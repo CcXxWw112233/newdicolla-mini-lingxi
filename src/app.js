@@ -3,6 +3,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { Provider } from '@tarojs/redux'
 import Index from './pages/index'
 import './app.scss'
+import 'taro-ui/dist/style/index.scss'
 import dva from './utils/dva';
 import models from './models/index';
 const dvaApp = dva.createApp({

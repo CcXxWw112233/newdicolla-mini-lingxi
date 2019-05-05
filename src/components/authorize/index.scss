@@ -1,0 +1,44 @@
+@import "../../gloalSet/styles/constant";
+.strong{
+  font-weight: bold;
+}
+.contain1{
+  position: relative;
+  font-size: pxTrans(14);
+  border-bottom: pxTrans(1) solid #f2f2f2;
+  padding-bottom: pxTrans(16);
+  .question{
+    position: absolute;
+    top: 0;
+    right: 0;
+    .question_icon{
+      font-size: pxTrans(18);
+      color: $color_3;
+    }
+  }
+   .contain1_inner {
+     text-align: center;
+   }
+  .app_name{
+    margin-top: pxTrans(6);
+    font-weight: bold;
+  }
+  .lingxi_logo {
+    width: pxTrans(32);
+    height: pxTrans(32);
+    border-radius: pxTrans(32);
+  }
+}
+.contain2{
+  font-size: pxTrans(14);
+  margin-top: pxTrans(10);
+  .contain2_1 {
+    color: $color_3;
+  }
+  .contain2_2{
+    color: $color_1;
+    margin-top: pxTrans(6);
+    font-weight: bold;
+  }
+  padding-bottom: pxTrans(20);
+}

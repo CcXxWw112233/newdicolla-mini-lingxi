@@ -1,4 +1,4 @@
 $designWidth: 750; // 设计稿的宽度
 @function pxTrans($n) {
-  @return $n*750/$designWidth*1px;
+  @return $n*750/$designWidth*2px;
 }
