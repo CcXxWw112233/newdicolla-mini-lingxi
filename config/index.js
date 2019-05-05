@@ -1,11 +1,12 @@
 const config = {
   projectName: 'newdicolla-mini-lingxi',
   date: '2019-5-3',
-  designWidth: 750,
+  designWidth: 375,
   deviceRatio: {
     '640': 2.34 / 2,
-    '750': 1,
-    '828': 1.81 / 2
+    '750': 2,
+    '828': 1.81 / 2,
+    '375': 1 / 2
   },
   sourceRoot: 'src',
   outputRoot: 'dist',
