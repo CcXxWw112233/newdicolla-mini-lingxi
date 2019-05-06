@@ -1,14 +1,10 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
-import RunningBoard from './components/RuningBoard'
+import RunningBoardItem from './RunningBoardItem'
 import './index.scss'
-import '../../gloalSet/styles/globalStyles.scss'
+import '../../../gloalSet/styles/globalStyles.scss'
 
-
-class Board extends Component {
-  config = {
-    navigationBarTitleText: '项目'
-  }
+export default class RuningBoard extends Component {
 
   componentWillReceiveProps (nextProps) {
     console.log(this.props, nextProps)
@@ -22,11 +18,9 @@ class Board extends Component {
 
   render () {
     return (
-      <View className='index global_horrizontal_padding'>
-        <RunningBoard />
+      <View className="board_item_out">
+        <RunningBoardItem />
       </View>
     )
   }
 }
-
-export default Board

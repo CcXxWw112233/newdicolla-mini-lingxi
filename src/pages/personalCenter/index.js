@@ -19,10 +19,15 @@ class PersonalCenter extends Component {
 
   componentDidHide () { }
 
+  setTitle = () => {
+      Taro.setNavigationBarTitle({
+        title: '哈哈哈阿瑟东拉哈是得利卡及时了解卡上劳动课哈哈哈阿瑟东拉哈是得利卡及时了解卡上劳动课'
+      })
+  }
   render () {
     return (
       <View className='index'>
-        <View><Text>我的</Text></View>
+        <View onClick={this.setTitle}><Text>我的</Text></View>
       </View>
     )
   }

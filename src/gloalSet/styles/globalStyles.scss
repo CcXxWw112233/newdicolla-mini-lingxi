@@ -12,3 +12,14 @@
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
 }
+//卡片
+.global_card_out {
+  background:rgba(255,255,255,1);
+  box-shadow:0px 2px 8px 0px rgba(0,0,0,0.15);
+  border-radius:4px;
+  padding: pxTrans(20);
+}
+//页面整体水平边距
+.global_horrizontal_padding {
+  padding: 0 $paddingValue 0 $paddingValue;
+}

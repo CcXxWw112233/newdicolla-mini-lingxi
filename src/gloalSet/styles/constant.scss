@@ -1,13 +1,10 @@
-$paddingValue: 5%;
-$marginValue: 5%;
-$contentWidth: 90%;
-$contentMarginTop: 20px;
-$contentPaddingVertical: 14px;
-$contentMarginVertical: 14px;
-$borderRadius: 4px;
-$imgBoderRadius: 8px;
-$innerContentMargin: 10px;
-$innerContentMargin2: 25px;
+$designWidth: 750; // 设计稿的宽度
+@function pxTrans($n) {
+  @return $n*750/$designWidth*2px;
+}
+
+$paddingValue: pxTrans(10);
+$border-radius: pxTrans(4);
 
 $color_1: #262626;
 $color_2: #595959;
@@ -15,12 +12,10 @@ $color_3: #8c8c8c;
 $color_4: #D9D9D9;
 $color_5: #ffffff;
 $color_special_1: #1890FF;
+$bg_color_1: #f5f5f5;
+$fontsize_1: pxTrans(16);
+$fontsize_2: pxTrans(14);
+$fontsize_3: pxTrans(12);
+$fontsize_4: pxTrans(10);
 
-$fontsize_1: 12px;
-$fontsize_2: 14px;
-$fontsize_3: 16px;
 
-$designWidth: 750; // 设计稿的宽度
-@function pxTrans($n) {
-  @return $n*750/$designWidth*2px;
-}

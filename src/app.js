@@ -3,7 +3,8 @@ import Taro, { Component } from '@tarojs/taro'
 import { Provider } from '@tarojs/redux'
 import Index from './pages/index'
 import './app.scss'
-import 'taro-ui/dist/style/index.scss'
+// import 'taro-ui/dist/style/index.scss'
+import './gloalSet/styles/taro-ui.css'
 import dva from './utils/dva';
 import models from './models/index';
 const dvaApp = dva.createApp({
@@ -22,8 +23,8 @@ class App extends Component {
 
   config = {
     pages: [
-      'pages/calendar/index',
       'pages/board/index',
+      'pages/calendar/index',
       'pages/personalCenter/index',
       'pages/login/index',
       'pages/index/index'
@@ -40,16 +41,16 @@ class App extends Component {
       "selectedColor": "#1890FF",
       "list": [
         {
-          "pagePath": "pages/calendar/index",
-          "text": "日历",
-          "iconPath": './asset/tabBar/calendar.png',
-          "selectedIconPath": './asset/tabBar/calendar_selected.png',
-        },
-        {
           "pagePath": "pages/board/index",
           "text": "项目",
           "iconPath": './asset/tabBar/board.png',
           "selectedIconPath": './asset/tabBar/board_selected.png',
+        },
+        {
+          "pagePath": "pages/calendar/index",
+          "text": "日历",
+          "iconPath": './asset/tabBar/calendar.png',
+          "selectedIconPath": './asset/tabBar/calendar_selected.png',
         },
         {
           "pagePath": "pages/personalCenter/index",

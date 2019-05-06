@@ -1,0 +1,72 @@
+@import "../../../gloalSet/styles/constant";
+.board_item_out{
+  margin-top: pxTrans(10);
+}
+.card_content {
+  .card_content_top {
+    .card_title {
+      color: $color_1;
+      font-size: $fontsize_1;
+      line-height: pxTrans(26);
+      font-weight: bold;
+    }
+    .organize {
+      color: $color_3;
+      font-size: $fontsize_2;
+      margin-left: pxTrans(6);
+      margin-right: pxTrans(6);
+    }
+    .star_list {
+      .star {
+        margin-top: pxTrans(4);
+        font-size: pxTrans(16);
+        margin-right: pxTrans(2);
+        color: #FAAD14;
+      }
+    }
+  }
+  .card_content_middle {
+    display: flex;
+    justify-content: space-between;
+    margin-top: pxTrans(6);
+    .card_content_middle_left {
+
+    }
+    .card_content_middle_right{
+      display: flex;
+      .task_1, .task_2{
+         color: $color_2;
+        Text{
+          font-weight: bold;
+        }
+      }
+      .task_2{
+        margin-left: pxTrans(10);
+      }
+    }
+  }
+  .card_content_bott {
+    margin-top: pxTrans(6);
+
+  }
+}
+
+.taglist {
+  margin-top: pxTrans(10);
+}
+.tag {
+  font-size: $fontsize_4;
+  //color: rgba(123,104,238, 1);
+  //border: pxTrans(1) solid rgba(123,104,238, 1);
+  //background-color: rgba(123,104,238, .5);
+  border-radius: $border-radius;
+  height: pxTrans(20);
+  line-height: pxTrans(22);
+  padding: 0 pxTrans(6);
+  display: inline-block;
+  margin-right: pxTrans(8);
+  margin-bottom: pxTrans(8);
+}
+.tag:active{
+  opacity: 0.9;
+}
