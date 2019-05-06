@@ -4,7 +4,7 @@ import { AtModal, AtModalHeader, AtModalContent, AtModalAction,} from "taro-ui"
 import { connect } from '@tarojs/redux'
 import './index.scss'
 import '../../gloalSet/styles/globalStyles.scss'
-import linxi_logo from '../../asset/authorize/lingxi_logo.jpg'
+import linxi_logo from '../../asset/authorize/board.png'
 
 @connect(({ authorize }) => ({
   authorize

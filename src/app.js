@@ -22,16 +22,44 @@ class App extends Component {
 
   config = {
     pages: [
+      'pages/calendar/index',
+      'pages/board/index',
+      'pages/personalCenter/index',
       'pages/login/index',
-      'pages/testPage/index',
       'pages/index/index'
     ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: 'WeChat',
-      navigationBarTextStyle: 'black'
+      navigationBarTextStyle: 'black',
+    },
+    tabBar: {
+      "backgroundColor": "#ffffff",
+      "color": "#8c8c8c",
+      "selectedColor": "#1890FF",
+      "list": [
+        {
+          "pagePath": "pages/calendar/index",
+          "text": "日历",
+          "iconPath": './asset/tabBar/calendar.png',
+          "selectedIconPath": './asset/tabBar/calendar_selected.png',
+        },
+        {
+          "pagePath": "pages/board/index",
+          "text": "项目",
+          "iconPath": './asset/tabBar/board.png',
+          "selectedIconPath": './asset/tabBar/board_selected.png',
+        },
+        {
+          "pagePath": "pages/personalCenter/index",
+          "text": "我的",
+          "iconPath": './asset/tabBar/personal.png',
+          "selectedIconPath": './asset/tabBar/personal_selected.png',
+        }
+      ]
     }
+
   }
 
   componentDidMount () {}
