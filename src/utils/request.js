@@ -3,7 +3,7 @@ import { BASE_URL, APP_ID, INT_REQUEST_OK } from "../gloalSet/js/constant";
 
 export const request = (options, notShowLoading) => {
   const { url = "", data = {}, method = "GET", header = {} } = options;
-  let Headers = { ...header, appid: APP_ID };
+  let Headers = { ...header};
   return new Promise((resolve, reject) => {
     if (!notShowLoading) {
       Taro.showLoading({
@@ -11,7 +11,7 @@ export const request = (options, notShowLoading) => {
         mask: "true"
       });
     }
-
+    Headers['content-type'] = 'application/x-www-form-urlencoded'
     Taro.request({
       url: BASE_URL + url,
       data: {

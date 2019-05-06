@@ -27,7 +27,8 @@ class App extends Component {
       'pages/calendar/index',
       'pages/personalCenter/index',
       'pages/login/index',
-      'pages/index/index'
+      'pages/index/index',
+      'pages/testPage/index',
     ],
     window: {
       backgroundTextStyle: 'light',

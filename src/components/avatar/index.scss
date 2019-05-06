@@ -1,4 +1,26 @@
 //.s{border-radius: }
+@import "../../gloalSet/styles/constant";
 .user_name {
-  //background-color: ;
+  background-color: $bg_color_2;
+  border-radius: pxTrans(100);
+}
+.list_user_out {
+  display: flex;
+  .list_user{
+    display: flex;
+    .list_avatar{
+    }
+  }
+  .list_more{
+    background:rgba(230,247,255,1);
+    padding: 0 pxTrans(8);
+    font-size: $fontsize_3;
+    color: $color_special_1;
+    text-align: center;
+  }
+}
+
+
+.avatar{
+  border: pxTrans(1) solid #ffffff;
 }

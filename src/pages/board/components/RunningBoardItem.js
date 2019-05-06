@@ -27,7 +27,7 @@ class RuningBoardItem extends Component {
             <Text className='star_list'>
               {starlist.map((value, key) => {
                 return (
-                  <Text className='global_iconfont star'>&#xe64b;</Text>
+                  <Text key={key} className='global_iconfont star'>&#xe64b;</Text>
                 )
               })}
             </Text>
@@ -49,6 +49,7 @@ class RuningBoardItem extends Component {
                 const rgb = '123,104,238'
                 return (
                   <Text className='tag'
+                        key={key}
                         style={{color: `rgba(${rgb},1)`, backgroundColor: `rgba(${rgb},.4)`, border: `1px solid rgba(${rgb},1)`}}
                   >卡机阿斯顿</Text>
                 )
