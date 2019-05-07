@@ -64,7 +64,7 @@ class Board extends Component {
   }
   render () {
     return (
-      <View className='index global_horrizontal_padding'>
+      <View className='global_horrizontal_padding'>
         <RunningBoard />
         <Button open-type={'getUserInfo'} onGetUserInfo={this.getUserInfo}>用户</Button>
       </View>

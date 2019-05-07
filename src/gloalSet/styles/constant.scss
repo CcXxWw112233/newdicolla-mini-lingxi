@@ -2,16 +2,18 @@ $designWidth: 750; // 设计稿的宽度
 @function pxTrans($n) {
   @return $n*750/$designWidth*2px;
 }
-
+//页面左右边距
 $paddingValue: pxTrans(10);
 $border-radius: pxTrans(4);
-
+//字体颜色
 $color_1: #262626;
 $color_2: #595959;
 $color_3: #8c8c8c;
 $color_4: #D9D9D9;
 $color_5: #ffffff;
-$color_special_1: #1890FF;
+//主题色
+$color_theme: #1890FF;
+//背景色
 $bg_color_1: #f5f5f5;
 $bg_color_2: #e5e5e5;
 

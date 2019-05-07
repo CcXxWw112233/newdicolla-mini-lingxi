@@ -1,13 +1,10 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
-import CardList from './components/CardList'
+import CardItem from './CardItem'
 import './index.scss'
+import '../../../gloalSet/styles/globalStyles.scss'
 
-class Calendar extends Component {
-
-    config = {
-    navigationBarTitleText: '日历'
-  }
+export default class RuningBoard extends Component {
 
   componentWillReceiveProps (nextProps) {
     console.log(this.props, nextProps)
@@ -21,11 +18,9 @@ class Calendar extends Component {
 
   render () {
     return (
-      <View className='global_horrizontal_padding'>
-        <CardList />
+      <View className="card_item_out">
+        <CardItem />
       </View>
     )
   }
 }
-
-export default Calendar
