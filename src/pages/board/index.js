@@ -7,14 +7,17 @@ import { request} from "../../utils/request";
 import { getBar } from '../../services/index/index'
 import SearchAndMenu from './components/SearchAndMenu'
 import BoardTypeSelect from './components/BoardTypeSelect/index'
+import { connect } from '@tarojs/redux'
 
+@connect(({ board }) => ({
+  board
+}))
 export default class Board extends Component {
   config = {
     navigationBarTitleText: '项目'
   }
 
   componentWillReceiveProps (nextProps) {
-    console.log(this.props, nextProps)
   }
 
   componentWillUnmount () { }
@@ -63,10 +66,22 @@ export default class Board extends Component {
       })
     }
   }
+
   render () {
+    const { dispatch } = this.props
+    const { board: { board_id }} = this.props
+    console.log(board_id)
+    const selectType = () => {
+      dispatch({
+        type: 'board/updateDatas',
+        payload: {
+          board_id: new Date().getTime()
+        }
+      })
+    }
     return (
       <View >
-        <SearchAndMenu />
+        <SearchAndMenu selectType={selectType}  />
         <BoardTypeSelect />
         <RunningBoard />
         {/*<Button open-type={'getUserInfo'} onGetUserInfo={this.getUserInfo}>用户</Button>*/}

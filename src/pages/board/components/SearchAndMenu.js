@@ -16,6 +16,10 @@ export default class SearchAndMenu extends Component {
 
   componentDidHide () { }
 
+  selectType = () => {
+    this.props.selectType && this.props.selectType()
+  }
+
   render () {
     return (
       <View>
@@ -30,7 +34,7 @@ export default class SearchAndMenu extends Component {
               <Input className={`${styles.search_input}`}/>
             </View>
           </View>
-          <View className={`${styles.menu}`}>
+          <View className={`${styles.menu}`} onClick={this.selectType}>
             <Text className={`${globalStyles.global_iconfont} ${styles.icon_menu}`}>&#xe63f;</Text>
           </View>
         </View>

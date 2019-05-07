@@ -4,7 +4,7 @@ import {isApiResponseOk} from "../../utils/request";
 export default {
   namespace: 'board',
   state: {
-    board_id: '00000'
+    board_id: 1
   },
   effects: {
     * effectsDemo({ payload }, { select, call, put }) {
