@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Button, Input } from '@tarojs/components'
-import './index.scss'
-import '../../gloalSet/styles/globalStyles.scss'
+import indexStyles from './index.scss'
+import globalStyles from '../../gloalSet/styles/globalStyles.scss'
 import { validateTel, validateEmail } from '../../utils/verify';
 import { sendVerifyCode, normalLogin} from "../../services/login";
 import Authorize from '../../components/authorize/index'
@@ -282,34 +282,35 @@ export default class Login extends Component {
       default: pswdErrorMessage = '';
     }
 
-    let paswdClass = `login_user_input login_input ${showCode ? 'login_code_input' : 'login_pswd_input'}`;
+    let paswdClass = `${indexStyles.login_user_input} ${indexStyles.login_input} ${showCode ? indexStyles.login_code_input: indexStyles.login_pswd_input}`;
     return (
-      <View className='login'>
-        <View className='login_header'>{!showCode?'账号密码': '手机验证码'}登录</View>
-        <View className='login_content'>
-          <View className='login_item_wrap login_user'>
-            <View className='login_user_input_wrap login_item'>
-              <Text className='login_user_icon global_iconfont icon_user login_icon'>&#xe640;</Text>
-              <Input type='text' onBlur={this.checkUser} onInput={this.inputUser} className='login_user_input login_input' placeholder='手机号/邮箱' value={user} />
+      <View className={`${indexStyles.login}`}>
+        <View className={`${indexStyles.login_header}`}>{!showCode?'账号密码': '手机验证码'}登录</View>
+        <View  className={`${indexStyles.login_content}`}>
+          <View className={`${indexStyles.login_item_wrap} ${indexStyles.login_user}`}>
+            <View className={`${indexStyles.login_user_input_wrap} ${indexStyles.login_item}`}>
+              <Text className={`${indexStyles.login_user_icon} ${indexStyles.login_icon} ${indexStyles.icon_user} ${globalStyles.global_iconfont}`}>&#xe640;</Text>
+              <Input type='text' onBlur={this.checkUser} onInput={this.inputUser}  className={`${indexStyles.login_user_input} ${indexStyles.login_input}`} placeholder='手机号/邮箱' value={user} />
             </View>
-            <View className='login_user_error login_error'>{userErrorMessage}</View>
+            <View className={`${indexStyles.login_user_error} ${indexStyles.login_error}`}>{userErrorMessage}</View>
           </View>
-          <View className={`login_item_wrap ${showCode ? 'login_code' : 'login_code'}`}>
-            <View className='login_code_code_wrap login_item'>
-              <Text className='login_pswd_icon global_iconfont icon_lock login_icon'>&#xe644;</Text>
+          <View className={`${indexStyles.login_item_wrap} ${showCode ? indexStyles.login_code: indexStyles.login_code}`} >
+            <View className={`${indexStyles.login_code_code_wrap} ${indexStyles.login_item}`}>
+              <Text
+                    className={`${indexStyles.login_pswd_icon} ${globalStyles.global_iconfont} ${indexStyles.icon_lock} ${indexStyles.login_icon}`}>&#xe644;</Text>
               <Input type={showCode ? 'text' : 'password'} onBlur={this.checkPswd} value={pswd} className={paswdClass} placeholder={showCode ? '验证码' : '密码'} onInput={this.inputPswd} />
-              {showCode ? <Text className={`login_code_text ${user && (userMessageType === 2) && Object.prototype.toString.call(codeMessage) !== '[object Number]' ? 'login_code_blue' : ''}`} onClick={this.setCodeMessage}>{codeMessage}</Text> : ''}
+              {showCode ? <Text className={`${indexStyles.login_code_text} ${user && (userMessageType === 2) && Object.prototype.toString.call(codeMessage) !== '[object Number]' ? indexStyles.login_code_blue : ''}`} onClick={this.setCodeMessage}>{codeMessage}</Text> : ''}
               </View>
-            <View className='login_code_error login_error'>{pswdErrorMessage}</View>
+            <View className={`${indexStyles.login_code_error} ${indexStyles.login_error}`}>{pswdErrorMessage}</View>
           </View>
         </View>
-        <View className='login_footer'>
-          <Button className='login_btn_normal login_btn' type='primary' onClick={this.normalLogin}>登录</Button>
+        <View className={`${indexStyles.login_footer}`}>
+          <Button className={`${indexStyles.login_btn_normal} ${indexStyles.login_btn}`} type='primary' onClick={this.normalLogin}>登录</Button>
           {/*<Button className='login_btn_wx login_btn' onClick={this.weixinLogin}>微信快捷登录</Button>*/}
-          <Button className='login_btn_wx login_btn' open_type='getPhoneNumber' onGetPhoneNumber={this.wexinAuthPhoneNoLogin}>微信快捷登录</Button>
+          <Button className={`${indexStyles.login_btn_wx} ${indexStyles.login_btn}`} open_type='getPhoneNumber' onGetPhoneNumber={this.wexinAuthPhoneNoLogin}>微信快捷登录</Button>
           </View>
-        <View className='change_login_type_out'>
-          <View onClick={this.ChangeLoginType} className='change_login_type'>{showCode?'账号密码': '验证码'}登录</View>
+        <View className={`${indexStyles.change_login_type_out}`}>
+          <View onClick={this.ChangeLoginType} className={`${indexStyles.change_login_type}`}>{showCode?'账号密码': '验证码'}登录</View>
         </View>
       </View >
     )

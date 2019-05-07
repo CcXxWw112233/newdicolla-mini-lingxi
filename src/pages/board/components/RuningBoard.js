@@ -1,8 +1,8 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
 import RunningBoardItem from './RunningBoardItem'
-import './index.scss'
-import '../../../gloalSet/styles/globalStyles.scss'
+import indexStyles from './index.scss'
+import globalStyles from '../../../gloalSet/styles/globalStyles.scss'
 
 export default class RuningBoard extends Component {
 
@@ -18,8 +18,13 @@ export default class RuningBoard extends Component {
 
   render () {
     return (
-      <View className="board_item_out">
+      <View className={`${indexStyles.board_item_out} ${globalStyles.global_horrizontal_padding}`}>
         <RunningBoardItem />
+        <RunningBoardItem />
+        <RunningBoardItem />
+        <RunningBoardItem />
+        <RunningBoardItem />
+
       </View>
     )
   }

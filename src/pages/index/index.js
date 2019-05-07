@@ -4,8 +4,7 @@ import { View, Button, Text } from '@tarojs/components'
 import './index.scss'
 
 class Index extends Component {
-
-    config = {
+  config = {
     navigationBarTitleText: '首页'
   }
 

@@ -1,10 +1,10 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
 import CardItem from './CardItem'
-import './index.scss'
-import '../../../gloalSet/styles/globalStyles.scss'
+import indexstyles from './index.scss'
+import globalStyles from '../../../gloalSet/styles/globalStyles.scss'
 
-export default class RuningBoard extends Component {
+export default class CardList extends Component {
 
   componentWillReceiveProps (nextProps) {
     console.log(this.props, nextProps)
@@ -18,7 +18,7 @@ export default class RuningBoard extends Component {
 
   render () {
     return (
-      <View className="card_item_out">
+      <View className={`${indexstyles.card_item_out} ${globalStyles.global_horrizontal_padding}`}>
         <CardItem />
       </View>
     )

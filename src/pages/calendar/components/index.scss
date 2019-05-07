@@ -4,8 +4,40 @@
 }
 
 .card_content {
+  margin-top: pxTrans(10);
+  display: flex;
   .card_content_left {
-
+    padding-top: pxTrans(4);
+    .iconfont_size{
+      font-size: pxTrans(16);
+      margin-right: pxTrans(6);
+      color: $color_2;
+    }
+  }
+  .card_content_middle{
+    flex: 1;
+    .card_content_middle_top{
+      .card_title {
+        color: $color_1;
+        font-size: $fontsize_1;
+        line-height: pxTrans(26);
+        font-weight: bold;
+      }
+      .organize {
+        color: $color_3;
+        font-size: $fontsize_3;
+        margin-left: pxTrans(6);
+        margin-right: pxTrans(6);
+      }
+    }
+    .card_content_middle_bott{
+      margin-top: pxTrans(10);
+      color: $color_3;
+      font-size: $fontsize_3;
+    }
+  }
+  .card_content_right {
+    margin-left: pxTrans(6);
   }
 
 }

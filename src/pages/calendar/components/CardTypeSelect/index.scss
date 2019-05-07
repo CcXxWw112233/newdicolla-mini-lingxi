@@ -1,0 +1,45 @@
+@import "../../../../gloalSet/styles/constant.scss";
+
+.select_list_out {
+  background-color: #ffffff;
+}
+.select_list {
+  position: fixed;
+  top: 0;
+  z-index: 12;
+  background-color: #ffffff;
+  width: 100%;
+  height: auto;
+  max-height: pxTrans(240);
+  overflow: scroll;
+}
+.select_item {
+  height: pxTrans(48);
+  line-height: pxTrans(48);
+  color: $color_2;
+  padding: 0 $paddingValue;
+  font-size: $fontsize_1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .select_item_left {
+    flex: 1;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+  }
+  .select_item_right {
+    margin-left: pxTrans(8);
+  }
+  .select_item_itemcheck {
+    font-size: $fontsize_1;
+  }
+
+}
+.selected {
+  background-color: #ffffff;
+}
+.select_item:active {
+  background-color:rgba(0,0,0,0.04)
+}
+

@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Button, Text, Image } from '@tarojs/components'
-import './index.scss'
+import indexStyle from './index.scss'
 import userIcon from '../../asset/test.jpg'
 
 export default class Avatar extends Component {
@@ -22,26 +22,26 @@ export default class Avatar extends Component {
     const ListAvaTarItemStyle = `margin-left:-${size/2 - 2}px;` //头像列表时，单个头像要往左移动遮住堆叠
     const ListMore = ``
     const singleUser = (
-      <View className="avatar" style={AvatarStyle}>
+      <View className={indexStyle.avatar} style={AvatarStyle}>
         {!!src?(
           <Image src={src} style={AvatarStyle}/>
         ):(
-          <View className='user_name'
+          <View className={indexStyle.user_name}
                 style={`${AvatarStyle}${AvartarBgStyle}`}>{text.substr(0, 1)}</View>
         )}
       </View>
     )
     const listUser = (
-      <View className='list_user_out'>
-        <View className='list_user'>
+      <View className={indexStyle.list_user_out}>
+        <View className={indexStyle.list_user}>
           {userList.map((value, key) => {
             const { avatar='', name = 'U' } = value ||{}
             return key < 3 && (
-              <View className="avatar" style={`${key!= 0?ListAvaTarItemStyle:''}${AvatarStyle}line-height:${size}px;`} key={key}>
+              <View className={indexStyle.avatar} style={`${key!= 0?ListAvaTarItemStyle:''}${AvatarStyle}line-height:${size}px;`} key={key}>
                 {!!avatar?(
                   <Image src={avatar} style={AvatarStyle}/>
                 ):(
-                  <View className='user_name'
+                  <View className={indexStyle.user_name}
                         style={`${AvatarStyle}${AvartarBgStyle}`}>{name.substr(0, 1)}</View>
                 )}
               </View>
@@ -49,7 +49,7 @@ export default class Avatar extends Component {
           })}
         </View>
         {userList.length > 3 && (
-          <View className="avatar list_more" style={`${ListAvaTarItemStyle}${AvatarStyle}width: auto;`}>+{userList.length}</View>
+          <View className={`${indexStyle.avatar} ${indexStyle.list_more}`} style={`${ListAvaTarItemStyle}${AvatarStyle}width: auto;`}>+{userList.length}</View>
         )}
       </View>
     )

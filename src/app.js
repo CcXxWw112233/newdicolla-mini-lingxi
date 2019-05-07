@@ -25,15 +25,15 @@ class App extends Component {
     pages: [
       'pages/calendar/index',
       'pages/board/index',
-      'pages/personalCenter/index',
-      'pages/login/index',
-      'pages/index/index',
       'pages/testPage/index',
+      'pages/login/index',
+      'pages/personalCenter/index',
+      'pages/index/index',
     ],
     window: {
       backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: 'WeChat',
+      navigationBarBackgroundColor: '#1890FF',
+      navigationBarTitleText: '灵犀',
       navigationBarTextStyle: 'black',
     },
     tabBar: {

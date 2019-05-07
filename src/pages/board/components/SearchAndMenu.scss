@@ -1,0 +1,53 @@
+@import "../../../gloalSet/styles/constant";
+.search_memu_out {
+  position: fixed;
+  z-index: 10;
+  width: 100%;
+  box-sizing: border-box;
+  left: 0;
+  top: 0;
+  height:pxTrans(44);
+  background:rgba(255,255,255,1);
+  box-shadow:0 pxTrans(1) pxTrans(2) 0 rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  .search_area {
+    flex: 1;
+    height:pxTrans(32);
+    background:rgba(0,0,0,0.04);
+    border-radius:pxTrans(4);
+    display: flex;
+    align-items: center;
+    color: $color_2;
+    padding: 0 pxTrans(8);
+    .search_icon_area {
+      color: $color_4;
+    }
+    .search_input_area {
+      margin-left: pxTrans(8);
+      .search_input {
+        width: pxTrans(250)
+      }
+    }
+  }
+  .menu {
+    margin-left: pxTrans(12);
+    height: pxTrans(32);
+    line-height: pxTrans(32);
+  }
+}
+.icon_menu{
+font-size: pxTrans(18);  color: $color_2;
+}
+
+.search_memu_out_back{
+  height: pxTrans(44);
+}
+.mask {
+  background-color: rgba(0,0,0,.35);
+  width: 100%;
+  height: 10000px;
+  position: fixed;
+  top: pxTrans(44);
+  z-index: 6;
+}

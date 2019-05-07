@@ -1,13 +1,14 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
 import RunningBoard from './components/RuningBoard'
-import './index.scss'
-import '../../gloalSet/styles/globalStyles.scss'
+import indexStyles from './index.scss'
+import globalStyles from '../../gloalSet/styles/globalStyles.scss'
 import { request} from "../../utils/request";
 import { getBar } from '../../services/index/index'
+import SearchAndMenu from './components/SearchAndMenu'
+import BoardTypeSelect from './components/BoardTypeSelect/index'
 
-
-class Board extends Component {
+export default class Board extends Component {
   config = {
     navigationBarTitleText: '项目'
   }
@@ -64,12 +65,13 @@ class Board extends Component {
   }
   render () {
     return (
-      <View className='global_horrizontal_padding'>
+      <View >
+        <SearchAndMenu />
+        <BoardTypeSelect />
         <RunningBoard />
-        <Button open-type={'getUserInfo'} onGetUserInfo={this.getUserInfo}>用户</Button>
+        {/*<Button open-type={'getUserInfo'} onGetUserInfo={this.getUserInfo}>用户</Button>*/}
       </View>
     )
   }
 }
 
-export default Board
