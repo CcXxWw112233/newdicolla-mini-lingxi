@@ -23,6 +23,7 @@ class App extends Component {
 
   config = {
     pages: [
+      'pages/im/index',
       'pages/calendar/index',
       'pages/board/index',
       'pages/personalCenter/index',
@@ -64,6 +65,9 @@ class App extends Component {
 
   }
 
+  globalData = {
+    store,
+  }
   componentDidMount () {}
 
   componentDidShow () {}

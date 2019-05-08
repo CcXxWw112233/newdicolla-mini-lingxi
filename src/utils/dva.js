@@ -3,13 +3,14 @@ import { create } from 'dva-core';
 import { createLogger } from 'redux-logger';
 import createLoading from 'dva-loading';
 
+
 let app;
 let store;
 let dispatch;
 
 function createApp(opt) {
   // redux日志
-  // opt.onAction = [createLogger()];
+  opt.onAction = [createLogger()];
   app = create(opt);
   app.use(createLoading({}));
 
@@ -19,7 +20,6 @@ function createApp(opt) {
 
   store = app._store;
   app.getStore = () => store;
-
   dispatch = store.dispatch;
 
   app.dispatch = dispatch;
@@ -28,7 +28,4 @@ function createApp(opt) {
 
 export default {
   createApp,
-  getDispatch() {
-    return app.dispatch;
-  }
 }
