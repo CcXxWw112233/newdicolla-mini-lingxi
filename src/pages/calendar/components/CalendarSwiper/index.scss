@@ -2,7 +2,7 @@
 .month_area_swiper {
   height: pxTrans(270);
   width: 100%;
-  background-color: #ffffff;
+  //background-color: #ffffff;
 
 }
 .month_area {
@@ -51,21 +51,23 @@
   .check_has_task {
     position: absolute;
     display: flex;
+    width: pxTrans(40);
     justify-content: center;
-
-    .has_task {
+    bottom: pxTrans(4);
+    .has_task, .has_flow {
       width: pxTrans(4);
       height: pxTrans(4);
       border-radius: pxTrans(4);
     }
     .has_task {
-
-      background-color: red;
+      background-color: $color_theme;
     }
     .has_flow {
-      width: pxTrans(4);
-      height: pxTrans(4);
       background-color: $color_7;
+      margin-left: pxTrans(4);
     }
+  }
+  .check_has_task_no_current_moth {
+    opacity: 0.6;
   }
 }

@@ -85,10 +85,11 @@ export default class CalendarSwiper extends Component {
             return (
               <View className={indexStyles.date_day} key={`${key}_${windowWidth}`} style={`width: ${windowWidth / 7}px`}>
                 <View
-                  className={`${indexStyles.date_day_inner}  ${key==5 && indexStyles.is_now_date}  ${key==5 && indexStyles.date_day_selected} ${(key < 2 || key > 30) && indexStyles.no_current_month_date}`}>
+                  className={`${indexStyles.date_day_inner}  ${key==5 && indexStyles.is_now_date}  ${key==8 && indexStyles.date_day_selected} ${(key < 2 || key > 30) && indexStyles.no_current_month_date}`}>
                   <Text>{key == 5? '今':key}</Text>
-                  <View className={`${indexStyles.check_has_task}`}>
-                    <View className={`${indexStyles.has_task}`}></View>
+                  <View className={`${indexStyles.check_has_task} ${(key < 2 || key > 30) && indexStyles.check_has_task_no_current_moth}`}>
+                    <View className={`${indexStyles.has_task}`}
+                          style={`background-color: ${key==8? '#ffffff' : '#1890FF' }`}></View>
                     <View className={`${indexStyles.has_flow}`}></View>
                   </View>
                 </View>
