@@ -1,0 +1,71 @@
+@import "../../../../gloalSet/styles/constant.scss";
+.month_area_swiper {
+  height: pxTrans(270);
+  width: 100%;
+  background-color: #ffffff;
+
+}
+.month_area {
+  .week_head{
+    height: pxTrans(30);
+    display: flex;
+    justify-content: space-between;
+    .week_day {
+      line-height: pxTrans(30);
+      flex: 1;
+      font-size: $fontsize_3;
+      color: $color_3;
+      text-align: center;
+    }
+  }
+}
+.date_area{
+  height: pxTrans(240);
+  display: flex;
+  flex-wrap: wrap ;
+  font-size: $fontsize_1;
+  .date_day {
+    height: pxTrans(40);
+    text-align: center;
+    border-radius: pxTrans(100);
+    color: $color_2;
+    .date_day_inner {
+      position: relative;
+      width: pxTrans(40);
+      line-height: pxTrans(40);
+      margin: 0 auto;
+      border-radius: pxTrans(40);
+    }
+  }
+
+  .no_current_month_date {
+    color: $color_4;
+  }
+  .is_now_date{
+    color: $color_theme;
+  }
+  .date_day_selected {
+    background-color: $color_theme;
+    color: $color_5;
+  }
+  .check_has_task {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+
+    .has_task {
+      width: pxTrans(4);
+      height: pxTrans(4);
+      border-radius: pxTrans(4);
+    }
+    .has_task {
+
+      background-color: red;
+    }
+    .has_flow {
+      width: pxTrans(4);
+      height: pxTrans(4);
+      background-color: $color_7;
+    }
+  }
+}

@@ -57,4 +57,19 @@
 
 .comfir_modal_conent {
  width: pxTrans(260);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .comfir_modal_conent_title{
+    color: $color_1;
+    font-size: $fontsize_1;
+  }
+  .comfir_modal_conent_detail{
+    margin-top: pxTrans(16);
+    color: $color_3;
+    font-size: $fontsize_2;
+  }
+  .btn1 {
+    color: $color_theme
+  }
 }

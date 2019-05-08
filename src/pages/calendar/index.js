@@ -4,10 +4,11 @@ import CardList from './components/CardList'
 import indexStyles from './index.scss'
 import CardTypeSelect from './components/CardTypeSelect/index'
 import SearchAndMenu from '../board/components/SearchAndMenu'
+import CalendarSwiper from './components/CalendarSwiper'
 
-class Calendar extends Component {
+export default class Calendar extends Component {
 
-    config = {
+  config = {
     navigationBarTitleText: '日历'
   }
 
@@ -19,21 +20,22 @@ class Calendar extends Component {
 
   componentDidShow () {
     console.log('1231132')
-
   }
 
   componentDidHide () { }
 
   render () {
-
+    const { show_card_type_select } = this.props
     return (
       <View>
         <SearchAndMenu />
-        <CardTypeSelect />
+        <CalendarSwiper />
+        {show_card_type_select && (
+          <CardTypeSelect />
+        )}
         <CardList />
       </View>
     )
   }
 }
 
-export default Calendar

@@ -32,14 +32,14 @@ class PersonalCenter extends Component {
         <AtModal isOpened style="width: 270px">
           <AtModalContent>
             <View className={indexStyles.comfir_modal_conent}>
-              <View>退出登录</View>
-              <View>确认要退出登录</View>
+              <View className={indexStyles.comfir_modal_conent_title}>退出登录</View>
+              <View className={indexStyles.comfir_modal_conent_detail}>确认要切换账号</View>
             </View>
 
           </AtModalContent>
           <AtModalAction>
-            <Button>取消</Button>
-            <Button>确定</Button>
+            <Button className={indexStyles.btn1} style={{color: '#1890FF'}}>确定</Button>
+            <Button className={indexStyles.btn1} style={{color: '#1890FF'}}>取消</Button>
           </AtModalAction>
         </AtModal>
       </View>

@@ -21,6 +21,7 @@ export default class SearchAndMenu extends Component {
   }
 
   render () {
+    const { search_mask_show } = this.props
     return (
       <View>
         <View className={styles.search_memu_out_back}></View>
@@ -39,7 +40,9 @@ export default class SearchAndMenu extends Component {
           </View>
         </View>
         {/*遮罩层*/}
-        <View className={styles.mask}></View>
+        {search_mask_show && (
+          <View className={styles.mask}></View>
+        )}
       </View>
     )
   }
