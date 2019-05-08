@@ -1,13 +1,13 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
 import Aavatar from '../../components/avatar/index'
+import { AtModal, AtModalHeader, AtModalContent, AtModalAction, AtDivider  } from "taro-ui"
 
 import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 
 class PersonalCenter extends Component {
-
-    config = {
+  config = {
     navigationBarTitleText: '个人信息'
   }
 
@@ -27,6 +27,23 @@ class PersonalCenter extends Component {
       })
   }
   render () {
+    const logoutModal = (
+      <View>
+        <AtModal isOpened style="width: 270px">
+          <AtModalContent>
+            <View className={indexStyles.comfir_modal_conent}>
+              <View>退出登录</View>
+              <View>确认要退出登录</View>
+            </View>
+
+          </AtModalContent>
+          <AtModalAction>
+            <Button>取消</Button>
+            <Button>确定</Button>
+          </AtModalAction>
+        </AtModal>
+      </View>
+    )
     return (
       <View className={indexStyles.index}>
         <View className={indexStyles.contain1}>
@@ -69,6 +86,7 @@ class PersonalCenter extends Component {
         <View className={indexStyles.logout}>
           切换账号
         </View>
+        {logoutModal}
       </View>
     )
   }

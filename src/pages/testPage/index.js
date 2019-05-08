@@ -2,12 +2,13 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 import './index.scss'
+import { AtModal, AtModalHeader, AtModalContent, AtModalAction, AtDivider  } from "taro-ui"
 
 const getEffectOrReducerByName = name => `testPage/${name}`
 @connect(({ testPage, board }) => ({
   testPage, board
 }))
-class Index extends Component {
+export default class TestPage extends Component {
 
   config = {
     navigationBarTitleText: '首页'
@@ -59,10 +60,19 @@ class Index extends Component {
         <View><Text>{number}</Text></View>
         <View><Text>{board_id}</Text></View>
 
-        <View><Text>model test</Text></View>
+        <View>
+          <AtModal isOpened>
+            <AtModalHeader>标题</AtModalHeader>
+            <AtModalContent>
+              这里是正文内容，欢迎加入京东凹凸实验室
+              这里是正文内容，欢迎加入京东凹凸实验室
+              这里是正文内容，欢迎加入京东凹凸实验室
+            </AtModalContent>
+            <AtModalAction> <Button>取消</Button> <Button>确定</Button> </AtModalAction>
+          </AtModal>
+        </View>
       </View>
     )
   }
 }
 
-export default Index

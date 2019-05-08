@@ -3,8 +3,10 @@ import Taro, { Component } from '@tarojs/taro'
 import { Provider } from '@tarojs/redux'
 import Index from './pages/index'
 import './app.scss'
-// import 'taro-ui/dist/style/index.scss'
-import './gloalSet/styles/taro-ui.css'
+// import 'taro-ui/dist/style/index.scss' //taro-ui默认
+// import './gloalSet/styles/taro-ui1890ff.global.css' //taro-ui带主题
+import './gloalSet/styles/taro_ui_index.global.scss' //global模式下转化taro-ui import 'taro-ui/dist/style/index.scss'
+
 import dva from './utils/dva';
 import models from './models/index';
 const dvaApp = dva.createApp({
@@ -12,6 +14,7 @@ const dvaApp = dva.createApp({
   models: models,
 });
 const store = dvaApp.getStore();
+global.store = store
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -23,12 +26,12 @@ class App extends Component {
 
   config = {
     pages: [
-      'pages/calendar/index',
-      'pages/my/index',
-      'pages/selectOrg/index',
       'pages/personalCenter/index',
-      'pages/board/index',
       'pages/testPage/index',
+      'pages/my/index',
+      'pages/calendar/index',
+      'pages/selectOrg/index',
+      'pages/board/index',
       'pages/login/index',
       'pages/index/index',
     ],
@@ -56,7 +59,7 @@ class App extends Component {
           "selectedIconPath": './asset/tabBar/board_selected.png',
         },
         {
-          "pagePath": "pages/personalCenter/index",
+          "pagePath": "pages/my/index",
           "text": "我的",
           "iconPath": './asset/tabBar/personal.png',
           "selectedIconPath": './asset/tabBar/personal_selected.png',

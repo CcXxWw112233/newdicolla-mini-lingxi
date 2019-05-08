@@ -1,6 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
 import Aavatar from '../../components/avatar/index'
+import Authorize from '../../components/authorize/index'
 
 import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
@@ -65,8 +66,8 @@ export default class My extends Component {
             </View>
             <View className={indexStyles.contain2_item_bott}>投资地图</View>
           </View>
-
         </View>
+
       </View>
     )
   }

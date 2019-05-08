@@ -1,0 +1,17 @@
+/**
+ * Taro UI - Default variables
+ */
+
+//// 在app.js中import 'taro-ui/dist/style/index.scss'相当于引入本文件
+//cssModule在全局模式下需要转化名称 --.global.--
+
+/* Variables */
+@import '../../../node_modules/taro-ui/dist/style/variables/default.scss';
+
+/* Mixin */
+@import '../../../node_modules/taro-ui/dist/style/mixins/index.scss';
+
+/* Components */
+@import '../../../node_modules/taro-ui/dist/style/components/index.scss';
+
+

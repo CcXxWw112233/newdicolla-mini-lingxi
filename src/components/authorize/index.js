@@ -2,8 +2,8 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Button, Image } from '@tarojs/components'
 import { AtModal, AtModalHeader, AtModalContent, AtModalAction,} from "taro-ui"
 import { connect } from '@tarojs/redux'
-import './index.scss'
-import '../../gloalSet/styles/globalStyles.scss'
+import indexStyles from './index.scss'
+import globalStyles from '../../gloalSet/styles/globalStyles.scss'
 import linxi_logo from '../../asset/authorize/board.png'
 
 @connect(({ authorize }) => ({
@@ -45,35 +45,35 @@ export default class Authorize extends Component {
           isOpened={show_authorize}
           closeOnClickOverlay={false}>
           <AtModalHeader>
-            <Text className='strong'>微信手机号授权</Text>
+            <Text className={`${indexStyles.strong}`}>微信手机号授权</Text>
           </AtModalHeader>
           <AtModalContent>
-            <View className='contain1'>
-              <View className='contain1_inner'>
-               <Image src={linxi_logo} className='lingxi_logo'/>
+            <View className={`${indexStyles.contain1}`}>
+              <View  className={`${indexStyles.contain1_inner}`}>
+               <Image src={linxi_logo} className={`${indexStyles.lingxi_logo}`} />
               </View>
-              <View className='contain1_inner app_name'>
+              <View className={`${indexStyles.contain1_inner} ${indexStyles.app_name}`} >
                 灵犀协作
               </View>
-              <View className='question'>
-                <Text className='global_iconfont question_icon'>
+              <View className={`${indexStyles.question}`}>
+                <Text className={`${globalStyles.global_iconfont} ${indexStyles.question_icon}`}>
                   &#xe643;
                 </Text>
               </View>
             </View>
-            <View className='contain2'>
-              <View className='contain2_1'>
+            <View className={`${indexStyles.contain2}`}>
+              <View className={`${indexStyles.contain2_1}`}>
                 申请获取你微信绑定的手机号
               </View>
-              <View className='contain2_2'>
+              <View className={`${indexStyles.contain2_2}`}>
                 13833333332
               </View>
             </View>
 
           </AtModalContent>
           <AtModalAction>
-            <Button onClick={this.onCancel} className='strong'>取消</Button>
-            <Button onClick={this.onConfirm} style={{color: '#4FB437'}} className='strong'>确定</Button>
+            <Button onClick={this.onCancel} className={`${indexStyles.strong}`}>取消</Button>
+            <Button onClick={this.onConfirm} style={{color: '#4FB437'}} className={`${indexStyles.strong}`}>确定</Button>
           </AtModalAction>
         </AtModal>
       </View>
