@@ -1,12 +1,14 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
+import Aavatar from '../../components/avatar/index'
 
-import './index.scss'
+import indexStyles from './index.scss'
+import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 
 class PersonalCenter extends Component {
 
     config = {
-    navigationBarTitleText: '我的'
+    navigationBarTitleText: '个人信息'
   }
 
   componentWillReceiveProps (nextProps) {
@@ -26,8 +28,47 @@ class PersonalCenter extends Component {
   }
   render () {
     return (
-      <View className='index'>
-        <View onClick={this.setTitle}><Text>我的</Text></View>
+      <View className={indexStyles.index}>
+        <View className={indexStyles.contain1}>
+          <View>
+            <Aavatar avartarTotal={'single'} size={48} />
+          </View>
+          <View className={indexStyles.contain1_name}>严士威</View>
+        </View>
+        <View className={indexStyles.contain2}>
+          <View className={indexStyles.list_item}>
+            <View className={indexStyles.list_item_name}>姓名</View>
+            <View className={indexStyles.list_item_detail}>刘谢</View>
+            <View className={`${indexStyles.list_item_iconnext}`}>
+              <Text className={`${globalStyle.global_iconfont}`}>&#xe646;</Text>
+            </View>
+          </View>
+          <View className={indexStyles.list_item}>
+            <View className={indexStyles.list_item_name}>组织</View>
+            <View className={indexStyles.list_item_detail}>阿萨德阿萨德阿萨德阿萨德阿萨德阿萨德阿萨德阿萨德阿萨德</View>
+            <View className={`${indexStyles.list_item_iconnext}`}>
+              <Text className={`${globalStyle.global_iconfont}`}>&#xe646;</Text>
+            </View>
+          </View>
+          <View className={indexStyles.list_item}>
+            <View className={indexStyles.list_item_name}>手机号</View>
+            <View className={indexStyles.list_item_detail}>13833332222</View>
+            <View className={`${indexStyles.list_item_iconnext}`}>
+              <Text className={`${globalStyle.global_iconfont}`}>&#xe646;</Text>
+            </View>
+          </View>
+          <View className={indexStyles.list_item}>
+            <View className={indexStyles.list_item_name}>邮箱号</View>
+            <View className={indexStyles.list_item_detail}>1212@212ss</View>
+            <View className={`${indexStyles.list_item_iconnext}`}>
+              <Text className={`${globalStyle.global_iconfont}`}>&#xe646;</Text>
+            </View>
+          </View>
+
+        </View>
+        <View className={indexStyles.logout}>
+          切换账号
+        </View>
       </View>
     )
   }

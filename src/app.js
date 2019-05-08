@@ -23,11 +23,13 @@ class App extends Component {
 
   config = {
     pages: [
-      'pages/board/index',
       'pages/calendar/index',
+      'pages/my/index',
+      'pages/selectOrg/index',
+      'pages/personalCenter/index',
+      'pages/board/index',
       'pages/testPage/index',
       'pages/login/index',
-      'pages/personalCenter/index',
       'pages/index/index',
     ],
     window: {
@@ -42,16 +44,16 @@ class App extends Component {
       "selectedColor": "#1890FF",
       "list": [
         {
-          "pagePath": "pages/board/index",
-          "text": "项目",
-          "iconPath": './asset/tabBar/board.png',
-          "selectedIconPath": './asset/tabBar/board_selected.png',
-        },
-        {
           "pagePath": "pages/calendar/index",
           "text": "日历",
           "iconPath": './asset/tabBar/calendar.png',
           "selectedIconPath": './asset/tabBar/calendar_selected.png',
+        },
+        {
+          "pagePath": "pages/board/index",
+          "text": "项目",
+          "iconPath": './asset/tabBar/board.png',
+          "selectedIconPath": './asset/tabBar/board_selected.png',
         },
         {
           "pagePath": "pages/personalCenter/index",

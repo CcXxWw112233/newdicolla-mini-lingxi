@@ -1,24 +1,13 @@
 @import "../../gloalSet/styles/constant";
+page{
+  background-color: $bg_color_3;
+}
 .index {
 }
-.contain1 {
-  width:100%;
-  height:pxTrans(72);
-  background: $bg_color_3;
-  display: flex;
-  align-items: center;
-  padding: 0 $paddingValue;
-  .contain1_name {
-    font-size: $fontsize_1;
-    color: $color_2;
-    margin-left: pxTrans(20);
-  }
-}
-.contain2{
-  background: $bg_color_3;
+.list_item_out {
   padding: 0 $paddingValue;
   .list_item {
-    border-top: pxTrans(1) solid #e5e5e5;
+    border-bottom: pxTrans(1) solid #e5e5e5;
     height:pxTrans(48);
     display: flex;
     font-size: pxTrans(16);
@@ -39,18 +28,9 @@
       color: $color_3;
     }
   }
-}
 
-.logout {
-  margin-top: pxTrans(20);
-  font-size: pxTrans(16);
-  height:pxTrans(48);
-  text-align: center;
-  line-height: pxTrans(48);
-  background: $bg_color_3;
-  color: $color_6;
 }
-.logout:active {
+.list_item_out:active {
   background-color: $bg_color_active;
 }
 
