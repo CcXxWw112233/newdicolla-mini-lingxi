@@ -1,4 +1,5 @@
 export const BASE_URL = 'http://am5evc.natappfree.cc'//'http://192.168.1.68'//'http://prerelease.lingxi.new-di.com'
+export const NODE_ENV = process.env.NODE_ENV
 
 export const PAGE_SIZE = 20
 export const QUERY_TYPE = 1

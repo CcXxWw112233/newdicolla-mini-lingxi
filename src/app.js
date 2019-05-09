@@ -14,7 +14,6 @@ const dvaApp = dva.createApp({
   models: models,
 });
 const store = dvaApp.getStore();
-global.store = store
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -26,8 +25,8 @@ class App extends Component {
 
   config = {
     pages: [
-      'pages/calendar/index',
       'pages/testPage/index',
+      'pages/calendar/index',
       'pages/personalCenter/index',
       'pages/my/index',
       'pages/selectOrg/index',
