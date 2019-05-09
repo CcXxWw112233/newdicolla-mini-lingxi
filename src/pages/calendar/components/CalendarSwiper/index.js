@@ -2,6 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Button, Text, Swiper, SwiperItem } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyles from '../../../../gloalSet/styles/globalStyles.scss'
+import { getMonthDate } from './getDate'
 
 export default class CalendarSwiper extends Component {
 
@@ -19,8 +20,6 @@ export default class CalendarSwiper extends Component {
   componentDidShow () {
     const systemInfo = Taro.getSystemInfoSync()
     const { windowWidth } = systemInfo
-    console.log(windowWidth)
-
     this.setState({
       windowWidth
     })
@@ -66,8 +65,11 @@ export default class CalendarSwiper extends Component {
       current_indi: current
     })
   }
+
+
   render () {
     const { swiper_list = [], current_indi, windowWidth } = this.state
+    console.log(getMonthDate({}))
 
     const week_array = ['日', '一', '二', '三', '四', '五', '六']
     const date_array = new Array(35)

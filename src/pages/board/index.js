@@ -70,7 +70,6 @@ export default class Board extends Component {
   render () {
     const { dispatch } = this.props
     const { board: { board_id }} = this.props
-    console.log(board_id)
     const selectType = () => {
       dispatch({
         type: 'board/updateDatas',

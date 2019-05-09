@@ -19,7 +19,6 @@ export default class Calendar extends Component {
   componentWillUnmount () { }
 
   componentDidShow () {
-    console.log('1231132')
   }
 
   componentDidHide () { }
