@@ -3,6 +3,7 @@ const current_year = current_date.getFullYear()
 const current_month = current_date.getMonth() + 1
 const current_date_no= current_date.getDate()
 const current_date_timestamp = current_date.getTime()
+const current_week_day = current_date.getDay()
 
 // console.log(current_date_timestamp, current_year, current_month, current_date_no)
 
@@ -54,14 +55,20 @@ function getNeedDate(timestring) {
   const date_no = date.getDate() //日
   const week_day = date.getDay() //周几
   const date_string = `${year}/${month}/${date_no}`
+  const date_decription = `${year}年${month}月${date_no}日 ${getWeekDay(week_day)}`
+  const date_timestamp = new Date(date_string).getTime()
   return {
     year,
     month,
     date_no,
     week_day,
+    is_today: isToday(date_timestamp),
     date_string,
-    timestamp: new Date(date_string).getTime(),
+    date_decription,
+    timestamp: date_timestamp,
     week_day_name: getWeekDay(week_day),
+    is_has_task: true, //是否有任务
+    is_has_flow: false, //是否有里程碑流程
   }
 }
 
@@ -81,7 +88,7 @@ function getAroundDate ({year = current_year, month = current_month}) {
   const base_month_date = getOneMonthDateDetail(year, month) //基准月份数据
   const front_month_date = getOneMonthDateDetail(front_one_year, front_one_month)
   const behind_month_date = getOneMonthDateDetail(behind_one_year, behind_one_month)
-  const gold_date_arr = [
+  const three_month_date_arr = [
     {
       date_top: getDateTop(front_one_year, front_one_month),
       date_inner: front_month_date,
@@ -95,17 +102,39 @@ function getAroundDate ({year = current_year, month = current_month}) {
       date_inner: behind_month_date,
     },
   ]
-  return gold_date_arr
+  const gold_arr = getCalendarData(three_month_date_arr)
+  return gold_arr
 }
 
 //获取日历组件所需要的日期列表
 function getCalendarData(gold_date_arr) {
-  const date_select_last = gold_date_arr[0]['date_inner']
-  const date_select = gold_date_arr[1]['date_inner']
-  const date_select_next = gold_date_arr[2]['date_inner']
+  const month_select_last = gold_date_arr[0]['date_inner']
+  const month_select = gold_date_arr[1]['date_inner']
+  const month_select_next = gold_date_arr[2]['date_inner']
+  const calendar_date_length = 35
+  let date_list = new Array(calendar_date_length) //所需要的日历数据
+  //所选月第一天在周几
+  const month_select_first_week_day = month_select[0]['week_day']
+  //所选月的上一个月要在日历前面摆放的日期
+  const calendar_date_last_month = month_select_last.slice(month_select_last.length - month_select_first_week_day, month_select_last.length)
+  // 所选月的下一个月要在日历摆放的日期
+  const calendar_date_next_month_length = calendar_date_length - calendar_date_last_month.length - month_select.length
+  const calendar_date_next_month = month_select_next.slice(0, calendar_date_next_month_length)
 
-
-  const date_list = new Array(35)
+  //处理上一个月和下一个月所在日历表中的数据
+  let calendar_date_last_month_new = []
+  let calendar_date_next_month_new = []
+  for(let val of calendar_date_last_month) {
+    val['no_in_select_month'] = true
+    calendar_date_last_month_new.push(val)
+  }
+  for(let val of calendar_date_next_month) {
+    val['no_in_select_month'] = true
+    calendar_date_next_month_new.push(val)
+  }
+  //最终转换数据
+  date_list = [].concat(calendar_date_last_month, month_select, calendar_date_next_month)
+  return date_list
 }
 
 export const getMonthDate = ({year = current_year, month = current_month}) => {
@@ -119,3 +148,8 @@ export const isToday = (timestamp) => {
 export const isSamDay = (timestamp, timestamp2) => {
   return new Date(timestamp).toDateString() === new Date(timestamp2).toDateString()
 }
+
+export const select_year = current_year
+export const select_month = current_month
+export const select_date = current_date_no
+export const select_week_day = current_week_day

@@ -1,10 +1,114 @@
 @import "../../../../gloalSet/styles/constant.scss";
-.month_area_swiper {
-  height: pxTrans(270);
-  width: 100%;
-  //background-color: #ffffff;
 
+@keyframes swiper_show_whole {
+  from {
+    height: pxTrans(70);
+  }
+  to {
+    height: pxTrans(270);
+  }
 }
+@keyframes swiper_show_part {
+  from {
+    height: pxTrans(270);
+  }
+  to {
+    height: pxTrans(70);
+  }
+}
+@keyframes calendar_back_all {
+  from {
+    height: pxTrans(140);
+  }
+  to {
+    height: pxTrans(340);
+  }
+}
+@keyframes calendar_back_part {
+  from {
+    height: pxTrans(340);
+  }
+  to {
+    height: pxTrans(140);
+  }
+}
+@keyframes set_calendar_icon_all {
+  from {
+    transform: rotate(180deg);
+  }
+  to {
+    transform: rotate(0);
+  }
+}
+@keyframes set_calendar_icon_part {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(180deg);
+  }
+}
+//日历组件
+.swiper_show_whole {
+  height: pxTrans(270);
+  animation:swiper_show_whole 0.5s ease;
+}
+.swiper_show_part {
+  height:pxTrans(70);
+  animation:swiper_show_part 0.5s ease;
+}
+.swiper_show_nomal {
+  height: pxTrans(270);
+}
+//日历组件底部背景
+.calendar_back_nomal {
+  height: pxTrans(340);
+}
+.calendar_back_all {
+  height: pxTrans(340);
+  animation:calendar_back_all 0.5s ease;
+}
+.calendar_back_part {
+  height: pxTrans(140);
+  animation:calendar_back_part 0.5s ease;
+}
+//查看日历形态按钮
+.set_calendar_icon_nomal {
+  //transform: rotate(0);
+}
+.set_calendar_icon_all {
+  transform: rotate(0);
+  animation:set_calendar_icon_all 0.5s ease;
+}
+.set_calendar_icon_part {
+  transform: rotate(180deg);
+  animation:set_calendar_icon_part 0.5s ease;
+}
+
+//基本组件样式
+.calendar_out{
+  height: auto;
+  background-color: $bg_color_1;
+  position: fixed;
+  z-index: 4;
+  top: pxTrans(44);
+  padding-bottom: pxTrans(6);
+  width: 100%;
+  .month_area_swiper {
+    //height: pxTrans(270);
+    width: 100%;
+  }
+  .set_calendar{
+    text-align: center;
+    font-size: pxTrans(36);
+    color: $color_3;
+  }
+}
+.calendar_back {
+  width: 100%;
+  background-color: red;
+}
+
 .month_area {
   .week_head{
     height: pxTrans(30);
@@ -70,4 +174,12 @@
   .check_has_task_no_current_moth {
     opacity: 0.6;
   }
+}
+
+.date_detail_dec{
+  font-size: $fontsize_1;
+  color: $color_2;
+  text-align: center;
+  margin-top: pxTrans(4);
+
 }

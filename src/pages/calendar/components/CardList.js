@@ -20,6 +20,13 @@ export default class CardList extends Component {
     return (
       <View className={`${indexstyles.card_item_out} ${globalStyles.global_horrizontal_padding}`}>
         <CardItem />
+        <CardItem />
+        <CardItem />
+        <CardItem />
+        <CardItem />
+        <CardItem />
+        <CardItem />
+        <CardItem />
       </View>
     )
   }
