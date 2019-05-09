@@ -1,6 +1,7 @@
 import Taro from '@tarojs/taro';
 
 function onUpdateSession(sessions) {
+  console.log('get session :', sessions)
   const {
     globalData: {
       store: { dispatch, getState }
@@ -17,8 +18,8 @@ function onUpdateSession(sessions) {
   });
 
   dispatch({
-    type: 'im/updateStateFieldByCover',
-    payload: tempState,
+    type: 'im/updateStateByReplace',
+    state: tempState,
     desc: 'update sessions'
   });
 }

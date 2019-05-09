@@ -23,8 +23,8 @@ function onBlacklist(blackList) {
     }
   })
   dispatch({
-    type: 'im/updateStateFieldByCover',
-    payload: tempState,
+    type: 'im/updateStateByReplace',
+    state: tempState,
     descr: 'update black list.'
   })
 }

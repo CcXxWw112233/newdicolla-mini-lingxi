@@ -36,8 +36,8 @@ function onMsg(msg) {
     nim.resetSessionUnread(msg.sessionId);
   }
   dispatch({
-    type: 'im/updateStateFieldByCover',
-    payload: tempState,
+    type: 'im/updateStateByReplace',
+    state: tempState,
     desc: 'on msg'
   });
 }

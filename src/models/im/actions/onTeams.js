@@ -22,8 +22,8 @@ function onTeams(teams) {
   });
   tempState.groupList = groupList;
   dispatch({
-    type: 'im/updateStateFieldByCover',
-    payload: tempState,
+    type: 'im/updateStateByReplace',
+    state: tempState,
     desc: 'get teams'
   });
 }

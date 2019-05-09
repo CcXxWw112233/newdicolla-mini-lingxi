@@ -29,8 +29,8 @@ function onUsers(friends) {
   });
 
   dispatch({
-    type: 'im/updateStateFieldByCover',
-    payload: temp,
+    type: 'im/updateStateByReplace',
+    state: temp,
     desc: 'get friends list.'
   });
 }

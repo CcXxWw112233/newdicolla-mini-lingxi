@@ -30,6 +30,9 @@ import {
   onUpdateSysMsgUnread,
   onOfflineCustomSysMsgs,
   onCustomSysMsg,
+  onBroadcastMsg,
+  onBroadcastMsgs,
+  onPushEvents,
 } from './actions/index';
 
 const { appkey, openPrivateConf } = ENVIRONMENT_CONFIG;
@@ -117,48 +120,12 @@ function* initNimSDK(loginInfo = {}) {
     onupdatesysmsgunread: onUpdateSysMsgUnread,
     onofflinecustomsysmsgs: onOfflineCustomSysMsgs,
     oncustomsysmsg: onCustomSysMsg,
-
-
-
-
-
-
-    /** 2. 或 sync done 之后触发
-     *  设置订阅后，服务器消息事件回调
-     */
-    // onPushEvent(param) {
-    //   console.log(' onPushEvent: ', param);
-    //   let msgEvents = param.msgEvents;
-    //   if (msgEvents) {
-    //     let statusArr = [];
-    //     msgEvents.map(data => {
-    //       statusArr.push({
-    //         status: updateMultiPortStatus(data),
-    //         account: data.account
-    //       });
-    //     });
-        // 更新好友全局状态
-        // dispatch({
-        //   type: 'FriendCard_Update_Online_Status',
-        //   payload: statusArr
-        // });
-    //   }
-    // }
+    // 收到广播消息
+    onbroadcastmsg: onBroadcastMsg,
+    onbroadcastmsgs: onBroadcastMsgs,
+    // 事件订阅
+    onpushevents: onPushEvents,
   });
 }
 
-// FriendCard：更新指定好友在线状态
-//  case 'FriendCard_Update_Online_Status': {
-//   let tempState = Object.assign({}, state)
-//   let statusArr = action.payload
-//   statusArr.map(item => {
-//     // 触发状态更新时friendCard可能为空
-//     if (!tempState.friendCard[item.account]) {
-//       tempState.friendCard[item.account] = {}
-//     }
-//     tempState.friendCard[item.account].status = item.status
-//     tempState.onlineList[item.account] = item.status
-//   })
-//   return Object.assign({}, state, tempState)
-// }
 export default initNimSDK;

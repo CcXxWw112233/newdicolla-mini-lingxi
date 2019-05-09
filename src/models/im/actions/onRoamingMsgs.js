@@ -26,8 +26,8 @@ function onRoamingMsgs(list) {
     tempState.rawMessageList[sessionId][msg.time] = Object.assign({}, msg);
   });
   dispatch({
-    type: 'im/updateStateFieldByCover',
-    payload: tempState,
+    type: 'im/updateStateByReplace',
+    state: tempState,
     desc: 'add roamingMsgList'
   });
 }

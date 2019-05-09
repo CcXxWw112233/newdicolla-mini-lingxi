@@ -18,8 +18,8 @@ function onOfflineMsgs(msg) {
     tempState.rawMessageList[sessionId][item.time] = Object.assign({}, item);
   });
   dispatch({
-    type: 'im/updateStateFieldByCover',
-    payload: tempState,
+    type: 'im/updateStateByReplace',
+    state: tempState,
     desc: 'get offline msg.'
   });
 }

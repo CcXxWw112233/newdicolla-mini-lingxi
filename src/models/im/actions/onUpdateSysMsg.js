@@ -22,8 +22,8 @@ function onUpdateSysMsg(sysMsg) {
           ? '已接受'
           : '';
       dispatch({
-        type: 'im/updateStateFieldByCover',
-        payload: tempState,
+        type: 'im/updateStateByReplace',
+        state: tempState,
         desc: 'update sys msg.'
       });
     }

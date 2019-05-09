@@ -1,7 +1,11 @@
 import Taro from '@tarojs/taro';
 
 function onDisconnect(error) {
-  const {globalData: {store: {dispatch}}} = Taro.getApp()
+  const {
+    globalData: {
+      store: { dispatch }
+    }
+  } = Taro.getApp();
 
   if (error) {
     switch (error.code) {
@@ -12,9 +16,12 @@ function onDisconnect(error) {
           title: 'im 账号或密码错误',
           duration: '2000'
         });
-        dispatch({ type: 'updateStateFieldByCover', payload: {
-          isLogin: false,
-        } });
+        dispatch({
+          type: 'updateStateFieldByCover',
+          payload: {
+            isLogin: false
+          }
+        });
         break;
       // 重复登录, 已经在其它端登录了, 请跳转到登录页面并提示错误
       case 417:
@@ -33,71 +40,77 @@ function onDisconnect(error) {
               // let pages = getCurrentPages();
               // let currentPage = pages[pages.length - 1];
               // if (currentPage.route.includes('videoCallMeeting')) {
-                // 多人视频
-                // try {
-                  // 兼容登录网关502错误离开房间
-                  // if (app.globalData.netcall) {
-                  //   app.globalData.netcall.leaveChannel().then(() => {
-                  //     app.globalData.netcall.destroy();
-                  //     app.globalData.nim.destroy({
-                  //       done: function() {
-                  //         console.log('destroy nim done !!!');
-                  //         wx.clearStorage();
-                  //         wx.hideLoading();
-                  //       }
-                  //     });
-                  //     wx.reLaunch({
-                  //       url: '/pages/login/login'
-                  //     });
-                  //   });
-                  // }
-                // } catch (error) {}
+              // 多人视频
+              // try {
+              // 兼容登录网关502错误离开房间
+              // if (app.globalData.netcall) {
+              //   app.globalData.netcall.leaveChannel().then(() => {
+              //     app.globalData.netcall.destroy();
+              //     app.globalData.nim.destroy({
+              //       done: function() {
+              //         console.log('destroy nim done !!!');
+              //         wx.clearStorage();
+              //         wx.hideLoading();
+              //       }
+              //     });
+              //     wx.reLaunch({
+              //       url: '/pages/login/login'
+              //     });
+              //   });
+              // }
+              // } catch (error) {}
               // } else if (currentPage.route.includes('videoCall')) {
-                // p2p
-                // try {
-                  // 兼容登录网关502错误离开房间
-                  // if (app.globalData.netcall) {
-                  //   app.globalData.netcall.hangup().then(() => {
-                  //     app.globalData.netcall.destroy();
-                  //     app.globalData.nim.destroy({
-                  //       done: function() {
-                  //         console.log('destroy nim done !!!');
-                  //         wx.clearStorage();
-                  //         wx.hideLoading();
-                  //       }
-                  //     });
-                  //     wx.reLaunch({
-                  //       url: '/pages/login/login'
-                  //     });
-                  //   });
-                  // }
-                // } catch (error) {
-                //   console.warn(error);
-                // }
-              } else {
-                const {globalData: {store: {getState}}} = Taro.getApp()
-                const {im: {nim}} = getState()
-                if(nim) {
-                  nim.destroy({
-                    done: function() {
-                      console.log('destroy nim done !!!');
-
-                      //这里做一些清理工作
-                      // wx.clearStorage();
-                      // wx.hideLoading();
-                    }
-                  });
+              // p2p
+              // try {
+              // 兼容登录网关502错误离开房间
+              // if (app.globalData.netcall) {
+              //   app.globalData.netcall.hangup().then(() => {
+              //     app.globalData.netcall.destroy();
+              //     app.globalData.nim.destroy({
+              //       done: function() {
+              //         console.log('destroy nim done !!!');
+              //         wx.clearStorage();
+              //         wx.hideLoading();
+              //       }
+              //     });
+              //     wx.reLaunch({
+              //       url: '/pages/login/login'
+              //     });
+              //   });
+              // }
+              // } catch (error) {
+              //   console.warn(error);
+              // }
+            } else {
+              const {
+                globalData: {
+                  store: { getState }
                 }
-                // app.globalData.nim.destroy({
-                //   done: function() {
-                //     console.log('destroy nim done !!!');
-                //     wx.clearStorage();
-                //     wx.hideLoading();
-                //   }
-                // });
-                // wx.reLaunch({
-                //   url: '/pages/login/login'
-                // });
+              } = Taro.getApp();
+              const {
+                im: { nim }
+              } = getState();
+              if (nim) {
+                nim.destroy({
+                  done: function() {
+                    console.log('destroy nim done !!!');
+
+                    //这里做一些清理工作
+                    // wx.clearStorage();
+                    // wx.hideLoading();
+                  }
+                });
+              }
+              // app.globalData.nim.destroy({
+              //   done: function() {
+              //     console.log('destroy nim done !!!');
+              //     wx.clearStorage();
+              //     wx.hideLoading();
+              //   }
+              // });
+              // wx.reLaunch({
+              //   url: '/pages/login/login'
+              // });
               // }
             }
           }

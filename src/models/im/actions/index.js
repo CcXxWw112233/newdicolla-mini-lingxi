@@ -26,6 +26,9 @@ import onSysMsgUnread from './onSysMsgUnread'
 import onUpdateSysMsgUnread from './onUpdateSysMsgUnread'
 import onOfflineCustomSysMsgs from './onOfflineCustomSysMsgs'
 import onCustomSysMsg from './onCustomSysMsg'
+import onBroadcastMsg from './onBroadcastMsg'
+import onBroadcastMsgs from './onBroadcastMsgs'
+import onPushEvents from './onPushEvents'
 
 export {
   onDisconnect,
@@ -56,4 +59,7 @@ export {
   onUpdateSysMsgUnread,
   onOfflineCustomSysMsgs,
   onCustomSysMsg,
+  onBroadcastMsg,
+  onBroadcastMsgs,
+  onPushEvents,
 }

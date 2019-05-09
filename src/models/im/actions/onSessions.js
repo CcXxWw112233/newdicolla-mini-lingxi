@@ -15,8 +15,8 @@ function onSessions(sessions) {
     }
   });
   dispatch({
-    type: 'im/updateStateFieldByCover',
-    payload: tempState,
+    type: 'im/updateStateByReplace',
+    state: tempState,
     desc: 'get new sessions'
   });
 }

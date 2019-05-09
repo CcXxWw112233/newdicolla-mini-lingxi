@@ -36,6 +36,14 @@ export default {
       }
       return state
     },
+    updateStateByReplace(state, {state: newState}) {
+      //这个model 的 state 是一个 object,
+      if(newState && isPlainObject(newState)) {
+        return newState
+      }
+      //如果试图用其他类型的 state 替换，返回原来的 state
+      return state
+    },
     updateStateFieldByCover(state, { payload, callback }) {
       if (callback && typeof callback === 'function') {
         callback(state);
