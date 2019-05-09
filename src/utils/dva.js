@@ -3,10 +3,12 @@ import { createLogger } from 'redux-logger';
 import createLoading from 'dva-loading';
 import { NODE_ENV } from '../gloalSet/js/constant'
 
+
 let app;
 let store;
 let dispatch;
 function createApp(opt) {
+  // redux日志
   if('development' == NODE_ENV) {
     // redux日志
     opt.onAction = [createLogger()];
@@ -20,7 +22,6 @@ function createApp(opt) {
 
   store = app._store;
   app.getStore = () => store;
-
   dispatch = store.dispatch;
 
   app.dispatch = dispatch;
