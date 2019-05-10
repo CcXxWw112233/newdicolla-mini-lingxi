@@ -1,6 +1,7 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
+import GroupItem from './GroupItem';
 
 @connect(({ im: { sessionlist, allBoardList } }) => {
   return {
@@ -9,49 +10,6 @@ import { connect } from '@tarojs/redux';
   };
 })
 class GroupList extends Component {
-  integrateSessionList = sessionlist => {
-    const { allBoardList } = this.props;
-    return sessionlist
-      .filter(item => item && item.scene === 'team')
-      .map(item => {
-        if (item.scene === 'team') {
-          let teamInfo = null;
-          teamInfo = allBoardList.find(team => {
-            return team.teamId === item.to;
-          });
-          if (teamInfo) {
-            item.name = teamInfo.name;
-            item.avatar =
-              teamInfo.avatar ||
-              (teamInfo.type === 'normal'
-                ? this.myGroupIcon
-                : this.myAdvancedIcon);
-          } else {
-            item.name = `群${item.to}`;
-            item.avatar = item.avatar || this.myGroupIcon;
-          }
-        }
-        let lastMsg = item.lastMsg || {};
-        if (lastMsg.type === 'text') {
-          item.lastMsgShow = lastMsg.text || '';
-        } else if (lastMsg.type === 'custom') {
-          item.lastMsgShow = util.parseCustomMsg(lastMsg);
-        } else if (
-          lastMsg.scene === 'team' &&
-          lastMsg.type === 'notification'
-        ) {
-          item.lastMsgShow = util.generateTeamSysmMsg(lastMsg);
-        } else if (util.mapMsgType(lastMsg)) {
-          item.lastMsgShow = `[${util.mapMsgType(lastMsg)}]`;
-        } else {
-          item.lastMsgShow = '';
-        }
-        if (item.updateTime) {
-          item.updateTimeShow = util.formatDate(item.updateTime, true);
-        }
-        return item;
-      });
-  };
   getCurrentBoardInfo = (id, list = []) => {
     const result = list.find(i => i.board_id === id);
     return result ? result : {};
@@ -63,21 +21,49 @@ class GroupList extends Component {
         ? currentBoardInfo.childs.map(i => i.im_id)
         : []
     );
-    return [currentBoardInfo].map(board =>
-      sessionlist
-        .filter(
-          i =>
-            i &&
-            i.scene &&
-            i.scene === 'team' &&
-            allGroupIMId.find(e => e === i.to)
-        )
-        .reduce((acc, curr) => {
-          //拿到最后一个消息，和统计未读数。
-          return acc
-        },
-        Object.assign({}, currentBoardInfo, { unReadNum: 0, lastMsg: {} }, { childs: currentBoardInfo.childs && currentBoardInfo.childs.length ? currentBoardInfo.childs.map(i => ({...i, unReadNum = 0, lastMsg: {}})) : [] }))
+
+    //为 currentBoardInfo 及它下面的子群 添加 unRead(未阅读消息数量) 和 lastMsg(最后一条消息， 用于展示)
+    const currentBoardIdWithDefaultUnReadAndLastMsg = Object.assign(
+      {},
+      currentBoardInfo,
+      { unRead: 0, lastMsg: {} }
     );
+    currentBoardIdWithDefaultUnReadAndLastMsg.childs =
+      currentBoardIdWithDefaultUnReadAndLastMsg.childs &&
+      currentBoardIdWithDefaultUnReadAndLastMsg.childs.length
+        ? currentBoardIdWithDefaultUnReadAndLastMsg.childs.map(i => {
+            return {
+              ...i,
+              unRead: 0,
+              lastMsg: ''
+            };
+          })
+        : [];
+    return sessionlist
+      .filter(
+        i =>
+          i &&
+          i.scene &&
+          i.scene === 'team' &&
+          allGroupIMId.find(e => e === i.to)
+      )
+      .reduce((acc, curr) => {
+        //拿到每个群组的最后一个消息，和统计未读数。
+
+        if (curr.to === acc.im_id) {
+          acc.unRead++;
+          acc.lastMsg = curr;
+          return acc;
+        }
+        let findedIndex = acc.childs.findIndex(i => i.im_id === curr.to);
+        const notFound = index => index === -1;
+        if (notFound(findedIndex)) {
+          return acc;
+        }
+        acc.childs[findedIndex].unRead++;
+        acc.childs[findedIndex].lastMsg = curr;
+        return acc;
+      }, currentBoardIdWithDefaultUnReadAndLastMsg);
   };
   render() {
     const { sessionlist, currentBoardId, allBoardList } = this.props;
@@ -89,11 +75,12 @@ class GroupList extends Component {
       currentBoardInfo,
       sessionlist
     );
-    console.log(
-      integratedCurrentBoardInfo,
-      'integratedCurrentBoardInfointegratedCurrentBoardInfo'
+    return (
+      <View>
+        <GroupItem
+        />
+      </View>
     );
-    return <View>GroupList</View>;
   }
 }
 

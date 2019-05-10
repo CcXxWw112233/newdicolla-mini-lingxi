@@ -1,7 +1,7 @@
 import Taro, {Component} from '@tarojs/taro'
 import { View } from '@tarojs/components';
 import styles from './index.scss'
-import GroupList from './components/GroupList'
+import GroupList from './components/GroupList.js'
 
 class BoardDetail extends Component {
   state = {
