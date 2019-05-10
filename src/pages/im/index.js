@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import {View} from '@tarojs/components'
+import {View, Button, Text} from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 
 @connect(({ im }) => ({
@@ -17,12 +17,18 @@ class Im extends Component {
         token: 'd1c46ff800a2fc1f3dc2c8cd09e5336338f18b0a717c845ecc63d0134e18404a',
       }
     })
+    dispatch({
+      type: 'im/fetchAllIMTeamList'
+    })
   }
-
+  handleJumpToBoardDetail = () => {
+    Taro.navigateTo({url: `/pages/boardDetail/index?boardId=1076314429173403648`})
+  }
   render () {
     return (
       <View className='global_horrizontal_padding'>
-        aaaaaaaaaaaaa
+        <Text>aaaaaaaaaaaaa</Text>
+        <Button onClick={this.handleJumpToBoardDetail}>跳转到项目详情页</Button>
       </View>
     )
   }

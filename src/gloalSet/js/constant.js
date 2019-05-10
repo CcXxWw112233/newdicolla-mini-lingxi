@@ -10,6 +10,7 @@ export const API_TEAM = '/api/team' //接口域名
 export const API_FILES = '/api/files' //接口域名
 export const API_FLOWS = '/api/flows' //接口域名
 export const API_WORKBENCH = '/api/workbench'
+export const API_MORE = '/api/more'
 
 export const WEBSOCKET_PATH = '192.168.0.30'  //WS链接地址
 export const WEBSOCKET_PORT= '9326'  //WS链接地址
