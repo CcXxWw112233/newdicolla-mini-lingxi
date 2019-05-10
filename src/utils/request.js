@@ -1,9 +1,11 @@
 import Taro from "@tarojs/taro";
-import { BASE_URL, APP_ID, INT_REQUEST_OK } from "../gloalSet/js/constant";
+import { BASE_URL, INT_REQUEST_OK, REQUEST_RES_CODE_TOKEN_INVALID } from "../gloalSet/js/constant";
 
 export const request = (options, notShowLoading) => {
   const { url = "", data = {}, method = "GET", header = {} } = options;
   let Headers = { ...header};
+  Headers['Authorization'] = Taro.getStorageSync('access_token')
+
   return new Promise((resolve, reject) => {
     if (!notShowLoading) {
       Taro.showLoading({
@@ -11,7 +13,7 @@ export const request = (options, notShowLoading) => {
         mask: "true"
       });
     }
-    Headers['content-type'] = 'application/x-www-form-urlencoded'
+    // Headers['content-type'] = 'application/x-www-form-urlencoded'
     Taro.request({
       url: BASE_URL + url,
       data: {
@@ -20,19 +22,14 @@ export const request = (options, notShowLoading) => {
       method,
       header: Headers,
       success: function(res) {
-        // success网络请求成功
         if (!notShowLoading) {
           Taro.hideLoading();
         }
-        if (isApiResponseOk(res.data)) {
-          resolve(res.data);
-        } else {
-          Taro.showToast({
-            title: res.data.data && res.data.data.message,
-            icon: "none"
-          });
-          reject({error: res.data});
+        if(REQUEST_RES_CODE_TOKEN_INVALID == res.data.code) {
+          Taro.navigateTo({url: '../../pages/login/index'})
         }
+
+        resolve(res.data);
       },
       fail: function(error) {
         if (!notShowLoading) {

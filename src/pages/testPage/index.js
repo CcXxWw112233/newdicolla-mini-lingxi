@@ -17,11 +17,17 @@ export default class TestPage extends Component {
   componentWillReceiveProps (nextProps) {
   }
 
-  componentWillUnmount () { }
+  componentWillUnmount () {
 
-  componentDidShow () {
   }
 
+  componentDidShow (opt) {
+    // console.log({opt})
+  }
+
+  componentWillMount () {
+    console.log(this.$router.params) // 输出 { id: 2, type: 'test' }
+  }
   componentDidHide () { }
 
   setNumber(type) {

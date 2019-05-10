@@ -9,7 +9,7 @@ let dispatch;
 function createApp(opt) {
   if('development' == NODE_ENV) {
     // redux日志
-    opt.onAction = [createLogger()];
+    // opt.onAction = [createLogger()];
   }
   app = create(opt);
   app.use(createLoading({}));

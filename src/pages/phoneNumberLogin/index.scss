@@ -1,0 +1,46 @@
+@import "../../gloalSet/styles/constant";
+.login_btn_wx{
+  background-color: #73D13D;
+  border: pxTrans(1) solid #73D13D;
+}
+.login_btn{
+  margin-top: pxTrans(40);
+  border: 0!important;
+  width: 100%;
+  height: pxTrans(40);
+  line-height: pxTrans(40);
+  text-align: center;
+  color: #fff;
+  border-radius: pxTrans(4);
+  margin-bottom: pxTrans(16);
+  box-shadow: none;
+}
+
+.contain1 {
+  margin-top: pxTrans(88);
+  text-align: center;
+  .linxi_logo {
+    height: pxTrans(88);
+    width: pxTrans(88);
+  }
+}
+.confirm_detail {
+  font-size: pxTrans(20);
+  margin-top: pxTrans(16);
+  text-align: center;
+  color: $color_2;
+}
+
+
+.change_login_type_out {
+  padding-right: $paddingValue;
+  display: flex;
+  justify-content: center;
+  margin-top: pxTrans(14);
+  .change_login_type{
+    text-align: center;
+    color: #1890FF;
+    font-size: pxTrans(14);
+    //width: 100pxTrans();
+  }
+}

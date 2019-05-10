@@ -14,3 +14,4 @@ export const getBar = (data , notShowLoading) => packagePromise((resolve, reject
     reject(res)
   })
 })
+

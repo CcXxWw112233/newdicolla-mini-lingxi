@@ -9,8 +9,8 @@ import sha256 from 'js-sha256'
 import { AtModal, AtModalHeader, AtModalContent, AtModalAction, AtSwitch, AtRadio, AtList, AtListItem, AtButton } from "taro-ui"
 import { connect } from '@tarojs/redux'
 
-@connect(({ authorize }) => ({
-  authorize
+@connect(({ login }) => ({
+  login
 }))
 export default class Login extends Component {
   state = {
@@ -163,6 +163,7 @@ export default class Login extends Component {
   }
     //普通登录
   normalLogin = () => {
+    const { dispatch } = this.props
     let {user, pswd, showCode, userMessageType} = this.state;
     let pswdErrorType = 0;
     if(user === '' || pswd === ''){
@@ -193,17 +194,11 @@ export default class Login extends Component {
     }
     normalLogin(data).then(res => {
       if(res.code === '0'){
-        const tokenArr = res.data.split('__');
-        Taro.setStorageSync('token',tokenArr[0]);        //设置token
-        Taro.setStorageSync('refreshToken',tokenArr[1]); //设置refreshToken
-        let pages = Taro.getCurrentPages();              //获取跳转页面的历史记录
-        let url =  '/pages/index/index';
-        if(pages.length > 1){
-          const page = pages.shift();
-          url = `/${page.route}`
-        }
-        Taro.reLaunch({
-          url: url,
+        dispatch({
+          type: 'login/handleToken',
+          payload: {
+            token_string: res.data
+          }
         })
       }else{
         if(res.message === '登录的手机号不存在'){
@@ -220,46 +215,26 @@ export default class Login extends Component {
       }
     }).catch(() => {})
   }
-  handleLoginData = () => {
-    const data= {
-      account: 15289749459,
-      password: sha256('qwe123')
-    }
-    const that = this
-    normalLogin(data).then(res => {
-      if(res.code === '0'){
-        const tokenArr = res.data.split('__');
-        Taro.setStorageSync('token',tokenArr[0]);        //设置token
-        Taro.setStorageSync('refreshToken',tokenArr[1]); //设置refreshToken
-        let pages = Taro.getCurrentPages();              //获取跳转页面的历史记录
-        let url =  '/pages/index/index';
-        if(pages.length > 1){
-          const page = pages.shift();
-          url = `/${page.route}`
-        }
-        Taro.reLaunch({
-          url: url,
-        })
-      }else{
-        if(res.message === '登录的手机号不存在'){
-          userMessageType = 3;
-        }
-        that.setState({
-          userMessageType,
-        })
-      }
-    }).catch(() => {})
 
-  }
-  wexinAuthPhoneNoLogin = (userInfo) => {
-    if(userInfo.detail.encryptedData){   //同意
-      Taro.showToast({
-        title: '确认授权了'
-      })
-      this.handleLoginData()
-    }else{ //拒绝,保持当前页面，直到同意
-      Taro.showToast({
-        title: '拒绝授权了'
+  //获取授权信息，然后进行微信授权登录
+  getUserInfo = (res) => {
+    const { detail = {} }  = res
+    const { encryptedData, iv } = detail
+    if(!!encryptedData) {
+      const { dispatch } = this.props
+      Taro.login().then(res => {
+        const code = res.code
+        Taro.getUserInfo().then(res2 => {
+          const parmas = {
+            encryptedData: res2.encryptedData, iv: res2.iv, code: code
+          }
+          dispatch({
+            type: 'login/weChatAuthLogin',
+            payload: {
+              parmas
+            }
+          })
+        })
       })
     }
   }
@@ -307,8 +282,10 @@ export default class Login extends Component {
         <View className={`${indexStyles.login_footer}`}>
           <Button className={`${indexStyles.login_btn_normal} ${indexStyles.login_btn}`} type='primary' onClick={this.normalLogin}>登录</Button>
           {/*<Button className='login_btn_wx login_btn' onClick={this.weixinLogin}>微信快捷登录</Button>*/}
-          <Button className={`${indexStyles.login_btn_wx} ${indexStyles.login_btn}`} open_type='getPhoneNumber' onGetPhoneNumber={this.wexinAuthPhoneNoLogin}>微信快捷登录</Button>
-          </View>
+          {/*<Button className={`${indexStyles.login_btn_wx} ${indexStyles.login_btn}`} open_type='getPhoneNumber' onGetPhoneNumber={this.wexinAuthPhoneNoLogin}>微信快捷登录</Button>*/}
+          <Button className={`${indexStyles.login_btn_wx} ${indexStyles.login_btn}`} open-type={'getUserInfo'} onGetUserInfo={this.getUserInfo}>微信快捷登录</Button>
+
+        </View>
         <View className={`${indexStyles.change_login_type_out}`}>
           <View onClick={this.ChangeLoginType} className={`${indexStyles.change_login_type}`}>{showCode?'账号密码': '验证码'}登录</View>
         </View>
