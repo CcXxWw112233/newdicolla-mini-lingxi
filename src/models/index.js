@@ -7,7 +7,6 @@ import login from './login/index'
 const models = [
   testPage,
   board,
-  authorize,
   im,
   authorize,
   login
