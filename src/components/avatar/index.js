@@ -6,7 +6,6 @@ import userIcon from '../../asset/test.jpg'
 export default class Avatar extends Component {
 
   componentWillReceiveProps (nextProps) {
-    console.log(this.props, nextProps)
   }
 
   componentWillUnmount () { }

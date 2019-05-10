@@ -1,10 +1,12 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
-import Aavatar from '../../components/avatar/index'
-
 import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
+import { connect } from '@tarojs/redux'
 
+@connect(({ accountInfo, my }) => ({
+  accountInfo, my
+}))
 export default class selectOrg extends Component {
 
   config = {
@@ -17,28 +19,41 @@ export default class selectOrg extends Component {
 
   componentWillUnmount () { }
 
-  componentDidShow () { }
+  componentDidShow () {
+    this.getCurrentUserOrgs()
+  }
 
   componentDidHide () { }
 
-  setTitle = () => {
-      Taro.setNavigationBarTitle({
-        title: '哈哈哈阿瑟东拉哈是得利卡及时了解卡上劳动课哈哈哈阿瑟东拉哈是得利卡及时了解卡上劳动课'
-      })
+  getCurrentUserOrgs = () => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'my/getOrgList',
+      payload: {}
+    })
   }
+
   render () {
-    const org_list = [1, 2, 3, 4]
+    const { org_list = [] } = this.props.my
     return (
       <View className={indexStyles.index}>
         <View className={indexStyles.contain2}>
+          <View className={indexStyles.list_item_out}>
+            <View className={indexStyles.list_item}>
+              <View className={indexStyles.list_item_name}>全组织</View>
+              <View className={`${indexStyles.list_item_iconnext}`}>
+                <Text className={`${globalStyle.global_iconfont}`}>&#xe641;</Text>
+              </View>
+            </View>
+          </View>
           {org_list.map((value, key) => {
+            const { name, id, } = value
             return (
-              <View className={indexStyles.list_item_out} key={key}>
+              <View className={indexStyles.list_item_out} key={id}>
                 <View className={indexStyles.list_item}>
-                  <View className={indexStyles.list_item_name}>姓名</View>
-                  <View className={indexStyles.list_item_detail}>刘谢</View>
+                  <View className={indexStyles.list_item_name}>{name}</View>
                   <View className={`${indexStyles.list_item_iconnext}`}>
-                    <Text className={`${globalStyle.global_iconfont}`}>&#xe646;</Text>
+                    <Text className={`${globalStyle.global_iconfont}`}>&#xe641;</Text>
                   </View>
                 </View>
               </View>

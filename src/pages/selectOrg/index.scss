@@ -13,7 +13,11 @@ page{
     font-size: pxTrans(16);
     align-items: center;
     .list_item_name {
+      flex: 1;
       color: $color_2;
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
     }
     .list_item_detail{
       flex: 1;

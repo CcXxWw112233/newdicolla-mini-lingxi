@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro'
 import { getBar } from '../../services/testPage'
 import {isApiResponseOk} from "../../utils/request";
-import {weChatAuthLogin, weChatPhoneLogin} from "../../services/login/index";
+import {weChatAuthLogin, weChatPhoneLogin, getAccountInfo} from "../../services/login/index";
 
 export default {
   namespace: 'login',
@@ -49,7 +49,27 @@ export default {
       const tokenArr = token_string.split('__');
       Taro.setStorageSync('access_token',tokenArr[0]);        //设置token
       Taro.setStorageSync('refresh_token',tokenArr[1]); //设置refreshToken
+      yield put({
+        type: 'getAccountInfo',
+        payload: {}
+      })
       Taro.switchTab({url: `../../pages/calendar/index`})
+
+    },
+    //获取用户信息
+    * getAccountInfo({ payload }, { select, call, put }) {
+      const res = yield call(getAccountInfo)
+      if(isApiResponseOk(res)) {
+        yield put({
+          type: 'accountInfo/updateDatas',
+          payload: {
+            account_info: res.data
+          }
+        })
+        Taro.setStorageSync('user_info', JSON.stringify(res.data))
+      }else {
+
+      }
     },
 
   },

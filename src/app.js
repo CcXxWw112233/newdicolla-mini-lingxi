@@ -9,7 +9,6 @@ import './gloalSet/styles/taro_ui_index.global.scss' //global模式下转化taro
 
 import dva from './utils/dva';
 import models from './models/index';
-import phoneNumberLogin from "./pages/phoneNumberLogin";
 const dvaApp = dva.createApp({
   initialState: {},
   models: models,
@@ -27,12 +26,12 @@ class App extends Component {
   config = {
     pages: [
       'pages/login/index',
+      'pages/selectOrg/index',
+      'pages/my/index',
       'pages/phoneNumberLogin/index',
       'pages/calendar/index',
       'pages/testPage/index',
       'pages/personalCenter/index',
-      'pages/my/index',
-      'pages/selectOrg/index',
       'pages/board/index',
       'pages/index/index',
     ],
@@ -70,6 +69,9 @@ class App extends Component {
 
   }
 
+  globalData = {
+    store,
+  }
   componentDidMount () {}
 
   componentDidShow () {}

@@ -5,31 +5,83 @@ import { AtModal, AtModalHeader, AtModalContent, AtModalAction, AtDivider  } fro
 
 import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
+import { connect } from '@tarojs/redux'
 
+@connect(({ accountInfo, my }) => ({
+  accountInfo, my
+}))
 class PersonalCenter extends Component {
+
+  state = {
+    show_change_account_modal: false
+  }
+
   config = {
     navigationBarTitleText: '个人信息'
   }
 
-  componentWillReceiveProps (nextProps) {
-    console.log(this.props, nextProps)
-  }
+  componentWillReceiveProps () { }
 
   componentWillUnmount () { }
 
-  componentDidShow () { }
+  componentDidShow () {
+    this.getAccountInfo()
+  }
 
   componentDidHide () { }
 
-  setTitle = () => {
-      Taro.setNavigationBarTitle({
-        title: '哈哈哈阿瑟东拉哈是得利卡及时了解卡上劳动课哈哈哈阿瑟东拉哈是得利卡及时了解卡上劳动课'
+  //获取用户信息
+  getAccountInfo = () => {
+    const account_info_string = Taro.getStorageSync('user_info')
+    const { dispatch } = this.props
+    if(!!!account_info_string) {
+      dispatch({
+        type: 'accountInfo/getAccountInfo',
+        payload: {}
       })
+    } else {
+      const account_info = JSON.parse(account_info_string)
+      dispatch({
+        type: 'accountInfo/updateDatas',
+        payload: {
+          account_info
+        }
+      })
+    }
   }
+
+  setAccountModalShow = () => {
+    const { show_change_account_modal } = this.state
+    this.setState({
+      show_change_account_modal: !show_change_account_modal
+    })
+  }
+
+  changeAccount = () => {
+    this.setAccountModalShow()
+    Taro.navigateTo({
+      url: '../../pages/login/index'
+    })
+  }
+
+  gotoChangeOrgPage = () => {
+    Taro.navigateTo({
+      url: '../../pages/selectOrg/index'
+    })
+  }
+
   render () {
+    const { show_change_account_modal } = this.state
+    const { account_info = {} } = this.props.accountInfo
+    const { avatar, name, user_set = {}, mobile, email } = account_info
+    const { org_name, current_org } = user_set
+
     const logoutModal = (
       <View>
-        <AtModal isOpened style="width: 270px">
+        <AtModal
+          closeOnClickOverlay={false}
+          isOpened={show_change_account_modal}
+          style="width: 270px">
           <AtModalContent>
             <View className={indexStyles.comfir_modal_conent}>
               <View className={indexStyles.comfir_modal_conent_title}>退出登录</View>
@@ -38,8 +90,8 @@ class PersonalCenter extends Component {
 
           </AtModalContent>
           <AtModalAction>
-            <Button className={indexStyles.btn1} style={{color: '#1890FF'}}>确定</Button>
-            <Button className={indexStyles.btn1} style={{color: '#1890FF'}}>取消</Button>
+            <Button className={indexStyles.btn1} style={{color: '#1890FF'}} onClick={this.changeAccount}>确定</Button>
+            <Button className={indexStyles.btn1} style={{color: '#1890FF'}} onClick={this.setAccountModalShow}>取消</Button>
           </AtModalAction>
         </AtModal>
       </View>
@@ -48,42 +100,42 @@ class PersonalCenter extends Component {
       <View className={indexStyles.index}>
         <View className={indexStyles.contain1}>
           <View>
-            <Aavatar avartarTotal={'single'} size={48} />
+            <Aavatar avartarTotal={'single'} size={48} src={avatar}/>
           </View>
-          <View className={indexStyles.contain1_name}>严士威</View>
+          <View className={indexStyles.contain1_name}>{name}</View>
         </View>
         <View className={indexStyles.contain2}>
           <View className={indexStyles.list_item}>
             <View className={indexStyles.list_item_name}>姓名</View>
-            <View className={indexStyles.list_item_detail}>刘谢</View>
+            <View className={indexStyles.list_item_detail}>{name}</View>
             <View className={`${indexStyles.list_item_iconnext}`}>
-              <Text className={`${globalStyle.global_iconfont}`}>&#xe646;</Text>
+              <Text className={`${globalStyle.global_iconfont}`}>&#xe654;</Text>
             </View>
           </View>
-          <View className={indexStyles.list_item}>
+          <View className={indexStyles.list_item} onClick={this.gotoChangeOrgPage}>
             <View className={indexStyles.list_item_name}>组织</View>
-            <View className={indexStyles.list_item_detail}>阿萨德阿萨德阿萨德阿萨德阿萨德阿萨德阿萨德阿萨德阿萨德</View>
+            <View className={indexStyles.list_item_detail}>{current_org == '0'?'全组织': org_name}</View>
             <View className={`${indexStyles.list_item_iconnext}`}>
-              <Text className={`${globalStyle.global_iconfont}`}>&#xe646;</Text>
+              <Text className={`${globalStyle.global_iconfont}`}>&#xe654;</Text>
             </View>
           </View>
           <View className={indexStyles.list_item}>
             <View className={indexStyles.list_item_name}>手机号</View>
-            <View className={indexStyles.list_item_detail}>13833332222</View>
+            <View className={indexStyles.list_item_detail}>{mobile}</View>
             <View className={`${indexStyles.list_item_iconnext}`}>
-              <Text className={`${globalStyle.global_iconfont}`}>&#xe646;</Text>
+              <Text className={`${globalStyle.global_iconfont}`}>&#xe654;</Text>
             </View>
           </View>
           <View className={indexStyles.list_item}>
             <View className={indexStyles.list_item_name}>邮箱号</View>
-            <View className={indexStyles.list_item_detail}>1212@212ss</View>
+            <View className={indexStyles.list_item_detail}>{email}</View>
             <View className={`${indexStyles.list_item_iconnext}`}>
-              <Text className={`${globalStyle.global_iconfont}`}>&#xe646;</Text>
+              <Text className={`${globalStyle.global_iconfont}`}>&#xe654;</Text>
             </View>
           </View>
 
         </View>
-        <View className={indexStyles.logout}>
+        <View className={indexStyles.logout} onClick={this.setAccountModalShow}>
           切换账号
         </View>
         {logoutModal}
