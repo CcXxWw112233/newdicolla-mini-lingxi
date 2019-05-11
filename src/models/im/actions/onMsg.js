@@ -32,6 +32,7 @@ function onMsg(msg) {
   }
   tempState.rawMessageList[sessionId][msg.time] = Object.assign({}, msg);
   if (tempState.currentChatTo === msg.sessionId && nim) {
+    console.log(msg.sessionId, '--------------- resetSessionUnread in Msg------------------')
     // 当前会话
     nim.resetSessionUnread(msg.sessionId);
   }

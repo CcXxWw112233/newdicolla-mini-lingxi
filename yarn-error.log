@@ -1,29 +1,29 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\dell\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add @tarojs/redux/types/index --silent --no-progress
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add GroupItem --silent --no-progress
 
 PATH: 
-  C:\Users\dell\AppData\Roaming\npm\node_modules\npm\node_modules\npm-lifecycle\node-gyp-bin;F:\work\newdicolla-mini-lingxi\node_modules\.bin;C:\Users\dell\AppData\Local\Temp\yarn--1557047379891-0.6244565204725603;F:\work\newdicolla-mini-lingxi\node_modules\.bin;C:\Users\dell\AppData\Local\Yarn\Data\link\node_modules\.bin;C:\Users\dell\AppData\Local\Yarn\bin;C:\Program Files\libexec\lib\node_modules\npm\bin\node-gyp-bin;C:\Program Files\lib\node_modules\npm\bin\node-gyp-bin;C:\Program Files\nodejs\node_modules\npm\bin\node-gyp-bin;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\iCLS\;C:\Program Files\Intel\Intel(R) Management Engine Components\iCLS\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\nodejs\;D:\Git\cmd;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Users\dell\AppData\Local\Microsoft\WindowsApps;C:\Users\dell\AppData\Roaming\npm;
+  C:\Program Files\nodejs\node_modules\npm\node_modules\npm-lifecycle\node-gyp-bin;D:\huoyongfei\project\newdicolla-mini-lingxi\node_modules\.bin;C:\Users\DELL\AppData\Local\Temp\yarn--1557467207615-0.008848174216243176;D:\huoyongfei\project\newdicolla-mini-lingxi\node_modules\.bin;C:\Users\DELL\AppData\Local\Yarn\Data\link\node_modules\.bin;C:\Program Files\libexec\lib\node_modules\npm\bin\node-gyp-bin;C:\Program Files\lib\node_modules\npm\bin\node-gyp-bin;C:\Program Files\nodejs\node_modules\npm\bin\node-gyp-bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\DELL\bin;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\iCLS;C:\Program Files\Intel\Intel(R) Management Engine Components\iCLS;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Windows\System32\OpenSSH;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Git\cmd;C:\Program Files\nodejs;C:\Program Files\Intel\WiFi\bin;C:\Program Files\Common Files\Intel\WirelessCommon;C:\Program Files (x86)\Yarn\bin;C:\Users\DELL\AppData\Local\Microsoft\WindowsApps;D:\soft\Microsoft VS Code\bin;C:\Users\DELL\AppData\Roaming\npm;C:\Program Files\Intel\WiFi\bin;C:\Program Files\Common Files\Intel\WirelessCommon;C:\Users\DELL\AppData\Local\Yarn\bin
 
 Yarn version: 
   1.15.2
 
 Node version: 
-  10.15.3
+  10.14.1
 
 Platform: 
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@tarojs%2fredux/types/index: Request "https://registry.yarnpkg.com/@tarojs%2fredux/types/index" returned a 405
-      at Request.params.callback [as _callback] (C:\Users\dell\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:66067:18)
-      at Request.self.callback (C:\Users\dell\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:129541:22)
-      at Request.emit (events.js:189:13)
-      at Request.<anonymous> (C:\Users\dell\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:130513:10)
-      at Request.emit (events.js:189:13)
-      at IncomingMessage.<anonymous> (C:\Users\dell\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:130435:12)
-      at Object.onceWrapper (events.js:277:13)
-      at IncomingMessage.emit (events.js:194:15)
-      at endReadableNT (_stream_readable.js:1125:12)
+  Error: https://registry.yarnpkg.com/GroupItem: Not found
+      at Request.params.callback [as _callback] (C:\Program Files (x86)\Yarn\lib\cli.js:65167:18)
+      at Request.self.callback (C:\Program Files (x86)\Yarn\lib\cli.js:129541:22)
+      at Request.emit (events.js:182:13)
+      at Request.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:130513:10)
+      at Request.emit (events.js:182:13)
+      at IncomingMessage.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:130435:12)
+      at Object.onceWrapper (events.js:273:13)
+      at IncomingMessage.emit (events.js:187:15)
+      at endReadableNT (_stream_readable.js:1094:12)
       at process._tickCallback (internal/process/next_tick.js:63:19)
 
 npm manifest: 

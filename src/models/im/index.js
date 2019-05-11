@@ -2,11 +2,30 @@ import { INITIAL_STATE } from './initialState';
 import initNimSDK from './initNimSDK';
 import { isPlainObject } from './../../utils/util';
 import { selectFieldsFromIm } from './selectFields';
+import {getAllIMTeamList} from './../../services/im/index'
+import {isApiResponseOk} from './../../utils/request'
 
 export default {
   namespace: 'im',
   state: INITIAL_STATE,
   effects: {
+    *fetchAllIMTeamList({}, {put, call}) {
+      const res = yield call(getAllIMTeamList)
+      if(isApiResponseOk(res)) {
+        const {data} = res
+        //这里应该是会拿到当前用户的全部组织的所有项目群组数据，
+        //但是目前还混有其他数据，所以这里过滤一下
+      const filteredAllBoardList = (arr = []) => arr.filter(i => i.type && i.type === '2')
+
+       yield put({
+          type: 'updateStateFieldByCover',
+          payload: {
+            allBoardList: filteredAllBoardList(data)
+          },
+          desc: 'get all team list.'
+        })
+      }
+    },
     *initNimSDK({ payload }, { select, put }) {
       const { account, token } = payload;
 

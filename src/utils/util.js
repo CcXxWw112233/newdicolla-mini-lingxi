@@ -1,10 +1,7 @@
 //工具函数
 export const isPlainObject = obj => {
-  if (typeof obj !== 'object' || obj === null) return false
-
-  let proto = obj
-  while (Object.getPrototypeOf(proto) !== null) {
-    proto = Object.getPrototypeOf(proto)
+  if(typeof obj === 'object' && obj !== null) {
+    return true
   }
-  return Object.getPrototypeOf(obj) === proto
+  return false
 }
