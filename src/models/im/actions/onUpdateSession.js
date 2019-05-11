@@ -25,7 +25,8 @@ function onUpdateSession(sessions) {
   });
 
   // tempState.sessionlist = nim.mergeSessions(state.sessionlist, sessions);
-  tempState.sessionlist = [...state.sessionlist, ...sessions]
+  const filteredSessionList = state.sessionlist.filter(i => !sessions.find(s => s.to === i.to && s.updateTime === i.updateTime))
+  tempState.sessionlist = [...filteredSessionList, ...sessions]
   tempState.sessionlist.sort((a, b) => {
     return b.updateTime - a.updateTime;
   });

@@ -23,13 +23,13 @@ class Avatar extends Component {
             {urlList.map(i => {
               if (this.isValidImgUrl(i)) {
                 return (
-                  <View className={styles.ItemWrapperOne}>
+                  <View key={i} className={styles.ItemWrapperOne}>
                     <Image className={styles.item} mode="aspectFill" src={i} />
                   </View>
                 );
               }
               return (
-                <View className={styles.ItemWrapperOne}>
+                <View key={i} className={styles.ItemWrapperOne}>
                   <AtIcon value="user" size="40" color="#3F536E" />
                 </View>
               );
@@ -41,13 +41,13 @@ class Avatar extends Component {
             {urlList.map(i => {
               if (this.isValidImgUrl(i)) {
                 return (
-                  <View className={styles.ItemWrapperTwo}>
+                  <View key={i} className={styles.ItemWrapperTwo}>
                     <Image className={styles.item} mode="aspectFill" src={i} />
                   </View>
                 );
               }
               return (
-                <View className={styles.ItemWrapperTwo}>
+                <View key={i} className={styles.ItemWrapperTwo}>
                   <AtIcon value="user" size="40" color="#3F536E" />
                 </View>
               );
@@ -60,6 +60,7 @@ class Avatar extends Component {
               if (this.isValidImgUrl(i)) {
                 return (
                   <View
+                  key={i}
                     className={
                       index === 0
                         ? styles.ItemWrapperThreeFirstChild
@@ -72,6 +73,7 @@ class Avatar extends Component {
               }
               return (
                 <View
+                  key={i}
                   className={
                     index === 0
                       ? styles.ItemWrapperThreeFirstChild
@@ -89,13 +91,13 @@ class Avatar extends Component {
             {urlList.map(i => {
               if (this.isValidImgUrl(i)) {
                 return (
-                  <View className={styles.ItemWrapperFour}>
+                  <View key={i} className={styles.ItemWrapperFour}>
                     <Image className={styles.item} mode="aspectFill" src={i} />
                   </View>
                 );
               }
               return (
-                <View className={styles.ItemWrapperFour}>
+                <View key={i} className={styles.ItemWrapperFour}>
                   <AtIcon value="user" size="40" color="#3F536E" />
                 </View>
               );
