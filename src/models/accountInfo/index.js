@@ -7,7 +7,6 @@ export default {
   namespace: 'accountInfo',
   state: {
     account_info: {},
-    current_org: '', //当前组织
   },
   effects: {
     //获取用户信息

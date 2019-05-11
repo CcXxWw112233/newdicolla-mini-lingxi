@@ -32,13 +32,15 @@ class PersonalCenter extends Component {
 
   //获取用户信息
   getAccountInfo = () => {
-    const account_info_string = Taro.getStorageSync('user_info')
-    const { dispatch } = this.props
-    dispatch({
-      type: 'accountInfo/getAccountInfo',
-      payload: {}
-    })
-
+    const { dispatch, accountInfo } = this.props
+    const { account_info = {}} = accountInfo
+    if(JSON.stringify(account_info) == '{}') {
+      dispatch({
+        type: 'accountInfo/getAccountInfo',
+        payload: {}
+      })
+    }
+    // const account_info_string = Taro.getStorageSync('user_info')
     // if(!!!account_info_string) {
     //   dispatch({
     //     type: 'accountInfo/getAccountInfo',
@@ -80,9 +82,9 @@ class PersonalCenter extends Component {
 
   render () {
     const { show_change_account_modal } = this.state
-    const { account_info = {}, current_org } = this.props.accountInfo
+    const { account_info = {} } = this.props.accountInfo
     const { avatar, name, user_set = {}, mobile, email } = account_info
-    const { org_name } = user_set
+    const { org_name, current_org } = user_set
 
     const logoutModal = (
       <View>

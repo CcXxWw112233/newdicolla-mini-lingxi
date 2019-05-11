@@ -28,9 +28,10 @@ export default {
     * changeCurrentOrg({ payload }, { select, call, put }) { //切换组织
       const res = yield call(changeOrg, payload)
       if(isApiResponseOk(res)) {
-        const tokenArray = res.data.split('__')
-        Taro.setStorageSync('access_token', tokenArray[0])
-        Taro.setStorageSync('refresh_token', tokenArray[1])
+        yield put({
+          type: 'accountInfo/getAccountInfo',
+          payload: {}
+        })
         Taro.navigateBack()
       }else{
       }

@@ -35,23 +35,21 @@ export default class selectOrg extends Component {
 
   setCurrentOrg = (current_org) => {
     const { dispatch } = this.props
-    dispatch({
-      type: 'accountInfo/updateDatas',
-      payload: {
-        current_org
-      }
-    })
+    //切换组织
     dispatch({
       type: 'my/changeCurrentOrg',
       payload: {
-        org_id: current_org
+        _organization_id: current_org
       }
     })
+
   }
 
   render () {
     const { org_list = [] } = this.props.my
-    const { current_org } = this.props.accountInfo
+    const { account_info = {} } = this.props.accountInfo
+    const { user_set = {} } = account_info
+    const { current_org } = user_set
 
     return (
       <View className={indexStyles.index}>

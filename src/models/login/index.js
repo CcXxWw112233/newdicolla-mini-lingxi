@@ -66,7 +66,7 @@ export default {
             account_info: res.data
           }
         })
-        Taro.setStorageSync('user_info', JSON.stringify(res.data))
+        Taro.setStorageSync('account_info', JSON.stringify(res.data))
       }else {
 
       }

@@ -74,6 +74,6 @@ export const changeOrg = (data , notShowLoading) => {
       ...data
     },
     method: 'PUT',
-    url: `${API_UPMS}/user/changecurrentorg`,
+    url: `${API_UPMS}/v2/user/changecurrentorg/${data['_organization_id']}`,
   }, notShowLoading)
 }

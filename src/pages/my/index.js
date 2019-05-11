@@ -26,12 +26,17 @@ export default class My extends Component {
 
   //获取用户信息
   getAccountInfo() {
-    const account_info_string = Taro.getStorageSync('user_info')
-    const { dispatch } = this.props
-    dispatch({
-      type: 'accountInfo/getAccountInfo',
-      payload: {}
-    })
+    const { dispatch, accountInfo } = this.props
+    const { account_info = {}} = accountInfo
+    if(JSON.stringify(account_info) == '{}') {
+      dispatch({
+        type: 'accountInfo/getAccountInfo',
+        payload: {}
+      })
+    }
+
+
+    // const account_info_string = Taro.getStorageSync('user_info')
     // if(!!!account_info_string) {
     //   dispatch({
     //     type: 'accountInfo/getAccountInfo',
