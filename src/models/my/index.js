@@ -1,13 +1,12 @@
 import { getBar } from '../../services/testPage'
 import {isApiResponseOk} from "../../utils/request";
-import { getOrgList } from "../../services/login";
+import {changeOrg, getOrgList} from "../../services/login";
 import Taro from '@tarojs/taro'
 
 export default {
   namespace: 'my',
   state: {
     org_list: [],
-    current_org: ''
   },
   effects: {
     //获取组织列表
@@ -27,32 +26,14 @@ export default {
 
     //切换组织
     * changeCurrentOrg({ payload }, { select, call, put }) { //切换组织
-      // let res = yield call(changeCurrentOrg, payload)
-      // if(isApiResponseOk(res)) {
-      //   const tokenArray = res.data.split('__')
-      //   Taro.setStorageSync().set('Authorization', tokenArray[0], {expires: 30, path: ''})
-      //   Cookies.set('refreshToken', tokenArray[1], {expires: 30, path: ''})
-      //   yield put({
-      //     type: 'getUSerInfo',
-      //     payload: {
-      //       operateType: 'changeOrg',
-      //     }
-      //   })
-      //   yield put({ //重新获取名词方案
-      //     type: 'getCurrentNounPlan',
-      //     payload: {
-      //     }
-      //   })
-      //
-      //   // //组织切换重新加载
-      //   // const redirectHash =  locallocation.pathname
-      //   // if(locallocation.pathname === '/technological/projectDetail') {
-      //   //   redirectHash === '/technological/project'
-      //   // }
-      //   // yield put(routerRedux.push(`/technological?redirectHash=${redirectHash}`));
-      // }else{
-      //   message.warn(`${currentNounPlanFilterName(ORGANIZATION)}切换出了点问题`, MESSAGE_DURATION_TIME)
-      // }
+      const res = yield call(changeOrg, payload)
+      if(isApiResponseOk(res)) {
+        const tokenArray = res.data.split('__')
+        Taro.setStorageSync('access_token', tokenArray[0])
+        Taro.setStorageSync('refresh_token', tokenArray[1])
+        Taro.navigateBack()
+      }else{
+      }
     },
 
 

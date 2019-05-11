@@ -34,20 +34,28 @@ class PersonalCenter extends Component {
   getAccountInfo = () => {
     const account_info_string = Taro.getStorageSync('user_info')
     const { dispatch } = this.props
-    if(!!!account_info_string) {
-      dispatch({
-        type: 'accountInfo/getAccountInfo',
-        payload: {}
-      })
-    } else {
-      const account_info = JSON.parse(account_info_string)
-      dispatch({
-        type: 'accountInfo/updateDatas',
-        payload: {
-          account_info
-        }
-      })
-    }
+    dispatch({
+      type: 'accountInfo/getAccountInfo',
+      payload: {}
+    })
+
+    // if(!!!account_info_string) {
+    //   dispatch({
+    //     type: 'accountInfo/getAccountInfo',
+    //     payload: {}
+    //   })
+    // } else {
+    //   const account_info = JSON.parse(account_info_string)
+    //   const { user_set = {} } = account_info
+    //   const { current_org } = user_set
+    //   dispatch({
+    //     type: 'accountInfo/updateDatas',
+    //     payload: {
+    //       account_info,
+    //       current_org
+    //     }
+    //   })
+    // }
   }
 
   setAccountModalShow = () => {
@@ -72,9 +80,9 @@ class PersonalCenter extends Component {
 
   render () {
     const { show_change_account_modal } = this.state
-    const { account_info = {} } = this.props.accountInfo
+    const { account_info = {}, current_org } = this.props.accountInfo
     const { avatar, name, user_set = {}, mobile, email } = account_info
-    const { org_name, current_org } = user_set
+    const { org_name } = user_set
 
     const logoutModal = (
       <View>
@@ -109,7 +117,7 @@ class PersonalCenter extends Component {
             <View className={indexStyles.list_item_name}>姓名</View>
             <View className={indexStyles.list_item_detail}>{name}</View>
             <View className={`${indexStyles.list_item_iconnext}`}>
-              <Text className={`${globalStyle.global_iconfont}`}>&#xe654;</Text>
+              {/*<Text className={`${globalStyle.global_iconfont}`}>&#xe654;</Text>*/}
             </View>
           </View>
           <View className={indexStyles.list_item} onClick={this.gotoChangeOrgPage}>
@@ -123,14 +131,14 @@ class PersonalCenter extends Component {
             <View className={indexStyles.list_item_name}>手机号</View>
             <View className={indexStyles.list_item_detail}>{mobile}</View>
             <View className={`${indexStyles.list_item_iconnext}`}>
-              <Text className={`${globalStyle.global_iconfont}`}>&#xe654;</Text>
+              {/*<Text className={`${globalStyle.global_iconfont}`}>&#xe654;</Text>*/}
             </View>
           </View>
           <View className={indexStyles.list_item}>
             <View className={indexStyles.list_item_name}>邮箱号</View>
             <View className={indexStyles.list_item_detail}>{email}</View>
             <View className={`${indexStyles.list_item_iconnext}`}>
-              <Text className={`${globalStyle.global_iconfont}`}>&#xe654;</Text>
+              {/*<Text className={`${globalStyle.global_iconfont}`}>&#xe654;</Text>*/}
             </View>
           </View>
 

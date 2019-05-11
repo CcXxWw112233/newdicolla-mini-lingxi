@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://dknnue.natappfree.cc'//'http://am5evc.natappfree.cc'//'http://192.168.1.68'//'http://prerelease.lingxi.new-di.com'
+export const BASE_URL = 'http://iktpdp.natappfree.cc'//'http://am5evc.natappfree.cc'//'http://192.168.1.68'//'http://prerelease.lingxi.new-di.com'
 export const NODE_ENV = process.env.NODE_ENV
 
 export const PAGE_SIZE = 20
