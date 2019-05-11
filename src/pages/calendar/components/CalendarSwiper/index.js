@@ -22,6 +22,16 @@ export default class CalendarSwiper extends Component {
 
   componentWillUnmount () { }
 
+  componentDidMount() {
+    this.getDataArray({})
+    this.getSelectDateDetail()
+    const systemInfo = Taro.getSystemInfoSync()
+    const { windowWidth } = systemInfo
+    this.setState({
+      windowWidth,
+    })
+  }
+
   componentDidShow () {
     this.getDataArray({})
     this.getSelectDateDetail()
@@ -30,7 +40,6 @@ export default class CalendarSwiper extends Component {
     this.setState({
       windowWidth,
     })
-    console.log({refs: this.ref})
   }
 
   componentDidHide () { }
@@ -38,6 +47,7 @@ export default class CalendarSwiper extends Component {
   //获取日历列表数据
   getDataArray = ({year, month}) => {
     const date_array = getMonthDate({year, month})
+    console.log({date_array})
     this.setState({
       date_array
     })
@@ -95,7 +105,6 @@ export default class CalendarSwiper extends Component {
         decoration = 'to_right'
       }
     }
-    console.log(decoration)
     this.swiperChangeHandle(decoration)
     this.setState({
       current_indi: current
@@ -152,7 +161,6 @@ export default class CalendarSwiper extends Component {
 
   render () {
     const { swiper_list = [], current_indi, windowWidth, date_array = [], select_timestamp, select_year, select_month, select_date_no, select_week_day_dec, show_whole_calendar} = this.state
-    console.log({ref: this.refs})
 
     const week_array = ['日', '一', '二', '三', '四', '五', '六']
     const renderDate = (

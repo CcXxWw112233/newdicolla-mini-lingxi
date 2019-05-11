@@ -28,11 +28,11 @@ export default class BoardTypeSelect extends Component {
             </View>
           </View>
           <View className={`${indexStyles.select_item} ${indexStyles.selected}`}>
-            <View className={`${indexStyles.select_item_left}`}>
+            <View className={`${indexStyles.select_item_left}`} style={{color: '#8c8c8c'}}>
               已归档的项目
             </View>
             <View className={`${indexStyles.select_item_right}`}>
-              <Text className={`${globalStyles.global_iconfont} ${indexStyles.select_item_itemcheck}`}>&#xe641;</Text>
+              {/*<Text className={`${globalStyles.global_iconfont} ${indexStyles.select_item_itemcheck}`}>&#xe641;</Text>*/}
             </View>
           </View>
         </View>

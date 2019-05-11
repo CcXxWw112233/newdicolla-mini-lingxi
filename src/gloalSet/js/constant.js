@@ -1,11 +1,11 @@
-export const BASE_URL = 'http://iktpdp.natappfree.cc'//'http://am5evc.natappfree.cc'//'http://192.168.1.68'//'http://prerelease.lingxi.new-di.com'
+export const BASE_URL = 'http://test.lingxi.new-di.com'//'http://am5evc.natappfree.cc'//'http://192.168.1.68'//'http://prerelease.lingxi.new-di.com'
 export const NODE_ENV = process.env.NODE_ENV
 
 export const PAGE_SIZE = 20
 export const QUERY_TYPE = 1
 
 export const API_UPMS = '/api/upms' //接口域名
-export const API_TEAM = '/api/team' //接口域名
+export const API_BOARD = '/api/projects' //接口域名
 export const API_FILES = '/api/files' //接口域名
 export const API_FLOWS = '/api/flows' //接口域名
 export const API_WORKBENCH = '/api/workbench'
@@ -24,4 +24,5 @@ export const REQUEST_RES_CODE_SUCCESS = '0' //成功
 export const REQUEST_RES_CODE_TOKEN_INVALID = '401' //token失效
 export const REQUEST_RES_CODE_NO_BIND = '4013' //未绑定
 
-
+//特殊接口字段待修改,（后台定义不规范，前端统一定义，便于修改）
+export const RESPONSE_DATA_CODE_DATA = 'data'
