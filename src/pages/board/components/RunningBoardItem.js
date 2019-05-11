@@ -28,7 +28,7 @@ class RuningBoardItem extends Component {
         <View className={`${globalStyles.global_card_out} ${indexStyles.card_content}`}>
           <View className={`${indexStyles.card_content_top}`}>
             <Text className={`${indexStyles.card_title}`}>{board_name}</Text>
-            <Text className={`${indexStyles.organize}`}>#合创迪安</Text>
+            <Text className={`${indexStyles.organize}`}>{}</Text>
             <Text className={`${indexStyles.star_list}`}>
               {starlist.map((value, key) => {
                 return (
