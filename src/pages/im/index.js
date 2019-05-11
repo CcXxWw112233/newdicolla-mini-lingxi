@@ -28,7 +28,6 @@ class Im extends Component {
   render() {
     return (
       <View className="global_horrizontal_padding">
-        <Text>aaaaaaaaaaaaa</Text>
         <Button onClick={this.handleJumpToBoardDetail}>跳转到项目详情页</Button>
       </View>
     );

@@ -11,7 +11,7 @@ function createApp(opt) {
   // redux日志
   if('development' == NODE_ENV) {
     // redux日志
-    // opt.onAction = [createLogger()];
+    opt.onAction = [createLogger()];
   }
   app = create(opt);
   app.use(createLoading({}));
