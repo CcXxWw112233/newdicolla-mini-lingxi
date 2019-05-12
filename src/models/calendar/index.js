@@ -10,7 +10,7 @@ export default {
     board_list: [], //项目列表
     selected_board: '0', //当前选择项目，所有项目为0
     selected_board_name: '所有参与的项目',
-    selected_timestamp: '', //选择查看时间的时间戳
+    selected_timestamp: new Date().getTime(), //选择查看时间的时间戳
     search_text: '',
     sche_card_list: [], //项目的所有排期的卡片列表
     no_sche_card_list: [], //项目的所有排期的卡片列表
@@ -39,12 +39,27 @@ export default {
       const selected_timestamp = yield select(select_selected_timestamp)
       const selected_board = yield select(select_selected_board)
       const current_org = getCurrentOrgByStorage()
-      const params = {
+      const obj = {
+        current_org,
         selected_board,
         selected_timestamp,
         ...payload
       }
-      const res = yield call(getScheCardList, {})
+      //保证和获取最新的参数
+      const date = new Date(obj['selected_timestamp'])
+      const year = date.getFullYear()
+      const month = date.getMonth() + 1
+      const date_no= date.getDate()
+      const start_time = new Date(`${year}/${month}/${date_no} 00:00:00`).getTime() / 1000
+      const due_time = new Date(`${year}/${month}/${date_no} 23:59:59`).getTime() / 1000
+      const params = {
+        _organization_id: obj['current_org'],
+        board_id: obj['selected_board'],
+        ...payload,
+        start_time,
+        due_time
+      }
+      const res = yield call(getScheCardList, {...params})
       if(isApiResponseOk(res)) {
         yield put({
           type: 'updateDatas',

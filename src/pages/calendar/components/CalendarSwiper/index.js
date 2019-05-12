@@ -17,7 +17,7 @@ export default class CalendarSwiper extends Component {
     swiper_list: [0, 1, 2],
     current_indi: 1, //滑动组件当前所在哪个点
     windowWidth: 0,
-    select_timestamp: new Date().getTime(), //当前选择的日期
+    selected_timestamp: new Date().getTime(), //当前选择的日期
     show_whole_calendar: '0', // 0 /1 /2 初始/展开/关闭
   }
   componentWillReceiveProps (nextProps) {
@@ -79,7 +79,7 @@ export default class CalendarSwiper extends Component {
       }
     }
     const new_timestamp = new Date(`${select_year_new}/${select_month_new}/${select_date_no_new}`).getTime()
-    this.setState({select_timestamp: new_timestamp})
+    this.updateSelecedTime(new_timestamp)
     this.getDataArray({year: select_year_new, month: select_month_new})
     this.getSelectDateDetail(new_timestamp)
   }
@@ -122,9 +122,7 @@ export default class CalendarSwiper extends Component {
     if(!no_in_select_month || no_in_select_month != 'undefined') {
       return
     }
-    this.setState({
-      select_timestamp: Number(timestamp)
-    })
+    this.updateSelecedTime(Number(timestamp))
     this.getSelectDateDetail(timestamp)
   }
 
@@ -162,8 +160,28 @@ export default class CalendarSwiper extends Component {
     })
   }
 
+  updateSelecedTime = (timestamp) => {
+    const { dispatch } = this.props
+    this.setState({
+      selected_timestamp: timestamp
+    })
+    dispatch({
+      type: 'calendar/updateDatas',
+      payload: {
+        selected_timestamp: timestamp
+      }
+    })
+    //获取排期列表
+    dispatch({
+      type: 'calendar/getScheCardList',
+      payload: {
+        selected_timestamp: timestamp
+      }
+    })
+  }
+
   render () {
-    const { swiper_list = [], current_indi, windowWidth, date_array = [], select_timestamp, select_year, select_month, select_date_no, select_week_day_dec, show_whole_calendar} = this.state
+    const { swiper_list = [], current_indi, windowWidth, date_array = [], selected_timestamp, select_year, select_month, select_date_no, select_week_day_dec, show_whole_calendar} = this.state
 
     const week_array = ['日', '一', '二', '三', '四', '五', '六']
     const renderDate = (
@@ -178,7 +196,7 @@ export default class CalendarSwiper extends Component {
         <View className={indexStyles.date_area}>
           {date_array.map((value, key) => {
             const { date_no, timestamp, is_today, is_has_task, is_has_flow, no_in_select_month } = value
-            const is_selected = isSamDay(select_timestamp, timestamp)
+            const is_selected = isSamDay(selected_timestamp, timestamp)
             return (
               <View className={indexStyles.date_day} key={`${timestamp}_${date_no}`} style={`width: ${windowWidth / 7}px`}>
                 <View

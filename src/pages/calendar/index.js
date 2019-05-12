@@ -36,6 +36,7 @@ export default class Calendar extends Component {
     })
     this.getOrgBoardList()
     this.getNoScheCardList()
+    this.getScheCardList()
   }
 
   //获取项目列表
@@ -47,10 +48,19 @@ export default class Calendar extends Component {
     })
   }
 
+  //获取尚未排期列表
   getNoScheCardList = () => {
     const { dispatch } = this.props
     dispatch({
       type: 'calendar/getNoScheCardList',
+      payload: {}
+    })
+  }
+
+  getScheCardList = () => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'calendar/getScheCardList',
       payload: {}
     })
   }
