@@ -4,27 +4,78 @@ import { connect } from '@tarojs/redux';
 import styles from './GroupList.scss';
 import GroupItem from './GroupItem';
 
-@connect(({ im: { sessionlist, allBoardList } }) => {
-  return {
-    allBoardList,
-    sessionlist
-  };
-})
+@connect(
+  ({ im: { sessionlist, currentBoardId, currentBoard} }) => {
+    return {
+      sessionlist,
+      currentBoardId,
+      currentBoard,
+    };
+  },
+  dispatch => {
+    return {
+      setCurrentChatTo: im_id =>
+        dispatch({
+          type: 'im/updateStateFieldByCover',
+          payload: {
+            currentChatTo: im_id
+          },
+          desc: 'set currentChatTo'
+        }),
+      setCurrentGroup: (group = {}) => {
+        dispatch({
+          type: 'im/updateStateFieldByCover',
+          payload: {
+            currentGroup: group
+          },
+          desc: 'set current chat group.'
+        })
+      },
+      updateCurrentChatUnreadNewsState: im_id =>
+        dispatch({
+          type: 'im/updateCurrentChatUnreadNewsState',
+          payload: {
+            im_id
+          },
+          desc: 'update currentChat unread news'
+        })
+    };
+  }
+)
 class GroupList extends Component {
   state = {
-    isShouldExpandSubGroup: true,
-  }
-  hanldClickedGroupItem = ({board_id, im_id}) => {
-    console.log(board_id, im_id, 'ooooooooooooooooooooooooooooo')
-  }
+    isShouldExpandSubGroup: true
+  };
+  hanldClickedGroupItem = ({ board_id, im_id }) => {
+    const { setCurrentChatTo, setCurrentGroup, updateCurrentChatUnreadNewsState, currentBoard } = this.props;
+
+    //生成与 云信后端返回数据相同格式的 id
+    const id = `team-${im_id}`;
+
+    //设置currentChatTo之后，会自动将该群的新接收的消息更新为已读，
+    //但是如果该群之前有未读消息的时候，需要先更新该群的未读消息状态
+    //所以需要在聊天界面的页面退出回调中，将 currentChatTo 值 清除
+    const getCurrentGroup = (currentBoard, im_id) => {
+      if(!currentBoard.childs || !Array.isArray(currentBoard.childs)) {
+        currentBoard.childs = []
+      }
+      const ret = [currentBoard, ...currentBoard.childs].find(i => i.im_id === im_id)
+      return ret ? ret : {}
+    }
+    Promise.resolve(setCurrentChatTo(id))
+      .then(() => setCurrentGroup(getCurrentGroup(currentBoard, im_id)))
+      .then(() => updateCurrentChatUnreadNewsState(id))
+      .then(() => {
+        Taro.navigateTo({
+          url: `/pages/chat/index`
+        });
+      })
+      .catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
+  };
   handleExpandSubGroupChange = flag => {
     this.setState({
       isShouldExpandSubGroup: flag
-    })
-  }
-  getCurrentBoardInfo = (id, list = []) => {
-    const result = list.find(i => i.board_id === id);
-    return result ? result : {};
+    });
   };
   integrateCurrentBoardWithSessions = (currentBoardInfo, sessionlist = []) => {
     //这里需要整合每个群组的未读消息数量和最后一个信息
@@ -101,8 +152,8 @@ class GroupList extends Component {
     //如果主群的未读数量不是0， 那么就不会显示消息点提醒
     if (unRead) return false;
     //如果子群中有任意的消息，那么就展开子群列表
-    if (childsUnReadArr.some(Boolean)){
-      return true
+    if (childsUnReadArr.some(Boolean)) {
+      return true;
     }
     return false;
   };
@@ -157,14 +208,10 @@ class GroupList extends Component {
     };
   };
   render() {
-    const { sessionlist, currentBoardId, allBoardList } = this.props;
-    const {isShouldExpandSubGroup} = this.state
-    const currentBoardInfo = this.getCurrentBoardInfo(
-      currentBoardId,
-      allBoardList
-    );
+    const { sessionlist, currentBoard } = this.props;
+    const { isShouldExpandSubGroup } = this.state;
     const integratedCurrentBoardInfo = this.integrateCurrentBoardWithSessions(
-      currentBoardInfo,
+      currentBoard,
       sessionlist
     );
     console.log(
@@ -207,38 +254,50 @@ class GroupList extends Component {
             );
           })}
         </View>
-        <View className={styles.subGroupWrapper}>
-          {isShouldExpandSubGroup && <View>
-          {integratedCurrentBoardInfo.childs.map((subGroup, index) => {
-            const {
-              board_id,
-              im_id,
-              lastMsg,
-              label,
-              name,
-              newsNum,
-              avatarList
-            } = this.genSubGroupInfo(subGroup);
-            return (
-              <GroupItem
-                key={board_id}
-                board_id={board_id}
-                im_id={im_id}
-                lastMsg={lastMsg}
-                label={label}
-                name={name}
-                newsNum={newsNum}
-                avatarList={avatarList}
-                isSubGroup={true}
-                onClickedGroupItem={this.hanldClickedGroupItem}
-              />
-            );
-          })}
-          </View>}
+        <View
+          className={`${styles.subGroupWrapper} ${
+            !isShouldExpandSubGroup ? styles.hideSubGroup : ''
+          }`}
+        >
+          {/* {isShouldExpandSubGroup && <View> */}
+          {true && (
+            <View>
+              {integratedCurrentBoardInfo.childs.map((subGroup, index) => {
+                const {
+                  board_id,
+                  im_id,
+                  lastMsg,
+                  label,
+                  name,
+                  newsNum,
+                  avatarList
+                } = this.genSubGroupInfo(subGroup);
+                return (
+                  <GroupItem
+                    key={board_id}
+                    board_id={board_id}
+                    im_id={im_id}
+                    lastMsg={lastMsg}
+                    label={label}
+                    name={name}
+                    newsNum={newsNum}
+                    avatarList={avatarList}
+                    isSubGroup={true}
+                    onClickedGroupItem={this.hanldClickedGroupItem}
+                  />
+                );
+              })}
+            </View>
+          )}
         </View>
       </View>
     );
   }
 }
 
+GroupList.defaultProps = {
+  currentBoardId: '', //当前的项目id
+  currentBoard: '', //当前的项目信息
+  sessionlist: [], //所有的会话列表，
+}
 export default GroupList;

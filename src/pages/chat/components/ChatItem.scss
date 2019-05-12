@@ -1,0 +1,93 @@
+.wrapper {
+  .contentWrapper {
+    display: flex;
+    .avatarWrapper {
+      width: 80px;
+      height: 80px;
+      .avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: #ebebeb;
+        text-align: center;
+      }
+    }
+    .newsWrapper {
+      .newsName {
+        height: 40px;
+        font-size: 24px;
+        font-weight: 400;
+        color: rgba(0, 0, 0, 0.45);
+        line-height: 40px;
+        margin-bottom: 4px;
+      }
+      .newsContentWrapper {
+        max-width: 460px;
+        border-radius: 10px;
+        padding: 16px 24px;
+        position: relative;
+        .newContent {
+          word-break: break-all;
+          font-size: 32px;
+          font-weight: 400;
+          color: rgba(89, 89, 89, 1);
+          line-height: 48px;
+        }
+        .newsContentBubble {
+          width: 24px;
+          height: 24px;
+        }
+      }
+    }
+  }
+  .contentWrapperIn {
+    .avatarWrapper {
+      margin-right: 8px;
+    }
+    .newsWrapper {
+      .newsName {
+        margin-left: 5px;
+      }
+      .newsContentWrapper {
+        background: #ebebeb;
+        .newContent {
+        }
+        .newsContentBubble {
+          position: absolute;
+          top: 20px;
+          left: -8px;
+          transform: rotate(45deg);
+          background: #ebebeb;
+        }
+      }
+    }
+  }
+  .contentWrapperOut {
+    flex-direction: row-reverse;
+    .avatarWrapper {
+      margin-left: 16px;
+    }
+    .newsWrapper {
+      .newsContentWrapper {
+        background: linear-gradient(
+          270deg,
+          rgba(22, 184, 252, 1) 0%,
+          rgba(24, 144, 255, 1) 100%
+        );
+        .newContent {
+          font-size: 32px;
+          font-weight: 400;
+          color: rgba(255, 255, 255, 1);
+          line-height: 48px;
+        }
+        .newsContentBubble {
+          position: absolute;
+          top: 20px;
+          right: -8px;
+          transform: rotate(45deg);
+          background: rgba(22, 184, 252, 1);
+        }
+      }
+    }
+  }
+}

@@ -31,6 +31,8 @@ class App extends Component {
       'pages/noSchedulesCard/index',
       'pages/board/index',
       'pages/my/index',
+      'pages/chat/index',
+      'pages/chatDetail/index',
       'pages/login/index',
       'pages/selectOrg/index',
       'pages/phoneNumberLogin/index',

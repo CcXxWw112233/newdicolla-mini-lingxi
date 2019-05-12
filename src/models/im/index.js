@@ -2,28 +2,40 @@ import { INITIAL_STATE } from './initialState';
 import initNimSDK from './initNimSDK';
 import { isPlainObject } from './../../utils/util';
 import { selectFieldsFromIm } from './selectFields';
-import {getAllIMTeamList} from './../../services/im/index'
-import {isApiResponseOk} from './../../utils/request'
+import { getAllIMTeamList, getIMAccount } from './../../services/im/index';
+import { isApiResponseOk } from './../../utils/request';
 
 export default {
   namespace: 'im',
   state: INITIAL_STATE,
   effects: {
-    *fetchAllIMTeamList({}, {put, call}) {
-      const res = yield call(getAllIMTeamList)
+    *fetchIMAccount({}, {call}) {
+      const res = yield call(getIMAccount)
+
       if(isApiResponseOk(res)) {
-        const {data} = res
+        const {accid, token} = res.data
+        return {
+          account: accid,
+          token,
+        }
+      }
+    },
+    *fetchAllIMTeamList({}, { put, call }) {
+      const res = yield call(getAllIMTeamList);
+      if (isApiResponseOk(res)) {
+        const { data } = res;
         //这里应该是会拿到当前用户的全部组织的所有项目群组数据，
         //但是目前还混有其他数据，所以这里过滤一下
-      const filteredAllBoardList = (arr = []) => arr.filter(i => i.type && i.type === '2')
+        const filteredAllBoardList = (arr = []) =>
+          arr.filter(i => i.type && i.type === '2');
 
-       yield put({
+        yield put({
           type: 'updateStateFieldByCover',
           payload: {
             allBoardList: filteredAllBoardList(data)
           },
           desc: 'get all team list.'
-        })
+        });
       }
     },
     *initNimSDK({ payload }, { select, put }) {
@@ -42,6 +54,40 @@ export default {
           nim: nimInstance
         }
       });
+    },
+    *updateCurrentChatUnreadNewsState({ payload }, { select }) {
+      const { im_id } = payload;
+      const { nim } = yield selectFieldsFromIm(select, 'nim');
+      if (nim) {
+        nim.resetSessionUnread(im_id);
+      }
+    },
+    *sendMsg({payload}, {select}) {
+      const {scene, to, text} = payload
+      const { nim } = yield selectFieldsFromIm(select, 'nim');
+      function onSendMsgDone (error, msg) {
+        store.dispatch('hideLoading')
+        if (error) {
+          // 被拉黑
+          if (error.code === 7101) {
+            msg.status = 'success'
+            alert(error.message)
+          } else {
+            alert(error.message)
+          }
+        }
+        onMsg(msg)
+      }
+      nim.sendText({
+          scene,
+          to,
+          text,
+          // needMsgReceipt: obj.needMsgReceipt || false
+          needMsgReceipt: false,
+          done: (error, msg) => {
+            console.log(error, msg, 'send msg')
+          },
+      })
     }
   },
   reducers: {
@@ -49,28 +95,28 @@ export default {
     //因为已经将 store 实例挂载到了 小程序 app 实例 的 globalData 属性上，
     //所以可以通过 Taro.getApp() 拿到 小程序 app 实例， 也就 可以通过 globalData - store - getState()
     //获取到 store 的数据
-    handleDependOnState(state, {callback}) {
-      if(callback && typeof callback === 'function') {
-        callback(state)
+    handleDependOnState(state, { callback }) {
+      if (callback && typeof callback === 'function') {
+        callback(state);
       }
-      return state
+      return state;
     },
-    updateStateByReplace(state, {state: newState}) {
+    updateStateByReplace(state, { state: newState }) {
       //这个model 的 state 是一个 object,
-      if(newState && isPlainObject(newState)) {
-        return newState
+      if (newState && isPlainObject(newState)) {
+        return newState;
       }
       //如果试图用其他类型的 state 替换，返回原来的 state
-      return state
+      return state;
     },
     updateStateFieldByCover(state, { payload, callback }) {
       if (callback && typeof callback === 'function') {
         callback(state);
       }
-      if(payload && isPlainObject(payload)) {
+      if (payload && isPlainObject(payload)) {
         return { ...state, ...payload };
       }
-      return state
+      return state;
     },
     updateStateFieldByExtension(state, { payload, callback }) {
       if (callback && typeof callback === 'function') {
@@ -96,7 +142,7 @@ export default {
       }, {});
       return { ...state, ...updatedFields };
     }
-  },
+  }
   // subscriptions: {
   //   setup({ dispatch: dis }, done) {
 

@@ -30,7 +30,7 @@ class Avatar extends Component {
               }
               return (
                 <View key={i} className={styles.ItemWrapperOne}>
-                  <AtIcon value="user" size="40" color="#3F536E" />
+                  <AtIcon value="user" size="18" color="#3F536E" />
                 </View>
               );
             })}
@@ -48,7 +48,7 @@ class Avatar extends Component {
               }
               return (
                 <View key={i} className={styles.ItemWrapperTwo}>
-                  <AtIcon value="user" size="40" color="#3F536E" />
+                  <AtIcon value="user" size="18" color="#3F536E" />
                 </View>
               );
             })}
@@ -80,7 +80,7 @@ class Avatar extends Component {
                       : styles.ItemWrapperThree
                   }
                 >
-                  <AtIcon value="user" size="40" color="#3F536E" />
+                  <AtIcon value="user" size="18" color="#3F536E" />
                 </View>
               );
             })}
@@ -98,7 +98,7 @@ class Avatar extends Component {
               }
               return (
                 <View key={i} className={styles.ItemWrapperFour}>
-                  <AtIcon value="user" size="40" color="#3F536E" />
+                  <AtIcon value="user" size="18" color="#3F536E" />
                 </View>
               );
             })}
@@ -116,7 +116,7 @@ class Avatar extends Component {
               </View>
             ) : (
               <View className={styles.ItemWrapperFiveFirstChild}>
-                <AtIcon value="user" size="40" color="#3F536E" />
+                <AtIcon value="user" size="18" color="#3F536E" />
               </View>
             )}
             {this.isValidImgUrl(urlList[1]) ? (
@@ -129,7 +129,7 @@ class Avatar extends Component {
               </View>
             ) : (
               <View className={styles.ItemWrapperFiveSecondChild}>
-                <AtIcon value="user" size="40" color="#3F536E" />
+                <AtIcon value="user" size="18" color="#3F536E" />
               </View>
             )}
             {this.isValidImgUrl(urlList[2]) ? (
@@ -142,7 +142,7 @@ class Avatar extends Component {
               </View>
             ) : (
               <View className={styles.ItemWrapperFiveThirdChild}>
-                <AtIcon value="user" size="40" color="#3F536E" />
+                <AtIcon value="user" size="18" color="#3F536E" />
               </View>
             )}
             {this.isValidImgUrl(urlList[3]) ? (
@@ -155,7 +155,7 @@ class Avatar extends Component {
               </View>
             ) : (
               <View className={styles.ItemWrapperFiveFourthChild}>
-                <AtIcon value="user" size="40" color="#3F536E" />
+                <AtIcon value="user" size="18" color="#3F536E" />
               </View>
             )}
             {this.isValidImgUrl(urlList[4]) ? (
@@ -168,7 +168,7 @@ class Avatar extends Component {
               </View>
             ) : (
               <View className={styles.ItemWrapperFiveFifthChild}>
-                <AtIcon value="user" size="40" color="#3F536E" />
+                <AtIcon value="user" size="18" color="#3F536E" />
               </View>
             )}
           </View>

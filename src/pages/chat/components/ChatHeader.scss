@@ -1,0 +1,38 @@
+.wrapper {
+  width: 750px;
+  height: 88px;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
+  .contentWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    .title {
+      max-width: 556px;
+      height: 88px;
+      font-size: 32px;
+      font-weight: 400;
+      color: rgba(38, 38, 38, 1);
+      line-height: 88px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .operatorWrapper {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 88px;
+      height: 88px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .operator {
+        font-size: 48px;
+        padding: 5px;
+        padding-right: 20px;
+      }
+    }
+  }
+}
