@@ -6,7 +6,11 @@ import CardTypeSelect from './components/CardTypeSelect/index'
 import SearchAndMenu from '../board/components/SearchAndMenu'
 import CalendarSwiper from './components/CalendarSwiper'
 
+import { connect } from '@tarojs/redux'
 
+@connect(({ calendar }) => ({
+  calendar
+}))
 export default class Calendar extends Component {
 
   config = {
@@ -25,6 +29,16 @@ export default class Calendar extends Component {
   componentWillUnmount () { }
 
   componentDidShow () {
+    this.getOrgBoardList()
+  }
+
+  //获取项目列表
+  getOrgBoardList = () => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'calendar/getOrgBoardList',
+      payload: {}
+    })
   }
 
   componentDidHide () { }

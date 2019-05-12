@@ -3,7 +3,11 @@ import { View, Button, Text } from '@tarojs/components'
 import CardItem from './CardItem'
 import indexstyles from './index.scss'
 import globalStyles from '../../../gloalSet/styles/globalStyles.scss'
+import { connect } from '@tarojs/redux'
 
+@connect(({ calendar }) => ({
+  calendar
+}))
 export default class CardList extends Component {
 
   componentWillReceiveProps (nextProps) {

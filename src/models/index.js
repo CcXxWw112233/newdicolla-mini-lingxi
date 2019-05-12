@@ -4,7 +4,7 @@ import authorize from './authorize/index'
 import login from './login/index'
 import my from './my/index'
 import accountInfo from './accountInfo/index'
-import searchMenu from './board/searchMenu'
+import calendar from './calendar/index'
 const models = [
   testPage,
   board,
@@ -12,6 +12,6 @@ const models = [
   login,
   accountInfo,
   my,
-  searchMenu
+  calendar
 ]
 export default models

@@ -3,7 +3,11 @@ import { View, Button, Text, Swiper, SwiperItem } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyles from '../../../../gloalSet/styles/globalStyles.scss'
 import { getMonthDate, isToday, isSamDay } from './getDate'
+import { connect } from '@tarojs/redux'
 
+@connect(({ calendar }) => ({
+  calendar
+}))
 export default class CalendarSwiper extends Component {
 
   constructor(props) {
