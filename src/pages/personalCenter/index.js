@@ -94,7 +94,7 @@ class PersonalCenter extends Component {
           style="width: 270px">
           <AtModalContent>
             <View className={indexStyles.comfir_modal_conent}>
-              <View className={indexStyles.comfir_modal_conent_title}>退出登录</View>
+              <View className={indexStyles.comfir_modal_conent_title}>切换账号</View>
               <View className={indexStyles.comfir_modal_conent_detail}>确认要切换账号</View>
             </View>
 
