@@ -43,6 +43,7 @@ export default class Calendar extends Component {
         <CalendarSwiper  />
         <CardTypeSelect show_card_type_select={show_card_type_select} onSelectType={this.onSelectType}/>
         <CardList />
+        <View style='height: 50px'></View>
       </View>
     )
   }

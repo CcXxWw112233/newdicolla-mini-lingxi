@@ -43,6 +43,7 @@ export default class RuningBoard extends Component {
             </View>
           )
         })}
+        <View className={indexStyles.no_more_text}>没有更多内容了~</View>
       </View>
     )
   }

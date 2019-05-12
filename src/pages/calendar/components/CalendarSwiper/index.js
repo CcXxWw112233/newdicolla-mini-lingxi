@@ -242,12 +242,10 @@ export default class CalendarSwiper extends Component {
             {select_year}年{select_month}月{select_date_no}日 {select_week_day_dec}
           </View>
           <View className={indexStyles.set_calendar}>
-            <View className={`${globalStyles.global_iconfont} ${show_whole_calendar == '0' && indexStyles.set_calendar_icon_nomal} ${show_whole_calendar == '1'&& indexStyles.set_calendar_icon_all} ${show_whole_calendar == '2'&& indexStyles.set_calendar_icon_part}`} onClick={this.setShowWholeCalendar}>&#xe642;</View>
+            <View className={`${globalStyles.global_iconfont} ${show_whole_calendar == '0' && indexStyles.set_calendar_icon_nomal} ${show_whole_calendar == '1'&& indexStyles.set_calendar_icon_all} ${show_whole_calendar == '2'&& indexStyles.set_calendar_icon_part}`} onClick={this.setShowWholeCalendar}>&#xe653;</View>
           </View>
         </View>
-        <View
-          ref='View'
-          className={`${indexStyles.calendar_back} ${show_whole_calendar == '0' && indexStyles.calendar_back_nomal} ${show_whole_calendar == '1'&& indexStyles.calendar_back_all} ${show_whole_calendar == '2'&& indexStyles.calendar_back_part}`}></View>
+        <View className={`${indexStyles.calendar_back} ${show_whole_calendar == '0' && indexStyles.calendar_back_nomal} ${show_whole_calendar == '1'&& indexStyles.calendar_back_all} ${show_whole_calendar == '2'&& indexStyles.calendar_back_part}`}></View>
       </View>
     )
   }

@@ -26,6 +26,8 @@ export default class CardList extends Component {
         <CardItem />
         <CardItem />
         <CardItem />
+        <View className={indexstyles.no_more_text}>没有更多内容了~</View>
+
       </View>
     )
   }
