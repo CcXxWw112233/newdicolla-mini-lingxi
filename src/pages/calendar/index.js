@@ -9,13 +9,13 @@ import CalendarSwiper from './components/CalendarSwiper'
 
 import { connect } from '@tarojs/redux'
 
-@connect(({ calendar: { no_sche_card_list } }) => ({
-  no_sche_card_list
+@connect(({ calendar: { no_sche_card_list, selected_board_name } }) => ({
+  no_sche_card_list, selected_board_name
 }))
 export default class Calendar extends Component {
 
   config = {
-    navigationBarTitleText: '所有参与的项目'
+    navigationBarTitleText: ''
   }
 
   state= {
@@ -30,6 +30,10 @@ export default class Calendar extends Component {
   componentWillUnmount () { }
 
   componentDidShow () {
+    const { selected_board_name } = this.props
+    Taro.setNavigationBarTitle({
+      title: selected_board_name
+    })
     this.getOrgBoardList()
     this.getNoScheCardList()
   }
@@ -61,8 +65,9 @@ export default class Calendar extends Component {
   }
 
   gotoNoSchedule = () => {
+    const { selected_board_name } = this.props
     Taro.navigateTo({
-      url: `../../pages/noSchedulesCard/index?title=$是`
+      url: `../../pages/noSchedulesCard/index?title=${selected_board_name}`
     })
   }
   render () {

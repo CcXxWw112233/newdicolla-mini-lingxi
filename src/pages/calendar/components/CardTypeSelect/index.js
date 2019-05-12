@@ -26,12 +26,18 @@ export default class CardTypeSelect extends Component {
 
   updateSelectedBoard = (board_str) => {
     const { dispatch, schedule } = this.props
-    const { board_id, board_name } = JSON.parse(board_str)
+    const arr = board_str.split('__/s/s__')
+    const board_id = arr[0]
+    const board_name = arr[1]
     dispatch({
       type: 'calendar/updateDatas',
       payload: {
-        selected_board: board_id
+        selected_board: board_id,
+        selected_board_name: board_name
       }
+    })
+    Taro.setNavigationBarTitle({
+      title: board_name
     })
     this.quitCoperate()
     if('1' == schedule) {
@@ -57,7 +63,7 @@ export default class CardTypeSelect extends Component {
     return (
       <View className={indexStyles.select_list_out}>
         <View className={`${indexStyles.select_list} ${'0' == show_card_type_select && indexStyles.select_list_normal} ${'1' == show_card_type_select && indexStyles.select_list_show} ${'2' == show_card_type_select && indexStyles.select_list_hide}`}>
-          <View className={`${indexStyles.select_item} ${indexStyles.selected}`} onClick={this.updateSelectedBoard.bind(this, '0')}>
+          <View className={`${indexStyles.select_item} ${indexStyles.selected}`} onClick={this.updateSelectedBoard.bind(this, '__/s/s__所有参与项目')}>
             <View className={`${indexStyles.select_item_left}`}>
               所有参与项目
             </View>
@@ -71,7 +77,7 @@ export default class CardTypeSelect extends Component {
           {board_list.map((value, key) => {
             const { board_name, board_id } = value
             return(
-              <View className={`${indexStyles.select_item} ${indexStyles.selected}`} key={board_id} onClick={this.updateSelectedBoard.bind(this, board_id)}>
+              <View className={`${indexStyles.select_item} ${indexStyles.selected}`} key={board_id} onClick={this.updateSelectedBoard.bind(this, `${board_id}__/s/s__${board_name}`)}>
                 <View className={`${indexStyles.select_item_left}`}>
                   {board_name}
                 </View>
