@@ -18,6 +18,7 @@ export default class CardList extends Component {
   render () {
     return (
       <View className={`${indexstyles.card_item_out} ${globalStyles.global_horrizontal_padding}`}>
+        <View className={`${globalStyles.global_card_out} ${indexstyles.no_scheduling}`}>暂未排期的工作（4）</View>
         <CardItem />
         <CardItem />
         <CardItem />

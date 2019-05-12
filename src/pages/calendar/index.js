@@ -6,6 +6,7 @@ import CardTypeSelect from './components/CardTypeSelect/index'
 import SearchAndMenu from '../board/components/SearchAndMenu'
 import CalendarSwiper from './components/CalendarSwiper'
 
+
 export default class Calendar extends Component {
 
   config = {
@@ -18,7 +19,7 @@ export default class Calendar extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    console.log(this.props, nextProps)
+
   }
 
   componentWillUnmount () { }
