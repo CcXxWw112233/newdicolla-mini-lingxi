@@ -9,6 +9,6 @@ import {request} from './../../utils/request'
 
 const requestWithNotShowLoading = (method, url, data = {}) => () => request({data, method, url}, true)
 
-export const getAllIMTeamList = requestWithNotShowLoading('GET', `${API_MORE}/im/contacts`)
+export const getAllIMTeamList = requestWithNotShowLoading('GET', `${API_MORE}/mini/im/contacts`)
 
 export const getIMAccount = requestWithNotShowLoading('GET', `${API_UPMS}/im/account`)

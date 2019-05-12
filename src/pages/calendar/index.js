@@ -29,6 +29,10 @@ export default class Calendar extends Component {
 
   componentWillUnmount () { }
 
+  componentDidMount() {
+    this.registerIm()
+  }
+
   componentDidShow () {
     const { selected_board_name } = this.props
     Taro.setNavigationBarTitle({
@@ -90,6 +94,27 @@ export default class Calendar extends Component {
       url: `../../pages/noSchedulesCard/index?title=${selected_board_name}`
     })
   }
+
+  registerIm = () => {
+    const initImData = async () => {
+      const { dispatch } = this.props;
+      const { account, token } = await dispatch({
+        type: 'im/fetchIMAccount'
+      });
+      await dispatch({
+        type: 'im/initNimSDK',
+        payload: {
+          account,
+          token
+        }
+      });
+      return await dispatch({
+        type: 'im/fetchAllIMTeamList'
+      });
+    };
+    initImData().catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
+  }
+
   render () {
     const { show_card_type_select, search_mask_show } = this.state
     const { no_sche_card_list = [] } = this.props

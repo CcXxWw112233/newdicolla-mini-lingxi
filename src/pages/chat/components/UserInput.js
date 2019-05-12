@@ -28,8 +28,9 @@ class UserInput extends Component {
   state = {
     inputValue: ''
   };
-  handleInputChange = e => {
-    if (e) e.stopPropagation();
+  handleInput = e => {
+    console.log(e,'eeeeeeeeeeeeeeeeeeeeeeeeee')
+    // if (e) e.stopPropagation();
     this.setState({
       inputValue: e.currentTarget.value
     });
@@ -37,12 +38,18 @@ class UserInput extends Component {
   sendTextMsg = () => {
     const { inputValue } = this.state;
     const { im_id, sendTeamTextMsg } = this.props;
-
-    if (!inputValue || !inputValue.trim()) {
+    if(!im_id) {
       Taro.showToast({
-        title: '请不要发空消息',
+        title: '未获取到群消息',
         icon: 'none'
       });
+      return
+    }
+    if (!inputValue) {
+      // Taro.showToast({
+      //   title: '请不要发空消息',
+      //   icon: 'none'
+      // });
       this.setState({
         inputValue: ''
       });
@@ -96,8 +103,7 @@ class UserInput extends Component {
                 marginLeft: '10px',
                 marginRight: '10px'
               }}
-              adjustPosition
-              onChange={this.handleInputChange}
+              onInput={this.handleInput}
               onConfirm={this.onInputConfirm}
             />
           </View>

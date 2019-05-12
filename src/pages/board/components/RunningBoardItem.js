@@ -7,8 +7,8 @@ import { RESPONSE_DATA_CODE_DATA } from '../../../gloalSet/js/constant'
 import {getOrgName} from "../../../utils/basicFunction";
 import { connect } from '@tarojs/redux'
 
-@connect(({ my: { org_list } }) => ({
-  org_list
+@connect(({ my: { org_list }, im: { allBoardList, sessionlist } }) => ({
+  org_list, allBoardList, sessionlist
 }))
 class RuningBoardItem extends Component {
 
@@ -22,6 +22,39 @@ class RuningBoardItem extends Component {
 
   componentDidHide () { }
 
+  gotoBoardDetail = (board_id) => {
+    Taro.navigateTo({
+      url: `/pages/boardDetail/index?boardId=${board_id}`
+    })
+  }
+
+  //显示红点
+  isBoardShouldShowNewMsgDot = (board_id = '') => {
+    //需要拿到 model - im 中的:
+    //allBoardList
+    //sessionlist
+
+    //1. 拿到当前项目的 im info object
+    let currentBoardImInfo = allBoardList.find(i => i.board_id === board_id);
+    if (!currentBoardImInfo) return false;
+
+    //2. 拿到当前项目的 im_id 及其所有子群的 im_id
+    const currentBoardImIdAndChildsId = [currentBoardImInfo.im_id].concat(
+      currentBoardImInfo.childs
+        ? currentBoardImInfo.childs.map(i => i.im_id)
+        : []
+    );
+
+    //3. 所有属于当前项目及其子群的对话中，是否有未读的消息，
+    // 如果有，返回 true,
+    // 如果没有，返回 false
+
+    return sessionlist
+      .filter(i => currentBoardImIdAndChildsId.find(id => id === i.to))
+      .some(i => i.unread);
+  };
+
+
   render () {
     const starlist = []
     const tagList = []
@@ -30,7 +63,7 @@ class RuningBoardItem extends Component {
     const users = board_item[RESPONSE_DATA_CODE_DATA] || []
     return (
       <View >
-        <View className={`${globalStyles.global_card_out} ${indexStyles.card_content}`}>
+        <View className={`${globalStyles.global_card_out} ${indexStyles.card_content}`} onClick={this.gotoBoardDetail.bind(this,board_id)}>
           <View className={`${indexStyles.card_content_top}`}>
             <Text className={`${indexStyles.card_title}`}>{board_name}</Text>
             <Text className={`${indexStyles.organize}`}>{getOrgName({org_id, org_list})}</Text>

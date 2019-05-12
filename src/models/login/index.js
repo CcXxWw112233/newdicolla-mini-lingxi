@@ -3,9 +3,15 @@ import { getBar } from '../../services/testPage'
 import {isApiResponseOk} from "../../utils/request";
 import {weChatAuthLogin, weChatPhoneLogin, getAccountInfo} from "../../services/login/index";
 
+let dispatches
 export default {
   namespace: 'login',
   state: {
+  },
+  subscriptions: {
+    setup({dispatch}) {
+      dispatches = dispatch
+    },
   },
   effects: {
     //微信授权登录）
@@ -49,6 +55,11 @@ export default {
       const tokenArr = token_string.split('__');
       Taro.setStorageSync('access_token',tokenArr[0]);        //设置token
       Taro.setStorageSync('refresh_token',tokenArr[1]); //设置refreshToken
+
+      yield put({
+        type: 'registerIm'
+      })
+
       yield put({
         type: 'getAccountInfo',
         payload: {}
@@ -71,7 +82,25 @@ export default {
 
       }
     },
-
+    //注入im
+    * registerIm({ payload }, { select, call, put }) {
+       const initImData = async () => {
+         const { account, token } = await dispatches({
+           type: 'im/fetchIMAccount'
+         });
+         await dispatches({
+           type: 'im/initNimSDK',
+           payload: {
+             account,
+             token
+           }
+         });
+         return await dispatches({
+           type: 'im/fetchAllIMTeamList'
+         });
+       };
+       initImData().catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
+     }
   },
 
   reducers: {
