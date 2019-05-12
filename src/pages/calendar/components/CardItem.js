@@ -3,8 +3,12 @@ import { View, Button, Text } from '@tarojs/components'
 import indexStyles from  './index.scss'
 import globalStyles from '../../../gloalSet/styles/globalStyles.scss'
 import Avatar from '../../../components/avatar'
-import CardList from "./CardList";
+import { getOrgName, timestampToTimeZH } from '../../../utils/basicFunction'
+import { connect } from '@tarojs/redux'
 
+@connect(({ my: { org_list } }) => ({
+  org_list
+}))
 export default class CardItem extends Component {
 
   componentWillReceiveProps (nextProps) {
@@ -21,8 +25,8 @@ export default class CardItem extends Component {
   }
 
   render () {
-    const { itemValue = {}, schedule } = this.props
-    const { board_id, content_id, content_name, org_id, flag } = itemValue
+    const { itemValue = {}, schedule, org_list } = this.props
+    const { board_id, content_id, content_name, org_id, flag, board_name, start_time, due_time } = itemValue
     const users = itemValue['data'] || []
     const card_logo_1 = (<Text className={`${globalStyles.global_iconfont} ${indexStyles.iconfont_size}`}>&#xe63d;</Text>)
     const card_logo_2 = (<Text className={`${globalStyles.global_iconfont} ${indexStyles.iconfont_size}`}>&#xe63e;</Text>)
@@ -44,10 +48,10 @@ export default class CardItem extends Component {
           <View className={`${indexStyles.card_content_middle}`}>
             <View className={`${indexStyles.card_content_middle_top}`}>
               <Text className={`${indexStyles.card_title}`}>{content_name}</Text>
-              <Text  className={`${indexStyles.organize}`}>#组织a>项目b</Text>
+              <Text  className={`${indexStyles.organize}`}>#{getOrgName({org_id, org_list})}>{board_name}</Text>
             </View>
             <View className={`${indexStyles.card_content_middle_bott}`}>
-              {schedule == '0'? '未排期':  '04月23 08:26 - 04月22 08:00'}
+              {schedule == '0'? '未排期': `${timestampToTimeZH(start_time)} - ${timestampToTimeZH(due_time)}`}
             </View>
           </View>
           <View className={`${indexStyles.card_content_right}`}>

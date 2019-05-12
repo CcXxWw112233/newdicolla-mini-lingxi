@@ -34,6 +34,7 @@ export default class Calendar extends Component {
     Taro.setNavigationBarTitle({
       title: selected_board_name
     })
+    this.getOrgList()
     this.getOrgBoardList()
     this.getNoScheCardList()
     this.getScheCardList()
@@ -56,11 +57,20 @@ export default class Calendar extends Component {
       payload: {}
     })
   }
-
+  // 获取排期列表
   getScheCardList = () => {
     const { dispatch } = this.props
     dispatch({
       type: 'calendar/getScheCardList',
+      payload: {}
+    })
+  }
+
+  // 获取组织列表
+  getOrgList = () => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'my/getOrgList',
       payload: {}
     })
   }
@@ -85,7 +95,7 @@ export default class Calendar extends Component {
     const { no_sche_card_list = [] } = this.props
     return (
       <View>
-        <SearchAndMenu onSelectType={this.onSelectType}search_mask_show={search_mask_show} />
+        <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
         <CalendarSwiper  />
         <CardTypeSelect show_card_type_select={show_card_type_select} onSelectType={this.onSelectType} schedule={'1'}/>
         {no_sche_card_list.length && (

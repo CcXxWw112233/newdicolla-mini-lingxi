@@ -36,6 +36,7 @@ export default class CardTypeSelect extends Component {
         selected_board_name: board_name
       }
     })
+
     Taro.setNavigationBarTitle({
       title: board_name
     })
@@ -47,14 +48,14 @@ export default class CardTypeSelect extends Component {
           selected_board: board_id
         }
       })
-    } else if('0' == schedule) {
-      dispatch({
-        type: 'calendar/getNoScheCardList',
-        payload: {
-          selected_board: board_id
-        }
-      })
     }
+    dispatch({
+      type: 'calendar/getNoScheCardList',
+      payload: {
+        selected_board: board_id
+      }
+    })
+
   }
 
   render () {
@@ -63,7 +64,7 @@ export default class CardTypeSelect extends Component {
     return (
       <View className={indexStyles.select_list_out}>
         <View className={`${indexStyles.select_list} ${'0' == show_card_type_select && indexStyles.select_list_normal} ${'1' == show_card_type_select && indexStyles.select_list_show} ${'2' == show_card_type_select && indexStyles.select_list_hide}`}>
-          <View className={`${indexStyles.select_item} ${indexStyles.selected}`} onClick={this.updateSelectedBoard.bind(this, '__/s/s__所有参与项目')}>
+          <View className={`${indexStyles.select_item} ${indexStyles.selected}`} onClick={this.updateSelectedBoard.bind(this, '0__/s/s__所有参与项目')}>
             <View className={`${indexStyles.select_item_left}`}>
               所有参与项目
             </View>

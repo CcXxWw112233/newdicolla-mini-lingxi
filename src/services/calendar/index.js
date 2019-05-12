@@ -30,7 +30,7 @@ export const getScheCardList = (data , notShowLoading) => {
       ...data
     },
     method: 'GET',
-    url: `${API_BOARD}/mini/board/participation/list/`,
+    url: `${API_WORKBENCHS}/mini/calendar`,
   }, notShowLoading)
 }
 

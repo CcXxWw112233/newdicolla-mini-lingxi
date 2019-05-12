@@ -56,10 +56,15 @@ export default {
         _organization_id: obj['current_org'],
         board_id: obj['selected_board'],
         ...payload,
-        start_time,
-        due_time
+        queryDate: start_time,
+        maxDate: due_time
       }
+      Taro.showLoading({
+        title: "加载中...",
+        mask: "true"
+      });
       const res = yield call(getScheCardList, {...params})
+      Taro.hideLoading()
       if(isApiResponseOk(res)) {
         yield put({
           type: 'updateDatas',

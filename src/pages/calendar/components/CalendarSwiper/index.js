@@ -204,12 +204,12 @@ export default class CalendarSwiper extends Component {
                   className={`${indexStyles.date_day_inner}  ${is_today && indexStyles.is_now_date}  ${is_selected && indexStyles.date_day_selected} ${no_in_select_month && indexStyles.no_current_month_date}`}>
                   <Text>{is_today? '今':date_no}</Text>
                   <View className={`${indexStyles.check_has_task} ${no_in_select_month && indexStyles.check_has_task_no_current_moth}`}>
-                    {is_has_task && (
-                      <View className={`${indexStyles.has_task}`} style={`background-color: ${is_selected? '#ffffff' : '#1890FF' }`}></View>
-                    )}
-                    {is_has_flow && (
-                      <View className={`${indexStyles.has_flow}`}></View>
-                    )}
+                    {/*{is_has_task && (*/}
+                      {/*<View className={`${indexStyles.has_task}`} style={`background-color: ${is_selected? '#ffffff' : '#1890FF' }`}></View>*/}
+                    {/*)}*/}
+                    {/*{is_has_flow && (*/}
+                      {/*<View className={`${indexStyles.has_flow}`}></View>*/}
+                    {/*)}*/}
                   </View>
                 </View>
               </View>
