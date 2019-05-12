@@ -3,10 +3,17 @@ import { View, Button, Text } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyles from '../../../gloalSet/styles/globalStyles.scss'
 import Avatar from '../../../components/avatar'
+import { RESPONSE_DATA_CODE_DATA } from '../../../gloalSet/js/constant'
+import {getOrgName} from "../../../utils/basicFunction";
+import { connect } from '@tarojs/redux'
+
+@connect(({ my: { org_list } }) => ({
+  org_list
+}))
 class RuningBoardItem extends Component {
 
   componentWillReceiveProps (nextProps) {
-    console.log(this.props, nextProps)
+
   }
 
   componentWillUnmount () { }
@@ -16,14 +23,17 @@ class RuningBoardItem extends Component {
   componentDidHide () { }
 
   render () {
-    const starlist = [1, 2, 3, 4, 5]
-    const tagList = [1, 2, 3, 4, 5]
+    const starlist = []
+    const tagList = []
+    const { board_item = {}, org_list } = this.props
+    const { board_id, board_name, relize_quantity, residue_quantity, org_id } = board_item
+    const users = board_item[RESPONSE_DATA_CODE_DATA] || []
     return (
       <View >
         <View className={`${globalStyles.global_card_out} ${indexStyles.card_content}`}>
           <View className={`${indexStyles.card_content_top}`}>
-            <Text className={`${indexStyles.card_title}`}>这是项目名</Text>
-            <Text className={`${indexStyles.organize}`}>#合创迪安</Text>
+            <Text className={`${indexStyles.card_title}`}>{board_name}</Text>
+            <Text className={`${indexStyles.organize}`}>{getOrgName({org_id, org_list})}</Text>
             <Text className={`${indexStyles.star_list}`}>
               {starlist.map((value, key) => {
                 return (
@@ -35,12 +45,12 @@ class RuningBoardItem extends Component {
           <View  className={`${indexStyles.card_content_middle}`}>
             <View  className={`${indexStyles.card_content_middle_left}`}>
               <View  className={`${indexStyles.avata_area}`}>
-                <Avatar />
+                <Avatar avartarTotal={'multiple'} userList={users}/>
               </View>
             </View>
             <View  className={`${indexStyles.card_content_middle_right}`}>
-              <View  className={`${indexStyles.task_1}`}>剩余任务 <Text>231</Text></View>
-              <View  className={`${indexStyles.task_2}`}>已完成  <Text>231</Text></View>
+              <View  className={`${indexStyles.task_1}`}>剩余任务 <Text>{residue_quantity}</Text></View>
+              <View  className={`${indexStyles.task_2}`}>已完成  <Text>{relize_quantity || 0}</Text></View>
             </View>
           </View>
           <View  className={`${indexStyles.card_content_bott}`}>
@@ -52,7 +62,7 @@ class RuningBoardItem extends Component {
                         className={`${indexStyles.tag}`}
                         key={key}
                         style={{color: `rgba(${rgb},1)`, backgroundColor: `rgba(${rgb},.4)`, border: `1px solid rgba(${rgb},1)`}}
-                  >卡机阿斯顿</Text>
+                  >{'标签名'}</Text>
                 )
               })}
             </View>

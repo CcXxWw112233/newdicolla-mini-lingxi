@@ -25,17 +25,17 @@ class App extends Component {
 
   config = {
     pages: [
+      'pages/calendar/index',
       'pages/im/index',
       'pages/boardDetail/index',
+      'pages/noSchedulesCard/index',
+      'pages/board/index',
+      'pages/my/index',
       'pages/login/index',
+      'pages/selectOrg/index',
       'pages/phoneNumberLogin/index',
-      // 'pages/testPage/index',
-      'pages/calendar/index',
       'pages/testPage/index',
       'pages/personalCenter/index',
-      'pages/my/index',
-      'pages/selectOrg/index',
-      'pages/board/index',
       'pages/index/index',
     ],
     window: {

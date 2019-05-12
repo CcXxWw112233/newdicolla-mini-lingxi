@@ -45,3 +45,35 @@ export const weChatPhoneLogin = (data , notShowLoading) => {
     url: `${API_UPMS}/mini/user/auth/bind/login`,
   }, notShowLoading)
 }
+
+//微信暂未绑定，需要手机号绑定登录
+export const getAccountInfo = (data , notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'GET',
+    url: `${API_UPMS}/v2/user`,
+  }, notShowLoading)
+}
+
+//查询当前用户所拥有的组织
+export const getOrgList = (data , notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'GET',
+    url: `${API_UPMS}/organization`,
+  }, notShowLoading)
+}
+//切换组织
+export const changeOrg = (data , notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'PUT',
+    url: `${API_UPMS}/v2/user/changecurrentorg/${data['_organization_id']}`,
+  }, notShowLoading)
+}

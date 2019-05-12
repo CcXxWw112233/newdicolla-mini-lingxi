@@ -5,7 +5,15 @@ import globalStyles from '../../../gloalSet/styles/globalStyles.scss'
 
 export default class SearchAndMenu extends Component {
 
+  state = {
+    search_mask_show: '0', /// 0默认 1 淡入 2淡出
+  }
+
   componentWillReceiveProps (nextProps) {
+    const { search_mask_show } = nextProps
+    this.setState({
+      search_mask_show
+    })
   }
 
   componentWillUnmount () { }
@@ -16,12 +24,29 @@ export default class SearchAndMenu extends Component {
 
   componentDidHide () { }
 
-  selectType = () => {
-    this.props.selectType && this.props.selectType()
+  onSelectType = () => {
+    this.setSearchMaskShow()
   }
 
-  render () {
+  setSearchMaskShow() {
     const { search_mask_show } = this.props
+    let show_flag = '0'
+    if('0' == search_mask_show) {
+      show_flag = '1'
+    }else if('1' == search_mask_show) {
+      show_flag = '2'
+    }else if('2' == search_mask_show) {
+      show_flag = '1'
+    }else {
+
+    }
+    this.props.onSelectType && this.props.onSelectType({show_type: show_flag})
+  }
+  quitCoperate = () => {
+    this.props.onSelectType && this.props.onSelectType({show_type: '2'})
+  }
+  render () {
+    const { search_mask_show } = this.state
     return (
       <View>
         <View className={styles.search_memu_out_back}></View>
@@ -35,14 +60,11 @@ export default class SearchAndMenu extends Component {
               <Input className={`${styles.search_input}`}/>
             </View>
           </View>
-          <View className={`${styles.menu}`} onClick={this.selectType}>
+          <View className={`${styles.menu}`} onClick={this.onSelectType}>
             <Text className={`${globalStyles.global_iconfont} ${styles.icon_menu}`}>&#xe63f;</Text>
           </View>
         </View>
-        {/*遮罩层*/}
-        {search_mask_show && (
-          <View className={styles.mask}></View>
-        )}
+        <View onClick={this.quitCoperate} className={`${styles.mask} ${'0' == search_mask_show && styles.mask_normal} ${'1' == search_mask_show && styles.mask_show} ${'2' == search_mask_show && styles.mask_hide}`}></View>
       </View>
     )
   }

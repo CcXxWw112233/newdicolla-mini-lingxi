@@ -71,3 +71,10 @@
 .tag:active{
   opacity: 0.9;
 }
+
+.no_more_text{
+  margin-top: pxTrans(10);
+  color: $color_3;
+  font-size: pxTrans(14);
+  text-align: center;
+}

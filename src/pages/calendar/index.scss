@@ -1,3 +1,4 @@
+@import "../../gloalSet/styles/constant";
 .calendar_card_out{
   display: flex;
   background-color: red;
@@ -10,4 +11,12 @@
     overflow: hidden;
     //height: 100px;
   }
+}
+
+.no_scheduling{
+  color: $color_3;
+  font-size: pxTrans(14);
+  text-align: center;
+  margin: 0 $paddingValue 0 $paddingValue;
+  margin-top: pxTrans(14);
 }

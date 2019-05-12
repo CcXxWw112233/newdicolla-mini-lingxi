@@ -1,44 +1,82 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
 import Aavatar from '../../components/avatar/index'
-import Authorize from '../../components/authorize/index'
-
+import { connect } from '@tarojs/redux'
 import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 
+@connect(({ accountInfo, my }) => ({
+  accountInfo, my
+}))
 export default class My extends Component {
   config = {
     navigationBarTitleText: '我的'
   }
 
-  componentWillReceiveProps (nextProps) {
-    console.log(this.props, nextProps)
+  componentWillReceiveProps () {
   }
 
   componentWillUnmount () { }
 
-  componentDidShow () { }
+  componentDidShow () {
+    this.getAccountInfo()
+  }
 
   componentDidHide () { }
 
-  setTitle = () => {
-      Taro.setNavigationBarTitle({
-        title: '哈哈哈阿瑟东拉哈是得利卡及时了解卡上劳动课哈哈哈阿瑟东拉哈是得利卡及时了解卡上劳动课'
+  //获取用户信息
+  getAccountInfo() {
+    const { dispatch, accountInfo } = this.props
+    const { account_info = {}} = accountInfo
+    if(JSON.stringify(account_info) == '{}') {
+      dispatch({
+        type: 'accountInfo/getAccountInfo',
+        payload: {}
       })
+    }
+
+
+    // const account_info_string = Taro.getStorageSync('user_info')
+    // if(!!!account_info_string) {
+    //   dispatch({
+    //     type: 'accountInfo/getAccountInfo',
+    //     payload: {}
+    //   })
+    // } else {
+    //   const account_info = JSON.parse(account_info_string)
+    //   dispatch({
+    //     type: 'accountInfo/updateDatas',
+    //     payload: {
+    //       account_info
+    //     }
+    //   })
+    // }
   }
+
+  gotoAccountDetail = ()=> {
+    Taro.navigateTo({
+      url: '../../pages/personalCenter/index'
+    })
+  }
+
   render () {
+    const { account_info = {} } = this.props.accountInfo
+    const { avatar, name, user_set = {} } = account_info
+    const { org_name, current_org } = user_set
     return (
       <View className={indexStyles.index}>
-        <View className={indexStyles.contain1}>
+        <View className={indexStyles.contain1} onClick={this.gotoAccountDetail}>
           <View>
-            <Aavatar avartarTotal={'single'} size={48} />
+            <Aavatar avartarTotal={'single'} size={48} src={avatar} />
           </View>
           <View className={indexStyles.contain1_detail}>
-            <View className={indexStyles.contain1_name}>严士威</View>
-            <View className={indexStyles.contain1_org}>哈哈哈阿瑟东拉哈是得利卡及时了解卡上劳动课哈哈哈阿瑟东拉哈是得利卡及时了解卡上劳动课</View>
+            <View className={indexStyles.contain1_name}>{name}</View>
+            {current_org != '0' && (
+              <View className={indexStyles.contain1_org}>{org_name}</View>
+            )}
           </View>
           <View className={`${indexStyles.contain1_next}`}>
-            <Text className={`${globalStyle.global_iconfont} ${indexStyles.contain1_name}`}>&#xe646;</Text>
+            <Text className={`${globalStyle.global_iconfont} ${indexStyles.contain1_name}`}>&#xe654;</Text>
           </View>
         </View>
         <View className={indexStyles.contain2}>

@@ -16,9 +16,9 @@
 //卡片
 .global_card_out {
   background:rgba(255,255,255,1);
-  box-shadow:0px 2px 8px 0px rgba(0,0,0,0.15);
-  border-radius:4px;
-  padding: pxTrans(20);
+  box-shadow:0px pxTrans(2) pxTrans(8) 0 rgba(0,0,0,0.15);
+  border-radius: pxTrans(4);
+  padding: pxTrans(16) pxTrans(20);
 }
 //页面整体水平边距
 .global_horrizontal_padding {
