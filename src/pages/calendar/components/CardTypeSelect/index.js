@@ -24,8 +24,9 @@ export default class CardTypeSelect extends Component {
     this.props.onSelectType && this.props.onSelectType({show_type: '2'})
   }
 
-  updateSelectedBoard = (board_id) => {
-    const { dispatch } = this.props
+  updateSelectedBoard = (board_str) => {
+    const { dispatch, schedule } = this.props
+    const { board_id, board_name } = JSON.parse(board_str)
     dispatch({
       type: 'calendar/updateDatas',
       payload: {
@@ -33,12 +34,21 @@ export default class CardTypeSelect extends Component {
       }
     })
     this.quitCoperate()
-    dispatch({
-      type: 'calendar/getScheCardList',
-      payload: {
-        selected_board: board_id
-      }
-    })
+    if('1' == schedule) {
+      dispatch({
+        type: 'calendar/getScheCardList',
+        payload: {
+          selected_board: board_id
+        }
+      })
+    } else if('0' == schedule) {
+      dispatch({
+        type: 'calendar/getNoScheCardList',
+        payload: {
+          selected_board: board_id
+        }
+      })
+    }
   }
 
   render () {
@@ -77,4 +87,8 @@ export default class CardTypeSelect extends Component {
       </View>
     )
   }
+}
+
+CardTypeSelect.defaultProps = {
+  schedule: '2', //1排期 0 没有排期
 }

@@ -14,14 +14,14 @@ class Index extends Component {
 
   componentWillUnmount () { }
 
-  componentDidShow () { }
+  componentDidShow () {}
 
   componentDidHide () { }
 
   render () {
     return (
       <View className='index'>
-        <View><Text>goto testPage</Text></View>
+        <View><Text></Text></View>
       </View>
     )
   }

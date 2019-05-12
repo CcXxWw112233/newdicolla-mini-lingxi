@@ -1,5 +1,5 @@
 import { request, packagePromise,} from "../../utils/request";
-import { API_BOARD } from "../../gloalSet/js/constant";
+import { API_BOARD, API_WORKBENCHS } from "../../gloalSet/js/constant";
 
 //某个组织或全组织下我参与的所有项目列表
 export const getOrgBoardList = (data , notShowLoading) => {
@@ -23,7 +23,7 @@ export const getBoardListSearch = (data , notShowLoading) => {
   }, notShowLoading)
 }
 
-//获取日历卡片列表
+//获取排期日历卡片列表
 export const getScheCardList = (data , notShowLoading) => {
   return request({
     data: {
@@ -41,6 +41,6 @@ export const getNoScheCardList = (data , notShowLoading) => {
       ...data
     },
     method: 'GET',
-    url: `${API_BOARD}/mini/board/participation/list/`,
+    url: `${API_WORKBENCHS}/mini/calendar/un_period`,
   }, notShowLoading)
 }

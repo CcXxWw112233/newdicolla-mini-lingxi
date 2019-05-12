@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://test.lingxi.new-di.com'//'http://am5evc.natappfree.cc'//'http://192.168.1.68'//'http://prerelease.lingxi.new-di.com'
+export const BASE_URL = 'http://iktpdp.natappfree.cc'//'http://test.lingxi.new-di.com'//'http://am5evc.natappfree.cc'//'http://192.168.1.68'//'http://prerelease.lingxi.new-di.com'
 export const NODE_ENV = process.env.NODE_ENV
 
 export const PAGE_SIZE = 20
@@ -8,7 +8,7 @@ export const API_UPMS = '/api/upms' //接口域名
 export const API_BOARD = '/api/projects' //接口域名
 export const API_FILES = '/api/files' //接口域名
 export const API_FLOWS = '/api/flows' //接口域名
-export const API_WORKBENCH = '/api/workbench'
+export const API_WORKBENCHS = '/api/workbenchs'
 
 export const WEBSOCKET_PATH = '192.168.0.30'  //WS链接地址
 export const WEBSOCKET_PORT= '9326'  //WS链接地址

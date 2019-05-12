@@ -26,6 +26,7 @@ class App extends Component {
   config = {
     pages: [
       'pages/calendar/index',
+      'pages/noSchedulesCard/index',
       'pages/board/index',
       'pages/my/index',
       'pages/login/index',
