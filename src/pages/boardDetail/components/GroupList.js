@@ -297,7 +297,7 @@ class GroupList extends Component {
 
 GroupList.defaultProps = {
   currentBoardId: '', //当前的项目id
-  currentBoard: '', //当前的项目信息
+  currentBoard: {}, //当前的项目信息
   sessionlist: [], //所有的会话列表，
 }
 export default GroupList;
