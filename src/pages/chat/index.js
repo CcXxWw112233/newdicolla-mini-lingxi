@@ -1,11 +1,22 @@
-import Taro, {Component} from '@tarojs/taro'
-import {View, Text} from '@tarojs/components'
-import ChatHeader from './components/ChatHeader.js'
-import styles from './index.scss'
+import Taro, { Component } from '@tarojs/taro';
+import { View } from '@tarojs/components';
+import { connect } from '@tarojs/redux';
+import styles from './index.scss';
+import ChatHeader from './components/ChatHeader.js';
+import ChatContent from './components/ChatContent.js';
+import UserInput from './components/UserInput.js'
 
+@connect(
+  ({ im: { currentGroup } }) => ({
+    currentGroup
+  }))
 class Chat extends Component {
+
+  componentWillMount() {}
+  componentWillUnmount() {
+
+  }
   componentDidHide() {
-    //退出聊天页的时候需要，重置 currentChatTo 为 ''
 
   }
   onPullDownRefresh() {
@@ -18,12 +29,20 @@ class Chat extends Component {
     //监听用户滑动页面事件
   }
   render() {
-    return(<View className={styles.wrapper}>
-      <View className={styles.headerWraper}>
-      <ChatHeader />
+    return (
+      <View className={styles.wrapper}>
+        <View className={styles.headerWraper}>
+          <ChatHeader />
+        </View>
+        <View className={styles.chatContentWrapper}>
+          <ChatContent />
+        </View>
+        <View className={styles.userInputWrapper}>
+          <UserInput />
+        </View>
       </View>
-    </View>)
+    );
   }
 }
 
-export default Chat
+export default Chat;

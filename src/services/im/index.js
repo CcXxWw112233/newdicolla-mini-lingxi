@@ -1,4 +1,4 @@
-import {API_MORE} from './../../gloalSet/js/constant'
+import {API_MORE, API_UPMS} from './../../gloalSet/js/constant'
 import {request} from './../../utils/request'
 
 // const currentUserListsUrl = `${serverUrlPrefix}/api/more/mini/im/contacts`;
@@ -10,3 +10,5 @@ import {request} from './../../utils/request'
 const requestWithNotShowLoading = (method, url, data = {}) => () => request({data, method, url}, true)
 
 export const getAllIMTeamList = requestWithNotShowLoading('GET', `${API_MORE}/im/contacts`)
+
+export const getIMAccount = requestWithNotShowLoading('GET', `${API_UPMS}/im/account`)

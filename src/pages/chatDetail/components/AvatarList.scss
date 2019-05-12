@@ -1,0 +1,38 @@
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 32px;
+  padding-bottom: 0px;
+  background: #fff;
+  .avatarItemWrapper {
+    width: 96px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-right: 48px;
+    margin-bottom: 24px;
+    overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    .avatarItemAvatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+    }
+    .avatarItemName {
+      height: 40px;
+      font-size: 24px;
+      font-weight: 400;
+      color: rgba(0, 0, 0, 0.65);
+      line-height: 40px;
+    }
+    .avatarItemNameShowAll {
+      color:rgba(0,0,0,0.25);
+      background: rgba(0, 0, 0, 0.02);
+    }
+  }
+  .avatarItemWrapperWithNoMargin {
+    margin-right: 0px;
+  }
+}

@@ -5,8 +5,9 @@ import styles from './BoardStar.scss';
 import { connect } from '@tarojs/redux';
 
 //star: 0, //显示的星星数
-@connect(({ im: { allBoardList } }) => ({
-  allBoardList
+@connect(({ im: { allBoardList, currentBoardId } }) => ({
+  allBoardList,
+  currentBoardId,
 }))
 class BoardStar extends Component {
   constructor(props) {
@@ -62,6 +63,7 @@ class BoardStar extends Component {
 }
 
 BoardStar.defaultProps = {
+  allBoardList: [], //所有的项目
   currentBoardId: '' //当前的 项目 id
 };
 

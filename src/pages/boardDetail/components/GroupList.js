@@ -5,10 +5,11 @@ import styles from './GroupList.scss';
 import GroupItem from './GroupItem';
 
 @connect(
-  ({ im: { sessionlist, allBoardList } }) => {
+  ({ im: { sessionlist, currentBoardId, currentBoard} }) => {
     return {
-      allBoardList,
-      sessionlist
+      sessionlist,
+      currentBoardId,
+      currentBoard,
     };
   },
   dispatch => {
@@ -21,6 +22,15 @@ import GroupItem from './GroupItem';
           },
           desc: 'set currentChatTo'
         }),
+      setCurrentGroup: (group = {}) => {
+        dispatch({
+          type: 'im/updateStateFieldByCover',
+          payload: {
+            currentGroup: group
+          },
+          desc: 'set current chat group.'
+        })
+      },
       updateCurrentChatUnreadNewsState: im_id =>
         dispatch({
           type: 'im/updateCurrentChatUnreadNewsState',
@@ -37,7 +47,7 @@ class GroupList extends Component {
     isShouldExpandSubGroup: true
   };
   hanldClickedGroupItem = ({ board_id, im_id }) => {
-    const { setCurrentChatTo, updateCurrentChatUnreadNewsState } = this.props;
+    const { setCurrentChatTo, setCurrentGroup, updateCurrentChatUnreadNewsState, currentBoard } = this.props;
 
     //生成与 云信后端返回数据相同格式的 id
     const id = `team-${im_id}`;
@@ -45,24 +55,27 @@ class GroupList extends Component {
     //设置currentChatTo之后，会自动将该群的新接收的消息更新为已读，
     //但是如果该群之前有未读消息的时候，需要先更新该群的未读消息状态
     //所以需要在聊天界面的页面退出回调中，将 currentChatTo 值 清除
-
+    const getCurrentGroup = (currentBoard, im_id) => {
+      if(!currentBoard.childs || !Array.isArray(currentBoard.childs)) {
+        currentBoard.childs = []
+      }
+      const ret = [currentBoard, ...currentBoard.childs].find(i => i.im_id === im_id)
+      return ret ? ret : {}
+    }
     Promise.resolve(setCurrentChatTo(id))
+      .then(() => setCurrentGroup(getCurrentGroup(currentBoard, im_id)))
       .then(() => updateCurrentChatUnreadNewsState(id))
       .then(() => {
         Taro.navigateTo({
           url: `/pages/chat/index`
         });
       })
-      .catch(e => Taro.showToast({ title: e, icon: 'none' }));
+      .catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
   };
   handleExpandSubGroupChange = flag => {
     this.setState({
       isShouldExpandSubGroup: flag
     });
-  };
-  getCurrentBoardInfo = (id, list = []) => {
-    const result = list.find(i => i.board_id === id);
-    return result ? result : {};
   };
   integrateCurrentBoardWithSessions = (currentBoardInfo, sessionlist = []) => {
     //这里需要整合每个群组的未读消息数量和最后一个信息
@@ -195,14 +208,10 @@ class GroupList extends Component {
     };
   };
   render() {
-    const { sessionlist, currentBoardId, allBoardList } = this.props;
+    const { sessionlist, currentBoard } = this.props;
     const { isShouldExpandSubGroup } = this.state;
-    const currentBoardInfo = this.getCurrentBoardInfo(
-      currentBoardId,
-      allBoardList
-    );
     const integratedCurrentBoardInfo = this.integrateCurrentBoardWithSessions(
-      currentBoardInfo,
+      currentBoard,
       sessionlist
     );
     console.log(
@@ -286,4 +295,9 @@ class GroupList extends Component {
   }
 }
 
+GroupList.defaultProps = {
+  currentBoardId: '', //当前的项目id
+  currentBoard: '', //当前的项目信息
+  sessionlist: [], //所有的会话列表，
+}
 export default GroupList;

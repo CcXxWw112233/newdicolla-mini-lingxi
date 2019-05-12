@@ -2,13 +2,24 @@ import { INITIAL_STATE } from './initialState';
 import initNimSDK from './initNimSDK';
 import { isPlainObject } from './../../utils/util';
 import { selectFieldsFromIm } from './selectFields';
-import { getAllIMTeamList } from './../../services/im/index';
+import { getAllIMTeamList, getIMAccount } from './../../services/im/index';
 import { isApiResponseOk } from './../../utils/request';
 
 export default {
   namespace: 'im',
   state: INITIAL_STATE,
   effects: {
+    *fetchIMAccount({}, {call}) {
+      const res = yield call(getIMAccount)
+
+      if(isApiResponseOk(res)) {
+        const {accid, token} = res.data
+        return {
+          account: accid,
+          token,
+        }
+      }
+    },
     *fetchAllIMTeamList({}, { put, call }) {
       const res = yield call(getAllIMTeamList);
       if (isApiResponseOk(res)) {
@@ -50,6 +61,33 @@ export default {
       if (nim) {
         nim.resetSessionUnread(im_id);
       }
+    },
+    *sendMsg({payload}, {select}) {
+      const {scene, to, text} = payload
+      const { nim } = yield selectFieldsFromIm(select, 'nim');
+      function onSendMsgDone (error, msg) {
+        store.dispatch('hideLoading')
+        if (error) {
+          // 被拉黑
+          if (error.code === 7101) {
+            msg.status = 'success'
+            alert(error.message)
+          } else {
+            alert(error.message)
+          }
+        }
+        onMsg(msg)
+      }
+      nim.sendText({
+          scene,
+          to,
+          text,
+          // needMsgReceipt: obj.needMsgReceipt || false
+          needMsgReceipt: false,
+          done: (error, msg) => {
+            console.log(error, msg, 'send msg')
+          },
+      })
     }
   },
   reducers: {
