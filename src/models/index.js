@@ -4,13 +4,14 @@ import authorize from './authorize/index'
 import login from './login/index'
 import my from './my/index'
 import accountInfo from './accountInfo/index'
-
+import searchMenu from './board/searchMenu'
 const models = [
   testPage,
   board,
   authorize,
   login,
   accountInfo,
-  my
+  my,
+  searchMenu
 ]
 export default models

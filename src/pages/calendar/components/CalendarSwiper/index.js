@@ -47,7 +47,6 @@ export default class CalendarSwiper extends Component {
   //获取日历列表数据
   getDataArray = ({year, month}) => {
     const date_array = getMonthDate({year, month})
-    console.log({date_array})
     this.setState({
       date_array
     })

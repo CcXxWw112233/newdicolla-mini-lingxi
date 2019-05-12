@@ -25,6 +25,7 @@ class App extends Component {
 
   config = {
     pages: [
+      'pages/board/index',
       'pages/calendar/index',
       'pages/my/index',
       'pages/login/index',
@@ -32,7 +33,6 @@ class App extends Component {
       'pages/phoneNumberLogin/index',
       'pages/testPage/index',
       'pages/personalCenter/index',
-      'pages/board/index',
       'pages/index/index',
     ],
     window: {

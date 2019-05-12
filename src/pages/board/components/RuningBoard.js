@@ -11,7 +11,6 @@ import { connect } from '@tarojs/redux'
 export default class RuningBoard extends Component {
 
   componentWillReceiveProps (nextProps) {
-    console.log(this.props, nextProps)
   }
 
   componentWillUnmount () { }

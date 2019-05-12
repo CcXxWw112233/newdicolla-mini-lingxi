@@ -7,7 +7,6 @@ import globalStyles from '../../../gloalSet/styles/globalStyles.scss'
 export default class CardList extends Component {
 
   componentWillReceiveProps (nextProps) {
-    console.log(this.props, nextProps)
   }
 
   componentWillUnmount () { }

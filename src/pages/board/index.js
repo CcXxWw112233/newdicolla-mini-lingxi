@@ -18,7 +18,8 @@ export default class Board extends Component {
   }
 
   state = {
-
+    show_board_select_type: '0', //出现项目选择
+    search_mask_show: '0', /// 0默认 1 淡入 2淡出
   }
 
   componentWillReceiveProps (nextProps) {
@@ -32,8 +33,11 @@ export default class Board extends Component {
 
   componentDidHide () { }
 
-  onSelectType = (e) => {
-
+  onSelectType = ({show_type}) => {
+    this.setState({
+      show_board_select_type: show_type,
+      search_mask_show: show_type
+    })
   }
 
   getBoardList = () => {
@@ -48,14 +52,15 @@ export default class Board extends Component {
 
   render () {
     const { board: { board_id }} = this.props
-
+    const { show_board_select_type, search_mask_show } = this.state
     return (
       <View >
-        <SearchAndMenu onSelectType={this.onSelectType}  />
-        {/*<BoardTypeSelect />*/}
+        <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
+        <View>
+          <BoardTypeSelect show_board_select_type={show_board_select_type} onSelectType={this.onSelectType} />
+        </View>
         <RunningBoard />
         <View style='height: 50px'></View>
-
       </View>
     )
   }

@@ -7,7 +7,6 @@ import Avatar from '../../../components/avatar'
 export default class CardItem extends Component {
 
   componentWillReceiveProps (nextProps) {
-    console.log(this.props, nextProps)
   }
 
   componentWillUnmount () { }

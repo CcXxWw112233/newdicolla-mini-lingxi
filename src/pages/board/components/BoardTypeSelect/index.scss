@@ -39,3 +39,30 @@
   background-color:rgba(0,0,0,0.04)
 }
 
+@keyframes select_list_show {
+  from {
+    top: pxTrans(-300)
+  }
+  to {
+    top: pxTrans(44)
+  }
+}
+@keyframes select_list_hide {
+  from {
+    top: pxTrans(44)
+  }
+  to {
+    top: pxTrans(-300)
+  }
+}
+.select_list_show {
+  top: pxTrans(44);
+  animation: select_list_show 0.5s ease;
+}
+.select_list_hide {
+  animation: select_list_hide 0.5s ease;
+  top: pxTrans(-300)
+}
+.select_list_normal {
+  top: pxTrans(-300)
+}

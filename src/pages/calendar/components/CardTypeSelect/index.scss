@@ -5,7 +5,6 @@
 }
 .select_list {
   position: fixed;
-  top: 0;
   z-index: 12;
   background-color: #ffffff;
   width: 100%;
@@ -43,3 +42,32 @@
   background-color:rgba(0,0,0,0.04)
 }
 
+
+
+@keyframes select_list_show {
+  from {
+    top: pxTrans(-400)
+  }
+  to {
+    top: pxTrans(0)
+  }
+}
+@keyframes select_list_hide {
+  from {
+    top: pxTrans(0)
+  }
+  to {
+    top: pxTrans(-400)
+  }
+}
+.select_list_show {
+  top: pxTrans(0);
+  animation: select_list_show 0.5s ease;
+}
+.select_list_hide {
+  animation: select_list_hide 0.5s ease;
+  top: pxTrans(-400)
+}
+.select_list_normal {
+  top: pxTrans(-400)
+}
