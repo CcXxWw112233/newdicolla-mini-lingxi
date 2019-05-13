@@ -18,6 +18,9 @@ export const getOrgName = ({org_id, org_list = []}) => {
 }
 
 export const timestampToTimeZH = (timestamp) => {
+  if(!timestamp) {
+    return ''
+  }
   const date = new Date(Number(timestamp) * 1000)
   const current_year = new Date().getFullYear()
   let year = date.getFullYear()

@@ -57,7 +57,9 @@ export default {
         board_id: obj['selected_board'],
         ...payload,
         queryDate: start_time,
-        maxDate: due_time
+        maxDate: due_time,
+        page_size: '200',
+        page_number: '1',
       }
       Taro.showLoading({
         title: "加载中...",
@@ -83,7 +85,7 @@ export default {
       const current_org = getCurrentOrgByStorage()
       const selected_board = yield select(select_selected_board)
 
-      const res = yield call(getNoScheCardList, { _organization_id: current_org, board_id: selected_board})
+      const res = yield call(getNoScheCardList, { _organization_id: current_org, board_id: selected_board,  page_size: '200', page_number: '1'})
       if(isApiResponseOk(res)) {
          yield put({
            type: 'updateDatas',
