@@ -29,8 +29,6 @@ class UserInput extends Component {
     inputValue: ''
   };
   handleInput = e => {
-    console.log(e,'eeeeeeeeeeeeeeeeeeeeeeeeee')
-    // if (e) e.stopPropagation();
     this.setState({
       inputValue: e.currentTarget.value
     });
@@ -97,6 +95,7 @@ class UserInput extends Component {
             <Input
               value={inputValue}
               confirmType="send"
+              adjustPosition={false}
               style={{
                 lineHeight: '84px',
                 width: '450px',

@@ -27,6 +27,7 @@ class GroupItem extends Component {
       showNewsDot,
       isSubGroup,
       isExpand,
+      isShouldShowExpandOpertor,
     } = this.props;
 
     return (
@@ -42,7 +43,7 @@ class GroupItem extends Component {
             </View>
             <View className={styles.groupInfoLastMsg}>{lastMsg}</View>
           </View>
-          {!isSubGroup && <View className={styles.operatorWrapper} onClick={this.handleClickedOperator}>
+          {!isSubGroup && isShouldShowExpandOpertor && <View className={styles.operatorWrapper} onClick={this.handleClickedOperator}>
             <View className={styles.operator}>
             {isExpand ? <AtIcon value='chevron-up' size='20' /> : <AtIcon value='chevron-down' size='20' />}
             </View>
@@ -68,6 +69,7 @@ GroupItem.defaultProps = {
   isExpand: false, //操作按钮是否展开状态
   onExpandChange: function(){}, //操作按钮展开状态改变回调
   onClickedGroupItem: function(){}, //点击 Groupitem 的回调
+  isShouldShowExpandOpertor: false, //是否需要显示展开操作按钮， 如果是子群或者即使是主群但是没有子群，那么也不显示
 };
 
 export default GroupItem;

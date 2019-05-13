@@ -204,7 +204,8 @@ class GroupList extends Component {
       name,
       newsNum: unRead,
       showNewsDot,
-      avatarList
+      avatarList,
+      childs,
     };
   };
   render() {
@@ -233,7 +234,8 @@ class GroupList extends Component {
               name,
               newsNum,
               showNewsDot,
-              avatarList
+              avatarList,
+              childs,
             } = this.genMainGroupInfo(mainGroup);
 
             return (
@@ -251,6 +253,7 @@ class GroupList extends Component {
                 onExpandChange={this.handleExpandSubGroupChange}
                 onClickedGroupItem={this.hanldClickedGroupItem}
                 isSubGroup={false}
+                isShouldShowExpandOpertor={childs.length}
               />
             );
           })}

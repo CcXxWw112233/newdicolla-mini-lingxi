@@ -11,22 +11,8 @@ import UserInput from './components/UserInput.js'
     currentGroup
   }))
 class Chat extends Component {
-
-  componentWillMount() {}
-  componentWillUnmount() {
-
-  }
-  componentDidHide() {
-
-  }
-  onPullDownRefresh() {
-    //监听用户下拉刷新事件
-  }
-  onReachBottom() {
-    //监听用户上拉触底事件
-  }
-  onPageScroll() {
-    //监听用户滑动页面事件
+  config = {
+    disableScroll: true, //页面整体不能上下滚动
   }
   render() {
     return (

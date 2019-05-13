@@ -143,9 +143,4 @@ export default {
       return { ...state, ...updatedFields };
     }
   }
-  // subscriptions: {
-  //   setup({ dispatch: dis }, done) {
-
-  //   }
-  // },
 };
