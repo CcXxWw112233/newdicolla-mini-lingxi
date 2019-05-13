@@ -26,7 +26,8 @@ import globalStyles from './../../../gloalSet/styles/globalStyles.scss';
 )
 class UserInput extends Component {
   state = {
-    inputValue: ''
+    inputValue: '',
+    autoFocus: false,
   };
   handleInput = e => {
     this.setState({
@@ -74,6 +75,9 @@ class UserInput extends Component {
       );
   };
   onInputConfirm = () => {
+    this.setState({
+      autoFocus: true,
+    })
     this.sendTextMsg();
   };
   handleClickedItem = e => {
@@ -84,7 +88,7 @@ class UserInput extends Component {
     })
   }
   render() {
-    const { inputValue } = this.state;
+    const { inputValue, autoFocus } = this.state;
     return (
       <View className={styles.wrapper}>
         <View className={styles.contentWrapper}>
@@ -95,13 +99,16 @@ class UserInput extends Component {
             <Input
               value={inputValue}
               confirmType="send"
-              adjustPosition={false}
+              adjustPosition={true}
+              cursorSpacing={20}
               style={{
                 lineHeight: '84px',
                 width: '450px',
                 marginLeft: '10px',
                 marginRight: '10px'
               }}
+              focus={autoFocus}
+              confirmHold={true}
               onInput={this.handleInput}
               onConfirm={this.onInputConfirm}
             />

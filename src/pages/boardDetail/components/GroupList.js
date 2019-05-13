@@ -3,13 +3,15 @@ import { View } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 import styles from './GroupList.scss';
 import GroupItem from './GroupItem';
+import { isPlainObject } from './../../../utils/util';
 
 @connect(
-  ({ im: { sessionlist, currentBoardId, currentBoard} }) => {
+  ({ im: { sessionlist, currentBoardId, currentBoard, rawMessageList } }) => {
     return {
       sessionlist,
       currentBoardId,
       currentBoard,
+      rawMessageList
     };
   },
   dispatch => {
@@ -29,7 +31,7 @@ import GroupItem from './GroupItem';
             currentGroup: group
           },
           desc: 'set current chat group.'
-        })
+        });
       },
       updateCurrentChatUnreadNewsState: im_id =>
         dispatch({
@@ -47,7 +49,12 @@ class GroupList extends Component {
     isShouldExpandSubGroup: true
   };
   hanldClickedGroupItem = ({ board_id, im_id }) => {
-    const { setCurrentChatTo, setCurrentGroup, updateCurrentChatUnreadNewsState, currentBoard } = this.props;
+    const {
+      setCurrentChatTo,
+      setCurrentGroup,
+      updateCurrentChatUnreadNewsState,
+      currentBoard
+    } = this.props;
 
     //生成与 云信后端返回数据相同格式的 id
     const id = `team-${im_id}`;
@@ -56,12 +63,14 @@ class GroupList extends Component {
     //但是如果该群之前有未读消息的时候，需要先更新该群的未读消息状态
     //所以需要在聊天界面的页面退出回调中，将 currentChatTo 值 清除
     const getCurrentGroup = (currentBoard, im_id) => {
-      if(!currentBoard.childs || !Array.isArray(currentBoard.childs)) {
-        currentBoard.childs = []
+      if (!currentBoard.childs || !Array.isArray(currentBoard.childs)) {
+        currentBoard.childs = [];
       }
-      const ret = [currentBoard, ...currentBoard.childs].find(i => i.im_id === im_id)
-      return ret ? ret : {}
-    }
+      const ret = [currentBoard, ...currentBoard.childs].find(
+        i => i.im_id === im_id
+      );
+      return ret ? ret : {};
+    };
     Promise.resolve(setCurrentChatTo(id))
       .then(() => setCurrentGroup(getCurrentGroup(currentBoard, im_id)))
       .then(() => updateCurrentChatUnreadNewsState(id))
@@ -77,21 +86,43 @@ class GroupList extends Component {
       isShouldExpandSubGroup: flag
     });
   };
-  integrateCurrentBoardWithSessions = (currentBoardInfo, sessionlist = []) => {
+  getGroupLastMsgFromRawMessageList = (im_id, rawMessageList) => {
+    const currentImGroup = rawMessageList[im_id];
+    if (isPlainObject(currentImGroup)) {
+      //过滤出属于群聊的用户消息
+      let ret =  Object.values(currentImGroup)
+        .filter(i => i.scene && i.scene === 'team')
+        .reduce((acc, curr) => {
+          if(!acc.time) return curr
+          if(curr.time > acc.time) return curr
+          return acc
+        } ,{})
+      return ret
+        // .reduce((acc, curr, index, arr) => {
+        //   const len = arr.length;
+        //   if (arr.length == 0) return acc;
+        //   if (index === len) return Object.assign({}, acc, curr);
+        // }, {});
+    }
+    return {};
+  };
+  integrateCurrentBoardWithSessions = (currentBoardInfo, sessionlist = [], rawMessageList = {}) => {
     //这里需要整合每个群组的未读消息数量和最后一个信息
     const allGroupIMId = [currentBoardInfo.im_id].concat(
       currentBoardInfo.childs && currentBoardInfo.childs.length
         ? currentBoardInfo.childs.map(i => i.im_id)
         : []
     );
-
+    const { im_id } = currentBoardInfo;
     //为 currentBoardInfo 及它下面的子群 添加 unRead(未阅读消息数量) 和 lastMsg(最后一条消息， 用于展示)
     const currentBoardIdWithDefaultUnReadAndLastMsg = Object.assign(
       {},
       currentBoardInfo,
-      { unRead: 0, lastMsg: {} }
+      {
+        unRead: 0,
+        lastMsg: this.getGroupLastMsgFromRawMessageList(`team-${im_id}`, rawMessageList)
+      }
     );
-
     currentBoardIdWithDefaultUnReadAndLastMsg.childs =
       currentBoardIdWithDefaultUnReadAndLastMsg.childs &&
       currentBoardIdWithDefaultUnReadAndLastMsg.childs.length
@@ -99,12 +130,11 @@ class GroupList extends Component {
             return {
               ...i,
               unRead: 0,
-              lastMsg: ''
+              lastMsg: this.getGroupLastMsgFromRawMessageList(`team-${i.im_id}`, rawMessageList)
             };
           })
         : [];
     return sessionlist
-      .reverse()
       .filter(
         i =>
           i &&
@@ -112,13 +142,13 @@ class GroupList extends Component {
           i.scene === 'team' &&
           allGroupIMId.find(e => e === i.to)
       )
+      .sort((a, b) => a.lastMsg.time - b.lastMsg.time)
       .reduce((acc, curr) => {
-        //拿到每个群组的最后一个消息，和统计未读数。
+        //统计每个群组的未读数。
 
         if (curr.to === acc.im_id) {
           //这里不是累加
           acc.unRead = curr.unread;
-          acc.lastMsg = curr;
           return acc;
         }
         let findedIndex = acc.childs.findIndex(i => i.im_id === curr.to);
@@ -127,7 +157,6 @@ class GroupList extends Component {
           return acc;
         }
         acc.childs[findedIndex].unRead = curr.unread;
-        acc.childs[findedIndex].lastMsg = curr;
         return acc;
       }, currentBoardIdWithDefaultUnReadAndLastMsg);
   };
@@ -167,7 +196,7 @@ class GroupList extends Component {
     unRead
   } = {}) => {
     //lastMsg 是个对象， 里面有 lastMsg 属性
-    lastMsg = this.genLastMsg(lastMsg.lastMsg);
+    lastMsg = this.genLastMsg(lastMsg);
     const avatarList = this.genAvatarList(users);
     return {
       board_id,
@@ -189,8 +218,7 @@ class GroupList extends Component {
     type_name: label,
     unRead
   } = {}) => {
-    //lastMsg 是个对象， 里面有 lastMsg 属性
-    lastMsg = this.genLastMsg(lastMsg.lastMsg);
+    lastMsg = this.genLastMsg(lastMsg);
     const avatarList = this.genAvatarList(users);
     const showNewsDot = this.isShouldShowNewDot(
       unRead,
@@ -205,22 +233,18 @@ class GroupList extends Component {
       newsNum: unRead,
       showNewsDot,
       avatarList,
-      childs,
+      childs
     };
   };
   render() {
-    const { sessionlist, currentBoard } = this.props;
+    const { sessionlist, currentBoard, rawMessageList } = this.props;
     const { isShouldExpandSubGroup } = this.state;
-    if(!currentBoard) return null
+    if (!currentBoard) return null;
     const integratedCurrentBoardInfo = this.integrateCurrentBoardWithSessions(
       currentBoard,
-      sessionlist
+      sessionlist,
+      rawMessageList
     );
-    // console.log(
-    //   integratedCurrentBoardInfo,
-    //   '============= integratedCurrentBoardInfo =================='
-    // );
-
     return (
       <View className={styles.wrapper}>
         <View className={styles.mainGroupWrapper}>
@@ -235,7 +259,7 @@ class GroupList extends Component {
               newsNum,
               showNewsDot,
               avatarList,
-              childs,
+              childs
             } = this.genMainGroupInfo(mainGroup);
 
             return (
@@ -302,6 +326,6 @@ class GroupList extends Component {
 GroupList.defaultProps = {
   currentBoardId: '', //当前的项目id
   currentBoard: {}, //当前的项目信息
-  sessionlist: [], //所有的会话列表，
-}
+  sessionlist: [] //所有的会话列表，
+};
 export default GroupList;
