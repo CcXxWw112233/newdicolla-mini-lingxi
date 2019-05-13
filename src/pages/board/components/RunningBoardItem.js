@@ -59,7 +59,7 @@ class RuningBoardItem extends Component {
     const starlist = []
     const tagList = []
     const { board_item = {}, org_list } = this.props
-    const { board_id, board_name, relize_quantity, residue_quantity, org_id } = board_item
+    const { board_id, board_name, realize_quantity, residue_quantity, org_id } = board_item
     const users = board_item[RESPONSE_DATA_CODE_DATA] || []
     return (
       <View >
@@ -83,7 +83,7 @@ class RuningBoardItem extends Component {
             </View>
             <View  className={`${indexStyles.card_content_middle_right}`}>
               <View  className={`${indexStyles.task_1}`}>剩余任务 <Text>{residue_quantity}</Text></View>
-              <View  className={`${indexStyles.task_2}`}>已完成  <Text>{relize_quantity || 0}</Text></View>
+              <View  className={`${indexStyles.task_2}`}>已完成  <Text>{realize_quantity || 0}</Text></View>
             </View>
           </View>
           <View  className={`${indexStyles.card_content_bott}`}>

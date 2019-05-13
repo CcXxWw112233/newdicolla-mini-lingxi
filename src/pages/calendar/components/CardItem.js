@@ -26,22 +26,45 @@ export default class CardItem extends Component {
 
   render () {
     const { itemValue = {}, schedule, org_list } = this.props
-    const { board_id, content_id, content_name, org_id, flag, board_name, start_time, due_time } = itemValue
+    const { board_id, content_id, content_name, org_id, flag, board_name, start_time, due_time, is_realize } = itemValue
     const users = itemValue['data'] || []
     const card_logo_1 = (<Text className={`${globalStyles.global_iconfont} ${indexStyles.iconfont_size}`}>&#xe63d;</Text>)
     const card_logo_2 = (<Text className={`${globalStyles.global_iconfont} ${indexStyles.iconfont_size}`}>&#xe63e;</Text>)
     const card_logo_3 = (<Text className={`${globalStyles.global_iconfont} ${indexStyles.iconfont_size}`}>&#xe633;</Text>)
     const card_logo_4 = (<Text className={`${globalStyles.global_iconfont} ${indexStyles.iconfont_size}`}>&#xe636;</Text>)
+    const card_logo_1_relize = (<Text className={`${globalStyles.global_iconfont} ${indexStyles.iconfont_size}`}>&#xe7a8;</Text>)
+
+
+    const dis_due_style = () => {
+      let opacity = '1'
+      if('0' == flag) {
+        if(is_realize == '1') {
+          opacity = '0.6'
+        }
+      } else if('1' == flag) {
+        if(due_time && due_time < new Date().getTime() / 1000) {
+          opacity = '0.6'
+        }
+      } else if('2' == flag) {
+
+      } else if('3' == flag) {
+
+      } else {
+
+      }
+      return opacity
+    }
+    // const dis_due_style = `opacity: ${flag == '0'?()}`
 
     return (
       <View >
-        <View className={`${globalStyles.global_card_out} ${indexStyles.card_content} `}>
+        <View className={`${globalStyles.global_card_out} ${indexStyles.card_content} `} style={`opacity: ${dis_due_style()}`}>
           <View className={`${indexStyles.card_content_left}`}>
-            {'1' == flag? (
-              card_logo_1
+            {'0' == flag? (
+              is_realize == '1'?card_logo_1_relize:card_logo_1
             ):(
-              '2' == flag? (card_logo_2):(
-                '3' == flag?card_logo_3: card_logo_4
+              '1' == flag? (card_logo_2):(
+                '2' == flag?card_logo_3: card_logo_4
               )
             )}
           </View>
