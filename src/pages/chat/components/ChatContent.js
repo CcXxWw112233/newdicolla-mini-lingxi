@@ -15,6 +15,14 @@ import { connect } from '@tarojs/redux';
   })
 )
 class ChatContent extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      scrollIntoViewEleId: '',
+    }
+    this.isTouchingScrollView = false
+  }
+
   getAvatarByFromNick = nick => {
     const { currentBoard } = this.props;
     let ret =
@@ -39,7 +47,7 @@ class ChatContent extends Component {
     const { currentChatTo, sessionlist } = this.props;
     //生成当前的聊天信息
     return sessionlist
-      .filter(i => i.id === currentChatTo)
+      .filter(i => i.id === currentChatTo && i.lastMsg && i.lastMsg.status === 'success')
       .map(this.mapSessionToNews)
       .sort((a, b) => a.updateTime - b.updateTime);
   };
@@ -48,8 +56,7 @@ class ChatContent extends Component {
     const currentGroupSessionListLen = currentGroupSessionList.length;
     //list 按时间倒序排列
     return nextSessionlist
-      .filter(i => i.id === currentChatTo)
-      .sort((a, b) => a.updateTime - b.updateTime)
+      .filter(i => i.id === currentChatTo && i.lastMsg && i.lastMsg.status === 'success')
       .filter((_, ind) => ind >= currentGroupSessionListLen)
       .map(this.mapSessionToNews)
       .sort((a, b) => a.updateTime - b.updateTime);
@@ -60,12 +67,25 @@ class ChatContent extends Component {
   onScroll = () => {
     console.log('on scroll...........................')
   }
+  onScrollViewTouchStart = () => {
+
+    this.setState({
+      scrollIntoViewEleId: ''
+    }, () => {
+      this.isTouchingScrollView = true
+    })
+  }
+  onScrollViewTouchEnd = () => {
+    this.isTouchingScrollView = false
+    console.log('touch end.........................................')
+  }
   updateCurrentGroupSessionListWhenSessionlistChange = nextProps => {
     const { sessionlist: nextSessionlist } = nextProps;
     const { sessionlist, dispatch } = this.props;
     const isArrChange = (arr1 = [], arr2 = []) => arr1.length !== arr2.length;
     if (isArrChange(sessionlist, nextSessionlist)) {
-      dispatch({
+
+      Promise.resolve(dispatch({
         type: 'im/updateStateFieldByExtension',
         payload: {
           currentGroupSessionList: this.updateCurrentGroupSessionList(
@@ -74,6 +94,12 @@ class ChatContent extends Component {
           )
         },
         desc: 'update current group sessionlist'
+      })).then(() => {
+        if(!this.isTouchingScrollView) {
+          this.setState({
+            scrollIntoViewEleId: 'scroll_bottom_id'
+          })
+        }
       });
     }
   };
@@ -92,6 +118,8 @@ class ChatContent extends Component {
   }
   render() {
     const { currentGroupSessionList } = this.props;
+    const {scrollIntoViewEleId} = this.state
+
     return (
       <ScrollView
         className={styles.wrapper}
@@ -102,9 +130,14 @@ class ChatContent extends Component {
         upperThreshold={20}
         onScrolltoupper={this.onScrolltoupper}
         onScroll={this.onScroll}
+        enableBackToTop={true}
+        scrollIntoView={scrollIntoViewEleId}
+        onTouchStart={this.onScrollViewTouchStart}
+        onTouchEnd={this.onScrollViewTouchEnd}
         >
+        <View className={styles.contentWrapper}>
         {currentGroupSessionList.map(i => (
-          <View className={styles.ChatItemWrapper} key={i.time}>
+          <View className={styles.chatItemWrapper} key={i.time}>
             <ChatItem
               flow={i.flow}
               fromNick={i.fromNick}
@@ -116,6 +149,8 @@ class ChatContent extends Component {
             />
           </View>
         ))}
+        </View>
+        <View id='scroll_bottom_id' className={styles.scrollToBottomIdEle}></View>
       </ScrollView>
     );
   }

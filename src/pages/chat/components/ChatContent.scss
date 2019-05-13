@@ -3,8 +3,18 @@
   height: calc(100vh - 222px);
   background: #fff;
   padding: 0px 32px 0px;
-  .ChatItemWrapper {
-    margin-bottom: 32px;
+  .contentWrapper {
+    padding: 10px 0px;
     width: 686px;
+    .chatItemWrapper {
+      margin-bottom: 32px;
+      width: 686px;
+    }
+  }
+  .scrollToBottomIdEle {
+    bottom: 0px;
+    width: 686px;
+    height: 2px;
+    background: transparent;
   }
 }

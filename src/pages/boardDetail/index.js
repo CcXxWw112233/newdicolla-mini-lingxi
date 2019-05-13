@@ -84,11 +84,14 @@ class BoardDetail extends Component {
     resetCurrentGroupSessionList()
   }
   render() {
+    const {allBoardList} = this.props
+    const isAllBoardListHasLen = Array.isArray(allBoardList) && allBoardList.length
+
     return (
       <View className={styles.wrapper}>
-        <View className={styles.imGroupWrapper}>
+        {isAllBoardListHasLen && <View className={styles.imGroupWrapper}>
           <GroupList />
-        </View>
+        </View>}
         <View className={styles.boardStarWrapper}>
           <BoardStar />
         </View>
