@@ -2,6 +2,7 @@ import Taro from '@tarojs/taro';
 import { dealMsg } from './../utils/dealGroupMsg';
 
 function onMsg(msg) {
+
   const {
     globalData: {
       store: { dispatch, getState }
@@ -32,7 +33,28 @@ function onMsg(msg) {
   }
   tempState.rawMessageList[sessionId][msg.time] = Object.assign({}, msg);
   if (tempState.currentChatTo === msg.sessionId && nim) {
+    const getAvatarByFromNick = nick => {
+      const { currentBoard } = tempState
+      let ret =
+        currentBoard && currentBoard.users.find(i => i.full_name === nick);
+      return ret ? ret.avatar : '';
+    };
+    const mapSessionToNews = ({ time, flow, fromNick, status, type, text }) => {
+      return {
+        flow,
+        fromNick,
+        avatar: getAvatarByFromNick(fromNick),
+        status,
+        time,
+        type,
+        text
+      };
+    };
+
     console.log(msg.sessionId, '--------------- resetSessionUnread in Msg------------------')
+    if(msg.scene === 'team' && msg.type === 'text' && tempState.currentChatTo && tempState.currentChatTo === msg.sessionId) {
+      tempState.currentGroupSessionList = [...tempState.currentGroupSessionList, mapSessionToNews(msg)]
+    }
     // 当前会话
     nim.resetSessionUnread(msg.sessionId);
   }
