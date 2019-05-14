@@ -31,6 +31,10 @@ class BoardStar extends Component {
         star: value
       })
     }
+    Taro.showToast({
+      title: '未完成功能',
+      icon: 'none'
+    })
   }
   getCurrentBoardStar = (list = [], id) => {
     const result = list.find(i => i.board_id === id);
