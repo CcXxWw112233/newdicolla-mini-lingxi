@@ -82,6 +82,7 @@ export default class CalendarSwiper extends Component {
     this.updateSelecedTime(new_timestamp)
     this.getDataArray({year: select_year_new, month: select_month_new})
     this.getSelectDateDetail(new_timestamp)
+    this.getSignList(new_timestamp)
   }
 
   //监听滑动
@@ -180,6 +181,17 @@ export default class CalendarSwiper extends Component {
     })
   }
 
+  //更新打点列表
+  getSignList = (new_timestamp) => {
+    const { dispatch } = this.props
+    //获取打点列表
+    dispatch({
+      type: 'calendar/getSignList',
+      payload: {
+        selected_timestamp: new_timestamp
+      }
+    })
+  }
   render () {
     const { swiper_list = [], current_indi, windowWidth, date_array = [], selected_timestamp, select_year, select_month, select_date_no, select_week_day_dec, show_whole_calendar} = this.state
 

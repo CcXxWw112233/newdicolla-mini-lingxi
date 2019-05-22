@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro'
 import {isApiResponseOk} from "../../utils/request";
-import { getOrgBoardList, getScheCardList, getNoScheCardList } from "../../services/calendar/index";
+import { getOrgBoardList, getScheCardList, getNoScheCardList, getSignList } from "../../services/calendar/index";
 import { select_selected_board, select_selected_timestamp, select_search_text,  } from './selects'
 import { getCurrentOrgByStorage } from '../../utils/basicFunction'
 
@@ -14,6 +14,7 @@ export default {
     search_text: '',
     sche_card_list: [], //项目的所有排期的卡片列表
     no_sche_card_list: [], //项目的所有排期的卡片列表
+    sign_list: [], //日历列表打点数据
   },
   effects: {
     // 获取当前组织项目列表
@@ -98,6 +99,30 @@ export default {
       }
     },
 
+    //获取打点列表
+    * getSignList({ payload }, { select, call, put }) {
+      let selected_timestamp = payload['selected_timestamp']
+      if(!selected_timestamp) {
+        selected_timestamp = yield select(select_selected_timestamp)
+      }
+      const date = new Date(selected_timestamp)
+      const year_ = date.getFullYear()
+      const month_ = date.getMonth() + 1
+      const month = month_ < 10? `0${month_}`: month_
+      const current_org = getCurrentOrgByStorage()
+      const selected_board = yield select(select_selected_board)
+      const res = yield call(getSignList, { _organization_id: current_org, board_id: selected_board, month: `${year_}-${month}` })
+      if(isApiResponseOk(res)) {
+        yield put({
+          type: 'updateDatas',
+          payload: {
+            sign_list: res.data
+          }
+        })
+      }else {
+
+      }
+    },
 
   },
 

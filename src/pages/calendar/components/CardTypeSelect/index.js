@@ -48,6 +48,11 @@ export default class CardTypeSelect extends Component {
           selected_board: board_id
         }
       })
+      dispatch({
+        type: 'calendar/getSignList',
+        payload: {
+        }
+      })
     }
     dispatch({
       type: 'calendar/getNoScheCardList',

@@ -54,6 +54,7 @@ export default class Calendar extends Component {
     this.getOrgBoardList()
     this.getNoScheCardList()
     this.getScheCardList()
+    this.getSignList()
   }
 
   //获取项目列表
@@ -88,6 +89,17 @@ export default class Calendar extends Component {
     dispatch({
       type: 'my/getOrgList',
       payload: {}
+    })
+  }
+
+  //获取打点列表
+  getSignList = (month) => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'calendar/getSignList',
+      payload: {
+        month
+      }
     })
   }
 

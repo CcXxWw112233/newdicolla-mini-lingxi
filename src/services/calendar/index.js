@@ -44,3 +44,14 @@ export const getNoScheCardList = (data , notShowLoading) => {
     url: `${API_WORKBENCHS}/mini/calendar/un_period`,
   }, notShowLoading)
 }
+
+//获取打点列表
+export const getSignList = (data , notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'GET',
+    url: `${API_WORKBENCHS}/mini/calendar/sign`,
+  }, notShowLoading)
+}
