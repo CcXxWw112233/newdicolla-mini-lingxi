@@ -14,12 +14,23 @@ import { connect } from '@tarojs/redux'
 }))
 export default class Board extends Component {
   config = {
-    navigationBarTitleText: '项目'
+    "navigationBarTitleText": '项目',
+    "enablePullDownRefresh": true,
+    "backgroundColor": '#696969',
   }
 
   state = {
     show_board_select_type: '0', //出现项目选择
     search_mask_show: '0', /// 0默认 1 淡入 2淡出
+  }
+
+  onPullDownRefresh(res) {
+    this.getBoardList()
+    Taro.showNavigationBarLoading()
+    setTimeout(function () {
+      Taro.stopPullDownRefresh()
+      Taro.hideNavigationBarLoading()
+    }, 300)
   }
 
   componentWillReceiveProps (nextProps) {

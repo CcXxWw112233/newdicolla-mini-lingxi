@@ -15,7 +15,19 @@ import { connect } from '@tarojs/redux'
 export default class Calendar extends Component {
 
   config = {
-    navigationBarTitleText: ''
+    navigationBarTitleText: '',
+    "enablePullDownRefresh": true,
+    "backgroundColor": '#696969',
+  }
+
+  onPullDownRefresh(res) {
+    this.getNoScheCardList()
+    this.getScheCardList()
+    Taro.showNavigationBarLoading()
+    setTimeout(function () {
+      Taro.stopPullDownRefresh()
+      Taro.hideNavigationBarLoading()
+    }, 300)
   }
 
   state= {
