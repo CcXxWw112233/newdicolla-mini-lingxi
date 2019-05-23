@@ -14,7 +14,7 @@ export default {
     search_text: '',
     sche_card_list: [], //项目的所有排期的卡片列表
     no_sche_card_list: [], //项目的所有排期的卡片列表
-    sign_list: [], //日历列表打点数据
+    sign_data: [], //日历列表打点数据
   },
   effects: {
     // 获取当前组织项目列表
@@ -116,7 +116,7 @@ export default {
         yield put({
           type: 'updateDatas',
           payload: {
-            sign_list: res.data
+            sign_data: res.data
           }
         })
       }else {

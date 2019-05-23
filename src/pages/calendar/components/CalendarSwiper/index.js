@@ -5,8 +5,8 @@ import globalStyles from '../../../../gloalSet/styles/globalStyles.scss'
 import { getMonthDate, isToday, isSamDay } from './getDate'
 import { connect } from '@tarojs/redux'
 
-@connect(({ calendar }) => ({
-  calendar
+@connect(({ calendar: { sign_data } }) => ({
+  sign_data
 }))
 export default class CalendarSwiper extends Component {
 
@@ -192,6 +192,15 @@ export default class CalendarSwiper extends Component {
       }
     })
   }
+
+  //返回是否具有任务打点
+  isHasNormalTask = (timestamp) => {
+    const { sign_data = {} } = this.props
+    const { calendar_normal_sign_data = [] } = sign_data
+    let i = calendar_normal_sign_data.find(item => item == timestamp)
+    return !!i
+  }
+
   render () {
     const { swiper_list = [], current_indi, windowWidth, date_array = [], selected_timestamp, select_year, select_month, select_date_no, select_week_day_dec, show_whole_calendar} = this.state
 
@@ -216,9 +225,9 @@ export default class CalendarSwiper extends Component {
                   className={`${indexStyles.date_day_inner}  ${is_today && indexStyles.is_now_date}  ${is_selected && indexStyles.date_day_selected} ${no_in_select_month && indexStyles.no_current_month_date}`}>
                   <Text>{is_today? '今':date_no}</Text>
                   <View className={`${indexStyles.check_has_task} ${no_in_select_month && indexStyles.check_has_task_no_current_moth}`}>
-                    {/*{is_has_task && (*/}
-                      {/*<View className={`${indexStyles.has_task}`} style={`background-color: ${is_selected? '#ffffff' : '#1890FF' }`}></View>*/}
-                    {/*)}*/}
+                    {this.isHasNormalTask(timestamp) && (
+                      <View className={`${indexStyles.has_task}`} style={`background-color: ${is_selected? '#ffffff' : '#1890FF' }`}></View>
+                    )}
                     {/*{is_has_flow && (*/}
                       {/*<View className={`${indexStyles.has_flow}`}></View>*/}
                     {/*)}*/}
