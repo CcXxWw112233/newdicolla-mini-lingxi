@@ -23,6 +23,9 @@ export default class Calendar extends Component {
   onPullDownRefresh(res) {
     this.getNoScheCardList()
     this.getScheCardList()
+    this.getOrgBoardList()
+    this.getSignList()
+
     Taro.showNavigationBarLoading()
     setTimeout(function () {
       Taro.stopPullDownRefresh()
