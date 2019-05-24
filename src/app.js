@@ -27,6 +27,7 @@ class App extends Component {
     pages: [
       'pages/calendar/index',
       'pages/im/index',
+      'pages/groupMember/index',
       'pages/boardDetail/index',
       'pages/noSchedulesCard/index',
       'pages/board/index',

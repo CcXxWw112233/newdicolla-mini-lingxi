@@ -1,0 +1,20 @@
+.wrapper {
+  .avatarWrapper {
+    margin-bottom: 32px;
+  }
+  .historyWrapper {
+    margin-bottom: 32px;
+  }
+  .groupDetailItemWrapper {
+    position: relative;
+    .hackAFuckingBorderBottom {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 686px;
+      height: 2px;
+      background: #ebebeb;
+    }
+  }
+}

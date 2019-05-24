@@ -7,6 +7,24 @@ import { getAllIMTeamList, getIMAccount } from './../../services/im/index';
 import { isApiResponseOk } from './../../utils/request';
 import { onMsg } from './actions/index';
 
+function onSendMsgDone(error, msg) {
+  if (error) {
+    // 被拉黑
+    if (error.code === 7101) {
+      msg.status = 'success';
+      alert(error.message);
+    } else {
+      Taro.showToast({
+        title: `发送消息失败: ${String(error)}`,
+        icon: 'none'
+      });
+    }
+    return;
+  }
+  msg.status = 'success';
+  onMsg(msg);
+}
+
 export default {
   namespace: 'im',
   state: INITIAL_STATE,
@@ -61,29 +79,27 @@ export default {
       const { im_id } = payload;
       const { nim } = yield selectFieldsFromIm(select, 'nim');
       if (nim) {
+        //重置群的未读信息
         nim.resetSessionUnread(im_id);
       }
+    },
+    *sendAudio({payload}, {select}) {
+      const {scene, to, wxFilePath, type} = payload
+      const {nim} = yield selectFieldsFromIm(select, 'nim')
+      nim.sendFile({
+        scene,
+        to,
+        type,
+        wxFilePath,
+        done: (err, msg) => {
+          onSendMsgDone(err, msg)
+        }
+      })
+
     },
     *sendMsg({ payload }, { select }) {
       const { scene, to, text } = payload;
       const { nim } = yield selectFieldsFromIm(select, 'nim');
-      function onSendMsgDone(error, msg) {
-        if (error) {
-          // 被拉黑
-          if (error.code === 7101) {
-            msg.status = 'success';
-            alert(error.message);
-          } else {
-            Taro.showToast({
-              title: `发送消息失败: ${String(error)}`,
-              icon: 'none'
-            });
-          }
-          return;
-        }
-        msg.status = 'success';
-        onMsg(msg);
-      }
       nim.sendText({
         scene,
         to,
