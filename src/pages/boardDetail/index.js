@@ -63,21 +63,9 @@ class BoardDetail extends Component {
     setCurrentBoardId(boardId);
     setCurrentBoard(getCurrentBoard(allBoardList, boardId));
   }
-  // comonentDidUpdate() {
-  //   const { allBoardList, setCurrentBoardId, setCurrentBoard } = this.props;
-  //   const { boardId } = this.$router.params;
-  //   const getCurrentBoard = (arr, id) => {
-  //     const ret = arr.find(i => i.board_id === id);
-  //     return ret ? ret : {};
-  //   };
-  //   setCurrentBoardId(boardId);
-  //   setCurrentBoard(getCurrentBoard(allBoardList, boardId));
-  // }
   componentDidShow() {
 
-    //重置当前聊天群 id， 当前聊天群信息
-    //如果不重置 当前聊天群 id ，
-    //对话的未读状态更新会受影响
+    //重置当前聊天群id，和当前聊天群信息
     const { resetCurrentChatTo, resetCurrentGroup, resetCurrentGroupSessionList } = this.props;
     resetCurrentChatTo();
     resetCurrentGroup();
@@ -85,11 +73,11 @@ class BoardDetail extends Component {
   }
   render() {
     const {allBoardList} = this.props
-    const isAllBoardListHasLen = Array.isArray(allBoardList) && allBoardList.length
+    const isHasBoardData = Array.isArray(allBoardList) && allBoardList.length
 
     return (
       <View className={styles.wrapper}>
-        {isAllBoardListHasLen && <View className={styles.imGroupWrapper}>
+        {isHasBoardData && <View className={styles.imGroupWrapper}>
           <GroupList />
         </View>}
         <View className={styles.boardStarWrapper}>

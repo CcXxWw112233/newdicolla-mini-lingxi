@@ -4,18 +4,21 @@ import styles from './AvatarList.scss';
 import globalStyles from './../../../gloalSet/styles/globalStyles.scss';
 
 class AvatarList extends Component {
-  shouldShowAvatarMax = 19;
   isValidImgUrl = url => {
     return /^http[s]?:/.test(url);
   };
   onClickAvatarItem = (which, e) => {
+    const {onShowAll} = this.props
     if (e) e.stopPropagation();
+    if(which === 'all') {
+      onShowAll()
+    }
     console.log(which, 'on avatar item clicked.');
   };
   render() {
-    const { avatarList } = this.props;
+    const { avatarList, shouldShowAvatarMax } = this.props;
     return (
-      <View className={styles.wrapper}>
+      <View className={`${styles.wrapper}`}>
         {avatarList.map((item, index) => {
           return (
             <View
@@ -27,19 +30,19 @@ class AvatarList extends Component {
               }`}
               onClick={e =>
                 this.onClickAvatarItem(
-                  index === this.shouldShowAvatarMax ? 'all' : item.id,
+                  index === shouldShowAvatarMax ? 'all' : item.id,
                   e
                 )
               }
             >
-              {index <= this.shouldShowAvatarMax ? (
+              {index <= shouldShowAvatarMax ? (
                 this.isValidImgUrl(item.avatar) ? (
-                  index === this.shouldShowAvatarMax ? (
+                  index === shouldShowAvatarMax ? (
                     <View
                       className={`${globalStyles.global_iconfont} ${
                         styles.avatarItemAvatar
                       } ${
-                        index === this.shouldShowAvatarMax
+                        index === shouldShowAvatarMax
                           ? styles.avatarItemNameShowAll
                           : ''
                       }`}
@@ -57,12 +60,12 @@ class AvatarList extends Component {
                       mode="aspectFill"
                     />
                   )
-                ) : index === this.shouldShowAvatarMax ? (
+                ) : index === shouldShowAvatarMax ? (
                   <View
                     className={`${globalStyles.global_iconfont} ${
                       styles.avatarItemAvatar
                     } ${
-                      index === this.shouldShowAvatarMax
+                      index === shouldShowAvatarMax
                         ? styles.avatarItemNameShowAll
                         : ''
                     }`}
@@ -86,10 +89,10 @@ class AvatarList extends Component {
                   </View>
                 )
               ) : null}
-              {index <= this.shouldShowAvatarMax ? (
+              {index <= shouldShowAvatarMax ? (
                 <Text className={styles.avatarItemName}>
-                  {index === this.shouldShowAvatarMax
-                    ? '查看全sdfdsf部'
+                  {index === shouldShowAvatarMax
+                    ? '查看全部'
                     : item.name}
                 </Text>
               ) : null}
@@ -102,7 +105,9 @@ class AvatarList extends Component {
 }
 
 AvatarList.defaultProps = {
-  avatarList: [] //头像对象数组
+  avatarList: [], //头像对象数组
+  shouldShowAvatarMax: 19, //头像的最大显示数量，超过之后，显示 显示全部 头像按钮
+  onShowAll: function(){}, //查看全部按钮
 };
 
 export default AvatarList;

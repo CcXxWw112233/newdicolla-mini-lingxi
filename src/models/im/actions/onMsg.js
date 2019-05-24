@@ -1,8 +1,9 @@
 import Taro from '@tarojs/taro';
 import { dealMsg } from './../utils/dealGroupMsg';
+import {genNews, isValidMsg} from './../utils/genNews.js'
+import {isShouldHandleType} from './../utils/activityHandle.js'
 
 function onMsg(msg) {
-
   const {
     globalData: {
       store: { dispatch, getState }
@@ -27,35 +28,30 @@ function onMsg(msg) {
     }
     dealMsg(msg, tempState, tempState.userInfo.account);
   }
+
+  //保存当前信息
   let sessionId = msg.sessionId;
   if (!tempState.rawMessageList[sessionId]) {
     tempState.rawMessageList[sessionId] = {};
   }
   tempState.rawMessageList[sessionId][msg.time] = Object.assign({}, msg);
-  if (tempState.currentChatTo === msg.sessionId && nim) {
-    const getAvatarByFromNick = nick => {
-      const { currentBoard } = tempState
-      let ret =
-        currentBoard && currentBoard.users.find(i => i.full_name === nick);
-      return ret ? ret.avatar : '';
-    };
-    const mapSessionToNews = ({ time, flow, fromNick, status, type, text }) => {
-      return {
-        flow,
-        fromNick,
-        avatar: getAvatarByFromNick(fromNick),
-        status,
-        time,
-        type,
-        text
-      };
-    };
 
-    console.log(msg.sessionId, '--------------- resetSessionUnread in Msg------------------')
-    if(msg.scene === 'team' && msg.type === 'text' && tempState.currentChatTo && tempState.currentChatTo === msg.sessionId) {
-      tempState.currentGroupSessionList = [...tempState.currentGroupSessionList, mapSessionToNews(msg)]
+  const isMsgBelongsToCurrentChatGroup =
+    tempState.currentChatTo === msg.sessionId && nim;
+
+  //如果这条消息属于当前打开的群聊，则需要处理，将符合条件的消息合并到当前群的消息列表中
+  if (isMsgBelongsToCurrentChatGroup) {
+
+    //如果是一条属于当前打开的群聊的text type的消息，
+    //那么就整合数据
+    if (isValidMsg(msg, tempState.currentChatTo)) {
+      const { currentBoard } = tempState;
+      tempState.currentGroupSessionList = [
+        ...tempState.currentGroupSessionList,
+        genNews(msg, currentBoard)
+      ];
     }
-    // 当前会话
+    // 更新当前群的未读消息状态
     nim.resetSessionUnread(msg.sessionId);
   }
   dispatch({

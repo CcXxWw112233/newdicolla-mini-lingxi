@@ -4,6 +4,7 @@
   padding: 32px;
   padding-bottom: 0px;
   background: #fff;
+  max-height: 630px;
   .avatarItemWrapper {
     width: 96px;
     display: flex;
@@ -13,22 +14,27 @@
     margin-right: 48px;
     margin-bottom: 24px;
     overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     .avatarItemAvatar {
       width: 96px;
       height: 96px;
       border-radius: 50%;
     }
     .avatarItemName {
+      width: 96px;
       height: 40px;
+      text-align: center;
       font-size: 24px;
       font-weight: 400;
       color: rgba(0, 0, 0, 0.65);
       line-height: 40px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .avatarItemNameShowAll {
-      color:rgba(0,0,0,0.25);
+      color: rgba(0, 0, 0, 0.25);
       background: rgba(0, 0, 0, 0.02);
     }
   }

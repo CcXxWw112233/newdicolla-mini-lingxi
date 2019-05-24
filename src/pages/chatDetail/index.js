@@ -1,45 +1,69 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
-import styles from './ChatDetail.scss';
-import globalStyles from './../../../gloalSet/styles/globalStyles.scss';
-import AvatarList from './components/AvatarList.js'
-
+import styles from './index.scss';
+import AvatarList from './components/AvatarList.js';
+import DetailItem from './components/DetailItem.js';
 
 @connect(({ im: { currentGroup } }) => ({
   currentGroup
 }))
 class ChatDetail extends Component {
-  onShowBoardDetail = e => {
-    if (e) e.stopPropagation();
+  handleShowAllGroupMember = () => {
+    this.pageJump('/pages/groupMember/index')
   };
+  handleTurnToHistoryPage = () => {
+    console.log('should show history page.');
+  };
+  pageJump = url => {
+    if(!url) return
+    Taro.navigateTo({
+      url,
+    })
+  }
   setNavigationBarTitle = () => {
     const { currentGroup: { name = '未知群名' } = {} } = this.props;
-    Taro.setNavigationBarTitle({title: name.substring(0, 15)})
-  }
+    Taro.setNavigationBarTitle({ title: name.substring(0, 15) });
+  };
   componentWillMount() {
-    this.setNavigationBarTitle()
-
+    this.setNavigationBarTitle();
   }
   render() {
-    const { currentGroup: { users = [] } = {} } = this.props;
-    const avatarList = users.map(i => ({id: i.id, name: i.full_name, avatar: i.avatar}))
+    const { currentGroup: { users = [], name = '未知群名' } = {} } = this.props;
+    const avatarList = users.map(i => ({
+      id: i.id,
+      name: i.name,
+      avatar: i.avatar
+    }));
+
     return (
-      <View>
-        <AvatarList avatarList={avatarList} />
-        {/* <View className={styles.contentWrapper}>
-          <Text className={styles.title}>{name}</Text>
-          <View
-            className={styles.operatorWrapper}
-            onClick={this.onShowBoardDetail}
-          >
-            <View
-              className={`${globalStyles.global_iconfont} ${styles.operator}`}
-            >
-              &#xe63f;
-            </View>
-          </View>
-        </View> */}
+      <View className={styles.wrapper}>
+        <View className={styles.avatarWrapper}>
+          <AvatarList
+            avatarList={avatarList}
+            onShowAll={this.handleShowAllGroupMember}
+          />
+        </View>
+        <View className={styles.historyWrapper}>
+          <DetailItem
+            itemText="查找聊天记录"
+            onItemClick={this.handleTurnToHistoryPage}
+            isCanOperator
+          />
+        </View>
+        <View className={styles.groupDetailItemWrapper}>
+          <DetailItem
+            itemTextKeyValue={['群聊名称:', name]}
+            isCanOperator={false}
+            isShowBottomBorder={true}
+          />
+          <DetailItem
+            itemTextKeyValue={['人数:', users.length]}
+            isCanOperator={false}
+            isCanOperator={false}
+          />
+          <View className={styles.hackAFuckingBorderBottom}></View>
+        </View>
       </View>
     );
   }

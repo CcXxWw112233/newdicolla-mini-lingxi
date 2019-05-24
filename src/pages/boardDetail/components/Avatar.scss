@@ -64,6 +64,7 @@
   align-items: flex-end;
 }
 .ItemWrapperFour {
+  position: relative;
   margin: 0 2px;
   width: 40px;
   height: 40px;
@@ -133,4 +134,12 @@ position: relative;
   line-height: 36px;
   border-radius: 18px;
   font-size: 26px;
+}
+
+.amendAtIconPosition {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  margin-top: 5px;
+  align-items: center;
 }

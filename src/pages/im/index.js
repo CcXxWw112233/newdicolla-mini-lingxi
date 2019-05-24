@@ -1,6 +1,8 @@
 import Taro, { Component, chooseInvoiceTitle } from '@tarojs/taro';
 import { View, Button, Text } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
+import styles from './index.scss'
+import SearchInput from './../groupMember/components/SearchInput.js'
 
 @connect(({ im }) => ({
   im
@@ -66,6 +68,9 @@ class Im extends Component {
     return (
       <View className="global_horrizontal_padding">
         <Button onClick={this.handleJumpToBoardDetail}>跳转到项目详情页</Button>
+        <View className={styles.searchInputWrapper}>
+        <SearchInput />
+        </View>
       </View>
     );
   }

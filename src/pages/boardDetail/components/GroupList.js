@@ -49,6 +49,14 @@ class GroupList extends Component {
     isShouldExpandSubGroup: true
   };
   hanldClickedGroupItem = ({ board_id, im_id }) => {
+    if (!im_id) {
+      Taro.showToast({
+        title: '当前群未注册',
+        icon: 'none'
+      });
+      return;
+    }
+
     const {
       setCurrentChatTo,
       setCurrentGroup,
@@ -58,10 +66,9 @@ class GroupList extends Component {
 
     //生成与 云信后端返回数据相同格式的 id
     const id = `team-${im_id}`;
-
     //设置currentChatTo之后，会自动将该群的新接收的消息更新为已读，
     //但是如果该群之前有未读消息的时候，需要先更新该群的未读消息状态
-    //所以需要在聊天界面的页面退出回调中，将 currentChatTo 值 清除
+
     const getCurrentGroup = (currentBoard, im_id) => {
       if (!currentBoard.childs || !Array.isArray(currentBoard.childs)) {
         currentBoard.childs = [];
@@ -87,40 +94,45 @@ class GroupList extends Component {
     });
   };
   getGroupLastMsgFromRawMessageList = (im_id, rawMessageList) => {
+
     const currentImGroup = rawMessageList[im_id];
+    const filterMsgType = i => i.scene && i.scene === 'team';
     if (isPlainObject(currentImGroup)) {
+
       //过滤出属于群聊的用户消息
-      let ret =  Object.values(currentImGroup)
-        .filter(i => i.scene && i.scene === 'team')
-        .reduce((acc, curr) => {
-          if(!acc.time) return curr
-          if(curr.time > acc.time) return curr
-          return acc
-        } ,{})
-      return ret
-        // .reduce((acc, curr, index, arr) => {
-        //   const len = arr.length;
-        //   if (arr.length == 0) return acc;
-        //   if (index === len) return Object.assign({}, acc, curr);
-        // }, {});
+      //这里会出现一个bug, 会丢掉currentImGroup对象的最后一个属性？？？？
+      //Object.entries, for...in, 都会丢失。。。
+      return Object.values(currentImGroup)
+        .filter(filterMsgType)
+        .sort((a, b) => a.time - b.time)
+        .slice(-1)[0]
     }
     return {};
   };
-  integrateCurrentBoardWithSessions = (currentBoardInfo, sessionlist = [], rawMessageList = {}) => {
-    //这里需要整合每个群组的未读消息数量和最后一个信息
+  integrateCurrentBoardWithSessions = (
+    currentBoardInfo,
+    sessionlist = [],
+    rawMessageList = {}
+  ) => {
+    //这里需要整合每个群组的未读消息数量
     const allGroupIMId = [currentBoardInfo.im_id].concat(
       currentBoardInfo.childs && currentBoardInfo.childs.length
         ? currentBoardInfo.childs.map(i => i.im_id)
         : []
     );
     const { im_id } = currentBoardInfo;
-    //为 currentBoardInfo 及它下面的子群 添加 unRead(未阅读消息数量) 和 lastMsg(最后一条消息， 用于展示)
+
+    //为 currentBoardInfo 及它下面的子群 添加 unRead(未阅读消息数量)
+    //和 lastMsg(最后一条消息， 用于展示)
     const currentBoardIdWithDefaultUnReadAndLastMsg = Object.assign(
       {},
       currentBoardInfo,
       {
         unRead: 0,
-        lastMsg: this.getGroupLastMsgFromRawMessageList(`team-${im_id}`, rawMessageList)
+        lastMsg: this.getGroupLastMsgFromRawMessageList(
+          `team-${im_id}`,
+          rawMessageList
+        ),
       }
     );
     currentBoardIdWithDefaultUnReadAndLastMsg.childs =
@@ -130,24 +142,25 @@ class GroupList extends Component {
             return {
               ...i,
               unRead: 0,
-              lastMsg: this.getGroupLastMsgFromRawMessageList(`team-${i.im_id}`, rawMessageList)
+              lastMsg: this.getGroupLastMsgFromRawMessageList(
+                `team-${i.im_id}`,
+                rawMessageList
+              )
             };
           })
         : [];
+
+    const currentBoardSessionList = i =>
+      i && i.scene && i.scene === 'team' && allGroupIMId.find(e => e === i.to);
+    const sortByTime = (a, b) => a.lastMsg.time - b.lastMsg.time
     return sessionlist
-      .filter(
-        i =>
-          i &&
-          i.scene &&
-          i.scene === 'team' &&
-          allGroupIMId.find(e => e === i.to)
-      )
-      .sort((a, b) => a.lastMsg.time - b.lastMsg.time)
+      .filter(currentBoardSessionList)
+      .sort(sortByTime)
       .reduce((acc, curr) => {
         //统计每个群组的未读数。
 
         if (curr.to === acc.im_id) {
-          //这里不是累加
+          //这里不是累加, 而是直接替换
           acc.unRead = curr.unread;
           return acc;
         }
@@ -162,12 +175,15 @@ class GroupList extends Component {
   };
   genLastMsg = (lastMsg = {}) => {
     const { fromNick, type, text } = lastMsg;
+
     if (!fromNick) return '';
+
     const typeCond = {
       text,
+      audio: '[语音]',
       image: '[图片]',
       video: '[视频]',
-      custom: '[系统消息]'
+      custom: '[动态消息]'
     };
     if (type === 'text') {
       return `${fromNick}: ${text}`;
@@ -175,7 +191,8 @@ class GroupList extends Component {
     return typeCond[type] ? typeCond[type] : '[未知类型消息]';
   };
   genAvatarList = (users = []) => {
-    return users.slice(0, 5).map(i => i.avatar);
+    //获取最多5个头像
+    return users.slice(0, 5).map(i => i && i.avatar ? i.avatar : 'unknown');
   };
   isShouldShowNewDot = (unRead = 0, childsUnReadArr) => {
     //如果主群的未读数量不是0， 那么就不会显示消息点提醒
@@ -195,17 +212,15 @@ class GroupList extends Component {
     type_name,
     unRead
   } = {}) => {
-    //lastMsg 是个对象， 里面有 lastMsg 属性
-    lastMsg = this.genLastMsg(lastMsg);
-    const avatarList = this.genAvatarList(users);
+
     return {
       board_id,
       im_id,
-      lastMsg,
+      lastMsg: this.genLastMsg(lastMsg),
       label: type_name === '小组' ? type_name : '小组',
       name,
       newsNum: unRead,
-      avatarList
+      avatarList: this.genAvatarList(users)
     };
   };
   genMainGroupInfo = ({
@@ -218,21 +233,19 @@ class GroupList extends Component {
     type_name: label,
     unRead
   } = {}) => {
-    lastMsg = this.genLastMsg(lastMsg);
-    const avatarList = this.genAvatarList(users);
-    const showNewsDot = this.isShouldShowNewDot(
-      unRead,
-      childs.map(i => i.unRead)
-    );
+
     return {
       board_id,
       im_id,
-      lastMsg,
+      lastMsg: this.genLastMsg(lastMsg),
       label,
       name,
       newsNum: unRead,
-      showNewsDot,
-      avatarList,
+      showNewsDot: this.isShouldShowNewDot(
+        unRead,
+        childs.map(i => i.unRead)
+      ),
+      avatarList: this.genAvatarList(users),
       childs
     };
   };
@@ -245,6 +258,7 @@ class GroupList extends Component {
       sessionlist,
       rawMessageList
     );
+
     return (
       <View className={styles.wrapper}>
         <View className={styles.mainGroupWrapper}>
@@ -287,36 +301,33 @@ class GroupList extends Component {
             !isShouldExpandSubGroup ? styles.hideSubGroup : ''
           }`}
         >
-          {/* {isShouldExpandSubGroup && <View> */}
-          {true && (
-            <View>
-              {integratedCurrentBoardInfo.childs.map((subGroup, index) => {
-                const {
-                  board_id,
-                  im_id,
-                  lastMsg,
-                  label,
-                  name,
-                  newsNum,
-                  avatarList
-                } = this.genSubGroupInfo(subGroup);
-                return (
-                  <GroupItem
-                    key={board_id}
-                    board_id={board_id}
-                    im_id={im_id}
-                    lastMsg={lastMsg}
-                    label={label}
-                    name={name}
-                    newsNum={newsNum}
-                    avatarList={avatarList}
-                    isSubGroup={true}
-                    onClickedGroupItem={this.hanldClickedGroupItem}
-                  />
-                );
-              })}
-            </View>
-          )}
+          <View>
+            {integratedCurrentBoardInfo.childs.map((subGroup, index) => {
+              const {
+                board_id,
+                im_id,
+                lastMsg,
+                label,
+                name,
+                newsNum,
+                avatarList
+              } = this.genSubGroupInfo(subGroup);
+              return (
+                <GroupItem
+                  key={board_id}
+                  board_id={board_id}
+                  im_id={im_id}
+                  lastMsg={lastMsg}
+                  label={label}
+                  name={name}
+                  newsNum={newsNum}
+                  avatarList={avatarList}
+                  isSubGroup={true}
+                  onClickedGroupItem={this.hanldClickedGroupItem}
+                />
+              );
+            })}
+          </View>
         </View>
       </View>
     );

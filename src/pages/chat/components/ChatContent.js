@@ -4,7 +4,7 @@ import styles from './ChatContent.scss';
 import ChatItem from './ChatItem.js';
 import { connect } from '@tarojs/redux';
 import { isPlainObject } from './../../../utils/util';
-
+import { genNews, isValidMsg } from './../../../models/im/utils/genNews.js';
 @connect(
   ({
     im: {
@@ -28,66 +28,18 @@ class ChatContent extends Component {
     this.state = {
       scrollIntoViewEleId: ''
     };
+    //是否正在 touch 聊天列表
     this.isTouchingScrollView = false;
   }
-
-  getAvatarByFromNick = nick => {
-    const { currentBoard } = this.props;
-    let ret =
-      currentBoard && currentBoard.users.find(i => i.full_name === nick);
-    return ret ? ret.avatar : '';
-  };
-  mapSessionToNews = ({ time, flow, fromNick, status, type, text }) => {
-    return {
-      flow,
-      fromNick,
-      avatar: this.getAvatarByFromNick(fromNick),
-      status,
-      time,
-      type,
-      text
-    };
-  };
   genCurrentGroupSessionList = () => {
-    const { currentChatTo, rawMessageList, sessionlist } = this.props;
-    console.log(
-      currentChatTo,
-      '========================== currentChatTo ========================='
-    );
+    const { currentChatTo, rawMessageList, currentBoard } = this.props;
     return rawMessageList[currentChatTo] &&
       isPlainObject(rawMessageList[currentChatTo])
-      ? Object.values(rawMessageList[currentChatTo]).map(this.mapSessionToNews)
+      ? Object.values(rawMessageList[currentChatTo])
+          .filter(msg => isValidMsg(msg, currentChatTo))
+          .map(msg => genNews(msg, currentBoard))
       : [];
-    //生成当前的聊天信息
-    return sessionlist
-      .filter(
-        i =>
-          i.id === currentChatTo && i.lastMsg && i.lastMsg.status === 'success'
-      )
-      .map(this.mapSessionToNews)
-      .sort((a, b) => a.updateTime - b.updateTime);
   };
-  updateCurrentGroupSessionList = nextRawMessageList => {
-    const { currentGroupSessionList, currentChatTo } = this.props;
-    const len = currentGroupSessionList.length;
-    if (!nextRawMessageList[currentChatTo]) return [];
-    return Object.values(nextRawMessageList[currentChatTo])
-      .filter((_, ind) => ind >= len)
-      .map(this.mapSessionToNews);
-  };
-  // updateCurrentGroupSessionList = (nextSessionlist, sessionlist) => {
-  //   const { currentChatTo, currentGroupSessionList } = this.props;
-  //   const currentGroupSessionListLen = currentGroupSessionList.length;
-  //   //list 按时间倒序排列
-  //   return nextSessionlist
-  //     .filter(
-  //       i =>
-  //         i.id === currentChatTo && i.lastMsg && i.lastMsg.status === 'success'
-  //     )
-  //     .filter((_, ind) => ind >= currentGroupSessionListLen)
-  //     .map(this.mapSessionToNews)
-  //     .sort((a, b) => a.updateTime - b.updateTime);
-  // };
   onScrolltoupper = () => {
     console.log('chat content on scroll to upper...');
   };
@@ -108,35 +60,45 @@ class ChatContent extends Component {
     this.isTouchingScrollView = false;
     console.log('touch end.........................................');
   };
-  updateCurrentGroupSessionListWhenCurrentGroupRawMessageListChange = nextProps => {
-    const { rawMessageList: nextRawMessageList } = nextProps;
-    const { dispatch } = this.props;
-
-    Promise.resolve(
-      dispatch({
-        type: 'im/updateStateFieldByExtension',
-        payload: {
-          currentGroupSessionList: this.updateCurrentGroupSessionList(
-            nextRawMessageList
-          )
-        },
-        desc: 'update current group sessionlist'
-      })
-    ).then(() => {
-
-    });
-  };
-  updateScrollViewPosition = () => {
-    if (!this.isTouchingScrollView) {
-      this.setState({
-        scrollIntoViewEleId: 'scroll_bottom_id'
-      });
+  updateScrollViewPosition = nextProps => {
+    const { currentGroupSessionList: nextCurrentGroupSessionList } = nextProps;
+    const { currentGroupSessionList } = this.props;
+    if (currentGroupSessionList.length !== nextCurrentGroupSessionList.length) {
+      if (!this.isTouchingScrollView) {
+        this.setState(
+          {
+            scrollIntoViewEleId: 'scroll_bottom_id'
+          },
+          () => {
+            this.setState({
+              scrollIntoViewEleId: ''
+            });
+          }
+        );
+      }
     }
-  }
+  };
+  isShouldShowTimestamp = (index, arr) => {
+    //如果是消息队列中的第一条消息，那么显示时间戳
+    if (index === 0) return true;
+    //时间间隔 5 分钟
+    const timeBetween = 1000 * 60 * 5;
+    //如果本条消息的时间戳比上一条消息的时间戳大于 timeBetween 则显示
+    const currentMsg = arr[index];
+    const prevMsg = arr[index - 1];
+    if (
+      currentMsg.time &&
+      prevMsg.time &&
+      currentMsg.time >= prevMsg.time + timeBetween
+    ) {
+      return true;
+    }
+    return false;
+  };
   componentWillReceiveProps(nextProps) {
     //这里接收到的nextProps的值是有问题的
     //导致更新现有消息的消息列表只能在 nim 的  onMsg 的方法回调中处理
-    this.updateScrollViewPosition()
+    this.updateScrollViewPosition(nextProps);
   }
   componentDidShow() {
     const { dispatch } = this.props;
@@ -168,19 +130,26 @@ class ChatContent extends Component {
         onTouchEnd={this.onScrollViewTouchEnd}
       >
         <View className={styles.contentWrapper}>
-          {currentGroupSessionList.map(i => (
-            <View className={styles.chatItemWrapper} key={i.time}>
-              <ChatItem
-                flow={i.flow}
-                fromNick={i.fromNick}
-                avatar={i.avatar}
-                status={i.status}
-                time={i.time}
-                type={i.type}
-                text={i.text}
-              />
-            </View>
-          ))}
+          {currentGroupSessionList.map((i, index, arr) => {
+            return (
+              <View className={styles.chatItemWrapper} key={i.time}>
+                {this.isShouldShowTimestamp(index, arr) && (
+                  <ChatItem type="timestamp" time={i.time} />
+                )}
+                <ChatItem
+                  flow={i.flow}
+                  fromNick={i.fromNick}
+                  avatar={i.avatar}
+                  status={i.status}
+                  time={i.time}
+                  type={i.type}
+                  text={i.text}
+                  file={i.file}
+                  content={i.content}
+                />
+              </View>
+            );
+          })}
         </View>
         <View id="scroll_bottom_id" className={styles.scrollToBottomIdEle} />
       </ScrollView>

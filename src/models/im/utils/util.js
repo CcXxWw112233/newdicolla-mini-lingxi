@@ -1,5 +1,5 @@
 /**
-   * 深度克隆friendCata
+   * 深度克隆
    */
   function deepClone(data) {
     let des = {}
