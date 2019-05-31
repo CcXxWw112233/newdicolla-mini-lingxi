@@ -1,6 +1,7 @@
 import Taro from '@tarojs/taro';
 
 function onTeams(teams) {
+  console.log(teams, '==================== teams ====================')
   const {
     globalData: {
       store: { dispatch, getState }

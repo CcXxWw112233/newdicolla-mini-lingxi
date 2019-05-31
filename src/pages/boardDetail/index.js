@@ -49,37 +49,59 @@ import { connect } from '@tarojs/redux';
           },
           desc: 'reset currentGroupSessionList'
         }),
+      checkTeamStatus: boardId =>
+        dispatch({
+          type: 'im/checkTeamStatus',
+          payload: {
+            boardId
+          },
+          desc: 'check im team status.'
+        })
     };
   }
 )
 class BoardDetail extends Component {
   componentWillMount() {
-    const { allBoardList, setCurrentBoardId, setCurrentBoard } = this.props;
+    const {
+      allBoardList,
+      setCurrentBoardId,
+      setCurrentBoard,
+      checkTeamStatus
+    } = this.props;
     const { boardId } = this.$router.params;
     const getCurrentBoard = (arr, id) => {
       const ret = arr.find(i => i.board_id === id);
       return ret ? ret : {};
     };
-    setCurrentBoardId(boardId);
-    setCurrentBoard(getCurrentBoard(allBoardList, boardId));
+    Promise.resolve(setCurrentBoardId(boardId))
+      .then(() => {
+        setCurrentBoard(getCurrentBoard(allBoardList, boardId));
+      })
+      .then(() => checkTeamStatus(boardId))
+      .catch(e => console.log('error in boardDetail: ' + e));
   }
   componentDidShow() {
-
     //重置当前聊天群id，和当前聊天群信息
-    const { resetCurrentChatTo, resetCurrentGroup, resetCurrentGroupSessionList } = this.props;
+    const {
+      resetCurrentChatTo,
+      resetCurrentGroup,
+      resetCurrentGroupSessionList
+    } = this.props;
     resetCurrentChatTo();
     resetCurrentGroup();
-    resetCurrentGroupSessionList()
+    resetCurrentGroupSessionList();
   }
   render() {
-    const {allBoardList} = this.props
-    const isHasBoardData = Array.isArray(allBoardList) && allBoardList.length
+    const { allBoardList } = this.props;
+    const isHasBoardData = Array.isArray(allBoardList) && allBoardList.length;
 
     return (
       <View className={styles.wrapper}>
-        {isHasBoardData && <View className={styles.imGroupWrapper}>
-          <GroupList />
-        </View>}
+        {isHasBoardData && (
+          <View className={styles.imGroupWrapper}>
+            <GroupList />
+          </View>
+        )}
         <View className={styles.boardStarWrapper}>
           <BoardStar />
         </View>

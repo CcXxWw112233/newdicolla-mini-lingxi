@@ -4,16 +4,15 @@ import { connect } from '@tarojs/redux';
 import styles from './index.scss';
 import ChatHeader from './components/ChatHeader.js';
 import ChatContent from './components/ChatContent.js';
-import UserInput from './components/UserInput.js'
+import UserInput from './components/UserInput.js';
 
-@connect(
-  ({ im: { currentGroup } }) => ({
-    currentGroup
-  }))
+@connect(({ im: { currentGroup } }) => ({
+  currentGroup
+}))
 class Chat extends Component {
   config = {
-    disableScroll: true, //页面整体不能上下滚动
-  }
+    disableScroll: true //页面整体不能上下滚动
+  };
   render() {
     return (
       <View className={styles.wrapper}>

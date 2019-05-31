@@ -1,6 +1,6 @@
 import { isShouldHandleType } from './activityHandle.js';
 
-const assistantAvatar = 'dynamicAssistant'
+const assistantAvatar = 'dynamicAssistant';
 
 const getAvatarByFromNick = (nick, currentBoard = { users: [] }) => {
   if (nick === '群动态助手') {
@@ -19,7 +19,9 @@ const genNews = (msg, currentBoard) => {
     type,
     text = '',
     file = {},
-    content
+    content,
+    pushContent,
+    groupNotification
   } = msg;
 
   return {
@@ -31,16 +33,14 @@ const genNews = (msg, currentBoard) => {
     type,
     text,
     file,
-    content: content ? JSON.parse(content) : ''
+    content: content ? JSON.parse(content) : '',
+    pushContent,
+    groupNotification
   };
 };
 
 const isValidMsg = msg => {
   const { scene, type, custom, content } = msg;
-  console.log(
-    msg,
-    '================================ msg in msg ==========================='
-  );
   // 是否是需要处理的定制消息
   if (type === 'custom' && custom === 'newActivity' && content) {
     let isValid = false;
@@ -55,7 +55,7 @@ const isValidMsg = msg => {
       return true;
     }
   }
-  return scene === 'team' && (type === 'text' || type === 'audio');
+  return scene === 'team' && (type === 'text' || type === 'audio' || 'image');
 };
 
 const isCustomNews = msg => {
@@ -73,4 +73,59 @@ const isPushCustomNews = msg => {
   return isCustomNews(msg) && custom === 'newPush';
 };
 
-export { genNews, isValidMsg, isActivityCustomNews, isPushCustomNews };
+const isGlobalPushNews = msg => {
+  //全局消息推送属性
+  const pushSessionId = 'p2p-10086';
+  const pushType = 'custom';
+  const pushCustom = 'newPush';
+
+  const { type, sessionId, custom } = msg;
+
+  return (
+    type === pushType && sessionId === pushSessionId && custom === pushCustom
+  );
+};
+
+const isPinupEmojiNews = msg => {
+  const pinupPushContent = '[贴图表情]';
+  const { type, scene, pushContent, content } = msg;
+
+  return (
+    type === 'custom' &&
+    scene === 'team' &&
+    pushContent === pinupPushContent &&
+    content
+  );
+};
+
+//是否系统通知消息
+
+const isNotificationNews = msg => {
+  const { type, fromClientType, groupNotification } = msg;
+  return (
+    type === 'notification' && fromClientType === 'Server' && groupNotification
+  );
+};
+
+//是否是创建新的群聊的系统通知消息
+const isCreatedNewGroupOrAddTeamMembersNews = session => {
+  const {
+    lastMsg: { fromClientType, type, attach: { type: attachType } = {} } = {}
+  } = session;
+  return (
+    fromClientType === 'Server' &&
+    type === 'notification' &&
+    attachType === 'addTeamMembers'
+  );
+};
+
+export {
+  genNews,
+  isValidMsg,
+  isActivityCustomNews,
+  isPushCustomNews,
+  isGlobalPushNews,
+  isPinupEmojiNews,
+  isCreatedNewGroupOrAddTeamMembersNews,
+  isNotificationNews,
+};

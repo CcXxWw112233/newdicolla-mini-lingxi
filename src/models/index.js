@@ -6,6 +6,8 @@ import login from './login/index'
 import my from './my/index'
 import accountInfo from './accountInfo/index'
 import calendar from './calendar/index'
+import chat from './chat/index'
+
 const models = [
   testPage,
   board,
@@ -14,6 +16,7 @@ const models = [
   login,
   accountInfo,
   my,
-  calendar
+  calendar,
+  chat,
 ]
 export default models

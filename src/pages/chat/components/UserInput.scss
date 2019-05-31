@@ -1,6 +1,8 @@
 .wrapper {
-  height: 126px;
-  .contentWrapper {
+  background: #f5f5f5;
+  width: 750px;
+  .panelWrapper {
+    height: 126px;
     display: flex;
     align-items: center;
     width: 100%;
@@ -34,10 +36,10 @@
       text-align: center;
       font-size: 36px;
       font-weight: 600;
-      color: #3D384D;
+      color: #3d384d;
     }
     .voiceInputing {
-      background: #C1C1C1;
+      background: #c1c1c1;
       color: #222222;
     }
     .expression {
@@ -55,6 +57,90 @@
       color: rgba(255, 255, 255, 1);
       line-height: 60px;
       text-align: center;
+    }
+  }
+  .contentWrapper {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    justify-content: center;
+    height: 500px;
+    .emojiListWrapper {
+      width: 100%;
+      background: #fff;
+      .emojiScrollViewContentWrapper {
+        width: 100%;
+        height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .emojiListContentWrapper {
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+          justify-content: center;
+          .emojiScrollViewContentItemWrapper {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+      }
+    }
+    .emojiPanelWrapper {
+      height: 100px;
+      width: 100%;
+      .emojiPanelContentWrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .emojiPanelItemWrapper {
+          margin: 0 40px;
+          padding: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .emojiPanelItemActive {
+          background: #fff;
+        }
+      }
+    }
+    .additionWrapper {
+      height: 100%;
+      .additionContentWrapper {
+        height: 100%;
+        padding: 78px 62px;
+        display: flex;
+        justify-content: space-between;
+        .additionItemWrapper {
+          .additionItemBtnIcon {
+            width: 116px;
+            height: 116px;
+            line-height: 116px;
+            font-size: 68px;
+            border-radius: 50%;
+            color: #8C8C8C;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          .additionItemText {
+            margin-top: 6px;
+            display: flex;
+            justify-content: center;
+            width: 116px;
+            height: 40px;
+            font-size: 24px;
+            font-weight: 400;
+            color: rgba(0, 0, 0, 0.65);
+            line-height: 40px;
+          }
+        }
+      }
     }
   }
 }

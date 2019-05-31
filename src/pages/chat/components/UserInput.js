@@ -1,17 +1,24 @@
 import Taro, { Component } from '@tarojs/taro';
-import { View, Input, Text } from '@tarojs/components';
+import {
+  View,
+  Input,
+  Text,
+  Image,
+  ScrollView,
+  Swiper
+} from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 import styles from './UserInput.scss';
 import globalStyles from './../../../gloalSet/styles/globalStyles.scss';
-import { onMsg } from './../../../models/im/actions/index';
+import emojiObj from './../../../models/im/config/emoji.js';
+import genEmojiList from './../../../models/im/utils/genEmojiList.js';
 
 @connect(
   ({
     im: {
-      currentGroup: { im_id },
-      nim
+      currentGroup: { im_id }
     }
-  }) => ({ im_id, nim }),
+  }) => ({ im_id }),
   dispatch => ({
     sendTeamTextMsg: (text, to) =>
       dispatch({
@@ -34,16 +41,75 @@ import { onMsg } from './../../../models/im/actions/index';
           wxFilePath
         },
         desc: 'im send audio'
+      }),
+    sendImageMsg: (tempFilePaths, to) =>
+      dispatch({
+        type: 'im/sendImage',
+        payload: {
+          type: 'image',
+          scene: 'team',
+          to,
+          tempFilePaths
+        },
+        desc: 'im send image'
+      }),
+    sendPinupEmoji: (to, catalog, chartlet) =>
+      dispatch({
+        type: 'im/sendPinupEmoji',
+        payload: {
+          type: 'custom',
+          scene: 'team',
+          to,
+          pushContent: '[贴图表情]',
+          content: {
+            type: 3,
+            data: {
+              catalog,
+              chartlet
+            }
+          }
+        },
+        desc: 'im send emoji'
+      }),
+    handleUserInputHeightChange: height =>
+      dispatch({
+        type: 'chat/updateStateFieldByCover',
+        payload: {
+          isUserInputHeightChange: height
+        },
+        desc: 'chat userInput height change'
+      }),
+    handleUserInputFocus: flag =>
+      dispatch({
+        type: 'chat/updateStateFieldByCover',
+        payload: {
+          isUserInputFocus: flag
+        },
+        desc: 'change userInput focus'
       })
+
   })
 )
 class UserInput extends Component {
   state = {
-    inputValue: '',
-    autoFocus: false,
+    inputValue: '', // 文本类型输入框 value
+    autoFocus: false, // 是否自动聚焦文本输入框(如果自动聚焦，则会弹出虚拟键盘)
     inputMode: 'text', //输入模式，默认 'text'. 'text' | voice | expression | addition
     recordStart: false, // 录音开始
-    recorderManager: null //录音内容
+    recorderManager: null, //录音内容
+    emojiType: 'emoji', // emoji | pinup
+    emojiAlbum: 'emoji' // emoji | ajmd | lt | xxy
+  };
+  handleInputFocus = e => {
+    const {handleUserInputFocus } = this.props;
+    handleUserInputFocus(true)
+    this.setState({
+      inputMode: 'text'
+    });
+  };
+  handleInputBlur = () => {
+    const { handleUserInputFocus } = this.props;
+    handleUserInputFocus(false)
   };
   handleInput = e => {
     this.setState({
@@ -113,11 +179,35 @@ class UserInput extends Component {
       }
     );
   };
+  setInputMode = mode => {
+    this.setState(
+      {
+        inputMode: mode
+      },
+      () => {
+        if (mode === 'text')
+          this.setState({
+            autoFocus: true
+          });
+      }
+    );
+  };
+  toggleInputMode = (aMode, bMode) => {
+    const { inputMode } = this.state;
+    if (inputMode === aMode) {
+      this.setInputMode(bMode);
+    } else {
+      this.setInputMode(aMode);
+    }
+  };
   handleClickedItem = (e, type) => {
     if (e) e.stopPropagation();
+    const { handleUserInputHeightChange } = this.props;
     const typeCond = {
-      voice: () => this.handleVoiceInput(),
-      text: () => this.handleTextInput()
+      voice: () => this.setInputMode('voice'),
+      text: () => this.setInputMode('text'),
+      expression: () => this.setInputMode('expression'),
+      addition: () => this.toggleInputMode('addition', 'text')
     };
     if (!typeCond[type]) {
       Taro.showToast({
@@ -126,7 +216,87 @@ class UserInput extends Component {
       });
       return;
     }
+    if (type === 'expression' || type === 'addition') {
+      handleUserInputHeightChange(280);
+    } else {
+      handleUserInputHeightChange(0);
+    }
     typeCond[type]();
+  };
+  sendImageToNOS = res => {
+    Taro.showLoading({
+      title: '发送中...'
+    });
+    let self = this;
+    let tempFilePaths = res.tempFilePaths;
+    for (let i = 0; i < tempFilePaths.length; i++) {
+      // 上传文件到nos
+      app.globalData.nim.sendFile({
+        // app.globalData.nim.previewFile({
+        type: 'image',
+        scene: self.data.chatType === 'p2p' ? 'p2p' : 'team',
+        to: self.data.chatTo,
+        wxFilePath: tempFilePaths[i],
+        done: function(err, msg) {
+          wx.hideLoading();
+          // 判断错误类型，并做相应处理
+          if (self.handleErrorAfterSend(err)) {
+            return;
+          }
+          // 存储数据到store
+          self.saveChatMessageListToStore(msg);
+
+          // 滚动到底部
+          self.scrollToBottom();
+        }
+      });
+    }
+  };
+  handleChooseImage = (...types) => {
+    const { im_id, sendImageMsg } = this.props;
+    Taro.chooseImage({
+      sourceType: types,
+      success: function(res) {
+        Taro.showLoading({
+          title: '发送中...'
+        });
+        Promise.resolve(sendImageMsg(res.tempFilePaths, im_id))
+          .then(() => {
+            Taro.hideLoading();
+          })
+          .catch(e => {
+            Taro.hideLoading();
+            Taro.showToast({
+              title: String(e),
+              icon: 'none'
+            });
+          });
+      },
+      fail: function() {
+        Taro.showToast({
+          title: '未选择任何图片',
+          icon: 'none'
+        });
+      },
+      complete: function() {}
+    });
+  };
+  handleChooseFile = () => {
+    Taro.showToast({
+      title: '未完成功能',
+      icon: 'none',
+    })
+  }
+  handleClickAdditionItem = type => {
+    const cond = {
+      image: () => this.handleChooseImage('album'),
+      photo: () => this.handleChooseImage('camera'),
+      file: () => this.handleChooseFile()
+    };
+    if (cond[type]) {
+      cond[type]();
+    }
+
   };
   handleVoiceTouchEnd = () => {
     this.setState(
@@ -307,17 +477,88 @@ class UserInput extends Component {
       }
     );
   };
+  genEmojiInfo = () => {
+    const { emojiList, pinupList } = emojiObj;
+    const emojiListMap = [
+      ...Object.entries(genEmojiList('emoji', emojiList)),
+      ...Object.entries(genEmojiList('pinup', pinupList))
+    ];
+    return {
+      emojiAlbumList: emojiListMap.map(([name, { type, album }]) => ({
+        type,
+        url: album,
+        name
+      })),
+      emojiList: emojiListMap.map(([name, { type, list }]) => ({
+        type,
+        list,
+        name
+      }))
+    };
+  };
+  handleSelectedEmojiItem = i => {
+    const { type, name, key } = i;
+    const { im_id, sendPinupEmoji } = this.props;
+
+    if (type === 'emoji') {
+      this.setState(state => {
+        const { inputValue } = state;
+        return {
+          inputValue: inputValue + key
+        };
+      });
+    }
+    if (type === 'pinup') {
+      sendPinupEmoji(im_id, name, key);
+    }
+  };
+  handleSelectEmojiList = i => {
+    const { type, name } = i;
+    const { emojiAlbum } = this.state;
+    if (name === emojiAlbum) return;
+    this.setState({
+      emojiType: type,
+      emojiAlbum: name
+    });
+  };
+  inputModeBelongs = (...modeArr) => {
+    const { inputMode } = this.state;
+    return modeArr.some(m => m === inputMode);
+  };
   componentWillUnmount() {
     this.setState({
       recorderManager: null
     });
   }
   render() {
-    const { inputValue, autoFocus, inputMode, recordStart } = this.state;
+    const {
+      inputValue,
+      autoFocus,
+      inputMode,
+      recordStart,
+      emojiType,
+      emojiAlbum
+    } = this.state;
+    const { emojiAlbumList, emojiList } = this.genEmojiInfo();
+    const findedCurrentEmojiAlbum = emojiList.filter(
+      i => i.name === emojiAlbum
+    );
+    const shouldDisplayEmojiList =
+      findedCurrentEmojiAlbum && findedCurrentEmojiAlbum.length
+        ? findedCurrentEmojiAlbum[0].list
+        : [];
     return (
-      <View className={styles.wrapper}>
-        <View className={styles.contentWrapper}>
-          {inputMode === 'text' && (
+      <View
+        className={styles.wrapper}
+        style={{
+          position: this.inputModeBelongs('expression', 'addition')
+            ? 'fixed'
+            : 'relative',
+          bottom: this.inputModeBelongs('expression', 'addition') ? '20px' : 0
+        }}
+      >
+        <View className={styles.panelWrapper}>
+          {this.inputModeBelongs('text', 'expression', 'addition') && (
             <View
               className={`${globalStyles.global_iconfont} ${styles.voice}`}
               onClick={e => this.handleClickedItem(e, 'voice')}
@@ -333,7 +574,7 @@ class UserInput extends Component {
               &#xe655;
             </View>
           )}
-          {inputMode === 'text' && (
+          {this.inputModeBelongs('text', 'expression', 'addition') && (
             <View className={styles.input}>
               <Input
                 ref="inputRef"
@@ -350,6 +591,8 @@ class UserInput extends Component {
                 focus={autoFocus}
                 confirmHold={true}
                 onInput={this.handleInput}
+                onFocus={this.handleInputFocus}
+                onBlur={this.handleInputBlur}
                 onConfirm={this.onInputConfirm}
               />
             </View>
@@ -365,11 +608,26 @@ class UserInput extends Component {
               <Text>{`${recordStart ? '松开 结束' : '按住 说话'}`}</Text>
             </View>
           )}
-          <View
-            className={`${globalStyles.global_iconfont} ${styles.expression}`}
-            onClick={e => this.handleClickedItem(e, 'expression')}
-          >
-            &#xe631;
+          <View>
+            {inputMode === 'expression' ? (
+              <View
+                className={`${globalStyles.global_iconfont} ${
+                  styles.expression
+                }`}
+                onClick={e => this.handleClickedItem(e, 'text')}
+              >
+                &#xe655;
+              </View>
+            ) : (
+              <View
+                className={`${globalStyles.global_iconfont} ${
+                  styles.expression
+                }`}
+                onClick={e => this.handleClickedItem(e, 'expression')}
+              >
+                &#xe631;
+              </View>
+            )}
           </View>
           {inputValue && inputValue.trim() ? (
             <View className={styles.sendTextBtn} onClick={this.onInputConfirm}>
@@ -384,6 +642,112 @@ class UserInput extends Component {
             </View>
           )}
         </View>
+        {inputMode === 'expression' && (
+          <View className={styles.contentWrapper}>
+            <View className={styles.emojiListWrapper}>
+              <ScrollView
+                className={styles.emojiScrollViewContentWrapper}
+                scrollY
+                scrollWithAnimation
+              >
+                <View className={styles.emojiListContentWrapper}>
+                  {shouldDisplayEmojiList.map(i => (
+                    <View
+                      className={styles.emojiScrollViewContentItemWrapper}
+                      key={i.key}
+                      style={{
+                        width: emojiType === 'emoji' ? '50px' : '80px',
+                        height: emojiType === 'emoji' ? '50px' : '80px'
+                      }}
+                      onClick={() => this.handleSelectedEmojiItem(i)}
+                    >
+                      <Image
+                        src={i.img}
+                        mode="aspectFill"
+                        style={{
+                          width: emojiType === 'emoji' ? '30px' : '60px',
+                          height: emojiType === 'emoji' ? '30px' : '60px'
+                        }}
+                      />
+                    </View>
+                  ))}
+                </View>
+              </ScrollView>
+            </View>
+            <View className={styles.emojiPanelWrapper}>
+              <View className={styles.emojiPanelContentWrapper}>
+                {emojiAlbumList.map(i => (
+                  <View
+                    className={`${styles.emojiPanelItemWrapper} ${
+                      emojiAlbum === i.name ? styles.emojiPanelItemActive : ''
+                    }`}
+                    key={i.url}
+                    onClick={() => this.handleSelectEmojiList(i)}
+                  >
+                    <Image
+                      src={i.url}
+                      mode="aspectFill"
+                      style={{
+                        width: '30px',
+                        height: '30px',
+                        justifyItems: 'center',
+                        margin: '0 auto'
+                      }}
+                    />
+                  </View>
+                ))}
+              </View>
+            </View>
+          </View>
+        )}
+        {inputMode === 'addition' && (
+          <View className={styles.contentWrapper}>
+            <Swiper
+              className={styles.additionWrapper}
+              indicatorColor="#F1F1F1"
+              indicatorActiveColor="#C1C1C1"
+              indicatorDots={false}
+            >
+              <SwiperItem>
+                <View className={styles.additionContentWrapper}>
+                  <View className={styles.additionItemWrapper}>
+                    <View
+                      className={`${globalStyles.global_iconfont} ${
+                        styles.additionItemBtnIcon
+                      }`}
+                      onClick={() => this.handleClickAdditionItem('file')}
+                    >
+                      &#xe662;
+                    </View>
+                    <Text className={styles.additionItemText}>文件</Text>
+                  </View>
+                  <View className={styles.additionItemWrapper}>
+                    <View
+                      className={`${globalStyles.global_iconfont} ${
+                        styles.additionItemBtnIcon
+                      }`}
+                      onClick={() => this.handleClickAdditionItem('image')}
+                    >
+                      &#xe664;
+                    </View>
+                    <Text className={styles.additionItemText}>图片</Text>
+                  </View>
+                  <View className={styles.additionItemWrapper}>
+                    <View
+                      className={`${globalStyles.global_iconfont} ${
+                        styles.additionItemBtnIcon
+                      }`}
+                      onClick={() => this.handleClickAdditionItem('photo')}
+                    >
+                      &#xe663;
+                    </View>
+                    <Text className={styles.additionItemText}>拍照</Text>
+                  </View>
+                </View>
+              </SwiperItem>
+            </Swiper>
+          </View>
+        )}
       </View>
     );
   }
