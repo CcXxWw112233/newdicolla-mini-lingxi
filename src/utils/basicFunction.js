@@ -21,7 +21,9 @@ export const timestampToTimeZH = (timestamp) => {
   if(!timestamp) {
     return ''
   }
-  const date = new Date(Number(timestamp) * 1000)
+  const length = timestamp.length
+  const newTimestampStr = length < 13? Number(timestamp) * 1000 :  Number(timestamp)
+  const date = new Date(newTimestampStr)
   const current_year = new Date().getFullYear()
   let year = date.getFullYear()
   let month = date.getMonth() + 1
