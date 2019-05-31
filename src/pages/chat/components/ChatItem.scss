@@ -73,13 +73,22 @@
         .newContent {
         }
         .audioContent {
+          display: flex;
+          flex-direction: row-reverse;
           .audioDur {
             text-align: left;
           }
           .audioIcon {
+            width: 36px;
+            height: 36px;
+            background: url(./../../../asset/chat/broadcastIn3.png);
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center center;
           }
         }
         .newsContentBubble {
+          z-index: -1;
           position: absolute;
           top: 20px;
           left: -8px;
@@ -143,13 +152,20 @@
         }
         .audioContent {
           .audioDur {
+            color: rgba(255, 255, 255, 1);
             text-align: right;
           }
           .audioIcon {
-            transform: rotate(180deg);
+            width: 36px;
+            height: 36px;
+            background: url(./../../../asset/chat/broadcastOut3.png);
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center center;
           }
         }
         .newsContentBubble {
+          z-index: -1;
           position: absolute;
           top: 20px;
           right: -8px;
@@ -165,9 +181,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
 }
 
-.notificationTime {
+.notificationTime,
+.notificationGroup
+{
   height: 44px;
   font-size: 24px;
   font-weight: 400;
@@ -175,15 +194,33 @@
   line-height: 44px;
 }
 
-.audioIconPlaying {
-  animation: blink 1s ease 0 infinite reverse both;
+.audioIconPlayingOut {
+  animation: blinkOut 1s ease 0 infinite reverse both;
 }
 
-@keyframes blink {
-  from {
-    opacity: 1;
+.audioIconPlayingIn {
+  animation: blinkIn 1s ease 0 infinite reverse both;
+}
+
+@keyframes blinkOut {
+  33% {
+    background: url(./../../../asset/chat/broadcastOut3.png);
   }
-  to {
-    opacity: 0.1;
+  66% {
+    background: url(./../../../asset/chat/broadcastOut2.png);
+  }
+  100% {
+    background: url(./../../../asset/chat/broadcastOut1.png);
+  }
+}
+@keyframes blinkIn {
+  33% {
+    background: url(./../../../asset/chat/broadcastIn3.png);
+  }
+  66% {
+    background: url(./../../../asset/chat/broadcastIn2.png);
+  }
+  100% {
+    background: url(./../../../asset/chat/broadcastIn1.png);
   }
 }

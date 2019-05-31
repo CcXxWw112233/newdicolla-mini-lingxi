@@ -9,15 +9,19 @@ const INITIAL_STATE = {
   currentChatTo: '', // 正在聊天 sessionId
   currentGroup: {}, //当前的聊天群信息
   currentGroupSessionList: [],  //当前群的聊天信息
+  isOnlyShowInform: false, //是否只过滤显示定制的通知消息
   currentBoardId: '', //当前选择的项目 id
   currentBoard: {}, //当前的项目
+  currentBoardImValid: {}, //当前项目及其子群是否是有效的 im 群(通过拉取 im 上面的群聊信息， 和从我们自己的服务其拉取的 allBoardList 的数据做对比， 如果不一致，就先修复数据，如果修复失败，则禁止用户点进具体的群)
   allBoardList: [], //所有组织的所有的群列表， 从我们后端拿，而不是云信, 目前来讲，因为只有群聊的入口，而且是所有项目(每个组织下可能多个项目), 每个项目的 type='2',所以可以根据这个条件筛选数据
   rawMessageList: {}, // 所有的聊天列表都在里面, 消息列表, 当受到新的消息列表的时候，如果存在当前群，则筛选，更新当前群的聊天信息
+  isTouchChatContentScrollView: false, //是否正在触摸聊天内容滚动列表
+
 
   friendCard: {}, //好友列表，含名片信息，额外添加在线信息
   onlineList: {}, // 在线好友列表
   // messageListToRender: {},
-  currentGroupMembers: [],
+  currentGroupMembers: [],  //当前的群成员列表
   groupList: {}, // 群列表
   groupMemberList: {}, // 群成员列表
   groupMemberMap: {}, // 群成员列表

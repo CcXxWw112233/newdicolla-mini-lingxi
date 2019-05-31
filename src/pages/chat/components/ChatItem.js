@@ -3,6 +3,12 @@ import { View, Image, Text } from '@tarojs/components';
 import styles from './ChatItem.scss';
 import globalStyles from './../../../gloalSet/styles/globalStyles.scss';
 import { parseActivityNewsBody } from './../../../models/im/utils/activityHandle.js';
+import EmojiItem from './EmojiItem.js';
+import {
+  isValidEmoji,
+  parseEmoji,
+  parsePinup
+} from './../../../models/im/utils/parseEmoji.js';
 
 class ChatItem extends Component {
   state = {
@@ -83,6 +89,30 @@ class ChatItem extends Component {
       }
     }
   };
+  handlePreviewImage = file => {
+    const { url } = file;
+    Taro.previewImage({
+      urls: [url],
+      current: url
+    });
+  };
+  genImageSize = (pixel, rate, side) => {
+    const MaxWidthPixel = 200;
+    const numWithUnit = num => `${num}px`;
+    if (side === 'w') {
+      if (pixel <= MaxWidthPixel) {
+        return numWithUnit(pixel);
+      }
+      return numWithUnit(MaxWidthPixel);
+    }
+    if (side === 'h') {
+      const widthReal = pixel * rate;
+      if (widthReal <= MaxWidthPixel) {
+        return numWithUnit(pixel);
+      }
+      return numWithUnit(MaxWidthPixel / rate);
+    }
+  };
   genAudioNewsWidth = ms => {
     const maxWidth = 160;
     const minWidth = 20;
@@ -121,7 +151,7 @@ class ChatItem extends Component {
         ],
         [
           [todayTimeOffset + oneDayTimestamp * 2, Infinity],
-          new Date(timestamp).toLocaleDateString()
+          new Date(timestamp).toLocaleDateString('zh')
         ]
       ]);
       const findDateCond = [...dateCondMap].find(
@@ -130,7 +160,7 @@ class ChatItem extends Component {
           nowAndInputTimestampOffset < key1
       );
       dateStr = findDateCond ? findDateCond[1] : '';
-      timeStr = new Date(timestamp).toLocaleTimeString([], {
+      timeStr = new Date(timestamp).toLocaleTimeString('zh', {
         hour: '2-digit',
         minute: '2-digit'
       });
@@ -148,13 +178,19 @@ class ChatItem extends Component {
       text,
       time,
       file,
-      content
+      content,
+      pushContent,
+      groupNotification
     } = this.props;
-
+    const isPinupEmoji = pushContent && pushContent === '[贴图表情]';
     const { isAudioPlaying } = this.state;
+
     return (
       <View className={styles.wrapper}>
-        {(type === 'text' || type === 'audio' || type === 'custom') && (
+        {(type === 'text' ||
+          type === 'audio' ||
+          type === 'custom' ||
+          type === 'image') && (
           <View
             className={`${styles.contentWrapper} ${
               flow === 'in' ? styles.contentWrapperIn : styles.contentWrapperOut
@@ -194,13 +230,53 @@ class ChatItem extends Component {
               )}
               <View
                 className={`${styles.newsContentWrapper} ${
-                  type === 'custom' ? styles.newContentAssistantWrapper : ''
+                  type === 'custom' && !isPinupEmoji
+                    ? styles.newContentAssistantWrapper
+                    : ''
                 }`}
               >
                 {type === 'text' && (
-                  <View className={styles.newContent}>{text}</View>
+                  <View className={styles.newContent}>
+                    {parseEmoji(text).map(i => {
+                      const { categ, cont } = i;
+                      return (
+                        <EmojiItem
+                          key={categ + cont}
+                          categ={isValidEmoji(cont) ? 'emoji' : 'text'}
+                          cont={isValidEmoji(cont) ? isValidEmoji(cont) : cont}
+                        />
+                      );
+                    })}
+                  </View>
                 )}
-                {type === 'custom' && (
+                {type === 'image' && (
+                  <Image
+                    onClick={() => this.handlePreviewImage(file)}
+                    src={file.url}
+                    style={{
+                      width: this.genImageSize(
+                        file.w,
+                        Number(file.w / file.h),
+                        'w'
+                      ),
+                      height: this.genImageSize(
+                        file.h,
+                        Number(file.w / file.h),
+                        'h'
+                      )
+                    }}
+                    mode="aspectFill"
+                  />
+                )}
+                {type === 'custom' && isPinupEmoji && (
+                  <View className={styles.pinupWrapper}>
+                    <Image
+                      src={parsePinup(content)}
+                      style={{ width: '100px', height: '100px' }}
+                    />
+                  </View>
+                )}
+                {type === 'custom' && !isPinupEmoji && (
                   <View className={styles.customNewsWrapper}>
                     {content && content.data && content.data.d ? (
                       <View className={styles.customNewsContentWrapper}>
@@ -213,22 +289,6 @@ class ChatItem extends Component {
                             range
                           } = parseActivityNewsBody(data);
 
-                          console.log(
-                            data,
-                            '======================= content ================================'
-                          );
-                          console.log(
-                            activityContent,
-                            '==================== activityContent ==========================='
-                          );
-                          console.log(
-                            activityType,
-                            '=========================== activityType ==============================='
-                          );
-                          console.log(
-                            range,
-                            '================== range ========================'
-                          );
                           return (
                             <View
                               key={data.creatorId}
@@ -237,7 +297,7 @@ class ChatItem extends Component {
                               <Text className={styles.creator}>
                                 {creator && creator.name
                                   ? `${creator.name}`
-                                  : '某个人'}
+                                  : ''}
                                 <Text
                                   style={{
                                     display: 'inline-block',
@@ -260,11 +320,11 @@ class ChatItem extends Component {
                                         '{placeholder}',
                                         range['rangeObj']['name']
                                       )
-                                    : '对什么'}
+                                    : ''}
                                 </Text>
                               )}
                               <Text className={styles.action}>
-                                {action ? `${action}` : '干了'}
+                                {action ? `${action}` : ''}
                                 <Text
                                   style={{
                                     display: 'inline-block',
@@ -298,7 +358,7 @@ class ChatItem extends Component {
                                   ? `“${activityContent['contentText']}”`
                                   : activityContent[activityType]
                                   ? `“${activityContent[activityType]['name']}”`
-                                  : '“某件事”'}
+                                  : ''}
                               </Text>
                             </View>
                           );
@@ -321,12 +381,19 @@ class ChatItem extends Component {
                     <View
                       className={`${globalStyles.global_iconfont} ${
                         styles.audioIcon
-                      } ${isAudioPlaying ? styles.audioIconPlaying : ''}`}
+                      } ${
+                        isAudioPlaying
+                          ? flow === 'in'
+                            ? styles.audioIconPlayingIn
+                            : styles.audioIconPlayingOut
+                          : ''
+                      }`}
                       style={{
-                        fontSize: '18px'
+                        fontSize: '18px',
+                        color: flow === 'in' ? '#313D40' : '#FFFBFE'
                       }}
                     >
-                      &#xe656;
+                      {/* &#xe656; */}
                     </View>
                   </View>
                 )}
@@ -341,6 +408,15 @@ class ChatItem extends Component {
               styles.notificationTime
             }`}
           >{`—— ${this.timestampToTime(time)} ——`}</View>
+        )}
+        {type === 'notification' && (
+          <View
+            className={`${styles.notificationWrapper} ${
+              styles.notificationGroup
+            }`}
+          >
+            {groupNotification}
+          </View>
         )}
       </View>
     );
@@ -362,7 +438,9 @@ ChatItem.defaultProps = {
       d: JSON.stringify({}),
       e: ''
     }
-  }
+  },
+  pushContent: '', //如果是 pinup 类型的表情就会有该字段
+  groupNotification: '' //如果是 notification 类型，那么会有该字段
 };
 
 export default ChatItem;

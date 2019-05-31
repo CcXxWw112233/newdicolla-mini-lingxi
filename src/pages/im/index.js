@@ -3,7 +3,7 @@ import { View, Button, Text } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 import styles from './index.scss'
 import SearchInput from './../groupMember/components/SearchInput.js'
-
+import UserInput from './../../pages/chat/components/UserInput.js'
 @connect(({ im }) => ({
   im
 }))
@@ -70,6 +70,9 @@ class Im extends Component {
         <Button onClick={this.handleJumpToBoardDetail}>跳转到项目详情页</Button>
         <View className={styles.searchInputWrapper}>
         <SearchInput />
+        </View>
+        <View style={{position: "fixed", bottom: 0}}>
+          <UserInput />
         </View>
       </View>
     );

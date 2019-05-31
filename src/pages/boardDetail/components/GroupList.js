@@ -6,12 +6,21 @@ import GroupItem from './GroupItem';
 import { isPlainObject } from './../../../utils/util';
 
 @connect(
-  ({ im: { sessionlist, currentBoardId, currentBoard, rawMessageList } }) => {
+  ({
+    im: {
+      sessionlist,
+      currentBoardId,
+      currentBoard,
+      currentBoardImValid,
+      rawMessageList
+    }
+  }) => {
     return {
       sessionlist,
       currentBoardId,
       currentBoard,
-      rawMessageList
+      rawMessageList,
+      currentBoardImValid
     };
   },
   dispatch => {
@@ -46,9 +55,17 @@ import { isPlainObject } from './../../../utils/util';
 )
 class GroupList extends Component {
   state = {
-    isShouldExpandSubGroup: true
+    isShouldExpandSubGroup: true, //是否需要展开子群
   };
   hanldClickedGroupItem = ({ board_id, im_id }) => {
+    const {
+      setCurrentChatTo,
+      setCurrentGroup,
+      updateCurrentChatUnreadNewsState,
+      currentBoard,
+      currentBoardImValid
+    } = this.props;
+
     if (!im_id) {
       Taro.showToast({
         title: '当前群未注册',
@@ -57,12 +74,16 @@ class GroupList extends Component {
       return;
     }
 
-    const {
-      setCurrentChatTo,
-      setCurrentGroup,
-      updateCurrentChatUnreadNewsState,
-      currentBoard
-    } = this.props;
+    const isValid =
+      currentBoardImValid[im_id] && currentBoardImValid[im_id]['isValid'];
+
+    if (!isValid) {
+      Taro.showToast({
+        title: '当前群数据异常',
+        icon: 'none'
+      });
+      return;
+    }
 
     //生成与 云信后端返回数据相同格式的 id
     const id = `team-${im_id}`;
@@ -94,18 +115,16 @@ class GroupList extends Component {
     });
   };
   getGroupLastMsgFromRawMessageList = (im_id, rawMessageList) => {
-
     const currentImGroup = rawMessageList[im_id];
     const filterMsgType = i => i.scene && i.scene === 'team';
     if (isPlainObject(currentImGroup)) {
-
       //过滤出属于群聊的用户消息
       //这里会出现一个bug, 会丢掉currentImGroup对象的最后一个属性？？？？
       //Object.entries, for...in, 都会丢失。。。
       return Object.values(currentImGroup)
         .filter(filterMsgType)
         .sort((a, b) => a.time - b.time)
-        .slice(-1)[0]
+        .slice(-1)[0];
     }
     return {};
   };
@@ -132,7 +151,7 @@ class GroupList extends Component {
         lastMsg: this.getGroupLastMsgFromRawMessageList(
           `team-${im_id}`,
           rawMessageList
-        ),
+        )
       }
     );
     currentBoardIdWithDefaultUnReadAndLastMsg.childs =
@@ -152,7 +171,7 @@ class GroupList extends Component {
 
     const currentBoardSessionList = i =>
       i && i.scene && i.scene === 'team' && allGroupIMId.find(e => e === i.to);
-    const sortByTime = (a, b) => a.lastMsg.time - b.lastMsg.time
+    const sortByTime = (a, b) => a.lastMsg.time - b.lastMsg.time;
     return sessionlist
       .filter(currentBoardSessionList)
       .sort(sortByTime)
@@ -183,7 +202,8 @@ class GroupList extends Component {
       audio: '[语音]',
       image: '[图片]',
       video: '[视频]',
-      custom: '[动态消息]'
+      custom: '[动态消息]',
+      notification: '[系统通知]',
     };
     if (type === 'text') {
       return `${fromNick}: ${text}`;
@@ -191,8 +211,12 @@ class GroupList extends Component {
     return typeCond[type] ? typeCond[type] : '[未知类型消息]';
   };
   genAvatarList = (users = []) => {
+    const userToAvatar = i => (i && i.avatar ? i.avatar : 'unknown');
+    if (users.length <= 5) {
+      return users.map(userToAvatar);
+    }
     //获取最多5个头像
-    return users.slice(0, 5).map(i => i && i.avatar ? i.avatar : 'unknown');
+    return users.slice(0, 5).map(userToAvatar);
   };
   isShouldShowNewDot = (unRead = 0, childsUnReadArr) => {
     //如果主群的未读数量不是0， 那么就不会显示消息点提醒
@@ -212,7 +236,6 @@ class GroupList extends Component {
     type_name,
     unRead
   } = {}) => {
-
     return {
       board_id,
       im_id,
@@ -233,7 +256,6 @@ class GroupList extends Component {
     type_name: label,
     unRead
   } = {}) => {
-
     return {
       board_id,
       im_id,
@@ -241,10 +263,7 @@ class GroupList extends Component {
       label,
       name,
       newsNum: unRead,
-      showNewsDot: this.isShouldShowNewDot(
-        unRead,
-        childs.map(i => i.unRead)
-      ),
+      showNewsDot: this.isShouldShowNewDot(unRead, childs.map(i => i.unRead)),
       avatarList: this.genAvatarList(users),
       childs
     };

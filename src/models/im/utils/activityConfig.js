@@ -1,4 +1,23 @@
+//消息推送的消息体，符合以下模板
+//谁(执行人)对什么(对象, 或者说范围，这一点可能不存在，或者说不被提及)做了(行为)什么(行为内容)
+//所以，根据这个基本模板
+//修正具体的推送条目中不符合模板的信息
+//其中的四个要素:
+// - 执行人(creator),这个字段是数据中一定会存在的
+// - 对象或者范围(range), 这个字段后台没有明确返回，需要根据情况组装，同时有的情况不需要组装这个要素(比如， “andy 完成了一条任务：建个小项目”， 其中就没有范围这个要素)
+// - 行为(action), 这个字段，可以直接使用消息体中的 title 字段，如果 title 字段不符合要求， 那么可以 手动添加 actionText 字段来修正
+// - 行为内容(content), 这个字段在判定推送消息体中的 action 字段 和 消息体中 content 相对应的时候就不需要修正（比如消息体 {action: 'board.card.update.add', content:{card: {}}},
+//    但是，像: {action: 'board.file.upload', content: {board: {}, board_file: {}}}, 这种坑爹的情况(file !== board_file)， 就需要修正
+
+//修正方式:
+//range - 添加 rangeCallback 回调函数，用来生成解析数据时的 range 字段
+//action - actionText - 字符串
+//content - 添加 contentCallback 回调函数，用来生成解析数据时的 conntent 字段，对于符合预期的推送消息体(推送消息体中的 action 字段 和 消息体中 content 相对应),就不需要通过这个回调修正了
+
+//rangeCallback 中占位符字段
 const placeholder = '{placeholder}'
+
+//辅助生成 rangeCallback 回调函数
 const genRangeObj = (rangeText = '', rangeObj = {}, isNavigate) => {
   return Object.assign({}, {
     rangeText,
@@ -7,6 +26,7 @@ const genRangeObj = (rangeText = '', rangeObj = {}, isNavigate) => {
   })
 }
 
+//辅助生成 contentCallback 回调函数
 const genContentObj = (contentText = '', contentObj = {}, isNavigate) => {
   return Object.assign({}, {
     contentText,
@@ -18,8 +38,17 @@ const genContentObj = (contentText = '', contentObj = {}, isNavigate) => {
 const activityConfig = {
   'board.create': {}, // 创建
   'board.delete': {}, // 删除
-  'board.update.name': {}, // 修改名称
-  'board.update.description': {}, // 修改详情
+  'board.update.name': {
+    contentCallback: content => {
+      const {board} = content
+      return genContentObj(board.name, board)
+    }
+  }, // 修改名称
+  'board.update.description': {
+    contentCallback: content => {
+      return genContentObj('.', {})
+    }
+  }, // 修改详情
   'board.update.user.add': {}, // 添加用户
   'board.update.archived': {}, // 归档
   'board.update.user.quit': {}, // 用户退出项目
@@ -58,13 +87,6 @@ const activityConfig = {
     contentCallback: content => {
       const {rela_data} = content
       return genContentObj(rela_data.name, rela_data)
-      return Object.assign(
-        {},
-        {
-          contentText: rela_data.name,
-          contentObj: {...rela_data}
-        }
-      )
     }
   }, // 添加标签
   'board.card.update.label.remove': {
@@ -92,19 +114,10 @@ const activityConfig = {
     contentCallback: content => {
       const { file_comment } = content;
       return genContentObj(file_comment.text, file_comment)
-      return Object.assign({}, {
-        contentText: file_comment.text,
-        contentObj: {...file_comment}
-      })
     },
     rangeCallback: content => {
       const { board_file } = content;
       return genRangeObj(`对 ${placeholder}`, board_file)
-
-      return Object.assign(
-        {},
-        { rangeText: `对 {placeholder}`, rangeObj: { ...board_file } }
-      );
     }
   }, //添加评论
   'board.file.comment.at.notice': {}, //文件评论@通知
@@ -147,5 +160,6 @@ const activityConfig = {
 
   'organization.member.apply': {} // 申请加入组织
 };
+
 
 export default activityConfig;

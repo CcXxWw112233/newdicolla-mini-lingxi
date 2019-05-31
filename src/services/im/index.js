@@ -12,3 +12,5 @@ const requestWithNotShowLoading = (method, url, data = {}) => () => request({dat
 export const getAllIMTeamList = requestWithNotShowLoading('GET', `${API_MORE}/mini/im/contacts`)
 
 export const getIMAccount = requestWithNotShowLoading('GET', `${API_UPMS}/im/account`)
+
+export const repairTeam = data =>  requestWithNotShowLoading('POST', `${API_MORE}/mini/im/checkImTeamData`, data)

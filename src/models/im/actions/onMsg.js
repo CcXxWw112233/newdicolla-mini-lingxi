@@ -1,7 +1,14 @@
-import Taro from '@tarojs/taro';
+import Taro, { connectSocket } from '@tarojs/taro';
 import { dealMsg } from './../utils/dealGroupMsg';
-import {genNews, isValidMsg} from './../utils/genNews.js'
-import {isShouldHandleType} from './../utils/activityHandle.js'
+import {
+  genNews,
+  isValidMsg,
+  isGlobalPushNews,
+  isActivityCustomNews,
+  isPinupEmojiNews,
+  isNotificationNews
+} from './../utils/genNews.js';
+import { handleGlobalNewsPush } from './../utils/activityHandle.js';
 
 function onMsg(msg) {
   const {
@@ -9,7 +16,7 @@ function onMsg(msg) {
       store: { dispatch, getState }
     }
   } = Taro.getApp();
-
+  console.log(msg, ' ================ get msg ========================');
   const {
     im: state,
     im: { nim }
@@ -36,24 +43,42 @@ function onMsg(msg) {
   }
   tempState.rawMessageList[sessionId][msg.time] = Object.assign({}, msg);
 
+  //整合消息进入当前聊天（如果正在聊天页面的话）的消息流
   const isMsgBelongsToCurrentChatGroup =
     tempState.currentChatTo === msg.sessionId && nim;
 
   //如果这条消息属于当前打开的群聊，则需要处理，将符合条件的消息合并到当前群的消息列表中
   if (isMsgBelongsToCurrentChatGroup) {
-
-    //如果是一条属于当前打开的群聊的text type的消息，
+    //如果是一条属于当前打开的群聊的需要整合的消息，
     //那么就整合数据
-    if (isValidMsg(msg, tempState.currentChatTo)) {
-      const { currentBoard } = tempState;
-      tempState.currentGroupSessionList = [
-        ...tempState.currentGroupSessionList,
-        genNews(msg, currentBoard)
-      ];
+    const mergeNews = () => {
+      if (isValidMsg(msg, tempState.currentChatTo) || isPinupEmojiNews(msg) || isNotificationNews(msg)) {
+        const { currentBoard } = tempState;
+        tempState.currentGroupSessionList = [
+          ...tempState.currentGroupSessionList,
+          genNews(msg, currentBoard)
+        ];
+      }
+    };
+
+    if (tempState.isOnlyShowInform) {
+      if (isActivityCustomNews(msg)) {
+        mergeNews();
+      }
+    } else {
+      mergeNews();
     }
+
     // 更新当前群的未读消息状态
     nim.resetSessionUnread(msg.sessionId);
   }
+
+  //处理全局的消息推送
+  if (isGlobalPushNews(msg)) {
+    console.log('get a global push news ................:', msg);
+    handleGlobalNewsPush(msg);
+  }
+
   dispatch({
     type: 'im/updateStateByReplace',
     state: tempState,

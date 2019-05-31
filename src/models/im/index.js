@@ -3,9 +3,19 @@ import { INITIAL_STATE } from './initialState';
 import initNimSDK from './initNimSDK';
 import { isPlainObject } from './../../utils/util';
 import { selectFieldsFromIm } from './selectFields';
-import { getAllIMTeamList, getIMAccount } from './../../services/im/index';
+import {
+  handleDependOnState,
+  updateStateByReplace,
+  updateStateFieldByCover,
+  updateStateFieldByExtension
+} from './reducers';
+import {
+  getAllIMTeamList,
+  getIMAccount,
+  repairTeam
+} from './../../services/im/index';
 import { isApiResponseOk } from './../../utils/request';
-import { onMsg } from './actions/index';
+import { onMsg, onTeams } from './actions/index';
 
 function onSendMsgDone(error, msg) {
   if (error) {
@@ -40,8 +50,12 @@ export default {
         };
       }
     },
-    *fetchAllIMTeamList({}, { put, call }) {
+    *fetchAllIMTeamList({}, { select, put, call }) {
       const res = yield call(getAllIMTeamList);
+      const { currentBoardId, currentBoard } = yield selectFieldsFromIm(
+        select,
+        ['currentBoardId', 'currentBoard']
+      );
       if (isApiResponseOk(res)) {
         const { data } = res;
         //这里应该是会拿到当前用户的全部组织的所有项目群组数据，
@@ -56,6 +70,164 @@ export default {
           },
           desc: 'get all team list.'
         });
+
+        //如果现在在群聊列表，或者群聊界面，那么需要动态更新当前的群聊列表
+        if (currentBoardId && currentBoard) {
+          const getCurrentBoard = (arr, id) => {
+            const ret = arr.find(i => i.board_id === id);
+            return ret ? ret : {};
+          };
+          yield put({
+            type: 'updateStateFieldByCover',
+            payload: {
+              currentBoard: getCurrentBoard(
+                filteredAllBoardList(data),
+                currentBoardId
+              )
+            },
+            desc: 'im set current board.'
+          });
+
+          yield put({
+            type: 'checkTeamStatus',
+            payload: {
+              boardId: currentBoardId
+            },
+            desc: 'im check team status'
+          });
+        }
+      }
+    },
+    *repairTeamStatus({ payload }, { select, call, put }) {
+      const { id, type, im_id } = payload;
+      const { currentBoardImValid } = yield selectFieldsFromIm(
+        select,
+        'currentBoardImValid'
+      );
+      const ret = yield call(repairTeam({ id, type }));
+      if (isApiResponseOk(ret)) {
+        yield put({
+          type: 'updateStateFieldByCover',
+          payload: {
+            currentBoardImValid: Object.assign({}, currentBoardImValid, {
+              [im_id]: Object.assign({}, currentBoardImValid[im_id], {
+                isValid: true
+              })
+            })
+          },
+          desc: 'update currentBoardImValid'
+        });
+      }
+    },
+    *checkTeamStatus({ payload }, { select }) {
+      // 因为后端将用户的 Im 群聊信息同时保存在了自己的服务器，而且我们实际显示的用户群聊信息是根据是从后端拿到的数据，而不是以 im 服务上的数据
+      // 而这两份数据是有可能不一致的，具体表现为从我们后端拿到的数据(allBoardList)里面的具体群数据在 im 服务器上没有注册，或者没有生效。
+      // 就可能导致用户虽然可以看到某个群(我们后端数据中拿到了)，但是却不能正常的发送消息(im 服务器上没有注册该群)
+      // 因此，下面做的事情是，检查用户可能要打开的群数据是否是 im 服务器上的有效数据，如果无效，调用一个修复数据的接口修复数据
+      // 而在群聊列表中依据这里生成的判断数据(currentBoardImValid), 来判定某个具体的群是否有效。
+
+      // 所以，问题的本质是同一份数据，放在了两个地方，而且要维护数据的同步，就会导致蛋疼的情况
+      // 这是一种不好的实践。
+
+      const { boardId } = payload;
+      const {
+        globalData: {
+          store: { dispatch }
+        }
+      } = Taro.getApp();
+
+      const { nim, allBoardList } = yield selectFieldsFromIm(select, [
+        'nim',
+        'allBoardList'
+      ]);
+
+      //获取当前账号的群信息
+      yield nim.getTeams({
+        done: getTeamsDone
+      });
+
+      async function getTeamsDone(error, teams) {
+        if (error) {
+          Taro.showToast({
+            title: '获取群聊状态数据失败',
+            icon: 'none'
+          });
+          return;
+        }
+        if (!teams || !teams.length) return;
+
+        //处理并存储 teams 信息
+        await onTeams(teams);
+
+        //通过从 allBoardList 中拿到当前项目的群聊或者子群聊（如果有）
+        const findedBoardInfo = allBoardList.find(i => i.board_id === boardId);
+        if (!findedBoardInfo) return;
+
+        const boardIms = [
+          findedBoardInfo.im_id
+            ? { im_id: findedBoardInfo.im_id, isMainGroup: true, boardId }
+            : null
+        ]
+          .concat(
+            findedBoardInfo.childs
+              ? findedBoardInfo.childs.map(i => ({
+                  im_id: i.im_id,
+                  isMainGroup: false,
+                  boardId: i.im_group_id
+                }))
+              : null
+          )
+          .filter(Boolean);
+        if (!boardIms.length) return;
+
+        const boardImValidInfo = boardIms.reduce((acc, curr) => {
+          const finedInTeams = teams.find(i => i.teamId === curr.im_id);
+          const isValid = team => team.valid && team.validToCurrentUser;
+          const genValidInfo = (originObj, curr, isValid) =>
+            Object.assign({}, originObj, {
+              [curr.im_id]: Object.assign({}, curr, { isValid })
+            });
+
+          if (finedInTeams && isValid(finedInTeams)) {
+            return genValidInfo(acc, curr, true);
+          }
+          return genValidInfo(acc, curr, false);
+        }, {});
+
+        //更新 currentBoardImValid
+        //如果当前项目的群聊及其子群聊都是有效的，那么就不需要修复
+        //否则，修复群聊，然后更新 currentBoardImValid
+        await dispatch({
+          type: 'im/updateStateFieldByCover',
+          payload: {
+            currentBoardImValid: boardImValidInfo
+          },
+          desc: 'update im currentBoardImValid'
+        });
+
+        const checkIsAllValid = validInfo =>
+          Object.entries(validInfo).every(
+            ([_, value]) => value && value['isValid']
+          );
+        const isAllBoardImValid = checkIsAllValid(boardImValidInfo);
+
+        if (!isAllBoardImValid) {
+          for (let item in boardImValidInfo) {
+            const { isValid, boardId, isMainGroup, im_id } = boardImValidInfo[
+              item
+            ];
+            if (!isValid) {
+              await dispatch({
+                type: 'im/repairTeamStatus',
+                payload: {
+                  im_id,
+                  id: boardId,
+                  type: isMainGroup ? '2' : '3'
+                }
+              });
+            }
+          }
+        }
       }
     },
     *initNimSDK({ payload }, { select, put }) {
@@ -63,6 +235,8 @@ export default {
 
       const { nim } = yield selectFieldsFromIm(select, 'nim');
 
+      // 单例模式
+      // 如果存在 nim 实例，那么先调用 disconnect 方法
       if (nim) {
         nim.disconnect();
       }
@@ -72,7 +246,8 @@ export default {
         type: 'updateStateFieldByCover',
         payload: {
           nim: nimInstance
-        }
+        },
+        desc: 'im init'
       });
     },
     *updateCurrentChatUnreadNewsState({ payload }, { select }) {
@@ -83,19 +258,34 @@ export default {
         nim.resetSessionUnread(im_id);
       }
     },
-    *sendAudio({payload}, {select}) {
-      const {scene, to, wxFilePath, type} = payload
-      const {nim} = yield selectFieldsFromIm(select, 'nim')
+    *sendImage({ payload }, { select }) {
+      const { type, scene, to, tempFilePaths } = payload;
+      const { nim } = yield selectFieldsFromIm(select, 'nim');
+
+      for (let i = 0; i < tempFilePaths.length; i++) {
+        nim.sendFile({
+          type,
+          scene,
+          to,
+          wxFilePath: tempFilePaths[i],
+          done: function(err, msg) {
+            onSendMsgDone(err, msg);
+          }
+        });
+      }
+    },
+    *sendAudio({ payload }, { select }) {
+      const { scene, to, wxFilePath, type } = payload;
+      const { nim } = yield selectFieldsFromIm(select, 'nim');
       nim.sendFile({
         scene,
         to,
         type,
         wxFilePath,
         done: (err, msg) => {
-          onSendMsgDone(err, msg)
+          onSendMsgDone(err, msg);
         }
-      })
-
+      });
     },
     *sendMsg({ payload }, { select }) {
       const { scene, to, text } = payload;
@@ -110,59 +300,35 @@ export default {
           onSendMsgDone(error, msg);
         }
       });
+    },
+    *sendPinupEmoji({ payload }, { select }) {
+      const { scene, to, pushContent, content } = payload;
+      const { nim } = yield selectFieldsFromIm(select, 'nim');
+
+      nim.sendCustomMsg({
+        scene,
+        to,
+        pushContent,
+        content: JSON.stringify(content),
+        done: (error, msg) => {
+          onSendMsgDone(error, msg);
+        }
+      });
     }
   },
   reducers: {
-    //当拿不到 redux store 数据的时候， 可以通过回调的方式，拿到当前 model 的 state
-    //因为已经将 store 实例挂载到了 小程序 app 实例 的 globalData 属性上，
-    //所以可以通过 Taro.getApp() 拿到 小程序 app 实例， 也就 可以通过 globalData - store - getState()
-    //获取到 store 的数据
-    handleDependOnState(state, { callback }) {
-      if (callback && typeof callback === 'function') {
-        callback(state);
-      }
-      return state;
-    },
-    updateStateByReplace(state, { state: newState }) {
-      //这个model 的 state 是一个 object,
-      if (newState && isPlainObject(newState)) {
-        return newState;
-      }
-      //如果试图用其他类型的 state 替换，返回原来的 state
-      return state;
-    },
-    updateStateFieldByCover(state, { payload, callback }) {
-      if (callback && typeof callback === 'function') {
-        callback(state);
-      }
-      if (payload && isPlainObject(payload)) {
-        return { ...state, ...payload };
-      }
-      return state;
-    },
-    updateStateFieldByExtension(state, { payload, callback }) {
-      if (callback && typeof callback === 'function') {
-        callback(state);
-      }
-
-      const updatedFields = Object.keys(payload).reduce((acc, curr) => {
-        const getCurrValue = (stateFieldValue, currFieldValue) => {
-          //如果都是对象的话，那么就合并属性
-          if (isPlainObject(stateFieldValue) && isPlainObject(currFieldValue)) {
-            return { ...stateFieldValue, ...currFieldValue };
-          }
-          //如果都是数组的话，那么也合并属性
-          if (Array.isArray(stateFieldValue) && Array.isArray(currFieldValue)) {
-            return [...stateFieldValue, ...currFieldValue];
-          }
-          //其他情况，直接替换
-          return currFieldValue;
-        };
-        return Object.assign({}, acc, {
-          [curr]: getCurrValue(state[curr], payload[curr])
-        });
-      }, {});
-      return { ...state, ...updatedFields };
+    handleDependOnState,
+    updateStateByReplace,
+    updateStateFieldByCover,
+    updateStateFieldByExtension
+  },
+  subscriptions: {
+    setup({ dispatch }) {
+      // 利用 Taro 提供的全局 发布订阅模式 方法，
+      // 监听特定的 im  自定义全局推送消息
+      Taro.eventCenter.on('newPush', data => {
+        // console.log(data, '++++++++++++++++ Taro.eventCenter.on +++++++++++++++++++++')
+      });
     }
   }
 };

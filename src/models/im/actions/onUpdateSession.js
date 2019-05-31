@@ -1,10 +1,10 @@
 import Taro from '@tarojs/taro';
+import {isCreatedNewGroupOrAddTeamMembersNews} from './../utils/genNews.js'
+
 
 function onUpdateSession(sessions) {
   console.log('get session :', sessions);
-  if(!Array.isArray(sessions)) {
-    sessions = [sessions]
-  }
+
   const {
     globalData: {
       store: { dispatch, getState }
@@ -15,6 +15,18 @@ function onUpdateSession(sessions) {
     im: state,
     im: { nim }
   } = getState();
+
+  //如果是新建群或者更新了群成员的信息，那么重新拉取所有的群信息的列表
+  if(isCreatedNewGroupOrAddTeamMembersNews(sessions)) {
+    dispatch({
+      type: 'im/fetchAllIMTeamList',
+      desc: 'fetch all im team list'
+    });
+  }
+
+  if(!Array.isArray(sessions)) {
+    sessions = [sessions]
+  }
 
   let tempState = Object.assign({}, state);
 
