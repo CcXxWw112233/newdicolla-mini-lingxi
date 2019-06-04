@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro';
-import { View, Text } from '@tarojs/components';
+import { View } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 import styles from './index.scss';
 import AvatarList from './components/AvatarList.js';
@@ -46,7 +46,7 @@ class ChatDetail extends Component {
         </View>
         <View className={styles.historyWrapper}>
           <DetailItem
-            itemText="查找聊天记录"
+            itemText='查找聊天记录'
             onItemClick={this.handleTurnToHistoryPage}
             isCanOperator
           />
@@ -55,11 +55,10 @@ class ChatDetail extends Component {
           <DetailItem
             itemTextKeyValue={['群聊名称:', name]}
             isCanOperator={false}
-            isShowBottomBorder={true}
+            isShowBottomBorder
           />
           <DetailItem
             itemTextKeyValue={['人数:', users.length]}
-            isCanOperator={false}
             isCanOperator={false}
           />
           <View className={styles.hackAFuckingBorderBottom}></View>

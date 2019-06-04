@@ -20,18 +20,22 @@ class ChatItem extends Component {
   };
   handleClickItem = (e, type, customType, customItemId) => {
     if (e && e.stopPropagation) e.stopPropagation();
+
+    // 需要跳页面的消息类型
     const shouldJumpType = ['card', 'flow'];
     if (!shouldJumpType.includes(customType)) return;
+
+    // 这里处理跳转
     Taro.showToast({
       title: 'clicked custom item',
       icon: 'none'
     });
   };
   handlePlayAudio = file => {
-    const { createInnerAudioContext } = this.state;
+    let { createInnerAudioContext } = this.state;
     const { url } = file;
     if (!createInnerAudioContext) {
-      const createInnerAudioContext = Taro.createInnerAudioContext();
+      createInnerAudioContext = Taro.createInnerAudioContext();
       createInnerAudioContext.src = url;
 
       //监听播放完毕事件
@@ -265,7 +269,7 @@ class ChatItem extends Component {
                         'h'
                       )
                     }}
-                    mode="aspectFill"
+                    mode='aspectFill'
                   />
                 )}
                 {type === 'custom' && isPinupEmoji && (

@@ -24,14 +24,14 @@ class Avatar extends Component {
               if (this.isValidImgUrl(i)) {
                 return (
                   <View key={i} className={styles.ItemWrapperOne}>
-                    <Image className={styles.item} mode="aspectFill" src={i} />
+                    <Image className={styles.item} mode='aspectFill' src={i} />
                   </View>
                 );
               }
               return (
                 <View key={i} className={styles.ItemWrapperOne}>
                   <View className={styles.amendAtIconPosition}>
-                    <AtIcon value="user" size="18" color="#3F536E" />
+                    <AtIcon value='user' size='18' color='#3F536E' />
                   </View>
                 </View>
               );
@@ -44,14 +44,14 @@ class Avatar extends Component {
               if (this.isValidImgUrl(i)) {
                 return (
                   <View key={i} className={styles.ItemWrapperTwo}>
-                    <Image className={styles.item} mode="aspectFill" src={i} />
+                    <Image className={styles.item} mode='aspectFill' src={i} />
                   </View>
                 );
               }
               return (
                 <View key={i} className={styles.ItemWrapperTwo}>
                   <View className={styles.amendAtIconPosition}>
-                    <AtIcon value="user" size="18" color="#3F536E" />
+                    <AtIcon value='user' size='18' color='#3F536E' />
                   </View>
                 </View>
               );
@@ -71,7 +71,7 @@ class Avatar extends Component {
                         : styles.ItemWrapperThree
                     }
                   >
-                    <Image className={styles.item} mode="aspectFill" src={i} />
+                    <Image className={styles.item} mode='aspectFill' src={i} />
                   </View>
                 );
               }
@@ -85,7 +85,7 @@ class Avatar extends Component {
                   }
                 >
                   <View className={styles.amendAtIconPosition}>
-                    <AtIcon value="user" size="18" color="#3F536E" />
+                    <AtIcon value='user' size='18' color='#3F536E' />
                   </View>
                 </View>
               );
@@ -98,7 +98,7 @@ class Avatar extends Component {
               if (this.isValidImgUrl(i)) {
                 return (
                   <View key={i} className={styles.ItemWrapperFour}>
-                    <Image className={styles.item} mode="aspectFill" src={i} />
+                    <Image className={styles.item} mode='aspectFill' src={i} />
                   </View>
                 );
               }
@@ -107,9 +107,9 @@ class Avatar extends Component {
                   <View className={styles.amendAtIconPosition}>
                     <AtIcon
                       style={{ height: '20px' }}
-                      value="user"
-                      size="18"
-                      color="#3F536E"
+                      value='user'
+                      size='18'
+                      color='#3F536E'
                     />
                   </View>
                 </View>
@@ -123,14 +123,14 @@ class Avatar extends Component {
               <View className={styles.ItemWrapperFiveFirstChild}>
                 <Image
                   className={styles.item}
-                  mode="aspectFill"
+                  mode='aspectFill'
                   src={urlList[0]}
                 />
               </View>
             ) : (
               <View className={styles.ItemWrapperFiveFirstChild}>
                 <View className={styles.amendAtIconPosition}>
-                  <AtIcon value="user" size="18" color="#3F536E" />
+                  <AtIcon value='user' size='18' color='#3F536E' />
                 </View>
               </View>
             )}
@@ -138,14 +138,14 @@ class Avatar extends Component {
               <View className={styles.ItemWrapperFiveSecondChild}>
                 <Image
                   className={styles.item}
-                  mode="aspectFill"
+                  mode='aspectFill'
                   src={urlList[1]}
                 />
               </View>
             ) : (
               <View className={styles.ItemWrapperFiveSecondChild}>
                 <View className={styles.amendAtIconPosition}>
-                  <AtIcon value="user" size="18" color="#3F536E" />
+                  <AtIcon value='user' size='18' color='#3F536E' />
                 </View>
               </View>
             )}
@@ -153,14 +153,14 @@ class Avatar extends Component {
               <View className={styles.ItemWrapperFiveThirdChild}>
                 <Image
                   className={styles.item}
-                  mode="aspectFill"
+                  mode='aspectFill'
                   src={urlList[2]}
                 />
               </View>
             ) : (
               <View className={styles.ItemWrapperFiveThirdChild}>
                 <View className={styles.amendAtIconPosition}>
-                  <AtIcon value="user" size="18" color="#3F536E" />
+                  <AtIcon value='user' size='18' color='#3F536E' />
                 </View>
               </View>
             )}
@@ -168,14 +168,14 @@ class Avatar extends Component {
               <View className={styles.ItemWrapperFiveFourthChild}>
                 <Image
                   className={styles.item}
-                  mode="aspectFill"
+                  mode='aspectFill'
                   src={urlList[3]}
                 />
               </View>
             ) : (
               <View className={styles.ItemWrapperFiveFourthChild}>
                 <View className={styles.amendAtIconPosition}>
-                  <AtIcon value="user" size="18" color="#3F536E" />
+                  <AtIcon value='user' size='18' color='#3F536E' />
                 </View>
               </View>
             )}
@@ -183,14 +183,14 @@ class Avatar extends Component {
               <View className={styles.ItemWrapperFiveFifthChild}>
                 <Image
                   className={styles.item}
-                  mode="aspectFill"
+                  mode='aspectFill'
                   src={urlList[4]}
                 />
               </View>
             ) : (
               <View className={styles.ItemWrapperFiveFifthChild}>
                 <View className={styles.amendAtIconPosition}>
-                  <AtIcon value="user" size="18" color="#3F536E" />
+                  <AtIcon value='user' size='18' color='#3F536E' />
                 </View>
               </View>
             )}
@@ -204,7 +204,7 @@ class Avatar extends Component {
 Avatar.defaultProps = {
   urlList: [], //头像 url 字符串数组
   showDot: false, //是否显示右上角圆点
-  value: 0, //显示的数字，如果大于等于零则显示，否则不现实
+  value: 0, //显示的数字，如果大于等于零则显示，否则不显示
   maxValue: 99 //要显示的最大值
 };
 

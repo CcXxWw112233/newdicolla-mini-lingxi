@@ -5,7 +5,8 @@ import {
   Text,
   Image,
   ScrollView,
-  Swiper
+  Swiper,
+  SwiperItem,
 } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 import styles from './UserInput.scss';
@@ -79,6 +80,7 @@ import genEmojiList from './../../../models/im/utils/genEmojiList.js';
         },
         desc: 'chat userInput height change'
       }),
+    // 聚焦 input 的时候会呼出虚拟键盘，这里记录 是否呼出虚拟键盘
     handleUserInputFocus: flag =>
       dispatch({
         type: 'chat/updateStateFieldByCover',
@@ -162,11 +164,6 @@ class UserInput extends Component {
     });
     this.sendTextMsg();
   };
-  handleVoiceInput = () => {
-    this.setState({
-      inputMode: 'voice'
-    });
-  };
   handleTextInput = () => {
     this.setState(
       {
@@ -217,40 +214,13 @@ class UserInput extends Component {
       return;
     }
     if (type === 'expression' || type === 'addition') {
+      // 根据这个调整 chatcontent 的下内边距, 防止其内容被遮挡
       handleUserInputHeightChange(280);
     } else {
       handleUserInputHeightChange(0);
     }
-    typeCond[type]();
-  };
-  sendImageToNOS = res => {
-    Taro.showLoading({
-      title: '发送中...'
-    });
-    let self = this;
-    let tempFilePaths = res.tempFilePaths;
-    for (let i = 0; i < tempFilePaths.length; i++) {
-      // 上传文件到nos
-      app.globalData.nim.sendFile({
-        // app.globalData.nim.previewFile({
-        type: 'image',
-        scene: self.data.chatType === 'p2p' ? 'p2p' : 'team',
-        to: self.data.chatTo,
-        wxFilePath: tempFilePaths[i],
-        done: function(err, msg) {
-          wx.hideLoading();
-          // 判断错误类型，并做相应处理
-          if (self.handleErrorAfterSend(err)) {
-            return;
-          }
-          // 存储数据到store
-          self.saveChatMessageListToStore(msg);
 
-          // 滚动到底部
-          self.scrollToBottom();
-        }
-      });
-    }
+    typeCond[type]();
   };
   handleChooseImage = (...types) => {
     const { im_id, sendImageMsg } = this.props;
@@ -361,64 +331,6 @@ class UserInput extends Component {
       }
     });
   };
-  handleAuthenticate = (auth, authTitle = '请授权') => {
-    return Promise.resolve(
-      Taro.getSetting()
-        .then(res => {
-          let recordAuth = res.authSetting[`scope.${auth}`];
-          if (recordAuth == false) {
-            //已申请过授权，但是被用户拒绝
-            return Taro.openSetting()
-              .then(res => {
-                let recordAuth = res.authSetting[`scope.${auth}`];
-                if (recordAuth == true) {
-                  Taro.showToast({
-                    title: '授权成功',
-                    icon: 'success'
-                  });
-                  return 'validated';
-                } else {
-                  Taro.showToast({
-                    title: authTitle,
-                    icon: 'success'
-                  });
-                  return 'rejected';
-                }
-              })
-              .catch(err => {
-                Taro.showToast({
-                  title: '鉴权失败',
-                  icon: 'error'
-                });
-                return 'rejected';
-              });
-          } else if (recordAuth == true) {
-            //用户同意授权
-            return 'validated';
-          } else {
-            //第一次进来，未发起授权
-            return Taro.authorize({
-              scope: `scope.${auth}`
-            })
-              .then(() => 'validated')
-              .catch(() => {
-                Taro.showToast({
-                  title: '鉴权失败，请重试',
-                  icon: 'error'
-                });
-                return 'failed';
-              });
-          }
-        })
-        .catch(() => {
-          Taro.showToast({
-            title: '鉴权失败，请重试',
-            icon: 'error'
-          });
-          return 'failed';
-        })
-    );
-  };
   handleVoiceTouchStar = () => {
     this.setState(
       {
@@ -500,6 +412,9 @@ class UserInput extends Component {
     const { type, name, key } = i;
     const { im_id, sendPinupEmoji } = this.props;
 
+    // emoji 类型的表情会混合进 type = 'text' 的文本信息流
+    // pinup 类型的表情会作为一种自定义的消息类型直接发送
+
     if (type === 'emoji') {
       this.setState(state => {
         const { inputValue } = state;
@@ -577,10 +492,10 @@ class UserInput extends Component {
           {this.inputModeBelongs('text', 'expression', 'addition') && (
             <View className={styles.input}>
               <Input
-                ref="inputRef"
+                ref='inputRef'
                 value={inputValue}
-                confirmType="send"
-                adjustPosition={true}
+                confirmType='send'
+                adjustPosition
                 cursorSpacing={20}
                 style={{
                   lineHeight: '84px',
@@ -589,7 +504,7 @@ class UserInput extends Component {
                   marginRight: '10px'
                 }}
                 focus={autoFocus}
-                confirmHold={true}
+                confirmHold
                 onInput={this.handleInput}
                 onFocus={this.handleInputFocus}
                 onBlur={this.handleInputBlur}
@@ -663,7 +578,7 @@ class UserInput extends Component {
                     >
                       <Image
                         src={i.img}
-                        mode="aspectFill"
+                        mode='aspectFill'
                         style={{
                           width: emojiType === 'emoji' ? '30px' : '60px',
                           height: emojiType === 'emoji' ? '30px' : '60px'
@@ -686,7 +601,7 @@ class UserInput extends Component {
                   >
                     <Image
                       src={i.url}
-                      mode="aspectFill"
+                      mode='aspectFill'
                       style={{
                         width: '30px',
                         height: '30px',
@@ -704,8 +619,8 @@ class UserInput extends Component {
           <View className={styles.contentWrapper}>
             <Swiper
               className={styles.additionWrapper}
-              indicatorColor="#F1F1F1"
-              indicatorActiveColor="#C1C1C1"
+              indicatorColor='#F1F1F1'
+              indicatorActiveColor='#C1C1C1'
               indicatorDots={false}
             >
               <SwiperItem>
