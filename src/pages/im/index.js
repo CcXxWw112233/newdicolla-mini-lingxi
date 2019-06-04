@@ -1,9 +1,10 @@
-import Taro, { Component, chooseInvoiceTitle } from '@tarojs/taro';
-import { View, Button, Text } from '@tarojs/components';
+import Taro, { Component } from '@tarojs/taro';
+import { View, Button } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
-import styles from './index.scss'
-import SearchInput from './../groupMember/components/SearchInput.js'
-import UserInput from './../../pages/chat/components/UserInput.js'
+import styles from './index.scss';
+import SearchInput from './../groupMember/components/SearchInput.js';
+import UserInput from './../../pages/chat/components/UserInput.js';
+
 @connect(({ im }) => ({
   im
 }))
@@ -46,32 +47,32 @@ class Im extends Component {
     //sessionlist
 
     //1. 拿到当前项目的 im info object
-    let currentBoardImInfo = allBoardList.find(i => i.board_id === board_id);
-    if (!currentBoardImInfo) return false;
+    // let currentBoardImInfo = allBoardList.find(i => i.board_id === board_id);
+    // if (!currentBoardImInfo) return false;
 
     //2. 拿到当前项目的 im_id 及其所有子群的 im_id
-    const currentBoardImIdAndChildsId = [currentBoardImInfo.im_id].concat(
-      currentBoardImInfo.childs
-        ? currentBoardImInfo.childs.map(i => i.im_id)
-        : []
-    );
+    // const currentBoardImIdAndChildsId = [currentBoardImInfo.im_id].concat(
+    //   currentBoardImInfo.childs
+    //     ? currentBoardImInfo.childs.map(i => i.im_id)
+    //     : []
+    // );
 
     //3. 所有属于当前项目及其子群的对话中，是否有未读的消息，
     // 如果有，返回 true,
     // 如果没有，返回 false
 
-    return sessionlist
-      .filter(i => currentBoardImIdAndChildsId.find(id => id === i.to))
-      .some(i => i.unread);
+    // return sessionlist
+    //   .filter(i => currentBoardImIdAndChildsId.find(id => id === i.to))
+    //   .some(i => i.unread);
   };
   render() {
     return (
-      <View className="global_horrizontal_padding">
+      <View className='global_horrizontal_padding'>
         <Button onClick={this.handleJumpToBoardDetail}>跳转到项目详情页</Button>
         <View className={styles.searchInputWrapper}>
-        <SearchInput />
+          <SearchInput />
         </View>
-        <View style={{position: "fixed", bottom: 0}}>
+        <View style={{ position: 'fixed', bottom: 0 }}>
           <UserInput />
         </View>
       </View>
