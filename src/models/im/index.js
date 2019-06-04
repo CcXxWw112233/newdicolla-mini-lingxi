@@ -179,6 +179,7 @@ export default {
           .filter(Boolean);
         if (!boardIms.length) return;
 
+        //验证
         const boardImValidInfo = boardIms.reduce((acc, curr) => {
           const finedInTeams = teams.find(i => i.teamId === curr.im_id);
           const isValid = team => team.valid && team.validToCurrentUser;
