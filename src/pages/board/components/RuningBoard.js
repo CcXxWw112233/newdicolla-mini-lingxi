@@ -16,7 +16,7 @@ export default class RuningBoard extends Component {
   componentWillUnmount () { }
 
   componentDidShow () {
-    this.getBoardList()
+    // this.getBoardList()
   }
 
   componentDidHide () { }

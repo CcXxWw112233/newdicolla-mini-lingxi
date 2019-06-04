@@ -20,6 +20,7 @@ export default class Board extends Component {
   }
 
   state = {
+    page_number: 1,
     show_board_select_type: '0', //出现项目选择
     search_mask_show: '0', /// 0默认 1 淡入 2淡出
   }
@@ -31,6 +32,15 @@ export default class Board extends Component {
       Taro.stopPullDownRefresh()
       Taro.hideNavigationBarLoading()
     }, 300)
+  }
+
+  onReachBottom() {
+    this.setState((prevState) => ({
+      page_number: ++prevState.page_number
+    }), () => {
+      console.log(this.state)
+      this.getBoardList()
+    })
   }
 
   componentWillReceiveProps (nextProps) {
@@ -56,7 +66,8 @@ export default class Board extends Component {
     dispatch({
       type: 'board/getBoardList',
       payload: {
-
+        page_number: this.state.page_number,
+        page_size: 7
       }
     })
   }

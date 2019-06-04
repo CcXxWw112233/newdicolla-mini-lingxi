@@ -20,6 +20,7 @@ export default {
 
       const { page_number = '1', page_size = '100'  } = payload
       const res = yield call(getBoardList, {_organization_id: current_org, page_number, page_size})
+      console.log(res)
       if(isApiResponseOk(res)) {
         yield put({
           type: 'updateDatas',
@@ -35,7 +36,10 @@ export default {
 
   reducers: {
     updateDatas(state, { payload }) {
-      return { ...state, ...payload };
+      return {
+        ...state,
+        board_list: [...state.board_list, ...payload.board_list]
+      }
     },
   },
 

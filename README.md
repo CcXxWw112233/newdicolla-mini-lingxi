@@ -1,4 +1,4 @@
-# title
+# titlesdfasdf
 
 ## hyf_交接部分
 
@@ -12,13 +12,13 @@
         : im 配置文件，主要作用是针对不同后台环境，切换 im 线上环境
     - models/im
         : actions - 主要是 im 实例化相关回调的处理函数
-        : config - 一些需要配置的 im 数据，目前主要是生成 emoji 数据  
+        : config - 一些需要配置的 im 数据，目前主要是生成 emoji 数据
         : demo - im 这部分基于 im 服务提供商云信的一个[原生小程序demo](https://github.com/netease-im/NIM_Web_Weapp_Demo)，这里存放着一些从里面扒下来的参考片段(这些片段在编译的时候会被忽略的,当然如果觉得碍眼，也可以直接删掉，到用的时候直接在仓库里找就可以了)
         : utils - 一些处理数据的工具函数
         : indexs.js - im model 的入口文件
-            * 这里采用 [dva](https://dvajs.com/guide/#%E7%89%B9%E6%80%A7)(一个基于 react, redux, redux-saga的数据流框架工具)的写法，model层的一个配置文件包括：namespace(命名空间, model 分成的概念可以参考[redux](https://www.redux.org.cn/))；state(状态);effects(处理副作用(例如数据获取等))；reducers(根据 dispatch 的 action， 更新 state)；subscriptions(监听软件的某些状态，更新 state数据，或者处理一些副作用)  
-        : initialState.js - model 初始 state  
-        : initNimSDK.js - 初始化 im 连接，及绑定数据回调到 im 实例。  
+            * 这里采用 [dva](https://dvajs.com/guide/#%E7%89%B9%E6%80%A7)(一个基于 react, redux, redux-saga的数据流框架工具)的写法，model层的一个配置文件包括：namespace(命名空间, model 分成的概念可以参考[redux](https://www.redux.org.cn/))；state(状态);effects(处理副作用(例如数据获取等))；reducers(根据 dispatch 的 action， 更新 state)；subscriptions(监听软件的某些状态，更新 state数据，或者处理一些副作用)
+        : initialState.js - model 初始 state
+        : initNimSDK.js - 初始化 im 连接，及绑定数据回调到 im 实例。
         : reducers - 抽象出来的 reducers 函数，因为这里的 reducer 几乎只是根据 action 里的数据替换或更新 state 的状态，所以通用性是很高的
         : selectFields.js - 抽象 dva - effects 获取 state 字段的函数
     - - services/im - 一些数据请求接口函数
