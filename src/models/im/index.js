@@ -1,7 +1,6 @@
 import Taro from '@tarojs/taro';
 import { INITIAL_STATE } from './initialState';
 import initNimSDK from './initNimSDK';
-import { isPlainObject } from './../../utils/util';
 import { selectFieldsFromIm } from './selectFields';
 import {
   handleDependOnState,
