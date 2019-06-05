@@ -140,19 +140,20 @@ export default {
         'allBoardList'
       ]);
 
+      if(!nim) return
       //获取当前账号的群信息
       yield nim.getTeams({
         done: getTeamsDone
       });
 
       async function getTeamsDone(error, teams) {
-        if (error) {
-          Taro.showToast({
-            title: '获取群聊状态数据失败',
-            icon: 'none'
-          });
-          return;
-        }
+        // if (error) {
+        //   Taro.showToast({
+        //     title: '获取群聊状态数据失败',
+        //     icon: 'none'
+        //   });
+        //   return;
+        // }
         if (!teams || !teams.length) return;
 
         //处理并存储 teams 信息
