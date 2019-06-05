@@ -1,7 +1,6 @@
 import Taro from '@tarojs/taro';
 import { INITIAL_STATE } from './initialState';
 import initNimSDK from './initNimSDK';
-import { isPlainObject } from './../../utils/util';
 import { selectFieldsFromIm } from './selectFields';
 import {
   handleDependOnState,
@@ -141,19 +140,20 @@ export default {
         'allBoardList'
       ]);
 
+      if(!nim) return
       //获取当前账号的群信息
       yield nim.getTeams({
         done: getTeamsDone
       });
 
       async function getTeamsDone(error, teams) {
-        if (error) {
-          Taro.showToast({
-            title: '获取群聊状态数据失败',
-            icon: 'none'
-          });
-          return;
-        }
+        // if (error) {
+        //   Taro.showToast({
+        //     title: '获取群聊状态数据失败',
+        //     icon: 'none'
+        //   });
+        //   return;
+        // }
         if (!teams || !teams.length) return;
 
         //处理并存储 teams 信息
@@ -180,6 +180,7 @@ export default {
           .filter(Boolean);
         if (!boardIms.length) return;
 
+        //验证
         const boardImValidInfo = boardIms.reduce((acc, curr) => {
           const finedInTeams = teams.find(i => i.teamId === curr.im_id);
           const isValid = team => team.valid && team.validToCurrentUser;

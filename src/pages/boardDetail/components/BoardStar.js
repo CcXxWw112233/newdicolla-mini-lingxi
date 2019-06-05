@@ -53,7 +53,7 @@ class BoardStar extends Component {
         <View className={styles.contentWrapper}>
           <View className={styles.contentStar}>
             <AtRate
-              size="38"
+              size='38'
               value={star}
               onChange={this.onStarChange}
               margin={19}

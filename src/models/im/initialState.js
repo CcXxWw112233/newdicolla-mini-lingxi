@@ -16,12 +16,12 @@ const INITIAL_STATE = {
   allBoardList: [], //所有组织的所有的群列表， 从我们后端拿，而不是云信, 目前来讲，因为只有群聊的入口，而且是所有项目(每个组织下可能多个项目), 每个项目的 type='2',所以可以根据这个条件筛选数据
   rawMessageList: {}, // 所有的聊天列表都在里面, 消息列表, 当受到新的消息列表的时候，如果存在当前群，则筛选，更新当前群的聊天信息
   isTouchChatContentScrollView: false, //是否正在触摸聊天内容滚动列表
+  currentGroupMembers: [],  //当前的群成员列表
 
-
+//目前没有用到的字段，p2p时可能会用
   friendCard: {}, //好友列表，含名片信息，额外添加在线信息
   onlineList: {}, // 在线好友列表
   // messageListToRender: {},
-  currentGroupMembers: [],  //当前的群成员列表
   groupList: {}, // 群列表
   groupMemberList: {}, // 群成员列表
   groupMemberMap: {}, // 群成员列表

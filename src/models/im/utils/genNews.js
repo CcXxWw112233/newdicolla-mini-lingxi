@@ -1,5 +1,7 @@
 import { isShouldHandleType } from './activityHandle.js';
 
+//用来生成聊天信息的
+
 const assistantAvatar = 'dynamicAssistant';
 
 const getAvatarByFromNick = (nick, currentBoard = { users: [] }) => {

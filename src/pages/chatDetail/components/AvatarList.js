@@ -57,7 +57,7 @@ class AvatarList extends Component {
                     <Image
                       className={styles.avatarItemAvatar}
                       src={item.avatar}
-                      mode="aspectFill"
+                      mode='aspectFill'
                     />
                   )
                 ) : index === shouldShowAvatarMax ? (

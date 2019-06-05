@@ -12,6 +12,7 @@ import {
   isNotificationNews
 } from './../../../models/im/utils/genNews.js';
 import globalStyles from './../../../gloalSet/styles/globalStyles.scss';
+
 @connect(
   ({
     im: {
@@ -155,6 +156,8 @@ class ChatContent extends Component {
     this.updateScrollViewPosition(nextProps);
   }
   componentDidShow() {
+    // 当进入聊天页面的时候，生成该群或者对话的聊天信息流
+
     const { dispatch } = this.props;
     dispatch({
       type: 'im/updateStateFieldByCover',
@@ -181,7 +184,7 @@ class ChatContent extends Component {
         upperThreshold={20}
         onScrolltoupper={this.onScrolltoupper}
         onScroll={this.onScroll}
-        enableBackToTop={true}
+        enableBackToTop
         scrollIntoView={scrollIntoViewEleId}
         onTouchStart={this.onScrollViewTouchStart}
         onTouchEnd={this.onScrollViewTouchEnd}
@@ -213,7 +216,7 @@ class ChatContent extends Component {
             return (
               <View className={styles.chatItemWrapper} key={i.time}>
                 {this.isShouldShowTimestamp(index, arr) && (
-                  <ChatItem type="timestamp" time={i.time} />
+                  <ChatItem type='timestamp' time={i.time} />
                 )}
                 <ChatItem
                   flow={i.flow}
@@ -232,7 +235,7 @@ class ChatContent extends Component {
             );
           })}
         </View>
-        <View id="scroll_bottom_id" className={styles.scrollToBottomIdEle} />
+        <View id='scroll_bottom_id' className={styles.scrollToBottomIdEle} />
       </ScrollView>
     );
   }

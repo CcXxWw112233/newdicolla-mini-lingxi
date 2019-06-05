@@ -240,7 +240,7 @@ class GroupList extends Component {
       board_id,
       im_id,
       lastMsg: this.genLastMsg(lastMsg),
-      label: type_name === '小组' ? type_name : '小组',
+      label: '小组',
       name,
       newsNum: unRead,
       avatarList: this.genAvatarList(users)
@@ -269,7 +269,7 @@ class GroupList extends Component {
     };
   };
   render() {
-    const { sessionlist, currentBoard, rawMessageList } = this.props;
+    const { currentBoard, sessionlist, rawMessageList } = this.props;
     const { isShouldExpandSubGroup } = this.state;
     if (!currentBoard) return null;
     const integratedCurrentBoardInfo = this.integrateCurrentBoardWithSessions(
@@ -341,7 +341,7 @@ class GroupList extends Component {
                   name={name}
                   newsNum={newsNum}
                   avatarList={avatarList}
-                  isSubGroup={true}
+                  isSubGroup
                   onClickedGroupItem={this.hanldClickedGroupItem}
                 />
               );
