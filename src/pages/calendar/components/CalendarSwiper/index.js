@@ -201,6 +201,14 @@ export default class CalendarSwiper extends Component {
     return !!i
   }
 
+  //返回是否具有里程碑打点
+  isHasMiletone = (timestamp) => {
+    const { sign_data = {} } = this.props
+    const { calendar_milestone_sign_data = [] } = sign_data
+    let i = calendar_milestone_sign_data.find(item => item == timestamp)
+    return !!i
+  }
+
   render () {
     const { swiper_list = [], current_indi, windowWidth, date_array = [], selected_timestamp, select_year, select_month, select_date_no, select_week_day_dec, show_whole_calendar} = this.state
 
@@ -228,9 +236,9 @@ export default class CalendarSwiper extends Component {
                     {this.isHasNormalTask(timestamp) && (
                       <View className={`${indexStyles.has_task}`} style={`background-color: ${is_selected? '#ffffff' : '#1890FF' }`}></View>
                     )}
-                    {/*{is_has_flow && (*/}
-                      {/*<View className={`${indexStyles.has_flow}`}></View>*/}
-                    {/*)}*/}
+                    {this.isHasMiletone(timestamp) && (
+                      <View className={`${indexStyles.has_flow}`}></View>
+                    )}
                   </View>
                 </View>
               </View>
