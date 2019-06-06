@@ -20,6 +20,7 @@ export default class Board extends Component {
   state = {
     page_number: 1, // 每次加载的页码，默认加载第一页
     curent_page_number_total: 6,  // 当前加载的条数
+    page_size: 6, // 每页显示的条数
     show_board_select_type: '0', //出现项目选择
     search_mask_show: '0', /// 0默认 1 淡入 2淡出
   }
@@ -46,16 +47,6 @@ export default class Board extends Component {
       this.getBoardList()
     })
   }
-  
-  // componentWillReceiveProps (nextProps) {
-  //   // console.log(nextProps)
-  //   const { board: { curent_page_number_total } } = nextProps
-  //   // 异步的操作
-  //   this.setState({
-  //     curent_page_number_total
-  //   })
-    
-  // }
 
   componentDidShow () {
     this.getBoardList()
@@ -94,13 +85,13 @@ export default class Board extends Component {
         <ScrollView
           scrollY={true}
           style={
-            {height: `${screenHeight}px`}
+            {height: `${screenHeight - 20}px`}
           }
           onScrollToLower={this.onScrollToLower}
         >
           <RunningBoard />
         </ScrollView>
-        <View style='height: 50px'></View>
+        {/* <View style='height: 50px'></View> */}
       </View>
     )
   }

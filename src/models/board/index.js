@@ -29,7 +29,7 @@ export default {
           type: 'updateDatas',
           payload: {
             board_list: new_board_list,
-            curent_page_number_total: res.data.length, // 每次请求获取当前的条数
+            curent_page_number_total: res.data.length > 0 ? res.data.length : 0, // 每次请求获取当前的条数
           }
         })
       }else {
