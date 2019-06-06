@@ -10,29 +10,9 @@ import { connect } from '@tarojs/redux'
 }))
 export default class RuningBoard extends Component {
 
-  componentWillReceiveProps (nextProps) {
-  }
-
-  componentWillUnmount () { }
-
-  componentDidShow () {
-    // this.getBoardList()
-  }
-
-  componentDidHide () { }
-
-  getBoardList = () => {
-    const { dispatch } = this.props
-    dispatch({
-      type: 'board/getBoardList',
-      payload: {
-
-      }
-    })
-  }
-
   render () {
-    const { board: { board_list = [] }} = this.props
+    const { board: { board_list = [], curent_page_number_total, page_size }} = this.props
+    // console.log(this.props, 'RuningBoard')
     return (
       <View className={`${indexStyles.board_item_out} ${globalStyles.global_horrizontal_padding}`}>
         {board_list.map((value, key) => {
@@ -43,7 +23,10 @@ export default class RuningBoard extends Component {
             </View>
           )
         })}
-        <View className={indexStyles.no_more_text}>没有更多内容了~</View>
+        {
+          curent_page_number_total >= page_size ?  <View className={indexStyles.no_more_text}>疯狂加载中...</View> :
+          <View className={indexStyles.no_more_text}>没有更多内容了~</View>
+        }
       </View>
     )
   }

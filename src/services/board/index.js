@@ -9,7 +9,7 @@ export const getBoardList = (data , notShowLoading) => {
     },
     method: 'GET',
     url: `${API_BOARD}/mini/board/page`,
-  }, notShowLoading)
+  }, true)
 }
 
 //获取项目列表（搜索）
