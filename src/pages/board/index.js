@@ -91,7 +91,7 @@ export default class Board extends Component {
         >
           <RunningBoard />
         </ScrollView>
-        {/* <View style='height: 50px'></View> */}
+        <View style='height: 20px'></View>
       </View>
     )
   }

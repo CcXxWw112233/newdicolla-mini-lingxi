@@ -41,12 +41,19 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 0,
+			"current": 1,
 			"list": [
 				{
 					"id": -1,
 					"name": "jf",
 					"pathName": "pages/board/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "todo",
+					"pathName": "pages/JfTodo/index.js",
 					"scene": null
 				}
 			]

@@ -12,7 +12,7 @@ export default class RuningBoard extends Component {
 
   render () {
     const { board: { board_list = [], curent_page_number_total, page_size }} = this.props
-    console.log(this.props, 'RuningBoard')
+    // console.log(this.props, 'RuningBoard')
     return (
       <View className={`${indexStyles.board_item_out} ${globalStyles.global_horrizontal_padding}`}>
         {board_list.map((value, key) => {
