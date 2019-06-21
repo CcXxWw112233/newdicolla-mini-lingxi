@@ -1,0 +1,1 @@
+export const selectVal=state=>state[(`board`)].selectVal

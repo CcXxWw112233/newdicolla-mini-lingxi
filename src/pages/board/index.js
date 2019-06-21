@@ -60,13 +60,26 @@ export default class Board extends Component {
       }
     })
   }
+  getSearchShowList=(e)=>{
+    let val=e.detail.value
+    const {dispatch}=this.props;
+    dispatch({
+      type:'board/getSearchShowList',
+      payload:{
+        search_term :val
+      }
+    })
+  }
 
   render () {
     const { board: { board_id }} = this.props
     const { show_board_select_type, search_mask_show } = this.state
     return (
       <View >
-        <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
+        <SearchAndMenu 
+        onSelectType={this.onSelectType} 
+        search_mask_show={search_mask_show}
+        onSearchShowList={this.getSearchShowList} />
         <View>
           <BoardTypeSelect show_board_select_type={show_board_select_type} onSelectType={this.onSelectType} />
         </View>

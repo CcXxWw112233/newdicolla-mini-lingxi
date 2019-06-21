@@ -7,6 +7,12 @@ export default class SearchAndMenu extends Component {
 
   state = {
     search_mask_show: '0', /// 0默认 1 淡入 2淡出
+    inputVal:''
+  }
+
+  constructor(props) {
+    super(props)
+    this.timer = null
   }
 
   componentWillReceiveProps (nextProps) {
@@ -22,7 +28,9 @@ export default class SearchAndMenu extends Component {
 
   }
 
-  componentDidHide () { }
+  componentDidHide () {
+    this.clearInput()
+   }
 
   onSelectType = () => {
     this.setSearchMaskShow()
@@ -45,25 +53,46 @@ export default class SearchAndMenu extends Component {
   quitCoperate = () => {
     this.props.onSelectType && this.props.onSelectType({show_type: '2'})
   }
-  onSearchFocus = () => {
-    Taro.showToast({
-      title: '未完成功能',
-      icon: 'none'
-    })
+  // onSearchFocus = () => {
+  //   Taro.showToast({
+  //     title: '未完成功能',
+  //     icon: 'none'
+  //   })
+  // }
+
+  // 清除搜索框值
+  clearInput(){
+    this.setState({
+      inputVal: ""
+    });
   }
+  setSearchShowList=(e)=>{
+    const { timer } = this.state
+    if(this.timer) {
+      clearTimeout(this.timer) 
+    }
+    this.setState({
+      inputVal:e.target.value
+    })
+    this.timer = setTimeout(() => {
+      this.props.onSearchShowList(e)
+    }, 500)
+   
+  }
+  
   render () {
-    const { search_mask_show } = this.state
+    const { search_mask_show,inputVal } = this.state
     return (
       <View>
         <View className={styles.search_memu_out_back}></View>
         <View className={`${globalStyles.global_horrizontal_padding} ${styles.search_memu_out}`}>
-          <View className={`${styles.search_area}`} onClick={this.onSearchFocus}>
+          <View className={`${styles.search_area}`} >
             <View className={`${styles.search_icon_area}`}>
               <Text className={`${globalStyles.global_iconfont} ${styles.icon_menu}`}>&#xe643;</Text>
             </View>
 
             <View className={`${styles.search_input_area}`}>
-              <Input disabled className={`${styles.search_input}`} />
+              <Input className={`${styles.search_input}`} onInput={this.setSearchShowList} value={inputVal} />
             </View>
           </View>
           <View className={`${styles.menu}`} onClick={this.onSelectType}>

@@ -141,13 +141,23 @@ export default class Calendar extends Component {
     };
     initImData().catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
   }
+  getSearchShowList=(e)=>{
+    let val=e.detail.value
+    const {dispatch}=this.props;
+    dispatch({
+      type:'board/getSearchShowList',
+      payload:{
+        search_term :val
+      }
+    })
+  }
 
   render () {
     const { show_card_type_select, search_mask_show } = this.state
     const { no_sche_card_list = [] } = this.props
     return (
       <View>
-        <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
+        <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} onSearchShowList={this.getSearchShowList}/>
         <CalendarSwiper  />
         <CardTypeSelect show_card_type_select={show_card_type_select} onSelectType={this.onSelectType} schedule={'1'}/>
         <MilestoneList schedule={'1'}/>

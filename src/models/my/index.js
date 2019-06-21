@@ -7,6 +7,7 @@ export default {
   namespace: 'my',
   state: {
     org_list: [],
+    count:0
   },
   effects: {
     //获取组织列表
@@ -43,7 +44,7 @@ export default {
   reducers: {
     updateDatas(state, { payload }) {
       return { ...state, ...payload };
-    },
+    }
   },
 
 };

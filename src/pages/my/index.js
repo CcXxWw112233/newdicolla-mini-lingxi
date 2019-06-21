@@ -9,6 +9,10 @@ import globalStyle from '../../gloalSet/styles/globalStyles.scss'
   accountInfo, my
 }))
 export default class My extends Component {
+  constructor(){
+    super(...arguments)
+    this.state={name:'hello world'}
+  }
   config = {
     navigationBarTitleText: '我的'
   }
@@ -59,11 +63,37 @@ export default class My extends Component {
     })
   }
 
+  addAction = ()=>{
+    console.log(this.props)
+    let {dispatch} = this.props
+    const { my: { count = 0 } } = this.props
+    let newCount = count
+    dispatch({
+      type:'my/updateDatas',
+      payload:{
+        count: ++ newCount
+      }
+    })
+  }
+  minusAction(){
+    let {dispatch} = this.props
+    const { my: { count = 0 } } = this.props
+    let newCount = count
+    dispatch({
+      type:'my/updateDatas',
+      payload:{
+        count: --newCount
+      }
+    })
+  }
   render () {
     const { account_info = {} } = this.props.accountInfo
     const { avatar, name, user_set = {} } = account_info
     const { org_name, current_org } = user_set
+    let {count}=this.props.my
+    console.log(count)
     return (
+      
       <View className={indexStyles.index}>
         <View className={indexStyles.contain1} onClick={this.gotoAccountDetail}>
           <View>
@@ -106,8 +136,13 @@ export default class My extends Component {
           </View>
         </View>
 
+
+        <View>数字为：{count}</View>
+        <Button onClick={() => this.addAction()}>+</Button>
+        <Button onClick={this.minusAction}>-</Button>
       </View>
     )
   }
+ 
 }
 
