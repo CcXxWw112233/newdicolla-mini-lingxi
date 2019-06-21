@@ -41,8 +41,6 @@ export default class Board extends Component {
   componentDidShow () {
     this.getBoardList()
   }
-  // .....
-  
 
   componentDidHide () { }
 
