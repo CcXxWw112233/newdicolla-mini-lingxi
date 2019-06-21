@@ -1,7 +1,6 @@
 import Taro from '@tarojs/taro'
 import { getBoardList,getBoardListSearch } from '../../services/board/index'
 import {isApiResponseOk} from "../../utils/request";
-// import {selectVal} from './selects'
 
 export default {
   namespace: 'board',
