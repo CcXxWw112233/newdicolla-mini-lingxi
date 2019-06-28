@@ -1,6 +1,13 @@
 import { request, packagePromise,} from "../../utils/request";
 import {API_UPMS} from "../../gloalSet/js/constant";
 
+export const getVerifycodeImg = (notShowLoading) => {
+  return request({
+    method:'GET',
+    url:`${API_UPMS}/user/getLoginImageCaptcha`,
+  },notShowLoading);
+}
+
 //手机验证码
 export const sendVerifyCode = (data , notShowLoading) => {
   return request({

@@ -3,7 +3,7 @@ import { View, Text, Button, Input } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyles from '../../gloalSet/styles/globalStyles.scss'
 import { validateTel, validateEmail } from '../../utils/verify';
-import { sendVerifyCode, normalLogin} from "../../services/login";
+import { sendVerifyCode, normalLogin, getVerifycodeImg} from "../../services/login";
 import Authorize from '../../components/authorize/index'
 import sha256 from 'js-sha256'
 import { AtModal, AtModalHeader, AtModalContent, AtModalAction, AtSwitch, AtRadio, AtList, AtListItem, AtButton } from "taro-ui"
@@ -19,9 +19,15 @@ export default class Login extends Component {
     showCode:true,       //是否验证码登陆
     user: '',
     pswd: '',
+    verifycode: '',
+    captcha_key: '',
     codeMessage: '获取验证码',
     pswdErrorType: 0,
-    userMessageType: 0
+    userMessageType: 0,
+    verifycodeErrorType:0,
+    verifyShow:false,
+    verifycodeBase64Img:'',
+    captchaKey:''
   }
   componentWillMount () {
 
@@ -91,6 +97,18 @@ export default class Login extends Component {
         pswdErrorType: pswdErrorType
       })
   }
+
+  inputVerifycode = (e) => {
+    let value = e.target.value;
+    let {verifycodeErrorType} = this.state;
+    if(String(value).length > 0){
+      verifycodeErrorType = 0;
+      }
+      this.setState({
+        verifycode: value,
+        verifycodeErrorType: verifycodeErrorType
+      })
+  }
     //验证密码框
   checkPswd = (e) => {
     let value = e.target.value;
@@ -107,6 +125,7 @@ export default class Login extends Component {
       pswdErrorType: error
     })
   }
+
     //发送短信设置60s倒计时
   setCodeMessage = () => {
     let {codeMessage, user, userMessageType} = this.state;
@@ -164,7 +183,7 @@ export default class Login extends Component {
     //普通登录
   normalLogin = () => {
     const { dispatch } = this.props
-    let {user, pswd, showCode, userMessageType} = this.state;
+    let {user, pswd,verifycode, showCode, userMessageType,verifycodeErrorType,verifyShow,verifycodeBase64Img,captchaKey} = this.state;
     let pswdErrorType = 0;
     if(user === '' || pswd === ''){
       if(user === ''){
@@ -177,9 +196,15 @@ export default class Login extends Component {
           pswdErrorType = 1
         }
       }
+      if(verifycode === ''){
+        if(!showCode){
+          verifycodeErrorType = 1
+        }
+      }
       this.setState({
         pswdErrorType: pswdErrorType,
-        userMessageType: userMessageType
+        userMessageType: userMessageType,
+        verifycodeErrorType:verifycodeErrorType
       })
       return false;
     }
@@ -190,6 +215,10 @@ export default class Login extends Component {
     if(showCode){
       data.verifycode = pswd;
     }else{
+      if(verifyShow){
+        data.captcha_key = captchaKey;
+        data.verifycode = verifycode; 
+      }
       data.password = sha256(pswd);
     }
     normalLogin(data).then(res => {
@@ -199,6 +228,12 @@ export default class Login extends Component {
           payload: {
             token_string: res.data
           }
+        })
+      }else if(res.code === '4005' || res.code === '4006' || res.code === '4007'){
+        this.setState({
+          verifyShow:true,
+          verifycodeBase64Img:res.data.base64_img,
+          captchaKey:res.data.captcha_key,
         })
       }else{
         if(res.message === '登录的手机号不存在'){
@@ -239,8 +274,22 @@ export default class Login extends Component {
     }
   }
 
+  getVerifyCodeImg = () => {
+    console.log("23424")
+    getVerifycodeImg().then(res => {
+        const code = res.code
+        if(code === '0'){
+          this.setState({
+            verifyShow:true,
+            verifycodeBase64Img:res.data.base64_img,
+            captchaKey:res.data.captcha_key,
+          });
+        }
+    });
+  }
+
   render () {
-    let {showCode, codeMessage='', userMessageType, pswdErrorType, user, pswd} = this.state;
+    let {showCode, codeMessage='', userMessageType, pswdErrorType, verifycodeErrorType, user, pswd, verifycode,captcha_key,verifyShow,verifycodeBase64Img} = this.state;
     let userErrorMessage;
     switch(userMessageType){      //userMessageType === 2 通过正则表达式校验
       case 1: userErrorMessage = '请输入正确的手机号或邮箱';break;
@@ -256,8 +305,29 @@ export default class Login extends Component {
       case 4: pswdErrorMessage = '账号密码错误，请重试';break;
       default: pswdErrorMessage = '';
     }
+    let verifycodeErrorMessage;
+    switch(verifycodeErrorType){
+      case 1: verifycodeErrorMessage = '请输入验证码';break;
+      case 2: verifycodeErrorMessage = '账号密码错误，请重试'; break;
+      case 3: verifycodeErrorMessage = '获取验证码错误'; break;
+      default: pswdErrorMessage = '';
+    }
 
-    let paswdClass = `${indexStyles.login_user_input} ${indexStyles.login_input} ${showCode ? indexStyles.login_code_input: indexStyles.login_pswd_input}`;
+    let paswdClass = `${indexStyles.login_input} ${showCode ? indexStyles.login_code_input: indexStyles.login_pswd_input}`;
+    let verifycodeView = null;
+    if(!showCode && verifyShow){
+      verifycodeView = (
+      <View className={`${indexStyles.login_code}`}>
+        <View className={`${indexStyles.login_verifycode_item}`}>
+          <Text className={`${globalStyles.global_iconfont} ${indexStyles.login_icon}`}>&#xe644;</Text>
+          <Input type='text' value={verifycode} className={`${indexStyles.login_verifycode_input}`} placeholder='验证码' onInput={this.inputVerifycode}/>
+          <Image className={`${indexStyles.login_verifycode_img}`} src={`data:image/png;base64,${verifycodeBase64Img}`}>
+          </Image>
+          <Text className={`${indexStyles.login_verifycode_text} ${indexStyles.login_code_blue}`} onClick={this.getVerifyCodeImg}>换一张</Text>
+        </View>
+        <View className={`${indexStyles.login_error}`}>{verifycodeErrorMessage}</View>
+      </View>)
+    }
     return (
       <View className={`${indexStyles.login}`}>
         <View className={`${indexStyles.login_header}`}>{!showCode?'账号密码': '手机验证码'}登录</View>
@@ -272,12 +342,16 @@ export default class Login extends Component {
           <View className={`${indexStyles.login_code}`} >
             <View className={`${indexStyles.login_item}`}>
               <Text
-                    className={`${globalStyles.global_iconfont} ${indexStyles.icon_lock} ${indexStyles.login_icon}`}>&#xe644;</Text>
+                    className={`${globalStyles.global_iconfont} ${indexStyles.login_icon}`}>&#xe644;</Text>
               <Input type={showCode ? 'text' : 'password'} onBlur={this.checkPswd} value={pswd} className={paswdClass} placeholder={showCode ? '验证码' : '密码'} onInput={this.inputPswd} />
               {showCode ? <Text className={`${indexStyles.login_code_text} ${user && (userMessageType === 2) && Object.prototype.toString.call(codeMessage) !== '[object Number]' ? indexStyles.login_code_blue : ''}`} onClick={this.setCodeMessage}>{codeMessage}</Text> : ''}
               </View>
             <View className={`${indexStyles.login_error}`}>{pswdErrorMessage}</View>
           </View>
+
+          {/*账号密码登录验证码*/}
+          {verifycodeView} 
+         
         </View>
         <View className={`${indexStyles.login_footer}`}>
           <Button className={`${indexStyles.login_btn_normal} ${indexStyles.login_btn}`} type='primary' onClick={this.normalLogin}>登录</Button>
