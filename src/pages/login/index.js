@@ -262,21 +262,21 @@ export default class Login extends Component {
       <View className={`${indexStyles.login}`}>
         <View className={`${indexStyles.login_header}`}>{!showCode?'账号密码': '手机验证码'}登录</View>
         <View  className={`${indexStyles.login_content}`}>
-          <View className={`${indexStyles.login_item_wrap} ${indexStyles.login_user}`}>
-            <View className={`${indexStyles.login_user_input_wrap} ${indexStyles.login_item}`}>
-              <Text className={`${indexStyles.login_user_icon} ${indexStyles.login_icon} ${indexStyles.icon_user} ${globalStyles.global_iconfont}`}>&#xe640;</Text>
-              <Input type='text' onBlur={this.checkUser} onInput={this.inputUser}  className={`${indexStyles.login_user_input} ${indexStyles.login_input}`} placeholder='手机号/邮箱' value={user} />
+          <View>
+            <View className={`${indexStyles.login_item}`}>
+              <Text className={`${indexStyles.login_icon} ${globalStyles.global_iconfont}`}>&#xe640;</Text>
+              <Input type='text' onBlur={this.checkUser} onInput={this.inputUser}  className={`${indexStyles.login_input}`} placeholder='手机号/邮箱' value={user} />
             </View>
-            <View className={`${indexStyles.login_user_error} ${indexStyles.login_error}`}>{userErrorMessage}</View>
+            <View className={`${indexStyles.login_error}`}>{userErrorMessage}</View>
           </View>
-          <View className={`${indexStyles.login_item_wrap} ${showCode ? indexStyles.login_code: indexStyles.login_code}`} >
-            <View className={`${indexStyles.login_code_code_wrap} ${indexStyles.login_item}`}>
+          <View className={`${indexStyles.login_code}`} >
+            <View className={`${indexStyles.login_item}`}>
               <Text
-                    className={`${indexStyles.login_pswd_icon} ${globalStyles.global_iconfont} ${indexStyles.icon_lock} ${indexStyles.login_icon}`}>&#xe644;</Text>
+                    className={`${globalStyles.global_iconfont} ${indexStyles.icon_lock} ${indexStyles.login_icon}`}>&#xe644;</Text>
               <Input type={showCode ? 'text' : 'password'} onBlur={this.checkPswd} value={pswd} className={paswdClass} placeholder={showCode ? '验证码' : '密码'} onInput={this.inputPswd} />
               {showCode ? <Text className={`${indexStyles.login_code_text} ${user && (userMessageType === 2) && Object.prototype.toString.call(codeMessage) !== '[object Number]' ? indexStyles.login_code_blue : ''}`} onClick={this.setCodeMessage}>{codeMessage}</Text> : ''}
               </View>
-            <View className={`${indexStyles.login_code_error} ${indexStyles.login_error}`}>{pswdErrorMessage}</View>
+            <View className={`${indexStyles.login_error}`}>{pswdErrorMessage}</View>
           </View>
         </View>
         <View className={`${indexStyles.login_footer}`}>
