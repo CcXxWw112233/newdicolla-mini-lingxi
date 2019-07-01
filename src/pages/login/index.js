@@ -230,23 +230,20 @@ export default class Login extends Component {
           }
         })
       }else if(res.code === '4005' || res.code === '4006' || res.code === '4007'){
+        Taro.showToast({
+          title: res.message,
+          icon: 'none'
+        });
         this.setState({
           verifyShow:true,
           verifycodeBase64Img:res.data.base64_img,
           captchaKey:res.data.captcha_key,
         })
       }else{
-        if(res.message === '登录的手机号不存在'){
-          userMessageType = 3;
-        }else if(res.message === '账号密码错误'){
-          pswdErrorType = 4;
-        }else if(res.code === '1002'){
-          userMessageType = 1;
-        }
-        _this.setState({
-          userMessageType: userMessageType,
-          pswdErrorType: pswdErrorType
-        })
+        Taro.showToast({
+          title: res.message,
+          icon: 'none'
+        });
       }
     }).catch(() => {})
   }
