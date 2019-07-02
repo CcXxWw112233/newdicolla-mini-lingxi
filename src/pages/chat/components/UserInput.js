@@ -100,13 +100,15 @@ class UserInput extends Component {
     recordStart: false, // 录音开始
     recorderManager: null, //录音内容
     emojiType: 'emoji', // emoji | pinup
-    emojiAlbum: 'emoji' // emoji | ajmd | lt | xxy
+    emojiAlbum: 'emoji', // emoji | ajmd | lt | xxy
+    inputBottomValue:0
   };
   handleInputFocus = e => {
-    const {handleUserInputFocus } = this.props;
+    const {handleUserInputFocus} = this.props;
     handleUserInputFocus(true)
     this.setState({
-      inputMode: 'text'
+      inputMode: 'text',
+      inputBottomValue: e.detail.height>0 ? e.detail.height+'px' : this.state.inputBottomValue
     });
   };
   handleInputBlur = () => {
@@ -452,7 +454,8 @@ class UserInput extends Component {
       inputMode,
       recordStart,
       emojiType,
-      emojiAlbum
+      emojiAlbum,
+      inputBottomValue
     } = this.state;
     const { emojiAlbumList, emojiList } = this.genEmojiInfo();
     const findedCurrentEmojiAlbum = emojiList.filter(
@@ -469,7 +472,7 @@ class UserInput extends Component {
           position: this.inputModeBelongs('expression', 'addition')
             ? 'fixed'
             : 'relative',
-          bottom: this.inputModeBelongs('expression', 'addition') ? '20px' : 0
+          bottom: this.inputModeBelongs('expression', 'addition') ? '20px' : inputBottomValue
         }}
       >
         <View className={styles.panelWrapper}>
@@ -495,7 +498,7 @@ class UserInput extends Component {
                 ref='inputRef'
                 value={inputValue}
                 confirmType='send'
-                adjustPosition
+                adjustPosition={false}
                 cursorSpacing={20}
                 style={{
                   lineHeight: '84px',
@@ -504,7 +507,7 @@ class UserInput extends Component {
                   marginRight: '10px'
                 }}
                 focus={autoFocus}
-                confirmHold
+                confirmHold={true}
                 onInput={this.handleInput}
                 onFocus={this.handleInputFocus}
                 onBlur={this.handleInputBlur}

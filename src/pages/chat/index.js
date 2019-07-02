@@ -4,6 +4,11 @@ import styles from './index.scss';
 import ChatHeader from './components/ChatHeader.js';
 import ChatContent from './components/ChatContent.js';
 import UserInput from './components/UserInput.js';
+import { connect } from '@tarojs/redux';
+
+@connect(({
+  chat:{chatContentHeightStyle}
+})=>({chatContentHeightStyle}),)
 
 class Chat extends Component {
   config = {

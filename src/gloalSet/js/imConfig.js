@@ -13,9 +13,9 @@ let configMap = {
     url: 'http://preapp.netease.im:8184'
   },
   online: {
-    appkey: '4cef922e6d1507726a859b84bc09b3cd', //测试
+    //appkey: '4cef922e6d1507726a859b84bc09b3cd', //测试
     // appkey: 'c5cb5fb73e7a86be378bb8b42d9e450a', //预发布
-    // appkey: 'c3abea191b7838ff65f9a6a44ff5e45f',   //正式环境
+    appkey: 'c3abea191b7838ff65f9a6a44ff5e45f',   //正式环境
     postUrl: 'https://app.netease.im'
   }
 };
