@@ -11,6 +11,7 @@ import {
 import { handleGlobalNewsPush } from './../utils/activityHandle.js';
 
 function onMsg(msg) {
+  console.log("OnMsg",onMsg);
   const {
     globalData: {
       store: { dispatch, getState }

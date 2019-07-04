@@ -3,6 +3,7 @@ import { View, Image, Text } from '@tarojs/components';
 import styles from './ChatItem.scss';
 import globalStyles from './../../../gloalSet/styles/globalStyles.scss';
 import { parseActivityNewsBody } from './../../../models/im/utils/activityHandle.js';
+import { timestampFormat } from '../../../utils/basicFunction'
 import EmojiItem from './EmojiItem.js';
 import {
   isValidEmoji,
@@ -163,12 +164,20 @@ class ChatItem extends Component {
           nowAndInputTimestampOffset >= key0 &&
           nowAndInputTimestampOffset < key1
       );
+      console.log(timestamp);
       dateStr = findDateCond ? findDateCond[1] : '';
-      timeStr = new Date(timestamp).toLocaleTimeString('zh', {
-        hour: '2-digit',
-        minute: '2-digit'
-      });
+      if(dateStr==='今天'||dateStr==='昨天'||dateStr==='前天'||dateStr===''){
+        timeStr = timestampFormat(timestamp,"hh:mm");
+        let hour = parseInt(timeStr.split(':')[0]);
+        timeStr = hour>12 ? '下午 '+timeStr: '上午 ' +timeStr;
+      }else{
+        timeStr = timestampFormat(timestamp,"MM月dd日 hh:mm");
+      }
+     
+      console.log("dateStr",dateStr);
+      console.log("timeStr",timeStr);
     } catch (error) {
+      console.log("ERROR",error);
       return timestamp;
     }
     return `${dateStr === '今天' ? '' : dateStr} ${timeStr}`;
