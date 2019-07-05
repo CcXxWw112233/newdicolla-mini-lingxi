@@ -18,7 +18,7 @@ export default {
   *getHistoryMsgs({ payload }, { select, put }) {
     const { scene, to } = payload;
     const { nim } = yield selectFieldsFromIm(select, 'nim');
-    const { currentBoard, currentGroupSessionList,testLyjList} = yield selectFieldsFromIm(select, ['currentBoard', 'currentGroupSessionList','testLyjList']);
+    const { currentBoard, currentGroupSessionList,currentGroupSessionArrayKeyList} = yield selectFieldsFromIm(select, ['currentBoard', 'currentGroupSessionList','currentGroupSessionArrayKeyList']);
 
     const msgs = yield new Promise((resolve, reject) => {
       nim.getHistoryMsgs({
@@ -52,9 +52,8 @@ export default {
       payload: {
         'currentGroupSessionList': historyList.concat(currentGroupSessionList).slice(0,40),
         //currentNextHistoryMsgId: nextMsgId,
-        // testLyjList_1: [],
-        'testLyjList[0]': historyList.concat(currentGroupSessionList).slice(0,40),
-        //[`testLyjList_${2}`]: historyList.concat(currentGroupSessionList).slice(0,40),
+        [`CURRENT_MESSAGE_LIST_${currentGroupSessionArrayKeyList.length+1}`]: historyList.slice(0,40),
+        currentGroupSessionArrayKeyList: `CURRENT_MESSAGE_LIST_${currentGroupSessionArrayKeyList.length+1}`
       }
     });
   }

@@ -27,8 +27,9 @@ import { on } from 'cluster';
       isOnlyShowInform,
       testLyjList
     },
-    im,
     chat: { isUserInputFocus, isUserInputHeightChange }
+    ,
+    chatmessageModle
   }) => ({
     currentChatTo,
     sessionlist,
@@ -41,7 +42,7 @@ import { on } from 'cluster';
     isUserInputFocus,
     isUserInputHeightChange,
     testLyjList,
-    im
+    chatmessageModle
   }),
   dispatch => ({
     toggleIsOnlyShowInform: flag =>
@@ -266,7 +267,7 @@ class ChatContent extends Component {
       testLyjList,im
     } = this.props;
     const { scrollIntoViewEleId,chatConetntViewHeightStyle} = this.state;
-    console.log("im", im);
+    console.log("chatmessage", chatmessageModle);
   
     return (
       <ScrollView
