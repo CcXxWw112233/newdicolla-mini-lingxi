@@ -3,7 +3,7 @@ import { View, ScrollView } from '@tarojs/components';
 import styles from './ChatContent.scss';
 import ChatItem from './ChatItem.js';
 import { connect } from '@tarojs/redux';
-import { isPlainObject } from './../../../utils/util';
+import { isPlainObject, getPaginationData} from './../../../utils/util';
 import {
   genNews,
   isValidMsg,
@@ -12,6 +12,7 @@ import {
   isNotificationNews
 } from './../../../models/im/utils/genNews.js';
 import globalStyles from './../../../gloalSet/styles/globalStyles.scss';
+import { on } from 'cluster';
 
 @connect(
   ({
@@ -20,26 +21,34 @@ import globalStyles from './../../../gloalSet/styles/globalStyles.scss';
       sessionlist,
       currentBoard,
       currentGroupSessionList,
+      currentNextHistoryMsgId,
       rawMessageList,
-      isOnlyShowInform
+      imChatSessionData,
+      isOnlyShowInform,
+      testLyjList
     },
+    im,
     chat: { isUserInputFocus, isUserInputHeightChange }
   }) => ({
     currentChatTo,
     sessionlist,
     currentBoard,
     currentGroupSessionList,
+    currentNextHistoryMsgId,
     rawMessageList,
+    imChatSessionData,
     isOnlyShowInform,
     isUserInputFocus,
-    isUserInputHeightChange
+    isUserInputHeightChange,
+    testLyjList,
+    im
   }),
   dispatch => ({
     toggleIsOnlyShowInform: flag =>
       dispatch({
         type: 'im/updateStateFieldByCover',
         payload: {
-          isOnlyShowInform: flag
+          isOnlyShowInform: flag,
         },
         desc: 'toggle im isOnlyShowInform'
       })
@@ -50,7 +59,9 @@ class ChatContent extends Component {
     super(props);
     this.state = {
       scrollIntoViewEleId: '', //设置scrollView 自动滚动属性
-      chatConetntViewHeightStyle:''
+      chatConetntViewHeightStyle:'',
+      loadHistroyCompleted:false,
+      next_msgid:0
     };
     //是否正在 touch 聊天列表
     this.isTouchingScrollView = false;
@@ -62,7 +73,9 @@ class ChatContent extends Component {
       currentBoard,
       isOnlyShowInform
     } = this.props;
-    return rawMessageList[currentChatTo] &&
+
+    console.log("rawMessageList",rawMessageList);
+    const tempmMessageList =  rawMessageList[currentChatTo] &&
       isPlainObject(rawMessageList[currentChatTo])
       ? Object.values(rawMessageList[currentChatTo])
           .filter(msg =>
@@ -74,9 +87,46 @@ class ChatContent extends Component {
           )
           .map(msg => genNews(msg, currentBoard))
       : [];
+
+    if(tempmMessageList.length>20){
+      for(let i = 1; true; i++){
+        let groupMessageList =  getPaginationData(i);
+        console.log("PAGE",groupMessageList);
+        if(groupMessageList.length<20){
+            break;
+        }
+      }
+      
+    }
+
+    return tempmMessageList;
+    
   };
+
+  genCurrentNextHistoryMsgId = () => {
+    const {
+      currentChatTo,
+      imChatSessionData
+    } = this.props;
+    return imChatSessionData[currentChatTo] && imChatSessionData[currentChatTo]['currentNextHistoryMsgId'] ? imChatSessionData[currentChatTo]['currentNextHistoryMsgId'] : 0;
+  }
   onScrolltoupper = () => {
     console.log('chat content on scroll to upper...');
+    const {loadHistroyCompleted} = this.state;
+    //获取历史聊天记录
+    if(!loadHistroyCompleted){
+      const {dispatch,currentChatTo,currentNextHistoryMsgId} = this.props;
+      console.log("111111111111111111111111111111");
+      dispatch({
+        type:'im/getHistoryMsgs',
+        payload:{
+          scene: 'team',
+          to:currentChatTo
+        }
+      });
+    }
+    
+
   };
   onScroll = () => {
     console.log('on scroll...........................');
@@ -173,10 +223,37 @@ class ChatContent extends Component {
     // 当进入聊天页面的时候，生成该群或者对话的聊天信息流
 
     const { dispatch } = this.props;
+    let tempCurrentGroupSessionList = this.genCurrentGroupSessionList();
+    if(tempCurrentGroupSessionList.length>0){
+      dispatch({
+        type: 'im/updateStateFieldByCover',
+        payload: {
+          currentGroupSessionList: tempCurrentGroupSessionList,
+          currentNextHistoryMsgId: this.genCurrentNextHistoryMsgId()
+        },
+        desc: 'init currentGroupSessionList'
+      });
+    }else{
+      const {dispatch,currentChatTo,currentNextHistoryMsgId} = this.props;
+      dispatch({
+        type: 'im/getHistoryMsgs',
+        payload: {
+          scene: 'team',
+          to: currentChatTo.replace('team-','')
+        },
+        desc: 'init currentGroupSessionList'
+      });
+    }
+    
+  }
+
+  testClick(e){
+    const {dispatch,currentChatTo,currentNextHistoryMsgId} = this.props;
     dispatch({
-      type: 'im/updateStateFieldByCover',
+      type: 'im/getHistoryMsgs',
       payload: {
-        currentGroupSessionList: this.genCurrentGroupSessionList()
+        scene: 'team',
+        to: currentChatTo.replace('team-','')
       },
       desc: 'init currentGroupSessionList'
     });
@@ -185,12 +262,12 @@ class ChatContent extends Component {
     const {
       currentGroupSessionList,
       isOnlyShowInform,
-      isUserInputHeightChange
+      isUserInputHeightChange,
+      testLyjList,im
     } = this.props;
     const { scrollIntoViewEleId,chatConetntViewHeightStyle} = this.state;
-    console.log("isUserInputHeightChange",isUserInputHeightChange);
-    
-    console.log(scrollIntoViewEleId);
+    console.log("im", im);
+  
     return (
       <ScrollView
         id='chatContent'
@@ -206,6 +283,7 @@ class ChatContent extends Component {
         onTouchStart={this.onScrollViewTouchStart}
         onTouchEnd={this.onScrollViewTouchEnd}
         style={chatConetntViewHeightStyle}
+        onClick={this.testClick}
       >
         <View
           className={`${globalStyles.global_iconfont} ${

@@ -42,6 +42,49 @@ const genNews = (msg, currentBoard) => {
   };
 };
 
+const genHistoryMsg = (msg,currentBoard,accountId) => {
+  if(msg&&msg.msg_type==="TEXT"){
+    let newMsg = {};
+    newMsg.type = 'text';
+    newMsg.time = parseInt(msg.sendtime);
+    newMsg.text = msg.body;
+    newMsg.from = msg.from;
+    if(msg.from === accountId){
+      newMsg.from = 'out';
+    }
+    newMsg.avatar = getAvatarByFromNick(msg.from, currentBoard);
+    newMsg.status = 'success';
+    return newMsg;
+  }
+  // const {
+  //   time,
+  //   flow,
+  //   from,
+  //   fromNick,
+  //   status,
+  //   msg_type:type,
+  //   body:text,
+  //   file = {},
+  //   content,
+  //   pushContent,
+  //   groupNotification
+  // } = msg;
+
+  // return {
+  //   flow,
+  //   fromNick,
+  //   avatar: getAvatarByFromNick(from, currentBoard),
+  //   status,
+  //   time,
+  //   type,
+  //   text,
+  //   file,
+  //   content: content ? JSON.parse(content) : '',
+  //   pushContent,
+  //   groupNotification
+  // };
+};
+
 const isValidMsg = msg => {
   const { scene, type, custom, content } = msg;
   // 是否是需要处理的定制消息
@@ -124,6 +167,7 @@ const isCreatedNewGroupOrAddTeamMembersNews = session => {
 
 export {
   genNews,
+  genHistoryMsg,
   isValidMsg,
   isActivityCustomNews,
   isPushCustomNews,

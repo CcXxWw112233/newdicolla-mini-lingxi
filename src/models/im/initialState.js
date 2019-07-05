@@ -9,6 +9,7 @@ const INITIAL_STATE = {
   currentChatTo: '', // 正在聊天 sessionId
   currentGroup: {}, //当前的聊天群信息
   currentGroupSessionList: [],  //当前群的聊天信息
+  currentNextHistoryMsgId: 0,
   isOnlyShowInform: false, //是否只过滤显示定制的通知消息
   currentBoardId: '', //当前选择的项目 id
   currentBoard: {}, //当前的项目
@@ -17,7 +18,8 @@ const INITIAL_STATE = {
   rawMessageList: {}, // 所有的聊天列表都在里面, 消息列表, 当受到新的消息列表的时候，如果存在当前群，则筛选，更新当前群的聊天信息
   isTouchChatContentScrollView: false, //是否正在触摸聊天内容滚动列表
   currentGroupMembers: [],  //当前的群成员列表
-
+  imChatSessionData:{},//所有的聊天实体(单人|群)相关数据缓存数据，如历史消息加载：currentNextHistoryMsgId 值
+  testLyjList:[],//测试
 //目前没有用到的字段，p2p时可能会用
   friendCard: {}, //好友列表，含名片信息，额外添加在线信息
   onlineList: {}, // 在线好友列表

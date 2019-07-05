@@ -14,3 +14,5 @@ export const getAllIMTeamList = requestWithNotShowLoading('GET', `${API_MORE}/mi
 export const getIMAccount = requestWithNotShowLoading('GET', `${API_UPMS}/im/account`)
 
 export const repairTeam = data =>  requestWithNotShowLoading('POST', `${API_MORE}/mini/im/checkImTeamData`, data)
+
+export const getImHistory =  data => requestWithNotShowLoading('GET',`${API_MORE}/im/history`, data);

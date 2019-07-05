@@ -49,6 +49,14 @@ import { connect } from '@tarojs/redux';
           },
           desc: 'reset currentGroupSessionList'
         }),
+      resetCurrentNextHistoryMsgId: () =>
+        dispatch({
+          type: 'im/updateStateFieldByCover',
+          payload: {
+            currentNextHistoryMsgId: 0
+          },
+          desc: 'reset currentNextHistoryMsgId'
+        }),
       checkTeamStatus: boardId =>
         dispatch({
           type: 'im/checkTeamStatus',
@@ -85,11 +93,13 @@ class BoardDetail extends Component {
     const {
       resetCurrentChatTo,
       resetCurrentGroup,
-      resetCurrentGroupSessionList
+      resetCurrentGroupSessionList,
+      resetCurrentNextHistoryMsgId
     } = this.props;
     resetCurrentChatTo();
     resetCurrentGroup();
     resetCurrentGroupSessionList();
+    resetCurrentNextHistoryMsgId();
   }
   render() {
     const { allBoardList } = this.props;

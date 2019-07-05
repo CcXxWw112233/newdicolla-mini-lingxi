@@ -15,6 +15,8 @@ import {
 } from './../../services/im/index';
 import { isApiResponseOk } from './../../utils/request';
 import { onMsg, onTeams } from './actions/index';
+import { genNews } from '../../models/im/utils/genNews.js';
+
 
 function onSendMsgDone(error, msg) {
   if (error) {
@@ -38,7 +40,7 @@ export default {
   namespace: 'im',
   state: INITIAL_STATE,
   effects: {
-    *fetchIMAccount({}, { call }) {
+    *fetchIMAccount({ }, { call }) {
       const res = yield call(getIMAccount);
 
       if (isApiResponseOk(res)) {
@@ -49,7 +51,7 @@ export default {
         };
       }
     },
-    *fetchAllIMTeamList({}, { select, put, call }) {
+    *fetchAllIMTeamList({ }, { select, put, call }) {
       const res = yield call(getAllIMTeamList);
       const { currentBoardId, currentBoard } = yield selectFieldsFromIm(
         select,
@@ -140,7 +142,7 @@ export default {
         'allBoardList'
       ]);
 
-      if(!nim) return
+      if (!nim) return
       //获取当前账号的群信息
       yield nim.getTeams({
         done: getTeamsDone
@@ -171,10 +173,10 @@ export default {
           .concat(
             findedBoardInfo.childs
               ? findedBoardInfo.childs.map(i => ({
-                  im_id: i.im_id,
-                  isMainGroup: false,
-                  boardId: i.im_group_id
-                }))
+                im_id: i.im_id,
+                isMainGroup: false,
+                boardId: i.im_group_id
+              }))
               : null
           )
           .filter(Boolean);
@@ -269,7 +271,7 @@ export default {
           scene,
           to,
           wxFilePath: tempFilePaths[i],
-          done: function(err, msg) {
+          done: function (err, msg) {
             onSendMsgDone(err, msg);
           }
         });
@@ -315,7 +317,8 @@ export default {
           onSendMsgDone(error, msg);
         }
       });
-    }
+    },
+  
   },
   reducers: {
     handleDependOnState,
