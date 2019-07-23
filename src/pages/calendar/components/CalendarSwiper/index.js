@@ -117,6 +117,11 @@ export default class CalendarSwiper extends Component {
 
   //选择日期
   selectDate = ( string) => {
+
+    //修改选中日期打点不能刷新
+    const new_timestamp = new Date(`${select_year_new}/${select_month_new}/${select_date_no_new}`).getTime()
+    this.getSignList(new_timestamp)
+
     const arr = string.split('__')
     const timestamp = arr[0]
     const no_in_select_month = arr[1]

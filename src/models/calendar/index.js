@@ -4,6 +4,8 @@ import { getOrgBoardList, getScheCardList, getNoScheCardList, getSignList } from
 import { select_selected_board, select_selected_timestamp, select_search_text,  } from './selects'
 import { getCurrentOrgByStorage } from '../../utils/basicFunction'
 
+const kPage_size = '10';  //一页多少条 默认10
+
 export default {
   namespace: 'calendar',
   state: {
@@ -53,18 +55,20 @@ export default {
       const date_no= date.getDate()
       const start_time = new Date(`${year}/${month}/${date_no} 00:00:00`).getTime() / 1000
       const due_time = new Date(`${year}/${month}/${date_no} 23:59:59`).getTime() / 1000
+      // const kPage_number = 0
+      // kPage_number = kPage_number + 1
       const params = {
         _organization_id: obj['current_org'],
         board_id: obj['selected_board'],
         ...payload,
         queryDate: start_time,
         maxDate: due_time,
-        page_size: '200',
-        page_number: '1',
+        page_size: kPage_size,
+        page_number: 1,
       }
       Taro.showLoading({
         title: "加载中...",
-        mask: "true"
+        mask: "true",
       });
       const res = yield call(getScheCardList, {...params})
       Taro.hideLoading()
