@@ -68,12 +68,21 @@ export const getOrgList = (data , notShowLoading) => {
   }, notShowLoading)
 }
 //切换组织
-export const changeOrg = (data , notShowLoading) => {
+export const changeOrg = (params , notShowLoading) => {
   return request({
     data: {
       ...data
     },
     method: 'PUT',
     url: `${API_UPMS}/v2/user/changecurrentorg/${data['_organization_id']}`,
+  }, notShowLoading)
+}
+
+//用户切换账号->退出登录
+export const changeOut = (params, notShowLoading) => {
+  return request({
+    params,
+    method: 'GET',
+    url: `${API_UPMS}/user/logout`
   }, notShowLoading)
 }

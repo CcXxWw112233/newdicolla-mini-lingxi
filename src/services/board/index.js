@@ -3,6 +3,7 @@ import { API_BOARD } from "../../gloalSet/js/constant";
 
 //获取项目列表
 export const getBoardList = (data , notShowLoading) => {
+  console.log('data ======= ', + data)
   return request({
     data: {
       ...data

@@ -46,7 +46,11 @@ export default {
           }
         })
       }else {
-
+        // 微信已绑定系统，给出提示
+        Taro.showToast({
+          icon: 'none',
+          title: res.message
+        })
       }
     },
     //处理token，做相应的页面跳转

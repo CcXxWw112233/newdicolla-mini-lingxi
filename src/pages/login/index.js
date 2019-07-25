@@ -284,8 +284,9 @@ export default class Login extends Component {
           {/*<Button className='login_btn_wx login_btn' onClick={this.weixinLogin}>微信快捷登录</Button>*/}
           {/*<Button className={`${indexStyles.login_btn_wx} ${indexStyles.login_btn}`} open_type='getPhoneNumber' onGetPhoneNumber={this.wexinAuthPhoneNoLogin}>微信快捷登录</Button>*/}
           <Button className={`${indexStyles.login_btn_wx} ${indexStyles.login_btn}`} open-type={'getUserInfo'} onGetUserInfo={this.getUserInfo}>微信快捷登录</Button>
-
+          
         </View>
+
         <View className={`${indexStyles.change_login_type_out}`}>
           <View onClick={this.ChangeLoginType} className={`${indexStyles.change_login_type}`}>{showCode?'账号密码': '验证码'}登录</View>
         </View>

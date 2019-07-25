@@ -21,7 +21,7 @@ export default class CalendarSwiper extends Component {
     show_whole_calendar: '0', // 0 /1 /2 初始/展开/关闭
   }
   componentWillReceiveProps (nextProps) {
-
+    
   }
 
   componentWillUnmount () { }
@@ -118,7 +118,7 @@ export default class CalendarSwiper extends Component {
   //选择日期
   selectDate = ( string) => {
 
-    //修改选中日期打点不能刷新
+    //选中日期打点重新刷新打点
     const new_timestamp = new Date(`${select_year_new}/${select_month_new}/${select_date_no_new}`).getTime()
     this.getSignList(new_timestamp)
 
@@ -159,7 +159,7 @@ export default class CalendarSwiper extends Component {
     }else if('2' == show_whole_calendar) {
       show_flag = '1'
     }else {
-
+      
     }
     this.setState({
       show_whole_calendar: show_flag

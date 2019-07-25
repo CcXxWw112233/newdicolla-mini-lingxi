@@ -1,11 +1,14 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
 import Aavatar from '../../components/avatar/index'
-import { AtModal, AtModalHeader, AtModalContent, AtModalAction, AtDivider  } from "taro-ui"
+import { AtModal, AtModalContent, AtModalAction } from "taro-ui"
+// AtModalHeader, AtDivider
 
 import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
+import { changeOut } from '../../services/login'
+import { ok } from 'ansi-colors'
 
 @connect(({ accountInfo, my }) => ({
   accountInfo, my
@@ -13,9 +16,8 @@ import { connect } from '@tarojs/redux'
 class PersonalCenter extends Component {
 
   state = {
-    show_change_account_modal: false
+    show_change_account_modal: false,
   }
-
   config = {
     navigationBarTitleText: '个人信息'
   }
@@ -26,6 +28,9 @@ class PersonalCenter extends Component {
 
   componentDidShow () {
     this.getAccountInfo()
+
+    this.$router.params
+    console.log('params==', + params)
   }
 
   componentDidHide () { }
@@ -61,17 +66,43 @@ class PersonalCenter extends Component {
   }
 
   setAccountModalShow = () => {
-    const { show_change_account_modal } = this.state
-    this.setState({
-      show_change_account_modal: !show_change_account_modal
-    })
-  }
+    // const { show_change_account_modal } = this.state
+    // this.setState({
+    //   show_change_account_modal: !show_change_account_modal
+    // })
 
+    let access_token = Taro.getStorageSync('access_token')
+    let refresh_token = Taro.getStorageSync('refresh_token')
+    const parmas = {
+      accessToken: access_token,
+      refreshToken: refresh_token,
+    }
+    // const { dispatch } = this.props
+    // dispatch({
+    //   type: 'accountInfo/changeOut',
+    //   payload: {
+    //     parmas
+    //   }
+    // })
+
+  // 1.退出账号
   changeAccount = () => {
-    this.setAccountModalShow()
-    Taro.navigateTo({
-      url: '../../pages/login/index'
+    changeOut(parmas).then(res => {
+      // 2.退出成功
+      if(isApiResponseOk(res)) {
+        // 2.1清除accessToken和refreshToken
+        Taro.clearStorageSync('access_token');
+        Taro.clearStorageSync('refresh_token');
+        // 2.2重新设置rootView
+        Taro.reLaunch({
+          url: '../../pages/login/index'
+        })
+
+      }else {
+
+      }
     })
+
   }
 
   gotoChangeOrgPage = () => {
@@ -79,7 +110,7 @@ class PersonalCenter extends Component {
       url: '../../pages/selectOrg/index'
     })
   }
-
+}
   render () {
     const { show_change_account_modal } = this.state
     const { account_info = {} } = this.props.accountInfo
@@ -140,7 +171,6 @@ class PersonalCenter extends Component {
             <View className={indexStyles.list_item_name}>邮箱号</View>
             <View className={indexStyles.list_item_detail}>{email}</View>
             <View className={`${indexStyles.list_item_iconnext}`}>
-              {/*<Text className={`${globalStyle.global_iconfont}`}>&#xe654;</Text>*/}
             </View>
           </View>
 

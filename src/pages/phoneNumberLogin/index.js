@@ -42,9 +42,12 @@ export default class phoneNumberLogin extends Component {
       Taro.login().then(res => {
         const code = res.code
         const parmas = {
-          encryptedData:userInfo.detail.encryptedData, iv: userInfo.detail.iv, code: code, key: this.state.user_key
+          encryptedData:userInfo.detail.encryptedData, 
+          iv: userInfo.detail.iv, 
+          code: code, key: this.state.user_key
         }
         const { dispatch } = this.props
+
         dispatch({
           type: getEffectOrReducerByName('weChatPhoneLogin'),
           payload: {

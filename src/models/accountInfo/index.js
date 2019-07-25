@@ -1,6 +1,6 @@
 import { getBar } from '../../services/testPage'
 import {isApiResponseOk} from "../../utils/request";
-import {getAccountInfo} from "../../services/login";
+import {getAccountInfo, changeOut} from "../../services/login";
 import Taro from '@tarojs/taro'
 
 export default {
@@ -29,10 +29,14 @@ export default {
     }
   },
 
+  //退出用户登录
+  * changeOut({ payload }, { select, call, put }) {
+    const res = yield call(changeOut, data)
+  },
+
   reducers: {
     updateDatas(state, { payload }) {
       return { ...state, ...payload };
     },
   },
-
 };

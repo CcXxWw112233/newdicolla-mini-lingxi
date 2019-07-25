@@ -89,6 +89,7 @@ export default class Calendar extends Component {
   // 获取组织列表
   getOrgList = () => {
     const { dispatch } = this.props
+    debugger
     dispatch({
       type: 'my/getOrgList',
       payload: {}

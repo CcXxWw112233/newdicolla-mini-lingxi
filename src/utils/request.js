@@ -26,7 +26,10 @@ export const request = (options, notShowLoading) => {
           Taro.hideLoading();
         }
         if(REQUEST_RES_CODE_TOKEN_INVALID == res.data.code) {
-          Taro.navigateTo({url: '../../pages/login/index'})
+          // Taro.navigateTo({url: '../../pages/login/index'})
+          Taro.reLaunch({
+            url: '../../pages/login/index'
+          })
         }
 
         resolve(res.data);

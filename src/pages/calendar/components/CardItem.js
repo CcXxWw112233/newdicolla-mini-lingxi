@@ -20,9 +20,9 @@ export default class CardItem extends Component {
 
   componentDidHide () { }
 
-  renderAA = () => {
-    return (<Text className={`${globalStyles.global_iconfont} ${indexStyles.iconfont_size}`}>&#xe633;</Text>)
-  }
+  // renderAA = () => {
+  //   return (<Text className={`${globalStyles.global_iconfont} ${indexStyles.iconfont_size}`}>&#xe633;</Text>)
+  // }
 
   render () {
     const { itemValue = {}, schedule, org_list } = this.props

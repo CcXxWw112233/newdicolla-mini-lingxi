@@ -36,7 +36,9 @@ export default class Avatar extends Component {
           {userList.map((value, key) => {
             const { avatar='', name = 'U' } = value ||{}
             return key < 3 && (
-              <View className={indexStyle.avatar} style={`${key!= 0?ListAvaTarItemStyle:''}${AvatarStyle}line-height:${size}px;`} key={key}>
+              // <View className={indexStyle.avatar} style={`${key!= 0?ListAvaTarItemStyle:''}${AvatarStyle}line-height:${size}px;`} key={key}>
+              <View className={indexStyle.avatar} style={`${key!= 0?ListAvaTarItemStyle:''}${AvatarStyle}line-height:${size}px;`} key={'123'}>
+
                 {!!avatar?(
                   <Image src={avatar} style={AvatarStyle}/>
                 ):(
