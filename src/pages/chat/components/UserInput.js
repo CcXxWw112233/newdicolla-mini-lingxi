@@ -18,8 +18,11 @@ import genEmojiList from './../../../models/im/utils/genEmojiList.js';
   ({
     im: {
       currentGroup: { im_id }
+    },
+    chat: {
+      handleInputMode
     }
-  }) => ({ im_id }),
+  }) => ({ im_id,handleInputMode }),
   dispatch => ({
     sendTeamTextMsg: (text, to) =>
       dispatch({
@@ -100,18 +103,38 @@ class UserInput extends Component {
     recordStart: false, // 录音开始
     recorderManager: null, //录音内容
     emojiType: 'emoji', // emoji | pinup
-    emojiAlbum: 'emoji' // emoji | ajmd | lt | xxy
+    emojiAlbum: 'emoji', // emoji | ajmd | lt | xxy
+    inputBottomValue:0
   };
   handleInputFocus = e => {
-    const {handleUserInputFocus } = this.props;
+    const {handleUserInputFocus, handleUserInputHeightChange} = this.props;
     handleUserInputFocus(true)
+    // console.log('sssss', this.refs.inputRef)
+    // let chatContentHeight = 0;
+    // const query = Taro.createSelectorQuery();
+    // query.select('#the-YOUR_ELEMEMT_ID').boundingClientRect();
+    // query.selectViewport().scrollOffset()
+    // query.exec((res)=>{
+    //   console.log("YING lkkk",res);
+    //   chatContentHeight = res[0].height;
+    // });
+    if(e.detail.height>0){
+      handleUserInputHeightChange(e.detail.height);
+    }
+    //handleUserInputHeightChange(298);
     this.setState({
-      inputMode: 'text'
+      inputMode: 'text',
+      //inputBottomValue:'298px'
+      inputBottomValue: e.detail.height>0 ? (e.detail.height-15)+'px' : this.state.inputBottomValue
     });
   };
   handleInputBlur = () => {
-    const { handleUserInputFocus } = this.props;
+    const { handleUserInputFocus,handleUserInputHeightChange} = this.props;
     handleUserInputFocus(false)
+     handleUserInputHeightChange(0);
+     this.setState({
+       inputBottomValue: 0
+    });
   };
   handleInput = e => {
     this.setState({
@@ -188,6 +211,14 @@ class UserInput extends Component {
           });
       }
     );
+    const {dispatch} = this.props;
+    dispatch({
+      type: 'chat/updateStateFieldByCover',
+      payload: {
+        handleInputMode: mode
+      },
+      desc: 'setInputMode'
+    });
   };
   toggleInputMode = (aMode, bMode) => {
     const { inputMode } = this.state;
@@ -224,6 +255,7 @@ class UserInput extends Component {
   };
   handleChooseImage = (...types) => {
     const { im_id, sendImageMsg } = this.props;
+    const {setInputMode} = this;
     Taro.chooseImage({
       sourceType: types,
       success: function(res) {
@@ -233,6 +265,7 @@ class UserInput extends Component {
         Promise.resolve(sendImageMsg(res.tempFilePaths, im_id))
           .then(() => {
             Taro.hideLoading();
+            setInputMode('text');
           })
           .catch(e => {
             Taro.hideLoading();
@@ -445,6 +478,16 @@ class UserInput extends Component {
       recorderManager: null
     });
   }
+
+  componentWillReceiveProps(nextProps) {
+    const { handleInputMode} = nextProps;
+    console.log(handleInputMode);
+    this.setState({
+      inputMode: handleInputMode
+    });
+  }
+
+
   render() {
     const {
       inputValue,
@@ -452,8 +495,11 @@ class UserInput extends Component {
       inputMode,
       recordStart,
       emojiType,
-      emojiAlbum
+      emojiAlbum,
+      inputBottomValue
     } = this.state;
+    
+    console.log(inputMode);
     const { emojiAlbumList, emojiList } = this.genEmojiInfo();
     const findedCurrentEmojiAlbum = emojiList.filter(
       i => i.name === emojiAlbum
@@ -469,7 +515,7 @@ class UserInput extends Component {
           position: this.inputModeBelongs('expression', 'addition')
             ? 'fixed'
             : 'relative',
-          bottom: this.inputModeBelongs('expression', 'addition') ? '20px' : 0
+          bottom: this.inputModeBelongs('expression', 'addition') ? '20px' : inputBottomValue
         }}
       >
         <View className={styles.panelWrapper}>
@@ -495,7 +541,7 @@ class UserInput extends Component {
                 ref='inputRef'
                 value={inputValue}
                 confirmType='send'
-                adjustPosition
+                adjustPosition={false}
                 cursorSpacing={20}
                 style={{
                   lineHeight: '84px',
@@ -504,7 +550,7 @@ class UserInput extends Component {
                   marginRight: '10px'
                 }}
                 focus={autoFocus}
-                confirmHold
+                confirmHold={true}
                 onInput={this.handleInput}
                 onFocus={this.handleInputFocus}
                 onBlur={this.handleInputBlur}

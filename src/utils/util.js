@@ -5,3 +5,4 @@ export const isPlainObject = obj => {
   }
   return false
 }
+

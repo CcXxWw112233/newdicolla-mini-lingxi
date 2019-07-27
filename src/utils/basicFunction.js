@@ -1,5 +1,6 @@
 //该文件为公共与业务逻辑相关
 import Taro from '@tarojs/taro'
+import { number, string } from 'prop-types';
 
 export const getCurrentOrgByStorage = () => {
   const account_info_string = Taro.getStorageSync('account_info')
@@ -37,4 +38,36 @@ export const timestampToTimeZH = (timestamp) => {
   min = min < 10 ? `0${min}`: min
 
   return `${year}${month}月${date_no}日 ${hours}:${min}`
+}
+
+export const timestampFormat = (timestamp,format='yyyy-MM-dd h:m:s') => {
+  if(!timestamp) {
+    return ''
+  }
+  let thisDate = null;
+  if( typeof timestamp === 'number' || typeof timestamp === 'string'){
+    thisDate = new Date(timestamp)
+  }else{
+    thisDate = timestamp;
+  }
+
+  let date = {
+    "M+": thisDate.getMonth() + 1,
+    "d+": thisDate.getDate(),
+    "h+": thisDate.getHours(),
+    "m+": thisDate.getMinutes(),
+    "s+": thisDate.getSeconds(),
+    "q+": Math.floor((thisDate.getMonth() + 3) / 3),
+    "S+": thisDate.getMilliseconds()
+ };
+ if (/(y+)/i.test(format)) {
+    format = format.replace(RegExp.$1, (thisDate.getFullYear() + '').substr(4 - RegExp.$1.length));
+ }
+ for (var k in date) {
+    if (new RegExp("(" + k + ")").test(format)) {
+        format = format.replace(RegExp.$1, RegExp.$1.length == 1
+           ? date[k] : ("00" + date[k]).substr(("" + date[k]).length));
+    }
+ }
+ return format;
 }

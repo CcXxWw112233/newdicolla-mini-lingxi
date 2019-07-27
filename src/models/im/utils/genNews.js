@@ -4,11 +4,11 @@ import { isShouldHandleType } from './activityHandle.js';
 
 const assistantAvatar = 'dynamicAssistant';
 
-const getAvatarByFromNick = (nick, currentBoard = { users: [] }) => {
-  if (nick === '群动态助手') {
+const getAvatarByFromNick = (fromImId, currentBoard = { users: [] }) => {
+  if (fromImId === '10086') {
     return assistantAvatar;
   }
-  let ret = currentBoard && currentBoard.users.find(i => i.name === nick);
+  let ret = currentBoard && currentBoard.users.find(i => i.id === fromImId );
   return ret ? ret.avatar : '';
 };
 
@@ -16,6 +16,7 @@ const genNews = (msg, currentBoard) => {
   const {
     time,
     flow,
+    from,
     fromNick,
     status,
     type,
@@ -29,7 +30,7 @@ const genNews = (msg, currentBoard) => {
   return {
     flow,
     fromNick,
-    avatar: getAvatarByFromNick(fromNick, currentBoard),
+    avatar: getAvatarByFromNick(from, currentBoard),
     status,
     time,
     type,

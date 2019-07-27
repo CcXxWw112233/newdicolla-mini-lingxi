@@ -34,6 +34,51 @@ page{
                     border-bottom-color: pxTrans(1) solid #40A9FF;
                 }
             }
+           
+        }
+
+        .login_verifycode_item{
+            display: flex;
+            position: relative;
+            margin-bottom: pxTrans(4);
+            .login_icon{
+                position: absolute;
+                font-size: pxTrans(18);
+                top: 50%;
+                transform: translateY(-50%);
+            }
+            .login_verifycode_input{
+                border-bottom: pxTrans(1) solid #f0f0f0;
+                height: pxTrans(48);
+                line-height: pxTrans(48);
+                padding-left: pxTrans(26);
+                width: pxTrans(128);
+                &:focus{
+                    border-bottom-color: pxTrans(1) solid #40A9FF;
+                }
+            }
+            .login_verifycode{
+                width: pxTrans(184);
+                height: pxTrans(48);
+                line-height: pxTrans(48);
+            }
+            .login_verifycode_img{
+                padding-left: pxTrans(16);
+                width: pxTrans(107);
+                height: pxTrans(48);
+            }
+            .login_verifycode_text{
+                position: absolute;
+                right: 0;
+                width: pxTrans(68);
+                text-align: center;
+                font-size: pxTrans(14);
+                height: pxTrans(24);
+                line-height: pxTrans(24);
+                top: 50%;
+                transform: translateY(-50%);
+                color: #BFBFBF;
+            }
         }
 
         .login_error{
@@ -41,7 +86,7 @@ page{
             font-size: pxTrans(12);
             height: pxTrans(14);
         }
-
+       
         .login_code{
             .login_code_input{
                 padding: 0 pxTrans(105) 0 pxTrans(26);
@@ -89,7 +134,6 @@ page{
     }
 }
 .change_login_type_out {
-  padding-right: $paddingValue;
   display: flex;
   justify-content: center;
   margin-top: pxTrans(8);

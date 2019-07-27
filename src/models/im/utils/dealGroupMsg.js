@@ -1,5 +1,5 @@
 function getMsgKey(msg, tempState, selfAccount) {
-  var obj  = {}
+  var obj = {}
   var flow = msg.flow
   selfAccount = selfAccount || tempState && tempState.userInfo.account
   obj.type = msg.attach && msg.attach.type
@@ -8,7 +8,7 @@ function getMsgKey(msg, tempState, selfAccount) {
   obj.teamId = msg.to
   obj.timetag = msg.time
   obj.team = msg.attach && msg.attach.team || {}
-  obj.teamType = obj.team.type === 'advanced' || tempState && tempState.groupList[obj.team.teamId] && tempState.groupList[obj.team.teamId].type === 'advanced'  ? '群' : (obj.team.type === 'normal' || tempState && tempState.groupList[obj.team.teamId] && tempState.groupList[obj.team.teamId].type === 'normal' ? '讨论组' : '群组')
+  obj.teamType = obj.team.type === 'advanced' || tempState && tempState.groupList[obj.team.teamId] && tempState.groupList[obj.team.teamId].type === 'advanced' ? '群' : (obj.team.type === 'normal' || tempState && tempState.groupList[obj.team.teamId] && tempState.groupList[obj.team.teamId].type === 'normal' ? '讨论组' : '群组')
   obj.account = msg.attach && msg.attach.account || ''
   obj.accounts = msg.attach && msg.attach.accounts || []
   obj.members = msg.attach && msg.attach.members || []
@@ -22,73 +22,80 @@ function getMsgKey(msg, tempState, selfAccount) {
   return obj
 }
 function dealMsg(msg, tempState, selfAccount) {
+  //console.log("KKKK",msg);
   var msgKey = getMsgKey(msg, tempState, selfAccount)
+
+  console.log("tempState", tempState);
   switch (msgKey.type) {
     case 'updateTeam':
-        if (msgKey.team.name) {
-          msg.groupNotification = msgKey.showNick + '更新了' + msgKey.teamType + '名称'
-        } else if (msgKey.team.intro) {
-          msg.groupNotification = msgKey.showNick + '更新了群介绍'
-        } else if (msgKey.team.announcement) {
-          msg.groupNotification = msgKey.showNick + '更新了群公告'
-        } else {
-          msg.groupNotification = msgKey.showNick + '更新了群设置'
-        }
-        if (tempState) {
-          onUpdateTeam(msg, msgKey, tempState)
-        }
-        break;
+      if (msgKey.team.name) {
+        msg.groupNotification = msgKey.showNick + '更新了' + msgKey.teamType + '名称'
+      } else if (msgKey.team.intro) {
+        msg.groupNotification = msgKey.showNick + '更新了群介绍'
+      } else if (msgKey.team.announcement) {
+        msg.groupNotification = msgKey.showNick + '更新了群公告'
+      } else {
+        msg.groupNotification = msgKey.showNick + '更新了群设置'
+      }
+      if (tempState) {
+        onUpdateTeam(msg, msgKey, tempState)
+      }
+      break;
     case 'addTeamMembers':
-        msg.groupNotification = msgKey.showNick + '邀请' + msgKey.accounts.join('，') + '进入了' + msgKey.teamType
-        if (tempState) {
-          onAddTeamMembers(msg, msgKey, tempState)
-        }
-        break;
+
+      msg.groupNotification = msgKey.showNick + '邀请' + getAccountNicknames(msgKey,tempState).join(",") + '进入了' + msgKey.teamType
+      if (tempState) {
+        onAddTeamMembers(msg, msgKey, tempState)
+      }
+      break;
     case 'removeTeamMembers':
-        if (msgKey.from === msgKey.accounts.join('，')) {
-          msg.groupNotification = msgKey.accounts.join('，') + '退出了' + msgKey.teamType
-        } else {
-          msg.groupNotification = msgKey.showNick + '将' + msgKey.accounts.join('、') + '移出了' + msgKey.teamType
-        }
-        if (tempState) {
-          onRemoveTeamMembers(msg, msgKey, tempState)
-        }
-        break;
+  
+      if (msgKey.from === msgKey.accounts.join('，')) {
+        msg.groupNotification = getAccountNicknames(msgKey,tempState).join(",") + '退出了' + msgKey.teamType
+      } else {
+        msg.groupNotification = msgKey.showNick + '将' + getAccountNicknames(msgKey,tempState).join(",") + '移出了' + msgKey.teamType
+      }
+      if (tempState) {
+        onRemoveTeamMembers(msg, msgKey, tempState)
+      }
+      break;
     case 'acceptTeamInvite':
-        msg.groupNotification = msgKey.showNick + '接受了' + msgKey.attachAccount + '的入群邀请'
-        break;
+      msg.groupNotification = msgKey.showNick + '接受了' + msgKey.attachAccount + '的入群邀请'
+      break;
     case 'passTeamApply':
-        if (msgKey.from === msgKey.account) {
-          msg.groupNotification = msgKey.showNick + '进入了' + msgKey.teamType
-        } else {
-          msg.groupNotification = msgKey.showNick + '通过了' + msgKey.attachAccount + '的加群申请'
-        }
-        break;
+      if (msgKey.from === msgKey.account) {
+        msg.groupNotification = msgKey.showNick + '进入了' + msgKey.teamType
+      } else {
+        msg.groupNotification = msgKey.showNick + '通过了' + msgKey.attachAccount + '的加群申请'
+      }
+      break;
     case 'addTeamManagers':
-        msg.groupNotification = msgKey.showNick + '将' + msgKey.accounts.join('，') + '设置为管理员'
-        break;
+     
+      msg.groupNotification = msgKey.showNick + '将' + getAccountNicknames(msgKey,tempState).join(",") + '设置为管理员'
+      break;
     case 'removeTeamManagers':
-        msg.groupNotification = msgKey.showNick+ '取消了' + msgKey.accounts.join('，') + '管理员身份'
-        break;
+     
+      msg.groupNotification = msgKey.showNick + '取消了' + getAccountNicknames(msgKey,tempState).join(",") + '管理员身份'
+      break;
     case 'leaveTeam':
-        msg.groupNotification = msgKey.showNick + '退出了' + msgKey.teamType
-        if (tempState) {
-          onLeaveTeam(msg, msgKey, tempState)
-        }
-        break;
+      msg.groupNotification = msgKey.showNick + '退出了' + msgKey.teamType
+      if (tempState) {
+        onLeaveTeam(msg, msgKey, tempState)
+      }
+      break;
     case 'dismissTeam':
-        msg.groupNotification = msgKey.showNick + '解散了群'
-        break;
+      msg.groupNotification = msgKey.showNick + '解散了群'
+      break;
     case 'transferTeam':
-        msg.groupNotification = msgKey.showNick + '转移了群主身份给' + msgKey.attachAccount
-        break;
+      msg.groupNotification = msgKey.showNick + '转移了群主身份给' + msgKey.attachAccount
+      break;
     case 'updateTeamMute':
-        msg.groupNotification = msgKey.attachAccount + '被' + msgKey.showNick + (msgKey.mute ? '' : '解除') + '禁言'
-        break;
+      msg.groupNotification = msgKey.attachAccount + '被' + msgKey.showNick + (msgKey.mute ? '' : '解除') + '禁言'
+      break;
   }
 }
 
-function splitGroupMemberArray (item, isInvalid, memberList) {
+function splitGroupMemberArray(item, isInvalid, memberList) {
   if (!item) {
     return
   }
@@ -115,7 +122,7 @@ function onUpdateTeam(msg, msgKey, tempState, updateIsCurrentNotIn) {
     card = Object.assign({}, tempState.groupList[msgKey.teamId], msgKey.team)
     tempState.groupList[msgKey.teamId] = card
   } else {
-    card  = Object.assign({}, tempState.groupList[msg.teamId], msg)
+    card = Object.assign({}, tempState.groupList[msg.teamId], msg)
     tempState.groupList[msg.teamId] = card
   }
   if (tempState.currentGroup.teamId === card.teamId) {
@@ -256,6 +263,25 @@ function onLeaveTeam(msg, msgKey, tempState) {
     msgKey.accounts = [msgKey.from]
     onRemoveTeamMembers(null, msgKey, tempState)
   }
+}
+
+function getAccountNicknames(msgKey, tempState) {
+  let { allBoardList } = tempState;
+  let teamInfo = allBoardList.find(i => i.im_id === msgKey.teamId);
+  let accountNicknames = [];
+  if (teamInfo&&teamInfo.users) {
+    for (let accountId of msgKey.accounts) {
+      let accountNickName = teamInfo.users.find(i => i.id === accountId);
+      if(accountNickName){
+        accountNicknames.push(accountNickName.name);
+      }else{
+        accountNicknames.push(accountId);
+      }
+    
+    }
+
+  }
+  return accountNicknames;
 }
 
 export {
