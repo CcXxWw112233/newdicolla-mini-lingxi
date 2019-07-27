@@ -69,7 +69,6 @@ export default {
         payload: {}
       })
       Taro.switchTab({url: `../../pages/calendar/index`})
-
     },
     //获取用户信息
     * getAccountInfo({ payload }, { select, call, put }) {

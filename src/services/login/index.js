@@ -68,7 +68,7 @@ export const getOrgList = (data , notShowLoading) => {
   }, notShowLoading)
 }
 //切换组织
-export const changeOrg = (params , notShowLoading) => {
+export const changeOrg = (data , notShowLoading) => {
   return request({
     data: {
       ...data
@@ -79,9 +79,11 @@ export const changeOrg = (params , notShowLoading) => {
 }
 
 //用户切换账号->退出登录
-export const changeOut = (params, notShowLoading) => {
+export const changeOut = (data, notShowLoading) => {
   return request({
-    params,
+    data: {
+      ...data
+    },
     method: 'GET',
     url: `${API_UPMS}/user/logout`
   }, notShowLoading)

@@ -1,10 +1,9 @@
 import Taro from '@tarojs/taro'
 import {isApiResponseOk} from "../../utils/request";
 import { getOrgBoardList, getScheCardList, getNoScheCardList, getSignList } from "../../services/calendar/index";
-import { select_selected_board, select_selected_timestamp, select_search_text,  } from './selects'
+import { select_selected_board, select_selected_timestamp, select_search_text, select_page_number, select_sche_card_list } from './selects'
 import { getCurrentOrgByStorage } from '../../utils/basicFunction'
-
-const kPage_size = '10';  //一页多少条 默认10
+import { number } from 'prop-types';
 
 export default {
   namespace: 'calendar',
@@ -17,14 +16,18 @@ export default {
     sche_card_list: [], //项目的所有排期的卡片列表
     no_sche_card_list: [], //项目的所有排期的卡片列表
     sign_data: [], //日历列表打点数据
+    page_number: 1,  //默认第1页
+    frequency: [],
   },
   effects: {
+
     // 获取当前组织项目列表
     * getOrgBoardList({ payload }, { select, call, put }) {
       const account_info_string = Taro.getStorageSync('account_info')
       const current_org = getCurrentOrgByStorage()
       const { page_number = '1', page_size = '100'  } = payload
       const res = yield call(getOrgBoardList, {_organization_id: current_org, page_number, page_size})
+
       if(isApiResponseOk(res)) {
         yield put({
           type: 'updateDatas',
@@ -39,9 +42,21 @@ export default {
 
     //获取排期卡片列表
     * getScheCardList({ payload }, { select, call, put }) {
+
       const selected_timestamp = yield select(select_selected_timestamp)
       const selected_board = yield select(select_selected_board)
       const current_org = getCurrentOrgByStorage()
+      // const page_number = yield select(select_page_number)
+
+      let typeSource = payload['type'];
+      let page_number;
+
+      if(typeSource === 1) {
+        page_number = yield select(select_page_number)
+      }else {
+        page_number = 1
+      }
+
       const obj = {
         current_org,
         selected_board,
@@ -55,30 +70,42 @@ export default {
       const date_no= date.getDate()
       const start_time = new Date(`${year}/${month}/${date_no} 00:00:00`).getTime() / 1000
       const due_time = new Date(`${year}/${month}/${date_no} 23:59:59`).getTime() / 1000
-      // const kPage_number = 0
-      // kPage_number = kPage_number + 1
       const params = {
         _organization_id: obj['current_org'],
         board_id: obj['selected_board'],
-        ...payload,
         queryDate: start_time,
         maxDate: due_time,
-        page_size: kPage_size,
-        page_number: 1,
+        // page_size: 100,
+        page_number: page_number,
+        ...payload,
       }
-      Taro.showLoading({
-        title: "加载中...",
-        mask: "true",
-      });
+      // Taro.showLoading({
+      //   title: "加载中...",
+      //   mask: "true",
+      // });
       const res = yield call(getScheCardList, {...params})
-      Taro.hideLoading()
+      const current_sche_card_list = yield select(select_sche_card_list)
+      // Taro.hideLoading()
       if(isApiResponseOk(res)) {
-        yield put({
-          type: 'updateDatas',
-          payload: {
-            sche_card_list: res.data
-          }
-        })
+        if (typeSource === 1) {
+          //处理上拉加载
+          let arr1 = current_sche_card_list; //1.1>从data获取当前datalist数组
+          let arr2 = res.data; //1.2>从此次请求返回的数据中获取新数组
+          arr1 = arr1.concat(arr2); //1.3>合并数组  
+          yield put({
+            type: 'updateDatas',
+            payload: {
+              sche_card_list: arr1
+            }
+          })
+        } else {
+          yield put({
+            type: 'updateDatas',
+            payload: {
+              sche_card_list: res.data
+            }
+          })
+        }
       }else {
 
       }
@@ -117,6 +144,7 @@ export default {
       const selected_board = yield select(select_selected_board)
       const res = yield call(getSignList, { _organization_id: current_org, board_id: selected_board, month: `${year_}-${month}` })
       if(isApiResponseOk(res)) {
+        
         yield put({
           type: 'updateDatas',
           payload: {

@@ -133,8 +133,7 @@ class RuningBoardItem extends Component {
                   <Text
                     className="tag"
                     className={`${indexStyles.tag}`}
-                    // key={key}
-                    key={'123'}
+                    key={key}
                     style={{
                       color: `rgba(${rgb},1)`,
                       backgroundColor: `rgba(${rgb},.4)`,

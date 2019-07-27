@@ -1,8 +1,15 @@
-// export const BASE_URL = 'http://uwvnrx.natappfree.cc'
+//线上环境
+//export const BASE_URL = 'https://lingxi.di-an.com' 
+//测试环境
+// export const BASE_URL = 'http://test.lingxi.new-di.com'
+//本地环境
+export const BASE_URL = 'http://192.168.1.39'
+//export const BASE_URL = 'http://192.168.1.68'
+//export const BASE_URL = 'http://prerelease.lingxi.new-di.com'
+//export const BASE_URL = 'http://w4iawu.natappfree.cc'
+//export const BASE_URL = 'http://uwvnrx.natappfree.cc'
 
-export const BASE_URL = 'http://test.lingxi.new-di.com'
-//'https://lingxi.di-an.com' //'http://prerelease.lingxi.new-di.com'//'http://w4iawu.natappfree.cc'//'http://test.lingxi.new-di.com'//'http://192.168.1.68'//'http://prerelease.lingxi.new-di.com'
-//http://prerelease.lingxi.new-di.com
+
 export const NODE_ENV = process.env.NODE_ENV
 export const PAGE_SIZE = 20
 export const QUERY_TYPE = 1

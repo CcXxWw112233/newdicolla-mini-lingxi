@@ -26,13 +26,24 @@ export default {
       } else {
 
       }
-    }
-  },
+    },
 
   //退出用户登录
   * changeOut({ payload }, { select, call, put }) {
-    const res = yield call(changeOut, data)
+  
+    const res = yield call(changeOut, payload)
+    if(isApiResponseOk(res)) {
+      Taro.clearStorageSync('access_token');
+      Taro.clearStorageSync('refresh_token');
+      Taro.reLaunch({
+        url: '../../pages/login/index'
+      })
+    }else {
+      
+    }
   },
+},
+
 
   reducers: {
     updateDatas(state, { payload }) {

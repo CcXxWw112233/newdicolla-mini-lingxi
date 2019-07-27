@@ -9,8 +9,8 @@ import CalendarSwiper from './components/CalendarSwiper'
 import MilestoneList from './components/MilestoneList'
 import { connect } from '@tarojs/redux'
 
-@connect(({ calendar: { no_sche_card_list, selected_board_name } }) => ({
-  no_sche_card_list, selected_board_name
+@connect(({ calendar: { no_sche_card_list, selected_board_name, page_number } }) => ({
+  no_sche_card_list, selected_board_name, page_number
 }))
 export default class Calendar extends Component {
 
@@ -18,11 +18,12 @@ export default class Calendar extends Component {
     navigationBarTitleText: '',
     "enablePullDownRefresh": true,
     "backgroundColor": '#696969',
+    "onReachBottomDistance": 50  //默认值50
   }
 
   onPullDownRefresh(res) {
     this.getNoScheCardList()
-    this.getScheCardList()
+    this.getScheCardList({})
     this.getOrgBoardList()
     this.getSignList()
 
@@ -31,6 +32,10 @@ export default class Calendar extends Component {
       Taro.stopPullDownRefresh()
       Taro.hideNavigationBarLoading()
     }, 300)
+  }
+
+  onReachBottom () {    //上拉加载...
+    this.pagingGet()
   }
 
   state= {
@@ -56,7 +61,7 @@ export default class Calendar extends Component {
     this.getOrgList()
     this.getOrgBoardList()
     this.getNoScheCardList()
-    this.getScheCardList()
+    this.getScheCardList({})
     this.getSignList()
   }
 
@@ -78,18 +83,33 @@ export default class Calendar extends Component {
     })
   }
   // 获取排期列表
-  getScheCardList = () => {
+  getScheCardList = (payload = {}) => {
     const { dispatch } = this.props
     dispatch({
       type: 'calendar/getScheCardList',
-      payload: {}
+      payload: {
+        ...payload
+      }
     })
+  }
+
+  pagingGet = () => {
+    const { page_number, dispatch } = this.props
+    let new_page_number = page_number
+    new_page_number = new_page_number + 1
+    dispatch({
+      type: 'calendar/updateDatas',
+      payload: {
+        page_number: new_page_number
+      }
+    })
+    
+    this.getScheCardList({type: 1})
   }
 
   // 获取组织列表
   getOrgList = () => {
     const { dispatch } = this.props
-    debugger
     dispatch({
       type: 'my/getOrgList',
       payload: {}
@@ -107,7 +127,9 @@ export default class Calendar extends Component {
     })
   }
 
-  componentDidHide () { }
+  componentDidHide () { 
+
+  }
 
   onSelectType = ({show_type}) => {
     this.setState({

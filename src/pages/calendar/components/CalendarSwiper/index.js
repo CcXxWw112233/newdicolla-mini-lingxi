@@ -61,7 +61,18 @@ export default class CalendarSwiper extends Component {
     const { select_year, select_month, select_date_no  } = this.state
     let select_year_new = select_year
     let select_month_new = select_month
-    let select_date_no_new = select_date_no
+
+    // 处理日期--->选择31号日期，滑动到下个月只有30号的时候，自动显示的下下个月的数据，再滑动会多跳动一个月
+    /**
+     * 1.向左滑动增加时，获取下个月共有多少天，
+     * 2.当前选中日期与下月最大天数进行对比，进行选择新的选中日期，向右滑动减少亦然，获取上月最大天数
+     */
+    // let select_date_no_new = select_date_no
+    let select_date_no_new
+    // 向后一个月有多少天
+    let afterDays = new Date(select_year, select_month + 1, 0).getDate()
+    // 向前一个月有多少天
+    let forwardDays = new Date(select_year, select_month - 1, 0).getDate()
 
     if('to_left' == decoration) { //增加
       if(select_month == 12) {
@@ -70,6 +81,16 @@ export default class CalendarSwiper extends Component {
       }else {
         select_month_new = select_month + 1
       }
+
+      console.log('select_date_no_new = ', select_date_no_new)
+      console.log('select_date_no = ', select_date_no)
+    
+      if (select_date_no == afterDays || select_date_no < afterDays) {
+        select_date_no_new = select_date_no
+      } else if (select_date_no > afterDays) {
+        select_date_no_new = afterDays
+      }
+      
     } else { //减少
       if(select_month == 1) {
         select_month_new = 12
@@ -77,7 +98,14 @@ export default class CalendarSwiper extends Component {
       }else {
         select_month_new = select_month - 1
       }
+
+      if (select_date_no == forwardDays || select_date_no < forwardDays) {
+        select_date_no_new = select_date_no
+      } else if (select_date_no > forwardDays) {
+        select_date_no_new = forwardDays
+      }
     }
+
     const new_timestamp = new Date(`${select_year_new}/${select_month_new}/${select_date_no_new}`).getTime()
     this.updateSelecedTime(new_timestamp)
     this.getDataArray({year: select_year_new, month: select_month_new})
@@ -119,8 +147,10 @@ export default class CalendarSwiper extends Component {
   selectDate = ( string) => {
 
     //选中日期打点重新刷新打点
-    const new_timestamp = new Date(`${select_year_new}/${select_month_new}/${select_date_no_new}`).getTime()
+    const { select_year, select_month, select_date_no  } = this.state
+    const new_timestamp = new Date(`${select_year}/${select_month}/${select_date_no}`).getTime()
     this.getSignList(new_timestamp)
+
 
     const arr = string.split('__')
     const timestamp = arr[0]
