@@ -16,7 +16,7 @@
   line-height: pxTrans(48);
   color: $color_2;
   padding: 0 $paddingValue;
-  font-size: $fontsize_1;
+  font-size: $fontsize_16;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -30,7 +30,7 @@
     margin-left: pxTrans(8);
   }
   .select_item_itemcheck {
-    font-size: $fontsize_1;
+    font-size: $fontsize_16;
   }
 }
 .selected {

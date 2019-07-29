@@ -45,8 +45,8 @@
 			"list": [
 				{
 					"id": 0,
-					"name": "pages/calendar/index",
-					"pathName": "pages/calendar/index",
+					"name": "pages/qrCodeInvalid/index",
+					"pathName": "pages/qrCodeInvalid/index",
 					"query": "",
 					"scene": null
 				}

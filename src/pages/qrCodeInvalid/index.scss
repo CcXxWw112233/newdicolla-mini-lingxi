@@ -1,0 +1,18 @@
+@import "../../gloalSet/styles/constant";
+.contain1 {
+  margin-top: pxTrans(106);
+  .qrCode_Invalid {
+    width: pxTrans(297);
+    height: pxTrans(186);
+  }
+}
+.text1 {
+  margin-top: pxTrans(32);
+  font-size: $fontsize_18;
+  text-align: center;
+}
+.text2 {
+  font-size: $fontsize_14;
+  text-align: center;
+  margin-top: pxTrans(8);
+}

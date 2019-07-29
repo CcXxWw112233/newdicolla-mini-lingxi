@@ -119,7 +119,7 @@
     .week_day {
       line-height: pxTrans(30);
       flex: 1;
-      font-size: $fontsize_3;
+      font-size: $fontsize_12;
       color: $color_3;
       text-align: center;
     }
@@ -129,7 +129,7 @@
   height: pxTrans(240);
   display: flex;
   flex-wrap: wrap ;
-  font-size: $fontsize_1;
+  font-size: $fontsize_16;
   .date_day {
     height: pxTrans(40);
     text-align: center;
@@ -179,7 +179,7 @@
 }
 
 .date_detail_dec{
-  font-size: $fontsize_1;
+  font-size: $fontsize_16;
   color: $color_2;
   text-align: center;
   margin-top: pxTrans(4);

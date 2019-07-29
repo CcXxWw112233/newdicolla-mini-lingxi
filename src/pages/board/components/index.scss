@@ -7,13 +7,13 @@
   .card_content_top {
     .card_title {
       color: $color_1;
-      font-size: $fontsize_1;
+      font-size: $fontsize_16;
       line-height: pxTrans(26);
       font-weight: bold;
     }
     .organize {
       color: $color_3;
-      font-size: $fontsize_2;
+      font-size: $fontsize_14;
       margin-left: pxTrans(6);
       margin-right: pxTrans(6);
     }
@@ -56,7 +56,7 @@
   margin-top: pxTrans(10);
 }
 .tag {
-  font-size: $fontsize_4;
+  font-size: $fontsize_10;
   //color: rgba(123,104,238, 1);
   //border: pxTrans(1) solid rgba(123,104,238, 1);
   //background-color: rgba(123,104,238, .5);

@@ -160,6 +160,7 @@ export default class CalendarSwiper extends Component {
     }
     this.updateSelecedTime(Number(timestamp))
     this.getSelectDateDetail(timestamp)
+
   }
 
   //获取选择日期的详情

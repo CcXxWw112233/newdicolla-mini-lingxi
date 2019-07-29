@@ -17,7 +17,6 @@ export default {
     no_sche_card_list: [], //项目的所有排期的卡片列表
     sign_data: [], //日历列表打点数据
     page_number: 1,  //默认第1页
-    frequency: [],
   },
   effects: {
 
@@ -48,13 +47,17 @@ export default {
       const current_org = getCurrentOrgByStorage()
       // const page_number = yield select(select_page_number)
 
+      console.log('payload = ', payload)
+
       let typeSource = payload['type'];
       let page_number;
 
-      if(typeSource === 1) {
+      if(typeSource === 1 ) {
         page_number = yield select(select_page_number)
+        console.log('上拉刷新')
       }else {
         page_number = 1
+        console.log('选中刷新')
       }
 
       const obj = {
@@ -86,6 +89,7 @@ export default {
       const res = yield call(getScheCardList, {...params})
       const current_sche_card_list = yield select(select_sche_card_list)
       // Taro.hideLoading()
+    
       if(isApiResponseOk(res)) {
         if (typeSource === 1) {
           //处理上拉加载

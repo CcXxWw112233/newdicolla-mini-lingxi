@@ -40,6 +40,10 @@ class App extends Component {
       'pages/testPage/index',
       'pages/personalCenter/index',
       'pages/index/index',
+      'pages/acceptInvitation/index',
+      'pages/qrCodeInvalid/index',
+      'pages/nowOpen/index',
+      'pages/auccessJoin/index',
     ],
     window: {
       backgroundTextStyle: 'light',

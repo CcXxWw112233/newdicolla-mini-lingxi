@@ -10,7 +10,7 @@
   align-items: center;
   padding: 0 $paddingValue;
   .contain1_name {
-    font-size: $fontsize_1;
+    font-size: $fontsize_16;
     color: $color_2;
     margin-left: pxTrans(20);
   }
@@ -62,12 +62,12 @@
   align-items: center;
   .comfir_modal_conent_title{
     color: $color_1;
-    font-size: $fontsize_1;
+    font-size: $fontsize_16;
   }
   .comfir_modal_conent_detail{
     margin-top: pxTrans(16);
     color: $color_3;
-    font-size: $fontsize_2;
+    font-size: $fontsize_14;
   }
   .btn1 {
     color: $color_theme

@@ -17,19 +17,19 @@ page {
     text-overflow:ellipsis;
     white-space: nowrap;
     .contain1_name {
-      font-size: $fontsize_1;
+      font-size: $fontsize_16;
       color:$color_5;
     }
     .contain1_org {
       width: 100%;
       color: $color_5;
-      font-size: $fontsize_2;
+      font-size: $fontsize_14;
       margin-top: pxTrans(6);
     }
   }
 
   .contain1_next{
-    font-size: $fontsize_1;
+    font-size: $fontsize_16;
     color:$color_5;
     width: pxTrans(30);
     text-align: right;
@@ -62,7 +62,7 @@ page {
     }
   }
   .contain2_item_bott {
-    font-size: $fontsize_2;
+    font-size: $fontsize_14;
     margin-top: pxTrans(4);
     color: $color_3;
   }

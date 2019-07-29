@@ -1,0 +1,42 @@
+@import "../../gloalSet/styles/constant";
+.contain {
+  margin-top: pxTrans(20);
+  text-align: center;
+    .forwardTips {
+      width: pxTrans(200);
+      height: pxTrans(54);
+      .forwardTipsText{
+        font-size: $fontsize_14;
+      }
+    }
+}
+.contain1 {
+  margin-top: pxTrans(106);
+  text-align: center;
+  .logo {
+    width: pxTrans(96);
+    height: pxTrans(96);
+  }
+}
+.tipsText {
+  font-size: $fontsize_18;
+  margin-top: pxTrans(16);
+  text-align: center;
+  color: #3F3D56;
+}
+.login_btn_wx{
+  background-color: #1890FF;
+  border: pxTrans(1) solid #1890FF;
+}
+.acceptBtn{
+  margin-top: pxTrans(100);
+  border: 0!important;
+  width: 100%;
+  height: pxTrans(40);
+  line-height: pxTrans(40);
+  text-align: center;
+  color: #fff;
+  border-radius: pxTrans(4);
+  margin-bottom: pxTrans(16);
+  box-shadow: none;
+}

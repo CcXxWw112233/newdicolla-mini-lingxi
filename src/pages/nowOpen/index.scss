@@ -1,0 +1,45 @@
+
+@import "../../gloalSet/styles/constant";
+
+.login_btn_wx{
+  background-color: #1890FF;
+  border: pxTrans(1) solid #1890FF;
+}
+
+.login_btn{
+  margin-top: pxTrans(40);
+  border: 0!important;
+  width: 100%;
+  height: pxTrans(40);
+  line-height: pxTrans(40);
+  text-align: center;
+  color: #fff;
+  border-radius: pxTrans(4);
+  margin-bottom: pxTrans(16);
+  box-shadow: none;
+}
+
+.contain1 {
+  margin-top: pxTrans(127);
+  text-align: center;
+  .nowOpenImage {
+    width: pxTrans(299);
+    height: pxTrans(179);
+  }
+}
+.textStyle {
+  font-size: $fontsize_18;
+  margin-top: pxTrans(16);
+  text-align: center;
+  color: #3F3D56;
+}
+
+.change_login_type_out {
+  display: flex;
+  justify-content: center;
+  margin-top: pxTrans(14);
+  .change_login_type {
+    color: #1890FF;
+    font-size: pxTrans(14);
+  }
+}
