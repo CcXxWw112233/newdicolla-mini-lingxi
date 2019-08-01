@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
 import Aavatar from '../../components/avatar/index'
-import { AtModal, AtModalHeader, AtModalContent, AtModalAction, AtDivider  } from "taro-ui"
+import { AtModal, AtModalContent, AtModalAction } from "taro-ui"
 
 import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
@@ -40,24 +40,6 @@ class PersonalCenter extends Component {
         payload: {}
       })
     }
-    // const account_info_string = Taro.getStorageSync('user_info')
-    // if(!!!account_info_string) {
-    //   dispatch({
-    //     type: 'accountInfo/getAccountInfo',
-    //     payload: {}
-    //   })
-    // } else {
-    //   const account_info = JSON.parse(account_info_string)
-    //   const { user_set = {} } = account_info
-    //   const { current_org } = user_set
-    //   dispatch({
-    //     type: 'accountInfo/updateDatas',
-    //     payload: {
-    //       account_info,
-    //       current_org
-    //     }
-    //   })
-    // }
   }
 
   //切换账户
@@ -131,7 +113,6 @@ class PersonalCenter extends Component {
             <View className={indexStyles.list_item_name}>姓名</View>
             <View className={indexStyles.list_item_detail}>{name}</View>
             <View className={`${indexStyles.list_item_iconnext}`}>
-              {/*<Text className={`${globalStyle.global_iconfont}`}>&#xe654;</Text>*/}
             </View>
           </View>
           <View className={indexStyles.list_item} onClick={this.gotoChangeOrgPage}>
@@ -145,14 +126,12 @@ class PersonalCenter extends Component {
             <View className={indexStyles.list_item_name}>手机号</View>
             <View className={indexStyles.list_item_detail}>{mobile}</View>
             <View className={`${indexStyles.list_item_iconnext}`}>
-              {/*<Text className={`${globalStyle.global_iconfont}`}>&#xe654;</Text>*/}
             </View>
           </View>
           <View className={indexStyles.list_item}>
             <View className={indexStyles.list_item_name}>邮箱号</View>
             <View className={indexStyles.list_item_detail}>{email}</View>
             <View className={`${indexStyles.list_item_iconnext}`}>
-              {/*<Text className={`${globalStyle.global_iconfont}`}>&#xe654;</Text>*/}
             </View>
           </View>
 

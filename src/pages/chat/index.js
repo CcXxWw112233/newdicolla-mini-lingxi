@@ -16,22 +16,8 @@ class Chat extends Component {
 
   }
 
-  componentWillMount () {
-    const sourcePage = this.$router.params;  
-    this.setState({
-      sourcePage
-    }) 
-  }
-
-  componentWillUnmount () {
-    //利用小程序的生命周期,当页面卸载的时候,跳转到指定的界面
-    const { sourcePage } = this.state
-    if (sourcePage.push === 'auccessJoin') { //关闭所有页面,打开首页
-      Taro.switchTab({url: `../../pages/calendar/index`
-      })
-    }
-  }
-
+  componentWillMount () {}
+  
   config = {
     disableScroll: true //页面整体不能上下滚动
   };

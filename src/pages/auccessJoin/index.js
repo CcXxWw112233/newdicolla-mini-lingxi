@@ -3,6 +3,11 @@ import { View, Image } from '@tarojs/components'
 import indexStyles from './index.scss'
 import auccess_Join_image from '../../asset/Invitation/auccess_Join.png'
 import globalStyles from '../../gloalSet/styles/globalStyles.scss'
+import { connect } from '@tarojs/redux'
+
+@connect(({ auccessJoin }) => ({
+  auccessJoin
+}))
 
 export default class auccessJoin extends Component {
     config = {
@@ -11,12 +16,17 @@ export default class auccessJoin extends Component {
     constructor () {
       super(...arguments)
       this.state = {
-        djsTime: 5,					//倒计时时间 5’s
+        djsTime: 3,					//倒计时时间 5’s
         Loadingtime: '',			// 计时器
       }
     }
     componentWillMount () {
-      const { boardId } = this.$router.params;
+
+      this.getOrgList()
+      this.fetchAllIMTeamList()
+
+      // const { boardId } = this.$router.params;
+      const boardId = Taro.getStorageSync('board_Id');
       let that = this
       this.setState({
         Loadingtime:setInterval(function(){ // 执行计时器
@@ -26,7 +36,7 @@ export default class auccessJoin extends Component {
           }else { //倒计时结束
             clearInterval(that.state.Loadingtime);
             Taro.navigateTo({
-              url: `../../pages/chat/index?push=auccessJoin&&boardId=${boardId}`
+              url: `../../pages/boardDetail/index?push=auccessJoin&&boardId=${boardId}`
             })
           }
         }, 1000)
@@ -40,6 +50,25 @@ export default class auccessJoin extends Component {
     componentDidShow () {
     }
     componentDidHide () {
+    }
+
+      // 获取组织列表
+    getOrgList = () => {
+      const { dispatch } = this.props
+      dispatch({
+        type: 'my/getOrgList',
+        payload: {}
+      })
+    }
+
+    fetchAllIMTeamList = () => {
+      const { dispatch } = this.props
+      dispatch({
+        type: 'im/fetchAllIMTeamList',
+        payload: {
+
+        }  
+      })
     }
 
     render () {

@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Image, Text, Button} from '@tarojs/components'
+import { View, Image, Button} from '@tarojs/components'
 import indexStyles from './index.scss'
 import now_Open_Image from '../../asset/Invitation/now_Open_Image.png'
 import globalStyles from '../../gloalSet/styles/globalStyles.scss'
@@ -39,7 +39,8 @@ export default class nowOpen extends Component {
             dispatch({
               type: 'login/weChatAuthLogin',
               payload: {
-                parmas
+                parmas,
+                sourcePage: 'Invitation',
               }
             })
           })

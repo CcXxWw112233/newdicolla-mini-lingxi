@@ -233,9 +233,6 @@ export default class Login extends Component {
             token_string: res.data,
             sourcePage: sourcePage.isSource,
           }
-          // payload: {
-          //   token_string: res.data,
-          // }
         })
       }else if(res.code === '4005' || res.code === '4006' || res.code === '4007'){
         Taro.showToast({
@@ -268,10 +265,12 @@ export default class Login extends Component {
           const parmas = {
             encryptedData: res2.encryptedData, iv: res2.iv, code: code
           }
+          const { sourcePage } = this.state
           dispatch({
             type: 'login/weChatAuthLogin',
             payload: {
-              parmas
+              parmas,
+              sourcePage: sourcePage.isSource,
             }
           })
         })
@@ -352,19 +351,13 @@ export default class Login extends Component {
               </View>
             <View className={`${indexStyles.login_error}`}>{pswdErrorMessage}</View>
           </View>
-
           {/*账号密码登录验证码*/}
           {verifycodeView} 
-         
         </View>
         <View className={`${indexStyles.login_footer}`}>
           <Button className={`${indexStyles.login_btn_normal} ${indexStyles.login_btn}`} type='primary' onClick={this.normalLogin}>登录</Button>
-          {/*<Button className='login_btn_wx login_btn' onClick={this.weixinLogin}>微信快捷登录</Button>*/}
-          {/*<Button className={`${indexStyles.login_btn_wx} ${indexStyles.login_btn}`} open_type='getPhoneNumber' onGetPhoneNumber={this.wexinAuthPhoneNoLogin}>微信快捷登录</Button>*/}
           <Button className={`${indexStyles.login_btn_wx} ${indexStyles.login_btn}`} open-type={'getUserInfo'} onGetUserInfo={this.getUserInfo}>微信快捷登录</Button>
-          
         </View>
-
         <View className={`${indexStyles.change_login_type_out}`}>
           <View onClick={this.ChangeLoginType} className={`${indexStyles.change_login_type}`}>{showCode?'账号密码': '验证码'}登录</View>
         </View>

@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Button, Text } from '@tarojs/components'
+import { View, Text } from '@tarojs/components'
 import Aavatar from '../../components/avatar/index'
 import { connect } from '@tarojs/redux'
 import indexStyles from './index.scss'

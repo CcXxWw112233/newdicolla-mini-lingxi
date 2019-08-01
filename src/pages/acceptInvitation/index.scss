@@ -1,11 +1,8 @@
 @import "../../gloalSet/styles/constant";
 
-/**
-* 有效显示的页面
-*/
 .effective_contain {
-  margin-top: pxTrans(20);
-  text-align: center;
+  margin-top: pxTrans(0);
+  margin-left: pxTrans(120);
     .effective_forwardTips {
       width: pxTrans(200);
       height: pxTrans(54);
@@ -44,27 +41,3 @@
   margin-bottom: pxTrans(16);
   box-shadow: none;
 }
-
-/**
-* 失效显示的页面
-*/
-
-/*
-.invalid_contain1 {
-  margin-top: pxTrans(106);
-  .invalid_qrCode_Invalid {
-    width: pxTrans(297);
-    height: pxTrans(186);
-  }
-}
-.invalid_text1 {
-  margin-top: pxTrans(32);
-  font-size: $fontsize_18;
-  text-align: center;
-}
-.invalid_text2 {
-  font-size: $fontsize_14;
-  text-align: center;
-  margin-top: pxTrans(8);
-}
-*/

@@ -68,7 +68,10 @@ class BoardDetail extends Component {
       setCurrentBoard,
       checkTeamStatus
     } = this.props;
-    const { boardId } = this.$router.params;
+    const params = this.$router.params;
+    const boardId = params.boardId;
+    const sourcePage = params.push; 
+    this.setState({ sourcePage });
     const getCurrentBoard = (arr, id) => {
       const ret = arr.find(i => i.board_id === id);
       return ret ? ret : {};
@@ -91,9 +94,21 @@ class BoardDetail extends Component {
     resetCurrentGroup();
     resetCurrentGroupSessionList();
   }
+
+  componentWillUnmount () {
+    //利用小程序的生命周期,当页面卸载的时候,跳转到指定的界面
+    const { sourcePage } = this.state
+    if (sourcePage === 'auccessJoin') {
+      Taro.switchTab({url: `../../pages/calendar/index`
+      })
+    }
+  }
+
   render() {
     const { allBoardList } = this.props;
     const isHasBoardData = Array.isArray(allBoardList) && allBoardList.length;
+
+    console.log('isHasBoardData = ', isHasBoardData)
 
     return (
       <View className={styles.wrapper}>

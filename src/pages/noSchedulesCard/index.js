@@ -1,7 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Button, Text } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import CardList from '../calendar/components/CardList'
-import indexStyles from './index.scss'
 import CardTypeSelect from '../calendar/components/CardTypeSelect/index'
 import SearchAndMenu from '../board/components/SearchAndMenu'
 

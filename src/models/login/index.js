@@ -6,6 +6,7 @@ import {weChatAuthLogin, weChatPhoneLogin, getAccountInfo} from "../../services/
 let dispatches
 export default {
   namespace: 'login',
+  state:{},
   subscriptions: {
     setup({dispatch}) {
       dispatches = dispatch
@@ -14,14 +15,17 @@ export default {
   effects: {
     //微信授权登录）
     * weChatAuthLogin({ payload }, { select, call, put }) {
-      const { parmas } = payload
+      const parmas = payload.parmas
+      console.log('parmas = 222===', parmas)
+      console.log('payload.sourcePage = 222===', payload.sourcePage)
+
       const res = yield call(weChatAuthLogin, {...parmas})
-      console.log('res wechat= ', res)
       if(isApiResponseOk(res)) {
         yield put({
           type: 'handleToken',
           payload: {
-            token_string: res.data
+            token_string: res.data,
+            sourcePage: payload.sourcePage,
           }
         })
       }else {
@@ -41,7 +45,7 @@ export default {
         yield put({
           type: 'handleToken',
           payload: {
-            token_string: res.data
+            token_string: res.data,
           }
         })
       }else {
@@ -54,6 +58,8 @@ export default {
     },
     //处理token，做相应的页面跳转
     * handleToken({ payload }, { select, call, put }) {
+
+      console.log('payload = handleToken=', payload.sourcePage)
 
       const token_string  = payload.token_string;
       const tokenArr = token_string.split('__');
@@ -71,17 +77,17 @@ export default {
       
       if (payload.sourcePage === 'Invitation') {
 
+        //邀请加入,未登录 --> 登录成功 --> 重新调用加入组织和项目请求
+       const query_Id =  Taro.getStorageSync('id')
+       const boardId =  Taro.getStorageSync('board_Id')
+
         yield put({
           type: 'invitation/userScanCodeJoinOrganization',
           payload: {
-            payload
+            id: query_Id,
+            board_Id: boardId
           }
         })
-        
-        // Taro.navigateTo({
-        //   // url: `../../pages/auccessJoin/index?boardId=${parameter}`
-        //   url: `../../pages/auccessJoin/index`
-        // })
       }
       else {
         Taro.switchTab({url: `../../pages/calendar/index`})

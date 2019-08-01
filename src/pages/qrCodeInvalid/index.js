@@ -29,5 +29,3 @@ export default class qrCodeInvalid extends Component {
       )
     }
   }
-  
-  

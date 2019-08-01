@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 import './index.scss'
-import { AtModal, AtModalHeader, AtModalContent, AtModalAction, AtDivider  } from "taro-ui"
+import { AtModal, AtModalHeader, AtModalContent, AtModalAction } from "taro-ui"
 
 const getEffectOrReducerByName = name => `testPage/${name}`
 @connect(({ testPage, board }) => ({

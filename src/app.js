@@ -42,9 +42,9 @@ class App extends Component {
       'pages/personalCenter/index',
       'pages/index/index',
       'pages/acceptInvitation/index',
-      'pages/qrCodeInvalid/index',
       'pages/nowOpen/index',
       'pages/auccessJoin/index',
+      'pages/qrCodeInvalid/index',
     ],
     window: {
       backgroundTextStyle: 'light',
