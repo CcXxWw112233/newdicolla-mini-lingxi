@@ -30,7 +30,10 @@ export default class Login extends Component {
     captchaKey:''
   }
   componentWillMount () {
-
+    const sourcePage = this.$router.params;  
+    this.setState({
+      sourcePage,
+    })
   }
   componentDidMount () {
   }
@@ -222,12 +225,17 @@ export default class Login extends Component {
       data.password = sha256(pswd);
     }
     normalLogin(data).then(res => {
+      const { sourcePage } = this.state
       if(res.code === '0'){
         dispatch({
           type: 'login/handleToken',
           payload: {
-            token_string: res.data
+            token_string: res.data,
+            sourcePage: sourcePage.isSource,
           }
+          // payload: {
+          //   token_string: res.data,
+          // }
         })
       }else if(res.code === '4005' || res.code === '4006' || res.code === '4007'){
         Taro.showToast({
@@ -272,7 +280,6 @@ export default class Login extends Component {
   }
 
   getVerifyCodeImg = () => {
-    console.log("23424")
     getVerifycodeImg().then(res => {
         const code = res.code
         if(code === '0'){

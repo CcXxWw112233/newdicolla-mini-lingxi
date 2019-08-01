@@ -70,14 +70,12 @@ class PersonalCenter extends Component {
 
   //确定切换账户
   changeAccount = () => {
-
     let access_token = Taro.getStorageSync('access_token')
     let refresh_token = Taro.getStorageSync('refresh_token')
     const parmas = {
       accessToken: access_token,
       refreshToken: refresh_token,
     }
-
     const { dispatch } = this.props
     dispatch({
       type:'accountInfo/changeOut',

@@ -1,7 +1,7 @@
 import Taro from "@tarojs/taro";
 import { BASE_URL, INT_REQUEST_OK, REQUEST_RES_CODE_TOKEN_INVALID } from "../gloalSet/js/constant";
 
-export const request = (options, notShowLoading) => {
+export const request = (options, notShowLoading, isNewLogin) => {
   const { url = "", data = {}, method = "GET", header = {} } = options;
   let Headers = { ...header};
   Headers['Authorization'] = Taro.getStorageSync('access_token')
@@ -27,9 +27,17 @@ export const request = (options, notShowLoading) => {
         }
         if(REQUEST_RES_CODE_TOKEN_INVALID == res.data.code) {
           // Taro.navigateTo({url: '../../pages/login/index'})
-          Taro.reLaunch({
-            url: '../../pages/login/index'
-          })
+          if (!isNewLogin) {
+            Taro.reLaunch({
+              url: '../../pages/login/index'
+            })
+          }
+          else {
+            Taro.reLaunch({
+              url: '../../pages/nowOpen/index'
+            })
+          }
+
         }
 
         resolve(res.data);

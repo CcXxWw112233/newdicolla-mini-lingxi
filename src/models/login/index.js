@@ -6,8 +6,6 @@ import {weChatAuthLogin, weChatPhoneLogin, getAccountInfo} from "../../services/
 let dispatches
 export default {
   namespace: 'login',
-  state: {
-  },
   subscriptions: {
     setup({dispatch}) {
       dispatches = dispatch
@@ -18,6 +16,7 @@ export default {
     * weChatAuthLogin({ payload }, { select, call, put }) {
       const { parmas } = payload
       const res = yield call(weChatAuthLogin, {...parmas})
+      console.log('res wechat= ', res)
       if(isApiResponseOk(res)) {
         yield put({
           type: 'handleToken',
@@ -55,10 +54,11 @@ export default {
     },
     //处理token，做相应的页面跳转
     * handleToken({ payload }, { select, call, put }) {
-      const { token_string } = payload
+
+      const token_string  = payload.token_string;
       const tokenArr = token_string.split('__');
       Taro.setStorageSync('access_token',tokenArr[0]);        //设置token
-      Taro.setStorageSync('refresh_token',tokenArr[1]); //设置refreshToken
+      Taro.setStorageSync('refresh_token',tokenArr[1]);       //设置refreshToken
 
       yield put({
         type: 'registerIm'
@@ -68,7 +68,24 @@ export default {
         type: 'getAccountInfo',
         payload: {}
       })
-      Taro.switchTab({url: `../../pages/calendar/index`})
+      
+      if (payload.sourcePage === 'Invitation') {
+
+        yield put({
+          type: 'invitation/userScanCodeJoinOrganization',
+          payload: {
+            payload
+          }
+        })
+        
+        // Taro.navigateTo({
+        //   // url: `../../pages/auccessJoin/index?boardId=${parameter}`
+        //   url: `../../pages/auccessJoin/index`
+        // })
+      }
+      else {
+        Taro.switchTab({url: `../../pages/calendar/index`})
+      }
     },
     //获取用户信息
     * getAccountInfo({ payload }, { select, call, put }) {

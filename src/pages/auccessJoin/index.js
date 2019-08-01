@@ -16,6 +16,7 @@ export default class auccessJoin extends Component {
       }
     }
     componentWillMount () {
+      const { boardId } = this.$router.params;
       let that = this
       this.setState({
         Loadingtime:setInterval(function(){ // 执行计时器
@@ -24,9 +25,8 @@ export default class auccessJoin extends Component {
             that.setState({djsTime:that.state.djsTime})
           }else { //倒计时结束
             clearInterval(that.state.Loadingtime);
-
-            Taro.switchTab({
-              url: `../../pages/calendar/index`
+            Taro.navigateTo({
+              url: `../../pages/chat/index?push=auccessJoin&&boardId=${boardId}`
             })
           }
         }, 1000)
@@ -35,7 +35,7 @@ export default class auccessJoin extends Component {
     componentWillReceiveProps () {
     }
     componentWillUnmount () {
-      clearInterval(this.state.Loadingtime);// 清除计时器
+      clearInterval(this.state.Loadingtime); // 清除计时器
     }
     componentDidShow () {
     }

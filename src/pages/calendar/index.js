@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Button, Text } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import CardList from './components/CardList'
 import indexStyles from './index.scss'
 import globalStyles from '../../gloalSet/styles/globalStyles.scss'
@@ -48,6 +48,8 @@ export default class Calendar extends Component {
   }
 
   componentWillUnmount () { }
+
+  componentWillMount () { }
 
   componentDidMount() {
     this.registerIm()

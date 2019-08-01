@@ -41,13 +41,41 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 0,
+			"current": 4,
 			"list": [
 				{
 					"id": 0,
-					"name": "pages/qrCodeInvalid/index",
-					"pathName": "pages/qrCodeInvalid/index",
-					"query": "",
+					"name": "pages/acceptInvitation/index",
+					"pathName": "pages/acceptInvitation/index",
+					"query": "id=1156175314305552384",
+					"scene": 1011
+				},
+				{
+					"id": 1,
+					"name": "pages/acceptInvitation/index",
+					"pathName": "pages/acceptInvitation/index",
+					"query": "id=1156175314305552384",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/chat/index",
+					"pathName": "pages/chat/index",
+					"query": "id=1156175314305552384",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/auccessJoin/index",
+					"pathName": "pages/auccessJoin/index",
+					"query": "id=1156175314305552384",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/calendar/index",
+					"pathName": "pages/calendar/index",
+					"query": "id=1156175314305552384",
 					"scene": null
 				}
 			]

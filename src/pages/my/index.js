@@ -34,23 +34,6 @@ export default class My extends Component {
         payload: {}
       })
     }
-
-
-    // const account_info_string = Taro.getStorageSync('user_info')
-    // if(!!!account_info_string) {
-    //   dispatch({
-    //     type: 'accountInfo/getAccountInfo',
-    //     payload: {}
-    //   })
-    // } else {
-    //   const account_info = JSON.parse(account_info_string)
-    //   dispatch({
-    //     type: 'accountInfo/updateDatas',
-    //     payload: {
-    //       account_info
-    //     }
-    //   })
-    // }
   }
 
   gotoAccountDetail = ()=> {

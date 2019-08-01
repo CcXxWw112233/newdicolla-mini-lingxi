@@ -46,18 +46,13 @@ export default {
       const selected_board = yield select(select_selected_board)
       const current_org = getCurrentOrgByStorage()
       // const page_number = yield select(select_page_number)
-
-      console.log('payload = ', payload)
-
       let typeSource = payload['type'];
       let page_number;
 
       if(typeSource === 1 ) {
         page_number = yield select(select_page_number)
-        console.log('上拉刷新')
       }else {
         page_number = 1
-        console.log('选中刷新')
       }
 
       const obj = {

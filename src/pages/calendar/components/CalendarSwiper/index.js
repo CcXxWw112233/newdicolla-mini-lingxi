@@ -82,9 +82,6 @@ export default class CalendarSwiper extends Component {
         select_month_new = select_month + 1
       }
 
-      console.log('select_date_no_new = ', select_date_no_new)
-      console.log('select_date_no = ', select_date_no)
-    
       if (select_date_no == afterDays || select_date_no < afterDays) {
         select_date_no_new = select_date_no
       } else if (select_date_no > afterDays) {
@@ -150,8 +147,7 @@ export default class CalendarSwiper extends Component {
     const { select_year, select_month, select_date_no  } = this.state
     const new_timestamp = new Date(`${select_year}/${select_month}/${select_date_no}`).getTime()
     this.getSignList(new_timestamp)
-
-
+ 
     const arr = string.split('__')
     const timestamp = arr[0]
     const no_in_select_month = arr[1]
@@ -161,6 +157,9 @@ export default class CalendarSwiper extends Component {
     this.updateSelecedTime(Number(timestamp))
     this.getSelectDateDetail(timestamp)
 
+    //存储当前选择的日期和上一个选择的日期, 当做对比
+    Taro.setStorageSync('timestamp', timestamp)
+    Taro.setStorageSync('new_timestamp', new_timestamp)
   }
 
   //获取选择日期的详情

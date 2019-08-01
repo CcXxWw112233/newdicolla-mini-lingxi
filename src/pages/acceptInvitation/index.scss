@@ -1,8 +1,12 @@
 @import "../../gloalSet/styles/constant";
-.contain {
+
+/**
+* 有效显示的页面
+*/
+.effective_contain {
   margin-top: pxTrans(20);
   text-align: center;
-    .forwardTips {
+    .effective_forwardTips {
       width: pxTrans(200);
       height: pxTrans(54);
       .forwardTipsText{
@@ -10,25 +14,25 @@
       }
     }
 }
-.contain1 {
+.effective_contain1 {
   margin-top: pxTrans(106);
   text-align: center;
-  .logo {
+  .effective_logo {
     width: pxTrans(96);
     height: pxTrans(96);
   }
 }
-.tipsText {
+.effective_tipsText {
   font-size: $fontsize_18;
   margin-top: pxTrans(16);
   text-align: center;
   color: #3F3D56;
 }
-.login_btn_wx{
+.effective_login_btn_wx{
   background-color: #1890FF;
   border: pxTrans(1) solid #1890FF;
 }
-.acceptBtn{
+.effective_acceptBtn{
   margin-top: pxTrans(100);
   border: 0!important;
   width: 100%;
@@ -40,3 +44,27 @@
   margin-bottom: pxTrans(16);
   box-shadow: none;
 }
+
+/**
+* 失效显示的页面
+*/
+
+/*
+.invalid_contain1 {
+  margin-top: pxTrans(106);
+  .invalid_qrCode_Invalid {
+    width: pxTrans(297);
+    height: pxTrans(186);
+  }
+}
+.invalid_text1 {
+  margin-top: pxTrans(32);
+  font-size: $fontsize_18;
+  text-align: center;
+}
+.invalid_text2 {
+  font-size: $fontsize_14;
+  text-align: center;
+  margin-top: pxTrans(8);
+}
+*/
