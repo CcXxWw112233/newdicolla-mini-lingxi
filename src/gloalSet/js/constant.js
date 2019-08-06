@@ -5,7 +5,7 @@ export const BASE_URL = 'http://test.lingxi.new-di.com'
 //本地环境
 // export const BASE_URL = 'http://192.168.1.39'
 // export const BASE_URL = 'http://192.168.1.68'
-// export const BASE_URL = 'http://ff6vm8.natappfree.cc'
+// export const BASE_URL = 'http://nthtqn.natappfree.cc'
 //export const BASE_URL = 'http://prerelease.lingxi.new-di.com'
 //export const BASE_URL = 'http://w4iawu.natappfree.cc'
 //export const BASE_URL = 'http://uwvnrx.natappfree.cc'

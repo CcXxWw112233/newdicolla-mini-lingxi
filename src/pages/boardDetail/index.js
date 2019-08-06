@@ -108,8 +108,6 @@ class BoardDetail extends Component {
     const { allBoardList } = this.props;
     const isHasBoardData = Array.isArray(allBoardList) && allBoardList.length;
 
-    console.log('isHasBoardData = ', isHasBoardData)
-
     return (
       <View className={styles.wrapper}>
         {isHasBoardData && (

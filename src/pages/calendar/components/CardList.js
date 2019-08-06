@@ -23,6 +23,9 @@ export default class CardList extends Component {
   render () {
     const { schedule, sche_card_list = [], no_sche_card_list = [] } = this.props
     const card_list = schedule == '1'? sche_card_list: no_sche_card_list //未排其和已排期的情况分别取不同数据
+
+    // const promptText = sche_card_list.length % 10 == 0 ? '加载更多': '没有更多内容了~'
+
     return (
       <View className={`${indexstyles.card_item_out} ${globalStyles.global_horrizontal_padding}`}>
         {card_list.map((value, key) => {
@@ -34,7 +37,7 @@ export default class CardList extends Component {
           )
         })}
 
-        <View className={indexstyles.no_more_text}>没有更多内容了~</View>
+        {/* <View className={indexstyles.no_more_text}>{promptText}</View> */}
 
       </View>
     )

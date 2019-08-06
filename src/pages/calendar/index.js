@@ -21,7 +21,7 @@ export default class Calendar extends Component {
     "onReachBottomDistance": 50  //默认值50
   }
 
-  onPullDownRefresh(res) {
+  onPullDownRefresh(res) {  //下拉刷新...
     this.getNoScheCardList()
     this.getScheCardList({})
     this.getOrgBoardList()

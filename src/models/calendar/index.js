@@ -45,15 +45,8 @@ export default {
       const selected_timestamp = yield select(select_selected_timestamp)
       const selected_board = yield select(select_selected_board)
       const current_org = getCurrentOrgByStorage()
-      // const page_number = yield select(select_page_number)
+      const page_number = yield select(select_page_number)
       let typeSource = payload['type'];
-      let page_number;
-
-      if(typeSource === 1 ) {
-        page_number = yield select(select_page_number)
-      }else {
-        page_number = 1
-      }
 
       const obj = {
         current_org,
@@ -73,17 +66,11 @@ export default {
         board_id: obj['selected_board'],
         queryDate: start_time,
         maxDate: due_time,
-        // page_size: 100,
         page_number: page_number,
         ...payload,
       }
-      // Taro.showLoading({
-      //   title: "加载中...",
-      //   mask: "true",
-      // });
       const res = yield call(getScheCardList, {...params})
       const current_sche_card_list = yield select(select_sche_card_list)
-      // Taro.hideLoading()
     
       if(isApiResponseOk(res)) {
         if (typeSource === 1) {

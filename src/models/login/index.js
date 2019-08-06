@@ -16,9 +16,6 @@ export default {
     //微信授权登录）
     * weChatAuthLogin({ payload }, { select, call, put }) {
       const parmas = payload.parmas
-      console.log('parmas = 222===', parmas)
-      console.log('payload.sourcePage = 222===', payload.sourcePage)
-
       const res = yield call(weChatAuthLogin, {...parmas})
       if(isApiResponseOk(res)) {
         yield put({
@@ -58,8 +55,6 @@ export default {
     },
     //处理token，做相应的页面跳转
     * handleToken({ payload }, { select, call, put }) {
-
-      console.log('payload = handleToken=', payload.sourcePage)
 
       const token_string  = payload.token_string;
       const tokenArr = token_string.split('__');

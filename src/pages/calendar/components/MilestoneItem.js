@@ -32,6 +32,7 @@ export default class MilestoneItem extends Component {
 
     return (
       <View >
+        {/* <View className={`${globalStyles.global_card_out} ${indexStyles.card_content} ${indexStyles.card_content2}`} style={`background-color: #FAAD14`}> */}
         <View className={`${globalStyles.global_card_out} ${indexStyles.card_content} ${indexStyles.card_content2}`} style={`background-color: #FAAD14`}>
           <View className={`${indexStyles.card_content_left}`}>
             {card_logo_4}
