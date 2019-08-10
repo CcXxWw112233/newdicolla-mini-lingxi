@@ -84,6 +84,7 @@ class BoardDetail extends Component {
       .catch(e => console.log('error in boardDetail: ' + e));
   }
   componentDidShow() {
+
     //重置当前聊天群id，和当前聊天群信息
     const {
       resetCurrentChatTo,
@@ -99,6 +100,8 @@ class BoardDetail extends Component {
     //利用小程序的生命周期,当页面卸载的时候,跳转到指定的界面
     const { sourcePage } = this.state
     if (sourcePage === 'auccessJoin') {
+      const switchTabCurrentPage = 'currentPage_BoardDetail_or_Login'
+      Taro.setStorageSync('switchTabCurrentPage', switchTabCurrentPage);  //解决wx.switchTab不能传值
       Taro.switchTab({url: `../../pages/calendar/index`
       })
     }

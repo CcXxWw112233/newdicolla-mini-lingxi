@@ -8,7 +8,7 @@ function onPushEvents(param) {
     }
   } = Taro.getApp();
 
-  console.log(' onPushEvents: ', param);
+  // console.log(' onPushEvents: ', param);
   let msgEvents = param.msgEvents;
   if (msgEvents) {
     let statusArr = [];

@@ -31,7 +31,7 @@ class Chat extends Component {
       },
       desc: 'handleInputDown'
     });
-    console.log('ssssss','out');
+    // console.log('ssssss','out');
   }
   inputDownChild = (e) => {
     e.stopPropagation();

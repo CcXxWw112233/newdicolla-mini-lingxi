@@ -3,7 +3,7 @@ import {isCreatedNewGroupOrAddTeamMembersNews} from './../utils/genNews.js'
 
 
 function onUpdateSession(sessions) {
-  console.log('get session :', sessions);
+  // console.log('get session :', sessions);
 
   const {
     globalData: {

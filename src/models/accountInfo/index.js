@@ -30,11 +30,9 @@ export default {
 
   //退出用户登录
   * changeOut({ payload }, { select, call, put }) {
-  
     const res = yield call(changeOut, payload)
     if(isApiResponseOk(res)) {
-      Taro.clearStorageSync('access_token');
-      Taro.clearStorageSync('refresh_token');
+      Taro.clearStorageSync();  //清除所有的Storage
       Taro.reLaunch({
         url: '../../pages/login/index'
       })

@@ -33,7 +33,7 @@ export const request = (options, notShowLoading, isNewLogin) => {
             })
           }
           else {
-            Taro.reLaunch({
+            Taro.navigateTo({
               url: '../../pages/nowOpen/index'
             })
           }
@@ -53,7 +53,7 @@ export const request = (options, notShowLoading, isNewLogin) => {
         reject({ error: "系统繁忙，请稍后重试" });
       },
       comcomplete: function(res) {
-        console.log(res);
+        // console.log(res);
       }
     });
   });

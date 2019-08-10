@@ -23,7 +23,6 @@ const store = dvaApp.getStore();
 // }
 
 class App extends Component {
-
   config = {
     pages: [
       'pages/calendar/index',

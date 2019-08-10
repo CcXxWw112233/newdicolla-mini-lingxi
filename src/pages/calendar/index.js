@@ -52,7 +52,15 @@ export default class Calendar extends Component {
   componentWillMount () { }
 
   componentDidMount() {
-    this.registerIm()
+
+    const switchTabCurrentPage = 'currentPage_BoardDetail_or_Login'
+    const routeSource = Taro.getStorageSync('switchTabCurrentPage')
+    if (routeSource === switchTabCurrentPage) {
+      Taro.removeStorageSync('switchTabCurrentPage')
+    }
+    else {
+        this.registerIm()
+    }
   }
 
   componentDidShow () {

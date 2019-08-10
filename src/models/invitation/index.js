@@ -23,7 +23,7 @@ export default {
           yield put({
             type: 'updateDatas',
             payload: {
-               qrCodeInfo: res.data,
+              qrCodeInfo: res.data || {},
             },
           })
         }
@@ -43,11 +43,10 @@ export default {
           const parameter = {
             board_id: payload.board_Id,
           }
-          console.log('parameter:', parameter)
           const res = yield call(userScanCodeJoinBoard, parameter)
           if(isApiResponseOk(res)) {
               Taro.navigateTo({
-                url: `../../pages/auccessJoin/index?boardId=${parameter}`
+                url: `../../pages/auccessJoin/index?boardId=${parameter}&&pageRoute=${payload.pageRoute}`
               })
           }else {
     

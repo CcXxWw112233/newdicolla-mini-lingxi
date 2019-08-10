@@ -38,6 +38,8 @@ export default class Board extends Component {
 
   componentWillUnmount () { }
 
+  componentDidMount () { }
+
   componentDidShow () {
     this.getBoardList()
   }

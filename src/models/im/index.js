@@ -127,7 +127,7 @@ export default {
 
       // 所以，问题的本质是同一份数据，放在了两个地方，而且要维护数据的同步，就会导致蛋疼的情况
       // 这是一种不好的实践。
-
+      
       const { boardId } = payload;
       const {
         globalData: {
@@ -139,7 +139,7 @@ export default {
         'nim',
         'allBoardList'
       ]);
-
+      
       if(!nim) return
       //获取当前账号的群信息
       yield nim.getTeams({

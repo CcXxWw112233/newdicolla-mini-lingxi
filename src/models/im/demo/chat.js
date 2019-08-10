@@ -86,8 +86,8 @@ let pageConfig = {
     // 滚动到底部
     self.scrollToBottom()
     app.globalData.emitter.on('callRejected', (data) => {
-      console.log('对方拒绝了111')
-      console.log(data)
+      // console.log('对方拒绝了111')
+      // console.log(data)
     })
   },
   /**

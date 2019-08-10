@@ -82,6 +82,7 @@ class GroupList extends Component {
         title: '当前群数据异常',
         icon: 'none'
       });
+
       return;
     }
 
