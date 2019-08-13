@@ -21,11 +21,11 @@ export default class Authorize extends Component {
     }
   }
   onCancel = (e) => {
-    console.log('取消')
+    // console.log('取消')
     this.setShowAuthorize(false)
   }
   onConfirm =(e) => {
-    console.log('确认')
+    // console.log('确认')
     this.setShowAuthorize(false)
   }
   setShowAuthorize = (show_authorize) => {

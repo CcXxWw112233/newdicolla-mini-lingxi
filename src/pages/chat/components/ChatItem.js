@@ -164,7 +164,7 @@ class ChatItem extends Component {
           nowAndInputTimestampOffset >= key0 &&
           nowAndInputTimestampOffset < key1
       );
-      console.log(timestamp);
+      // console.log(timestamp);
       dateStr = findDateCond ? findDateCond[1] : '';
       if(dateStr==='今天'||dateStr==='昨天'||dateStr==='前天'||dateStr===''){
         timeStr = timestampFormat(timestamp,"hh:mm");
@@ -174,10 +174,10 @@ class ChatItem extends Component {
         timeStr = timestampFormat(timestamp,"MM月dd日 hh:mm");
       }
      
-      console.log("dateStr",dateStr);
-      console.log("timeStr",timeStr);
+      // console.log("dateStr",dateStr);
+      // console.log("timeStr",timeStr);
     } catch (error) {
-      console.log("ERROR",error);
+      // console.log("ERROR",error);
       return timestamp;
     }
     return `${dateStr === '今天' ? '' : dateStr} ${timeStr}`;

@@ -481,7 +481,7 @@ class UserInput extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { handleInputMode} = nextProps;
-    console.log(handleInputMode);
+    // console.log(handleInputMode);
     this.setState({
       inputMode: handleInputMode
     });
@@ -499,7 +499,7 @@ class UserInput extends Component {
       inputBottomValue
     } = this.state;
     
-    console.log(inputMode);
+    // console.log(inputMode);
     const { emojiAlbumList, emojiList } = this.genEmojiInfo();
     const findedCurrentEmojiAlbum = emojiList.filter(
       i => i.name === emojiAlbum

@@ -82,8 +82,11 @@ class App extends Component {
   globalData = {
     store,
   }
-  
-  componentDidMount () {}
+
+  componentDidMount () {
+    const options = this.$router.params
+    Taro.setStorageSync('sceneParams', options)
+  }
 
   componentDidShow () {}
 

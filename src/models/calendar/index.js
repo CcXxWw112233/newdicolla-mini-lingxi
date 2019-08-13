@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro'
 import {isApiResponseOk} from "../../utils/request";
 import { getOrgBoardList, getScheCardList, getNoScheCardList, getSignList } from "../../services/calendar/index";
-import { select_selected_board, select_selected_timestamp, select_search_text, select_page_number, select_sche_card_list } from './selects'
+import { select_selected_board, select_selected_timestamp, select_search_text, select_page_number, select_sche_card_list, select_is_reach_bottom } from './selects'
 import { getCurrentOrgByStorage } from '../../utils/basicFunction'
 import { number } from 'prop-types';
 
@@ -17,6 +17,7 @@ export default {
     no_sche_card_list: [], //项目的所有排期的卡片列表
     sign_data: [], //日历列表打点数据
     page_number: 1,  //默认第1页
+    isReachBottom: true,  //是否上拉加载分页
   },
   effects: {
 
@@ -71,7 +72,6 @@ export default {
       }
       const res = yield call(getScheCardList, {...params})
       const current_sche_card_list = yield select(select_sche_card_list)
-    
       if(isApiResponseOk(res)) {
         if (typeSource === 1) {
           //处理上拉加载
@@ -93,7 +93,12 @@ export default {
           })
         }
       }else {
-
+        yield put({
+          type: 'updateDatas',
+          payload: {
+            isReachBottom: false
+          }
+        })
       }
     },
 

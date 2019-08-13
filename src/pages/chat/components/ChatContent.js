@@ -188,9 +188,9 @@ class ChatContent extends Component {
       isUserInputHeightChange
     } = this.props;
     const { scrollIntoViewEleId,chatConetntViewHeightStyle} = this.state;
-    console.log("isUserInputHeightChange",isUserInputHeightChange);
+    // console.log("isUserInputHeightChange",isUserInputHeightChange);
     
-    console.log(scrollIntoViewEleId);
+    // console.log(scrollIntoViewEleId);
     return (
       <ScrollView
         id='chatContent'

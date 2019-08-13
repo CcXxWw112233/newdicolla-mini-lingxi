@@ -9,8 +9,8 @@ import CalendarSwiper from './components/CalendarSwiper'
 import MilestoneList from './components/MilestoneList'
 import { connect } from '@tarojs/redux'
 
-@connect(({ calendar: { no_sche_card_list, selected_board_name, page_number } }) => ({
-  no_sche_card_list, selected_board_name, page_number
+@connect(({ calendar: { no_sche_card_list, selected_board_name, page_number, isReachBottom } }) => ({
+  no_sche_card_list, selected_board_name, page_number, isReachBottom,
 }))
 export default class Calendar extends Component {
 
@@ -35,7 +35,10 @@ export default class Calendar extends Component {
   }
 
   onReachBottom () {    //上拉加载...
-    this.pagingGet()
+    const isReachBottom = this.props.isReachBottom
+    if (isReachBottom === true) {
+      this.pagingGet()
+    }
   }
 
   state= {
@@ -52,7 +55,6 @@ export default class Calendar extends Component {
   componentWillMount () { }
 
   componentDidMount() {
-
     const switchTabCurrentPage = 'currentPage_BoardDetail_or_Login'
     const routeSource = Taro.getStorageSync('switchTabCurrentPage')
     if (routeSource === switchTabCurrentPage) {
@@ -137,9 +139,7 @@ export default class Calendar extends Component {
     })
   }
 
-  componentDidHide () { 
-
-  }
+  componentDidHide () { }
 
   onSelectType = ({show_type}) => {
     this.setState({

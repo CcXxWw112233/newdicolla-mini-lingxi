@@ -3,14 +3,23 @@
 .effective_contain {
   margin-top: pxTrans(0);
   margin-left: pxTrans(120);
-    .effective_forwardTips {
-      width: pxTrans(200);
-      height: pxTrans(54);
-      .forwardTipsText{
-        font-size: $fontsize_14;
-      }
-    }
+  position: relative;
+  .forwardTipsText {
+    position: absolute;
+    width: pxTrans(60);
+    margin-left: pxTrans(-30);
+    left: 50%;
+    top: 0;
+    font-size: $fontsize_14;
+    color: #fff;
+    width: pxTrans(200);
+  }
+  .effective_forwardTips {
+    width: pxTrans(200);
+    height: pxTrans(54);
+  }
 }
+
 .effective_contain1 {
   margin-top: pxTrans(106);
   text-align: center;
@@ -23,15 +32,15 @@
   font-size: $fontsize_18;
   margin-top: pxTrans(16);
   text-align: center;
-  color: #3F3D56;
+  color: #3f3d56;
 }
-.effective_login_btn_wx{
-  background-color: #1890FF;
-  border: pxTrans(1) solid #1890FF;
+.effective_login_btn_wx {
+  background-color: #1890ff;
+  border: pxTrans(1) solid #1890ff;
 }
-.effective_acceptBtn{
+.effective_acceptBtn {
   margin-top: pxTrans(100);
-  border: 0!important;
+  border: 0 !important;
   width: 100%;
   height: pxTrans(40);
   line-height: pxTrans(40);

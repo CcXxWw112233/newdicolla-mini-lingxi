@@ -19,7 +19,7 @@ export function sendFileMsg ({state, commit}, obj) {
     },
     uploaderror: function () {
       fileInput.value = ''
-      console && console.log('上传失败')
+      // console && console.log('上传失败')
     },
     uploaddone: function(error, file) {
       fileInput.value = ''

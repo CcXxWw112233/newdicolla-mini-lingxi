@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Image } from '@tarojs/components'
+import { View, Image, Text } from '@tarojs/components'
 import indexStyles from './index.scss'
 import auccess_Join_image from '../../asset/Invitation/auccess_Join.png'
 import globalStyles from '../../gloalSet/styles/globalStyles.scss'
@@ -86,7 +86,9 @@ export default class auccessJoin extends Component {
           <Image src={auccess_Join_image} className={indexStyles.auccess_Join} />
         </View>
         <View className={indexStyles.text1}>已成功加入项目</View>
-        <View className={indexStyles.text2}>正在为你跳转小程序，你也可以前往网页 \n 或者App展开协作</View>
+        <View className={indexStyles.text2}>
+          <Text>正在为你跳转小程序，你也可以前往网页\n或者App展开协作</Text>
+        </View>
       </View>
     )
   }

@@ -54,7 +54,7 @@
 					"id": 1,
 					"name": "pages/acceptInvitation/index",
 					"pathName": "pages/acceptInvitation/index",
-					"query": "id=1160036701045919744",
+					"query": "id=1160744390482857984",
 					"scene": 1008
 				},
 				{
@@ -77,6 +77,13 @@
 					"pathName": "pages/calendar/index",
 					"query": "id=1156175314305552384",
 					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/calendar/index",
+					"pathName": "pages/calendar/index",
+					"query": "",
+					"scene": 1008
 				}
 			]
 		}

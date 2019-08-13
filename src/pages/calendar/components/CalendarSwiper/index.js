@@ -205,7 +205,8 @@ export default class CalendarSwiper extends Component {
       type: 'calendar/updateDatas',
       payload: {
         selected_timestamp: timestamp,
-        page_number: 1  //重新选择日历上的日期,重置 page_number 为 1
+        page_number: 1,  //重新选择日历上的日期,重置 page_number 为 1
+        isReachBottom: true,
       }
     })
     //获取排期列表

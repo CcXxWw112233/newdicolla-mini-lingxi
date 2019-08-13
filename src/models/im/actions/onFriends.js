@@ -42,7 +42,7 @@ function onFriends(friends) {
       accounts: friends.map(item => item.account),
       sync: true,
       done: function (err, obj) {
-        console.log('subscribe friends login state :', obj)
+        // console.log('subscribe friends login state :', obj)
         // console.log(err, obj)
       }
     })
