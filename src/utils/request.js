@@ -7,12 +7,17 @@ export const request = (options, notShowLoading, isNewLogin) => {
   Headers['Authorization'] = Taro.getStorageSync('access_token')
 
   return new Promise((resolve, reject) => {
-    if (!notShowLoading) {
-      Taro.showLoading({
-        title: "加载中...",
-        mask: "true"
-      });
-    }
+
+    /***
+     * windows刷新菊花隐藏掉
+     */
+    // if (!notShowLoading) {
+    //   Taro.showLoading({
+    //     title: "加载中...",
+    //     mask: "true"
+    //   });
+    // }
+
     // Headers['content-type'] = 'application/x-www-form-urlencoded'
     Taro.request({
       url: BASE_URL + url,
@@ -22,9 +27,11 @@ export const request = (options, notShowLoading, isNewLogin) => {
       method,
       header: Headers,
       success: function(res) {
-        if (!notShowLoading) {
-          Taro.hideLoading();
-        }
+
+        // if (!notShowLoading) {
+        //   Taro.hideLoading();
+        // }
+
         if(REQUEST_RES_CODE_TOKEN_INVALID == res.data.code) {
           // Taro.navigateTo({url: '../../pages/login/index'})
           if (!isNewLogin) {

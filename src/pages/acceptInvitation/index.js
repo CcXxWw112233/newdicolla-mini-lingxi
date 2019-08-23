@@ -13,7 +13,6 @@ import CustomNavigation from './components/CustomNavigation.js'
 export default class acceptInvitation extends Component {
   config = {
     navigationStyle: 'custom',
-    // navigationBarTitleText: '灵犀协作',
   }
   state = {
 
@@ -27,6 +26,19 @@ export default class acceptInvitation extends Component {
     }
   }
   componentDidMount() {
+  }
+  componentWillReceiveProps() {
+  }
+  componentWillUnmount() {
+  }
+  componentDidShow() {
+    this.scanQRCodeJoin()
+    this.isLoginStatus()
+  }
+  componentDidHide() {
+  }
+
+  scanQRCodeJoin() {
     const sceneParams = Taro.getStorageSync('sceneParams')
     let queryId
     if (sceneParams.scene === 1047) {  //扫码场景进入
@@ -47,13 +59,12 @@ export default class acceptInvitation extends Component {
       payload: params
     })
   }
-  componentWillReceiveProps() {
-  }
-  componentWillUnmount() {
-  }
-  componentDidShow() {
-  }
-  componentDidHide() {
+
+  isLoginStatus() {
+    const access_token = Taro.getStorageSync('access_token')
+    if (!access_token) {
+      Taro.setStorageSync('isLoginStatus', 'yes')
+    }
   }
 
   acceptTheInvitation = () => {
@@ -80,9 +91,8 @@ export default class acceptInvitation extends Component {
         <CustomNavigation />
         <View className={`${globalStyles.global_horrizontal_padding}`}>
           <View className={indexStyles.effective_contain}>
-            <View><Image src={forward_Tips} className={indexStyles.effective_forwardTips}></Image>
-            </View>
-            <View className={indexStyles.forwardTipsText}>点击【转发】邀请微信好友</View>
+            <Image src={forward_Tips} className={indexStyles.effective_forwardTips}></Image>
+            {/* <View className={indexStyles.forwardTipsText}>点击【转发】邀请微信好友</View> */}
           </View>
           <View className={indexStyles.effective_contain1}>
             <Image src={accept_Invitation_Logo} className={indexStyles.effective_logo} />

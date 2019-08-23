@@ -67,7 +67,7 @@ function* initNimSDK(loginInfo = {}) {
     syncTeams: true, //是否同步群列表， 默认为 true, 但是没触发？？？
     onconnect: () => onConnect({ account, token }),
     onwillreconnect: onWillReconnect,
-    ondisconnect: onDisconnect,
+    ondisconnect: (error) => onDisconnect(error,),
     onerror: onError,
     // 私有化配置文件
     privateConf: openPrivateConf ? openPrivateConf : '',

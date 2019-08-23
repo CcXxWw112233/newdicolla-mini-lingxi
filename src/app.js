@@ -50,6 +50,7 @@ class App extends Component {
       navigationBarBackgroundColor: '#1890FF',
       navigationBarTitleText: '灵犀',
       navigationBarTextStyle: 'white',
+      navigationStyle: 'default',
     },
     tabBar: {
       "backgroundColor": "#ffffff",
@@ -84,11 +85,14 @@ class App extends Component {
   }
 
   componentDidMount () {
-    const options = this.$router.params
-    Taro.setStorageSync('sceneParams', options)
   }
 
-  componentDidShow () {}
+  componentDidShow () {
+    const options = this.$router.params
+    if (options.path === 'pages/acceptInvitation/index') {
+      Taro.setStorageSync('sceneParams', options)
+    }
+  }
 
   componentDidHide () {}
 

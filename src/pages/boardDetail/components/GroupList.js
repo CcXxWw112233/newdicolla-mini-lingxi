@@ -78,12 +78,17 @@ class GroupList extends Component {
       currentBoardImValid[im_id] && currentBoardImValid[im_id]['isValid'];
 
     if (!isValid) {
-      Taro.showToast({
-        title: '当前群数据异常',
-        icon: 'none'
-      });
+      // Taro.showToast({
+      //   title: '当前群数据异常',
+      //   icon: 'none'
+      // });
+      // return;
 
-      return;
+      // console.log('当前群数据异常...')
+      /**
+       * 遇到群聊数据异常的情况, 重新注入registerIm连接
+       */
+      this.registerIm()
     }
 
     //生成与 云信后端返回数据相同格式的 id
@@ -269,6 +274,30 @@ class GroupList extends Component {
       childs
     };
   };
+
+  registerIm = () => {
+
+    // console.log('群聊异常执行重新注入Im');
+    
+    const initImData = async () => {
+      const { dispatch } = this.props;
+      const { account, token } = await dispatch({
+        type: 'im/fetchIMAccount'
+      });
+      await dispatch({
+        type: 'im/initNimSDK',
+        payload: {
+          account,
+          token
+        }
+      });
+      return await dispatch({
+        type: 'im/fetchAllIMTeamList'
+      });
+    };
+    initImData().catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
+  }
+
   render() {
     const { currentBoard, sessionlist, rawMessageList } = this.props;
     const { isShouldExpandSubGroup } = this.state;

@@ -116,7 +116,38 @@ function onDisconnect(error) {
           }
         });
         break;
+      case 'logout':{
+        // console.log(error.code,"主动destroy");
+      }
+      break;
       default:
+        // console.log(error.code,"im 异常错误");
+        // console.log(error,"im 异常错误");
+        // const {
+        //   globalData: {
+        //     store: { getState }
+        //   }
+        // } = Taro.getApp();
+        // const {
+        //   im: { nim }
+        // } = getState();
+        // try {
+        //   nim.disconnect()
+        //   console.log('liuyingjun',"im 异常错误");
+        //   nim.connect()
+        // } catch (error) {
+        //   console.log('im disconnect:错误', error);
+        //   nim.destroy();
+        //   const {dispatch} = this.props;
+        //   dispatch({
+        //     type:'im/updateStateFieldByCover',
+        //     payload:{
+        //       nim:null
+        //     }
+        //   });
+        //   // registerIM
+        // }
+       
         break;
     }
   }

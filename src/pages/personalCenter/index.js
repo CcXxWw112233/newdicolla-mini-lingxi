@@ -65,6 +65,24 @@ class PersonalCenter extends Component {
         ...parmas
       }
     })
+
+    const {
+      globalData: {
+        store: { getState }
+      }
+    } = Taro.getApp();
+    const {
+      im: { nim }
+    } = getState();
+    nim.destroy();
+
+    // const {dispatch} = this.props;
+    dispatch({
+      type:'im/updateStateFieldByCover',
+      payload:{
+        nim:null
+      }
+    });
   }
 
   //前往组织

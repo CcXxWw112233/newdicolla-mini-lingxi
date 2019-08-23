@@ -5,11 +5,9 @@ import Invalid_Image from '../../asset/Invitation/qrCode_Invalid.png'
 import globalStyles from '../../gloalSet/styles/globalStyles.scss'
 import CustomNavigation from '../acceptInvitation/components/CustomNavigation.js'
 
-
 export default class qrCodeInvalid extends Component {
   config = {
     navigationStyle: 'custom',
-    navigationBarTitleText: '灵犀协作',
   }
   componentWillReceiveProps() {
   }

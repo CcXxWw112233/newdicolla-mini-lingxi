@@ -60,8 +60,8 @@ export default class Calendar extends Component {
     if (routeSource === switchTabCurrentPage) {
       Taro.removeStorageSync('switchTabCurrentPage')
     }
-    else {
-        this.registerIm()
+    else { 
+      this.registerIm()
     }
   }
 

@@ -4,16 +4,15 @@
   margin-top: pxTrans(0);
   margin-left: pxTrans(120);
   position: relative;
-  .forwardTipsText {
-    position: absolute;
-    width: pxTrans(60);
-    margin-left: pxTrans(-30);
-    left: 50%;
-    top: 0;
-    font-size: $fontsize_14;
-    color: #fff;
-    width: pxTrans(200);
-  }
+  // .forwardTipsText {
+  //   position: absolute;
+  //   width: pxTrans(60);
+  //   margin-left: pxTrans(-30);
+  //   left: 50%;
+  //   top: 0;
+  //   font-size: $fontsize_14;
+  //   color: #fff
+  // }
   .effective_forwardTips {
     width: pxTrans(200);
     height: pxTrans(54);

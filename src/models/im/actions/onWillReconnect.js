@@ -7,5 +7,6 @@ function onWillReconnect() {
     icon: 'none',
     duration: 3000,
   })
+  nim.disconnect({ done: () => { nim.connect(); } })
 }
 export default onWillReconnect
