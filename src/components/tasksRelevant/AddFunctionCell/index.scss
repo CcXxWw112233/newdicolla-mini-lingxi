@@ -1,0 +1,8 @@
+.viewStyle {
+    justify-content    : space-between;
+    display            : flex;
+    height: pxTrans(58);
+    .itemStyle{
+        flex-direction: column;
+    }
+}

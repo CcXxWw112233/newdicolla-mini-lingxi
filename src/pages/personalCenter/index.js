@@ -155,7 +155,7 @@ class PersonalCenter extends Component {
 
         </View>
         <View className={indexStyles.logout} onClick={this.setAccountModalShow}>
-          切换账号
+          退出登陆
         </View>
         {logoutModal}
       </View>

@@ -74,7 +74,7 @@ export default class CardItem extends Component {
               <Text  className={`${indexStyles.organize}`}>#{getOrgName({org_id, org_list})}>{board_name}</Text>
             </View>
             <View className={`${indexStyles.card_content_middle_bott}`}>
-              {schedule == '0'? '未排期': `${start_time?timestampToTimeZH(start_time): '开始时间未设置'} - ${due_time?timestampToTimeZH(due_time): '截止时间未设置'}`}
+              {schedule == '0'? '未排期': `${start_time?timestampToTimeZH(start_time): '开始时间未设置1'} - ${due_time?timestampToTimeZH(due_time): '截止时间未设置'}`}
             </View>
           </View>
           <View className={`${indexStyles.card_content_right}`}>

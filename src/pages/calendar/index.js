@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { View , Button} from '@tarojs/components'
 import CardList from './components/CardList'
 import indexStyles from './index.scss'
 import globalStyles from '../../gloalSet/styles/globalStyles.scss'
@@ -152,6 +152,12 @@ export default class Calendar extends Component {
     const { selected_board_name } = this.props
     Taro.navigateTo({
       url: `../../pages/noSchedulesCard/index?title=${selected_board_name}`
+    })
+  }
+
+  newlyBuildThingProject = () => {
+    Taro.navigateTo({
+      url: '../../pages/addingTasks/index'
     })
   }
 

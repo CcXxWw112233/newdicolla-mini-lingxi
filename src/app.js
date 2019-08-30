@@ -44,6 +44,11 @@ class App extends Component {
       'pages/nowOpen/index',
       'pages/auccessJoin/index',
       'pages/qrCodeInvalid/index',
+      'pages/addingTasks/index',
+      'pages/choiceProject/index',
+      'pages/fillDescribe/index',
+      'pages/taksDetails/index',
+      // 'pages/DateTimePicker/index',
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -70,7 +75,7 @@ class App extends Component {
           "selectedIconPath": './asset/tabBar/board_selected.png',
         },
         {
-          "pagePath": "pages/my/index",
+          "pagePath": "pages/personalCenter/index",
           "text": "我的",
           "iconPath": './asset/tabBar/personal.png',
           "selectedIconPath": './asset/tabBar/personal_selected.png',

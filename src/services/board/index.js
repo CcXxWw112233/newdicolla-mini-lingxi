@@ -1,5 +1,5 @@
 import { request, packagePromise,} from "../../utils/request";
-import { API_BOARD } from "../../gloalSet/js/constant";
+import { API_BOARD, REQUEST_INTERGFACE_VERSIONN } from "../../gloalSet/js/constant";
 
 //获取项目列表
 export const getBoardList = (data , notShowLoading) => {
@@ -21,4 +21,15 @@ export const getBoardListSearch = (data , notShowLoading) => {
     method: 'GET',
     url: `${API_BOARD}/mini/board/list/search`,
   }, notShowLoading)
+}
+
+export async function getProjectList(params) {
+  return request({
+    url: `${API_BOARD}${REQUEST_INTERGFACE_VERSIONN}/board/list`,
+    method: 'GET',
+    params: {
+      contain_type: '3',
+      _organization_id: params._organization_id || localStorage.getItem('OrganizationId')
+    }
+  });
 }

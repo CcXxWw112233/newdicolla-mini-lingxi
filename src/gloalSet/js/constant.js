@@ -1,7 +1,7 @@
 //线上环境
-export const BASE_URL = 'https://lingxi.di-an.com' 
+// export const BASE_URL = 'https://lingxi.di-an.com' 
 //测试环境
-// export const BASE_URL = 'http://test.lingxi.new-di.com'
+export const BASE_URL = 'http://test.lingxi.new-di.com'
 //本地环境
 // export const BASE_URL = 'http://192.168.1.39'
 // export const BASE_URL = 'http://192.168.1.68'
@@ -20,6 +20,7 @@ export const API_FILES = '/api/files' //接口域名
 export const API_FLOWS = '/api/flows' //接口域名
 export const API_WORKBENCHS = '/api/workbenchs'
 export const API_MORE = '/api/more'
+export const REQUEST_INTERGFACE_VERSIONN = '/v2' //接口版本
 
 export const WEBSOCKET_PATH = '192.168.0.30'  //WS链接地址
 export const WEBSOCKET_PORT= '9326'  //WS链接地址

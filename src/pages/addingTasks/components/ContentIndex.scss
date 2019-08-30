@@ -1,0 +1,15 @@
+.establish_btn_normal{
+    background-color: #1890FF;
+    border: pxTrans(1) solid #1890FF;
+}
+.establish_btn{
+    border: 0!important;
+    width: 100%;
+    height: pxTrans(40);
+    line-height: pxTrans(40);
+    text-align: center;
+    color: #fff;
+    border-radius: pxTrans(4);
+    margin-bottom: pxTrans(16);
+    box-shadow: none;
+}

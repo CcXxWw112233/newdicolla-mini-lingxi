@@ -10,7 +10,7 @@ export default {
   effects: {
     * effectsDemo({ payload }, { select, call, put }) {
       const number = yield select(select_number)
-      console.log({number})
+      // console.log({number})
       const res = yield call(getBar, payload)
       if(isApiResponseOk(res)) {
         yield put({

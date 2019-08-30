@@ -31,6 +31,22 @@ export default {
 
       }
     },
+  
+    * getProjectList({ payload }, { select, call, put }) {
+      let res = yield call(getProjectList, payload)
+      console.log('res = ', 1111)
+      if(isApiResponseOk(res)) {
+        yield put({
+          type: 'updateDatas',
+          payload: {
+            projectList: res.data
+          }
+        })
+      }else{
+
+      }
+    },
+  
   },
 
   reducers: {

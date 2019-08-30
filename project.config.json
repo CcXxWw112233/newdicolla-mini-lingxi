@@ -41,7 +41,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 1,
+			"current": 8,
 			"list": [
 				{
 					"id": 0,
@@ -84,6 +84,27 @@
 					"pathName": "pages/calendar/index",
 					"query": "",
 					"scene": 1008
+				},
+				{
+					"id": -1,
+					"name": "pages/DateTimePicker/index",
+					"pathName": "pages/DateTimePicker/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 7,
+					"name": "pages/fillDescribe/index",
+					"pathName": "pages/taksDetails/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 8,
+					"name": "pages/addingTasks/index",
+					"pathName": "pages/addingTasks/index",
+					"query": "",
+					"scene": null
 				}
 			]
 		}
