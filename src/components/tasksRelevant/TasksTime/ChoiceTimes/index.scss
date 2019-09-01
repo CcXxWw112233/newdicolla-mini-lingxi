@@ -1,0 +1,7 @@
+.viewStyle {
+    height: pxTrans(64);
+    flex-direction: row;
+    .timeStyle {
+        flex-direction: column;
+    }
+}
