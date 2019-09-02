@@ -41,7 +41,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 8,
+			"current": 7,
 			"list": [
 				{
 					"id": 0,
@@ -94,15 +94,15 @@
 				},
 				{
 					"id": 7,
-					"name": "pages/fillDescribe/index",
+					"name": "pages/taksDetails/index",
 					"pathName": "pages/taksDetails/index",
 					"query": "",
 					"scene": null
 				},
 				{
 					"id": 8,
-					"name": "pages/addingTasks/index",
-					"pathName": "pages/addingTasks/index",
+					"name": "pages/choiceProject/index",
+					"pathName": "pages/taksDetails/index",
 					"query": "",
 					"scene": null
 				},

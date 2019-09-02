@@ -5,20 +5,26 @@ import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { AtIndexes } from 'taro-ui'
 import { connect } from '@tarojs/redux';
 
-@connect( ({ indexes}) => ({
-    indexes
+@connect( ({ tasks }) => ({
+  tasks
 }))
 export default class Indexes extends Component {
 
   componentWillReceiveProps () { }
 
   componentDidMount() {
-      //获取项目列表
-    // const { dispatch } = this.props;
-    // dispatch({
-    //   type: 'board/getProjectList',
-    //   payload: { }
-    // })
+
+      this.getTaskGroupList()
+  }
+
+  getTaskGroupList = () => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'tasks/getTaskGroupList',
+      payload: {
+
+      }
+    })
   }
 
   componentWillUnmount () { }

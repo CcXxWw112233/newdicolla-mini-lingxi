@@ -1,0 +1,23 @@
+@import "../../../../gloalSet/styles/constant";
+
+.viewStyle {
+    display         : flex;
+    background   : rgba(245, 245, 245, 1);
+    height          : pxTrans(54);
+
+    .inputStyle {
+        height: pxTrans(42);
+        border-radius:pxTrans(8);
+    }
+
+    .emoji_icon_button {
+        width : pxTrans(24);
+        height: pxTrans(24);
+    }
+
+    .plus_icon_button {
+        width       : pxTrans(24);
+        height      : pxTrans(24);
+        margin-right: pxTrans(16);
+    }
+}

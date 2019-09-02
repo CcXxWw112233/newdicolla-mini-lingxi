@@ -8,6 +8,7 @@ import accountInfo from './accountInfo/index'
 import calendar from './calendar/index'
 import chat from './chat/index'
 import invitation from './invitation/index'
+import tasks from './tasks/index'
 
 const models = [
   testPage,
@@ -20,5 +21,6 @@ const models = [
   calendar,
   chat,
   invitation,
+  tasks,
 ]
 export default models

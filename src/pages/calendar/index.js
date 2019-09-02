@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View , Button} from '@tarojs/components'
+import { View, Button } from '@tarojs/components'
 import CardList from './components/CardList'
 import indexStyles from './index.scss'
 import globalStyles from '../../gloalSet/styles/globalStyles.scss'
@@ -34,25 +34,25 @@ export default class Calendar extends Component {
     }, 300)
   }
 
-  onReachBottom () {    //上拉加载...
+  onReachBottom() {    //上拉加载...
     const isReachBottom = this.props.isReachBottom
     if (isReachBottom === true) {
       this.pagingGet()
     }
   }
 
-  state= {
+  state = {
     show_card_type_select: '0',
     search_mask_show: '0'
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
 
   }
 
-  componentWillUnmount () { }
+  componentWillUnmount() { }
 
-  componentWillMount () { }
+  componentWillMount() { }
 
   componentDidMount() {
     const switchTabCurrentPage = 'currentPage_BoardDetail_or_Login'
@@ -60,12 +60,12 @@ export default class Calendar extends Component {
     if (routeSource === switchTabCurrentPage) {
       Taro.removeStorageSync('switchTabCurrentPage')
     }
-    else { 
+    else {
       this.registerIm()
     }
   }
 
-  componentDidShow () {
+  componentDidShow() {
     const { selected_board_name } = this.props
     Taro.setNavigationBarTitle({
       title: selected_board_name
@@ -115,8 +115,8 @@ export default class Calendar extends Component {
         page_number: new_page_number
       }
     })
-    
-    this.getScheCardList({type: 1})
+
+    this.getScheCardList({ type: 1 })
   }
 
   // 获取组织列表
@@ -139,9 +139,15 @@ export default class Calendar extends Component {
     })
   }
 
-  componentDidHide () { }
+  componentDidHide() { }
 
-  onSelectType = ({show_type}) => {
+  gotoAddingTasks = () => {
+    Taro.navigateTo({
+      url: '../../pages/addingTasks/index',
+    })
+  }
+
+  onSelectType = ({ show_type }) => {
     this.setState({
       show_card_type_select: show_type,
       search_mask_show: show_type
@@ -181,20 +187,22 @@ export default class Calendar extends Component {
     initImData().catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
   }
 
-  render () {
+  render() {
     const { show_card_type_select, search_mask_show } = this.state
     const { no_sche_card_list = [] } = this.props
     return (
       <View>
         <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
-        <CalendarSwiper  />
-        <CardTypeSelect show_card_type_select={show_card_type_select} onSelectType={this.onSelectType} schedule={'1'}/>
-        <MilestoneList schedule={'1'}/>
+        <CalendarSwiper />
+        <CardTypeSelect show_card_type_select={show_card_type_select} onSelectType={this.onSelectType} schedule={'1'} />
+        <MilestoneList schedule={'1'} />
         {no_sche_card_list.length && (
           <View className={`${globalStyles.global_card_out} ${indexStyles.no_scheduling}`} onClick={this.gotoNoSchedule}>暂未排期的工作（{no_sche_card_list.length}）</View>
         )}
-        <CardList schedule={'1'}/>
+        <CardList schedule={'1'} />
         <View style='height: 50px'></View>
+
+        <View className={indexStyles.plusTasks} onClick={this.gotoAddingTasks}>+</View>
       </View>
     )
   }
