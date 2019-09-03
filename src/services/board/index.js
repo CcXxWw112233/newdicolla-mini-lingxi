@@ -23,6 +23,7 @@ export const getBoardListSearch = (data , notShowLoading) => {
   }, notShowLoading)
 }
 
+//项目列表
 export async function getProjectList(params) {
   return request({
     url: `${API_BOARD}${REQUEST_INTERGFACE_VERSIONN}/board/list`,
@@ -32,4 +33,15 @@ export async function getProjectList(params) {
       _organization_id: params._organization_id || localStorage.getItem('OrganizationId')
     }
   });
+}
+
+//任务, 日程， 节点数据关联里程碑
+export const boardAppRelaMiletones = (data , notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'POST',
+    url: `${API_BOARD}/milestone/rela`,
+  }, notShowLoading)
 }

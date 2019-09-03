@@ -3,7 +3,11 @@ import { View, Text, Button } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { AtInput } from 'taro-ui'
+import { connect } from '@tarojs/redux';
 
+@connect(({ tasks }) => ({
+  tasks
+}))
 export default class index extends Component {
 
   constructor() {
@@ -14,12 +18,26 @@ export default class index extends Component {
   }
 
   handleChange (value) {
+    console.log(value, 'sssss')
     this.setState({
       value
     })
-    return value
+    // return value
   }
 
+  onSend = () => {
+    const { dispatch } = this.props
+    const { value } = this.state
+    const content_Id = this.props.content
+    dispatch({
+      type: 'tasks/addComment',
+      payload: {
+        comment: value,
+        card_id: content_Id,
+      }
+    })
+  }
+ 
   componentWillReceiveProps() { }
 
   componentDidMount() { }
@@ -34,19 +52,21 @@ export default class index extends Component {
 
     const { value } = this.state
     const send = value ? '发送' : <Text className={`${globalStyle.global_iconfont}`}>&#xe632;</Text>
+    // const isDisabled = send === '发送' ? false : true
     return (
       <View className={indexStyles.viewStyle}>
           <AtInput
             className={indexStyles.inputStyle}
             type='text'
             placeholder='输入评论, 可以@他人'
-            value={this.state.value}
+            value={value}
             onChange={this.handleChange.bind(this)}
           />
         <View className={`${indexStyles.emoji_icon_button}`}>
           <Text className={`${globalStyle.global_iconfont}`}>&#xe631;</Text>
         </View>
-        <View className={`${indexStyles.plus_icon_button}`}>
+        {/* <View className={`${indexStyles.plus_icon_button}`} onClick={this.onSend} disabled={isDisabled}> */}
+        <View className={`${indexStyles.plus_icon_button}`} onClick={this.onSend}>
           {send}
         </View>
       </View>

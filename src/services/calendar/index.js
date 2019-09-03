@@ -1,5 +1,5 @@
 import { request, packagePromise,} from "../../utils/request";
-import { API_BOARD, API_WORKBENCHS } from "../../gloalSet/js/constant";
+import { API_BOARD, API_WORKBENCHS, API_UPMS } from "../../gloalSet/js/constant";
 
 //某个组织或全组织下我参与的所有项目列表
 export const getOrgBoardList = (data , notShowLoading) => {
@@ -53,5 +53,17 @@ export const getSignList = (data , notShowLoading) => {
     },
     method: 'GET',
     url: `${API_WORKBENCHS}/mini/calendar/sign`,
+  }, notShowLoading)
+}
+
+
+//获取用户下所有组织Id及项目Id
+export const getUserAllOrgsAllBoards = (data , notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'GET',
+    url: `${API_UPMS}/organization/list/id`,
   }, notShowLoading)
 }

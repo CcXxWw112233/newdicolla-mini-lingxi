@@ -21,15 +21,18 @@ export default class ProjectNameCell extends Component {
     }
 
     render() {
-
+        const title = this.props.title
+        const name = this.props.name
+        const tasksIcon = <Text className={`${globalStyle.global_iconfont}`}>&#xe6a8;</Text>
+        const boardIcon = <Text className={`${globalStyle.global_iconfont}`}>&#xe6a7;</Text>
         return (
             <View >
                 <View className={indexStyles.list_item} onClick={this.gotoChangeOrgPage}>
                     <View className={`${indexStyles.list_item_left_iconnext}`}>
-                        <Text className={`${globalStyle.global_iconfont}`}>&#xe649;</Text>
+                        {title === '项目' ? (boardIcon) : (tasksIcon)}
                     </View>
-                    <View className={indexStyles.list_item_name}>项目</View>
-                    <View className={indexStyles.list_item_detail}>项目名称</View>
+                    <View className={indexStyles.list_item_name}>{title}</View>
+                    <View className={indexStyles.list_item_detail}>{name}</View>
                     <View className={`${indexStyles.list_item_iconnext}`}>
                         <Text className={`${globalStyle.global_iconfont}`}>&#xe654;</Text>
                     </View>

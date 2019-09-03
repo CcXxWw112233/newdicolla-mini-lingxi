@@ -24,25 +24,24 @@ export default class CardItem extends Component {
     return (<Text className={`${globalStyles.global_iconfont} ${indexStyles.iconfont_size}`}>&#xe633;</Text>)
   }
 
-  gotoTaksDetails = (flag) => {
-    if (flag === '0') {
+  gotoTaksDetails = (pramar) => {
+    if (pramar.code === '0') {
       Taro.navigateTo({
-        url: '../../pages/taksDetails/index'
+        url: `../../pages/taksDetails/index?content_id=${pramar.contentId}`
       })
     }
   }
 
   render() {
     const { itemValue = {}, schedule, org_list } = this.props
-    const { board_id, content_id, content_name, org_id, flag, board_name, start_time, due_time, is_realize } = itemValue
+    const { board_id, content_id, content_name, org_id, flag, board_name, start_time, due_time, is_realize } = itemValue    
     const users = itemValue['data'] || []
     const card_logo_1 = (<Text className={`${globalStyles.global_iconfont} ${indexStyles.iconfont_size}`}>&#xe63d;</Text>)
     const card_logo_2 = (<Text className={`${globalStyles.global_iconfont} ${indexStyles.iconfont_size}`}>&#xe63e;</Text>)
     const card_logo_3 = (<Text className={`${globalStyles.global_iconfont} ${indexStyles.iconfont_size}`}>&#xe633;</Text>)
     const card_logo_4 = (<Text className={`${globalStyles.global_iconfont} ${indexStyles.iconfont_size}`}>&#xe636;</Text>)
     const card_logo_1_relize = (<Text className={`${globalStyles.global_iconfont} ${indexStyles.iconfont_size}`}>&#xe7a8;</Text>)
-
-
+    
     const dis_due_style = () => {
       let opacity = '1'
       if ('0' == flag) {
@@ -64,8 +63,13 @@ export default class CardItem extends Component {
     }
     // const dis_due_style = `opacity: ${flag == '0'?()}`
 
+    const pramar = {
+      code: flag,
+      contentId: content_id
+    }
+
     return (
-      <View onClick={this.gotoTaksDetails.bind(this, flag)}>
+      <View onClick={this.gotoTaksDetails.bind(this, pramar)}>
         <View className={`${globalStyles.global_card_out} ${indexStyles.card_content} `} style={`opacity: ${dis_due_style()}`}>
           <View className={`${indexStyles.card_content_left}`}>
             {'0' == flag ? (

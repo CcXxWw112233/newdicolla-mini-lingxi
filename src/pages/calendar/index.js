@@ -75,6 +75,15 @@ export default class Calendar extends Component {
     this.getNoScheCardList()
     this.getScheCardList({})
     this.getSignList()
+    this.getUserAllOrgsAllBoards()
+  }
+
+  getUserAllOrgsAllBoards = () => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'calendar/getUserAllOrgsAllBoards',
+      payload: {}
+    })
   }
 
   //获取项目列表

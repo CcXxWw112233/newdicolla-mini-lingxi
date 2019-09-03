@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro'
 import {isApiResponseOk} from "../../utils/request";
-import { getOrgBoardList, getScheCardList, getNoScheCardList, getSignList } from "../../services/calendar/index";
+import { getOrgBoardList, getScheCardList, getNoScheCardList, getSignList, getUserAllOrgsAllBoards } from "../../services/calendar/index";
 import { select_selected_board, select_selected_timestamp, select_search_text, select_page_number, select_sche_card_list, select_is_reach_bottom } from './selects'
 import { getCurrentOrgByStorage } from '../../utils/basicFunction'
 import { number } from 'prop-types';
@@ -142,6 +142,18 @@ export default {
             sign_data: res.data
           }
         })
+      }else {
+
+      }
+    },
+
+    // 获取用户下所有组织Id及项目Id
+    * getUserAllOrgsAllBoards({ payload }, { select, call, put }) {
+      const current_org = getCurrentOrgByStorage()
+      const res = yield call(getUserAllOrgsAllBoards, {_organization_id: current_org })
+      console.log('res 所有组织Id及项目Id = ', res);
+      if(isApiResponseOk(res)) {
+       
       }else {
 
       }

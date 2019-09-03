@@ -23,19 +23,16 @@ export default class DescribeCell extends Component {
     }
 
     render() {
-
+        const description = this.props.description
         return (
             <View className={indexStyles.viewStyle}>
-
-
                 <View className={indexStyles.list_item} onClick={this.choiceCloseMilepostList}>
                     <View className={`${indexStyles.list_item_left_iconnext}`}>
                         <Text className={`${globalStyle.global_iconfont}`}>&#xe7f5;</Text>
                     </View>
                     <View className={indexStyles.list_item_name}>描述</View>
-                    <View className={indexStyles.list_item_detail}>描述...</View>
+                    <View className={indexStyles.list_item_detail}>{description}</View>
                 </View>
-
                 <View className={`${indexStyles.list_item_iconnext}`} onClick={this.closeDescribeCell}>
                     <Text className={`${globalStyle.global_iconfont}`}>&#xe7fc;</Text>
                 </View>

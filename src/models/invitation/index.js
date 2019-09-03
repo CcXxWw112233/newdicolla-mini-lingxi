@@ -41,7 +41,7 @@ export default {
       if(isApiResponseOk(res)) {
           //2>用户扫码加入项目
           const parameter = {
-            board_id: payload.board_Id,
+            id: payload.id,
           }
           const res = yield call(userScanCodeJoinBoard, parameter)
           if(isApiResponseOk(res)) {
