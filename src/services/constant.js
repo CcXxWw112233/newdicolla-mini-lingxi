@@ -7,7 +7,7 @@ export const CONTENT_DATA_TYPE_FILE = 'file'
 export const CONTENT_DATA_TYPE_FOLDER = 'folder'
 export const CONTENT_DATA_TYPE_FLOW = 'flow'
 
-const createHeaderContentDataByCardId = (cardId) => {
+export const createHeaderContentDataByCardId = (cardId) => {
     if (cardId) {
       return {
         BaseInfo: {

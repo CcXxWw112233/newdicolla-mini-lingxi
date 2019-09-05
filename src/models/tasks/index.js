@@ -32,9 +32,11 @@ export default {
     //任务详情
     * getTasksDetail({ payload }, { select, call, put }) {
       const res = yield call(getTasksDetail, payload)
+      console.log('tasksDetailDatas, ', res.data);
+      
       if(isApiResponseOk(res)) {
         yield put({
-          type: 'updateDatas',
+          type: 'getCardCommentListAll',
           payload: {
             tasksDetailDatas: res.data
           }
@@ -64,7 +66,12 @@ export default {
       console.log('res = 评论列表', res);
       
       if(isApiResponseOk(res)) {
-       
+        yield put({
+          type: 'updateDatas',
+          payload: {
+            tasksDetailDatas: res.data
+          }
+        })
       }else {
         
       }
@@ -74,10 +81,12 @@ export default {
     * addComment({ payload }, { select, call, put }) {
       console.log(payload, 'payload');
       const res = yield call(addComment, payload)
-      console.log('res = ', res);
+      console.log('res = 新增评论:', res);
       
       if(isApiResponseOk(res)) {
-       
+
+        yield call(getCardCommentListAll, payload)
+        
       }else {
         
       }

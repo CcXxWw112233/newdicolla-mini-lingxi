@@ -3,7 +3,7 @@ import { View, Button, Text } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyles from '../../../gloalSet/styles/globalStyles.scss'
 import Avatar from '../../../components/avatar'
-import { getOrgName, timestampToTimeZH } from '../../../utils/basicFunction'
+import { getOrgName, timestampToTimeZH, setBoardIdStorage } from '../../../utils/basicFunction'
 import { connect } from '@tarojs/redux'
 
 @connect(({ my: { org_list } }) => ({
@@ -26,6 +26,7 @@ export default class CardItem extends Component {
 
   gotoTaksDetails = (pramar) => {
     if (pramar.code === '0') {
+      setBoardIdStorage(pramar.boardId)
       Taro.navigateTo({
         url: `../../pages/taksDetails/index?content_id=${pramar.contentId}`
       })
@@ -65,7 +66,8 @@ export default class CardItem extends Component {
 
     const pramar = {
       code: flag,
-      contentId: content_id
+      contentId: content_id,
+      boardId: board_id
     }
 
     return (

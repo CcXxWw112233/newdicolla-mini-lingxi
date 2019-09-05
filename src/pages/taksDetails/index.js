@@ -83,7 +83,7 @@ export default class taksDetails extends Component {
                 <TasksTime cellInfo={timeInfo} />
                 <ProjectNameCell title='项目' name={board_name} />
                 <ProjectNameCell title='任务' name={list_name}/>
-                <ExecutorCell />
+                {/* <ExecutorCell /> */}
                 <MilepostCell />
                 <DescribeCell description={description}/>
                 <SonTasksCell />

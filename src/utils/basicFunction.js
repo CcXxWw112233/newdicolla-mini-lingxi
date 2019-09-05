@@ -148,9 +148,6 @@ export const setBoardIdStorage = (value) => {
 
 export const setRequestHeaderBaseInfo = ({ data, params = {}, headers = {} }) => {
 
-  console.log(' params ', params);
-  
-
   let header_base_info_orgid = Taro.getStorageSync('OrganizationId') || '0'
   let header_base_info_board_id = Taro.getStorageSync('storageCurrentOperateBoardId') || '0'
 

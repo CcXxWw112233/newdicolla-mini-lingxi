@@ -22,7 +22,6 @@ export default class index extends Component {
     this.setState({
       value
     })
-    // return value
   }
 
   onSend = () => {

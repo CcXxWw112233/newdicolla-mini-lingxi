@@ -151,9 +151,9 @@ export default {
     * getUserAllOrgsAllBoards({ payload }, { select, call, put }) {
       const current_org = getCurrentOrgByStorage()
       const res = yield call(getUserAllOrgsAllBoards, {_organization_id: current_org })
-      console.log('res 所有组织Id及项目Id = ', res);
       if(isApiResponseOk(res)) {
        
+        Taro.setStorageSync('userAllOrgsAllBoards', JSON.stringify(res.data))
       }else {
 
       }

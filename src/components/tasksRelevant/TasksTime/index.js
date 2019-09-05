@@ -32,7 +32,7 @@ export default class TasksTime extends Component {
                     </View>
                     <Input className={indexStyles.card_title} placeholder='填写名称'  value={card_name} disabled={input_disabled}></Input>
                 </View>
-                <View className={indexStyles.selectionTime}>
+                <View className={indexStyles.selectionTime}>  
                     <ChoiceTimes onClick={this.ejectTimePicks} time={sTime}/>
                     <ChoiceTimes onClick={this.ejectTimePicks} time={eTime}/>
                 </View>
