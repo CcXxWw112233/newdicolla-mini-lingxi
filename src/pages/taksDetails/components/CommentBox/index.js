@@ -51,7 +51,6 @@ export default class index extends Component {
 
     const { value } = this.state
     const send = value ? '发送' : <Text className={`${globalStyle.global_iconfont}`}>&#xe632;</Text>
-    // const isDisabled = send === '发送' ? false : true
     return (
       <View className={indexStyles.viewStyle}>
           <AtInput

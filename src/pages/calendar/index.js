@@ -199,6 +199,7 @@ export default class Calendar extends Component {
   render() {
     const { show_card_type_select, search_mask_show } = this.state
     const { no_sche_card_list = [] } = this.props
+    
     return (
       <View>
         <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
@@ -211,7 +212,7 @@ export default class Calendar extends Component {
         <CardList schedule={'1'} />
         <View style='height: 50px'></View>
 
-        <View className={indexStyles.plusTasks} onClick={this.gotoAddingTasks}>+</View>
+        {/* <View className={indexStyles.plusTasks} onClick={this.gotoAddingTasks}>+</View> */}
       </View>
     )
   }

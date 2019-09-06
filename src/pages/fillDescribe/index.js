@@ -52,7 +52,7 @@ export default class fillDescribe extends Component {
                     onChange={this.handleChange.bind(this)}
                     placeholder='项目描述...'
                     count={false}
-                    height={200}>
+                    minHeight={200}>
                 </AtTextarea>
             </View>
         )

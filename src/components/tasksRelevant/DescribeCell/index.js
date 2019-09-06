@@ -31,7 +31,9 @@ export default class DescribeCell extends Component {
                         <Text className={`${globalStyle.global_iconfont}`}>&#xe7f5;</Text>
                     </View>
                     <View className={indexStyles.list_item_name}>描述</View>
-                    <View className={indexStyles.list_item_detail}>{description}</View>
+                    <View className={indexStyles.list_item_detail}>
+                        <RichText className='text' nodes={description} />
+                    </View>
                 </View>
                 <View className={`${indexStyles.list_item_iconnext}`} onClick={this.closeDescribeCell}>
                     <Text className={`${globalStyle.global_iconfont}`}>&#xe7fc;</Text>

@@ -36,7 +36,7 @@ export default class ContentIndex extends Component {
 
     render() {
         const { describeInfo } = this.state
-        console.log(describeInfo, 'ssssssssss');
+        console.log(describeInfo, '');
         
         return (
             <View className={`${globalStyle.global_horrizontal_padding}`}>

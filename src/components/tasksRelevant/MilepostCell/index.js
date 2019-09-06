@@ -23,7 +23,7 @@ export default class MilepostCell extends Component {
     }
 
     render() {
-
+        const milestone_data = this.props.milestone_data || ''
         return (
             <View className={indexStyles.viewStyle}>
 
@@ -32,7 +32,7 @@ export default class MilepostCell extends Component {
                         <Text className={`${globalStyle.global_iconfont}`}>&#xe636;</Text>
                     </View>
                     <View className={indexStyles.list_item_name}>里程碑</View>
-                    <View className={indexStyles.list_item_detail}>里程碑名称</View>
+                    <View className={indexStyles.list_item_detail}>{milestone_data.name}</View>
                 </View>
 
                 <View className={`${indexStyles.list_item_iconnext}`} onClick={this.closeMilepostCell}>

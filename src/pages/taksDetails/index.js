@@ -7,27 +7,23 @@ import ProjectNameCell from '../../components/tasksRelevant/ProjectNameCell/inde
 import ExecutorCell from '../../components/tasksRelevant/ExecutorCell/index'
 import MilepostCell from '../../components/tasksRelevant/MilepostCell/index'
 import DescribeCell from '../../components/tasksRelevant/DescribeCell/index'
-import SonTasksCell from './components/SonTasksCell/index';
-import RelationContentCell from './components/RelationContentCell/index';
-import TagCell from './components/TagCell/index';
-import NewBuilders from './components/NewBuilders/index';
-import CommentCell from './components/CommentCell/index';
-import CommentBox from './components/CommentBox/index';
-import { connect } from '@tarojs/redux';
+import SonTasksCell from './components/SonTasksCell/index'
+import RelationContentCell from './components/RelationContentCell/index'
+import TagCell from './components/TagCell/index'
+import NewBuilders from './components/NewBuilders/index'
+import CommentCell from './components/CommentCell/index'
+import CommentBox from './components/CommentBox/index'
+import { connect } from '@tarojs/redux'
 
 @connect(({ tasks: { tasksDetailDatas = {} } }) => ({
     tasksDetailDatas
 }))
 export default class taksDetails extends Component {
-    navigationStyle
     config = {
         navigationBarTitleText: '任务详情'
     }
-    constructor() {
-        super(...arguments)
-        this.state = {
-            content_Id: ''
-        }
+    state = {
+        content_Id: ''
     }
 
     componentDidMount() {
@@ -35,7 +31,6 @@ export default class taksDetails extends Component {
         this.setState({
             content_Id: contentId
         })
-        this.loadDatas(contentId)
     }
 
     componentWillReceiveProps() { }
@@ -46,28 +41,11 @@ export default class taksDetails extends Component {
 
     componentDidHide() { }
 
-    loadDatas = (contentId) => {
-        const { dispatch } = this.props
-        dispatch({
-            type: 'tasks/getTasksDetail',
-            payload: {
-                id: contentId
-            }
-        })
-
-        dispatch({
-            type: 'tasks/getCardCommentListAll',
-            payload: {
-                id: contentId
-            }
-        })
-    }
-
     render() {
-        const { tasksDetailDatas = {} } = this.props
-        const card_name = tasksDetailDatas['card_name'] || ''
-        const due_time = tasksDetailDatas['due_time'] || ''
-        const start_time = tasksDetailDatas['start_time'] || ''
+        const { tasksDetailDatas } = this.props
+        const card_name = tasksDetailDatas.card_name
+        const due_time = tasksDetailDatas.due_time
+        const start_time = tasksDetailDatas.start_time
         const timeInfo = {
             eTime: due_time,
             sTime: start_time,
@@ -76,22 +54,26 @@ export default class taksDetails extends Component {
         const board_name = tasksDetailDatas['board_name'] || ''
         const list_name = tasksDetailDatas['list_name'] || ''
         const description = tasksDetailDatas['description'] || ''
-        const content_Id = this.state
-      
+        const { content_Id } = this.state
+        const executors = tasksDetailDatas['executors'] || ''
+        const milestone_data = tasksDetailDatas['milestone_data'] || ''
+        const label_data = tasksDetailDatas['label_data'] || ''
+        const child_data = tasksDetailDatas['child_data'] || ''
+
         return (
             <View className={`${globalStyle.global_horrizontal_padding}`}>
                 <TasksTime cellInfo={timeInfo} />
                 <ProjectNameCell title='项目' name={board_name} />
-                <ProjectNameCell title='任务' name={list_name}/>
-                {/* <ExecutorCell /> */}
-                <MilepostCell />
-                <DescribeCell description={description}/>
-                <SonTasksCell />
+                <ProjectNameCell title='任务' name={list_name} />
+                <ExecutorCell executors={executors} />
+                <MilepostCell milestone_data={milestone_data} />
+                <DescribeCell description={description} />
+                <SonTasksCell child_data={child_data} />
                 <RelationContentCell />
-                <TagCell />
-                <NewBuilders />
+                <TagCell label_data={label_data} />
+                {/* <NewBuilders />
                 <CommentCell />
-                <CommentBox content={content_Id} />
+                <CommentBox content={content_Id} /> */}
             </View>
         )
     }

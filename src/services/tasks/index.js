@@ -59,4 +59,16 @@ export const addComment = (data , notShowLoading) => {
   }, notShowLoading)
 }
 
+
+//查看内容关联
+export const checkContentLink = (data , notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'GET',
+    url: `${API_BOARD}/content_link`,
+  }, notShowLoading)
+}
+
  

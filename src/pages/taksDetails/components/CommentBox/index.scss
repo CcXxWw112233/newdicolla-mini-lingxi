@@ -11,13 +11,11 @@
     }
 
     .emoji_icon_button {
-        width : pxTrans(24);
-        height: pxTrans(24);
+        font-size : pxTrans(24);
     }
 
     .plus_icon_button {
-        width       : pxTrans(24);
-        height      : pxTrans(24);
+        font-size       : pxTrans(24);
         margin-right: pxTrans(16);
     }
 }

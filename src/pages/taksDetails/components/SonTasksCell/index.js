@@ -16,7 +16,7 @@ export default class index extends Component {
   componentDidHide() { }
 
   render() {
-
+    const { child_data } = this.props
     return (
       <View className={indexStyles.viewStyle}>
         <View className={indexStyles.list_item}>
@@ -25,12 +25,15 @@ export default class index extends Component {
           </View>
           <View className={indexStyles.list_item_name}>子任务</View>
           <View className={indexStyles.sonTasks_list_item_detail}>
-            <View className={indexStyles.sonTasks_list_item}>
-              <View className={`${indexStyles.sonTasks_list_item_left_iconnext}`}>
-                <Text className={`${globalStyle.global_iconfont}`}>&#xe661;</Text>
-              </View>
-              <View className={indexStyles.sonTasks_list_item_name}>子任务1</View>
-            </View>
+            {child_data.map((item, key) => (
+                <View className={indexStyles.sonTasks_list_item} key={key}>
+                  <View className={`${indexStyles.sonTasks_list_item_left_iconnext}`}>
+                    <Text className={`${globalStyle.global_iconfont}`}>&#xe661;</Text>
+                  </View>
+                  <View className={indexStyles.sonTasks_list_item_name}>{item.card_name}</View>
+                </View>
+              ))
+            }
           </View>
         </View>
       </View>

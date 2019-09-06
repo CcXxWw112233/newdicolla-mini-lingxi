@@ -24,6 +24,7 @@ export default class ExecutorCell extends Component {
     }
 
     render() {
+        const description = this.props.executors || []
         return (
             <View className={indexStyles.viewStyle}>
                 <View className={indexStyles.list_item} onClick={this.choiceExecutorCellList}>
@@ -34,7 +35,7 @@ export default class ExecutorCell extends Component {
                         <View className={indexStyles.list_item_name}>执行人</View>
                         <View className={`${indexStyles.card_content_middle_left}`}>
                             <View className={`${indexStyles.avata_area}`}>
-                                <Avatar avartarTotal={'multiple'} userList={'users'} />
+                                <Avatar avartarTotal={'multiple'} userList={description} />
                             </View>
                         </View>
                     </View>

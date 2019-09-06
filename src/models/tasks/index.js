@@ -1,22 +1,24 @@
 import Taro from '@tarojs/taro'
-import { getTaskGroupList, addTask, getTasksDetail, getCardCommentListAll, boardAppRelaMiletones, addComment } from '../../services/tasks/index'
+import { getTaskGroupList, addTask, getTasksDetail, getCardCommentListAll, boardAppRelaMiletones, addComment, checkContentLink } from '../../services/tasks/index'
 import {isApiResponseOk} from "../../utils/request";
+import { setBoardIdStorage } from '../../utils/basicFunction'
 
 export default {
   namespace: 'tasks',
   state: {
     tasks_list: [], //任务列表
-    tasksDetailDatas: {} //任务详情
+    tasksDetailDatas: {}, //任务详情
+    content_Link: [],  //关联内容
   },
   effects: {
     //获取任务列表
     * getTaskGroupList({ payload }, { select, call, put }) {
       const boardId =  Taro.getStorageSync('board_Id')
       console.log('boardId = ', boardId);
-      
+
       const res = yield call(getTaskGroupList, {board_id: boardId, type: 2, arrange_type: 1})
       console.log(res, '========res');
-      
+
       if(isApiResponseOk(res)) {
         yield put({
           type: 'updateDatas',
@@ -31,17 +33,39 @@ export default {
 
     //任务详情
     * getTasksDetail({ payload }, { select, call, put }) {
-      const res = yield call(getTasksDetail, payload)
-      console.log('tasksDetailDatas, ', res.data);
-      
+      const { id, boardId } = payload;
+      const res = yield call(getTasksDetail, {id: id})
+
       if(isApiResponseOk(res)) {
         yield put({
-          type: 'getCardCommentListAll',
+          type: 'updateDatas',
           payload: {
             tasksDetailDatas: res.data
           }
         })
-        
+
+        setBoardIdStorage(boardId)
+
+        Taro.navigateTo({
+          url: `../../pages/taksDetails/index?content_id=${id}`
+        })
+
+        yield put({
+          type: 'getCardCommentListAll',
+          payload: {
+            id: res.data.card_id
+          }
+        })
+
+        yield put ({
+          type: 'checkContentLink',
+          payload: {
+            board_id: boardId,
+            link_id: id,
+            link_local: '3',
+          }
+        })
+
       }else {
 
       }
@@ -52,11 +76,11 @@ export default {
       const { parmas } = payload
       const res = yield call(addTask, parmas)
       console.log('res = ', res);
-      
+
       if(isApiResponseOk(res)) {
-       
+
       }else {
-        
+
       }
     },
 
@@ -64,16 +88,16 @@ export default {
     * getCardCommentListAll({ payload }, { select, call, put }) {
       const res = yield call(getCardCommentListAll, payload)
       console.log('res = 评论列表', res);
-      
+
       if(isApiResponseOk(res)) {
         yield put({
           type: 'updateDatas',
           payload: {
-            tasksDetailDatas: res.data
+            // tasksDetailDatas: res.data
           }
         })
       }else {
-        
+
       }
     },
 
@@ -82,13 +106,13 @@ export default {
       console.log(payload, 'payload');
       const res = yield call(addComment, payload)
       console.log('res = 新增评论:', res);
-      
+
       if(isApiResponseOk(res)) {
 
         yield call(getCardCommentListAll, payload)
-        
+
       }else {
-        
+
       }
     },
 
@@ -97,11 +121,27 @@ export default {
       const { parmas } = payload
       const res = yield call(boardAppRelaMiletones, parmas)
       console.log('res = ', res);
-      
+
       if(isApiResponseOk(res)) {
-       
+
       }else {
-        
+
+      }
+    },
+
+    //查看关联内容
+    * checkContentLink({ payload }, { select, call, put }) {
+      const res = yield call(checkContentLink, payload)
+
+      if(isApiResponseOk(res)) {
+        yield put({
+          type: 'updateDatas',
+          payload: {
+            content_Link: res.data
+          }
+        })
+      }else {
+
       }
     },
   },

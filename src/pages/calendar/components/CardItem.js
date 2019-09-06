@@ -25,10 +25,15 @@ export default class CardItem extends Component {
   }
 
   gotoTaksDetails = (pramar) => {
+    
     if (pramar.code === '0') {
-      setBoardIdStorage(pramar.boardId)
-      Taro.navigateTo({
-        url: `../../pages/taksDetails/index?content_id=${pramar.contentId}`
+      const { dispatch } = this.props
+      dispatch({
+          type: 'tasks/getTasksDetail',
+          payload: {
+              id: pramar.contentId,
+              boardId: pramar.boardId,
+          }
       })
     }
   }
