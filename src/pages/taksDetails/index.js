@@ -49,28 +49,45 @@ export default class taksDetails extends Component {
         const timeInfo = {
             eTime: due_time,
             sTime: start_time,
-            cardName: card_name,
+            cardDefinition: card_name,
         }
         const board_name = tasksDetailDatas['board_name'] || ''
         const list_name = tasksDetailDatas['list_name'] || ''
         const description = tasksDetailDatas['description'] || ''
         const { content_Id } = this.state
-        const executors = tasksDetailDatas['executors'] || ''
+        const executors = tasksDetailDatas['executors'] || []
         const milestone_data = tasksDetailDatas['milestone_data'] || ''
         const label_data = tasksDetailDatas['label_data'] || ''
         const child_data = tasksDetailDatas['child_data'] || ''
 
         return (
-            <View className={`${globalStyle.global_horrizontal_padding}`}>
-                <TasksTime cellInfo={timeInfo} />
-                <ProjectNameCell title='项目' name={board_name} />
-                <ProjectNameCell title='任务' name={list_name} />
-                <ExecutorCell executors={executors} />
-                <MilepostCell milestone_data={milestone_data} />
-                <DescribeCell description={description} />
-                <SonTasksCell child_data={child_data} />
-                <RelationContentCell />
-                <TagCell label_data={label_data} />
+            <View >
+                <View className={indexStyles.tasks_time_style}>
+                    <TasksTime cellInfo={timeInfo} />
+                </View>
+                <View className={indexStyles.project_name_style}>
+                    <ProjectNameCell title='项目' name={board_name} />
+                </View>
+                <View className={indexStyles.tasks_name_style}>
+                    <ProjectNameCell title='任务分组' name={list_name} />
+                </View>
+                <View className={indexStyles.other_style}>
+                    <View className={indexStyles.tasks_name_style}>
+                        <ProjectNameCell title='执行人' name='' executors={executors} />
+                    </View>
+                    <View className={indexStyles.tasks_name_style}>
+                        <ProjectNameCell title='里程碑' name={milestone_data.name} />
+                    </View>
+                    <View className={indexStyles.tasks_name_style}>
+                        <ProjectNameCell title='描述' name={description} />
+                    </View>
+                    {/* <ExecutorCell executors={executors} /> */}
+                    {/* <MilepostCell milestone_data={milestone_data} /> */}
+                    {/* <DescribeCell description={description} /> */}
+                    <SonTasksCell child_data={child_data} />
+                    <RelationContentCell />
+                    <TagCell label_data={label_data} />
+                </View>
                 {/* <NewBuilders />
                 <CommentCell />
                 <CommentBox content={content_Id} /> */}

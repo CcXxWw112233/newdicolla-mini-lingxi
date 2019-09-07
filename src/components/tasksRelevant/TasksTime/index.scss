@@ -1,25 +1,25 @@
 @import "../../../gloalSet/styles/constant";
 
-.viewStyle {
+.view_Style {
 
     .input_View {
         height       : pxTrans(60);
-        display      : flex;
         border-bottom: thick solid rgba(0, 0, 0, 0.09);
         border-width : 1px;
+        display      : flex;
+        align-items  : center;
 
         .list_item_iconnext {
-            color : $color_3;
-            width : pxTrans(24);
-            height: pxTrans(24);
-            margin: pxTrans(18) pxTrans(2) pxTrans(18) pxTrans(0);
+            color       : $color_2;
+            font-size   : pxTrans(20);
+            margin-left : pxTrans(20);
+            margin-right: pxTrans(10);
         }
 
         .card_title {
             font-size  : pxTrans(20);
             color      : rgba(0, 0, 0, 0.25);
             line-height: 28px;
-            margin     : pxTrans(16) pxTrans(10) pxTrans(16) pxTrans(0);
         }
     }
 
@@ -28,12 +28,23 @@
         display        : flex;
         justify-content: space-between;
 
+
         .startTime {
-            flex: 1;
+            flex           : 1;
+            border-right   : pxTrans(0.5) solid rgba(0, 0, 0, 0.09);
+            justify-content: center;
+            align-items    : center;
+            text-align     : center;
+            display        : flex;
         }
 
         .endTime {
-            flex: 1;
+            flex           : 1;
+            border-left    : pxTrans(0.5) solid rgba(0, 0, 0, 0.09);
+            justify-content: center;
+            align-items    : center;
+            text-align     : center;
+            display        : flex;
         }
     }
 }

@@ -17,25 +17,30 @@ export default class index extends Component {
   componentDidHide() { }
 
   render() {
-    const label_data = this.props.label_data    
+    const label_data = this.props.label_data || ''
     return (
-      <View className={indexStyles.viewStyle}>
-        <View className={indexStyles.list_item}>
-          <View className={`${indexStyles.list_item_left_iconnext}`}>
-            <Text className={`${globalStyle.global_iconfont}`}>&#xe6ac;</Text>
-          </View>
-          <View className={indexStyles.list_item_name}>标签</View>
-          <View className={indexStyles.TagCell_list_item_detail}>
-            {
-              label_data.map((tag, key) => (
-                <View className={indexStyles.TagCell_list_item} key={key}>
-                  <AtTag type='primary' circle style={{backgroundColor: tag.labelColor}}>
+      <View className={indexStyles.list_item}>
+        <View className={`${indexStyles.list_item_left_iconnext}`}>
+          <Text className={`${globalStyle.global_iconfont}`}>&#xe6ac;</Text>
+        </View>
+        <View className={indexStyles.list_item_name}>标签</View>
+        <View className={indexStyles.tagCell_list_item_detail}>
+          {
+            label_data.map((tag, key) => (
+              <View
+                className={indexStyles.tagCell_list_item}
+                style={{
+                  color: tag.label_color,
+                  backgroundColor: tag.label_color,
+                  border: tag.label_color
+                }}
+              >
+                <AtTag type='primary'>
                   {tag.label_name}
-                  </AtTag>
-                </View>
-              ))
-            }
-          </View>
+                </AtTag>
+              </View>
+            ))
+          }
         </View>
       </View>
     )

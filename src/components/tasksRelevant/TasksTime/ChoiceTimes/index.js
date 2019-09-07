@@ -22,11 +22,13 @@ export default class ChoiceTimes extends Component {
 
         return (
             <View className={indexStyles.viewStyle}>
-               <View className={indexStyles.timeStyle}>
-                   <View>{timeTable}</View>
+               {/* <View className={indexStyles.timeStyle}> */}
+                   {/* <View>{timeTable}</View> */}
+                   timeTable
+
                    {/* <View>{hour}</View> */}
-               </View>
-               <View>周一</View>
+               {/* </View> */}
+               {/* <View>周一</View> */}
             </View>
         )
     }

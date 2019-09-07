@@ -3,6 +3,7 @@ import { View, Text } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyles from '../../../gloalSet/styles/globalStyles.scss'
 import ChoiceTimes from './ChoiceTimes/index'
+import { timestampToTimeZH } from '../../../utils/basicFunction'
 
 export default class TasksTime extends Component {
 
@@ -19,22 +20,28 @@ export default class TasksTime extends Component {
     }
 
     render() {
-        const cellInfo = this.props.cellInfo
-        const card_name = cellInfo.cardName || ''
+        const { cellInfo } = this.props
+        const card_name = cellInfo.cardDefinition || ''
         const input_disabled = !card_name ? false : true
         const sTime = cellInfo.sTime || ''
         const eTime = cellInfo.eTime || ''
         return (
-            <View className={indexStyles.viewStyle}>
+            <View className={indexStyles.view_Style}>
                 <View className={indexStyles.input_View}>
-                <View className={`${indexStyles.list_item_iconnext}`}>
-                    <Text className={`${globalStyles.global_iconfont}`}>&#xe661;</Text>
+                    <View className={`${indexStyles.list_item_iconnext}`}>
+                        <Text className={`${globalStyles.global_iconfont}`}>&#xe661;</Text>
                     </View>
-                    <Input className={indexStyles.card_title} placeholder='填写名称'  value={card_name} disabled={input_disabled}></Input>
+                    <Input className={indexStyles.card_title} placeholder='填写名称' value={card_name} disabled={input_disabled}></Input>
                 </View>
-                <View className={indexStyles.selectionTime}>  
-                    <ChoiceTimes onClick={this.ejectTimePicks} time={sTime}/>
-                    <ChoiceTimes onClick={this.ejectTimePicks} time={eTime}/>
+                <View className={indexStyles.selectionTime}>
+                    <View className={indexStyles.startTime} >
+                        {/* <ChoiceTimes onClick={this.ejectTimePicks} time={sTime} /> */}
+                        {timestampToTimeZH(sTime)}
+                    </View>
+                    <View className={indexStyles.endTime} >
+                        {/* <ChoiceTimes onClick={this.ejectTimePicks} time={eTime} /> */}
+                        {timestampToTimeZH(eTime)}
+                    </View>
                 </View>
             </View>
         )

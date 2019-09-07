@@ -50,12 +50,12 @@ export default {
           url: `../../pages/taksDetails/index?content_id=${id}`
         })
 
-        yield put({
-          type: 'getCardCommentListAll',
-          payload: {
-            id: res.data.card_id
-          }
-        })
+        // yield put({
+        //   type: 'getCardCommentListAll',
+        //   payload: {
+        //     id: res.data.card_id
+        //   }
+        // })
 
         yield put ({
           type: 'checkContentLink',

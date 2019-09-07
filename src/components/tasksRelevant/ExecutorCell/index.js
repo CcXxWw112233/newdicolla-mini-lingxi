@@ -15,9 +15,9 @@ export default class ExecutorCell extends Component {
     componentDidHide() { }
 
     choiceExecutorCellList() {
-        Taro.navigateTo({
-            url: '../../pages/choiceProject/index'
-        })
+        // Taro.navigateTo({
+        //     url: '../../pages/choiceProject/index'
+        // })
     }
     closeExecutorCell() {
         console.log('关闭执行人cell');
@@ -25,25 +25,34 @@ export default class ExecutorCell extends Component {
 
     render() {
         const description = this.props.executors || []
+        
         return (
-            <View className={indexStyles.viewStyle}>
                 <View className={indexStyles.list_item} onClick={this.choiceExecutorCellList}>
-                    <View className={indexStyles.list_item}>
-                        <View className={`${indexStyles.list_item_left_iconnext}`}>
-                            <Text className={`${globalStyle.global_iconfont}`}>&#xe7ae;</Text>
-                        </View>
+
+                    <View className={`${indexStyles.list_item_left_iconnext}`}>
+                        <Text className={`${globalStyle.global_iconfont}`}>&#xe7ae;</Text>
+                    </View>
+
+
+                    <View className={indexStyles.right_list_item}>
+                    <View className={indexStyles.right_centre_style}>
+
+
                         <View className={indexStyles.list_item_name}>执行人</View>
+
                         <View className={`${indexStyles.card_content_middle_left}`}>
                             <View className={`${indexStyles.avata_area}`}>
                                 <Avatar avartarTotal={'multiple'} userList={description} />
                             </View>
                         </View>
-                    </View>
-                    <View className={`${indexStyles.list_item_iconnext}`} onClick={this.closeExecutorCell}>
+                        </View>
+
+                        <View className={`${indexStyles.list_item_iconnext}`} onClick={this.closeExecutorCell}>
                         <Text className={`${globalStyle.global_iconfont}`}>&#xe7fc;</Text>
+                     </View>
+
                     </View>
                 </View>
-            </View>
         )
     }
 }
