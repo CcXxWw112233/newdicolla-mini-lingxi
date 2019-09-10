@@ -31,7 +31,7 @@ export default class CardList extends Component {
           const { content_id, flag } = value
           return flag != '3' && (
             <View key={content_id}>
-              <CardItem  itemValue={value} schedule={schedule}/>
+              <CardItem  itemValue={value} schedule={schedule} gotoBackIdentification={this.props.gotoBackIdentification}/>
             </View>
           )
         })}

@@ -13,6 +13,9 @@ import { connect } from '@tarojs/redux'
   no_sche_card_list, selected_board_name, page_number, isReachBottom,
 }))
 export default class Calendar extends Component {
+  constructor(props) {
+    super(props)
+  }
 
   config = {
     navigationBarTitleText: '',
@@ -43,16 +46,29 @@ export default class Calendar extends Component {
 
   state = {
     show_card_type_select: '0',
-    search_mask_show: '0'
+    search_mask_show: '0',
+    isClose: true, //判断当前页面是打开还是从其他页返回来
+  }
+
+  gotoBackIdentification = () => {
+    debugger
+    this.setData({
+      isClose: false
+    })
+    console.log('判断当前页面是打开还是从其他页返回来');
   }
 
   componentWillReceiveProps(nextProps) {
 
   }
 
-  componentWillUnmount() { }
+  componentWillUnmount() {
 
-  componentWillMount() { }
+  }
+
+  componentWillMount() {
+    // this.getScheCardList({})
+  }
 
   componentDidMount() {
     const switchTabCurrentPage = 'currentPage_BoardDetail_or_Login'
@@ -66,6 +82,13 @@ export default class Calendar extends Component {
   }
 
   componentDidShow() {
+    const { isClose } = this.state
+
+    console.log(isClose, 'ssss')
+
+    var pages = getCurrentPages();
+    var currPage = pages[pages.length - 1];
+
     const { selected_board_name } = this.props
     Taro.setNavigationBarTitle({
       title: selected_board_name
@@ -73,7 +96,14 @@ export default class Calendar extends Component {
     this.getOrgList()
     this.getOrgBoardList()
     this.getNoScheCardList()
-    this.getScheCardList({})
+    // this.getScheCardList({})
+    console.log(currPage.data, 'ddddd');
+
+    if (currPage.data.source === 'isLoadCard') {
+      console.log('从任务详情页返回来, 不重新加载listCard数据');
+    } else {
+      this.getScheCardList({})
+    }
     this.getSignList()
     this.getUserAllOrgsAllBoards()
   }
@@ -199,9 +229,9 @@ export default class Calendar extends Component {
   render() {
     const { show_card_type_select, search_mask_show } = this.state
     const { no_sche_card_list = [] } = this.props
-    
+
     return (
-      <View>
+      <View className={indexStyles.view_style}>
         <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
         <CalendarSwiper />
         <CardTypeSelect show_card_type_select={show_card_type_select} onSelectType={this.onSelectType} schedule={'1'} />
@@ -209,7 +239,7 @@ export default class Calendar extends Component {
         {no_sche_card_list.length && (
           <View className={`${globalStyles.global_card_out} ${indexStyles.no_scheduling}`} onClick={this.gotoNoSchedule}>暂未排期的工作（{no_sche_card_list.length}）</View>
         )}
-        <CardList schedule={'1'} />
+        <CardList schedule={'1'} gotoBackIdentification={this.gotoBackIdentification} />
         <View style='height: 50px'></View>
 
         {/* <View className={indexStyles.plusTasks} onClick={this.gotoAddingTasks}>+</View> */}

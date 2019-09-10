@@ -25,7 +25,6 @@ export default class CardItem extends Component {
   }
 
   gotoTaksDetails = (pramar) => {
-    
     if (pramar.code === '0') {
       const { dispatch } = this.props
       dispatch({
@@ -36,6 +35,8 @@ export default class CardItem extends Component {
           }
       })
     }
+
+    this.props.gotoBackIdentification()
   }
 
   render() {
@@ -76,7 +77,7 @@ export default class CardItem extends Component {
     }
 
     return (
-      <View onClick={this.gotoTaksDetails.bind(this, pramar)}>
+      <View onClick={() => this.gotoTaksDetails(pramar)}>
         <View className={`${globalStyles.global_card_out} ${indexStyles.card_content} `} style={`opacity: ${dis_due_style()}`}>
           <View className={`${indexStyles.card_content_left}`}>
             {'0' == flag ? (

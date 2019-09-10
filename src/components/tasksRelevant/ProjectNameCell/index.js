@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { View, Text, RichText } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../../gloalSet/styles/globalStyles.scss'
 import index from '../../../pages/taksDetails/components/CommentBox';
@@ -33,7 +33,7 @@ export default class ProjectNameCell extends Component {
         } else if (title === '项目') {
             icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe6a7;</Text>
         } else if (title === '里程碑') {
-            icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe636;</Text>
+            icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe6a9;</Text>
         } else if (title === '执行人') {
             icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe7ae;</Text>
             executors = this.props.executors || []

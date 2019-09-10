@@ -17,9 +17,9 @@ export default {
         const { user_set = {} } = account_info
         current_org = user_set['current_org']
       }
-
       const { page_number = '1', page_size = '100'  } = payload
       const res = yield call(getBoardList, {_organization_id: current_org, page_number, page_size})
+      
       if(isApiResponseOk(res)) {
         yield put({
           type: 'updateDatas',

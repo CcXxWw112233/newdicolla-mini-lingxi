@@ -1,6 +1,7 @@
 @import "../../../gloalSet/styles/constant";
 
 .view_Style {
+    background: rgb(255, 255, 255);
 
     .input_View {
         height       : pxTrans(60);
@@ -10,7 +11,7 @@
         align-items  : center;
 
         .list_item_iconnext {
-            color       : $color_2;
+            color       : rgb(0, 0, 0, 0.25);
             font-size   : pxTrans(20);
             margin-left : pxTrans(20);
             margin-right: pxTrans(10);

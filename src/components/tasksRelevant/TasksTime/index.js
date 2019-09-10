@@ -20,7 +20,7 @@ export default class TasksTime extends Component {
     }
 
     render() {
-        const { cellInfo } = this.props
+        const { cellInfo = { } } = this.props
         const card_name = cellInfo.cardDefinition || ''
         const input_disabled = !card_name ? false : true
         const sTime = cellInfo.sTime || ''

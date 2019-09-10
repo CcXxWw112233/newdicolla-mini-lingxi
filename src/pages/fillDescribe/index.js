@@ -32,6 +32,7 @@ export default class fillDescribe extends Component {
         if (prevPage) {
             prevPage.setData({
                 describeInfo: value,
+                source: 'fillDescribe',
             }, function(){
                 Taro.navigateBack({})
             })

@@ -1,15 +1,34 @@
-.establish_btn_normal{
-    background-color: #1890FF;
-    border: pxTrans(1) solid #1890FF;
+.tasks_time_style {
+    margin-bottom: 16px;
+    background   : rgb(255, 255, 255);
 }
-.establish_btn{
-    border: 0!important;
-    width: 100%;
-    height: pxTrans(40);
-    line-height: pxTrans(40);
-    text-align: center;
-    color: #fff;
+
+.project_name_style {
+    background: rgb(255, 255, 255);
+}
+
+.tasks_name_style {
+    background   : rgb(255, 255, 255);
+    margin-bottom: 16px;
+}
+
+.other_style {
+    background: rgb(255, 255, 255);
+}
+
+.establish_btn_normal {
+    background-color: #1890FF;
+    border          : pxTrans(1) solid #1890FF;
+}
+
+.establish_btn {
+    border       : 0 !important;
+    width        : 100%;
+    height       : pxTrans(40);
+    line-height  : pxTrans(40);
+    text-align   : center;
+    color        : #fff;
     border-radius: pxTrans(4);
     margin-bottom: pxTrans(16);
-    box-shadow: none;
+    box-shadow   : none;
 }

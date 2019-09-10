@@ -17,7 +17,7 @@ export default class index extends Component {
   componentDidHide() { }
 
   render() {
-    const label_data = this.props.label_data || ''
+    const { label_data = [] } = this.props
     return (
       <View className={indexStyles.list_item}>
         <View className={`${indexStyles.list_item_left_iconnext}`}>
@@ -26,20 +26,20 @@ export default class index extends Component {
         <View className={indexStyles.list_item_name}>标签</View>
         <View className={indexStyles.tagCell_list_item_detail}>
           {
-            label_data.map((tag, key) => (
-              <View
-                className={indexStyles.tagCell_list_item}
-                style={{
-                  color: tag.label_color,
-                  backgroundColor: tag.label_color,
-                  border: tag.label_color
-                }}
-              >
-                <AtTag type='primary'>
-                  {tag.label_name}
-                </AtTag>
-              </View>
-            ))
+            label_data.map((tag, key) => {
+              const rgb = tag.label_color;
+              return (
+                <View className={indexStyles.tagCell_list_item}>
+                  <AtTag type='primary' customStyle={{
+                    color: `rgba(${rgb},1)`,
+                    backgroundColor: `rgba(${rgb},.2)`,
+                    border: `1px solid rgba(${rgb},1)`,
+                  }}>
+                    {tag.label_name}
+                  </AtTag>
+                </View>
+              )
+            })
           }
         </View>
       </View>

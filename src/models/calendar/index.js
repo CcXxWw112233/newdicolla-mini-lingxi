@@ -72,6 +72,7 @@ export default {
       }
       const res = yield call(getScheCardList, {...params})
       const current_sche_card_list = yield select(select_sche_card_list)
+      
       if(isApiResponseOk(res)) {
         if (typeSource === 1) {
           //处理上拉加载

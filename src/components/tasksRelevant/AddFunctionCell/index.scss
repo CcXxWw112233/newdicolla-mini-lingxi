@@ -1,8 +1,24 @@
-.viewStyle {
-    justify-content    : space-between;
-    display            : flex;
-    height: pxTrans(58);
-    .itemStyle{
-        flex-direction: column;
+.list_item {
+    background     : white;
+    display        : flex;
+    justify-content: space-around;
+    align-items    : center;
+    height         : pxTrans(56);
+
+    .itemStyle {
+        text-align: center;
+        margin    : 16px 16px;
+
+        .list_item_iconnext {
+            font-size: pxTrans(40);
+            color    : rgb(0, 0, 0, 0.25);
+        }
+
+        .name_style {
+            font-size  : pxTrans(12);
+            font-weight: 400;
+            color      : rgba(0, 0, 0, 0.45);
+            line-height: pxTrans(20);
+        }
     }
 }

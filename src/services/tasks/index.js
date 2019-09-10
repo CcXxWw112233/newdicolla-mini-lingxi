@@ -71,4 +71,26 @@ export const checkContentLink = (data , notShowLoading) => {
   }, notShowLoading)
 }
 
+//执行人列表
+export const getTaskExecutorsList = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'GET',
+    url: `${API_BOARD}/board/user/${data.board_id}`,
+  }, notShowLoading)
+}
+
+//里程碑列表
+export const getTaskMilestoneList = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'GET',
+    url: `${API_BOARD}/milestone/${data.id}`,
+  }, notShowLoading)
+}
+
  

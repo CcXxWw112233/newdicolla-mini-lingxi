@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { getTaskGroupList, addTask, getTasksDetail, getCardCommentListAll, boardAppRelaMiletones, addComment, checkContentLink } from '../../services/tasks/index'
+import { getTaskGroupList, addTask, getTasksDetail, getCardCommentListAll, boardAppRelaMiletones, addComment, checkContentLink, getTaskExecutorsList, getTaskMilestoneList } from '../../services/tasks/index'
 import {isApiResponseOk} from "../../utils/request";
 import { setBoardIdStorage } from '../../utils/basicFunction'
 
@@ -9,15 +9,14 @@ export default {
     tasks_list: [], //任务列表
     tasksDetailDatas: {}, //任务详情
     content_Link: [],  //关联内容
+    executors_list: [], //执行人列表 
+    milestone_list: [], //获取里程碑列表
   },
   effects: {
     //获取任务列表
     * getTaskGroupList({ payload }, { select, call, put }) {
       const boardId =  Taro.getStorageSync('board_Id')
-      console.log('boardId = ', boardId);
-
       const res = yield call(getTaskGroupList, {board_id: boardId, type: 2, arrange_type: 1})
-      console.log(res, '========res');
 
       if(isApiResponseOk(res)) {
         yield put({
@@ -144,6 +143,41 @@ export default {
 
       }
     },
+    //执行人列表
+    * getTaskExecutorsList({ payload }, { select, call, put }) {
+      const boardId =  Taro.getStorageSync('board_Id')
+      const res = yield call(getTaskExecutorsList, {board_id: boardId})
+
+      if(isApiResponseOk(res)) {
+        yield put({
+          type: 'updateDatas',
+          payload: {
+            executors_list: res.data
+          }
+        })
+      }else {
+
+      }
+    },
+
+    //获取里程碑列表
+    * getTaskMilestoneList({ payload }, { select, call, put }) {
+      const boardId =  Taro.getStorageSync('board_Id')
+      const res = yield call(getTaskMilestoneList, {id: '1160729934935756800'})
+console.log('res里程碑列表=', res);
+
+      if(isApiResponseOk(res)) {
+        yield put({
+          type: 'updateDatas',
+          payload: {
+            milestone_list: res.data
+          }
+        })
+      }else {
+
+      }
+    },
+
   },
 
   reducers: {

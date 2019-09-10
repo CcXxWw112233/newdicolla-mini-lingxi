@@ -8,12 +8,13 @@
   margin-left  : pxTrans(0);
   margin-right : pxTrans(0);
   border-bottom: pxTrans(1) solid rgba(0, 0, 0, 0.09);
+  background   : rgb(255, 255, 255);
 
   .list_item_left_iconnext {
-    color       : $color_2;
     font-size   : pxTrans(20);
     margin-left : pxTrans(20);
     margin-right: pxTrans(10);
+    color       : rgb(0, 0, 0, 0.25);
   }
 
   .right_style {
@@ -30,7 +31,6 @@
       }
 
       .list_item_detail {
-        word-break   : break-all;
         flex         : 1;
         color        : rgba(0, 0, 0, 0.65);
         margin-left  : pxTrans(6);
@@ -40,12 +40,9 @@
       }
 
       .executors_list_item_detail {
-        flex         : 1;
-        color        : rgba(0, 0, 0, 0.65);
-        margin-left  : pxTrans(6);
-        overflow     : hidden;
-        text-overflow: ellipsis;
-        white-space  : nowrap;
+        flex            : 1;
+        color           : rgba(0, 0, 0, 0.65);
+        margin-left     : pxTrans(6);
       }
     }
 

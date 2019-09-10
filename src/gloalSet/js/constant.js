@@ -2,12 +2,14 @@
 // export const BASE_URL = 'https://lingxi.di-an.com' 
 //测试环境
 // export const BASE_URL = 'http://test.lingxi.new-di.com'
+//稳定版开发服务器
 export const BASE_URL = 'http://dev.lingxi.new-di.com'
 //本地环境
 // export const BASE_URL = 'http://192.168.1.39'
-// export const BASE_URL = 'http://192.168.1.68'
-// export const BASE_URL = 'http://dev.lingxi.new-di.com'
-//export const BASE_URL = 'http://prerelease.lingxi.new-di.com'
+
+//预发布地址
+// export const BASE_URL = 'http://prerelease.lingxi.new-di.com'
+
 //export const BASE_URL = 'http://w4iawu.natappfree.cc'
 //export const BASE_URL = 'http://uwvnrx.natappfree.cc'
 
