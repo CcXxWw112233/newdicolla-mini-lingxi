@@ -15,15 +15,15 @@ export default class TopOption extends Component {
     componentDidShow() { }
 
     componentDidHide() { }
-    
+
     cancelChoice() {
-        console.log('取消');
+        Taro.navigateBack({})
     }
 
     determineChoice = () => {
         this.props.topCurrencyDetermineChoice()
     }
-    
+
     render() {
         return (
             <View className={indexStyles.viewStyle}>

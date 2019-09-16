@@ -88,6 +88,13 @@ export default {
         const switchTabCurrentPage = 'currentPage_BoardDetail_or_Login'
         Taro.setStorageSync('switchTabCurrentPage', switchTabCurrentPage);  //解决wx.switchTab不能传值
         Taro.switchTab({url: `../../pages/calendar/index`})
+        
+        yield put({
+          type: 'calendar/updateDatas',
+          payload: {
+            isReachBottom: true,
+          }
+        })
       }
     },
     //获取用户信息

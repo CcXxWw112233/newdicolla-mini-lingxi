@@ -4,7 +4,7 @@
   min-height   : pxTrans(56);
   font-size    : pxTrans(16);
   display      : flex;
-  align-items  : flex-start;
+  align-items  : baseline;
   margin-left  : pxTrans(0);
   margin-right : pxTrans(0);
   border-bottom: pxTrans(1) solid rgba(0, 0, 0, 0.09);
@@ -15,6 +15,7 @@
     font-size   : pxTrans(20);
     margin-left : pxTrans(20);
     margin-right: pxTrans(10);
+    margin-top  : pxTrans(18);
   }
 
   .list_item_name {
@@ -32,6 +33,7 @@
     flex-wrap    : wrap;
     display      : flex;
     align-items  : center;
+    margin-bottom: pxTrans(12);
 
     .tagCell_list_item {
       margin: pxTrans(5) pxTrans(5) pxTrans(5) pxTrans(5);

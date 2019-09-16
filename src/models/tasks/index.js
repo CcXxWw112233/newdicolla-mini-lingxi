@@ -15,9 +15,7 @@ export default {
   effects: {
     //获取任务列表
     * getTaskGroupList({ payload }, { select, call, put }) {
-      const boardId =  Taro.getStorageSync('board_Id')
-      const res = yield call(getTaskGroupList, {board_id: boardId, type: 2, arrange_type: 1})
-
+      const res = yield call(getTaskGroupList, payload)
       if(isApiResponseOk(res)) {
         yield put({
           type: 'updateDatas',
@@ -72,9 +70,9 @@ export default {
 
     //新增任务
     * addTask({ payload }, { select, call, put }) {
-      const { parmas } = payload
-      const res = yield call(addTask, parmas)
-      console.log('res = ', res);
+console.log(payload, '9999----33333');
+      const res = yield call(addTask, payload)
+      console.log('res =新增任务: ', res);
 
       if(isApiResponseOk(res)) {
 
@@ -145,9 +143,8 @@ export default {
     },
     //执行人列表
     * getTaskExecutorsList({ payload }, { select, call, put }) {
-      const boardId =  Taro.getStorageSync('board_Id')
-      const res = yield call(getTaskExecutorsList, {board_id: boardId})
-
+      const { board_id } = payload
+      const res = yield call(getTaskExecutorsList, {board_id: board_id})
       if(isApiResponseOk(res)) {
         yield put({
           type: 'updateDatas',
@@ -162,10 +159,8 @@ export default {
 
     //获取里程碑列表
     * getTaskMilestoneList({ payload }, { select, call, put }) {
-      const boardId =  Taro.getStorageSync('board_Id')
-      const res = yield call(getTaskMilestoneList, {id: '1160729934935756800'})
-console.log('res里程碑列表=', res);
-
+      const { board_id } = payload
+      const res = yield call(getTaskMilestoneList, {id: board_id})
       if(isApiResponseOk(res)) {
         yield put({
           type: 'updateDatas',

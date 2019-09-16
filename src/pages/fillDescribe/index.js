@@ -18,6 +18,13 @@ export default class fillDescribe extends Component {
 
     componentWillUnmount() { }
 
+    componentDidMount() {
+        const { describeInfo } = this.$router.params
+        this.setState({
+            value: describeInfo
+        })
+    }
+
     componentDidShow() { }
 
     componentDidHide() { }

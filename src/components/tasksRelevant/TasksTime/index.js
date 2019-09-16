@@ -20,11 +20,12 @@ export default class TasksTime extends Component {
     }
 
     render() {
-        const { cellInfo = { } } = this.props
-        const card_name = cellInfo.cardDefinition || ''
+        const { cellInfo = {} } = this.props
+        const card_name = cellInfo.cardDefinition
         const input_disabled = !card_name ? false : true
-        const sTime = cellInfo.sTime || ''
-        const eTime = cellInfo.eTime || ''
+        const sTime = cellInfo.sTime
+        const eTime = cellInfo.eTime
+        
         return (
             <View className={indexStyles.view_Style}>
                 <View className={indexStyles.input_View}>
@@ -36,11 +37,11 @@ export default class TasksTime extends Component {
                 <View className={indexStyles.selectionTime}>
                     <View className={indexStyles.startTime} >
                         {/* <ChoiceTimes onClick={this.ejectTimePicks} time={sTime} /> */}
-                        {timestampToTimeZH(sTime)}
+                        {sTime ? timestampToTimeZH(sTime) : '开始时间'}
                     </View>
                     <View className={indexStyles.endTime} >
                         {/* <ChoiceTimes onClick={this.ejectTimePicks} time={eTime} /> */}
-                        {timestampToTimeZH(eTime)}
+                        {eTime ? timestampToTimeZH(eTime) : '结束时间'}
                     </View>
                 </View>
             </View>

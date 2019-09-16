@@ -1,41 +1,43 @@
 @import "../../gloalSet/styles/constant";
 
-.calendar_card_out {
-  display         : flex;
-  background-color: red;
-  flex-direction  : column;
+.view_style {
+  .calendar_card_out {
+    display         : flex;
+    background-color: red;
+    flex-direction  : column;
 
-  .calendar {
-    height: auto;
+    .calendar {
+      height: auto;
+    }
+
+    .card {
+      flex    : 1;
+      overflow: hidden;
+      //height: 100px;
+    }
   }
 
-  .card {
-    flex    : 1;
-    overflow: hidden;
-    //height: 100px;
+  .no_scheduling {
+    color     : $color_3;
+    font-size : pxTrans(14);
+    text-align: center;
+    margin    : 0 $paddingValue 0 $paddingValue;
+    margin-top: pxTrans(14);
   }
-}
 
-.no_scheduling {
-  color     : $color_3;
-  font-size : pxTrans(14);
-  text-align: center;
-  margin    : 0 $paddingValue 0 $paddingValue;
-  margin-top: pxTrans(14);
-}
-
-.plusTasks {
-  display         : flex;
-  justify-content : center;
-  align-items     : center;
-  background-color: $color_theme;
-  color           : $color_5;
-  margin          : 0 auto;
-  width           : pxTrans(40);
-  height          : pxTrans(40);
-  line-height     : pxTrans(40);
-  border-radius   : pxTrans(40);
-  position        : absolute;
-  right           : pxTrans(16);
-  bottom          : pxTrans(16);
+  .plusTasks {
+    display         : flex;
+    justify-content : center;
+    align-items     : center;
+    background-color: $color_theme;
+    color           : $color_5;
+    margin          : 0 auto;
+    width           : pxTrans(40);
+    height          : pxTrans(40);
+    line-height     : pxTrans(40);
+    border-radius   : pxTrans(40);
+    position        : fixed;
+    right           : pxTrans(16);
+    bottom          : pxTrans(16);
+  }
 }

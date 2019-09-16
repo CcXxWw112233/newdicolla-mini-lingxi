@@ -18,6 +18,7 @@ export default {
     sign_data: [], //日历列表打点数据
     page_number: 1,  //默认第1页
     isReachBottom: true,  //是否上拉加载分页
+    isOtherPageBack: false,  //当前日历页面是首页加载还是其他页面返回来的标识
   },
   effects: {
 
@@ -48,7 +49,7 @@ export default {
       const current_org = getCurrentOrgByStorage()
       const page_number = yield select(select_page_number)
       let typeSource = payload['type'];
-
+      
       const obj = {
         current_org,
         selected_board,

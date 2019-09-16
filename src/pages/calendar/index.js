@@ -9,8 +9,8 @@ import CalendarSwiper from './components/CalendarSwiper'
 import MilestoneList from './components/MilestoneList'
 import { connect } from '@tarojs/redux'
 
-@connect(({ calendar: { no_sche_card_list, selected_board_name, page_number, isReachBottom } }) => ({
-  no_sche_card_list, selected_board_name, page_number, isReachBottom,
+@connect(({ calendar: { no_sche_card_list, selected_board_name, page_number, isReachBottom, isOtherPageBack, } }) => ({
+  no_sche_card_list, selected_board_name, page_number, isReachBottom, isOtherPageBack,
 }))
 export default class Calendar extends Component {
   constructor(props) {
@@ -25,8 +25,18 @@ export default class Calendar extends Component {
   }
 
   onPullDownRefresh(res) {  //下拉刷新...
+
+    const { dispatch } = this.props
+    dispatch({
+      type: 'calendar/updateDatas',
+      payload: {
+        page_number: 1,
+        isReachBottom: true,
+      }
+    })
+
     this.getNoScheCardList()
-    this.getScheCardList({})
+    this.getScheCardList()
     this.getOrgBoardList()
     this.getSignList()
 
@@ -38,7 +48,8 @@ export default class Calendar extends Component {
   }
 
   onReachBottom() {    //上拉加载...
-    const isReachBottom = this.props.isReachBottom
+    const { isReachBottom } = this.props
+
     if (isReachBottom === true) {
       this.pagingGet()
     }
@@ -47,28 +58,13 @@ export default class Calendar extends Component {
   state = {
     show_card_type_select: '0',
     search_mask_show: '0',
-    isClose: true, //判断当前页面是打开还是从其他页返回来
   }
 
-  gotoBackIdentification = () => {
-    debugger
-    this.setData({
-      isClose: false
-    })
-    console.log('判断当前页面是打开还是从其他页返回来');
-  }
+  componentWillReceiveProps(nextProps) { }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillUnmount() { }
 
-  }
-
-  componentWillUnmount() {
-
-  }
-
-  componentWillMount() {
-    // this.getScheCardList({})
-  }
+  componentWillMount() { }
 
   componentDidMount() {
     const switchTabCurrentPage = 'currentPage_BoardDetail_or_Login'
@@ -82,30 +78,38 @@ export default class Calendar extends Component {
   }
 
   componentDidShow() {
-    const { isClose } = this.state
+    const { selected_board_name, isOtherPageBack } = this.props
 
-    console.log(isClose, 'ssss')
-
-    var pages = getCurrentPages();
-    var currPage = pages[pages.length - 1];
-
-    const { selected_board_name } = this.props
     Taro.setNavigationBarTitle({
       title: selected_board_name
     })
     this.getOrgList()
     this.getOrgBoardList()
     this.getNoScheCardList()
-    // this.getScheCardList({})
-    console.log(currPage.data, 'ddddd');
-
-    if (currPage.data.source === 'isLoadCard') {
-      console.log('从任务详情页返回来, 不重新加载listCard数据');
-    } else {
+    if (isOtherPageBack !== true) {
       this.getScheCardList({})
     }
     this.getSignList()
     this.getUserAllOrgsAllBoards()
+  }
+
+  componentDidHide() {
+
+    const { dispatch } = this.props
+    dispatch({
+      type: 'calendar/updateDatas',
+      payload: {
+        isOtherPageBack: false
+      }
+    })
+
+    dispatch({
+      type: 'calendar/updateDatas',
+      payload: {
+        page_number: 1,
+        isReachBottom: true,
+      }
+    })
   }
 
   getUserAllOrgsAllBoards = () => {
@@ -178,8 +182,6 @@ export default class Calendar extends Component {
     })
   }
 
-  componentDidHide() { }
-
   gotoAddingTasks = () => {
     Taro.navigateTo({
       url: '../../pages/addingTasks/index',
@@ -239,12 +241,14 @@ export default class Calendar extends Component {
         {no_sche_card_list.length && (
           <View className={`${globalStyles.global_card_out} ${indexStyles.no_scheduling}`} onClick={this.gotoNoSchedule}>暂未排期的工作（{no_sche_card_list.length}）</View>
         )}
-        <CardList schedule={'1'} gotoBackIdentification={this.gotoBackIdentification} />
+        <CardList schedule={'1'} />
         <View style='height: 50px'></View>
 
-        {/* <View className={indexStyles.plusTasks} onClick={this.gotoAddingTasks}>+</View> */}
+        <View className={indexStyles.plusTasks} onClick={this.gotoAddingTasks}>
+          +
+          {/* <Text className={`${globalStyles.global_iconfont}`}>&#xe632;</Text> */}
+        </View>
       </View>
     )
   }
 }
-

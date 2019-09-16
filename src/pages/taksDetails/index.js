@@ -14,8 +14,8 @@ import CommentBox from './components/CommentBox/index'
 import { connect } from '@tarojs/redux'
 
 
-@connect(({ tasks: { tasksDetailDatas = {} } }) => ({
-    tasksDetailDatas
+@connect(({ tasks: { tasksDetailDatas = {} }, calendar: { isOtherPageBack = {} } }) => ({
+    tasksDetailDatas, isOtherPageBack
 }))
 export default class taksDetails extends Component {
     config = {
@@ -34,29 +34,25 @@ export default class taksDetails extends Component {
 
     componentWillReceiveProps() { }
 
-    componentDidShow() { }
+    componentDidShow() { 
+        const { dispatch } = this.props
+        dispatch({
+          type: 'calendar/updateDatas',
+          payload: {
+            isOtherPageBack: true
+          }
+        })
+    }
 
     componentDidHide() { }
 
-    componentWillUnmount() {
-        var pages = Taro.getCurrentPages()
-        var prevPage = null
-        if (pages.length >= 2) {
-            prevPage = pages[pages.length - 2]
-        }
-        if (prevPage) {
-            prevPage.setData({
-                source: 'isLoadCard',
-            }, function () {
-            })
-        }
-    }
+    componentWillUnmount() { }
 
     render() {
         const { tasksDetailDatas } = this.props
-        const card_name = tasksDetailDatas.card_name
-        const due_time = tasksDetailDatas.due_time
-        const start_time = tasksDetailDatas.start_time
+        const card_name = tasksDetailDatas['card_name'] || ''
+        const due_time = tasksDetailDatas['due_time'] || ''
+        const start_time = tasksDetailDatas['start_time']
         const timeInfo = {
             eTime: due_time,
             sTime: start_time,
@@ -109,7 +105,6 @@ export default class taksDetails extends Component {
                     }
                     </View>
                 }
-
                 {/* <NewBuilders />
                 <CommentCell />
                 <CommentBox content={content_Id} /> */}
