@@ -44,11 +44,11 @@ class App extends Component {
       'pages/nowOpen/index',
       'pages/auccessJoin/index',
       'pages/qrCodeInvalid/index',
-      'pages/addingTasks/index',
-      'pages/choiceProject/index',
-      'pages/fillDescribe/index',
       'pages/taksDetails/index',
-      'pages/DateTimePicker/index',
+      // 'pages/addingTasks/index',
+      // 'pages/choiceProject/index',
+      // 'pages/fillDescribe/index',
+      // 'pages/DateTimePicker/index',
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -89,23 +89,23 @@ class App extends Component {
     store,
   }
 
-  componentDidMount () {
+  componentDidMount() {
   }
 
-  componentDidShow () {
+  componentDidShow() {
     const options = this.$router.params
     if (options.path === 'pages/acceptInvitation/index') {
       Taro.setStorageSync('sceneParams', options)
     }
   }
 
-  componentDidHide () {}
+  componentDidHide() { }
 
-  componentDidCatchError () {}
+  componentDidCatchError() { }
 
   // 在 App 类中的 render() 函数没有实际作用
   // 请勿修改此函数
-  render () {
+  render() {
     return (
       <Provider store={store}>
         <Index />

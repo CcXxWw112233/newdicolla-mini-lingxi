@@ -22,25 +22,38 @@ export default class taksDetails extends Component {
         navigationBarTitleText: '任务详情'
     }
     state = {
-        content_Id: ''
+        content_Id: '',
+        isComplete: '',  //是否完成状态
     }
 
     componentDidMount() {
-        const contentId = this.$router.params.content_id
+
+        const content_id = this.$router.params.contentId
+        const board_id = this.$router.params.boardId
+
+        const { dispatch } = this.props
+        dispatch({
+            type: 'tasks/getTasksDetail',
+            payload: {
+                id: content_id,
+                boardId: board_id,
+            }
+        })
+
         this.setState({
-            content_Id: contentId
+            content_Id: content_id
         })
     }
 
     componentWillReceiveProps() { }
 
-    componentDidShow() { 
+    componentDidShow() {
         const { dispatch } = this.props
         dispatch({
-          type: 'calendar/updateDatas',
-          payload: {
-            isOtherPageBack: true
-          }
+            type: 'calendar/updateDatas',
+            payload: {
+                isOtherPageBack: true
+            }
         })
     }
 
@@ -48,15 +61,29 @@ export default class taksDetails extends Component {
 
     componentWillUnmount() { }
 
+    tasksDetailsRealizeStatus = () => {
+
+        const { isComplete } = this.state
+        this.setState({
+            isComplete: !isComplete
+        })
+    }
+
     render() {
         const { tasksDetailDatas } = this.props
+        const card_id = tasksDetailDatas['card_id'] || ''
         const card_name = tasksDetailDatas['card_name'] || ''
         const due_time = tasksDetailDatas['due_time'] || ''
         const start_time = tasksDetailDatas['start_time']
+        const is_realize = tasksDetailDatas['is_realize'] || ''
+        let { isComplete } = this.state
+        isComplete = isComplete ? isComplete : (is_realize === "0" ? false : true)
         const timeInfo = {
             eTime: due_time,
             sTime: start_time,
             cardDefinition: card_name,
+            isComplete: isComplete,
+            cardId: card_id
         }
         const board_name = tasksDetailDatas['board_name'] || ''
         const list_name = tasksDetailDatas['list_name'] || '未分组'
@@ -75,7 +102,7 @@ export default class taksDetails extends Component {
         return (
             <View >
                 <View className={indexStyles.tasks_time_style}>
-                    <TasksTime cellInfo={timeInfo} />
+                    <TasksTime cellInfo={timeInfo} tasksDetailsRealizeStatus={() => this.tasksDetailsRealizeStatus()} />
                 </View>
                 <ProjectNameCell title='项目' name={board_name} />
                 <View className={indexStyles.tasks_name_style}>

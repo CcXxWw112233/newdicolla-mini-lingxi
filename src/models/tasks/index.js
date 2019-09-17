@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro'
-import { getTaskGroupList, addTask, getTasksDetail, getCardCommentListAll, boardAppRelaMiletones, addComment, checkContentLink, getTaskExecutorsList, getTaskMilestoneList } from '../../services/tasks/index'
-import {isApiResponseOk} from "../../utils/request";
+import { getTaskGroupList, addTask, getTasksDetail, getCardCommentListAll, boardAppRelaMiletones, addComment, checkContentLink, getTaskExecutorsList, getTaskMilestoneList, setTasksRealize, updataTasks, } from '../../services/tasks/index'
+import { isApiResponseOk } from "../../utils/request";
 import { setBoardIdStorage } from '../../utils/basicFunction'
 
 export default {
@@ -16,14 +16,14 @@ export default {
     //获取任务列表
     * getTaskGroupList({ payload }, { select, call, put }) {
       const res = yield call(getTaskGroupList, payload)
-      if(isApiResponseOk(res)) {
+      if (isApiResponseOk(res)) {
         yield put({
           type: 'updateDatas',
           payload: {
             tasks_list: res.data
           }
         })
-      }else {
+      } else {
 
       }
     },
@@ -31,9 +31,9 @@ export default {
     //任务详情
     * getTasksDetail({ payload }, { select, call, put }) {
       const { id, boardId } = payload;
-      const res = yield call(getTasksDetail, {id: id})
-
-      if(isApiResponseOk(res)) {
+      const res = yield call(getTasksDetail, { id: id })
+      
+      if (isApiResponseOk(res)) {
         yield put({
           type: 'updateDatas',
           payload: {
@@ -43,10 +43,6 @@ export default {
 
         setBoardIdStorage(boardId)
 
-        Taro.navigateTo({
-          url: `../../pages/taksDetails/index?content_id=${id}`
-        })
-
         // yield put({
         //   type: 'getCardCommentListAll',
         //   payload: {
@@ -54,7 +50,7 @@ export default {
         //   }
         // })
 
-        yield put ({
+        yield put({
           type: 'checkContentLink',
           payload: {
             board_id: boardId,
@@ -63,20 +59,17 @@ export default {
           }
         })
 
-      }else {
+      } else {
 
       }
     },
 
     //新增任务
     * addTask({ payload }, { select, call, put }) {
-console.log(payload, '9999----33333');
       const res = yield call(addTask, payload)
-      console.log('res =新增任务: ', res);
+      if (isApiResponseOk(res)) {
 
-      if(isApiResponseOk(res)) {
-
-      }else {
+      } else {
 
       }
     },
@@ -84,31 +77,26 @@ console.log(payload, '9999----33333');
     //评论列表
     * getCardCommentListAll({ payload }, { select, call, put }) {
       const res = yield call(getCardCommentListAll, payload)
-      console.log('res = 评论列表', res);
-
-      if(isApiResponseOk(res)) {
+      if (isApiResponseOk(res)) {
         yield put({
           type: 'updateDatas',
           payload: {
             // tasksDetailDatas: res.data
           }
         })
-      }else {
+      } else {
 
       }
     },
 
     //新增评论
     * addComment({ payload }, { select, call, put }) {
-      console.log(payload, 'payload');
       const res = yield call(addComment, payload)
-      console.log('res = 新增评论:', res);
-
-      if(isApiResponseOk(res)) {
+      if (isApiResponseOk(res)) {
 
         yield call(getCardCommentListAll, payload)
 
-      }else {
+      } else {
 
       }
     },
@@ -117,11 +105,9 @@ console.log(payload, '9999----33333');
     * boardAppRelaMiletones({ payload }, { select, call, put }) {
       const { parmas } = payload
       const res = yield call(boardAppRelaMiletones, parmas)
-      console.log('res = ', res);
+      if (isApiResponseOk(res)) {
 
-      if(isApiResponseOk(res)) {
-
-      }else {
+      } else {
 
       }
     },
@@ -130,29 +116,29 @@ console.log(payload, '9999----33333');
     * checkContentLink({ payload }, { select, call, put }) {
       const res = yield call(checkContentLink, payload)
 
-      if(isApiResponseOk(res)) {
+      if (isApiResponseOk(res)) {
         yield put({
           type: 'updateDatas',
           payload: {
             content_Link: res.data
           }
         })
-      }else {
+      } else {
 
       }
     },
     //执行人列表
     * getTaskExecutorsList({ payload }, { select, call, put }) {
       const { board_id } = payload
-      const res = yield call(getTaskExecutorsList, {board_id: board_id})
-      if(isApiResponseOk(res)) {
+      const res = yield call(getTaskExecutorsList, { board_id: board_id })
+      if (isApiResponseOk(res)) {
         yield put({
           type: 'updateDatas',
           payload: {
             executors_list: res.data
           }
         })
-      }else {
+      } else {
 
       }
     },
@@ -160,17 +146,27 @@ console.log(payload, '9999----33333');
     //获取里程碑列表
     * getTaskMilestoneList({ payload }, { select, call, put }) {
       const { board_id } = payload
-      const res = yield call(getTaskMilestoneList, {id: board_id})
-      if(isApiResponseOk(res)) {
+      const res = yield call(getTaskMilestoneList, { id: board_id })
+      if (isApiResponseOk(res)) {
         yield put({
           type: 'updateDatas',
           payload: {
             milestone_list: res.data
           }
         })
-      }else {
+      } else {
 
       }
+    },
+
+    //完成/未任务
+    * setTasksRealize({ payload }, { select, call, put }) {
+      const res = yield call(setTasksRealize, payload)
+    },
+
+    //更新任务
+    * updataTasks({ payload }, { select, call, put }) {
+      const res = yield call(updataTasks, payload)
     },
 
   },

@@ -86,9 +86,9 @@ export default class Calendar extends Component {
     this.getOrgList()
     this.getOrgBoardList()
     this.getNoScheCardList()
-    if (isOtherPageBack !== true) {
+    // if (isOtherPageBack !== true) {
       this.getScheCardList({})
-    }
+    // }
     this.getSignList()
     this.getUserAllOrgsAllBoards()
   }
@@ -244,10 +244,9 @@ export default class Calendar extends Component {
         <CardList schedule={'1'} />
         <View style='height: 50px'></View>
 
-        <View className={indexStyles.plusTasks} onClick={this.gotoAddingTasks}>
+        {/* <View className={indexStyles.plusTasks} onClick={this.gotoAddingTasks}>
           +
-          {/* <Text className={`${globalStyles.global_iconfont}`}>&#xe632;</Text> */}
-        </View>
+        </View> */}
       </View>
     )
   }

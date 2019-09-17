@@ -5,7 +5,6 @@ import globalStyles from '../../../gloalSet/styles/globalStyles.scss'
 import Avatar from '../../../components/avatar'
 import { getOrgName, timestampToTimeZH, setBoardIdStorage } from '../../../utils/basicFunction'
 import { connect } from '@tarojs/redux'
-import { call } from 'when/node';
 
 @connect(({ my: { org_list } }) => ({
   org_list
@@ -26,14 +25,10 @@ export default class CardItem extends Component {
   }
 
   gotoTaksDetails = (pramar) => {
+
     if (pramar.code === '0') {
-      const { dispatch } = this.props
-      dispatch({
-          type: 'tasks/getTasksDetail',
-          payload: {
-              id: pramar.contentId,
-              boardId: pramar.boardId,
-          }
+      Taro.navigateTo({
+        url: `../../pages/taksDetails/index?contentId=${pramar.contentId}&&boardId=${pramar.boardId}`
       })
     }
   }

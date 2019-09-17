@@ -1,15 +1,16 @@
-.tasks_time_style, .tasks_name_style {
+.tasks_time_style,
+.tasks_name_style {
     margin-bottom: 16px;
 }
 
 .add_function_style {
     padding: 16px 16px 16px 16px;
 }
- 
 
 .establish_btn_normal {
     background-color: #1890FF;
     border          : pxTrans(1) solid #1890FF;
+    margin-top      : pxTrans(16);
 }
 
 .establish_btn {
@@ -20,6 +21,5 @@
     text-align   : center;
     color        : #fff;
     border-radius: pxTrans(4);
-    margin-bottom: pxTrans(16);
     box-shadow   : none;
 }

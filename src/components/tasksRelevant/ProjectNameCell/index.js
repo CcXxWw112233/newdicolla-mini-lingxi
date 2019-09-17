@@ -86,7 +86,8 @@ export default class ProjectNameCell extends Component {
         }
 
         return (
-            <View className={indexStyles.list_item} onClick={this.gotoChangeChoiceInfoPage.bind(this, { title: title, name: name })}>
+            // <View className={indexStyles.list_item} onClick={this.gotoChangeChoiceInfoPage.bind(this, { title: title, name: name })}>
+            <View className={indexStyles.list_item}>
                 <View className={`${indexStyles.list_item_left_iconnext}`}>
                     {icon}
                 </View>

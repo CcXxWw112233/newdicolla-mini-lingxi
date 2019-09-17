@@ -26,14 +26,14 @@ export const getTaskGroupList = (data , notShowLoading) => {
     }, notShowLoading)
   }
 
-  //创建任务
+  //新增任务(工作台中)
   export const addTask = (data , notShowLoading) => {
     return request({
       data: {
         ...data
       },
       method: 'POST',
-      url: `${API_BOARD}/card`,
+      url: `${API_BOARD}/card/add`,
     }, notShowLoading)
   }
 
@@ -92,5 +92,29 @@ export const getTaskMilestoneList = (data, notShowLoading) => {
     url: `${API_BOARD}/milestone/${data.id}`,
   }, notShowLoading)
 }
+
+
+//完成/未任务
+export const setTasksRealize = (data , notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'PUT',
+    url: `${API_BOARD}/card/realize`,
+  }, notShowLoading, true)
+}
+
+//更新任务
+export const updataTasks = (data , notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'PUT',
+    url: `${API_BOARD}/card`,
+  }, notShowLoading, true)
+}
+
 
  
