@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro'
 
-function onWillReconnect() {
-  console.log('im onWillReconnect')
+function onWillReconnect(e) {
+  console.log('im onWillReconnect', e)
   Taro.showToast({
     title: 'im 重连中...',
     icon: 'none',

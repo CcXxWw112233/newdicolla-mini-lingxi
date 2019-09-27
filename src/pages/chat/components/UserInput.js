@@ -17,12 +17,13 @@ import genEmojiList from './../../../models/im/utils/genEmojiList.js';
 @connect(
   ({
     im: {
-      currentGroup: { im_id }
+      currentGroup: { im_id },
+      isOnlyShowInform,
     },
     chat: {
       handleInputMode
     }
-  }) => ({ im_id,handleInputMode }),
+  }) => ({ im_id, handleInputMode, isOnlyShowInform }),
   dispatch => ({
     sendTeamTextMsg: (text, to) =>
       dispatch({
@@ -104,10 +105,10 @@ class UserInput extends Component {
     recorderManager: null, //录音内容
     emojiType: 'emoji', // emoji | pinup
     emojiAlbum: 'emoji', // emoji | ajmd | lt | xxy
-    inputBottomValue:0
+    inputBottomValue: 0
   };
   handleInputFocus = e => {
-    const {handleUserInputFocus, handleUserInputHeightChange} = this.props;
+    const { handleUserInputFocus, handleUserInputHeightChange } = this.props;
     handleUserInputFocus(true)
     // console.log('sssss', this.refs.inputRef)
     // let chatContentHeight = 0;
@@ -118,22 +119,22 @@ class UserInput extends Component {
     //   console.log("YING lkkk",res);
     //   chatContentHeight = res[0].height;
     // });
-    if(e.detail.height>0){
+    if (e.detail.height > 0) {
       handleUserInputHeightChange(e.detail.height);
     }
     //handleUserInputHeightChange(298);
     this.setState({
       inputMode: 'text',
       //inputBottomValue:'298px'
-      inputBottomValue: e.detail.height>0 ? (e.detail.height-15)+'px' : this.state.inputBottomValue
+      inputBottomValue: e.detail.height > 0 ? (e.detail.height - 15) + 'px' : this.state.inputBottomValue
     });
   };
   handleInputBlur = () => {
-    const { handleUserInputFocus,handleUserInputHeightChange} = this.props;
+    const { handleUserInputFocus, handleUserInputHeightChange } = this.props;
     handleUserInputFocus(false)
-     handleUserInputHeightChange(0);
-     this.setState({
-       inputBottomValue: 0
+    handleUserInputHeightChange(0);
+    this.setState({
+      inputBottomValue: 0
     });
   };
   handleInput = e => {
@@ -180,6 +181,19 @@ class UserInput extends Component {
           icon: 'none'
         })
       );
+
+
+    // 发送聊天消息的时候如果消息收起状态: 自动展开聊天消息列表
+    const { dispatch, isOnlyShowInform } = this.props
+    if (isOnlyShowInform == true) {
+      dispatch({
+        type: 'im/updateStateFieldByCover',
+        payload: {
+          isOnlyShowInform: false
+        },
+        desc: 'toggle im isOnlyShowInform'
+      })
+    }
   };
   onInputConfirm = () => {
     this.setState({
@@ -211,7 +225,7 @@ class UserInput extends Component {
           });
       }
     );
-    const {dispatch} = this.props;
+    const { dispatch } = this.props;
     dispatch({
       type: 'chat/updateStateFieldByCover',
       payload: {
@@ -255,10 +269,10 @@ class UserInput extends Component {
   };
   handleChooseImage = (...types) => {
     const { im_id, sendImageMsg } = this.props;
-    const {setInputMode} = this;
+    const { setInputMode } = this;
     Taro.chooseImage({
       sourceType: types,
-      success: function(res) {
+      success: function (res) {
         Taro.showLoading({
           title: '发送中...'
         });
@@ -275,13 +289,13 @@ class UserInput extends Component {
             });
           });
       },
-      fail: function() {
+      fail: function () {
         Taro.showToast({
           title: '未选择任何图片',
           icon: 'none'
         });
       },
-      complete: function() {}
+      complete: function () { }
     });
   };
   handleChooseFile = () => {
@@ -377,7 +391,7 @@ class UserInput extends Component {
             if (recordAuth == false) {
               //已申请过授权，但是用户拒绝
               Taro.openSetting({
-                success: function(res) {
+                success: function (res) {
                   let recordAuth = res.authSetting['scope.record'];
                   if (recordAuth == true) {
                     Taro.showToast({
@@ -412,7 +426,7 @@ class UserInput extends Component {
               });
             }
           },
-          fail: function() {
+          fail: function () {
             Taro.showToast({
               title: '鉴权失败，请重试',
               icon: 'error'
@@ -480,7 +494,7 @@ class UserInput extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { handleInputMode} = nextProps;
+    const { handleInputMode } = nextProps;
     // console.log(handleInputMode);
     this.setState({
       inputMode: handleInputMode
@@ -498,7 +512,7 @@ class UserInput extends Component {
       emojiAlbum,
       inputBottomValue
     } = this.state;
-    
+
     // console.log(inputMode);
     const { emojiAlbumList, emojiList } = this.genEmojiInfo();
     const findedCurrentEmojiAlbum = emojiList.filter(
@@ -562,7 +576,7 @@ class UserInput extends Component {
             <View
               className={`${styles.voiceInput} ${
                 recordStart ? styles.voiceInputing : ''
-              }`}
+                }`}
               onTouchStart={this.handleVoiceTouchStar}
               onTouchEnd={this.handleVoiceTouchEnd}
             >
@@ -574,34 +588,34 @@ class UserInput extends Component {
               <View
                 className={`${globalStyles.global_iconfont} ${
                   styles.expression
-                }`}
+                  }`}
                 onClick={e => this.handleClickedItem(e, 'text')}
               >
                 &#xe655;
               </View>
             ) : (
-              <View
-                className={`${globalStyles.global_iconfont} ${
-                  styles.expression
-                }`}
-                onClick={e => this.handleClickedItem(e, 'expression')}
-              >
-                &#xe631;
+                <View
+                  className={`${globalStyles.global_iconfont} ${
+                    styles.expression
+                    }`}
+                  onClick={e => this.handleClickedItem(e, 'expression')}
+                >
+                  &#xe631;
               </View>
-            )}
+              )}
           </View>
           {inputValue && inputValue.trim() ? (
             <View className={styles.sendTextBtn} onClick={this.onInputConfirm}>
               发送
             </View>
           ) : (
-            <View
-              className={`${globalStyles.global_iconfont} ${styles.addition}`}
-              onClick={e => this.handleClickedItem(e, 'addition')}
-            >
-              &#xe632;
+              <View
+                className={`${globalStyles.global_iconfont} ${styles.addition}`}
+                onClick={e => this.handleClickedItem(e, 'addition')}
+              >
+                &#xe632;
             </View>
-          )}
+            )}
         </View>
         {inputMode === 'expression' && (
           <View className={styles.contentWrapper}>
@@ -641,7 +655,7 @@ class UserInput extends Component {
                   <View
                     className={`${styles.emojiPanelItemWrapper} ${
                       emojiAlbum === i.name ? styles.emojiPanelItemActive : ''
-                    }`}
+                      }`}
                     key={i.url}
                     onClick={() => this.handleSelectEmojiList(i)}
                   >
@@ -675,7 +689,7 @@ class UserInput extends Component {
                     <View
                       className={`${globalStyles.global_iconfont} ${
                         styles.additionItemBtnIcon
-                      }`}
+                        }`}
                       onClick={() => this.handleClickAdditionItem('file')}
                     >
                       &#xe662;
@@ -686,7 +700,7 @@ class UserInput extends Component {
                     <View
                       className={`${globalStyles.global_iconfont} ${
                         styles.additionItemBtnIcon
-                      }`}
+                        }`}
                       onClick={() => this.handleClickAdditionItem('image')}
                     >
                       &#xe664;
@@ -697,7 +711,7 @@ class UserInput extends Component {
                     <View
                       className={`${globalStyles.global_iconfont} ${
                         styles.additionItemBtnIcon
-                      }`}
+                        }`}
                       onClick={() => this.handleClickAdditionItem('photo')}
                     >
                       &#xe663;

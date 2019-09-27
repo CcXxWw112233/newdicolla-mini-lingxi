@@ -41,13 +41,13 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 2,
+			"current": -1,
 			"list": [
 				{
 					"id": 0,
 					"name": "pages/acceptInvitation/index",
 					"pathName": "pages/acceptInvitation/index",
-					"query": "id=1156175314305552384",
+					"query": "id=1174207375045955584",
 					"scene": 1011
 				},
 				{
@@ -58,10 +58,11 @@
 					"scene": null
 				},
 				{
-					"id": -1,
-					"name": "pages/addingTasks/index",
-					"pathName": "pages/addingTasks/index",
-					"scene": null
+					"id": 3,
+					"name": "pages/sceneEntrance/index",
+					"pathName": "pages/sceneEntrance/index",
+					"query": "redirectType=1&&boardId=1177204298187149312&&contentId=1177204298187149312",
+					"scene": 1074
 				}
 			]
 		}

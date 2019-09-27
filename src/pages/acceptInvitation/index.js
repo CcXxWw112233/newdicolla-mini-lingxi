@@ -32,20 +32,20 @@ export default class acceptInvitation extends Component {
   componentWillUnmount() {
   }
   componentDidShow() {
-    this.scanQRCodeJoin()
+    const options = this.$router.params
+    this.scanQRCodeJoin(options)
     this.isLoginStatus()
   }
-  componentDidHide() {
-  }
 
-  scanQRCodeJoin() {
-    const sceneParams = Taro.getStorageSync('sceneParams')
+  componentDidHide() { }
+
+  scanQRCodeJoin(options) {
     let queryId
-    if (sceneParams.scene === 1047) {  //扫码场景进入
-      const sceneArr = sceneParams.query.scene.split('&')[0]
+    if (options.scene) {  //扫码场景进入
+      const sceneArr = options.scene.split('&')[0]
       queryId = sceneArr.slice(5)
     } else {  //其他场景进入
-      queryId = sceneParams.query.id
+      queryId = options.id
     }
     this.setState({
       queryId,

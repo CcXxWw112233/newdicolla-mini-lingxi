@@ -11,37 +11,57 @@ import AddFunctionCell from '../../components/tasksRelevant/AddFunctionCell/inde
 import NewBuilders from './components/NewBuilders/index'
 import CommentCell from './components/CommentCell/index'
 import CommentBox from './components/CommentBox/index'
+import CustomNavigation from '../acceptInvitation/components/CustomNavigation.js'
 import { connect } from '@tarojs/redux'
 
-
-@connect(({ tasks: { tasksDetailDatas = {} }, calendar: { isOtherPageBack = {} } }) => ({
+@connect(({ tasks: { tasksDetailDatas = {}, }, calendar: { isOtherPageBack = {} } }) => ({
     tasksDetailDatas, isOtherPageBack
 }))
 export default class taksDetails extends Component {
     config = {
+        navigationStyle: 'custom',
         navigationBarTitleText: '任务详情'
     }
     state = {
         content_Id: '',
-        isComplete: '',  //是否完成状态
+        backIcon: ''
     }
 
     componentDidMount() {
+        const board_id = this.$router.params.boardId //项目 Id
+        const content_id = this.$router.params.contentId  //任务Id
+        const back_icon = this.$router.params.backIcon //显示返回箭头图标还是小房子图标
 
-        const content_id = this.$router.params.contentId
-        const board_id = this.$router.params.boardId
+        if (board_id || content_id) {
+            Taro.setStorageSync('tasks_detail_boardId', board_id)
+            Taro.setStorageSync('tasks_detail_contentId', content_id)
+        }
 
+        this.setState({
+            content_Id: content_id,
+            backIcon: back_icon,
+        })
+
+        this.loadTasksDetail(content_id, board_id)
+    }
+
+    loadTasksDetail(content_id, board_id) {
+        let contentId
+        let boardId
+        if (content_id || board_id) {
+            contentId = content_id
+            boardId = board_id
+        } else {
+            contentId = Taro.getStorageSync('tasks_detail_contentId')
+            boardId = Taro.getStorageSync('tasks_detail_contentId')
+        }
         const { dispatch } = this.props
         dispatch({
             type: 'tasks/getTasksDetail',
             payload: {
-                id: content_id,
-                boardId: board_id,
+                id: contentId,
+                boardId: boardId,
             }
-        })
-
-        this.setState({
-            content_Id: content_id
         })
     }
 
@@ -59,13 +79,45 @@ export default class taksDetails extends Component {
 
     componentDidHide() { }
 
-    componentWillUnmount() { }
+    componentWillUnmount() {
+        // Taro.switchTab({
+        //     url: `../../pages/calendar/index`
+        // })
+    }
 
-    tasksDetailsRealizeStatus = () => {
+    tasksDetailsRealizeStatus = (timeInfo) => {
 
-        const { isComplete } = this.state
-        this.setState({
-            isComplete: !isComplete
+        let isRealize
+        if (timeInfo.isRealize === '1') {
+            this.modifyRealize({ is_realize: '0' })
+            isRealize = 0
+
+        } else {
+            this.modifyRealize({ is_realize: '1' })
+            isRealize = 1
+        }
+
+        const { dispatch } = this.props
+        dispatch({
+            type: 'tasks/setTasksRealize',
+            payload: {
+                card_id: timeInfo.cardId,
+                is_realize: isRealize,
+            }
+        })
+    }
+
+    modifyRealize = (new_data = {}) => {
+
+        const { tasksDetailDatas = {}, dispatch } = this.props
+        dispatch({
+            type: 'tasks/updateDatas',
+            payload: {
+                tasksDetailDatas: {
+                    ...tasksDetailDatas,
+                    ...new_data
+                }
+            }
         })
     }
 
@@ -76,19 +128,18 @@ export default class taksDetails extends Component {
         const due_time = tasksDetailDatas['due_time'] || ''
         const start_time = tasksDetailDatas['start_time']
         const is_realize = tasksDetailDatas['is_realize'] || ''
-        let { isComplete } = this.state
-        isComplete = isComplete ? isComplete : (is_realize === "0" ? false : true)
+
         const timeInfo = {
             eTime: due_time,
             sTime: start_time,
             cardDefinition: card_name,
-            isComplete: isComplete,
+            isRealize: is_realize,
             cardId: card_id
         }
         const board_name = tasksDetailDatas['board_name'] || ''
         const list_name = tasksDetailDatas['list_name'] || '未分组'
         const description = tasksDetailDatas['description'] || ''
-        const { content_Id } = this.state
+        const { content_Id, backIcon } = this.state
         const executors = tasksDetailDatas['executors'] || []
         const milestone_data = tasksDetailDatas['milestone_data'] || ''
         const label_data = tasksDetailDatas['label_data']
@@ -101,8 +152,10 @@ export default class taksDetails extends Component {
 
         return (
             <View >
+                <CustomNavigation backIcon={backIcon} />
+
                 <View className={indexStyles.tasks_time_style}>
-                    <TasksTime cellInfo={timeInfo} tasksDetailsRealizeStatus={() => this.tasksDetailsRealizeStatus()} />
+                    <TasksTime cellInfo={timeInfo} tasksDetailsRealizeStatus={(timeInfo) => this.tasksDetailsRealizeStatus(timeInfo)} />
                 </View>
                 <ProjectNameCell title='项目' name={board_name} />
                 <View className={indexStyles.tasks_name_style}>

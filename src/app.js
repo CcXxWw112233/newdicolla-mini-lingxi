@@ -49,6 +49,7 @@ class App extends Component {
       // 'pages/choiceProject/index',
       // 'pages/fillDescribe/index',
       // 'pages/DateTimePicker/index',
+      'pages/sceneEntrance/index',
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -92,12 +93,7 @@ class App extends Component {
   componentDidMount() {
   }
 
-  componentDidShow() {
-    const options = this.$router.params
-    if (options.path === 'pages/acceptInvitation/index') {
-      Taro.setStorageSync('sceneParams', options)
-    }
-  }
+  componentDidShow() { }
 
   componentDidHide() { }
 

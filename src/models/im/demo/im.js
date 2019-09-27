@@ -560,8 +560,8 @@ export default class IMController {
   /**
    * 断开重连
    */
-  onWillReconnect() {
-    console.log(' onWillReconnect')
+  onWillReconnect(e) {
+    console.log(' onWillReconnect', e)
     showToast('text', '重连中，请稍后！', { duration: 3000 })
     nim.disconnect({ done: () => { nim.connect(); } })
   }

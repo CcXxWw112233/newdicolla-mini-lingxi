@@ -26,18 +26,29 @@ export const request = (options, notShowLoading, isNewLogin) => {
         ...data
       },
       method,
-      header: {...Headers, ...setRequestHeaderBaseInfo({ data, headers: Headers })},
+      header: { ...Headers, ...setRequestHeaderBaseInfo({ data, headers: Headers }) },
       success: function (res) {
         // if (!notShowLoading) {
         //   Taro.hideLoading();
         // }
+
+        //获取是哪个页面未登录=>跳转到登录
+        let pages = Taro.getCurrentPages();
+        let currPage = null;
+        if (pages.length) {
+          currPage = pages[pages.length - 1];
+        }
+        let route = currPage.route
+        let routePageName = route.slice(6, -6)
+
         if (REQUEST_RES_CODE_TOKEN_INVALID == res.data.code) {
-          if (!isNewLogin) {
+          if (!isNewLogin) {//正常的登录页面
             Taro.reLaunch({
-              url: '../../pages/login/index'
+              url: `../../pages/login/index?redirect=${routePageName}`
+              // url: `../../pages/login/index`
             })
           }
-          else {
+          else {  //扫码登录的新的登录页面
             Taro.navigateTo({
               url: '../../pages/nowOpen/index'
             })

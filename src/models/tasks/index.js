@@ -11,6 +11,7 @@ export default {
     content_Link: [],  //关联内容
     executors_list: [], //执行人列表 
     milestone_list: [], //获取里程碑列表
+
   },
   effects: {
     //获取任务列表
@@ -37,7 +38,7 @@ export default {
         yield put({
           type: 'updateDatas',
           payload: {
-            tasksDetailDatas: res.data
+            tasksDetailDatas: res.data,
           }
         })
 

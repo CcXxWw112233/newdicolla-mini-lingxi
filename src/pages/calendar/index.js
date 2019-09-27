@@ -87,10 +87,18 @@ export default class Calendar extends Component {
     this.getOrgBoardList()
     this.getNoScheCardList()
     // if (isOtherPageBack !== true) {
-      this.getScheCardList({})
+    this.getScheCardList({})
     // }
     this.getSignList()
     this.getUserAllOrgsAllBoards()
+
+    if (Taro.pageScrollTo) {
+      Taro.pageScrollTo({
+        scrollTop: 0,
+      })
+    } else {
+      console.log('当前微信版本不支持');
+    }
   }
 
   componentDidHide() {

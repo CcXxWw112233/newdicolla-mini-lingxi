@@ -1,17 +1,14 @@
 //线上环境
-// export const BASE_URL = 'https://lingxi.di-an.com' 
+// export const BASE_URL = 'https://lingxi.di-an.com'
 //测试环境
 export const BASE_URL = 'http://test.lingxi.new-di.com'
 //稳定版开发服务器
 // export const BASE_URL = 'http://dev.lingxi.new-di.com'
 //本地环境
-// export const BASE_URL = 'http://192.168.1.39'
+// export const BASE_URL = 'http://192.168.1.68'
 
 //预发布地址
-// export const BASE_URL = 'http://prerelease.lingxi.new-di.com'
-
-//export const BASE_URL = 'http://w4iawu.natappfree.cc'
-//export const BASE_URL = 'http://uwvnrx.natappfree.cc'
+// export const BASE_URL = 'http://gsuv9b.natappfree.cc'
 
 export const NODE_ENV = process.env.NODE_ENV
 export const PAGE_SIZE = 20
@@ -26,7 +23,7 @@ export const API_MORE = '/api/more'
 export const REQUEST_INTERGFACE_VERSIONN = '/v2' //接口版本
 
 export const WEBSOCKET_PATH = '192.168.0.30'  //WS链接地址
-export const WEBSOCKET_PORT= '9326'  //WS链接地址
+export const WEBSOCKET_PORT = '9326'  //WS链接地址
 
 export const UPLOAD_PROCESS_FILE_SIZE = 100 //流程上传文件MB限制
 export const MESSAGE_DURATION_TIME = 10 //message弹框时间

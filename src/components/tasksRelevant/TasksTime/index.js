@@ -29,19 +29,9 @@ export default class TasksTime extends Component {
     }
 
     tasksRealizeStatus = () => {
-        this.props.tasksDetailsRealizeStatus()
 
         const { cellInfo = {} } = this.props
-        const isCompleteStatus = cellInfo.isComplete
-        const isRealize = isCompleteStatus === false ? 1 : 0
-        const { dispatch } = this.props
-        dispatch({
-            type: 'tasks/setTasksRealize',
-            payload: {
-                card_id: cellInfo.cardId,
-                is_realize: isRealize,
-            }
-        })
+        this.props.tasksDetailsRealizeStatus(cellInfo)
     }
 
     //更新任务名称
@@ -63,9 +53,9 @@ export default class TasksTime extends Component {
         const sTime = cellInfo.sTime
         const eTime = cellInfo.eTime
         const card_id = cellInfo.cardId
-        const isComplete = cellInfo.isComplete
+        const is_Realize = cellInfo.isRealize
 
-        const inputIcon = isComplete === true ? <Text className={`${globalStyles.global_iconfont}`} style={{ color: '#1890FF' }}>&#xe66a;</Text> : <Text className={`${globalStyles.global_iconfont}`}>&#xe661;</Text>
+        const inputIcon = is_Realize === '1' ? <Text className={`${globalStyles.global_iconfont}`} style={{ color: '#1890FF' }}>&#xe66a;</Text> : <Text className={`${globalStyles.global_iconfont}`}>&#xe661;</Text>
 
         return (
             <View className={indexStyles.view_Style}>
