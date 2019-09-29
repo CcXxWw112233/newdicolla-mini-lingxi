@@ -79,16 +79,13 @@ export default class Calendar extends Component {
 
   componentDidShow() {
     const { selected_board_name, isOtherPageBack } = this.props
-
     Taro.setNavigationBarTitle({
       title: selected_board_name
     })
     this.getOrgList()
     this.getOrgBoardList()
     this.getNoScheCardList()
-    // if (isOtherPageBack !== true) {
     this.getScheCardList({})
-    // }
     this.getSignList()
     this.getUserAllOrgsAllBoards()
 

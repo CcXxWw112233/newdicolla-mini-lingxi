@@ -31,7 +31,7 @@ export default class acceptInvitation extends Component {
   }
   componentWillUnmount() {
   }
-  componentDidShow() {
+  componentDidShow(e) {
     const options = this.$router.params
     this.scanQRCodeJoin(options)
     this.isLoginStatus()
@@ -40,6 +40,7 @@ export default class acceptInvitation extends Component {
   componentDidHide() { }
 
   scanQRCodeJoin(options) {
+
     let queryId
     if (options.scene) {  //扫码场景进入
       const sceneArr = options.scene.split('&')[0]
@@ -47,6 +48,7 @@ export default class acceptInvitation extends Component {
     } else {  //其他场景进入
       queryId = options.id
     }
+
     this.setState({
       queryId,
     })

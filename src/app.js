@@ -90,8 +90,7 @@ class App extends Component {
     store,
   }
 
-  componentDidMount() {
-  }
+  componentDidMount(options) { }
 
   componentDidShow() { }
 

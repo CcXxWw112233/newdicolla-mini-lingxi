@@ -28,6 +28,7 @@ export default class taksDetails extends Component {
     }
 
     componentDidMount() {
+
         const board_id = this.$router.params.boardId //项目 Id
         const content_id = this.$router.params.contentId  //任务Id
         const back_icon = this.$router.params.backIcon //显示返回箭头图标还是小房子图标

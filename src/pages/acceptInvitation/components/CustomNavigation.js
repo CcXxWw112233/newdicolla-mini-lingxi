@@ -8,7 +8,7 @@ class CustomNavigation extends Component {
     state = {};
 
     goToHomePages = () => {
-        Taro.switchTab({ url: `../../pages/calendar/index` })
+        Taro.reLaunch({ url: `../../pages/calendar/index` })
     }
 
     render() {

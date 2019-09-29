@@ -33,15 +33,15 @@ export default {
     * getTasksDetail({ payload }, { select, call, put }) {
       const { id, boardId } = payload;
       const res = yield call(getTasksDetail, { id: id })
-      
+
       if (isApiResponseOk(res)) {
         yield put({
           type: 'updateDatas',
           payload: {
             tasksDetailDatas: res.data,
           }
-        })
-
+        }
+        )
         setBoardIdStorage(boardId)
 
         // yield put({
@@ -61,7 +61,21 @@ export default {
         })
 
       } else {
+        Taro.showToast({
+          title: res.message + ' ,正在为你进行跳转...',
+          icon: 'none',
 
+          success: function () {
+            const access_token = Taro.getStorageSync('access_token')
+            if (access_token) {
+              setTimeout(function () {
+                Taro.reLaunch({
+                  url: '../../pages/calendar/index',
+                })
+              }, 3000)
+            }
+          }
+        });
       }
     },
 

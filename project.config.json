@@ -41,7 +41,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": -1,
+			"current": 2,
 			"list": [
 				{
 					"id": 0,
@@ -58,11 +58,11 @@
 					"scene": null
 				},
 				{
-					"id": 3,
+					"id": 2,
 					"name": "pages/sceneEntrance/index",
 					"pathName": "pages/sceneEntrance/index",
-					"query": "redirectType=1&&boardId=1177204298187149312&&contentId=1177204298187149312",
-					"scene": 1074
+					"query": "contentId=1128918538057289728&boardId=1108692133692444672&orgId=1108691844285468672&redirectType=1",
+					"scene": 1014
 				}
 			]
 		}

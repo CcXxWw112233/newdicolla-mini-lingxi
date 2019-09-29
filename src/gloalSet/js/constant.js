@@ -1,14 +1,29 @@
 //线上环境
-// export const BASE_URL = 'https://lingxi.di-an.com'
+export const BASE_URL = 'https://lingxi.di-an.com'
 //测试环境
-export const BASE_URL = 'http://test.lingxi.new-di.com'
+// export const BASE_URL = 'http://test.lingxi.new-di.com'
 //稳定版开发服务器
 // export const BASE_URL = 'http://dev.lingxi.new-di.com'
 //本地环境
 // export const BASE_URL = 'http://192.168.1.68'
-
 //预发布地址
 // export const BASE_URL = 'http://gsuv9b.natappfree.cc'
+
+/***
+ * 根据环境自动配置url
+ */
+// export let BASE_URL
+// if (typeof __wxConfig == "object") {
+//     let version = __wxConfig.envVersion;
+//     // console.log("当前环境:" + version)
+//     if (version == "develop") { //工具或者真机 开发环境
+//         BASE_URL = 'http://test.lingxi.new-di.com'
+//     } else if (version == "trial") { //测试环境(体验版)
+//         BASE_URL = 'https://lingxi.di-an.com'
+//     } else if (version == "release") { //正式环境
+//         BASE_URL = 'https://lingxi.di-an.com'
+//     }
+// }
 
 export const NODE_ENV = process.env.NODE_ENV
 export const PAGE_SIZE = 20

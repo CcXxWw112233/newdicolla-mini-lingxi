@@ -3,22 +3,21 @@ import { View } from '@tarojs/components'
 
 export default class sceneEntrance extends Component {
 
-    componentDidMount() { }
+    componentDidMount() {
+        const options = this.$router.params
+        this.sceneEntrancePages(options)
+    }
 
     componentWillReceiveProps() { }
 
     componentWillUnmount() { }
 
-    componentDidShow() {
-        const options = this.$router.params
-        this.sceneEntrancePages(options)
-    }
+    componentDidShow() { }
 
     componentDidHide() { }
 
     sceneEntrancePages(options) {
-
-        if (options.redirectType === '1') {
+        if (options.redirectType === '1' || options.redirectType === 1) {
             Taro.redirectTo({
                 url: `../../pages/taksDetails/index?contentId=${options.contentId}&&boardId=${options.boardId}`
             })

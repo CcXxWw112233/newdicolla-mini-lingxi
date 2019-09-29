@@ -23,7 +23,10 @@ export const userScanCodeJoinBoard = (data, notShowLoading) => {
   }, notShowLoading)
 }
 
-//用户扫码加入 组织
+/* 
+* mark - parms 新的加入组织接口
+*/
+//用户扫码加入 组织===1
 export const userScanCodeJoinOrganization = (data, notShowLoading, isNewLogin) => {
   return request({
     data: {
@@ -34,7 +37,7 @@ export const userScanCodeJoinOrganization = (data, notShowLoading, isNewLogin) =
   }, notShowLoading, true)
 }
 
-//
+//用户扫码加入 组织===2
 export const commInviteQRCodejoin = (data, notShowLoading) => {
   return request({
     data: {
@@ -44,3 +47,18 @@ export const commInviteQRCodejoin = (data, notShowLoading) => {
     url: `${API_BOARD}/comm/invite/QRCode/join`,
   }, notShowLoading)
 }
+
+/*
+* mark - parms 旧的加入组织接口
+*/
+/*
+export const userScanCodeJoinOrganization = (data, notShowLoading, isNewLogin) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'PUT',
+    url: `${API_UPMS}/organization/QRCode/join`,
+  }, notShowLoading, true)
+}
+*/

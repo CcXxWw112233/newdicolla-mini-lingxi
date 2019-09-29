@@ -1,6 +1,7 @@
 import Taro from '@tarojs/taro'
 import { isApiResponseOk } from "../../utils/request";
 import { qrCodeIsInvitation, userScanCodeJoinBoard, userScanCodeJoinOrganization, commInviteQRCodejoin } from "../../services/invitation/index";
+import { NODE_ENV } from '../../gloalSet/js/constant';
 
 export default {
   namespace: 'invitation',
@@ -44,13 +45,16 @@ export default {
           id: payload.id,
         }
 
-
         const result = yield call(commInviteQRCodejoin, { id: payload.id, role_id: res.data.role_id })
         if (isApiResponseOk(result)) {
 
         }
         else {
-
+          Taro.showToast({
+            title: res.message,
+            icon: 'none',
+            duration: 2000
+          })
         }
 
         const returnResult = yield call(userScanCodeJoinBoard, parameter)
@@ -59,10 +63,18 @@ export default {
             url: `../../pages/auccessJoin/index?boardId=${parameter}&&pageRoute=${payload.pageRoute}`
           })
         } else {
-
+          Taro.showToast({
+            title: res.message,
+            icon: 'none',
+            duration: 2000
+          })
         }
       } else {
-
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
       }
     },
   },
