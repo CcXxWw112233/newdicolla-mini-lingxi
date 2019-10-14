@@ -80,11 +80,7 @@ export default class taksDetails extends Component {
 
     componentDidHide() { }
 
-    componentWillUnmount() {
-        // Taro.switchTab({
-        //     url: `../../pages/calendar/index`
-        // })
-    }
+    componentWillUnmount() { }
 
     tasksDetailsRealizeStatus = (timeInfo) => {
 

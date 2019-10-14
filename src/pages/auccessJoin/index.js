@@ -24,13 +24,12 @@ export default class auccessJoin extends Component {
     const params = this.$router.params
     const route = params.pageRoute
     const isLoginStatus = Taro.getStorageSync('isLoginStatus')
-
     if (route === "acceptInvitation" && isLoginStatus === 'yes') {
       const { dispatch } = this.props
       dispatch({
         type: 'login/registerIm',
       });
-    } 
+    }
     else {
       this.getOrgList()
       this.fetchAllIMTeamList()

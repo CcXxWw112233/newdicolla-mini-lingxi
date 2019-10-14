@@ -25,7 +25,11 @@ export default {
           }
         })
       } else {
-
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
       }
     },
 
@@ -66,15 +70,14 @@ export default {
           icon: 'none',
 
           success: function () {
-            const access_token = Taro.getStorageSync('access_token')
-            if (access_token) {
-              setTimeout(function () {
-                Taro.reLaunch({
-                  url: '../../pages/calendar/index',
-                })
-              }, 3000)
-            }
+            // if (res.code === 401) {
+            setTimeout(function () {
+              Taro.reLaunch({
+                url: '../../pages/calendar/index',
+              })
+            }, 3000)
           }
+          // }
         });
       }
     },
@@ -177,11 +180,29 @@ export default {
     //完成/未任务
     * setTasksRealize({ payload }, { select, call, put }) {
       const res = yield call(setTasksRealize, payload)
+      if (isApiResponseOk(res)) {
+
+      } else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
+      }
     },
 
     //更新任务
     * updataTasks({ payload }, { select, call, put }) {
       const res = yield call(updataTasks, payload)
+      if (isApiResponseOk(res)) {
+
+      } else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
+      }
     },
 
   },

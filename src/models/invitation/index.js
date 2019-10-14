@@ -35,34 +35,28 @@ export default {
 
     // 1>用户扫码加入组织
     * userScanCodeJoinOrganization({ payload }, { select, call, put }) {
+
       const parameterInfo = {
         id: payload.id,
       }
       const res = yield call(userScanCodeJoinOrganization, parameterInfo)
       if (isApiResponseOk(res)) {
-        //2>用户扫码加入项目
+
         const parameter = {
           id: payload.id,
         }
-
-        const result = yield call(commInviteQRCodejoin, { id: payload.id, role_id: res.data.role_id })
+        const parmar = {
+          id: payload.id,
+          role_id: res.data.role_id,
+        }
+        //2>用户扫码加入项目
+        const result = yield call(commInviteQRCodejoin, parmar)
         if (isApiResponseOk(result)) {
-
-        }
-        else {
-          Taro.showToast({
-            title: res.message,
-            icon: 'none',
-            duration: 2000
-          })
-        }
-
-        const returnResult = yield call(userScanCodeJoinBoard, parameter)
-        if (isApiResponseOk(returnResult)) {
           Taro.navigateTo({
             url: `../../pages/auccessJoin/index?boardId=${parameter}&&pageRoute=${payload.pageRoute}`
           })
-        } else {
+        }
+        else {
           Taro.showToast({
             title: res.message,
             icon: 'none',

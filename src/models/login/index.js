@@ -45,6 +45,17 @@ export default {
             token_string: res.data,
           }
         })
+
+        const query_Id = Taro.getStorageSync('id')
+        const boardId = Taro.getStorageSync('board_Id')
+        yield put({
+          type: 'invitation/userScanCodeJoinOrganization',
+          payload: {
+            id: query_Id,
+            board_Id: boardId,
+          }
+        })
+
       } else {
         // 微信已绑定系统，给出提示
         Taro.showToast({
