@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro'
 import { getBar } from '../../services/testPage'
 import { isApiResponseOk } from "../../utils/request";
-import { weChatAuthLogin, weChatPhoneLogin, getAccountInfo } from "../../services/login/index";
+import { weChatAuthLogin, weChatPhoneLogin, getAccountInfo, initializeOrganization } from "../../services/login/index";
 
 let dispatches
 export default {
@@ -124,6 +124,20 @@ export default {
           }
         })
         Taro.setStorageSync('account_info', JSON.stringify(res.data))
+        //如果没有组织 => 默认初始化一个组织 
+        //has_org = 1 已有组织, 0 没有组织则初始化一个默认组织
+        if (res.data.has_org === '0') {
+          const result = yield call(initializeOrganization)
+          if (isApiResponseOk(result)) {
+
+          } else {
+            Taro.showToast({
+              title: res.message,
+              icon: 'none',
+              duration: 2000
+            })
+          }
+        }
       } else {
 
       }

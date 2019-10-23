@@ -65,19 +65,21 @@ export default {
         })
 
       } else {
+        console.log(res, 'ssss');
         Taro.showToast({
           title: res.message + ' ,正在为你进行跳转...',
           icon: 'none',
-
           success: function () {
-            // if (res.code === 401) {
-            setTimeout(function () {
-              Taro.reLaunch({
-                url: '../../pages/calendar/index',
-              })
-            }, 3000)
+            if (res.code === 401) { //未登录, 没有权限查看
+
+            } else { // code = 1
+              setTimeout(function () {
+                Taro.reLaunch({
+                  url: '../../pages/calendar/index',
+                })
+              }, 3000)
+            }
           }
-          // }
         });
       }
     },

@@ -1,7 +1,8 @@
 import { getBar } from '../../services/testPage'
-import {isApiResponseOk} from "../../utils/request";
-import {getAccountInfo, changeOut} from "../../services/login";
+import { isApiResponseOk } from "../../utils/request";
+import { getAccountInfo, changeOut } from "../../services/login";
 import Taro from '@tarojs/taro'
+import { message } from 'taro-ui';
 
 export default {
   namespace: 'accountInfo',
@@ -24,23 +25,27 @@ export default {
         })
         Taro.setStorageSync('account_info', JSON.stringify(res.data))
       } else {
-
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
       }
     },
 
-  //退出用户登录
-  * changeOut({ payload }, { select, call, put }) {
-    const res = yield call(changeOut, payload)
-    if(isApiResponseOk(res)) {
-      Taro.clearStorageSync();  //清除所有的Storage
-      Taro.reLaunch({
-        url: '../../pages/login/index'
-      })
-    }else {
-      
-    }
+    //退出用户登录
+    * changeOut({ payload }, { select, call, put }) {
+      const res = yield call(changeOut, payload)
+      if (isApiResponseOk(res)) {
+        Taro.clearStorageSync();  //清除所有的Storage
+        Taro.reLaunch({
+          url: '../../pages/login/index'
+        })
+      } else {
+
+      }
+    },
   },
-},
 
 
   reducers: {
