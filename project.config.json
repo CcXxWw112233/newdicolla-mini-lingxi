@@ -41,28 +41,49 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 2,
+			"current": 0,
 			"list": [
 				{
 					"id": 0,
 					"name": "pages/acceptInvitation/index",
 					"pathName": "pages/acceptInvitation/index",
-					"query": "id=1174207375045955584",
+					"query": "id=1187329910579007488",
 					"scene": 1011
 				},
 				{
+					"id": 1,
+					"name": "pages/acceptInvitation/index",
+					"pathName": "pages/acceptInvitation/index",
+					"query": "id=1161224388561997824",
+					"scene": 1008
+				},
+				{
 					"id": -1,
-					"name": "pages/taksDetails/index",
-					"pathName": "pages/taksDetails/index",
-					"query": "",
+					"name": "pages/chat/index",
+					"pathName": "pages/chat/index",
+					"query": "id=1156175314305552384",
 					"scene": null
 				},
 				{
-					"id": 2,
-					"name": "pages/sceneEntrance/index",
-					"pathName": "pages/sceneEntrance/index",
-					"query": "contentId=1186839237274767360&boardId=1131866602271281152&orgId=1131866438773116928&redirectType=1",
-					"scene": 1014
+					"id": -1,
+					"name": "pages/auccessJoin/index",
+					"pathName": "pages/auccessJoin/index",
+					"query": "id=1156175314305552384",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/calendar/index",
+					"pathName": "pages/calendar/index",
+					"query": "id=1156175314305552384",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/calendar/index",
+					"pathName": "pages/calendar/index",
+					"query": "",
+					"scene": 1008
 				}
 			]
 		}

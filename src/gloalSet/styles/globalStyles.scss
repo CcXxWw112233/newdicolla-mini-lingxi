@@ -1,25 +1,29 @@
-@import  './constant';
+@import './constant';
 @import "./theme";
+
 .pagePublic {
   font-family: PingFangSC-Regular;
-  color: #262626;
-  padding: 0 $paddingValue;
+  color      : #262626;
+  padding    : 0 $paddingValue;
 }
-.global_iconfont{
-  font-family:"iconfont" !important;
-  //font-size:16px;
-  font-style:normal;
-  -webkit-font-smoothing: antialiased;
+
+.global_iconfont {
+  font-family              : "iconfont" !important;
+  //font-size              :16px;
+  font-style               : normal;
+  -webkit-font-smoothing   : antialiased;
   -webkit-text-stroke-width: 0.2px;
-  -moz-osx-font-smoothing: grayscale;
+  -moz-osx-font-smoothing  : grayscale;
 }
+
 //卡片
 .global_card_out {
-  background:rgba(255,255,255,1);
-  box-shadow:0px pxTrans(2) pxTrans(8) 0 rgba(0,0,0,0.15);
+  background   : rgba(255, 255, 255, 1);
+  box-shadow   : 0px pxTrans(2) pxTrans(8) 0 rgba(0, 0, 0, 0.15);
   border-radius: pxTrans(4);
-  padding: pxTrans(16) pxTrans(20);
+  padding      : pxTrans(16) pxTrans(20);
 }
+
 //页面整体水平边距
 .global_horrizontal_padding {
   padding: 0 $paddingValue 0 $paddingValue;

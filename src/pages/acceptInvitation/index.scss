@@ -1,51 +1,88 @@
 @import "../../gloalSet/styles/constant";
+@import '../../gloalSet/styles/pxTrans';
 
-.effective_contain {
-  margin-top: pxTrans(0);
-  margin-left: pxTrans(120);
-  position: relative;
-  // .forwardTipsText {
-  //   position: absolute;
-  //   width: pxTrans(60);
-  //   margin-left: pxTrans(-30);
-  //   left: 50%;
-  //   top: 0;
-  //   font-size: $fontsize_14;
-  //   color: #fff
-  // }
-  .effective_forwardTips {
-    width: pxTrans(200);
-    height: pxTrans(54);
+.mask {
+  margin-top   : 0%;
+  height       : 100%;
+  width        : 100%;
+  position     : absolute;
+  z-index      : 9999;
+  top          : 0;
+  left         : 0;
+  background   : rgba(0, 0, 0, .75);
+  // opacity   : 0.7;
+
+  .guide_share_style_01 {
+    width   : pxTrans(73);
+    height  : pxTrans(127);
+    position: absolute;
+    right   : pxTrans(67);
+  }
+
+  .guide_share_style_02 {
+    width   : pxTrans(272);
+    height  : pxTrans(274);
+    position: absolute;
+    top     : 0;
+    right   : 0;
+    left    : 0;
+    bottom  : 0;
+    margin  : pxTrans(125) auto;
+  }
+
+  .guide_close_style {
+    width        : pxTrans(28);
+    height       : pxTrans(28);
+    position     : absolute;
+    border-radius: pxTrans(28);
+    top          : 0;
+    right        : 0;
+    left         : 0;
+    bottom       : 0;
+    margin       : pxTrans(396) auto;
+
+    .guide_close_image_style {
+      position     : absolute;
+      top          : 0;
+      left         : 0;
+      width        : pxTrans(28);
+      height       : pxTrans(28);
+      border-radius: pxTrans(28);
+    }
   }
 }
 
 .effective_contain1 {
   margin-top: pxTrans(106);
   text-align: center;
+
   .effective_logo {
-    width: pxTrans(96);
+    width : pxTrans(96);
     height: pxTrans(96);
   }
 }
+
 .effective_tipsText {
-  font-size: $fontsize_18;
+  font-size : $fontsize_18;
   margin-top: pxTrans(16);
   text-align: center;
-  color: #3f3d56;
+  color     : #3f3d56;
 }
+
 .effective_login_btn_wx {
   background-color: #1890ff;
-  border: pxTrans(1) solid #1890ff;
+  border          : pxTrans(1) solid #1890ff;
 }
+
 .effective_acceptBtn {
-  margin-top: pxTrans(100);
-  border: 0 !important;
-  width: 100%;
-  height: pxTrans(40);
-  line-height: pxTrans(40);
-  text-align: center;
-  color: #fff;
+  margin-top   : pxTrans(100);
+  border       : 0 !important;
+  width        : 100%;
+  height       : pxTrans(40);
+  line-height  : pxTrans(40);
+  text-align   : center;
+  color        : #fff;
   border-radius: pxTrans(4);
   margin-bottom: pxTrans(16);
-  box-shadow: none;
+  box-shadow   : none;
 }

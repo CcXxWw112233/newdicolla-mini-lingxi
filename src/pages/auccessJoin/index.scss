@@ -1,18 +1,115 @@
 @import "../../gloalSet/styles/constant";
+@import '../../gloalSet/styles/pxTrans';
+
 .contain1 {
-  margin-top: pxTrans(106);
+  margin-top: pxTrans(67);
+  width     : 100%;
+  text-align: center;
+
   .auccess_Join {
-    width: pxTrans(311);
-    height: pxTrans(183);
+    width : pxTrans(112);
+    height: pxTrans(112);
   }
 }
+
+.cardTip {
+  margin: pxTrans(20) pxTrans(35) pxTrans(0) pxTrans(35);
+
+  .pc_Website_image {
+    height: pxTrans(28);
+    width : 100%;
+  }
+
+  .pcWebsiteStyle {
+    margin-top: pxTrans(-6);
+    height    : pxTrans(67);
+    overflow  : hidden;
+    background: rgba(255, 255, 255, 1);
+    display   : flex;
+
+    .cardContentStyle {
+      flex       : 1;
+      align-items: center;
+      display    : flex;
+      width      : 100%;
+      height     : 100%;
+
+      .inputStyle {
+        margin     : pxTrans(14) 0 pxTrans(14) pxTrans(15);
+        display    : flex;
+        align-items: center;
+        height     : pxTrans(39);
+        background : rgba(245, 245, 245, 1);
+        flex       : 1;
+
+        .iconfont_size {
+          font-size   : pxTrans(23);
+          margin-left : pxTrans(11);
+          margin-right: pxTrans(11);
+          color       : rgba(190, 190, 190, 1);
+        }
+      }
+
+      .copyButtonStyle {
+        padding-left : 0;
+        padding-right: 0;
+        text-align   : center;
+        align-items  : center;
+        margin-right : 0;
+        width        : pxTrans(65);
+        color        : #1890ff;
+        font-size    : $fontsize_14;
+        background   : rgba(255, 255, 255, 1);
+        line-height  : pxTrans(61);
+      }
+
+      .copySuccessStyle {
+        padding-left : 0;
+        padding-right: 0;
+        text-align   : center;
+        align-items  : center;
+        margin-right : 0px;
+        width        : pxTrans(65);
+        color        : rgba(0, 0, 0, 0.25);
+        font-size    : $fontsize_14;
+        background   : rgba(255, 255, 255, 1);
+        line-height  : pxTrans(61);
+      }
+    }
+  }
+}
+
 .text1 {
-  margin-top: pxTrans(32);
-  font-size: $fontsize_18;
+  margin-top: pxTrans(17);
+  font-size : $fontsize_18;
   text-align: center;
 }
+
 .text2 {
-  font-size: $fontsize_14;
-  text-align: center;
-  margin-top: pxTrans(8);
+  height     : 26px;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color      : rgba(0, 0, 0, 0.65);
+  line-height: 26px;
+  font-size  : $fontsize_14;
+  text-align : center;
+  margin-top : pxTrans(47);
+}
+
+.effective_login_btn_wx {
+  background-color: #1890ff;
+  border          : pxTrans(1) solid #1890ff;
+}
+
+.effective_acceptBtn {
+  margin-top   : pxTrans(100);
+  border       : 0 !important;
+  width        : 100%;
+  height       : pxTrans(40);
+  line-height  : pxTrans(40);
+  text-align   : center;
+  color        : #fff;
+  border-radius: pxTrans(4);
+  margin-bottom: pxTrans(16);
+  box-shadow   : none;
 }

@@ -1,11 +1,14 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Image, Button, Text } from '@tarojs/components'
 import indexStyles from './index.scss'
-import accept_Invitation_Logo from '../../asset/Invitation/accept_Invitation_Logo.png'
-import forward_Tips from '../../asset/Invitation/forward_Tips.png'
 import globalStyles from '../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
 import CustomNavigation from './components/CustomNavigation.js'
+import accept_Invitation_Logo from '../../asset/Invitation/accept_Invitation_Logo.png'
+import guide_share_01 from '../../asset/Invitation/guide_share_01.png'
+import guide_share_02 from '../../asset/Invitation/guide_share_02.png'
+import guide_share_03 from '../../asset/Invitation/guide_share_03.png'
+import { flush } from 'redux-saga/effects'
 
 @connect(({ invitation: { qrCodeInfo = {} } }) => ({
   qrCodeInfo
@@ -15,7 +18,7 @@ export default class acceptInvitation extends Component {
     navigationStyle: 'custom',
   }
   state = {
-
+    is_mask_show: false, //是否显示引导分享遮罩
   }
   onShareAppMessage() {
     const { queryId } = this.state
@@ -45,6 +48,11 @@ export default class acceptInvitation extends Component {
     if (options.scene) {  //扫码场景进入
       const sceneArr = options.scene.split('&')[0]
       queryId = sceneArr.slice(5)
+
+      this.setState({
+        is_mask_show: true,
+      })
+
     } else {  //其他场景进入
       queryId = options.id
     }
@@ -85,17 +93,40 @@ export default class acceptInvitation extends Component {
     })
   }
 
+  closeMask = () => {
+    this.setState({
+      is_mask_show: false,
+    })
+  }
+
   render() {
     const { qrCodeInfo = {} } = this.props
     const user_name = qrCodeInfo.user_name
+    const { is_mask_show } = this.state
+
+    const SystemInfo = Taro.getSystemInfoSync()
+    const screen_Height = SystemInfo.screenHeight
+    const statusBar_Height = SystemInfo.statusBarHeight
+    const navBar_Height = SystemInfo.platform == 'ios' ? 44 : 48
+
+    /***
+     * 引导页面遮罩高度 = 屏幕高度 - 导航栏高度
+     */
     return (
       <View>
         <CustomNavigation />
-        <View className={`${globalStyles.global_horrizontal_padding}`}>
-          <View className={indexStyles.effective_contain}>
-            <Image src={forward_Tips} className={indexStyles.effective_forwardTips}></Image>
-            {/* <View className={indexStyles.forwardTipsText}>点击【转发】邀请微信好友</View> */}
+        {is_mask_show && is_mask_show === true ? <View className={indexStyles.mask} style={{ height: screen_Height - (statusBar_Height + navBar_Height) + 'px', marginTop: statusBar_Height + navBar_Height + 'px' }}>
+
+          <Image src={guide_share_01} className={indexStyles.guide_share_style_01} />
+          <Image src={guide_share_02} className={indexStyles.guide_share_style_02} />
+          <View onClick={this.closeMask} className={indexStyles.guide_close_style}>
+            <Image src={guide_share_03} className={indexStyles.guide_close_image_style} />
           </View>
+
+        </View> : ''
+        }
+
+        <View className={`${globalStyles.global_horrizontal_padding}`}>
           <View className={indexStyles.effective_contain1}>
             <Image src={accept_Invitation_Logo} className={indexStyles.effective_logo} />
           </View>
