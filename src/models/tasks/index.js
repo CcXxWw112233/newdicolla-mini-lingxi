@@ -74,9 +74,15 @@ export default {
 
             } else { // code = 1
               setTimeout(function () {
-                Taro.reLaunch({
-                  url: '../../pages/calendar/index',
-                })
+                if (res.code === 4042) {  // 任务已归档/删除
+                  Taro.navigateTo({
+                    url: `../../pages/boardDetail/index?push=sceneEntrance&&boardId=${boardId}`
+                  })
+                } else {  //其他异常
+                  Taro.reLaunch({
+                    url: '../../pages/calendar/index',
+                  })
+                }
               }, 3000)
             }
           }

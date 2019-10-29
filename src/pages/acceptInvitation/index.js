@@ -115,6 +115,7 @@ export default class acceptInvitation extends Component {
     return (
       <View>
         <CustomNavigation />
+
         {is_mask_show && is_mask_show === true ? <View className={indexStyles.mask} style={{ height: screen_Height - (statusBar_Height + navBar_Height) + 'px', marginTop: statusBar_Height + navBar_Height + 'px' }}>
 
           <Image src={guide_share_01} className={indexStyles.guide_share_style_01} />
@@ -123,8 +124,7 @@ export default class acceptInvitation extends Component {
             <Image src={guide_share_03} className={indexStyles.guide_close_image_style} />
           </View>
 
-        </View> : ''
-        }
+        </View> : ''}
 
         <View className={`${globalStyles.global_horrizontal_padding}`}>
           <View className={indexStyles.effective_contain1}>

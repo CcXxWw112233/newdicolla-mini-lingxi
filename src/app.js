@@ -50,6 +50,7 @@ class App extends Component {
       // 'pages/fillDescribe/index',
       // 'pages/DateTimePicker/index',
       'pages/sceneEntrance/index',
+      'pages/errorPage/index',
     ],
     window: {
       backgroundTextStyle: 'light',

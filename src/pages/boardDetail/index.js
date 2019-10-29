@@ -70,7 +70,7 @@ class BoardDetail extends Component {
     } = this.props;
     const params = this.$router.params;
     const boardId = params.boardId;
-    const sourcePage = params.push; 
+    const sourcePage = params.push;
     this.setState({ sourcePage });
     const getCurrentBoard = (arr, id) => {
       const ret = arr.find(i => i.board_id === id);
@@ -96,13 +96,14 @@ class BoardDetail extends Component {
     resetCurrentGroupSessionList();
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     //利用小程序的生命周期,当页面卸载的时候,跳转到指定的界面
     const { sourcePage } = this.state
-    if (sourcePage === 'auccessJoin') {
+    if (sourcePage === 'auccessJoin' || sourcePage === 'sceneEntrance') {
       const switchTabCurrentPage = 'currentPage_BoardDetail_or_Login'
       Taro.setStorageSync('switchTabCurrentPage', switchTabCurrentPage);  //解决wx.switchTab不能传值
-      Taro.switchTab({url: `../../pages/calendar/index`
+      Taro.switchTab({
+        url: `../../pages/calendar/index`
       })
     }
   }

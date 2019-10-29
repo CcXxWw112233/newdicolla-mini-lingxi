@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import {isApiResponseOk} from "../../utils/request";
+import { isApiResponseOk } from "../../utils/request";
 import { getOrgBoardList, getScheCardList, getNoScheCardList, getSignList, getUserAllOrgsAllBoards } from "../../services/calendar/index";
 import { select_selected_board, select_selected_timestamp, select_search_text, select_page_number, select_sche_card_list, select_is_reach_bottom } from './selects'
 import { getCurrentOrgByStorage } from '../../utils/basicFunction'
@@ -26,17 +26,17 @@ export default {
     * getOrgBoardList({ payload }, { select, call, put }) {
       const account_info_string = Taro.getStorageSync('account_info')
       const current_org = getCurrentOrgByStorage()
-      const { page_number = '1', page_size = '100'  } = payload
-      const res = yield call(getOrgBoardList, {_organization_id: current_org, page_number, page_size})
+      const { page_number = '1', page_size = '100' } = payload
+      const res = yield call(getOrgBoardList, { _organization_id: current_org, page_number, page_size })
 
-      if(isApiResponseOk(res)) {
+      if (isApiResponseOk(res)) {
         yield put({
           type: 'updateDatas',
           payload: {
             board_list: res.data
           }
         })
-      }else {
+      } else {
 
       }
     },
@@ -49,7 +49,7 @@ export default {
       const current_org = getCurrentOrgByStorage()
       const page_number = yield select(select_page_number)
       let typeSource = payload['type'];
-      
+
       const obj = {
         current_org,
         selected_board,
@@ -60,7 +60,7 @@ export default {
       const date = new Date(obj['selected_timestamp'])
       const year = date.getFullYear()
       const month = date.getMonth() + 1
-      const date_no= date.getDate()
+      const date_no = date.getDate()
       const start_time = new Date(`${year}/${month}/${date_no} 00:00:00`).getTime() / 1000
       const due_time = new Date(`${year}/${month}/${date_no} 23:59:59`).getTime() / 1000
       const params = {
@@ -71,10 +71,10 @@ export default {
         page_number: page_number,
         ...payload,
       }
-      const res = yield call(getScheCardList, {...params})
+      const res = yield call(getScheCardList, { ...params })
       const current_sche_card_list = yield select(select_sche_card_list)
-      
-      if(isApiResponseOk(res)) {
+
+      if (isApiResponseOk(res)) {
         if (typeSource === 1) {
           //处理上拉加载
           let arr1 = current_sche_card_list; //1.1>从data获取当前datalist数组
@@ -94,7 +94,7 @@ export default {
             }
           })
         }
-      }else {
+      } else {
         yield put({
           type: 'updateDatas',
           payload: {
@@ -110,15 +110,15 @@ export default {
       const current_org = getCurrentOrgByStorage()
       const selected_board = yield select(select_selected_board)
 
-      const res = yield call(getNoScheCardList, { _organization_id: current_org, board_id: selected_board,  page_size: '200', page_number: '1'})
-      if(isApiResponseOk(res)) {
-         yield put({
-           type: 'updateDatas',
-           payload: {
-             no_sche_card_list: res.data
-           }
-         })
-      }else {
+      const res = yield call(getNoScheCardList, { _organization_id: current_org, board_id: selected_board, page_size: '200', page_number: '1' })
+      if (isApiResponseOk(res)) {
+        yield put({
+          type: 'updateDatas',
+          payload: {
+            no_sche_card_list: res.data
+          }
+        })
+      } else {
 
       }
     },
@@ -126,25 +126,26 @@ export default {
     //获取打点列表
     * getSignList({ payload }, { select, call, put }) {
       let selected_timestamp = payload['selected_timestamp']
-      if(!selected_timestamp) {
+      if (!selected_timestamp) {
         selected_timestamp = yield select(select_selected_timestamp)
       }
+
       const date = new Date(selected_timestamp)
       const year_ = date.getFullYear()
       const month_ = date.getMonth() + 1
-      const month = month_ < 10? `0${month_}`: month_
+      const month = month_ < 10 ? `0${month_}` : month_
       const current_org = getCurrentOrgByStorage()
       const selected_board = yield select(select_selected_board)
       const res = yield call(getSignList, { _organization_id: current_org, board_id: selected_board, month: `${year_}-${month}` })
-      if(isApiResponseOk(res)) {
-        
+
+      if (isApiResponseOk(res)) {
         yield put({
           type: 'updateDatas',
           payload: {
             sign_data: res.data
           }
         })
-      }else {
+      } else {
 
       }
     },
@@ -152,11 +153,11 @@ export default {
     // 获取用户下所有组织Id及项目Id
     * getUserAllOrgsAllBoards({ payload }, { select, call, put }) {
       const current_org = getCurrentOrgByStorage()
-      const res = yield call(getUserAllOrgsAllBoards, {_organization_id: current_org })
-      if(isApiResponseOk(res)) {
-       
+      const res = yield call(getUserAllOrgsAllBoards, { _organization_id: current_org })
+      if (isApiResponseOk(res)) {
+
         Taro.setStorageSync('userAllOrgsAllBoards', JSON.stringify(res.data))
-      }else {
+      } else {
 
       }
     },

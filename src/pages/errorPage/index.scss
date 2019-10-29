@@ -1,0 +1,11 @@
+@import '../../gloalSet/styles/pxTrans';
+
+.contain1 {
+    margin-top: pxTrans(210);
+    text-align: center;
+
+    .generalErrorStyle {
+        width : pxTrans(208);
+        height: pxTrans(99);
+    }
+}

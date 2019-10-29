@@ -1,6 +1,6 @@
 import { getBar } from '../../services/testPage'
-import {isApiResponseOk} from "../../utils/request";
-import {changeOrg, getOrgList} from "../../services/login";
+import { isApiResponseOk } from "../../utils/request";
+import { changeOrg, getOrgList } from "../../services/login";
 import Taro from '@tarojs/taro'
 
 export default {
@@ -13,12 +13,12 @@ export default {
     * getOrgList({ payload }, { select, call, put }) {
       const res = yield call(getOrgList)
       if (isApiResponseOk(res)) {
-         yield put({
-           type: 'updateDatas',
-           payload: {
-             org_list: res.data
-           }
-         })
+        yield put({
+          type: 'updateDatas',
+          payload: {
+            org_list: res.data
+          }
+        })
       } else {
 
       }
@@ -26,14 +26,17 @@ export default {
 
     //切换组织
     * changeCurrentOrg({ payload }, { select, call, put }) { //切换组织
-      const res = yield call(changeOrg, payload)
-      if(isApiResponseOk(res)) {
+      const { isTodo, _organization_id } = payload
+      const res = yield call(changeOrg, { _organization_id: _organization_id })
+      if (isApiResponseOk(res)) {
+        debugger
         yield put({
           type: 'accountInfo/getAccountInfo',
           payload: {}
         })
+        if (isTodo === 'todoList') return
         Taro.navigateBack()
-      }else{
+      } else {
       }
     },
 
