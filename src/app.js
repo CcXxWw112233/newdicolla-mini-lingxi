@@ -56,7 +56,8 @@ class App extends Component {
       navigationBarBackgroundColor: '#1890FF',
       navigationBarTitleText: '灵犀',
       navigationBarTextStyle: 'white',
-      navigationStyle: 'default',
+      // navigationStyle: 'default',
+      navigationStyle: 'custom',
     },
     tabBar: {
       "backgroundColor": "#ffffff",

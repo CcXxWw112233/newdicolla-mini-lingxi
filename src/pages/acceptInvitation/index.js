@@ -3,7 +3,7 @@ import { View, Image, Button, Text } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyles from '../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
-import CustomNavigation from './components/CustomNavigation.js'
+import CustomNavigation from '../../components/customNavigation/CustomNavigation.js'
 import accept_Invitation_Logo from '../../asset/Invitation/accept_Invitation_Logo.png'
 import guide_share_01 from '../../asset/Invitation/guide_share_01.png'
 import guide_share_02 from '../../asset/Invitation/guide_share_02.png'
@@ -14,9 +14,6 @@ import { flush } from 'redux-saga/effects'
   qrCodeInfo
 }))
 export default class acceptInvitation extends Component {
-  config = {
-    navigationStyle: 'custom',
-  }
   state = {
     is_mask_show: false, //是否显示引导分享遮罩
   }
@@ -114,7 +111,7 @@ export default class acceptInvitation extends Component {
      */
     return (
       <View>
-        <CustomNavigation />
+        <CustomNavigation back_Icon='home_icon' />
         {is_mask_show && is_mask_show === true ? <View className={indexStyles.mask} style={{ height: screen_Height - (statusBar_Height + navBar_Height) + 'px', marginTop: statusBar_Height + navBar_Height + 'px' }}>
 
           <Image src={guide_share_01} className={indexStyles.guide_share_style_01} />

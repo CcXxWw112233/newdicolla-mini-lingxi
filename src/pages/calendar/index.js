@@ -8,6 +8,7 @@ import SearchAndMenu from '../board/components/SearchAndMenu'
 import CalendarSwiper from './components/CalendarSwiper'
 import MilestoneList from './components/MilestoneList'
 import { connect } from '@tarojs/redux'
+import CustomNavigation from '../../components/customNavigation/CustomNavigation.js'
 
 @connect(({ calendar: { no_sche_card_list, selected_board_name, page_number, isReachBottom, isOtherPageBack, } }) => ({
   no_sche_card_list, selected_board_name, page_number, isReachBottom, isOtherPageBack,
@@ -238,20 +239,24 @@ export default class Calendar extends Component {
     const { no_sche_card_list = [] } = this.props
 
     return (
-      <View className={indexStyles.view_style}>
-        <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
-        <CalendarSwiper />
-        <CardTypeSelect show_card_type_select={show_card_type_select} onSelectType={this.onSelectType} schedule={'1'} />
-        <MilestoneList schedule={'1'} />
-        {no_sche_card_list.length && (
-          <View className={`${globalStyles.global_card_out} ${indexStyles.no_scheduling}`} onClick={this.gotoNoSchedule}>暂未排期的工作（{no_sche_card_list.length}）</View>
-        )}
-        <CardList schedule={'1'} />
-        <View style='height: 50px'></View>
+      <View>
+        <CustomNavigation back_Icon='home_icon' customNavigationTitle='所有参与的项目' isHideLeftIcon='ture' />
 
-        {/* <View className={indexStyles.plusTasks} onClick={this.gotoAddingTasks}>
+        <View className={indexStyles.view_style}>
+          <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
+          <CalendarSwiper />
+          <CardTypeSelect show_card_type_select={show_card_type_select} onSelectType={this.onSelectType} schedule={'1'} />
+          <MilestoneList schedule={'1'} />
+          {no_sche_card_list.length && (
+            <View className={`${globalStyles.global_card_out} ${indexStyles.no_scheduling}`} onClick={this.gotoNoSchedule}>暂未排期的工作（{no_sche_card_list.length}）</View>
+          )}
+          <CardList schedule={'1'} />
+          <View style='height: 50px'></View>
+
+          {/* <View className={indexStyles.plusTasks} onClick={this.gotoAddingTasks}>
           +
         </View> */}
+        </View>
       </View>
     )
   }
