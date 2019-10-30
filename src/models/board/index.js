@@ -1,11 +1,12 @@
 import Taro from '@tarojs/taro'
-import { getBoardList } from '../../services/board/index'
+import { getBoardList, getBoardDetail, } from '../../services/board/index'
 import { isApiResponseOk } from "../../utils/request";
 
 export default {
   namespace: 'board',
   state: {
     board_list: [], //项目列表
+    board_detail: {}, //项目详情
   },
   effects: {
     //获取项目列表
@@ -45,6 +46,20 @@ export default {
 
       }
     },
+
+    * getBoardDetail({ payload }, { select, call, put }) {
+      let res = yield call(getBoardDetail, payload)
+      if (isApiResponseOk(res)) {
+        yield put({
+          type: 'updateDatas',
+          payload: {
+            board_detail: res.data
+          }
+        })
+
+        return res || {}
+      }
+    }
 
   },
 

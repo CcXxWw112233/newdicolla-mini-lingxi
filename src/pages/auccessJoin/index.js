@@ -18,12 +18,18 @@ export default class auccessJoin extends Component {
     this.state = {
       copyText: '复制',
       pcWebsite: 'lingxi.di-an.com',
+      board_id: '',
     }
   }
 
   componentDidMount() {
-    const params = this.$router.params
-    const route = params.pageRoute
+    const param = this.$router.params
+    const route = param.pageRoute
+    const { boardId } = param
+
+    this.setState({
+      board_id: boardId,
+    })
     const isLoginStatus = Taro.getStorageSync('isLoginStatus')
     if (route === "acceptInvitation" && isLoginStatus === 'yes') {
       const { dispatch } = this.props
@@ -77,9 +83,9 @@ export default class auccessJoin extends Component {
   }
 
   enterUse = () => {
-    const boardId = Taro.getStorageSync('board_Id');
+    const { board_id } = this.state
     Taro.navigateTo({
-      url: `../../pages/boardDetail/index?push=auccessJoin&&boardId=${boardId}`
+      url: `../../pages/boardDetail/index?push=auccessJoin&&boardId=${board_id}`
     })
   }
 

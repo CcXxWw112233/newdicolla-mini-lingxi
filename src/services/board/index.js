@@ -1,8 +1,8 @@
-import { request, packagePromise,} from "../../utils/request";
+import { request, packagePromise, } from "../../utils/request";
 import { API_BOARD, REQUEST_INTERGFACE_VERSIONN } from "../../gloalSet/js/constant";
 
 //获取项目列表
-export const getBoardList = (data , notShowLoading) => {
+export const getBoardList = (data, notShowLoading) => {
   return request({
     data: {
       ...data
@@ -13,7 +13,7 @@ export const getBoardList = (data , notShowLoading) => {
 }
 
 //获取项目列表（搜索）
-export const getBoardListSearch = (data , notShowLoading) => {
+export const getBoardListSearch = (data, notShowLoading) => {
   return request({
     data: {
       ...data
@@ -36,12 +36,23 @@ export async function getProjectList(params) {
 }
 
 //任务, 日程， 节点数据关联里程碑
-export const boardAppRelaMiletones = (data , notShowLoading) => {
+export const boardAppRelaMiletones = (data, notShowLoading) => {
   return request({
     data: {
       ...data
     },
     method: 'POST',
     url: `${API_BOARD}/milestone/rela`,
+  }, notShowLoading)
+}
+
+// 获取项目详情
+export const getBoardDetail = (data, notShowLoading) => {
+  return request({
+    data: {
+      // ...data
+    },
+    method: 'GET',
+    url: `${API_BOARD}/board/detail/${data.id}`,
   }, notShowLoading)
 }

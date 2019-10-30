@@ -25,6 +25,7 @@ export default {
             sourcePage: payload.sourcePage,
           }
         })
+
       } else {
         const res_code = res.code
         if ('4013' == res_code) {
@@ -101,9 +102,31 @@ export default {
         })
       }
       else {
-        const switchTabCurrentPage = 'currentPage_BoardDetail_or_Login'
-        Taro.setStorageSync('switchTabCurrentPage', switchTabCurrentPage);  //解决wx.switchTab不能传值
-        Taro.switchTab({ url: `../../pages/calendar/index` })
+
+        //服务消息每日代办进入小程序, 自动切换为全组织,登录成后自动切换 
+        const todoListData = Taro.getStorageSync('isTodoList')
+        if (todoListData) {
+          Promise.resolve(
+            dispatches({
+              type: 'my/changeCurrentOrg',
+              payload: {
+                _organization_id: '0',
+                isTodo: 'todoList',
+              }
+            })
+          ).then(res => {
+            if (isApiResponseOk(res)) {
+              const switchTabCurrentPage = 'currentPage_BoardDetail_or_Login'
+              Taro.setStorageSync('switchTabCurrentPage', switchTabCurrentPage);  //解决wx.switchTab不能传值
+              Taro.switchTab({ url: `../../pages/calendar/index` })
+            } else {
+            }
+          })
+        } else {
+          const switchTabCurrentPage = 'currentPage_BoardDetail_or_Login'
+          Taro.setStorageSync('switchTabCurrentPage', switchTabCurrentPage);  //解决wx.switchTab不能传值
+          Taro.switchTab({ url: `../../pages/calendar/index` })
+        }
 
         yield put({
           type: 'calendar/updateDatas',

@@ -40,7 +40,7 @@ const activityConfig = {
   'board.delete': {}, // 删除
   'board.update.name': {
     contentCallback: content => {
-      const {board} = content
+      const { board } = content
       return genContentObj(board.name, board)
     }
   }, // 修改名称
@@ -81,21 +81,21 @@ const activityConfig = {
   'board.card.update.file.remove': {}, // 移除附件
   'board.card.update.label.add': {
     rangeCallback: content => {
-      const {card} = content
+      const { card } = content
       return genRangeObj(`对任务 ${placeholder}`, card, true)
     },
     contentCallback: content => {
-      const {rela_data} = content
+      const { rela_data } = content
       return genContentObj(rela_data.name, rela_data)
     }
   }, // 添加标签
   'board.card.update.label.remove': {
     rangeCallback: content => {
-      const {card} = content
+      const { card } = content
       return genRangeObj(`对任务 ${placeholder}`, card, true)
     },
     contentCallback: content => {
-      const {rela_data} = content
+      const { rela_data } = content
       return genContentObj(rela_data.name, rela_data)
     }
   }, // 移除标签

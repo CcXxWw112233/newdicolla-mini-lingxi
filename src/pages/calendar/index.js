@@ -115,6 +115,11 @@ export default class Calendar extends Component {
         isReachBottom: true,
       }
     })
+
+    if (Taro.getStorageSync('isTodoList')) {
+      //清除从服务消息[每日代办]进来的标记
+      Taro.removeStorageSync('isTodoList')
+    }
   }
 
   getUserAllOrgsAllBoards = () => {

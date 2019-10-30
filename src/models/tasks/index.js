@@ -65,7 +65,6 @@ export default {
         })
 
       } else {
-        console.log(res, 'ssss');
         Taro.showToast({
           title: res.message + ' ,正在为你进行跳转...',
           icon: 'none',

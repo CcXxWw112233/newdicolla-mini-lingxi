@@ -58,6 +58,7 @@ class GroupList extends Component {
     isShouldExpandSubGroup: true, //是否需要展开子群
   };
   hanldClickedGroupItem = ({ board_id, im_id }) => {
+
     const {
       setCurrentChatTo,
       setCurrentGroup,
@@ -162,17 +163,17 @@ class GroupList extends Component {
     );
     currentBoardIdWithDefaultUnReadAndLastMsg.childs =
       currentBoardIdWithDefaultUnReadAndLastMsg.childs &&
-      currentBoardIdWithDefaultUnReadAndLastMsg.childs.length
+        currentBoardIdWithDefaultUnReadAndLastMsg.childs.length
         ? currentBoardIdWithDefaultUnReadAndLastMsg.childs.map(i => {
-            return {
-              ...i,
-              unRead: 0,
-              lastMsg: this.getGroupLastMsgFromRawMessageList(
-                `team-${i.im_id}`,
-                rawMessageList
-              )
-            };
-          })
+          return {
+            ...i,
+            unRead: 0,
+            lastMsg: this.getGroupLastMsgFromRawMessageList(
+              `team-${i.im_id}`,
+              rawMessageList
+            )
+          };
+        })
         : [];
 
     const currentBoardSessionList = i =>
@@ -278,7 +279,7 @@ class GroupList extends Component {
   registerIm = () => {
 
     // console.log('群聊异常执行重新注入Im');
-    
+
     const initImData = async () => {
       const { dispatch } = this.props;
       const { account, token } = await dispatch({
@@ -348,7 +349,7 @@ class GroupList extends Component {
         <View
           className={`${styles.subGroupWrapper} ${
             !isShouldExpandSubGroup ? styles.hideSubGroup : ''
-          }`}
+            }`}
         >
           <View>
             {integratedCurrentBoardInfo.childs.map((subGroup, index) => {

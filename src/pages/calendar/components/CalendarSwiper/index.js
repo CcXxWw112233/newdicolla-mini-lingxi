@@ -28,7 +28,7 @@ export default class CalendarSwiper extends Component {
 
   componentDidMount() {
     // 1.1 从服务消息[每日代办]进入, 打开选中当时的日期
-    const todoListData = Taro.getApp().isTodoList
+    const todoListData = Taro.getStorageSync('isTodoList')
     if (todoListData) {
       this.selectDate(`${todoListData}__${undefined}`)
     }

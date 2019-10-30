@@ -80,7 +80,7 @@ export default class acceptInvitation extends Component {
   acceptTheInvitation = () => {
     const { queryId } = this.state
     const { dispatch, qrCodeInfo = {} } = this.props
-    const boardId = qrCodeInfo.id
+    const boardId = qrCodeInfo.rela_id
     Taro.setStorageSync('id', queryId)
     Taro.setStorageSync('board_Id', boardId)
     dispatch({

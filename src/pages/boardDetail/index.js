@@ -76,6 +76,7 @@ class BoardDetail extends Component {
       const ret = arr.find(i => i.board_id === id);
       return ret ? ret : {};
     };
+
     Promise.resolve(setCurrentBoardId(boardId))
       .then(() => {
         setCurrentBoard(getCurrentBoard(allBoardList, boardId));
@@ -111,7 +112,6 @@ class BoardDetail extends Component {
   render() {
     const { allBoardList } = this.props;
     const isHasBoardData = Array.isArray(allBoardList) && allBoardList.length;
-
     return (
       <View className={styles.wrapper}>
         {isHasBoardData && (

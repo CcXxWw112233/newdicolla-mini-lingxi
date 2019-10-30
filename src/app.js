@@ -93,7 +93,22 @@ class App extends Component {
 
   componentDidMount(options) { }
 
-  componentDidShow() { }
+  componentDidShow() {
+    /***
+     * 小程序切换到后台后, im会重连会发送不了消息, 所以每次进入前台连接一次
+     */
+    const { getState } = store
+    const { im: { nim } } = getState()
+    if (nim) {
+      nim.disconnect({
+        done: () => {
+          setTimeout(() => {
+            nim.connect({})
+          }, 50)
+        }
+      })
+    }
+  }
 
   componentDidHide() { }
 

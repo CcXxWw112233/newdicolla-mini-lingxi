@@ -208,7 +208,7 @@ export default class IMController {
         type: 'UnreadInfo_update',
         payload: session
       })
-    } catch(error) {
+    } catch (error) {
     }
   }
   /**
@@ -290,23 +290,23 @@ export default class IMController {
                   }
                 } else if (currentPage.route.includes('videoCall')) { // p2p
                   try {
-                     // 兼容登录网关502错误离开房间
-                     if (app.globalData.netcall) {
-                       app.globalData.netcall.hangup()
-                         .then(() => {
-                           app.globalData.netcall.destroy()
-                           app.globalData.nim.destroy({
-                             done: function () {
-                               console.log('destroy nim done !!!')
-                               wx.clearStorage()
-                               wx.hideLoading()
-                             }
-                           })
-                           wx.reLaunch({
-                             url: '/pages/login/login',
-                           })
+                    // 兼容登录网关502错误离开房间
+                    if (app.globalData.netcall) {
+                      app.globalData.netcall.hangup()
+                        .then(() => {
+                          app.globalData.netcall.destroy()
+                          app.globalData.nim.destroy({
+                            done: function () {
+                              console.log('destroy nim done !!!')
+                              wx.clearStorage()
+                              wx.hideLoading()
+                            }
+                          })
+                          wx.reLaunch({
+                            url: '/pages/login/login',
+                          })
                         })
-                     }
+                    }
                   } catch (error) {
                     console.warn(error)
                   }
@@ -560,8 +560,8 @@ export default class IMController {
   /**
    * 断开重连
    */
-  onWillReconnect(e) {
-    console.log(' onWillReconnect', e)
+  onWillReconnect(reconnect) {
+    console.log(' onWillReconnect', reconnect)
     showToast('text', '重连中，请稍后！', { duration: 3000 })
     nim.disconnect({ done: () => { nim.connect(); } })
   }

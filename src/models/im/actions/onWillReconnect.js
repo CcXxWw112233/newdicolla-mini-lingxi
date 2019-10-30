@@ -7,6 +7,15 @@ function onWillReconnect(e) {
     icon: 'none',
     duration: 3000,
   })
-  nim.disconnect({ done: () => { nim.connect(); } })
+  // const { globalData: { store: { getState } } } = Taro.getApp()
+  // const { im: { nim } } = getState()
+  // nim.disconnect({
+  //   done: () => {
+  //     console.log('断开连接成功');
+  //     setTimeout(() => {
+  //       nim.connect({})
+  //     }, 50)
+  //   }
+  // })
 }
 export default onWillReconnect

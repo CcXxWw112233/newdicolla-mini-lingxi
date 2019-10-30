@@ -29,18 +29,16 @@ export default {
       const { isTodo, _organization_id } = payload
       const res = yield call(changeOrg, { _organization_id: _organization_id })
       if (isApiResponseOk(res)) {
-        debugger
         yield put({
           type: 'accountInfo/getAccountInfo',
           payload: {}
         })
-        if (isTodo === 'todoList') return
+        //从服务消息进入每日代办,进入当前日期,并切换为全组织
+        if (isTodo === 'todoList') return res || {}
         Taro.navigateBack()
       } else {
       }
     },
-
-
   },
 
   reducers: {

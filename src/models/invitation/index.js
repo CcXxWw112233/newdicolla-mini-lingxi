@@ -41,7 +41,6 @@ export default {
       }
       const res = yield call(userScanCodeJoinOrganization, parameterInfo)
       if (isApiResponseOk(res)) {
-
         const parameter = {
           id: payload.id,
         }
@@ -53,7 +52,7 @@ export default {
         const result = yield call(commInviteQRCodejoin, parmar)
         if (isApiResponseOk(result)) {
           Taro.navigateTo({
-            url: `../../pages/auccessJoin/index?boardId=${parameter}&&pageRoute=${payload.pageRoute}`
+            url: `../../pages/auccessJoin/index?boardId=${payload.board_Id}&&pageRoute=${payload.pageRoute}`
           })
         }
         else {
