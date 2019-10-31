@@ -89,7 +89,18 @@ class GroupList extends Component {
       /**
        * 遇到群聊数据异常的情况, 重新注入registerIm连接
        */
-      this.registerIm()
+      // this.registerIm()
+      const { globalData: { store: { getState } } } = Taro.getApp()
+      const { im: { nim } } = getState()
+      nim.disconnect({
+        done: () => {
+          console.log('断开连接成功');
+          setTimeout(() => {
+            nim.connect({})
+          }, 50)
+        }
+      })
+
     }
 
     //生成与 云信后端返回数据相同格式的 id

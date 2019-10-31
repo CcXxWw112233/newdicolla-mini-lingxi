@@ -25,12 +25,19 @@ class CustomNavigation extends Component {
             <View className={indexStyles.CustomNavigation_Scss} style={{ height: statusBar_Height + navBar_Height + 'px' }}>
                 <View className={indexStyles.statusBar_Scss} style={{ height: statusBar_Height + 'px' }}></View>
                 <View className={indexStyles.navBar_Scss} style={{ height: navBar_Height + 'px' }}>
-                    <View className={indexStyles.homeWapper} style={{ width: '80px', lineHeight: navBar_Height + 'px' }} onClick={this.goToHomePages}>
-                        {/* <Image src={icon_home_normal} className={indexStyles.left_home_icon}/> */}
-                        <View className={indexStyles.left_home_icon}>
-                            {leftIcon}
+                    {
+                        backIcon == 'arrow_icon' ? (<View className={indexStyles.back_Wapper} style={{ width: '80px', lineHeight: navBar_Height + 'px' }} onClick={this.goToHomePages}>
+                            <View className={indexStyles.left_back_icon}>
+                                {leftIcon}
+                            </View>
                         </View>
-                    </View>
+                        ) : (<View className={indexStyles.home_Wapper} onClick={this.goToHomePages}>
+                            <View className={indexStyles.left_home_icon}>
+                                {leftIcon}
+                            </View>
+                        </View>)
+                    }
+
                     <View style={{ width: '80px', display: 'inline-block', display: 'flex', justifyContent: 'center', color: '#FFFFFF' }}>
                         <Text>灵犀协作</Text>
                     </View>
