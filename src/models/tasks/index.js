@@ -70,7 +70,9 @@ export default {
           icon: 'none',
           success: function () {
             if (res.code === 401) { //未登录, 没有权限查看
-
+              // Taro.navigateTo({
+              //   url: '../../pages/login/index?redirect=taksDetails'
+              // })
             } else { // code = 1
               setTimeout(function () {
                 if (res.code === 4042) {  // 任务已归档/删除

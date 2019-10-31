@@ -54,9 +54,7 @@ export default class sceneEntrance extends Component {
                 })
                 dispatch({
                     type: 'im/fetchAllIMTeamList',
-                    payload: {
-
-                    }
+                    payload: {}
                 })
 
                 Promise.resolve(
@@ -69,16 +67,10 @@ export default class sceneEntrance extends Component {
                 ).then(res => {
                     if (isApiResponseOk(res)) {
                         pageObject = 'boardDetail'
-                    } else {
-                        const { code } = res
-                        if (code === 4041) {  //如果项目已删除/归档 就去项目列表
-                            pageObject = 'board'
-                        }
+                        Taro.navigateTo({
+                            url: `../../pages/${pageObject}/index?contentId=${contentId}&boardId=${boardId}&push=sceneEntrance`
+                        })
                     }
-                    Taro.navigateTo({
-                        url: `../../pages/boardDetail/index?contentId=${contentId}&boardId=${boardId}&push=sceneEntrance`
-                    })
-
                     return
                 })
 

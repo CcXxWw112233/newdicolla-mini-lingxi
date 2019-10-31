@@ -41,7 +41,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 5,
+			"current": 6,
 			"list": [
 				{
 					"id": 0,
@@ -89,7 +89,7 @@
 					"id": 6,
 					"name": "pages/sceneEntrance/index",
 					"pathName": "pages/sceneEntrance/index",
-					"query": "contentId=1108692133692444672&boardId=1108692133692444672&redirectType=1",
+					"query": "contentId=1177913364861554688&boardId=1177912496384774145&redirectType=1&currentDate=1572437967000",
 					"scene": null
 				}
 			]

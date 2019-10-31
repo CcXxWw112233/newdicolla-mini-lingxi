@@ -81,6 +81,7 @@ export default {
         type: 'getAccountInfo',
         payload: {}
       })
+      console.log(payload.sourcePage, 'ssss');
 
       if (payload.sourcePage === 'Invitation') {
 
@@ -99,6 +100,11 @@ export default {
         //从taksDetails页面过来的, 登录后继续去taksDetails页面
         Taro.redirectTo({
           url: `../../pages/taksDetails/index`
+        })
+      } else if (payload.sourcePage === 'boardDetails') {
+        //从boardDetails页面过来的, 登录后继续去boardDetails页面
+        Taro.redirectTo({
+          url: `../../pages/boardDetails/index`
         })
       }
       else {

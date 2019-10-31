@@ -49,6 +49,7 @@ export default {
 
     * getBoardDetail({ payload }, { select, call, put }) {
       let res = yield call(getBoardDetail, payload)
+
       if (isApiResponseOk(res)) {
         yield put({
           type: 'updateDatas',
@@ -56,8 +57,29 @@ export default {
             board_detail: res.data
           }
         })
-
         return res || {}
+      }
+      else {
+        if (res.code === 401) { //未登录, 没有权限查看
+          Taro.navigateTo({
+            url: '../../pages/login/index?redirect=boardDetail'
+          })
+        } else {
+          if (res.code === '4041') { //如果项目已删除/归档 就去项目列表
+            Taro.showToast({
+              title: res.message + '正在为你进行跳转...',
+              icon: 'none',
+              duration: 2000,
+            })
+            setTimeout(function () {
+              Taro.switchTab({ url: `../../pages/board/index` })
+            }, 2000)
+          } else {  //其他异常
+            Taro.reLaunch({
+              url: '../../pages/calendar/index',
+            })
+          }
+        }
       }
     }
 
