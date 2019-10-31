@@ -19,8 +19,6 @@ class CustomNavigation extends Component {
         const navBar_Height = SystemInfo.platform == 'ios' ? 44 : 48
         const { backIcon } = this.props
 
-        let leftIcon = backIcon == 'arrow_icon' ? <Text className={`${globalStyle.global_iconfont}`}>&#xe646;</Text> : <Text className={`${globalStyle.global_iconfont}`}>&#xe7c6;</Text>
-
         return (
             <View className={indexStyles.CustomNavigation_Scss} style={{ height: statusBar_Height + navBar_Height + 'px' }}>
                 <View className={indexStyles.statusBar_Scss} style={{ height: statusBar_Height + 'px' }}></View>
@@ -28,13 +26,11 @@ class CustomNavigation extends Component {
                     {
                         backIcon == 'arrow_icon' ? (<View className={indexStyles.back_Wapper} style={{ width: '80px', lineHeight: navBar_Height + 'px' }} onClick={this.goToHomePages}>
                             <View className={indexStyles.left_back_icon}>
-                                {leftIcon}
-                            </View>
+                                <Text className={`${globalStyle.global_iconfont}`}>&#xe646;</Text>                             </View>
                         </View>
                         ) : (<View className={indexStyles.home_Wapper} onClick={this.goToHomePages}>
                             <View className={indexStyles.left_home_icon}>
-                                {leftIcon}
-                            </View>
+                                <Text className={`${globalStyle.global_iconfont}`}>&#xe7c6;</Text>                            </View>
                         </View>)
                     }
 
