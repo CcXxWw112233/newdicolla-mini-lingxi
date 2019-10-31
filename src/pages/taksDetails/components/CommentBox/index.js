@@ -17,8 +17,7 @@ export default class index extends Component {
     }
   }
 
-  handleChange (value) {
-    console.log(value, 'sssss')
+  handleChange(value) {
     this.setState({
       value
     })
@@ -36,7 +35,7 @@ export default class index extends Component {
       }
     })
   }
- 
+
   componentWillReceiveProps() { }
 
   componentDidMount() { }
@@ -53,13 +52,13 @@ export default class index extends Component {
     const send = value ? '发送' : <Text className={`${globalStyle.global_iconfont}`}>&#xe632;</Text>
     return (
       <View className={indexStyles.viewStyle}>
-          <AtInput
-            className={indexStyles.inputStyle}
-            type='text'
-            placeholder='输入评论, 可以@他人'
-            value={value}
-            onChange={this.handleChange.bind(this)}
-          />
+        <AtInput
+          className={indexStyles.inputStyle}
+          type='text'
+          placeholder='输入评论, 可以@他人'
+          value={value}
+          onChange={this.handleChange.bind(this)}
+        />
         <View className={`${indexStyles.emoji_icon_button}`}>
           <Text className={`${globalStyle.global_iconfont}`}>&#xe631;</Text>
         </View>

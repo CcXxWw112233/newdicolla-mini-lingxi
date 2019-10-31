@@ -314,6 +314,7 @@ class UserInput extends Component {
       cond[type]();
     }
 
+    Taro.setStorageSync('is_chat_extended_function', 'true')
   };
   handleVoiceTouchEnd = () => {
     this.setState(
