@@ -43,6 +43,7 @@ export default class sceneEntrance extends Component {
             })
         } else {
             if (redirectType === '0') {
+                Taro.setStorageSync('sceneEntrance_Goto_Other', 'errorPage')
                 pageObject = 'errorPage'
             } else if (redirectType === '1') {
                 Taro.setStorageSync('sceneEntrance_Goto_Other', 'boardDetail')

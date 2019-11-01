@@ -74,7 +74,7 @@ export default {
                 url: `../../pages/board/index`
               })
             } else {  //其他异常
-              Taro.reLaunch({
+              Taro.switchTab({
                 url: '../../pages/calendar/index',
               })
             }

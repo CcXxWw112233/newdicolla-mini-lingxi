@@ -79,7 +79,7 @@ export default {
                 url: `../../pages/boardDetail/index?push=sceneEntrance&&boardId=${boardId}`
               })
             } else {  //其他异常
-              Taro.reLaunch({
+              Taro.switchTab({
                 url: '../../pages/calendar/index',
               })
             }

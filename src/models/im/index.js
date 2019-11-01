@@ -24,10 +24,29 @@ function onSendMsgDone(error, msg) {
       alert(error.message);
     } else {
       Taro.showToast({
-        title: `发送消息失败: ${String(error)}`,
-        icon: 'none'
+        // title: `发送消息失败: ${String(error)}`,
+        title: `发送消息失败: 请重发`,
+        icon: 'none',
+        duration: 2000,
       });
+
+      /***
+       * 消息发送失败, 重新连接, 并提示用户再次发送
+       */
+      const { globalData: { store: { getState } } } = Taro.getApp()
+      const { im: { nim } } = getState()
+      if (nim) {
+        nim.disconnect({
+          done: () => {
+            console.log('断开连接成功');
+            setTimeout(() => {
+              nim.connect({})
+            }, 50)
+          }
+        })
+      }
     }
+
     return;
   }
   msg.status = 'success';
