@@ -45,17 +45,8 @@ export default class sceneEntrance extends Component {
             if (redirectType === '0') {
                 pageObject = 'errorPage'
             } else if (redirectType === '1') {
-                /***
-                 * 注入 IM
-                 */
-                dispatch({
-                    type: 'my/getOrgList',
-                    payload: {}
-                })
-                dispatch({
-                    type: 'im/fetchAllIMTeamList',
-                    payload: {}
-                })
+                Taro.setStorageSync('sceneEntrance_Goto_Other', 'boardDetail')
+                Taro.setStorageSync('board_Id', boardId)
 
                 Promise.resolve(
                     dispatch({
@@ -65,6 +56,19 @@ export default class sceneEntrance extends Component {
                         }
                     })
                 ).then(res => {
+
+                    /***
+          * 注入 IM
+          */
+                    dispatch({
+                        type: 'my/getOrgList',
+                        payload: {}
+                    })
+                    dispatch({
+                        type: 'im/fetchAllIMTeamList',
+                        payload: {}
+                    })
+
                     if (isApiResponseOk(res)) {
                         pageObject = 'boardDetail'
                         Taro.navigateTo({

@@ -61,24 +61,24 @@ export default {
       }
       else {
         if (res.code === 401) { //未登录, 没有权限查看
-          Taro.navigateTo({
-            url: '../../pages/login/index?redirect=boardDetail'
-          })
+
         } else {
-          if (res.code === '4041') { //如果项目已删除/归档 就去项目列表
-            Taro.showToast({
-              title: res.message + '正在为你进行跳转...',
-              icon: 'none',
-              duration: 2000,
-            })
-            setTimeout(function () {
-              Taro.switchTab({ url: `../../pages/board/index` })
-            }, 2000)
-          } else {  //其他异常
-            Taro.reLaunch({
-              url: '../../pages/calendar/index',
-            })
-          }
+          Taro.showToast({
+            title: res.message + '正在为你进行跳转...',
+            icon: 'none',
+            duration: 2000,
+          })
+          setTimeout(function () {
+            if (res.code === '4041') { //如果项目已删除/归档 就去项目列表
+              Taro.switchTab({
+                url: `../../pages/board/index`
+              })
+            } else {  //其他异常
+              Taro.reLaunch({
+                url: '../../pages/calendar/index',
+              })
+            }
+          }, 2000)
         }
       }
     }

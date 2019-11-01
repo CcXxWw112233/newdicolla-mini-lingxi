@@ -71,6 +71,7 @@ class BoardDetail extends Component {
     const params = this.$router.params;
     const boardId = params.boardId;
     const sourcePage = params.push;
+
     this.setState({ sourcePage });
     const getCurrentBoard = (arr, id) => {
       const ret = arr.find(i => i.board_id === id);

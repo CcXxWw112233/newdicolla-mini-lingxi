@@ -65,29 +65,26 @@ export default {
         })
 
       } else {
-        Taro.showToast({
-          title: res.message + ' ,正在为你进行跳转...',
-          icon: 'none',
-          success: function () {
-            if (res.code === 401) { //未登录, 没有权限查看
-              // Taro.navigateTo({
-              //   url: '../../pages/login/index?redirect=taksDetails'
-              // })
-            } else { // code = 1
-              setTimeout(function () {
-                if (res.code === 4042) {  // 任务已归档/删除
-                  Taro.navigateTo({
-                    url: `../../pages/boardDetail/index?push=sceneEntrance&&boardId=${boardId}`
-                  })
-                } else {  //其他异常
-                  Taro.reLaunch({
-                    url: '../../pages/calendar/index',
-                  })
-                }
-              }, 3000)
+        if (res.code === 401) { //未登录, 没有权限查看
+
+        } else {
+          Taro.showToast({
+            title: res.message + '正在为你进行跳转...',
+            icon: 'none',
+            duration: 2000,
+          })
+          setTimeout(function () {
+            if (res.code === '4041') { //如果任务已删除/归档 就去任务列表(首页)
+              Taro.navigateTo({
+                url: `../../pages/boardDetail/index?push=sceneEntrance&&boardId=${boardId}`
+              })
+            } else {  //其他异常
+              Taro.reLaunch({
+                url: '../../pages/calendar/index',
+              })
             }
-          }
-        });
+          }, 2000)
+        }
       }
     },
 
