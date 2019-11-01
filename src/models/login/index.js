@@ -82,6 +82,10 @@ export default {
       })
       const boardId = Taro.getStorageSync('board_Id')
 
+      //日历页面是否需要注入im方法的标识
+      const switchTabCurrentPage = 'currentPage_BoardDetail_or_Login'
+      Taro.setStorageSync('switchTabCurrentPage', switchTabCurrentPage);
+
       if (payload.sourcePage === 'Invitation') {
         //邀请加入,未登录 --> 登录成功 --> 重新调用加入组织和项目请求
         const query_Id = Taro.getStorageSync('id')
@@ -102,7 +106,6 @@ export default {
         const sceneEntrance_Goto_Other = Taro.getStorageSync('sceneEntrance_Goto_Other')
         //服务消息每日代办进入小程序, 自动切换为全组织,登录成后自动切换 
         const todoListData = Taro.getStorageSync('isTodoList')
-
         if (sceneEntrance_Goto_Other === 'boardDetail') {
           Promise.resolve(  //再次查询项目有没有失效
             dispatches({
@@ -130,8 +133,7 @@ export default {
             })
           ).then(res => {
             if (isApiResponseOk(res)) {
-              const switchTabCurrentPage = 'currentPage_BoardDetail_or_Login'
-              Taro.setStorageSync('switchTabCurrentPage', switchTabCurrentPage);  //解决wx.switchTab不能传值
+
               Taro.switchTab({ url: `../../pages/calendar/index` })
             }
           })
@@ -146,8 +148,6 @@ export default {
       }
       else {
 
-        const switchTabCurrentPage = 'currentPage_BoardDetail_or_Login'
-        Taro.setStorageSync('switchTabCurrentPage', switchTabCurrentPage);  //解决wx.switchTab不能传值
         Taro.switchTab({ url: `../../pages/calendar/index` })
 
         yield put({

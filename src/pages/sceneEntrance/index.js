@@ -49,6 +49,18 @@ export default class sceneEntrance extends Component {
                 Taro.setStorageSync('sceneEntrance_Goto_Other', 'boardDetail')
                 Taro.setStorageSync('board_Id', boardId)
 
+                /***
+                * 注入 IM
+                */
+                dispatch({
+                    type: 'my/getOrgList',
+                    payload: {}
+                })
+                dispatch({
+                    type: 'im/fetchAllIMTeamList',
+                    payload: {}
+                })
+
                 Promise.resolve(
                     dispatch({
                         type: 'board/getBoardDetail',
@@ -57,19 +69,6 @@ export default class sceneEntrance extends Component {
                         }
                     })
                 ).then(res => {
-
-                    /***
-          * 注入 IM
-          */
-                    dispatch({
-                        type: 'my/getOrgList',
-                        payload: {}
-                    })
-                    dispatch({
-                        type: 'im/fetchAllIMTeamList',
-                        payload: {}
-                    })
-
                     if (isApiResponseOk(res)) {
                         pageObject = 'boardDetail'
                         Taro.navigateTo({
