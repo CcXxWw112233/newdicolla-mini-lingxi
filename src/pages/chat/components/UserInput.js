@@ -201,6 +201,9 @@ class UserInput extends Component {
     });
     this.sendTextMsg();
   };
+  handleChange = () => {
+
+  }
   handleTextInput = () => {
     this.setState(
       {
@@ -332,6 +335,7 @@ class UserInput extends Component {
     );
   };
   sendAudioMsg = res => {
+    debugger
     Taro.showLoading({
       title: '发送中...'
     });
@@ -570,6 +574,7 @@ class UserInput extends Component {
                 onFocus={this.handleInputFocus}
                 onBlur={this.handleInputBlur}
                 onConfirm={this.onInputConfirm}
+                onChange={this.handleChange}
               />
             </View>
           )}

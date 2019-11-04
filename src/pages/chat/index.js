@@ -13,7 +13,28 @@ import { connect } from '@tarojs/redux';
 class Chat extends Component {
 
   state = {
+    isIphoneX: false, //是否iPhone X及以上设备
+  }
 
+  componentDidMount() {
+    try {
+      var res = Taro.getSystemInfoSync()
+      console.log(res, 'ssss111');
+      if (res.platform === "devtools") {
+        this.setState({
+          isIphoneX: true
+        })
+        if (res.system >= 11.0) {
+          if (model.search('iPhone X') != -1 && model.search('iPhone 11') != -1) {
+            // this.setState({
+            //   isIphoneX: true
+            // })
+          }
+        }
+      }
+    } catch (e) {
+
+    }
   }
 
   componentWillMount() { }
@@ -36,17 +57,26 @@ class Chat extends Component {
     e.stopPropagation();
   }
   render() {
+    const { isIphoneX } = this.state
+    console.log(isIphoneX, 'ssss');
+
     return (
-      <View className={styles.wrapper} onClick={this.inputDown}>
-        <View className={styles.headerWraper}>
-          <ChatHeader />
+      <View>
+        <View className={styles.wrapper} onClick={this.inputDown}>
+          <View className={styles.headerWraper}>
+            <ChatHeader />
+          </View>
+          <View className={styles.chatContentWrapper}>
+            <ChatContent />
+          </View>
+          <View className={styles.userInputWrapper} onClick={this.inputDownChild}>
+            <UserInput />
+          </View>
         </View>
-        <View className={styles.chatContentWrapper}>
-          <ChatContent />
-        </View>
-        <View className={styles.userInputWrapper} onClick={this.inputDownChild}>
-          <UserInput />
-        </View>
+        {
+          isIphoneX === 'true' ? (<View className={styles.bottomView}></View>
+          ) : ''
+        }
       </View>
     );
   }
