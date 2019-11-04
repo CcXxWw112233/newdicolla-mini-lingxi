@@ -1,9 +1,18 @@
+@import "../../../gloalSet/styles/constant";
+
 .wrapper {
+<<<<<<< HEAD
   margin-top   : 5px;
   // height    : calc(100vh - 222px);
   height       : calc(100vh - 250px);
   background   : #fff;
   padding      : 0px 32px 0px;
+=======
+  margin-top: 5px;
+  height    : calc(100vh - 222px);
+  background: #fff;
+  padding   : 0px 32px 0px;
+>>>>>>> f53f7b6a52aad5e25f284dd66e6a161ed9801a4b
 
   .filterInformWrapper {
     position       : fixed;

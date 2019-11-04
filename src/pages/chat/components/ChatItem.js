@@ -127,8 +127,8 @@ class ChatItem extends Component {
       second * step >= maxWidth
         ? maxWidth
         : second * step <= minWidth
-        ? minWidth
-        : second * step;
+          ? minWidth
+          : second * step;
     return `${ret}px`;
   };
   timestampToTime = timestamp => {
@@ -166,14 +166,14 @@ class ChatItem extends Component {
       );
       // console.log(timestamp);
       dateStr = findDateCond ? findDateCond[1] : '';
-      if(dateStr==='今天'||dateStr==='昨天'||dateStr==='前天'||dateStr===''){
-        timeStr = timestampFormat(timestamp,"hh:mm");
+      if (dateStr === '今天' || dateStr === '昨天' || dateStr === '前天' || dateStr === '') {
+        timeStr = timestampFormat(timestamp, "hh:mm");
         let hour = parseInt(timeStr.split(':')[0]);
-        timeStr = hour>12 ? '下午 '+timeStr: '上午 ' +timeStr;
-      }else{
-        timeStr = timestampFormat(timestamp,"MM月dd日 hh:mm");
+        timeStr = hour > 12 ? '下午 ' + timeStr : '上午 ' + timeStr;
+      } else {
+        timeStr = timestampFormat(timestamp, "MM月dd日 hh:mm");
       }
-     
+
       // console.log("dateStr",dateStr);
       // console.log("timeStr",timeStr);
     } catch (error) {
@@ -204,229 +204,229 @@ class ChatItem extends Component {
           type === 'audio' ||
           type === 'custom' ||
           type === 'image') && (
-          <View
-            className={`${styles.contentWrapper} ${
-              flow === 'in' ? styles.contentWrapperIn : styles.contentWrapperOut
-            }`}
-          >
-            <View className={styles.avatarWrapper}>
-              {this.isValidImgUrl(avatar) ? (
-                <Image src={avatar} className={`${styles.avatar}`} />
-              ) : avatar === 'dynamicAssistant' ? (
-                <View
-                  className={`${globalStyles.global_iconfont} ${
-                    styles.avatarAssistant
-                  }`}
-                  style={{
-                    fontSize: '36px',
-                    borderRadius: '50%',
-                    color: '#fff'
-                  }}
-                >
-                  &#xe645;
-                </View>
-              ) : (
-                <View
-                  className={`${globalStyles.global_iconfont} ${styles.avatar}`}
-                  style={{
-                    fontSize: '36px',
-                    borderRadius: '50%'
-                  }}
-                >
-                  &#xe647;
-                </View>
-              )}
-            </View>
-            <View className={styles.newsWrapper}>
-              {flow === 'in' && (
-                <View className={styles.newsName}>{fromNick}</View>
-              )}
-              <View
-                className={`${styles.newsContentWrapper} ${
-                  type === 'custom' && !isPinupEmoji
-                    ? styles.newContentAssistantWrapper
-                    : ''
+            <View
+              className={`${styles.contentWrapper} ${
+                flow === 'in' ? styles.contentWrapperIn : styles.contentWrapperOut
                 }`}
-              >
-                {type === 'text' && (
-                  <View className={styles.newContent}>
-                    {parseEmoji(text).map(i => {
-                      const { categ, cont } = i;
-                      return (
-                        <EmojiItem
-                          key={categ + cont}
-                          categ={isValidEmoji(cont) ? 'emoji' : 'text'}
-                          cont={isValidEmoji(cont) ? isValidEmoji(cont) : cont}
-                        />
-                      );
-                    })}
-                  </View>
-                )}
-                {type === 'image' && (
-                  <Image
-                    onClick={() => this.handlePreviewImage(file)}
-                    src={file.url}
+            >
+              <View className={styles.avatarWrapper}>
+                {this.isValidImgUrl(avatar) ? (
+                  <Image src={avatar} className={`${styles.avatar}`} />
+                ) : avatar === 'dynamicAssistant' ? (
+                  <View
+                    className={`${globalStyles.global_iconfont} ${
+                      styles.avatarAssistant
+                      }`}
                     style={{
-                      width: this.genImageSize(
-                        file.w,
-                        Number(file.w / file.h),
-                        'w'
-                      ),
-                      height: this.genImageSize(
-                        file.h,
-                        Number(file.w / file.h),
-                        'h'
-                      )
+                      fontSize: '36px',
+                      borderRadius: '50%',
+                      color: '#fff'
                     }}
-                    mode='aspectFill'
-                  />
+                  >
+                    &#xe645;
+                </View>
+                ) : (
+                      <View
+                        className={`${globalStyles.global_iconfont} ${styles.avatar}`}
+                        style={{
+                          fontSize: '36px',
+                          borderRadius: '50%'
+                        }}
+                      >
+                        &#xe647;
+                </View>
+                    )}
+              </View>
+              <View className={styles.newsWrapper}>
+                {flow === 'in' && (
+                  <View className={styles.newsName}>{fromNick}</View>
                 )}
-                {type === 'custom' && isPinupEmoji && (
-                  <View className={styles.pinupWrapper}>
+                <View
+                  className={`${styles.newsContentWrapper} ${
+                    type === 'custom' && !isPinupEmoji
+                      ? styles.newContentAssistantWrapper
+                      : ''
+                    }`}
+                >
+                  {type === 'text' && (
+                    <View className={styles.newContent}>
+                      {parseEmoji(text).map(i => {
+                        const { categ, cont } = i;
+                        return (
+                          <EmojiItem
+                            key={categ + cont}
+                            categ={isValidEmoji(cont) ? 'emoji' : 'text'}
+                            cont={isValidEmoji(cont) ? isValidEmoji(cont) : cont}
+                          />
+                        );
+                      })}
+                    </View>
+                  )}
+                  {type === 'image' && (
                     <Image
-                      src={parsePinup(content)}
-                      style={{ width: '100px', height: '100px' }}
+                      onClick={() => this.handlePreviewImage(file)}
+                      src={file.url}
+                      style={{
+                        width: this.genImageSize(
+                          file.w,
+                          Number(file.w / file.h),
+                          'w'
+                        ),
+                        height: this.genImageSize(
+                          file.h,
+                          Number(file.w / file.h),
+                          'h'
+                        )
+                      }}
+                      mode='aspectFill'
                     />
-                  </View>
-                )}
-                {type === 'custom' && !isPinupEmoji && (
-                  <View className={styles.customNewsWrapper}>
-                    {content && content.data && content.data.d ? (
-                      <View className={styles.customNewsContentWrapper}>
-                        {[JSON.parse(content.data.d)].map(data => {
-                          const {
-                            activityType,
-                            creator,
-                            action,
-                            activityContent,
-                            range
-                          } = parseActivityNewsBody(data);
+                  )}
+                  {type === 'custom' && isPinupEmoji && (
+                    <View className={styles.pinupWrapper}>
+                      <Image
+                        src={parsePinup(content)}
+                        style={{ width: '100px', height: '100px' }}
+                      />
+                    </View>
+                  )}
+                  {type === 'custom' && !isPinupEmoji && (
+                    <View className={styles.customNewsWrapper}>
+                      {content && content.data && content.data.d ? (
+                        <View className={styles.customNewsContentWrapper}>
+                          {[JSON.parse(content.data.d)].map(data => {
+                            const {
+                              activityType,
+                              creator,
+                              action,
+                              activityContent,
+                              range
+                            } = parseActivityNewsBody(data);
 
-                          return (
-                            <View
-                              key={data.creatorId}
-                              className={styles.customNewsContent}
-                            >
-                              <Text className={styles.creator}>
-                                {creator && creator.name
-                                  ? `${creator.name}`
-                                  : ''}
-                                <Text
-                                  style={{
-                                    display: 'inline-block',
-                                    width: '6px'
-                                  }}
-                                >
-                                  &nbsp;
+                            return (
+                              <View
+                                key={data.creatorId}
+                                className={styles.customNewsContent}
+                              >
+                                <Text className={styles.creator}>
+                                  {creator && creator.name
+                                    ? `${creator.name}`
+                                    : ''}
+                                  <Text
+                                    style={{
+                                      display: 'inline-block',
+                                      width: '6px'
+                                    }}
+                                  >
+                                    &nbsp;
                                 </Text>
-                              </Text>
-                              {range && range['rangeText'] && (
-                                <Text
-                                  className={`${styles.range} ${
-                                    range && range['isNavigate']
-                                      ? styles.customNewsNav
-                                      : ''
-                                  }`}
-                                >
-                                  {range['rangeText'] && range['rangeObj']
-                                    ? range['rangeText'].replace(
+                                </Text>
+                                {range && range['rangeText'] && (
+                                  <Text
+                                    className={`${styles.range} ${
+                                      range && range['isNavigate']
+                                        ? styles.customNewsNav
+                                        : ''
+                                      }`}
+                                  >
+                                    {range['rangeText'] && range['rangeObj']
+                                      ? range['rangeText'].replace(
                                         '{placeholder}',
                                         range['rangeObj']['name']
                                       )
-                                    : ''}
+                                      : ''}
+                                  </Text>
+                                )}
+                                <Text className={styles.action}>
+                                  {action ? `${action}` : ''}
+                                  <Text
+                                    style={{
+                                      display: 'inline-block',
+                                      width: '6px'
+                                    }}
+                                  >
+                                    &nbsp;
                                 </Text>
-                              )}
-                              <Text className={styles.action}>
-                                {action ? `${action}` : ''}
+                                </Text>
                                 <Text
-                                  style={{
-                                    display: 'inline-block',
-                                    width: '6px'
-                                  }}
+                                  className={`${styles.thing} ${
+                                    activityType === 'card' ||
+                                      activityContent['isNavigate']
+                                      ? styles.customNewsNav
+                                      : ''
+                                    }`}
+                                  onClick={e =>
+                                    this.handleClickItem(
+                                      e,
+                                      'custom',
+                                      activityType,
+                                      activityContent &&
+                                        activityContent[activityType] &&
+                                        activityContent[activityType]['id']
+                                        ? activityContent[activityType]['id']
+                                        : null
+                                    )
+                                  }
                                 >
-                                  &nbsp;
+                                  {activityContent['contentText']
+                                    ? `“${activityContent['contentText']}”`
+                                    : activityContent[activityType]
+                                      ? `“${activityContent[activityType]['name']}”`
+                                      : ''}
                                 </Text>
-                              </Text>
-                              <Text
-                                className={`${styles.thing} ${
-                                  activityType === 'card' ||
-                                  activityContent['isNavigate']
-                                    ? styles.customNewsNav
-                                    : ''
-                                }`}
-                                onClick={e =>
-                                  this.handleClickItem(
-                                    e,
-                                    'custom',
-                                    activityType,
-                                    activityContent &&
-                                      activityContent[activityType] &&
-                                      activityContent[activityType]['id']
-                                      ? activityContent[activityType]['id']
-                                      : null
-                                  )
-                                }
-                              >
-                                {activityContent['contentText']
-                                  ? `“${activityContent['contentText']}”`
-                                  : activityContent[activityType]
-                                  ? `“${activityContent[activityType]['name']}”`
-                                  : ''}
-                              </Text>
-                            </View>
-                          );
-                        })}
-                      </View>
-                    ) : (
-                      <Text>未知消息内容</Text>
-                    )}
-                  </View>
-                )}
-                {type === 'audio' && (
-                  <View
-                    className={styles.audioContent}
-                    onClick={() => this.handlePlayAudio(file)}
-                  >
-                    <Text
-                      style={{ width: this.genAudioNewsWidth(file.dur) }}
-                      className={styles.audioDur}
-                    >{`${Math.ceil(file.dur / 1000)}" `}</Text>
-                    <View
-                      className={`${globalStyles.global_iconfont} ${
-                        styles.audioIcon
-                      } ${
-                        isAudioPlaying
-                          ? flow === 'in'
-                            ? styles.audioIconPlayingIn
-                            : styles.audioIconPlayingOut
-                          : ''
-                      }`}
-                      style={{
-                        fontSize: '18px',
-                        color: flow === 'in' ? '#313D40' : '#FFFBFE'
-                      }}
-                    >
-                      {/* &#xe656; */}
+                              </View>
+                            );
+                          })}
+                        </View>
+                      ) : (
+                          <Text>未知消息内容</Text>
+                        )}
                     </View>
-                  </View>
-                )}
-                <View className={styles.newsContentBubble} />
+                  )}
+                  {type === 'audio' && (
+                    <View
+                      className={styles.audioContent}
+                      onClick={() => this.handlePlayAudio(file)}
+                    >
+                      <Text
+                        style={{ width: this.genAudioNewsWidth(file.dur) }}
+                        className={styles.audioDur}
+                      >{`${Math.ceil(file.dur / 1000)}" `}</Text>
+                      <View
+                        className={`${globalStyles.global_iconfont} ${
+                          styles.audioIcon
+                          } ${
+                          isAudioPlaying
+                            ? flow === 'in'
+                              ? styles.audioIconPlayingIn
+                              : styles.audioIconPlayingOut
+                            : ''
+                          }`}
+                        style={{
+                          fontSize: '18px',
+                          color: flow === 'in' ? '#313D40' : '#FFFBFE'
+                        }}
+                      >
+                        {/* &#xe656; */}
+                      </View>
+                    </View>
+                  )}
+                  <View className={styles.newsContentBubble} />
+                </View>
               </View>
             </View>
-          </View>
-        )}
+          )}
         {type === 'timestamp' && (
           <View
             className={`${styles.notificationWrapper} ${
               styles.notificationTime
-            }`}
+              }`}
           >{`—— ${this.timestampToTime(time)} ——`}</View>
         )}
         {type === 'notification' && (
           <View
             className={`${styles.notificationWrapper} ${
               styles.notificationGroup
-            }`}
+              }`}
           >
             {groupNotification}
           </View>
