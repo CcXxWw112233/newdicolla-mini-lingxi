@@ -1,33 +1,38 @@
 .wrapper {
-  margin-top: 5px;
-  height: calc(100vh - 222px);
-  background: #fff;
-  padding: 0px 32px 0px;
+  margin-top   : 5px;
+  // height    : calc(100vh - 222px);
+  height       : calc(100vh - 250px);
+  background   : #fff;
+  padding      : 0px 32px 0px;
+
   .filterInformWrapper {
-    position: fixed;
-    top: 128px;
-    right: 32px;
-    display: flex;
-    align-items: center;
+    position       : fixed;
+    top            : 128px;
+    right          : 32px;
+    display        : flex;
+    align-items    : center;
     justify-content: center;
-    width: 64px;
-    height: 64px;
-    font-size: 40px;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.15);
-    border-radius: 32px;
+    width          : 64px;
+    height         : 64px;
+    font-size      : 40px;
+    background     : rgba(255, 255, 255, 1);
+    box-shadow     : 0px 0px 8px 0px rgba(0, 0, 0, 0.15);
+    border-radius  : 32px;
   }
+
   .contentWrapper {
     padding: 10px 0px;
-    width: 686px;
+    width  : 686px;
+
     .chatItemWrapper {
       margin-bottom: 32px;
-      width: 686px;
+      width        : 686px;
     }
   }
+
   .scrollToBottomIdEle {
-    width: 686px;
-    height: 2px;
+    width     : 686px;
+    height    : 2px;
     background: transparent;
   }
 }

@@ -105,7 +105,8 @@ class UserInput extends Component {
     recorderManager: null, //录音内容
     emojiType: 'emoji', // emoji | pinup
     emojiAlbum: 'emoji', // emoji | ajmd | lt | xxy
-    inputBottomValue: 0
+    inputBottomValue: 0,
+    isIphoneX: false, //是否iPhone X及以上设备
   };
   handleInputFocus = e => {
     const { handleUserInputFocus, handleUserInputHeightChange } = this.props;
@@ -502,7 +503,20 @@ class UserInput extends Component {
     });
   }
 
+  componentDidMount() {
+    const res = Taro.getSystemInfoSync()
+    console.log(res, 'ssss111');
+    if (res.platform === "devtools") {
+      if (res.system >= 11.0) {
+        if (model.search('iPhone X') != -1 && model.search('iPhone 11') != -1) {
+          this.setState({
+            isIphoneX: true
+          })
+        }
+      }
+    }
 
+  }
   render() {
     const {
       inputValue,
@@ -511,7 +525,8 @@ class UserInput extends Component {
       recordStart,
       emojiType,
       emojiAlbum,
-      inputBottomValue
+      inputBottomValue,
+      isIphoneX,
     } = this.state;
 
     // console.log(inputMode);
@@ -530,7 +545,7 @@ class UserInput extends Component {
           position: this.inputModeBelongs('expression', 'addition')
             ? 'fixed'
             : 'relative',
-          bottom: this.inputModeBelongs('expression', 'addition') ? '20px' : inputBottomValue
+          // bottom: this.inputModeBelongs('expression', 'addition') ? '20px' : inputBottomValue
         }}
       >
         <View className={styles.panelWrapper}>
@@ -618,6 +633,9 @@ class UserInput extends Component {
             </View>
             )}
         </View>
+
+        <View className={styles.bottomView}></View>
+
         {inputMode === 'expression' && (
           <View className={styles.contentWrapper}>
             <View className={styles.emojiListWrapper}>
@@ -724,6 +742,7 @@ class UserInput extends Component {
             </Swiper>
           </View>
         )}
+
       </View>
     );
   }

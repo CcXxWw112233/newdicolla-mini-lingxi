@@ -50,7 +50,7 @@ class ChatContent extends Component {
     super(props);
     this.state = {
       scrollIntoViewEleId: '', //设置scrollView 自动滚动属性
-      chatConetntViewHeightStyle:''
+      chatConetntViewHeightStyle: ''
     };
     //是否正在 touch 聊天列表
     this.isTouchingScrollView = false;
@@ -65,14 +65,14 @@ class ChatContent extends Component {
     return rawMessageList[currentChatTo] &&
       isPlainObject(rawMessageList[currentChatTo])
       ? Object.values(rawMessageList[currentChatTo])
-          .filter(msg =>
-            isOnlyShowInform
-              ? isValidMsg(msg, currentChatTo) && isActivityCustomNews(msg)
-              : isValidMsg(msg, currentChatTo) ||
-                isPinupEmojiNews(msg) ||
-                isNotificationNews(msg)
-          )
-          .map(msg => genNews(msg, currentBoard))
+        .filter(msg =>
+          isOnlyShowInform
+            ? isValidMsg(msg, currentChatTo) && isActivityCustomNews(msg)
+            : isValidMsg(msg, currentChatTo) ||
+            isPinupEmojiNews(msg) ||
+            isNotificationNews(msg)
+        )
+        .map(msg => genNews(msg, currentBoard))
       : [];
   };
   onScrolltoupper = () => {
@@ -101,9 +101,9 @@ class ChatContent extends Component {
       isUserInputHeightChange: nextIsUserInputHeightChange
     } = nextProps;
     this.setState({
-      scrollIntoViewEleId: 'scroll_bottom_id_'+new Date().getTime()
+      scrollIntoViewEleId: 'scroll_bottom_id_' + new Date().getTime()
     });
-    
+
     // const { currentGroupSessionList, isUserInputHeightChange } = this.props;
     // if (nextIsUserInputHeightChange !== isUserInputHeightChange) {
     //   this.setState({
@@ -122,7 +122,7 @@ class ChatContent extends Component {
     //     });
     //   }
     // }
-    
+
     // let chatContentHeight = 0;
     // const query = Taro.createSelectorQuery();
     // query.select('#chatContent').boundingClientRect();
@@ -130,7 +130,7 @@ class ChatContent extends Component {
     //   console.log("YING",res);
     //   chatContentHeight = res[0].height;
     // });
-    
+
 
 
   };
@@ -187,9 +187,9 @@ class ChatContent extends Component {
       isOnlyShowInform,
       isUserInputHeightChange
     } = this.props;
-    const { scrollIntoViewEleId,chatConetntViewHeightStyle} = this.state;
+    const { scrollIntoViewEleId, chatConetntViewHeightStyle } = this.state;
     // console.log("isUserInputHeightChange",isUserInputHeightChange);
-    
+
     // console.log(scrollIntoViewEleId);
     return (
       <ScrollView
@@ -210,7 +210,7 @@ class ChatContent extends Component {
         <View
           className={`${globalStyles.global_iconfont} ${
             styles.filterInformWrapper
-          }`}
+            }`}
           style={{
             color: isOnlyShowInform ? '#1890FF' : '#595959'
           }}

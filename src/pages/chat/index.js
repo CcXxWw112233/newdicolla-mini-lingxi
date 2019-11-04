@@ -13,7 +13,6 @@ import { connect } from '@tarojs/redux';
 class Chat extends Component {
 
   state = {
-
   }
 
   componentWillMount() { }
@@ -36,16 +35,19 @@ class Chat extends Component {
     e.stopPropagation();
   }
   render() {
+
     return (
-      <View className={styles.wrapper} onClick={this.inputDown}>
-        <View className={styles.headerWraper}>
-          <ChatHeader />
-        </View>
-        <View className={styles.chatContentWrapper}>
-          <ChatContent />
-        </View>
-        <View className={styles.userInputWrapper} onClick={this.inputDownChild}>
-          <UserInput />
+      <View>
+        <View className={styles.wrapper} onClick={this.inputDown}>
+          <View className={styles.headerWraper}>
+            <ChatHeader />
+          </View>
+          <View className={styles.chatContentWrapper}>
+            <ChatContent />
+          </View>
+          <View className={styles.userInputWrapper} onClick={this.inputDownChild}>
+            <UserInput />
+          </View>
         </View>
       </View>
     );
