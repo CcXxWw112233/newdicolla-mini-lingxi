@@ -123,6 +123,7 @@ class GroupList extends Component {
       .then(() => setCurrentGroup(getCurrentGroup(currentBoard, im_id)))
       .then(() => updateCurrentChatUnreadNewsState(id))
       .then(() => {
+        // Taro.setStorageSync('pageSource_chat', 'chat')
         Taro.navigateTo({
           url: `/pages/chat/index`
         });

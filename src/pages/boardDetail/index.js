@@ -41,6 +41,7 @@ import { connect } from '@tarojs/redux';
           },
           desc: 'reset currentGroup'
         }),
+
       resetCurrentGroupSessionList: () =>
         dispatch({
           type: 'im/updateStateFieldByCover',

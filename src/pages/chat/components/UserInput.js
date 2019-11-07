@@ -146,6 +146,7 @@ class UserInput extends Component {
   sendTextMsg = () => {
     const { inputValue } = this.state;
     const { im_id, sendTeamTextMsg } = this.props;
+
     if (!im_id) {
       Taro.showToast({
         title: '未获取到群消息',
@@ -170,6 +171,9 @@ class UserInput extends Component {
       });
       return;
     }
+    Taro.showLoading({
+      title: '发送中...',
+    });
     Promise.resolve(sendTeamTextMsg(inputValue, im_id))
       .then(() =>
         this.setState({
@@ -202,9 +206,9 @@ class UserInput extends Component {
     });
     this.sendTextMsg();
   };
-  handleChange = () => {
+  // handleChange = () => {
 
-  }
+  // }
   handleTextInput = () => {
     this.setState(
       {
@@ -274,19 +278,19 @@ class UserInput extends Component {
   handleChooseImage = (...types) => {
     const { im_id, sendImageMsg } = this.props;
     const { setInputMode } = this;
+
     Taro.chooseImage({
       sourceType: types,
       success: function (res) {
         Taro.showLoading({
-          title: '发送中...'
+          title: '发送中...',
         });
         Promise.resolve(sendImageMsg(res.tempFilePaths, im_id))
           .then(() => {
-            Taro.hideLoading();
+            // Taro.hideLoading();
             setInputMode('text');
           })
           .catch(e => {
-            Taro.hideLoading();
             Taro.showToast({
               title: String(e),
               icon: 'none'
@@ -336,15 +340,14 @@ class UserInput extends Component {
     );
   };
   sendAudioMsg = res => {
-    debugger
     Taro.showLoading({
-      title: '发送中...'
+      title: '发送中...',
     });
     const { tempFilePath } = res;
     const { im_id, sendTeamAudioMsg } = this.props;
     Promise.resolve(sendTeamAudioMsg(tempFilePath, im_id))
       .then(() => {
-        Taro.hideLoading();
+        // Taro.hideLoading();
         this.setState({
           recorderManager: null
         });
@@ -509,7 +512,6 @@ class UserInput extends Component {
 
   componentDidMount() {
     const res = Taro.getSystemInfoSync()
-    console.log(res, 'ssss111');
     if (res.platform === "devtools") {
       if (res.system >= 11.0) {
         if (model.search('iPhone X') != -1 && model.search('iPhone 11') != -1) {
@@ -549,7 +551,7 @@ class UserInput extends Component {
           position: this.inputModeBelongs('expression', 'addition')
             ? 'fixed'
             : 'relative',
-          // bottom: this.inputModeBelongs('expression', 'addition') ? '20px' : inputBottomValue
+          bottom: this.inputModeBelongs('expression', 'addition') ? '20px' : inputBottomValue
         }}
       >
         <View className={styles.panelWrapper}>
@@ -589,7 +591,7 @@ class UserInput extends Component {
                 onFocus={this.handleInputFocus}
                 onBlur={this.handleInputBlur}
                 onConfirm={this.onInputConfirm}
-                onChange={this.handleChange}
+              // onChange={this.handleChange}
               />
             </View>
           )}

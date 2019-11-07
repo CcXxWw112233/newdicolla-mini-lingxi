@@ -80,7 +80,16 @@ export default class taksDetails extends Component {
 
     componentDidHide() { }
 
-    componentWillUnmount() { }
+    componentWillUnmount() {
+        const { sourcePage } = this.state
+        if (sourcePage === 'auccessJoin' || sourcePage === 'sceneEntrance') {
+            const switchTabCurrentPage = 'currentPage_BoardDetail_or_Login'
+            Taro.setStorageSync('switchTabCurrentPage', switchTabCurrentPage);
+            Taro.switchTab({
+                url: `../../pages/calendar/index`
+            })
+        }
+    }
 
     tasksDetailsRealizeStatus = (timeInfo) => {
 

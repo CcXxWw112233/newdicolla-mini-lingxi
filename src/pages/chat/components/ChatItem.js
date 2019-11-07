@@ -10,7 +10,18 @@ import {
   parseEmoji,
   parsePinup
 } from './../../../models/im/utils/parseEmoji.js';
+import { onResendMsg } from './../../../models/im/actions/onResendMsg.js'
+import { connect } from '@tarojs/redux';
 
+@connect(
+  ({
+    im: {
+      currentGroupSessionList,
+    },
+  }) => ({
+    currentGroupSessionList,
+  }),
+)
 class ChatItem extends Component {
   state = {
     isAudioPlaying: false, // 是否正在播放音频消息
@@ -182,6 +193,28 @@ class ChatItem extends Component {
     }
     return `${dateStr === '今天' ? '' : dateStr} ${timeStr}`;
   };
+
+  onResendMessage = (someMsg) => {
+
+    const { currentGroupSessionList } = this.props
+    /**
+     * 重新发送
+     */
+    // 1.1 遍历出失败的那条在本地渲染列表数组中删掉
+    Array.prototype.removeByValue = function (val) {
+      for (var i = 0; i < this.length; i++) {
+        if (JSON.stringify(this[i]).indexOf(JSON.stringify(val)) != -1) {
+          this.splice(i, 1);
+          break;
+        }
+      }
+    };
+    currentGroupSessionList.removeByValue(someMsg);
+
+    // 1.2 把需要重新发送的那条消息重新发送
+    onResendMsg(someMsg)
+  }
+
   render() {
     const {
       flow,
@@ -193,13 +226,16 @@ class ChatItem extends Component {
       file,
       content,
       pushContent,
-      groupNotification
+      groupNotification,
+      status,
+      someMsg,
     } = this.props;
     const isPinupEmoji = pushContent && pushContent === '[贴图表情]';
     const { isAudioPlaying } = this.state;
 
     return (
       <View className={styles.wrapper}>
+
         {(type === 'text' ||
           type === 'audio' ||
           type === 'custom' ||
@@ -237,180 +273,188 @@ class ChatItem extends Component {
                 </View>
                     )}
               </View>
-              <View className={styles.newsWrapper}>
-                {flow === 'in' && (
-                  <View className={styles.newsName}>{fromNick}</View>
-                )}
-                <View
-                  className={`${styles.newsContentWrapper} ${
-                    type === 'custom' && !isPinupEmoji
-                      ? styles.newContentAssistantWrapper
-                      : ''
-                    }`}
-                >
-                  {type === 'text' && (
-                    <View className={styles.newContent}>
-                      {parseEmoji(text).map(i => {
-                        const { categ, cont } = i;
-                        return (
-                          <EmojiItem
-                            key={categ + cont}
-                            categ={isValidEmoji(cont) ? 'emoji' : 'text'}
-                            cont={isValidEmoji(cont) ? isValidEmoji(cont) : cont}
-                          />
-                        );
-                      })}
-                    </View>
-                  )}
-                  {type === 'image' && (
-                    <Image
-                      onClick={() => this.handlePreviewImage(file)}
-                      src={file.url}
-                      style={{
-                        width: this.genImageSize(
-                          file.w,
-                          Number(file.w / file.h),
-                          'w'
-                        ),
-                        height: this.genImageSize(
-                          file.h,
-                          Number(file.w / file.h),
-                          'h'
-                        )
-                      }}
-                      mode='aspectFill'
-                    />
-                  )}
-                  {type === 'custom' && isPinupEmoji && (
-                    <View className={styles.pinupWrapper}>
-                      <Image
-                        src={parsePinup(content)}
-                        style={{ width: '100px', height: '100px' }}
-                      />
-                    </View>
-                  )}
-                  {type === 'custom' && !isPinupEmoji && (
-                    <View className={styles.customNewsWrapper}>
-                      {content && content.data && content.data.d ? (
-                        <View className={styles.customNewsContentWrapper}>
-                          {[JSON.parse(content.data.d)].map(data => {
-                            const {
-                              activityType,
-                              creator,
-                              action,
-                              activityContent,
-                              range
-                            } = parseActivityNewsBody(data);
 
-                            return (
-                              <View
-                                key={data.creatorId}
-                                className={styles.customNewsContent}
-                              >
-                                <Text className={styles.creator}>
-                                  {creator && creator.name
-                                    ? `${creator.name}`
-                                    : ''}
-                                  <Text
-                                    style={{
-                                      display: 'inline-block',
-                                      width: '6px'
-                                    }}
-                                  >
-                                    &nbsp;
+              <View className={styles.messageConcentWrapper}>
+                {
+                  status === 'fail' ? (<View onClick={this.onResendMessage.bind(this, someMsg)}><Text className={`${globalStyles.global_iconfont} ${styles.failWrapper}`}>&#xe848;</Text></View>
+                  ) : ''
+                }
+
+                <View className={styles.newsWrapper}>
+                  {flow === 'in' && (
+                    <View className={styles.newsName}>{fromNick}</View>
+                  )}
+                  <View
+                    className={`${styles.newsContentWrapper} ${
+                      type === 'custom' && !isPinupEmoji
+                        ? styles.newContentAssistantWrapper
+                        : ''
+                      }`}
+                  >
+                    {type === 'text' && (
+                      <View className={styles.newContent}>
+                        {parseEmoji(text).map(i => {
+                          const { categ, cont } = i;
+                          return (
+                            <EmojiItem
+                              key={categ + cont}
+                              categ={isValidEmoji(cont) ? 'emoji' : 'text'}
+                              cont={isValidEmoji(cont) ? isValidEmoji(cont) : cont}
+                            />
+                          );
+                        })}
+                      </View>
+                    )}
+                    {type === 'image' && (
+                      <Image
+                        onClick={() => this.handlePreviewImage(file)}
+                        src={file.url}
+                        style={{
+                          width: this.genImageSize(
+                            file.w,
+                            Number(file.w / file.h),
+                            'w'
+                          ),
+                          height: this.genImageSize(
+                            file.h,
+                            Number(file.w / file.h),
+                            'h'
+                          )
+                        }}
+                        mode='aspectFill'
+                      />
+                    )}
+                    {type === 'custom' && isPinupEmoji && (
+                      <View className={styles.pinupWrapper}>
+                        <Image
+                          src={parsePinup(content)}
+                          style={{ width: '100px', height: '100px' }}
+                        />
+                      </View>
+                    )}
+                    {type === 'custom' && !isPinupEmoji && (
+                      <View className={styles.customNewsWrapper}>
+                        {content && content.data && content.data.d ? (
+                          <View className={styles.customNewsContentWrapper}>
+                            {[JSON.parse(content.data.d)].map(data => {
+                              const {
+                                activityType,
+                                creator,
+                                action,
+                                activityContent,
+                                range
+                              } = parseActivityNewsBody(data);
+
+                              return (
+                                <View
+                                  key={data.creatorId}
+                                  className={styles.customNewsContent}
+                                >
+                                  <Text className={styles.creator}>
+                                    {creator && creator.name
+                                      ? `${creator.name}`
+                                      : ''}
+                                    <Text
+                                      style={{
+                                        display: 'inline-block',
+                                        width: '6px'
+                                      }}
+                                    >
+                                      &nbsp;
                                 </Text>
+                                  </Text>
+                                  {range && range['rangeText'] && (
+                                    <Text
+                                      className={`${styles.range} ${
+                                        range && range['isNavigate']
+                                          ? styles.customNewsNav
+                                          : ''
+                                        }`}
+                                    >
+                                      {range['rangeText'] && range['rangeObj']
+                                        ? range['rangeText'].replace(
+                                          '{placeholder}',
+                                          range['rangeObj']['name']
+                                        )
+                                        : ''}
+                                    </Text>
+                                  )}
+                                  <Text className={styles.action}>
+                                    {action ? `${action}` : ''}
+                                    <Text
+                                      style={{
+                                        display: 'inline-block',
+                                        width: '6px'
+                                      }}
+                                    >
+                                      &nbsp;
                                 </Text>
-                                {range && range['rangeText'] && (
+                                  </Text>
                                   <Text
-                                    className={`${styles.range} ${
-                                      range && range['isNavigate']
+                                    className={`${styles.thing} ${
+                                      activityType === 'card' ||
+                                        activityContent['isNavigate']
                                         ? styles.customNewsNav
                                         : ''
                                       }`}
-                                  >
-                                    {range['rangeText'] && range['rangeObj']
-                                      ? range['rangeText'].replace(
-                                        '{placeholder}',
-                                        range['rangeObj']['name']
+                                    onClick={e =>
+                                      this.handleClickItem(
+                                        e,
+                                        'custom',
+                                        activityType,
+                                        activityContent &&
+                                          activityContent[activityType] &&
+                                          activityContent[activityType]['id']
+                                          ? activityContent[activityType]['id']
+                                          : null
                                       )
-                                      : ''}
-                                  </Text>
-                                )}
-                                <Text className={styles.action}>
-                                  {action ? `${action}` : ''}
-                                  <Text
-                                    style={{
-                                      display: 'inline-block',
-                                      width: '6px'
-                                    }}
+                                    }
                                   >
-                                    &nbsp;
-                                </Text>
-                                </Text>
-                                <Text
-                                  className={`${styles.thing} ${
-                                    activityType === 'card' ||
-                                      activityContent['isNavigate']
-                                      ? styles.customNewsNav
-                                      : ''
-                                    }`}
-                                  onClick={e =>
-                                    this.handleClickItem(
-                                      e,
-                                      'custom',
-                                      activityType,
-                                      activityContent &&
-                                        activityContent[activityType] &&
-                                        activityContent[activityType]['id']
-                                        ? activityContent[activityType]['id']
-                                        : null
-                                    )
-                                  }
-                                >
-                                  {activityContent['contentText']
-                                    ? `“${activityContent['contentText']}”`
-                                    : activityContent[activityType]
-                                      ? `“${activityContent[activityType]['name']}”`
-                                      : ''}
-                                </Text>
-                              </View>
-                            );
-                          })}
-                        </View>
-                      ) : (
-                          <Text>未知消息内容</Text>
-                        )}
-                    </View>
-                  )}
-                  {type === 'audio' && (
-                    <View
-                      className={styles.audioContent}
-                      onClick={() => this.handlePlayAudio(file)}
-                    >
-                      <Text
-                        style={{ width: this.genAudioNewsWidth(file.dur) }}
-                        className={styles.audioDur}
-                      >{`${Math.ceil(file.dur / 1000)}" `}</Text>
-                      <View
-                        className={`${globalStyles.global_iconfont} ${
-                          styles.audioIcon
-                          } ${
-                          isAudioPlaying
-                            ? flow === 'in'
-                              ? styles.audioIconPlayingIn
-                              : styles.audioIconPlayingOut
-                            : ''
-                          }`}
-                        style={{
-                          fontSize: '18px',
-                          color: flow === 'in' ? '#313D40' : '#FFFBFE'
-                        }}
-                      >
-                        {/* &#xe656; */}
+                                    {activityContent['contentText']
+                                      ? `“${activityContent['contentText']}”`
+                                      : activityContent[activityType]
+                                        ? `“${activityContent[activityType]['name']}”`
+                                        : ''}
+                                  </Text>
+                                </View>
+                              );
+                            })}
+                          </View>
+                        ) : (
+                            <Text>未知消息内容</Text>
+                          )}
                       </View>
-                    </View>
-                  )}
-                  <View className={styles.newsContentBubble} />
+                    )}
+                    {type === 'audio' && (
+                      <View
+                        className={styles.audioContent}
+                        onClick={() => this.handlePlayAudio(file)}
+                      >
+                        <Text
+                          style={{ width: this.genAudioNewsWidth(file.dur) }}
+                          className={styles.audioDur}
+                        >{`${Math.ceil(file.dur / 1000)}" `}</Text>
+                        <View
+                          className={`${globalStyles.global_iconfont} ${
+                            styles.audioIcon
+                            } ${
+                            isAudioPlaying
+                              ? flow === 'in'
+                                ? styles.audioIconPlayingIn
+                                : styles.audioIconPlayingOut
+                              : ''
+                            }`}
+                          style={{
+                            fontSize: '18px',
+                            color: flow === 'in' ? '#313D40' : '#FFFBFE'
+                          }}
+                        >
+                          {/* &#xe656; */}
+                        </View>
+                      </View>
+                    )}
+                    <View className={styles.newsContentBubble} />
+                  </View>
                 </View>
               </View>
             </View>
@@ -453,7 +497,8 @@ ChatItem.defaultProps = {
     }
   },
   pushContent: '', //如果是 pinup 类型的表情就会有该字段
-  groupNotification: '' //如果是 notification 类型，那么会有该字段
+  groupNotification: '', //如果是 notification 类型，那么会有该字段
+  someMsg: {},  //消息内容
 };
 
 export default ChatItem;

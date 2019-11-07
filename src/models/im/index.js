@@ -17,22 +17,29 @@ import { isApiResponseOk } from './../../utils/request';
 import { onMsg, onTeams } from './actions/index';
 
 function onSendMsgDone(error, msg) {
+  console.log('消息未发出_错误:', error, msg);
+
+  Taro.hideLoading()
+
   if (error) {
-    // 被拉黑
+    // 被拉黑
     if (error.code === 7101) {
-      msg.status = 'success';
+      msg.status = 'fail';
       alert(error.message);
     } else {
-      Taro.showToast({
-        // title: `发送消息失败: ${String(error)}`,
-        title: `发送消息失败: 请重发`,
-        icon: 'none',
-        duration: 2000,
-      });
+      // Taro.showToast({
+      //   // title: `发送消息失败: ${String(error)}`,
+      //   title: `消息未发出: 请重发`,
+      //   icon: 'none',
+      //   duration: 2000,
+      // });
 
-      /***
-       * 消息发送失败, 重新连接, 并提示用户再次发送
-       */
+      msg.status = 'fail';
+      onMsg(msg);
+
+      /***
+       * 消息发送失败, 重新连接, 并提示用户再次发送
+       */
       const { globalData: { store: { getState } } } = Taro.getApp()
       const { im: { nim } } = getState()
       if (nim) {
@@ -46,12 +53,13 @@ function onSendMsgDone(error, msg) {
         })
       }
     }
-
     return;
   }
   msg.status = 'success';
   onMsg(msg);
 }
+
+export { onSendMsgDone };
 
 export default {
   namespace: 'im',

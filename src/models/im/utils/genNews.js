@@ -8,9 +8,39 @@ const getAvatarByFromNick = (fromImId, currentBoard = { users: [] }) => {
   if (fromImId === '10086') {
     return assistantAvatar;
   }
-  let ret = currentBoard && currentBoard.users.find(i => i.id === fromImId );
+  let ret = currentBoard && currentBoard.users.find(i => i.id === fromImId);
   return ret ? ret.avatar : '';
 };
+
+// const genNews = (msg, currentBoard) => {
+//   const {
+//     time,
+//     flow,
+//     from,
+//     fromNick,
+//     status,
+//     type,
+//     text = '',
+//     file = {},
+//     content,
+//     pushContent,
+//     groupNotification
+//   } = msg;
+
+//   return {
+//     flow,
+//     fromNick,
+//     avatar: getAvatarByFromNick(from, currentBoard),
+//     status,
+//     time,
+//     type,
+//     text,
+//     file,
+//     content: content ? JSON.parse(content) : '',
+//     pushContent,
+//     groupNotification
+//   };
+// };
 
 const genNews = (msg, currentBoard) => {
   const {
@@ -24,7 +54,29 @@ const genNews = (msg, currentBoard) => {
     file = {},
     content,
     pushContent,
-    groupNotification
+    groupNotification,
+
+    cc,
+    fromClientType,
+    fromDeviceId,
+    idClient,
+    idServer,
+    isHistoryable,
+    isLocal,
+    isOfflinable,
+    isPushable,
+    isReplyMsg,
+    isRoamingable,
+    isSyncable,
+    isUnreadable,
+    needMsgReceipt,
+    needPushNick,
+    resend,
+    scene,
+    sessionId,
+    target,
+    to,
+    userUpdateTime,
   } = msg;
 
   return {
@@ -38,9 +90,32 @@ const genNews = (msg, currentBoard) => {
     file,
     content: content ? JSON.parse(content) : '',
     pushContent,
-    groupNotification
+    groupNotification,
+
+    cc,
+    fromClientType,
+    fromDeviceId,
+    idClient,
+    idServer,
+    isHistoryable,
+    isLocal,
+    isOfflinable,
+    isPushable,
+    isReplyMsg,
+    isRoamingable,
+    isSyncable,
+    isUnreadable,
+    needMsgReceipt,
+    needPushNick,
+    resend,
+    scene,
+    sessionId,
+    target,
+    to,
+    userUpdateTime,
   };
 };
+
 
 const isValidMsg = msg => {
   const { scene, type, custom, content } = msg;

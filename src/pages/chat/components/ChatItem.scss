@@ -162,42 +162,53 @@
       margin-left: 16px;
     }
 
-    .newsWrapper {
-      .newsContentWrapper {
-        background: linear-gradient(270deg,
-            rgba(22, 184, 252, 1) 0%,
-            rgba(24, 144, 255, 1) 100%);
+    .messageConcentWrapper {
+      display    : flex;
+      align-items: center;
 
-        .newContent {
-          font-size  : 32px;
-          font-weight: 400;
-          color      : rgba(255, 255, 255, 1);
-          line-height: 48px;
-        }
+      .failWrapper {
+        font-size   : pxTrans(20);
+        margin-right: 10px;
+        color       : #F5222D;
+      }
 
-        .audioContent {
-          .audioDur {
-            color     : rgba(255, 255, 255, 1);
-            text-align: right;
+      .newsWrapper {
+        .newsContentWrapper {
+          background: linear-gradient(270deg,
+              rgba(22, 184, 252, 1) 0%,
+              rgba(24, 144, 255, 1) 100%);
+
+          .newContent {
+            font-size  : 32px;
+            font-weight: 400;
+            color      : rgba(255, 255, 255, 1);
+            line-height: 48px;
           }
 
-          .audioIcon {
-            width              : 36px;
-            height             : 36px;
-            background         : url(./../../../asset/chat/broadcastOut3.png);
-            background-repeat  : no-repeat;
-            background-size    : contain;
-            background-position: center center;
-          }
-        }
+          .audioContent {
+            .audioDur {
+              color     : rgba(255, 255, 255, 1);
+              text-align: right;
+            }
 
-        .newsContentBubble {
-          z-index   : -1;
-          position  : absolute;
-          top       : 20px;
-          right     : -8px;
-          transform : rotate(45deg);
-          background: rgba(22, 184, 252, 1);
+            .audioIcon {
+              width              : 36px;
+              height             : 36px;
+              background         : url(./../../../asset/chat/broadcastOut3.png);
+              background-repeat  : no-repeat;
+              background-size    : contain;
+              background-position: center center;
+            }
+          }
+
+          .newsContentBubble {
+            z-index   : -1;
+            position  : absolute;
+            top       : 20px;
+            right     : -8px;
+            transform : rotate(45deg);
+            background: rgba(22, 184, 252, 1);
+          }
         }
       }
     }

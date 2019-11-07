@@ -29,6 +29,7 @@ import onCustomSysMsg from './onCustomSysMsg'
 import onBroadcastMsg from './onBroadcastMsg'
 import onBroadcastMsgs from './onBroadcastMsgs'
 import onPushEvents from './onPushEvents'
+import onResendMsg from './onResendMsg'
 
 export {
   onDisconnect,
@@ -62,4 +63,5 @@ export {
   onBroadcastMsg,
   onBroadcastMsgs,
   onPushEvents,
+  onResendMsg,
 }

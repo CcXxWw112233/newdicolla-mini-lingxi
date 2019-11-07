@@ -142,7 +142,7 @@ export default {
             url: '../../pages/errorPage/index'
           })
         } else {
-          console.log('sceneEntrance页面其他场景...');
+          Taro.switchTab({ url: `../../pages/calendar/index` })
         }
         Taro.removeStorageSync('sceneEntrance_Goto_Other')
       }

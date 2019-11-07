@@ -10,8 +10,11 @@ import {
 } from './../utils/genNews.js';
 import { handleGlobalNewsPush } from './../utils/activityHandle.js';
 
+//收到的消息
 function onMsg(msg) {
-  console.log("OnMsg",onMsg);
+  // console.log("OnMsg", onMsg);
+  console.log('收到消息', msg.scene, msg.type, msg);
+
   const {
     globalData: {
       store: { dispatch, getState }
@@ -24,6 +27,7 @@ function onMsg(msg) {
   } = getState();
 
   let tempState = Object.assign({}, state);
+
   tempState.rawMessageList = Object.assign({}, tempState.rawMessageList);
   // 自己的退群消息就不记录、展示了
   if (msg && msg.type === 'notification') {
@@ -54,6 +58,7 @@ function onMsg(msg) {
     //那么就整合数据
     const mergeNews = () => {
       if (isValidMsg(msg, tempState.currentChatTo) || isPinupEmojiNews(msg) || isNotificationNews(msg)) {
+
         const { currentBoard } = tempState;
         tempState.currentGroupSessionList = [
           ...tempState.currentGroupSessionList,

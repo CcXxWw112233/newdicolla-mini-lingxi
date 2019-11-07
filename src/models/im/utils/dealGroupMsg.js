@@ -22,7 +22,7 @@ function getMsgKey(msg, tempState, selfAccount) {
   return obj
 }
 function dealMsg(msg, tempState, selfAccount) {
-  //console.log("KKKK",msg);
+  // console.log("KKKK", msg);
   var msgKey = getMsgKey(msg, tempState, selfAccount)
 
   console.log("tempState", tempState);
@@ -43,17 +43,17 @@ function dealMsg(msg, tempState, selfAccount) {
       break;
     case 'addTeamMembers':
 
-      msg.groupNotification = msgKey.showNick + '邀请' + getAccountNicknames(msgKey,tempState).join(",") + '进入了' + msgKey.teamType
+      msg.groupNotification = msgKey.showNick + '邀请' + getAccountNicknames(msgKey, tempState).join(",") + '进入了' + msgKey.teamType
       if (tempState) {
         onAddTeamMembers(msg, msgKey, tempState)
       }
       break;
     case 'removeTeamMembers':
-  
+
       if (msgKey.from === msgKey.accounts.join('，')) {
-        msg.groupNotification = getAccountNicknames(msgKey,tempState).join(",") + '退出了' + msgKey.teamType
+        msg.groupNotification = getAccountNicknames(msgKey, tempState).join(",") + '退出了' + msgKey.teamType
       } else {
-        msg.groupNotification = msgKey.showNick + '将' + getAccountNicknames(msgKey,tempState).join(",") + '移出了' + msgKey.teamType
+        msg.groupNotification = msgKey.showNick + '将' + getAccountNicknames(msgKey, tempState).join(",") + '移出了' + msgKey.teamType
       }
       if (tempState) {
         onRemoveTeamMembers(msg, msgKey, tempState)
@@ -70,12 +70,12 @@ function dealMsg(msg, tempState, selfAccount) {
       }
       break;
     case 'addTeamManagers':
-     
-      msg.groupNotification = msgKey.showNick + '将' + getAccountNicknames(msgKey,tempState).join(",") + '设置为管理员'
+
+      msg.groupNotification = msgKey.showNick + '将' + getAccountNicknames(msgKey, tempState).join(",") + '设置为管理员'
       break;
     case 'removeTeamManagers':
-     
-      msg.groupNotification = msgKey.showNick + '取消了' + getAccountNicknames(msgKey,tempState).join(",") + '管理员身份'
+
+      msg.groupNotification = msgKey.showNick + '取消了' + getAccountNicknames(msgKey, tempState).join(",") + '管理员身份'
       break;
     case 'leaveTeam':
       msg.groupNotification = msgKey.showNick + '退出了' + msgKey.teamType
@@ -269,15 +269,15 @@ function getAccountNicknames(msgKey, tempState) {
   let { allBoardList } = tempState;
   let teamInfo = allBoardList.find(i => i.im_id === msgKey.teamId);
   let accountNicknames = [];
-  if (teamInfo&&teamInfo.users) {
+  if (teamInfo && teamInfo.users) {
     for (let accountId of msgKey.accounts) {
       let accountNickName = teamInfo.users.find(i => i.id === accountId);
-      if(accountNickName){
+      if (accountNickName) {
         accountNicknames.push(accountNickName.name);
-      }else{
+      } else {
         accountNicknames.push(accountId);
       }
-    
+
     }
 
   }

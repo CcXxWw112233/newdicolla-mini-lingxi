@@ -79,7 +79,7 @@ class ChatContent extends Component {
     console.log('chat content on scroll to upper...');
   };
   onScroll = () => {
-    console.log('on scroll...........................');
+    // console.log('on scroll...........................');
   };
   onScrollViewTouchStart = () => {
     this.setState(
@@ -169,14 +169,43 @@ class ChatContent extends Component {
     //导致更新现有消息的消息列表只能在 nim 的  onMsg 的方法回调中处理
     this.updateScrollViewPosition(nextProps);
   }
+
   componentDidShow() {
     // 当进入聊天页面的时候，生成该群或者对话的聊天信息流
+
+    // const { dispatch } = this.props;
+    // dispatch({
+    //   type: 'im/updateStateFieldByCover',
+    //   payload: {
+    //     currentGroupSessionList: this.genCurrentGroupSessionList()
+    //   },
+    //   desc: 'init currentGroupSessionList'
+    // });
+
+    // 当进入聊天页面的时候，生成该群或者对话的聊天信息流
+    // 遍历循环删除失败的消息(暂时解决方法)
+
+    // const pageSource_chat = Taro.getStorageSync('pageSource_chat')
+    let getCurrentGroupSessionList = []
+    // if (pageSource_chat === 'chat') {
+    // Taro.removeStorageSync('pageSource_chat')
+    getCurrentGroupSessionList = this.genCurrentGroupSessionList()
+    for (var i = getCurrentGroupSessionList.length - 1; i >= 0; i--) {
+      if (getCurrentGroupSessionList[i].status === 'fail') {
+        getCurrentGroupSessionList.splice(i, 1);
+      }
+    }
+    // } else {
+    //   getCurrentGroupSessionList = this.genCurrentGroupSessionList()
+    // }
+
+
 
     const { dispatch } = this.props;
     dispatch({
       type: 'im/updateStateFieldByCover',
       payload: {
-        currentGroupSessionList: this.genCurrentGroupSessionList()
+        currentGroupSessionList: getCurrentGroupSessionList
       },
       desc: 'init currentGroupSessionList'
     });
@@ -189,6 +218,7 @@ class ChatContent extends Component {
     } = this.props;
     const { scrollIntoViewEleId, chatConetntViewHeightStyle } = this.state;
     // console.log("isUserInputHeightChange",isUserInputHeightChange);
+    console.log(currentGroupSessionList, '渲染消息列表的数组');
 
     // console.log(scrollIntoViewEleId);
     return (
@@ -248,6 +278,7 @@ class ChatContent extends Component {
                   content={i.content}
                   pushContent={i.pushContent}
                   groupNotification={i.groupNotification}
+                  someMsg={i}
                 />
               </View>
             );
