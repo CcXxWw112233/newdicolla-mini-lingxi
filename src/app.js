@@ -51,6 +51,7 @@ class App extends Component {
       // 'pages/DateTimePicker/index',
       'pages/sceneEntrance/index',
       'pages/errorPage/index',
+      'pages/file/index'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -77,8 +78,8 @@ class App extends Component {
           "selectedIconPath": './asset/tabBar/board_selected.png',
         },
         {
-          "pagePath": "pages/personalCenter/index",
-          "text": "我的",
+          "pagePath": "pages/file/index",
+          "text": "文件",
           "iconPath": './asset/tabBar/personal.png',
           "selectedIconPath": './asset/tabBar/personal_selected.png',
         }

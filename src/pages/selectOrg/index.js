@@ -13,17 +13,17 @@ export default class selectOrg extends Component {
     navigationBarTitleText: '选择组织'
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
 
   }
 
-  componentWillUnmount () { }
+  componentWillUnmount() { }
 
-  componentDidShow () {
+  componentDidShow() {
     this.getCurrentUserOrgs()
   }
 
-  componentDidHide () { }
+  componentDidHide() { }
 
   getCurrentUserOrgs = () => {
     const { dispatch } = this.props
@@ -45,7 +45,7 @@ export default class selectOrg extends Component {
 
   }
 
-  render () {
+  render() {
     const { org_list = [] } = this.props.my
     const { account_info = {} } = this.props.accountInfo
     const { user_set = {} } = account_info

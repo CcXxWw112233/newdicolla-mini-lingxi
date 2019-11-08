@@ -9,20 +9,20 @@ export default class SearchAndMenu extends Component {
     search_mask_show: '0', /// 0默认 1 淡入 2淡出
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     const { search_mask_show } = nextProps
     this.setState({
       search_mask_show
     })
   }
 
-  componentWillUnmount () { }
+  componentWillUnmount() { }
 
-  componentDidShow () {
+  componentDidShow() {
 
   }
 
-  componentDidHide () { }
+  componentDidHide() { }
 
   onSelectType = () => {
     this.setSearchMaskShow()
@@ -31,19 +31,19 @@ export default class SearchAndMenu extends Component {
   setSearchMaskShow() {
     const { search_mask_show } = this.props
     let show_flag = '0'
-    if('0' == search_mask_show) {
+    if ('0' == search_mask_show) {
       show_flag = '1'
-    }else if('1' == search_mask_show) {
+    } else if ('1' == search_mask_show) {
       show_flag = '2'
-    }else if('2' == search_mask_show) {
+    } else if ('2' == search_mask_show) {
       show_flag = '1'
-    }else {
+    } else {
 
     }
-    this.props.onSelectType && this.props.onSelectType({show_type: show_flag})
+    this.props.onSelectType && this.props.onSelectType({ show_type: show_flag })
   }
   quitCoperate = () => {
-    this.props.onSelectType && this.props.onSelectType({show_type: '2'})
+    this.props.onSelectType && this.props.onSelectType({ show_type: '2' })
   }
   onSearchFocus = () => {
     Taro.showToast({
@@ -51,7 +51,7 @@ export default class SearchAndMenu extends Component {
       icon: 'none'
     })
   }
-  render () {
+  render() {
     const { search_mask_show } = this.state
     return (
       <View>
