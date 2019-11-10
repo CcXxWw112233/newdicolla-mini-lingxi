@@ -77,6 +77,12 @@ class App extends Component {
           "iconPath": './asset/tabBar/board.png',
           "selectedIconPath": './asset/tabBar/board_selected.png',
         },
+        // {
+        //   "pagePath": "pages/file/index",
+        //   "text": "文件",
+        //   "iconPath": './asset/tabBar/personal.png',
+        //   "selectedIconPath": './asset/tabBar/personal_selected.png',
+        // }
         {
           "pagePath": "pages/file/index",
           "text": "文件",

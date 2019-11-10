@@ -13,22 +13,22 @@ export default class My extends Component {
     navigationBarTitleText: '我的'
   }
 
-  componentWillReceiveProps () {
+  componentWillReceiveProps() {
   }
 
-  componentWillUnmount () { }
+  componentWillUnmount() { }
 
-  componentDidShow () {
+  componentDidShow() {
     this.getAccountInfo()
   }
 
-  componentDidHide () { }
+  componentDidHide() { }
 
   //获取用户信息
   getAccountInfo() {
     const { dispatch, accountInfo } = this.props
-    const { account_info = {}} = accountInfo
-    if(JSON.stringify(account_info) == '{}') {
+    const { account_info = {} } = accountInfo
+    if (JSON.stringify(account_info) == '{}') {
       dispatch({
         type: 'accountInfo/getAccountInfo',
         payload: {}
@@ -36,13 +36,13 @@ export default class My extends Component {
     }
   }
 
-  gotoAccountDetail = ()=> {
+  gotoAccountDetail = () => {
     Taro.navigateTo({
       url: '../../pages/personalCenter/index'
     })
   }
 
-  render () {
+  render() {
     const { account_info = {} } = this.props.accountInfo
     const { avatar, name, user_set = {} } = account_info
     const { org_name, current_org } = user_set

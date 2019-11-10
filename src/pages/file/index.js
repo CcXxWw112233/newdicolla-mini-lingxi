@@ -13,7 +13,8 @@ import { filterFileFormatType } from '../../../utils/util';
 }))
 export default class File extends Component {
     config = {
-        navigationBarTitleText: '文件'
+        navigationBarTitleText: '文件',
+        "onReachBottomDistance": 50,  //默认值50
     }
     componentDidMount() {
         const { dispatch } = this.props
@@ -36,6 +37,18 @@ export default class File extends Component {
 
     componentWillUnmount() { }
 
+    onReachBottom() {
+        const { dispatch } = this.props
+
+        dispatch({
+            type: 'file/updateDatas',
+            payload: {
+
+            }
+        })
+
+    }
+
     onSelectType = ({ show_type }) => {
         this.setState({
             show_card_type_select: show_type,
@@ -49,8 +62,6 @@ export default class File extends Component {
 
     goFileDetails = (value) => {
         const { file_id } = value
-        console.log(file_id, 'sssss');
-
         const { dispatch } = this.props
         dispatch({
             type: 'file/getFileDetails',
@@ -58,98 +69,6 @@ export default class File extends Component {
                 id: file_id,
             },
         })
-    }
-
-    distinguishFileType = (fileName) => {
-        let themeCode = '';
-        const type = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
-        switch (type) {
-            case '.3dm':
-                themeCode = '';
-                break
-            case '.iges':
-                themeCode = '&#xe658;';
-                break
-            case '.obj':
-                themeCode = '&#xe65b;';
-                break
-            case '.ma':
-                themeCode = '&#xe65f;';
-                break
-            case '.mb':
-                themeCode = '&#xe64f;';
-                break
-            case '.skp':
-                themeCode = '';
-                break
-            case '.dwg':
-                themeCode = '&#xe64c;';
-                break
-            case '.psd':
-                themeCode = '&#xe65d;';
-                break
-            case '.pdf':
-                themeCode = '&#xe651;';
-                break
-            case '.doc':
-                themeCode = '&#xe64d;';
-                break
-            case '.xls':
-                themeCode = '&#xe65e;';
-                break
-            case '.ppt':
-                themeCode = '&#xe655;';
-                break
-            case '.docx':
-                themeCode = '&#xe64a;';
-                break
-            case '.xlsx':
-                themeCode = '&#xe65c;';
-                break
-            case '.pptx':
-                themeCode = '&#xe650;';
-                break
-            case '.key':
-                themeCode = '&#xe64e;';
-                break
-            case '.jpg':
-                themeCode = '&#xe653;';
-                break
-            case '.jpeg':
-                themeCode = '&#xe659;';
-                break
-            case '.png':
-                themeCode = '&#xe69a;';
-                break
-            case '.gif':
-                themeCode = '&#xe657;';
-                break
-            case '.mp4':
-                themeCode = '';
-                break
-            case '.mp3':
-                themeCode = '';
-                break
-            case '.txt':
-                themeCode = '&#xe654;';
-                break
-            case '.rar':
-                themeCode = '';
-                break
-            case '.zip':
-                themeCode = '';
-                break
-            case '.7z':
-                themeCode = '';
-                break
-            case '.gz':
-                themeCode = '';
-                break
-            default:
-                themeCode = '&#xe660;'; // 未识别类型显示
-                break
-        }
-        return themeCode;
     }
 
     render() {
@@ -175,7 +94,7 @@ export default class File extends Component {
                 <View className={indexStyles.grid_style}>
                     {file_list.map((value, key) => {
                         const { thumbnail_url } = value
-                        const fileType = this.distinguishFileType(value.file_name)
+                        // const fileType = this.distinguishFileType(value.file_name)
                         return (
                             <View className={indexStyles.lattice_style} onClick={this.goFileDetails.bind(this, value)} >
                                 {
@@ -184,7 +103,7 @@ export default class File extends Component {
                                         </Image>)
                                         :
                                         (<View>
-                                            <Text className={`${globalStyle.global_iconfont} ${indexStyles.folder_Path_icon}`} dangerouslySetInnerHTML={{ __html: distinguishFileType(value.file_name) }}></Text>
+                                            <Text className={`${globalStyle.global_iconfont} ${indexStyles.folder_Path_icon}`}></Text>
                                             <View>{value.file_name}</View>
                                         </View>)
                                 }
