@@ -79,7 +79,7 @@ export default class File extends Component {
             <View className={indexStyles.index}>
                 {/* <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={'0'} /> */}
 
-                <View className={indexStyles.head_background}>
+                {/* <View className={indexStyles.head_background}>
                     <Image src={file_head_background} className={indexStyles.image_head_background} />
 
                     <View className={indexStyles.hear_function}>
@@ -87,9 +87,9 @@ export default class File extends Component {
                             <Text className={`${globalStyle.global_iconfont} ${indexStyles.folder_Path_icon}`}>&#xe6c6;</Text>
                             <View>全部文件</View>
                         </View>
-                        {/* <View>相册/相机</View> */}
+                        <View>相册/相机</View>
                     </View>
-                </View>
+                </View> */}
 
                 <View className={indexStyles.grid_style}>
                     {file_list.map((value, key) => {

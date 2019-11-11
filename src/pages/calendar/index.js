@@ -22,7 +22,6 @@ export default class Calendar extends Component {
   state = {
     show_card_type_select: '0',
     search_mask_show: '0',
-    is_mask_show_personalCenter: false, //是否显示个人中心
   }
 
   config = {
@@ -257,24 +256,33 @@ export default class Calendar extends Component {
     initImData().catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
   }
 
-  showPersonalCenter = () => {
-    this.setState({
-      is_mask_show_personalCenter: !this.state.is_mask_show_personalCenter
+  showPersonalCenter = (value) => {
+    //子组件传值到父组件,去改变state里面值的时候, value不能用this.setState,is_mask_show_personalCenter
+    // this.setState({
+    //   is_mask_show_personalCenter: value
+    // })
+
+    const { dispatch } = this.props
+    dispatch({
+      type: 'accountInfo/updateDatas',
+      payload: {
+        is_mask_show_personalCenter: value
+      }
     })
   }
 
   render() {
-    const { show_card_type_select, search_mask_show, is_mask_show_personalCenter, } = this.state
+    const { show_card_type_select, search_mask_show, } = this.state
     const { no_sche_card_list = [] } = this.props
 
-    const { account_info = {} } = this.props.accountInfo
+    const { account_info = {}, is_mask_show_personalCenter } = this.props.accountInfo
     const { avatar } = account_info
 
     return (
       <View className={indexStyles.view_style}>
-        <CustomNavigation home_personal_center='homePersonalCenter' personal_center_image={avatar} showPersonalCenter={() => this.showPersonalCenter()} />
+        <CustomNavigation home_personal_center='homePersonalCenter' personal_center_image={avatar} showPersonalCenter={() => this.showPersonalCenter(true)} />
 
-        {is_mask_show_personalCenter && is_mask_show_personalCenter === false ? <PersonalCenter account_info={account_info} closePersonalCenter={() => this.showPersonalCenter()} />
+        {is_mask_show_personalCenter && is_mask_show_personalCenter === true ? <PersonalCenter account_info={account_info} closePersonalCenter={() => this.showPersonalCenter(false)} />
           : ''}
 
         <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
