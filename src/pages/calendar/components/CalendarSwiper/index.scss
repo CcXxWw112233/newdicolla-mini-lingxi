@@ -22,21 +22,25 @@
 
 @keyframes calendar_back_all {
   from {
-    height: pxTrans(140);
+    // height: pxTrans(140);
+    height   : pxTrans(100);
   }
 
   to {
-    height: pxTrans(340);
+    // height: pxTrans(340);
+    height   : pxTrans(100);
   }
 }
 
 @keyframes calendar_back_part {
   from {
-    height: pxTrans(340);
+    // height: pxTrans(340);
+    height   : pxTrans(100);
   }
 
   to {
-    height: pxTrans(140);
+    // height: pxTrans(140);
+    height   : pxTrans(100);
   }
 }
 
@@ -77,17 +81,20 @@
 
 //日历组件底部背景
 .calendar_back_nomal {
-  height: pxTrans(340);
+  // height: pxTrans(340);
+  height   : pxTrans(100);
 }
 
 .calendar_back_all {
-  height   : pxTrans(340);
-  animation: calendar_back_all 0.5s ease;
+  // height   : pxTrans(340);
+  height      : pxTrans(100);
+  animation   : calendar_back_all 0.5s ease;
 }
 
 .calendar_back_part {
-  height   : pxTrans(140);
-  animation: calendar_back_part 0.5s ease;
+  // height   : pxTrans(140);
+  height      : pxTrans(100);
+  animation   : calendar_back_part 0.5s ease;
 }
 
 //查看日历形态按钮
@@ -107,14 +114,14 @@
 
 //基本组件样式
 .calendar_out {
-  height          : auto;
-  background-color: $bg_color_1;
-  position        : fixed;
-  z-index         : 4;
-  top             : pxTrans(44);
-  padding-bottom  : pxTrans(6);
-  width           : 100%;
-  box-shadow      : 0 pxTrans(1) pxTrans(2) rgba(0, 0, 0, 0.15);
+  height             : auto;
+  background-color   : $bg_color_1;
+  // position        : fixed;
+  z-index            : 4;
+  top                : pxTrans(44);
+  padding-bottom     : pxTrans(6);
+  width              : 100%;
+  box-shadow         : 0 pxTrans(1) pxTrans(2) rgba(0, 0, 0, 0.15);
 
   .month_area_swiper {
     //height: pxTrans(270);

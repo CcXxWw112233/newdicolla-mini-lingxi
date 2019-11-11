@@ -139,7 +139,6 @@ export default class Calendar extends Component {
   getAccountInfo() {
     const { dispatch, accountInfo } = this.props
     const { account_info = {} } = accountInfo
-
     if (JSON.stringify(account_info) == '{}') {
       dispatch({
         type: 'accountInfo/getAccountInfo',
@@ -278,15 +277,20 @@ export default class Calendar extends Component {
     const { account_info = {}, is_mask_show_personalCenter } = this.props.accountInfo
     const { avatar } = account_info
 
+    const SystemInfo = Taro.getSystemInfoSync()
+    const statusBar_Height = SystemInfo.statusBarHeight
+    const navBar_Height = SystemInfo.platform == 'ios' ? 44 : 48
+
     return (
       <View className={indexStyles.view_style}>
-        <CustomNavigation home_personal_center='homePersonalCenter' personal_center_image={avatar} showPersonalCenter={() => this.showPersonalCenter(true)} />
+        <CustomNavigation home_personal_center='homePersonalCenter' personal_center_image={avatar} showPersonalCenter={() => this.showPersonalCenter(true)} title='日历' />
 
         {is_mask_show_personalCenter && is_mask_show_personalCenter === true ? <PersonalCenter account_info={account_info} closePersonalCenter={() => this.showPersonalCenter(false)} />
           : ''}
-
-        <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
-        <CalendarSwiper />
+        <View style={{ position: 'sticky', top: `${statusBar_Height + navBar_Height}` + 'px', zIndex: 15, left: 0 }}>
+          <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
+          <CalendarSwiper />
+        </View>
         <CardTypeSelect show_card_type_select={show_card_type_select} onSelectType={this.onSelectType} schedule={'1'} />
         <MilestoneList schedule={'1'} />
         {no_sche_card_list.length && (

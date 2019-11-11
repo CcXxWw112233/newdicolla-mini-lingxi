@@ -1,5 +1,7 @@
 @import "../../../../gloalSet/styles/constant.scss";
 
+
+
 .mask {
     margin-top: 0%;
     height    : 100%;
@@ -48,6 +50,8 @@
             height       : pxTrans(72);
             border-radius: pxTrans(72);
             top          : 0;
+            font-size    : pxTrans(55);
+            border       : 1px solid rgba(0, 0, 0, 0.15);
         }
 
         .nick_name_style {

@@ -38,6 +38,13 @@ export default class PersonalCenter extends Component {
                 nim: null
             }
         });
+
+        dispatch({
+            type: 'accountInfo/updateDatas',
+            payload: {
+                is_mask_show_personalCenter: false
+            }
+        })
     }
 
     render() {
@@ -57,7 +64,13 @@ export default class PersonalCenter extends Component {
                         <Text className={`${globalStyles.global_iconfont}`}>&#xe7fc;</Text>
                     </View>
                     <View className={indexStyles.personal_center_content}>
-                        <Image className={indexStyles.avatar_image_style} src={avatar}></Image>
+                        {
+                            avatar ? (
+                                <Image className={indexStyles.avatar_image_style} src={avatar}></Image>
+                            ) : (
+                                    <Text className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}>&#xe647;</Text>
+                                )
+                        }
                         <View className={indexStyles.nick_name_style}>{name}</View>
                         <View className={indexStyles.account_style}>
                             <Text>{email}\n{mobile}</Text>

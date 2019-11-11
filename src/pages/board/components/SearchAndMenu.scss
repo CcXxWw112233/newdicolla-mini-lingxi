@@ -1,17 +1,17 @@
 @import "../../../gloalSet/styles/constant";
 
 .search_memu_out {
-  position   : fixed;
-  z-index    : 10;
-  width      : 100%;
-  box-sizing : border-box;
-  left       : 0;
-  top        : 0;
-  height     : pxTrans(44);
-  background : rgba(255, 255, 255, 1);
-  box-shadow : 0 pxTrans(1) pxTrans(2) 0 rgba(0, 0, 0, 0.15);
-  display    : flex;
-  align-items: center;
+  // position   : fixed;
+  z-index       : 10;
+  width         : 100%;
+  box-sizing    : border-box;
+  left          : 0;
+  top           : 0;
+  height        : pxTrans(44);
+  background    : rgba(255, 255, 255, 1);
+  box-shadow    : 0 pxTrans(1) pxTrans(2) 0 rgba(0, 0, 0, 0.15);
+  display       : flex;
+  align-items   : center;
 
   .search_area {
     flex         : 1;
@@ -53,7 +53,7 @@
 }
 
 .search_memu_out_back {
-  height: pxTrans(44);
+  // height: pxTrans(44);
 }
 
 .mask {

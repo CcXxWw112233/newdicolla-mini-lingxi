@@ -26,19 +26,19 @@
   }
 
   .plusTasks {
-    display         : flex;
-    justify-content : center;
-    align-items     : center;
-    background-color: $color_theme;
-    color           : $color_5;
-    margin          : 0 auto;
-    width           : pxTrans(40);
-    height          : pxTrans(40);
-    line-height     : pxTrans(40);
-    border-radius   : pxTrans(40);
-    position        : fixed;
-    right           : pxTrans(16);
-    bottom          : pxTrans(16);
+    display            : flex;
+    justify-content    : center;
+    align-items        : center;
+    background-color   : $color_theme;
+    color              : $color_5;
+    margin             : 0 auto;
+    width              : pxTrans(40);
+    height             : pxTrans(40);
+    line-height        : pxTrans(40);
+    border-radius      : pxTrans(40);
+    // position        : fixed;
+    right              : pxTrans(16);
+    bottom             : pxTrans(16);
   }
 
 }

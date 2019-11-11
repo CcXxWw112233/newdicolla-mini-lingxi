@@ -1,11 +1,12 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text, Image } from '@tarojs/components'
+import { View, Text, Image, RichText } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import file_head_background from '../../asset/file/file_head_background.png'
 import { connect } from '@tarojs/redux'
 import SearchAndMenu from '../board/components/SearchAndMenu'
-import { filterFileFormatType } from '../../../utils/util';
+import { filterFileFormatType } from './../../utils/util';
+import file_list_empty from '../../asset/file/file_list_empty.png'
 
 
 @connect(({ file: { file_list = [], } }) => ({
@@ -16,7 +17,9 @@ export default class File extends Component {
         navigationBarTitleText: '文件',
         "onReachBottomDistance": 50,  //默认值50
     }
-    componentDidMount() {
+    componentDidMount() { }
+
+    componentDidShow() {
         const { dispatch } = this.props
         dispatch({
             type: 'file/getFilePage',
@@ -29,7 +32,6 @@ export default class File extends Component {
             },
         })
     }
-    componentDidShow() { }
 
     componentDidHide() { }
 
@@ -61,12 +63,13 @@ export default class File extends Component {
     }
 
     goFileDetails = (value) => {
-        const { file_id } = value
+        const { file_id, board_id } = value
         const { dispatch } = this.props
         dispatch({
             type: 'file/getFileDetails',
             payload: {
                 id: file_id,
+                board_id: board_id,
             },
         })
     }
@@ -77,6 +80,7 @@ export default class File extends Component {
 
         return (
             <View className={indexStyles.index}>
+
                 {/* <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={'0'} /> */}
 
                 {/* <View className={indexStyles.head_background}>
@@ -91,27 +95,35 @@ export default class File extends Component {
                     </View>
                 </View> */}
 
-                <View className={indexStyles.grid_style}>
-                    {file_list.map((value, key) => {
-                        const { thumbnail_url } = value
-                        // const fileType = this.distinguishFileType(value.file_name)
-                        return (
-                            <View className={indexStyles.lattice_style} onClick={this.goFileDetails.bind(this, value)} >
-                                {
-                                    thumbnail_url ?
-                                        (<Image mode='aspectFit' className={indexStyles.img_style} src={thumbnail_url}>
-                                        </Image>)
-                                        :
-                                        (<View>
-                                            <Text className={`${globalStyle.global_iconfont} ${indexStyles.folder_Path_icon}`}></Text>
-                                            <View>{value.file_name}</View>
-                                        </View>)
-                                }
+                {
+                    file_list.length !== 0 ? (<View className={indexStyles.grid_style}>
+                        {file_list.map((value, key) => {
+                            const { thumbnail_url } = value
+                            const fileType = filterFileFormatType(value.file_name)
+                            return (
+                                <View className={indexStyles.lattice_style} onClick={this.goFileDetails.bind(this, value)} >
+                                    {
+                                        thumbnail_url ?
+                                            (<Image mode='aspectFill' className={indexStyles.img_style} src={thumbnail_url}>
+                                            </Image>)
+                                            :
+                                            (<View className={indexStyles.other_icon_style}>
+                                                <RichText className={`${globalStyle.global_iconfont} ${indexStyles.folder_type_icon}`} nodes={fileType} />
+                                                <View className={indexStyles.other_name_style}>{value.file_name}</View>
+                                            </View>)
+                                    }
 
+                                </View>
+                            )
+                        })}
+                    </View>
+                    ) : (
+                            <View className={indexStyles.contain1}>
+                                <Image src={file_list_empty} className={indexStyles.file_list_empty} />
                             </View>
                         )
-                    })}
-                </View>
+                }
+
             </View>
         )
     }
