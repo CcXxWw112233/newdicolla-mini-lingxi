@@ -1,14 +1,15 @@
 import Taro from '@tarojs/taro'
-import { getFilePage, getFileDetails, } from '../../services/file/index'
+import { getFilePage, getFileDetails, getFolder } from '../../services/file/index'
 import { isApiResponseOk } from "../../utils/request";
 
 export default {
     namespace: 'file',
     state: {
         file_list: [], //文件略缩图信息
+        isShowBoardList: false,  //是否显示项目列表
     },
     effects: {
-        //文件信息
+        //全部文件信息
         * getFilePage({ payload }, { select, call, put }) {
             const res = yield call(getFilePage, payload)
 
@@ -37,6 +38,22 @@ export default {
                 Taro.navigateTo({
                     url: `../../pages/webView/index`
                 })
+            } else {
+                Taro.showToast({
+                    title: res.message,
+                    icon: 'none',
+                    duration: 2000
+                })
+            }
+        },
+
+        //文件夹树形列表
+        * getFolder({ payload }, { select, call, put }) {
+            const res = yield call(getFolder, payload)
+            console.log(res, 'sss');
+
+            if (isApiResponseOk(res)) {
+
             } else {
                 Taro.showToast({
                     title: res.message,

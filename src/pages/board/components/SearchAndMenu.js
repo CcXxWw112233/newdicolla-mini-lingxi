@@ -15,6 +15,11 @@ export default class SearchAndMenu extends Component {
 
   componentDidHide() { }
 
+  handleChange = (inputValue) => {
+    console.log(inputValue.detail.value, 'ssss');
+    this.props.onSearch(inputValue.detail.value)
+  }
+
   onSearchFocus = () => {
     Taro.showToast({
       title: '未完成功能',
@@ -29,7 +34,11 @@ export default class SearchAndMenu extends Component {
         <View className={`${globalStyles.global_horrizontal_padding} ${styles.search_memu_out}`}>
           <View className={`${styles.search_area}`} onClick={this.onSearchFocus}>
             <View className={`${styles.search_input_area}`}>
-              <Input placeholder='搜索' className={`${styles.search_input}`} />
+              <Input
+                className={`${styles.search_input}`}
+                placeholder='搜索'
+                onChange={this.handleChange}
+              />
             </View>
             <View className={`${styles.search_icon_area}`}>
               <Text className={`${globalStyles.global_iconfont} ${styles.icon_menu}`}>&#xe643;</Text>

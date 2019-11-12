@@ -7,15 +7,15 @@ import { connect } from '@tarojs/redux'
 import SearchAndMenu from '../board/components/SearchAndMenu'
 import { filterFileFormatType } from './../../utils/util';
 import file_list_empty from '../../asset/file/file_list_empty.png'
+import BoardFile from './components/boardFile/index.js'
 
 
-@connect(({ file: { file_list = [], } }) => ({
-    file_list,
+@connect(({ file: { file_list = [], isShowBoardList } }) => ({
+    file_list, isShowBoardList
 }))
 export default class File extends Component {
     config = {
         navigationBarTitleText: '文件',
-        "onReachBottomDistance": 50,  //默认值50
     }
     componentDidMount() { }
 
@@ -39,18 +39,6 @@ export default class File extends Component {
 
     componentWillUnmount() { }
 
-    onReachBottom() {
-        const { dispatch } = this.props
-
-        dispatch({
-            type: 'file/updateDatas',
-            payload: {
-
-            }
-        })
-
-    }
-
     onSelectType = ({ show_type }) => {
         this.setState({
             show_card_type_select: show_type,
@@ -58,8 +46,16 @@ export default class File extends Component {
         })
     }
 
-    choiceBoard = () => {
-        console.log('选择项目');
+
+    //显示关闭项目列表
+    choiceBoard = (e) => {
+        const { dispatch } = this.props
+        dispatch({
+            type: 'file/updateDatas',
+            payload: {
+                isShowBoardList: e,
+            },
+        })
     }
 
     goFileDetails = (value) => {
@@ -74,26 +70,51 @@ export default class File extends Component {
         })
     }
 
+    onSearch = (value) => {
+        const { dispatch } = this.props
+        dispatch({
+            type: 'global/globalQuery',
+            payload: {
+                _organization_id: '0',
+                page_number: '1',
+                page_size: '5',
+                // query_conditions: [
+                //     { id: '1135447108158099461', value: '' },
+                //     { id: '1192646538984296448', value: '' },
+                // ],
+                search_term: value, //关键字
+                search_type: '6',  //文件 type = 6
+            },
+        })
+    }
+
     render() {
 
-        const { file_list } = this.props
+        const { file_list, isShowBoardList, } = this.props
 
         return (
             <View className={indexStyles.index}>
+                {/* {
+                    isShowBoardList === true ?
+                        <BoardFile closeBoardList={() => this.choiceBoard(false)} /> : ''
+                } */}
+                <BoardFile closeBoardList={() => this.choiceBoard(false)} />
 
-                {/* <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={'0'} /> */}
+                <View style={{ position: 'sticky', top: 0 + 'px', left: 0 }}>
+                    <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={'0'} onSearch={(value) => this.onSearch(value)} />
+                </View>
 
-                {/* <View className={indexStyles.head_background}>
+                <View className={indexStyles.head_background}>
                     <Image src={file_head_background} className={indexStyles.image_head_background} />
 
                     <View className={indexStyles.hear_function}>
-                        <View className={indexStyles.folderPath} onClick={this.choiceBoard}>
+                        <View className={indexStyles.folderPath} onClick={() => this.choiceBoard(true)}>
                             <Text className={`${globalStyle.global_iconfont} ${indexStyles.folder_Path_icon}`}>&#xe6c6;</Text>
                             <View>全部文件</View>
                         </View>
-                        <View>相册/相机</View>
+                        {/* <View>相册/相机</View> */}
                     </View>
-                </View> */}
+                </View>
 
                 {
                     file_list.length !== 0 ? (<View className={indexStyles.grid_style}>

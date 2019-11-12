@@ -12,6 +12,7 @@ export const getFilePage = (data, notShowLoading) => {
     }, notShowLoading)
 }
 
+//获取文件列表
 export const getFileDetails = (data, notShowLoading) => {
     return request({
         data: {
@@ -21,3 +22,15 @@ export const getFileDetails = (data, notShowLoading) => {
         url: `${API_BOARD}/file/preview/${data['id']}`
     }, notShowLoading)
 }
+
+//获取文件列表
+export const getFolder = (data, notShowLoading) => {
+    return request({
+        data: {
+            ...data
+        },
+        method: 'GET',
+        url: `${API_BOARD}/folder`,
+    }, notShowLoading)
+}
+

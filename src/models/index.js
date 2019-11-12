@@ -10,6 +10,7 @@ import chat from './chat/index'
 import invitation from './invitation/index'
 import tasks from './tasks/index'
 import file from './file/index'
+import global from './global/index'
 
 const models = [
   testPage,
@@ -24,5 +25,6 @@ const models = [
   invitation,
   tasks,
   file,
+  global,
 ]
 export default models

@@ -8,7 +8,7 @@
         width   : 100%;
         position: fixed;
         left    : 0;
-        top     : pxTrans(0);
+        top     : pxTrans(44);
 
         .image_head_background {
             position: absolute;
@@ -17,10 +17,9 @@
         }
 
         .hear_function {
-            width   : 100%;
-            height  : pxTrans(34);
-            top     : pxTrans(24);
-            position: fixed;
+            width     : 100%;
+            height    : pxTrans(34);
+            margin-top: pxTrans(24);
 
             .folderPath {
                 width        : pxTrans(104);

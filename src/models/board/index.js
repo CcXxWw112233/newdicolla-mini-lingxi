@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { getBoardList, getBoardDetail, } from '../../services/board/index'
+import { getBoardList, getBoardDetail, v2BoardList, } from '../../services/board/index'
 import { isApiResponseOk } from "../../utils/request";
 
 export default {
@@ -81,8 +81,23 @@ export default {
           }, 2000)
         }
       }
-    }
+    },
 
+    * v2BoardList({ payload }, { select, call, put }) {
+      let res = yield call(v2BoardList, payload)
+      console.log(res, '通用项目列表sss');
+
+      if (isApiResponseOk(res)) {
+        // yield put({
+        //   type: 'updateDatas',
+        //   payload: {
+        //     board_detail: res.data
+        //   }
+        // })
+      }
+      else {
+      }
+    },
   },
 
   reducers: {
@@ -90,5 +105,4 @@ export default {
       return { ...state, ...payload };
     },
   },
-
 };
