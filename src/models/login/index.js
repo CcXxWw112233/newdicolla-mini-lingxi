@@ -173,6 +173,7 @@ export default {
         //has_org = 1 已有组织, 0 没有组织则初始化一个默认组织
         if (res.data.has_org === '0') {
           const result = yield call(initializeOrganization)
+          console.log(result, '默认初始化一个组织');
           if (isApiResponseOk(result)) {
 
           } else {

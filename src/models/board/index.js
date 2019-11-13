@@ -7,6 +7,7 @@ export default {
   state: {
     board_list: [], //项目列表
     board_detail: {}, //项目详情
+    v2_board_list: [],  //文件页面项目列表
   },
   effects: {
     //获取项目列表
@@ -85,17 +86,20 @@ export default {
 
     * v2BoardList({ payload }, { select, call, put }) {
       let res = yield call(v2BoardList, payload)
-      console.log(res, '通用项目列表sss');
-
       if (isApiResponseOk(res)) {
-        // yield put({
-        //   type: 'updateDatas',
-        //   payload: {
-        //     board_detail: res.data
-        //   }
-        // })
+        yield put({
+          type: 'updateDatas',
+          payload: {
+            v2_board_list: res.data
+          }
+        })
       }
       else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000,
+        })
       }
     },
   },

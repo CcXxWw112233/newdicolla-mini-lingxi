@@ -1,4 +1,4 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro, { Component, hideToast } from '@tarojs/taro'
 import { View, Text, Image, RichText } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
@@ -8,7 +8,6 @@ import SearchAndMenu from '../board/components/SearchAndMenu'
 import { filterFileFormatType } from './../../utils/util';
 import file_list_empty from '../../asset/file/file_list_empty.png'
 import BoardFile from './components/boardFile/index.js'
-
 
 @connect(({ file: { file_list = [], isShowBoardList } }) => ({
     file_list, isShowBoardList
@@ -20,17 +19,7 @@ export default class File extends Component {
     componentDidMount() { }
 
     componentDidShow() {
-        const { dispatch } = this.props
-        dispatch({
-            type: 'file/getFilePage',
-            payload: {
-                _organization_id: '0',
-                board_id: '',
-                folder_id: '',
-                page_number: '',
-                page_size: '',
-            },
-        })
+        this.getFilePage()
     }
 
     componentDidHide() { }
@@ -39,13 +28,33 @@ export default class File extends Component {
 
     componentWillUnmount() { }
 
+    getFilePage = (board_id, file_id) => {
+
+        console.log(board_id, file_id, 'sssss项目');
+
+
+        const boardId = board_id ? board_id : ''
+        const fileId = file_id ? file_id : ''
+
+        const { dispatch } = this.props
+        dispatch({
+            type: 'file/getFilePage',
+            payload: {
+                _organization_id: '0',
+                board_id: boardId,
+                folder_id: fileId,
+                page_number: '',
+                page_size: '',
+            },
+        })
+    }
+
     onSelectType = ({ show_type }) => {
         this.setState({
             show_card_type_select: show_type,
             search_mask_show: show_type
         })
     }
-
 
     //显示关闭项目列表
     choiceBoard = (e) => {
@@ -70,18 +79,28 @@ export default class File extends Component {
         })
     }
 
-    onSearch = (value) => {
+    onSearch = (value, board_id, file_id) => {
+        console.log(value, 'sssss搜索');
+
         const { dispatch } = this.props
+
+        const queryConditions = []
+        if (board_id) {
+            const board = { id: '1135447108158099461', value: board_id }
+            queryConditions.push(board)
+            if (file_id) {
+                const file = { id: '1192646538984296448', value: 'file_id' }
+                queryConditions.push(file)
+            }
+        }
+
         dispatch({
             type: 'global/globalQuery',
             payload: {
                 _organization_id: '0',
                 page_number: '1',
                 page_size: '5',
-                // query_conditions: [
-                //     { id: '1135447108158099461', value: '' },
-                //     { id: '1192646538984296448', value: '' },
-                // ],
+                query_conditions: queryConditions,
                 search_term: value, //关键字
                 search_type: '6',  //文件 type = 6
             },
@@ -98,13 +117,13 @@ export default class File extends Component {
                     isShowBoardList === true ?
                         <BoardFile closeBoardList={() => this.choiceBoard(false)} /> : ''
                 } */}
-                <BoardFile closeBoardList={() => this.choiceBoard(false)} />
+                <BoardFile closeBoardList={() => this.choiceBoard(false)} selectedBoardFile={(board_id) => this.getFilePage(board_id)} selectionFile={(file_id) => { this.getFilePage(file_id) }} />
 
                 <View style={{ position: 'sticky', top: 0 + 'px', left: 0 }}>
-                    <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={'0'} onSearch={(value) => this.onSearch(value)} />
+                    <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={'0'} onSearch={(value) => this.onSearch(value)} isDisabled={false} />
                 </View>
 
-                <View className={indexStyles.head_background}>
+                {/* <View className={indexStyles.head_background}>
                     <Image src={file_head_background} className={indexStyles.image_head_background} />
 
                     <View className={indexStyles.hear_function}>
@@ -112,9 +131,9 @@ export default class File extends Component {
                             <Text className={`${globalStyle.global_iconfont} ${indexStyles.folder_Path_icon}`}>&#xe6c6;</Text>
                             <View>全部文件</View>
                         </View>
-                        {/* <View>相册/相机</View> */}
+                        <View>相册/相机</View>
                     </View>
-                </View>
+                </View> */}
 
                 {
                     file_list.length !== 0 ? (<View className={indexStyles.grid_style}>

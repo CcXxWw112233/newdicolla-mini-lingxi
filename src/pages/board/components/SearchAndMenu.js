@@ -16,18 +16,25 @@ export default class SearchAndMenu extends Component {
   componentDidHide() { }
 
   handleChange = (inputValue) => {
-    console.log(inputValue.detail.value, 'ssss');
     this.props.onSearch(inputValue.detail.value)
   }
 
   onSearchFocus = () => {
+    const { isDisabled } = this.props
+
+    if (isDisabled === false) return
+
     Taro.showToast({
       title: '未完成功能',
       icon: 'none'
     })
   }
+
   render() {
     const { search_mask_show } = this.state
+    const { isDisabled } = this.props
+    const is_disabled = isDisabled === false ? isDisabled : true  //搜索栏是否可点击
+
     return (
       <View>
         <View className={styles.search_memu_out_back}></View>
@@ -38,6 +45,7 @@ export default class SearchAndMenu extends Component {
                 className={`${styles.search_input}`}
                 placeholder='搜索'
                 onChange={this.handleChange}
+                disabled={is_disabled}
               />
             </View>
             <View className={`${styles.search_icon_area}`}>
