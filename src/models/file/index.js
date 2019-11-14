@@ -61,7 +61,7 @@ export default {
                 yield put({
                     type: 'updateDatas',
                     payload: {
-                        folder_tree: res.data
+                        folder_tree: res.data.child_data
                     }
                 })
             } else {

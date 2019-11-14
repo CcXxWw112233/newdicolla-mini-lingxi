@@ -6,68 +6,24 @@ import Avatar from '../../../components/avatar';
 import { RESPONSE_DATA_CODE_DATA } from '../../../gloalSet/js/constant';
 import { getOrgName } from '../../../utils/basicFunction';
 import { connect } from '@tarojs/redux';
+// import BoardDetail from '../../boardDetail/index'
 
-@connect(({ my: { org_list }, im: { allBoardList, sessionlist } }) => ({
+@connect(({ my: { org_list } }) => ({
   org_list,
-  allBoardList,
-  sessionlist
 }))
 class RuningBoardItem extends Component {
-  componentWillReceiveProps(nextProps) {}
+  componentWillReceiveProps(nextProps) { }
 
-  componentWillUnmount() {}
+  componentWillUnmount() { }
 
-  componentDidShow() {}
+  componentDidShow() { }
 
-  componentDidHide() {}
+  componentDidHide() { }
 
   gotoBoardDetail = board_id => {
     Taro.navigateTo({
       url: `/pages/boardDetail/index?boardId=${board_id}`
     });
-  };
-
-  //显示红点
-  isBoardShouldShowNewMsgDot = (board_id = '') => {
-    //需要拿到 model - im 中的:
-    //allBoardList
-    //sessionlist
-
-    //const {allBoardList, sessionlist} = this.props
-
-    //1. 拿到当前项目的 im info object
-    let currentBoardImInfo = allBoardList.find(i => i.board_id === board_id);
-    if (!currentBoardImInfo) return false;
-
-    //2. 拿到当前项目的 im_id 及其所有子群的 im_id
-    const currentBoardImIdAndChildsImId = [currentBoardImInfo.im_id].concat(
-      currentBoardImInfo.childs
-        ? currentBoardImInfo.childs.map(i => i.im_id)
-        : []
-    );
-
-    //3. 所有属于当前项目及其子群的对话中，是否有未读的消息，
-    // 如果有，返回 true,
-    // 如果没有，返回 false
-
-    const currentBoardSessionList = i =>
-      i &&
-      i.scene &&
-      i.scene === 'team' &&
-      currentBoardImIdAndChildsImId.find(e => e === i.to);
-    const sortByTime = (a, b) => a.lastMsg.time - b.lastMsg.time;
-    return sessionlist
-      .filter(currentBoardSessionList)
-      .sort(sortByTime)
-      .reduce((acc, curr) => {
-        if (curr.unread && !acc.find(i => curr.to === i)) {
-          return [...acc, curr.to];
-        }
-        if (curr.unread === 0 && acc.find(i => curr.to === i)) {
-          return acc.filter(i => i !== curr.to);
-        }
-      }, [])
-      .some(Boolean);
   };
 
   render() {
@@ -84,10 +40,13 @@ class RuningBoardItem extends Component {
     const users = board_item[RESPONSE_DATA_CODE_DATA] || [];
     return (
       <View>
+
+        {/* <BoardDetail boardId={board_id} /> */}
+
         <View
           className={`${globalStyles.global_card_out} ${
             indexStyles.card_content
-          }`}
+            }`}
           onClick={this.gotoBoardDetail.bind(this, board_id)}
         >
           <View className={`${indexStyles.card_content_top}`}>
@@ -102,7 +61,7 @@ class RuningBoardItem extends Component {
                     key={key}
                     className={`${globalStyles.global_iconfont} ${
                       indexStyles.star
-                    }`}
+                      }`}
                   >
                     &#xe64b;
                   </Text>

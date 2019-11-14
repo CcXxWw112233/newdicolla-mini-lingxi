@@ -8,8 +8,6 @@ import { connect } from '@tarojs/redux'
 export default class Tree extends Component {
 
     selectionFile = (folderId) => {
-        console.log(folderId, '是是是');
-
         this.props.selectionFile(folderId)
     }
 
@@ -17,7 +15,7 @@ export default class Tree extends Component {
         const { arr } = this.props
         return (
             <View>
-                {arr.map(item => (
+                {arr && arr.map(item => (
                     <View>
                         <View>{item.value}</View>
                         <View class={indexStyles.ul}>

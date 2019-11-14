@@ -43,8 +43,6 @@ export default class BoardFile extends Component {
     }
 
     selectionFile = (folderId) => {
-        console.log(selectionFile, '少时诵诗书所所所');
-
         this.props.selectionFile(folderId)
     }
 
@@ -58,31 +56,39 @@ export default class BoardFile extends Component {
         const { folder_tree, v2_board_list } = this.props
 
         return (
-            <View className={indexStyles.choice_board_file_style} style={{ height: screen_Height - (statusBar_Height + navBar_Height) + 'px', marginTop: statusBar_Height + navBar_Height + 'px' }}>
+            <View className={indexStyles.choice_board_file_style}>
 
                 <View className={indexStyles.whole_file_style}>
-                    <View className={indexStyles.whole_file_hear_style} onClick={this.wholeFile}>
+                    <View className={indexStyles.whole_file_hear_style} onClick={() => this.selectedBoardItem('')}>
                         <Text className={`${globalStyle.global_iconfont} ${indexStyles.folder_Path_icon}`}>&#xe662;</Text>
-                        <View>全部文件</View>
+                        <View style={{ marginLeft: 10 + 'px', fontSize: 18 + 'px' }}>全部文件</View>
                     </View>
-                </View>
-
-                <View className={indexStyles.close_button_style} onClick={this.closeBoardList}>
-                    <Text className={`${globalStyle.global_iconfont} ${indexStyles.close_button_icon_style}`}>&#xe7fc;</Text>
                 </View>
 
                 <View >
                     {v2_board_list && v2_board_list.map(item => (
-                        <View style={{ height: 40 + 'px', width: '100%' }} onClick={() => this.selectedBoardItem(item.board_id)}>{item.board_name}
 
-                            {folder_tree ? <TreeFile folderTree={folder_tree} selectionFile={(folderId) => this.selectionFile(folderId)} /> : ''
+                        <View className={indexStyles.board_item_style} onClick={() => this.selectedBoardItem(item.board_id)}>
+
+                            <View className={indexStyles.board_item_cell_style}>
+                                <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_icon}`}>&#xe8ed;</Text>
+                                <View className={indexStyles.board_item_name}>{item.board_name}</View>
+                            </View>
+
+                            {folder_tree ? <TreeFile folderTree={folder_tree} selectionFile={(folderId) => this.selectionFile(folderId)} className={indexStyles.tree_file_style} /> : ''
                             }
-
                         </View>
                     ))
                     }
                 </View>
-            </View>
+
+                <View className={indexStyles.close_view_style}>
+                    <View className={indexStyles.close_button_style} onClick={this.closeBoardList}>
+                        <Text className={`${globalStyle.global_iconfont} ${indexStyles.close_button_icon_style}`}>&#xe7fc;</Text>
+                    </View>
+                </View >
+
+            </View >
         )
     }
 }

@@ -41,7 +41,7 @@ export default class TreeFile extends Component {
 
     render() {
         const { folderTree } = this.props
-        const arr = this.jsonToArray([folderTree])
+        const arr = this.jsonToArray(folderTree)
         return (
             <View>
                 <Tree arr={arr} selectionFile={(folderId) => this.selectionFile(folderId)} />

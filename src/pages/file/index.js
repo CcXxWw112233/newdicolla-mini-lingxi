@@ -30,9 +30,6 @@ export default class File extends Component {
 
     getFilePage = (board_id, file_id) => {
 
-        console.log(board_id, file_id, 'sssss项目');
-
-
         const boardId = board_id ? board_id : ''
         const fileId = file_id ? file_id : ''
 
@@ -115,15 +112,17 @@ export default class File extends Component {
             <View className={indexStyles.index}>
                 {/* {
                     isShowBoardList === true ?
-                        <BoardFile closeBoardList={() => this.choiceBoard(false)} /> : ''
+                        <BoardFile closeBoardList={() => this.choiceBoard(false)} selectedBoardFile={(board_id) => this.getFilePage(board_id)} selectionFile={(file_id) => { this.getFilePage(file_id) }} />
+                        : ''
                 } */}
+
                 <BoardFile closeBoardList={() => this.choiceBoard(false)} selectedBoardFile={(board_id) => this.getFilePage(board_id)} selectionFile={(file_id) => { this.getFilePage(file_id) }} />
 
                 <View style={{ position: 'sticky', top: 0 + 'px', left: 0 }}>
                     <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={'0'} onSearch={(value) => this.onSearch(value)} isDisabled={false} />
                 </View>
 
-                {/* <View className={indexStyles.head_background}>
+                <View className={indexStyles.head_background}>
                     <Image src={file_head_background} className={indexStyles.image_head_background} />
 
                     <View className={indexStyles.hear_function}>
@@ -131,9 +130,8 @@ export default class File extends Component {
                             <Text className={`${globalStyle.global_iconfont} ${indexStyles.folder_Path_icon}`}>&#xe6c6;</Text>
                             <View>全部文件</View>
                         </View>
-                        <View>相册/相机</View>
                     </View>
-                </View> */}
+                </View>
 
                 {
                     file_list.length !== 0 ? (<View className={indexStyles.grid_style}>
