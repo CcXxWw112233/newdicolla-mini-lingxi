@@ -75,7 +75,10 @@ export default class BoardFile extends Component {
                                 <View className={indexStyles.board_item_name}>{item.board_name}</View>
                             </View>
 
-                            {folder_tree ? <TreeFile folderTree={folder_tree} selectionFile={(folderId) => this.selectionFile(folderId)} className={indexStyles.tree_file_style} /> : ''
+                            {folder_tree ?
+                                <View className={indexStyles.folder_tree_view}>
+                                    <TreeFile folderTree={folder_tree} selectionFile={(folderId) => this.selectionFile(folderId)} boardId={item.board_id} />
+                                </View> : ''
                             }
                         </View>
                     ))

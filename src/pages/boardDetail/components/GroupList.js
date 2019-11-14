@@ -8,6 +8,7 @@ import { isPlainObject } from './../../../utils/util';
 @connect(
   ({
     im: {
+      allBoardList,
       sessionlist,
       currentBoardId,
       currentBoard,
@@ -16,6 +17,7 @@ import { isPlainObject } from './../../../utils/util';
     }
   }) => {
     return {
+      allBoardList,
       sessionlist,
       currentBoardId,
       currentBoard,
@@ -314,7 +316,7 @@ class GroupList extends Component {
   }
 
   render() {
-    const { currentBoard, sessionlist, rawMessageList } = this.props;
+    const { allBoardList = [], currentBoard, sessionlist, rawMessageList } = this.props;
     const { isShouldExpandSubGroup } = this.state;
     if (!currentBoard) return null;
     const integratedCurrentBoardInfo = this.integrateCurrentBoardWithSessions(
@@ -323,11 +325,14 @@ class GroupList extends Component {
       rawMessageList
     );
 
+    console.log("kkkallBoardList", allBoardList);
+
+
     return (
       <View className={styles.wrapper}>
         <View className={styles.mainGroupWrapper}>
           {/* Taro 编译有错误，如果将生成 mainGroup 的函数直接放在 render 里，那么解析出来的 board_id, 等变量会直接替换 生成 subGroup 的 board_id 等变量，导致其不生效 */}
-          {[integratedCurrentBoardInfo].map(mainGroup => {
+          {allBoardList.map(mainGroup => {
             const {
               board_id,
               im_id,
@@ -338,7 +343,7 @@ class GroupList extends Component {
               showNewsDot,
               avatarList,
               childs
-            } = this.genMainGroupInfo(mainGroup);
+            } = mainGroup;
 
             return (
               <GroupItem

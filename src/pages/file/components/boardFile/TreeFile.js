@@ -13,10 +13,6 @@ export default class TreeFile extends Component {
         isBranch: false, //是否有子级
     }
 
-    selectionFile = (folderId) => {
-        this.props.selectionFile(folderId)
-    }
-
     jsonToArray(nodes, arr = []) {
         var r = arr;
         if (nodes && nodes.length) {
@@ -40,11 +36,14 @@ export default class TreeFile extends Component {
     }
 
     render() {
-        const { folderTree } = this.props
+        const { folderTree, boardId } = this.props
         const arr = this.jsonToArray(folderTree)
+
         return (
             <View>
-                <Tree arr={arr} selectionFile={(folderId) => this.selectionFile(folderId)} />
+                <View className={indexStyles.view_style}>
+                    <Tree arr={arr} boardId={boardId} />
+                </View>
             </View>
         )
     }

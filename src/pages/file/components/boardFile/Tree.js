@@ -7,22 +7,14 @@ import { connect } from '@tarojs/redux'
 @connect(({ }) => ({}))
 export default class Tree extends Component {
 
-    selectionFile = (folderId) => {
-        this.props.selectionFile(folderId)
-    }
-
     render() {
-        const { arr } = this.props
+        const { arr, boardId } = this.props
+
         return (
             <View>
                 {arr && arr.map(item => (
-                    <View>
-                        <View>{item.value}</View>
-                        <View class={indexStyles.ul}>
-                            <View class={indexStyles.li_item} onClick={() => this.selectionFile(item.folder_id)} data-itemid={item.folder_id}>
-                                <Text>{item.folder_name}</Text>
-                            </View>
-                        </View>
+                    <View class={indexStyles.li_item} data-itemid={item.folder_id}>
+                        {item.folder_name}
                     </View>
                 ))
                 }

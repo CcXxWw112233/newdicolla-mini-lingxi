@@ -8,7 +8,6 @@ import { getBar } from '../../services/index/index'
 import SearchAndMenu from './components/SearchAndMenu'
 import BoardTypeSelect from './components/BoardTypeSelect/index'
 import { connect } from '@tarojs/redux'
-import BoardDetail from '../boardDetail/index'
 
 @connect(({ board }) => ({
   board
@@ -65,28 +64,15 @@ export default class Board extends Component {
   }
 
   render() {
-    const { board: { board_list = [] } } = this.props
-    const { search_mask_show } = this.state
+    const { board: { board_id } } = this.props
+    const { show_board_select_type, search_mask_show } = this.state
     return (
       <View >
         <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
-
-        <View className={`${indexStyles.board_item_out} ${globalStyles.global_horrizontal_padding}`}>
-
-          {board_list && board_list.map((value, key) => {
-            const { board_id } = value
-            return (
-              <View key={board_id}>
-                {/* {board_id} */}
-
-                <RunningBoard boardId={board_id} />
-                {/* <BoardDetail boardId={board_id} /> */}
-              </View>
-            )
-          })}
-
-          <View className={indexStyles.no_more_text}>没有更多内容了~</View>
+        <View>
+          <BoardTypeSelect show_board_select_type={show_board_select_type} onSelectType={this.onSelectType} />
         </View>
+        <RunningBoard />
       </View>
     )
   }

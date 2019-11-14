@@ -1,8 +1,8 @@
 @import "../../../../gloalSet/styles/constant.scss";
 
 .choice_board_file_style {
-    height    : 100%;
     width     : 100%;
+    height    : 100%;
     position  : absolute;
     top       : 0;
     z-index   : 100;
@@ -49,8 +49,8 @@
             }
         }
 
-        .tree_file_style {
-            margin-left: pxTrans(18);
+        .folder_tree_view {
+            margin-left: pxTrans(40);
         }
     }
 

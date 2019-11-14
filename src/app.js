@@ -53,7 +53,6 @@ class App extends Component {
       'pages/errorPage/index',
       'pages/file/index',
       'pages/webView/index',
-      'pages/projectCircle/index',
     ],
     window: {
       backgroundTextStyle: 'light',

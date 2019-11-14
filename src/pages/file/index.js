@@ -77,7 +77,6 @@ export default class File extends Component {
     }
 
     onSearch = (value, board_id, file_id) => {
-        console.log(value, 'sssss搜索');
 
         const { dispatch } = this.props
 
@@ -110,13 +109,11 @@ export default class File extends Component {
 
         return (
             <View className={indexStyles.index}>
-                {/* {
+                {
                     isShowBoardList === true ?
                         <BoardFile closeBoardList={() => this.choiceBoard(false)} selectedBoardFile={(board_id) => this.getFilePage(board_id)} selectionFile={(file_id) => { this.getFilePage(file_id) }} />
                         : ''
-                } */}
-
-                <BoardFile closeBoardList={() => this.choiceBoard(false)} selectedBoardFile={(board_id) => this.getFilePage(board_id)} selectionFile={(file_id) => { this.getFilePage(file_id) }} />
+                }
 
                 <View style={{ position: 'sticky', top: 0 + 'px', left: 0 }}>
                     <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={'0'} onSearch={(value) => this.onSearch(value)} isDisabled={false} />
