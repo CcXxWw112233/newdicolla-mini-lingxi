@@ -27,6 +27,9 @@ export default class BoardFile extends Component {
     }
 
     selectedBoardItem = (boardId) => {
+
+        Taro.setStorageSync('file_item_board_id', boardId)
+
         this.props.selectedBoardFile(boardId)
 
         const { dispatch } = this.props
@@ -48,12 +51,8 @@ export default class BoardFile extends Component {
 
     render() {
 
-        const SystemInfo = Taro.getSystemInfoSync()
-        const screen_Height = SystemInfo.screenHeight
-        const statusBar_Height = SystemInfo.statusBarHeight
-        const navBar_Height = SystemInfo.platform == 'ios' ? 44 : 48
-
         const { folder_tree, v2_board_list } = this.props
+        const file_item_board_id = Taro.getStorageSync('file_item_board_id')
 
         return (
             <View className={indexStyles.choice_board_file_style}>
@@ -68,14 +67,16 @@ export default class BoardFile extends Component {
                 <View >
                     {v2_board_list && v2_board_list.map(item => (
 
-                        <View className={indexStyles.board_item_style} onClick={() => this.selectedBoardItem(item.board_id)}>
+                        <View className={indexStyles.tree_style}>
+                            <View className={indexStyles.board_item_style} onClick={() => this.selectedBoardItem(item.board_id)}>
 
-                            <View className={indexStyles.board_item_cell_style}>
-                                <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_icon}`}>&#xe8ed;</Text>
-                                <View className={indexStyles.board_item_name}>{item.board_name}</View>
+                                <View className={indexStyles.board_item_cell_style}>
+                                    <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_icon}`}>&#xe8ed;</Text>
+                                    <View className={indexStyles.board_item_name}>{item.board_name}</View>
+                                </View>
                             </View>
 
-                            {folder_tree ?
+                            {folder_tree && item.board_id === file_item_board_id ?
                                 <View className={indexStyles.folder_tree_view}>
                                     <TreeFile folderTree={folder_tree} selectionFile={(folderId) => this.selectionFile(folderId)} boardId={item.board_id} />
                                 </View> : ''
