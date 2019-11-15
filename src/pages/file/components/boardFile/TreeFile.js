@@ -36,13 +36,13 @@ export default class TreeFile extends Component {
     }
 
     render() {
-        const { folderTree, boardId } = this.props
+        const { folderTree, boardId, orgId } = this.props
         const arr = this.jsonToArray(folderTree)
 
         return (
             <View>
                 <View className={indexStyles.view_style}>
-                    <Tree arr={arr} boardId={boardId} />
+                    <Tree arr={arr} boardId={boardId} orgId={orgId} />
                 </View>
             </View>
         )

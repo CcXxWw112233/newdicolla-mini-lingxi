@@ -22,23 +22,20 @@ export default class BoardFile extends Component {
         })
     }
 
-    wholeFile = () => {
+    selectedBoardItem = (org_id, board_id, file_id) => {
 
-    }
+        Taro.setStorageSync('file_item_board_id', board_id)
+        this.props.selectedBoardFile(org_id, board_id, file_id)
 
-    selectedBoardItem = (boardId) => {
-
-        Taro.setStorageSync('file_item_board_id', boardId)
-
-        this.props.selectedBoardFile(boardId)
-
-        const { dispatch } = this.props
-        dispatch({
-            type: 'file/getFolder',
-            payload: {
-                board_id: boardId,
-            },
-        })
+        if (board_id) {
+            const { dispatch } = this.props
+            dispatch({
+                type: 'file/getFolder',
+                payload: {
+                    board_id: board_id,
+                },
+            })
+        }
     }
 
     closeBoardList = () => {
@@ -53,12 +50,13 @@ export default class BoardFile extends Component {
 
         const { folder_tree, v2_board_list } = this.props
         const file_item_board_id = Taro.getStorageSync('file_item_board_id')
+        console.log(v2_board_list, 'ssss');
 
         return (
             <View className={indexStyles.choice_board_file_style}>
 
                 <View className={indexStyles.whole_file_style}>
-                    <View className={indexStyles.whole_file_hear_style} onClick={() => this.selectedBoardItem('')}>
+                    <View className={indexStyles.whole_file_hear_style} onClick={() => this.selectedBoardItem('0', '', '')}>
                         <Text className={`${globalStyle.global_iconfont} ${indexStyles.folder_Path_icon}`}>&#xe662;</Text>
                         <View style={{ marginLeft: 10 + 'px', fontSize: 18 + 'px' }}>全部文件</View>
                     </View>
@@ -68,7 +66,7 @@ export default class BoardFile extends Component {
                     {v2_board_list && v2_board_list.map(item => (
 
                         <View className={indexStyles.tree_style}>
-                            <View className={indexStyles.board_item_style} onClick={() => this.selectedBoardItem(item.board_id)}>
+                            <View className={indexStyles.board_item_style} onClick={() => this.selectedBoardItem('0', item.board_id, '')}>
 
                                 <View className={indexStyles.board_item_cell_style}>
                                     <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_icon}`}>&#xe8ed;</Text>
@@ -78,7 +76,7 @@ export default class BoardFile extends Component {
 
                             {folder_tree && item.board_id === file_item_board_id ?
                                 <View className={indexStyles.folder_tree_view}>
-                                    <TreeFile folderTree={folder_tree} selectionFile={(folderId) => this.selectionFile(folderId)} boardId={item.board_id} />
+                                    <TreeFile folderTree={folder_tree} boardId={item.board_id} orgId={item.org_id} />
                                 </View> : ''
                             }
                         </View>

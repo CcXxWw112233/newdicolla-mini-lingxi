@@ -19,7 +19,10 @@ export default class File extends Component {
     componentDidMount() { }
 
     componentDidShow() {
-        this.getFilePage()
+        const org_id = '0'
+        const board_id = ''
+        const file_id = ''
+        this.getFilePage(org_id, board_id, file_id)
     }
 
     componentDidHide() { }
@@ -28,18 +31,15 @@ export default class File extends Component {
 
     componentWillUnmount() { }
 
-    getFilePage = (board_id, file_id) => {
-
-        const boardId = board_id ? board_id : ''
-        const fileId = file_id ? file_id : ''
+    getFilePage = (org_id, board_id, file_id) => {
 
         const { dispatch } = this.props
         dispatch({
             type: 'file/getFilePage',
             payload: {
-                _organization_id: '0',
-                board_id: boardId,
-                folder_id: fileId,
+                _organization_id: org_id,
+                board_id: board_id,
+                folder_id: file_id,
                 page_number: '',
                 page_size: '',
             },
@@ -111,7 +111,7 @@ export default class File extends Component {
             <View className={indexStyles.index}>
                 {
                     isShowBoardList === true ?
-                        <BoardFile closeBoardList={() => this.choiceBoard(false)} selectedBoardFile={(board_id) => this.getFilePage(board_id)} selectionFile={(file_id) => { this.getFilePage(file_id) }} />
+                        <BoardFile closeBoardList={() => this.choiceBoard(false)} selectedBoardFile={(org_id, board_id, file_id) => this.getFilePage(org_id, board_id, file_id)} />
                         : ''
                 }
 
