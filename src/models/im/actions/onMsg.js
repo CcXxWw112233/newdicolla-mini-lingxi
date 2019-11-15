@@ -58,7 +58,6 @@ function onMsg(msg) {
     //那么就整合数据
     const mergeNews = () => {
       if (isValidMsg(msg, tempState.currentChatTo) || isPinupEmojiNews(msg) || isNotificationNews(msg)) {
-        console.log(tempState, '少时诵诗书所');
 
         const { currentBoard } = tempState;
         tempState.currentGroupSessionList = [

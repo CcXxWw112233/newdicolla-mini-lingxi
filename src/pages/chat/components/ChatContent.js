@@ -51,7 +51,7 @@ class ChatContent extends Component {
     this.state = {
       scrollIntoViewEleId: '', //设置scrollView 自动滚动属性
       chatConetntViewHeightStyle: '',
-      isIosHomeIndicator: false,  //是否iPhone X 及以上版本
+      isIosHomeIndicator: false,  //是否iPhone X 及以上设备
     };
     //是否正在 touch 聊天列表
     this.isTouchingScrollView = false;
@@ -275,9 +275,6 @@ class ChatContent extends Component {
           }}
         >
           {currentGroupSessionList.map((i, index, arr) => {
-
-            console.log(i, 'ssspppp');
-
             return (
               <View className={styles.chatItemWrapper} key={i.time}>
                 {this.isShouldShowTimestamp(index, arr) && (
