@@ -13,7 +13,6 @@ export default {
         //全部文件信息
         * getFilePage({ payload }, { select, call, put }) {
             const res = yield call(getFilePage, payload)
-
             if (isApiResponseOk(res)) {
                 yield put({
                     type: 'updateDatas',
@@ -56,7 +55,6 @@ export default {
         //文件夹树形列表
         * getFolder({ payload }, { select, call, put }) {
             const res = yield call(getFolder, payload)
-            console.log(res, '文件夹树形列表');
             if (isApiResponseOk(res)) {
                 yield put({
                     type: 'updateDatas',

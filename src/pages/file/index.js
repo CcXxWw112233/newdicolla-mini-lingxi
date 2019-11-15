@@ -22,7 +22,13 @@ export default class File extends Component {
         const org_id = '0'
         const board_id = ''
         const file_id = ''
-        this.getFilePage(org_id, board_id, file_id)
+
+        const is_reload_file_list = Taro.getStorageSync('isReloadFileList')
+        if (is_reload_file_list === 'is_reload_file_list') {
+            Taro.removeStorageSync('isReloadFileList')
+        } else {
+            this.getFilePage(org_id, board_id, file_id)
+        }
     }
 
     componentDidHide() { }
@@ -65,6 +71,9 @@ export default class File extends Component {
     }
 
     goFileDetails = (value) => {
+
+        Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
+
         const { id, board_id } = value
         const { dispatch } = this.props
         dispatch({

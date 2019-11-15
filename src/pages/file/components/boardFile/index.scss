@@ -2,7 +2,7 @@
 
 .choice_board_file_style {
     width     : 100%;
-    height    : 100%;
+    height    : pxTrans(1000);
     position  : absolute;
     top       : 0;
     z-index   : 100;
@@ -54,14 +54,13 @@
         }
     }
 
-
-
     .close_view_style {
-        width          : 100%;
-        display        : flex;
-        justify-content: center;
-        position       : absolute;
-        bottom         : pxTrans(24);
+        width             : 100%;
+        display           : flex;
+        justify-content   : center;
+        position          : absolute;
+        // bottom         : pxTrans(24);
+
 
         .close_button_style {
             width          : pxTrans(24);

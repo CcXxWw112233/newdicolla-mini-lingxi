@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { View, Text, ScrollView } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
@@ -50,7 +50,6 @@ export default class BoardFile extends Component {
 
         const { folder_tree, v2_board_list } = this.props
         const file_item_board_id = Taro.getStorageSync('file_item_board_id')
-        console.log(v2_board_list, 'ssss');
 
         return (
             <View className={indexStyles.choice_board_file_style}>
@@ -62,27 +61,29 @@ export default class BoardFile extends Component {
                     </View>
                 </View>
 
-                <View >
-                    {v2_board_list && v2_board_list.map(item => (
+                <ScrollView>
+                    <View >
+                        {v2_board_list && v2_board_list.map(item => (
 
-                        <View className={indexStyles.tree_style}>
-                            <View className={indexStyles.board_item_style} onClick={() => this.selectedBoardItem('0', item.board_id, '')}>
+                            <View className={indexStyles.tree_style}>
+                                <View className={indexStyles.board_item_style} onClick={() => this.selectedBoardItem('0', item.board_id, '')}>
 
-                                <View className={indexStyles.board_item_cell_style}>
-                                    <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_icon}`}>&#xe8ed;</Text>
-                                    <View className={indexStyles.board_item_name}>{item.board_name}</View>
+                                    <View className={indexStyles.board_item_cell_style}>
+                                        <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_icon}`}>&#xe8ed;</Text>
+                                        <View className={indexStyles.board_item_name}>{item.board_name}</View>
+                                    </View>
                                 </View>
-                            </View>
 
-                            {folder_tree && item.board_id === file_item_board_id ?
-                                <View className={indexStyles.folder_tree_view}>
-                                    <TreeFile folderTree={folder_tree} boardId={item.board_id} orgId={item.org_id} />
-                                </View> : ''
-                            }
-                        </View>
-                    ))
-                    }
-                </View>
+                                {folder_tree && item.board_id === file_item_board_id ?
+                                    <View className={indexStyles.folder_tree_view}>
+                                        <TreeFile folderTree={folder_tree} boardId={item.board_id} orgId={item.org_id} />
+                                    </View> : ''
+                                }
+                            </View>
+                        ))
+                        }
+                    </View>
+                </ScrollView>
 
                 <View className={indexStyles.close_view_style}>
                     <View className={indexStyles.close_button_style} onClick={this.closeBoardList}>
