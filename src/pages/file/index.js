@@ -8,6 +8,7 @@ import SearchAndMenu from '../board/components/SearchAndMenu'
 import { filterFileFormatType } from './../../utils/util';
 import file_list_empty from '../../asset/file/file_list_empty.png'
 import BoardFile from './components/boardFile/index.js'
+import { getOrgIdByBoardId, setBoardIdStorage } from '../../utils/basicFunction'
 
 @connect(({ file: { file_list = [], isShowBoardList } }) => ({
     file_list, isShowBoardList
@@ -70,20 +71,44 @@ export default class File extends Component {
         })
     }
 
-    goFileDetails = (value) => {
+    goFileDetails = (value, fileName) => {
 
         Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
 
-        const { id, board_id } = value
+        const { file_resource_id, board_id } = value
         const { dispatch } = this.props
+        setBoardIdStorage(board_id)
+        const fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
+
+        const parameter = {
+            board_id,
+            ids: file_resource_id,
+            _organization_id: getOrgIdByBoardId(board_id),
+        }
+
+        // 清除缓存文件
+        Taro.getSavedFileList({
+            success(res) {
+                if (res.fileList.length > 0) {
+                    Taro.removeSavedFile({
+                        filePath: res.fileList[0].filePath,
+                        complete(res) {
+                            console.log('清除成', res)
+                        }
+                    })
+                }
+            }
+        })
+
         dispatch({
-            type: 'file/getFileDetails',
+            type: 'file/getDownloadUrl',
             payload: {
-                id: id,
-                board_id: board_id,
+                parameter,
+                fileType: fileType,
             },
         })
     }
+
 
     onSearch = (value, board_id, file_id) => {
 
@@ -138,14 +163,13 @@ export default class File extends Component {
                         </View>
                     </View>
                 </View>
-
                 {
                     file_list.length !== 0 ? (<View className={indexStyles.grid_style}>
                         {file_list.map((value, key) => {
                             const { thumbnail_url } = value
                             const fileType = filterFileFormatType(value.file_name)
                             return (
-                                <View className={indexStyles.lattice_style} onClick={this.goFileDetails.bind(this, value)} >
+                                <View className={indexStyles.lattice_style} onClick={this.goFileDetails.bind(this, value, value.file_name)} >
                                     {
                                         thumbnail_url ?
                                             (<Image mode='aspectFill' className={indexStyles.img_style} src={thumbnail_url}>

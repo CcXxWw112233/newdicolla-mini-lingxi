@@ -23,6 +23,22 @@ export const getFileDetails = (data, notShowLoading) => {
     }, notShowLoading)
 }
 
+export const getDownloadUrl = (data, notShowLoading) => {
+    return request({
+        data: {
+            ...data
+        },
+        method: 'GET',
+        header: {
+            BaseInfo: {
+                contentDataType: 'file',
+                contentDataId: data.ids
+            }
+        },
+        url: `${API_BOARD}/file/download`
+    }, notShowLoading)
+}
+
 //获取文件列表
 export const getFolder = (data, notShowLoading) => {
     return request({

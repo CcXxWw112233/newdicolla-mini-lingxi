@@ -6,7 +6,7 @@ import { Base64 } from 'js-base64';
 export const getCurrentOrgByStorage = () => {
   const account_info_string = Taro.getStorageSync('account_info')
   let current_org = '0'
-  if(!!account_info_string) {
+  if (!!account_info_string) {
     const account_info = JSON.parse(account_info_string)
     const { user_set = {} } = account_info
     current_org = user_set['current_org']
@@ -14,17 +14,17 @@ export const getCurrentOrgByStorage = () => {
   return current_org
 }
 
-export const getOrgName = ({org_id, org_list = []}) => {
+export const getOrgName = ({ org_id, org_list = [] }) => {
   const name = (org_list.find(item => item['id'] == org_id) || {}).name
   return name
 }
 
 export const timestampToTimeZH = (timestamp) => {
-  if(!timestamp) {
+  if (!timestamp) {
     return ''
   }
   const length = timestamp.length
-  const newTimestampStr = length < 13? Number(timestamp) * 1000 :  Number(timestamp)
+  const newTimestampStr = length < 13 ? Number(timestamp) * 1000 : Number(timestamp)
   const date = new Date(newTimestampStr)
   const current_year = new Date().getFullYear()
   let year = date.getFullYear()
@@ -33,22 +33,22 @@ export const timestampToTimeZH = (timestamp) => {
   let hours = date.getHours()
   let min = date.getMinutes()
   // year = current_year != year?`${year}年`: ''
-  month = month < 10? `0${month}`: month
-  date_no = date_no < 10 ? `0${date_no}`: date_no
-  hours = hours < 10 ? `0${hours}`: hours
-  min = min < 10 ? `0${min}`: min
+  month = month < 10 ? `0${month}` : month
+  date_no = date_no < 10 ? `0${date_no}` : date_no
+  hours = hours < 10 ? `0${hours}` : hours
+  min = min < 10 ? `0${min}` : min
 
   return `${year}年${month}月${date_no}日 ${hours}:${min}`
 }
 
-export const timestampFormat = (timestamp,format='yyyy-MM-dd h:m:s') => {
-  if(!timestamp) {
+export const timestampFormat = (timestamp, format = 'yyyy-MM-dd h:m:s') => {
+  if (!timestamp) {
     return ''
   }
   let thisDate = null;
-  if( typeof timestamp === 'number' || typeof timestamp === 'string'){
+  if (typeof timestamp === 'number' || typeof timestamp === 'string') {
     thisDate = new Date(timestamp)
-  }else{
+  } else {
     thisDate = timestamp;
   }
 
@@ -60,22 +60,22 @@ export const timestampFormat = (timestamp,format='yyyy-MM-dd h:m:s') => {
     "s+": thisDate.getSeconds(),
     "q+": Math.floor((thisDate.getMonth() + 3) / 3),
     "S+": thisDate.getMilliseconds()
- };
- if (/(y+)/i.test(format)) {
+  };
+  if (/(y+)/i.test(format)) {
     format = format.replace(RegExp.$1, (thisDate.getFullYear() + '').substr(4 - RegExp.$1.length));
- }
- for (var k in date) {
+  }
+  for (var k in date) {
     if (new RegExp("(" + k + ")").test(format)) {
-        format = format.replace(RegExp.$1, RegExp.$1.length == 1
-           ? date[k] : ("00" + date[k]).substr(("" + date[k]).length));
+      format = format.replace(RegExp.$1, RegExp.$1.length == 1
+        ? date[k] : ("00" + date[k]).substr(("" + date[k]).length));
     }
- }
- return format;
+  }
+  return format;
 }
 
 
 export const timestampWeek = (format) => {
-  if(!format) {
+  if (!format) {
     return ''
   }
 
@@ -85,12 +85,12 @@ export const timestampWeek = (format) => {
     const day = date.getDate()
     return [year, month, day].map(formatNumber).join('-')
   }
-  
+
   const formatNumber = n => {
     n = n.toString()
     return n[1] ? n : '0' + n
   }
-  
+
   //todate默认参数是当前日期，可以传入对应时间 todate格式为2018-10-05
   function getDates(days, format) {
     var dateArry = [];
@@ -100,7 +100,7 @@ export const timestampWeek = (format) => {
     }
     return dateArry;
   }
-  
+
   function dateLater(dates, later) {
     let dateObj = {};
     let show_day = new Array('周日', '周一', '周二', '周三', '周四', '周五', '周六');
@@ -122,24 +122,24 @@ export const setBoardIdStorage = (value) => {
   // 从缓存中拿到相应的board_id对应上org_id，存储当前项目的org_id => aboutBoardOrganizationId,
   // 如果当前组织确定（非全部组织），则返回当前组织
   const OrganizationId = Taro.getStorageSync('OrganizationId', value)
-  if(OrganizationId && OrganizationId != '0') {
+  if (OrganizationId && OrganizationId != '0') {
     Taro.setStorageSync('aboutBoardOrganizationId', OrganizationId)
     return
   }
 
   let userAllOrgsAllBoards = Taro.getStorageSync('userAllOrgsAllBoards') || '[]'
-  if(userAllOrgsAllBoards) {
+  if (userAllOrgsAllBoards) {
     userAllOrgsAllBoards = JSON.parse(userAllOrgsAllBoards)
   }
   let org_id = ''
-  for(let val of userAllOrgsAllBoards) {
-    for(let val_2 of val['board_ids']) {
-      if(value == val_2) {
+  for (let val of userAllOrgsAllBoards) {
+    for (let val_2 of val['board_ids']) {
+      if (value == val_2) {
         org_id = val['org_id']
         break
       }
     }
-    if(org_id) {
+    if (org_id) {
       break
     }
   }
@@ -151,18 +151,18 @@ export const setRequestHeaderBaseInfo = ({ data, params = {}, headers = {} }) =>
   let header_base_info_orgid = Taro.getStorageSync('OrganizationId') || '0'
   let header_base_info_board_id = Taro.getStorageSync('storageCurrentOperateBoardId') || '0'
 
-  if(data['_organization_id'] || params['_organization_id']) {
+  if (data['_organization_id'] || params['_organization_id']) {
     header_base_info_orgid = data['_organization_id'] || params['_organization_id']
   }
 
-  if(data['boardId'] || params['boardId'] || data['board_id'] || params['board_id']) {
+  if (data['boardId'] || params['boardId'] || data['board_id'] || params['board_id']) {
     header_base_info_board_id = data['boardId'] || params['boardId'] || data['board_id'] || params['board_id']
   }
 
   const header_base_info = Object.assign({
-      orgId: header_base_info_orgid,
-      boardId: header_base_info_board_id,
-      aboutBoardOrganizationId: Taro.getStorageSync('aboutBoardOrganizationId') || '0',
+    orgId: header_base_info_orgid,
+    boardId: header_base_info_board_id,
+    aboutBoardOrganizationId: Taro.getStorageSync('aboutBoardOrganizationId') || '0',
   }, headers['BaseInfo'] || {})
   const header_base_info_str = JSON.stringify(header_base_info)
   const header_base_info_str_base64 = Base64.encode(header_base_info_str)
@@ -171,4 +171,28 @@ export const setRequestHeaderBaseInfo = ({ data, params = {}, headers = {} }) =>
   }
 
   return new_herders
+}
+
+// 根据boardid查找得到orgid
+export const getOrgIdByBoardId = (boardId) => {
+  if (!boardId) {
+    return ''
+  }
+  let userAllOrgsAllBoards = Taro.getStorageSync('userAllOrgsAllBoards') || '[]'
+  if (userAllOrgsAllBoards) {
+    userAllOrgsAllBoards = JSON.parse(userAllOrgsAllBoards)
+  }
+  let org_id = ''
+  for (let val of userAllOrgsAllBoards) {
+    for (let val_2 of val['board_ids']) {
+      if (boardId == val_2) {
+        org_id = val['org_id']
+        break
+      }
+    }
+    if (org_id) {
+      break
+    }
+  }
+  return org_id
 }
