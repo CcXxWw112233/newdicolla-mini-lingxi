@@ -3,7 +3,7 @@ import { View, Button, Text } from '@tarojs/components'
 import RunningBoard from './components/RuningBoard'
 import indexStyles from './index.scss'
 import globalStyles from '../../gloalSet/styles/globalStyles.scss'
-import { request } from "../../utils/request";
+import { request} from "../../utils/request";
 import { getBar } from '../../services/index/index'
 import SearchAndMenu from './components/SearchAndMenu'
 import BoardTypeSelect from './components/BoardTypeSelect/index'
@@ -33,20 +33,20 @@ export default class Board extends Component {
     }, 300)
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
   }
 
-  componentWillUnmount() { }
+  componentWillUnmount () { }
 
-  componentDidMount() { }
+  componentDidMount () { }
 
-  componentDidShow() {
+  componentDidShow () {
     this.getBoardList()
   }
 
-  componentDidHide() { }
+  componentDidHide () { }
 
-  onSelectType = ({ show_type }) => {
+  onSelectType = ({show_type}) => {
     this.setState({
       show_board_select_type: show_type,
       search_mask_show: show_type
@@ -63,8 +63,8 @@ export default class Board extends Component {
     })
   }
 
-  render() {
-    const { board: { board_id } } = this.props
+  render () {
+    const { board: { board_id }} = this.props
     const { show_board_select_type, search_mask_show } = this.state
     return (
       <View >
@@ -73,6 +73,7 @@ export default class Board extends Component {
           <BoardTypeSelect show_board_select_type={show_board_select_type} onSelectType={this.onSelectType} />
         </View>
         <RunningBoard />
+        <View style='height: 50px'></View>
       </View>
     )
   }

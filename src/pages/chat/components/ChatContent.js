@@ -275,6 +275,9 @@ class ChatContent extends Component {
           }}
         >
           {currentGroupSessionList.map((i, index, arr) => {
+
+            console.log(i, 'ssspppp');
+
             return (
               <View className={styles.chatItemWrapper} key={i.time}>
                 {this.isShouldShowTimestamp(index, arr) && (

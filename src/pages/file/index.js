@@ -65,12 +65,12 @@ export default class File extends Component {
     }
 
     goFileDetails = (value) => {
-        const { file_id, board_id } = value
+        const { id, board_id } = value
         const { dispatch } = this.props
         dispatch({
             type: 'file/getFileDetails',
             payload: {
-                id: file_id,
+                id: id,
                 board_id: board_id,
             },
         })
@@ -80,15 +80,15 @@ export default class File extends Component {
 
         const { dispatch } = this.props
 
-        const queryConditions = []
-        if (board_id) {
-            const board = { id: '1135447108158099461', value: board_id }
-            queryConditions.push(board)
-            if (file_id) {
-                const file = { id: '1192646538984296448', value: 'file_id' }
-                queryConditions.push(file)
-            }
-        }
+        // const queryConditions = []
+        // if (board_id) {
+        //     const board = { id: '1135447108158099461', value: board_id }
+        //     queryConditions.push(board)
+        //     if (file_id) {
+        //         const file = { id: '1192646538984296448', value: 'file_id' }
+        //         queryConditions.push(file)
+        //     }
+        // }
 
         dispatch({
             type: 'global/globalQuery',
@@ -96,7 +96,7 @@ export default class File extends Component {
                 _organization_id: '0',
                 page_number: '1',
                 page_size: '5',
-                query_conditions: queryConditions,
+                // query_conditions: queryConditions,
                 search_term: value, //关键字
                 search_type: '6',  //文件 type = 6
             },
