@@ -8,11 +8,6 @@ import Tree from './Tree'
 @connect(({ }) => ({}))
 export default class TreeFile extends Component {
 
-    state = {
-        open: false,     //是否展开
-        isBranch: false, //是否有子级
-    }
-
     jsonToArray(nodes, arr = []) {
         var r = arr;
         if (nodes && nodes.length) {

@@ -50,8 +50,7 @@ class ChatContent extends Component {
     super(props);
     this.state = {
       scrollIntoViewEleId: '', //设置scrollView 自动滚动属性
-      chatConetntViewHeightStyle: '',
-      isIosHomeIndicator: false,  //是否iPhone X 及以上设备
+      chatConetntViewHeightStyle: ''
     };
     //是否正在 touch 聊天列表
     this.isTouchingScrollView = false;
@@ -131,6 +130,9 @@ class ChatContent extends Component {
     //   console.log("YING",res);
     //   chatContentHeight = res[0].height;
     // });
+
+
+
   };
   isShouldShowTimestamp = (index, arr) => {
     //如果是消息队列中的第一条消息，那么显示时间戳
@@ -162,24 +164,10 @@ class ChatContent extends Component {
       });
     });
   };
-
-  componentDidMount() {
-    Taro.getSystemInfo({
-      success: (res) => {
-        if (res.model.indexOf('iPhone X') > -1 || res.model.indexOf('iPhone 11') > -1) {
-          this.setState({
-            isIosHomeIndicator: true
-          })
-        }
-      }
-    })
-  }
-
   componentWillReceiveProps(nextProps) {
     //这里接收到的nextProps的值是有问题的
     //导致更新现有消息的消息列表只能在 nim 的  onMsg 的方法回调中处理
     this.updateScrollViewPosition(nextProps);
-
   }
 
   componentDidShow() {
@@ -222,23 +210,21 @@ class ChatContent extends Component {
       desc: 'init currentGroupSessionList'
     });
   }
-
   render() {
     const {
       currentGroupSessionList,
       isOnlyShowInform,
       isUserInputHeightChange
     } = this.props;
-    const { scrollIntoViewEleId, chatConetntViewHeightStyle, isIosHomeIndicator, } = this.state;
+    const { scrollIntoViewEleId, chatConetntViewHeightStyle } = this.state;
     // console.log("isUserInputHeightChange",isUserInputHeightChange);
-    // console.log(currentGroupSessionList, '渲染消息列表的数组');
+    console.log(currentGroupSessionList, '渲染消息列表的数组');
 
     // console.log(scrollIntoViewEleId);
     return (
       <ScrollView
         id='chatContent'
-        className={[styles.wrapper, isIosHomeIndicator === false ? styles.maxHeight : styles.minHeight].join(" ")}
-        // className={`${styles.wrapper} ${true ? styles.minHeight : styles.maxHeight}`}
+        className={styles.wrapper}
         scrollY
         scrollWithAnimation
         lowerThreshold={20}

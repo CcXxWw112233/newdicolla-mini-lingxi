@@ -316,7 +316,6 @@ export default {
     },
     *sendMsg({ payload }, { select }) {
       const { scene, to, text } = payload;
-
       const { nim } = yield selectFieldsFromIm(select, 'nim');
       nim.sendText({
         scene,

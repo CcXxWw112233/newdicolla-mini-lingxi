@@ -1,17 +1,11 @@
 @import "../../../gloalSet/styles/constant";
 
-.minHeight {
-  height: calc(100vh - 280px);
-}
-
-.maxHeight {
-  height: calc(100vh - 222px);
-}
-
 .wrapper {
-  margin-top: 5px;
-  background: #fff;
-  padding   : 0px 32px 0px;
+  margin-top   : 5px;
+  // height    : calc(100vh - 222px);
+  height       : calc(100vh - 280px);
+  background   : #fff;
+  padding      : 0px 32px 0px;
 
   .filterInformWrapper {
     position       : fixed;
