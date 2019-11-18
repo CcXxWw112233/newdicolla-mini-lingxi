@@ -32,7 +32,9 @@ export default {
         //下载文件
         * getDownloadUrl({ payload }, { select, call, put }) {
             const { parameter, fileType } = payload
-            Taro.showLoading()
+            Taro.showLoading({
+                title: '加载中...',
+            })
             const res = yield call(getDownloadUrl, parameter)
             var index = fileType.lastIndexOf(".");
             const file_type = fileType.substring(index + 1, fileType.length)
@@ -54,41 +56,53 @@ export default {
                         url: res.data[0],
                         success: function (res) {
                             var filePath = res.tempFilePath
-                            console.log('filePath', filePath)
+                            //console.log('filePath', filePath)
                             Taro.saveFile({
                                 tempFilePath: filePath,
                                 success: function (res) {
-                                    console.log("saveFile=====ssss", res.savedFilePath, file_type)
+                                    //console.log("saveFile=====ssss", res.savedFilePath, file_type)
                                     Taro.openDocument({
                                         filePath: res.savedFilePath,
                                         fileType: file_type,  //指定文件类型 file_type
                                         success: function (res) {
-                                            console.log("打开文档成功", res)
+                                            //console.log("打开文档成功", res)
                                         },
                                         fail: function (res) {
                                             Taro.showToast({
-                                                title: res.errMsg
+                                                title: '文件过大或不支持该格式',
+                                                icon: 'none',
+                                                duration: 2000
                                             })
-                                            console.log("fail", res);
+                                            // console.log("fail", res);
                                         },
                                         complete: function (res) {
                                             Taro.hideLoading()
-                                            console.log("complete", res);
+                                            //console.log("complete", res);
                                         }
                                     })
                                 },
                                 fail: function (res) {
                                     Taro.hideLoading()
-                                    console.log("saveFile", res);
+                                    Taro.showToast({
+                                        title: '文件过大或不支持该格式',
+                                        icon: 'none',
+                                        duration: 2000
+                                    })
+                                    //console.log("saveFile", res);
                                 },
                                 complete: function (res) {
-                                    console.log("saveFile", res);
+                                    // console.log("saveFile", res);
                                 }
                             })
 
                         },
                         fail: function (res) {
                             Taro.hideLoading()
+                            Taro.showToast({
+                                title: '文件过大或不支持该格式',
+                                icon: 'none',
+                                duration: 2000
+                            })
                             console.log('fail', res)
                         },
                         complete: function (res) {

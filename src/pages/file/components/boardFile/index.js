@@ -11,7 +11,37 @@ import TreeFile from './TreeFile'
 }))
 export default class BoardFile extends Component {
 
+    state = {
+        height: ''
+    }
+
+    setMaskHeight = () => {
+        let systemInfo = wx.getSystemInfoSync()
+        // px转换到rpx的比例
+        let pxToRpxScale = 750 / systemInfo.windowWidth;
+        // 状态栏的高度
+        let ktxStatusHeight = systemInfo.statusBarHeight * pxToRpxScale
+        // 导航栏的高度
+        let navigationHeight = 44 * pxToRpxScale
+        // window的宽度
+        let ktxWindowWidth = systemInfo.windowWidth * pxToRpxScale
+        // window的高度
+        let ktxWindowHeight = systemInfo.windowHeight * pxToRpxScale
+        // 屏幕的高度
+        let ktxScreentHeight = systemInfo.screenHeight * pxToRpxScale
+        // 底部tabBar的高度
+        let tabBarHeight = ktxScreentHeight - ktxStatusHeight - navigationHeight - ktxWindowHeight
+
+    }
+
     componentDidMount() {
+
+        // const systemInfo = Taro.getSystemInfoSync()
+        // const { windowHeight } = systemInfo
+        // this.setState({
+        //     height: windowHeight
+        // })
+        // console.log('sssss', systemInfo)
         const { dispatch } = this.props
         dispatch({
             type: 'board/v2BoardList',
@@ -50,9 +80,9 @@ export default class BoardFile extends Component {
 
         const { folder_tree, v2_board_list } = this.props
         const file_item_board_id = Taro.getStorageSync('file_item_board_id')
-
+        const { height } = this.state
         return (
-            <View className={indexStyles.choice_board_file_style}>
+            <View className={indexStyles.choice_board_file_style} >
 
                 <View className={indexStyles.whole_file_style}>
                     <View className={indexStyles.whole_file_hear_style} onClick={() => this.selectedBoardItem('0', '', '')}>

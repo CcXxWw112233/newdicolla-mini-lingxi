@@ -23,6 +23,7 @@ export const getFileDetails = (data, notShowLoading) => {
     }, notShowLoading)
 }
 
+//下载文件
 export const getDownloadUrl = (data, notShowLoading) => {
     return request({
         data: {

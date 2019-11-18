@@ -6,11 +6,12 @@
     margin-top: 0%;
     height    : 100%;
     width     : 100%;
-    position  : absolute;
+    position  : fixed;
     z-index   : 9999;
     top       : 0;
     left      : 0;
     background: rgba(0, 0, 0, .45);
+    overflow  : hidden;
 
     .personal_center_style {
         background   : white;

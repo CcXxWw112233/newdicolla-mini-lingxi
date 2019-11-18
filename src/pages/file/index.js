@@ -93,7 +93,7 @@ export default class File extends Component {
                     Taro.removeSavedFile({
                         filePath: res.fileList[0].filePath,
                         complete(res) {
-                            console.log('清除成', res)
+                            //console.log('清除成功', res)
                         }
                     })
                 }
