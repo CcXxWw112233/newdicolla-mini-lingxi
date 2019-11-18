@@ -3,45 +3,52 @@
 .select_list_out {
   background-color: #ffffff;
 }
+
 .select_list {
-  position: fixed;
-  z-index: 12;
+  position        : fixed;
+  z-index         : 12;
   background-color: #ffffff;
-  width: 100%;
-  height: auto;
-  max-height: pxTrans(240);
-  overflow: scroll;
-  box-shadow:0 pxTrans(1) pxTrans(2) rgba(255,255,255,0.6);
+  width           : 100%;
+  height          : auto;
+  max-height      : pxTrans(240);
+  overflow        : scroll;
+  box-shadow      : 0 pxTrans(1) pxTrans(2) rgba(255, 255, 255, 0.6);
 
 }
+
 .select_item {
-  height: pxTrans(48);
-  line-height: pxTrans(48);
-  color: $color_2;
-  padding: 0 $paddingValue;
-  font-size: $fontsize_16;
-  display: flex;
+  height         : pxTrans(48);
+  line-height    : pxTrans(48);
+  color          : $color_2;
+  padding        : 0 $paddingValue;
+  font-size      : $fontsize_16;
+  display        : flex;
   justify-content: space-between;
-  align-items: center;
+  align-items    : center;
+
   .select_item_left {
-    flex: 1;
-    overflow: hidden;
-    text-overflow:ellipsis;
-    white-space: nowrap;
+    flex         : 1;
+    overflow     : hidden;
+    text-overflow: ellipsis;
+    white-space  : nowrap;
   }
+
   .select_item_right {
     margin-left: pxTrans(8);
   }
+
   .select_item_itemcheck {
     font-size: $fontsize_16;
   }
 
 }
+
 .selected {
   background-color: #ffffff;
 }
+
 .select_item:active {
-  background-color:rgba(0,0,0,0.04)
+  background-color: rgba(0, 0, 0, 0.04)
 }
 
 
@@ -50,26 +57,32 @@
   from {
     top: pxTrans(-400)
   }
+
   to {
     top: pxTrans(0)
   }
 }
+
 @keyframes select_list_hide {
   from {
     top: pxTrans(0)
   }
+
   to {
     top: pxTrans(-400)
   }
 }
+
 .select_list_show {
-  top: pxTrans(0);
+  top      : pxTrans(0);
   animation: select_list_show 0.5s ease;
 }
+
 .select_list_hide {
   animation: select_list_hide 0.5s ease;
-  top: pxTrans(-400)
+  top      : pxTrans(-400)
 }
+
 .select_list_normal {
   top: pxTrans(-400)
 }

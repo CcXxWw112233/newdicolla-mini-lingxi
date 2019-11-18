@@ -56,3 +56,14 @@ export const getBoardDetail = (data, notShowLoading) => {
     url: `${API_BOARD}/board/detail/${data.id}`,
   }, notShowLoading)
 }
+
+//通用项目列表
+export const v2BoardList = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'GET',
+    url: `${API_BOARD}/v2/board/list`,
+  }, notShowLoading)
+}

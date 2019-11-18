@@ -1,0 +1,25 @@
+@import "../../../../gloalSet/styles/constant.scss";
+
+.li_item {
+    width: 100%;
+
+    height     : pxTrans(40);
+    display    : flex;
+    text-align : center;
+    align-items: center;
+
+    .open_item_icon,
+    .folder_Path_icon {
+        font-size: pxTrans(16);
+    }
+
+    .file_item_name {
+        margin-left: pxTrans(10);
+        height     : pxTrans(26);
+        font-size  : pxTrans(18);
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color      : rgba(255, 255, 255, 1);
+        line-height: pxTrans(26);
+    }
+}

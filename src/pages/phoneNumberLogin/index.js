@@ -13,49 +13,48 @@ export default class phoneNumberLogin extends Component {
 
   config = {
     navigationBarTitleText: '手机号登录',
-    user_key: ''
+    user_key: '',
+    sourcePage: '',
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) { }
 
-  }
+  componentWillUnmount() { }
 
-  componentWillUnmount () {
+  componentDidShow() { }
 
-  }
-
-  componentDidShow () {
-
-  }
-
-  componentWillMount () {
-    const { user_key } = this.$router.params
+  componentWillMount() {
+    const { user_key, sourcePage } = this.$router.params
     this.setState({
-      user_key
+      user_key: user_key,
+      sourcePage: sourcePage
     })
   }
 
-  componentDidHide () { }
+  componentDidHide() { }
 
   onGetPhoneNumberLogin = (userInfo) => {
-    if(userInfo.detail.encryptedData){   //同意
+    if (userInfo.detail.encryptedData) {   //同意
       Taro.login().then(res => {
         const code = res.code
         const parmas = {
-          encryptedData:userInfo.detail.encryptedData, 
-          iv: userInfo.detail.iv, 
-          code: code, key: this.state.user_key
+          encryptedData: userInfo.detail.encryptedData,
+          iv: userInfo.detail.iv,
+          code: code, key: this.state.user_key,
         }
         const { dispatch } = this.props
+        const sourcePage = this.state.sourcePage
+
 
         dispatch({
           type: getEffectOrReducerByName('weChatPhoneLogin'),
           payload: {
-            parmas
+            parmas,
+            sourcePage
           }
         })
       })
-    }else{ //拒绝,保持当前页面，直到同意
+    } else { //拒绝,保持当前页面，直到同意
       Taro.showToast({
         icon: 'none',
         title: '您拒绝了授权手机号登录'
@@ -66,7 +65,7 @@ export default class phoneNumberLogin extends Component {
   gotoLoginPage = () => {
     Taro.navigateBack()
   }
-  render () {
+  render() {
     return (
       <View className={`${globalStyles.global_horrizontal_padding}`}>
         <View className={indexStyles.contain1}>
@@ -75,7 +74,7 @@ export default class phoneNumberLogin extends Component {
         <View className={indexStyles.confirm_detail}>您未绑定账号</View>
         <Button className={`${indexStyles.login_btn_wx} ${indexStyles.login_btn}`} open_type='getPhoneNumber' onGetPhoneNumber={this.onGetPhoneNumberLogin}>微信手机号快捷登录</Button>
         <View className={`${indexStyles.change_login_type_out}`}>
-           <View onClick={this.gotoLoginPage} className={`${indexStyles.change_login_type}`}>账号密码登录</View>
+          <View onClick={this.gotoLoginPage} className={`${indexStyles.change_login_type}`}>账号密码登录</View>
         </View>
       </View>
     )

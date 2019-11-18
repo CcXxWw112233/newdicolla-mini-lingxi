@@ -8,6 +8,7 @@ export default {
   namespace: 'accountInfo',
   state: {
     account_info: {},
+    is_mask_show_personalCenter: false, //是否打开个人中心
   },
   effects: {
     //获取用户信息

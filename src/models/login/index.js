@@ -28,7 +28,7 @@ export default {
       } else {
         const res_code = res.code
         if ('4013' == res_code) {
-          Taro.navigateTo({ url: `../../pages/phoneNumberLogin/index?user_key=${res.data}` })
+          Taro.navigateTo({ url: `../../pages/phoneNumberLogin/index?user_key=${res.data}&sourcePage=${payload.sourcePage}` })
         } else {
 
         }
@@ -36,7 +36,7 @@ export default {
     },
     // 微信未绑定系统，通过手机号绑定
     * weChatPhoneLogin({ payload }, { select, call, put }) {
-      const { parmas } = payload
+      const { parmas, sourcePage } = payload
       const res = yield call(weChatPhoneLogin, parmas)
       if (isApiResponseOk(res)) {
         yield put({
@@ -46,16 +46,17 @@ export default {
           }
         })
 
-        const query_Id = Taro.getStorageSync('id')
-        const boardId = Taro.getStorageSync('board_Id')
-        yield put({
-          type: 'invitation/userScanCodeJoinOrganization',
-          payload: {
-            id: query_Id,
-            board_Id: boardId,
-          }
-        })
-
+        if (sourcePage === 'Invitation') {
+          const query_Id = Taro.getStorageSync('id')
+          const boardId = Taro.getStorageSync('board_Id')
+          yield put({
+            type: 'invitation/userScanCodeJoinOrganization',
+            payload: {
+              id: query_Id,
+              board_Id: boardId,
+            }
+          })
+        }
       } else {
         // 微信已绑定系统，给出提示
         Taro.showToast({
@@ -161,6 +162,7 @@ export default {
     //获取用户信息
     * getAccountInfo({ payload }, { select, call, put }) {
       const res = yield call(getAccountInfo)
+
       if (isApiResponseOk(res)) {
         yield put({
           type: 'accountInfo/updateDatas',

@@ -156,44 +156,50 @@ export default class taksDetails extends Component {
             isDescription: description,
         }
 
+        const SystemInfo = Taro.getSystemInfoSync()
+        const statusBar_Height = SystemInfo.statusBarHeight
+        const navBar_Height = SystemInfo.platform == 'ios' ? 44 : 48
+
         return (
             <View >
                 <CustomNavigation backIcon={backIcon} />
 
-                <View className={indexStyles.tasks_time_style}>
-                    <TasksTime cellInfo={timeInfo} tasksDetailsRealizeStatus={(timeInfo) => this.tasksDetailsRealizeStatus(timeInfo)} />
-                </View>
-                <ProjectNameCell title='项目' name={board_name} />
-                <View className={indexStyles.tasks_name_style}>
-                    <ProjectNameCell title='任务分组' name={list_name} />
-                </View>
-                <View>
-                    {
-                        executors ? <ProjectNameCell title='执行人' name='' executors={executors} /> : ''
-                    }
-                    {
-                        milestone_data.name ? <ProjectNameCell title='里程碑' name={milestone_data.name} /> : ''
-                    }
-                    {
-                        description ? <ProjectNameCell title='描述' name={description} /> : ''
-                    }
-                    {
-                        child_data.length > 0 ? <SonTasksCell child_data={child_data} /> : ''
-                    }
-                    <RelationContentCell />
-                    {
-                        label_data.length > 0 ? <TagCell label_data={label_data} /> : ''
-                    }
-                </View>
-                {
-                    <View className={indexStyles.add_function_style}> {
-                        executors && description && milestone_data ? '' : <AddFunctionCell isFunction={is_Function} />
-                    }
+                <View style={{ marginTop: `${statusBar_Height + navBar_Height}` + 'px', left: 0 }}>
+                    <View className={indexStyles.tasks_time_style}>
+                        <TasksTime cellInfo={timeInfo} tasksDetailsRealizeStatus={(timeInfo) => this.tasksDetailsRealizeStatus(timeInfo)} />
                     </View>
-                }
-                {/* <NewBuilders />
+                    <ProjectNameCell title='项目' name={board_name} />
+                    <View className={indexStyles.tasks_name_style}>
+                        <ProjectNameCell title='任务分组' name={list_name} />
+                    </View>
+                    <View>
+                        {
+                            executors ? <ProjectNameCell title='执行人' name='' executors={executors} /> : ''
+                        }
+                        {
+                            milestone_data.name ? <ProjectNameCell title='里程碑' name={milestone_data.name} /> : ''
+                        }
+                        {
+                            description ? <ProjectNameCell title='描述' name={description} /> : ''
+                        }
+                        {
+                            child_data.length > 0 ? <SonTasksCell child_data={child_data} /> : ''
+                        }
+                        <RelationContentCell />
+                        {
+                            label_data.length > 0 ? <TagCell label_data={label_data} /> : ''
+                        }
+                    </View>
+                    {
+                        <View className={indexStyles.add_function_style}> {
+                            executors && description && milestone_data ? '' : <AddFunctionCell isFunction={is_Function} />
+                        }
+                        </View>
+                    }
+                    {/* <NewBuilders />
                 <CommentCell />
                 <CommentBox content={content_Id} /> */}
+                </View>
             </View>
         )
     }

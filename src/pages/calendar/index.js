@@ -8,20 +8,28 @@ import SearchAndMenu from '../board/components/SearchAndMenu'
 import CalendarSwiper from './components/CalendarSwiper'
 import MilestoneList from './components/MilestoneList'
 import { connect } from '@tarojs/redux'
+import CustomNavigation from '../acceptInvitation/components/CustomNavigation.js'
+import PersonalCenter from './components/PersonalCenter'
 
-@connect(({ calendar: { no_sche_card_list, selected_board_name, page_number, isReachBottom, isOtherPageBack, } }) => ({
-  no_sche_card_list, selected_board_name, page_number, isReachBottom, isOtherPageBack,
+@connect(({ calendar: { no_sche_card_list, selected_board_name, page_number, isReachBottom, isOtherPageBack, }, accountInfo }) => ({
+  no_sche_card_list, selected_board_name, page_number, isReachBottom, isOtherPageBack, accountInfo,
 }))
 export default class Calendar extends Component {
   constructor(props) {
     super(props)
   }
 
+  state = {
+    show_card_type_select: '0',
+    search_mask_show: '0',
+  }
+
   config = {
+    navigationStyle: 'custom',
     navigationBarTitleText: '',
     "enablePullDownRefresh": true,
     "backgroundColor": '#696969',
-    "onReachBottomDistance": 50  //默认值50
+    "onReachBottomDistance": 50,  //默认值50
   }
 
   onPullDownRefresh(res) {  //下拉刷新...
@@ -55,11 +63,6 @@ export default class Calendar extends Component {
     }
   }
 
-  state = {
-    show_card_type_select: '0',
-    search_mask_show: '0',
-  }
-
   componentWillReceiveProps(nextProps) { }
 
   componentWillUnmount() { }
@@ -89,6 +92,7 @@ export default class Calendar extends Component {
     this.getScheCardList({})
     this.getSignList()
     this.getUserAllOrgsAllBoards()
+    this.getAccountInfo()
 
     if (Taro.pageScrollTo) {
       Taro.pageScrollTo({
@@ -129,6 +133,18 @@ export default class Calendar extends Component {
       type: 'calendar/getUserAllOrgsAllBoards',
       payload: {}
     })
+  }
+
+  //获取用户信息
+  getAccountInfo() {
+    const { dispatch, accountInfo } = this.props
+    const { account_info = {} } = accountInfo
+    if (JSON.stringify(account_info) == '{}') {
+      dispatch({
+        type: 'accountInfo/getAccountInfo',
+        payload: {}
+      })
+    }
   }
 
   //获取项目列表
@@ -239,19 +255,47 @@ export default class Calendar extends Component {
     initImData().catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
   }
 
+  showPersonalCenter = (value) => {
+    //子组件传值到父组件,去改变state里面值的时候, value不能用this.setState,is_mask_show_personalCenter
+    // this.setState({
+    //   is_mask_show_personalCenter: value
+    // })
+
+    const { dispatch } = this.props
+    dispatch({
+      type: 'accountInfo/updateDatas',
+      payload: {
+        is_mask_show_personalCenter: value
+      }
+    })
+  }
+
   render() {
-    const { show_card_type_select, search_mask_show } = this.state
+    const { show_card_type_select, search_mask_show, } = this.state
     const { no_sche_card_list = [] } = this.props
+
+    const { account_info = {}, is_mask_show_personalCenter } = this.props.accountInfo
+    const { avatar } = account_info
+
+    const SystemInfo = Taro.getSystemInfoSync()
+    const statusBar_Height = SystemInfo.statusBarHeight
+    const navBar_Height = SystemInfo.platform == 'ios' ? 44 : 48
 
     return (
       <View className={indexStyles.view_style}>
-        <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
-        <CalendarSwiper />
+        <CustomNavigation home_personal_center='homePersonalCenter' personal_center_image={avatar} showPersonalCenter={() => this.showPersonalCenter(true)} title='日历' />
+
+        {is_mask_show_personalCenter && is_mask_show_personalCenter === true ? <PersonalCenter account_info={account_info} closePersonalCenter={() => this.showPersonalCenter(false)} />
+          : ''}
+        <View style={{ position: 'sticky', top: `${statusBar_Height + navBar_Height}` + 'px', zIndex: 15, left: 0 }}>
+          <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
+          <CalendarSwiper />
+        </View>
         <CardTypeSelect show_card_type_select={show_card_type_select} onSelectType={this.onSelectType} schedule={'1'} />
-        <MilestoneList schedule={'1'} />
-        {no_sche_card_list.length && (
-          <View className={`${globalStyles.global_card_out} ${indexStyles.no_scheduling}`} onClick={this.gotoNoSchedule}>暂未排期的工作（{no_sche_card_list.length}）</View>
-        )}
+        {/* <MilestoneList schedule={'1'} /> */}
+        {/* {no_sche_card_list.length && ( */}
+        <View className={`${globalStyles.global_card_out} ${indexStyles.no_scheduling}`} onClick={this.gotoNoSchedule}>暂未排期的工作（{no_sche_card_list.length}）</View>
+        {/* )} */}
         <CardList schedule={'1'} />
         <View style='height: 50px'></View>
 

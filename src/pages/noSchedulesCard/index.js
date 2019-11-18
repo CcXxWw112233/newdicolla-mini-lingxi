@@ -15,23 +15,23 @@ export default class Calendar extends Component {
     navigationBarTitleText: ''
   }
 
-  state= {
+  state = {
     show_card_type_select: '0',
     search_mask_show: '0'
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
 
   }
 
-  componentWillMount () {
+  componentWillMount() {
     const { title } = this.$router.params
     Taro.setNavigationBarTitle({
       title
     })
   }
 
-  componentDidShow () {
+  componentDidShow() {
     this.getOrgBoardList()
     this.getNoScheCardList()
   }
@@ -53,22 +53,22 @@ export default class Calendar extends Component {
     })
   }
 
-  componentDidHide () { }
+  componentDidHide() { }
 
-  onSelectType = ({show_type}) => {
+  onSelectType = ({ show_type }) => {
     this.setState({
       show_card_type_select: show_type,
       search_mask_show: show_type
     })
   }
 
-  render () {
+  render() {
     const { show_card_type_select, search_mask_show } = this.state
     return (
       <View>
         <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
-        <CardTypeSelect show_card_type_select={show_card_type_select} onSelectType={this.onSelectType} schedule={'0'}/>
-        <CardList schedule={'0'}/>
+        <CardTypeSelect show_card_type_select={show_card_type_select} onSelectType={this.onSelectType} schedule={'0'} />
+        <CardList schedule={'0'} />
         <View style='height: 50px'></View>
       </View>
     )

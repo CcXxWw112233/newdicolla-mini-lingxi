@@ -139,4 +139,3 @@ export default class acceptInvitation extends Component {
     )
   }
 }
-

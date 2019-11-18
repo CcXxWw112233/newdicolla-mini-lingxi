@@ -1,0 +1,81 @@
+@import "../../../../gloalSet/styles/constant.scss";
+
+.choice_board_file_style {
+    width         : 100%;
+    height        : pxTrans(10000);
+    position      : absolute;
+    top           : 0;
+    z-index       : 100;
+    overflow      : scroll;
+    left          : 0;
+    background    : rgba(0, 0, 0, .65);
+    color         : rgba(255, 255, 255, 1);
+    padding-bottom: pxTrans(50);
+
+    .whole_file_style {
+        margin-top      : pxTrans(20);
+        width           : 100%;
+        height          : pxTrans(50);
+        // background   : rgba(255, 255, 255, 1);
+        // opacity      : 0.19;
+        display         : flex;
+        z-index         : 101;
+
+        .whole_file_hear_style {
+            display    : flex;
+            align-items: center;
+            margin-left: pxTrans(18);
+        }
+    }
+
+    .board_item_style {
+        width: 100%;
+
+        .board_item_cell_style {
+            height     : pxTrans(40);
+            display    : flex;
+            text-align : center;
+            align-items: center;
+
+            .board_item_icon {
+                font-size   : pxTrans(12);
+                margin-left : pxTrans(18);
+                margin-right: pxTrans(10);
+            }
+
+            .board_item_name {
+                height     : pxTrans(26);
+                font-size  : pxTrans(18);
+                font-weight: 600;
+                line-height: pxTrans(26);
+            }
+        }
+
+        .folder_tree_view {
+            margin-left: pxTrans(40);
+        }
+    }
+
+    .close_view_style {
+        width             : 100%;
+        display           : flex;
+        justify-content   : center;
+        position          : absolute;
+        // bottom         : pxTrans(24);
+
+
+        .close_button_style {
+            width          : pxTrans(24);
+            height         : pxTrans(24);
+            color          : rgba(255, 255, 255, 1);
+            display        : flex;
+            justify-content: center;
+            align-items    : center;
+
+            .close_button_icon_style {
+                font-size: pxTrans(24);
+                margin   : pxTrans(10) auto;
+            }
+        }
+    }
+}

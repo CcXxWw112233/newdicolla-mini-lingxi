@@ -20,21 +20,21 @@ class PersonalCenter extends Component {
     navigationBarTitleText: '个人信息'
   }
 
-  componentWillReceiveProps () { }
+  componentWillReceiveProps() { }
 
-  componentWillUnmount () { }
+  componentWillUnmount() { }
 
-  componentDidShow () {
+  componentDidShow() {
     this.getAccountInfo()
   }
 
-  componentDidHide () { }
+  componentDidHide() { }
 
   //获取用户信息
   getAccountInfo = () => {
     const { dispatch, accountInfo } = this.props
-    const { account_info = {}} = accountInfo
-    if(JSON.stringify(account_info) == '{}') {
+    const { account_info = {} } = accountInfo
+    if (JSON.stringify(account_info) == '{}') {
       dispatch({
         type: 'accountInfo/getAccountInfo',
         payload: {}
@@ -60,7 +60,7 @@ class PersonalCenter extends Component {
     }
     const { dispatch } = this.props
     dispatch({
-      type:'accountInfo/changeOut',
+      type: 'accountInfo/changeOut',
       payload: {
         ...parmas
       }
@@ -76,11 +76,10 @@ class PersonalCenter extends Component {
     } = getState();
     nim.destroy();
 
-    // const {dispatch} = this.props;
     dispatch({
-      type:'im/updateStateFieldByCover',
-      payload:{
-        nim:null
+      type: 'im/updateStateFieldByCover',
+      payload: {
+        nim: null
       }
     });
   }
@@ -92,7 +91,7 @@ class PersonalCenter extends Component {
     })
   }
 
-  render () {
+  render() {
     const { show_change_account_modal } = this.state
     const { account_info = {} } = this.props.accountInfo
     const { avatar, name, user_set = {}, mobile, email } = account_info
@@ -112,8 +111,8 @@ class PersonalCenter extends Component {
 
           </AtModalContent>
           <AtModalAction>
-            <Button className={indexStyles.btn1} style={{color: '#1890FF'}} onClick={this.changeAccount}>确定</Button>
-            <Button className={indexStyles.btn1} style={{color: '#1890FF'}} onClick={this.setAccountModalShow}>取消</Button>
+            <Button className={indexStyles.btn1} style={{ color: '#1890FF' }} onClick={this.changeAccount}>确定</Button>
+            <Button className={indexStyles.btn1} style={{ color: '#1890FF' }} onClick={this.setAccountModalShow}>取消</Button>
           </AtModalAction>
         </AtModal>
       </View>
@@ -122,7 +121,7 @@ class PersonalCenter extends Component {
       <View className={indexStyles.index}>
         <View className={indexStyles.contain1}>
           <View>
-            <Aavatar avartarTotal={'single'} size={48} src={avatar}/>
+            <Aavatar avartarTotal={'single'} size={48} src={avatar} />
           </View>
           <View className={indexStyles.contain1_name}>{name}</View>
         </View>
@@ -135,7 +134,7 @@ class PersonalCenter extends Component {
           </View>
           <View className={indexStyles.list_item} onClick={this.gotoChangeOrgPage}>
             <View className={indexStyles.list_item_name}>组织</View>
-            <View className={indexStyles.list_item_detail}>{current_org == '0'?'全组织': org_name}</View>
+            <View className={indexStyles.list_item_detail}>{current_org == '0' ? '全组织' : org_name}</View>
             <View className={`${indexStyles.list_item_iconnext}`}>
               <Text className={`${globalStyle.global_iconfont}`}>&#xe654;</Text>
             </View>

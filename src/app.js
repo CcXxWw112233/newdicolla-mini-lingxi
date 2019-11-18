@@ -51,6 +51,8 @@ class App extends Component {
       // 'pages/DateTimePicker/index',
       'pages/sceneEntrance/index',
       'pages/errorPage/index',
+      'pages/file/index',
+      'pages/webView/index',
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -72,19 +74,18 @@ class App extends Component {
         },
         {
           "pagePath": "pages/board/index",
-          "text": "项目",
+          "text": "项目圈",
           "iconPath": './asset/tabBar/board.png',
           "selectedIconPath": './asset/tabBar/board_selected.png',
         },
         {
-          "pagePath": "pages/personalCenter/index",
-          "text": "我的",
+          "pagePath": "pages/file/index",
+          "text": "文件",
           "iconPath": './asset/tabBar/personal.png',
           "selectedIconPath": './asset/tabBar/personal_selected.png',
         }
       ]
     }
-
   }
 
   globalData = {

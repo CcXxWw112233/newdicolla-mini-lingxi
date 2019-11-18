@@ -1,0 +1,108 @@
+@import "../../gloalSet/styles/constant";
+
+.index {
+    margin     : 0;
+    // position: relative;
+
+    .head_background {
+        height  : pxTrans(123);
+        width   : 100%;
+        position: fixed;
+        left    : 0;
+        top     : pxTrans(44);
+
+        .image_head_background {
+            position: absolute;
+            width   : 100%;
+            height  : 100%;
+        }
+
+        .hear_function {
+            width     : 100%;
+            height    : pxTrans(34);
+            margin-top: pxTrans(24);
+
+            .folderPath {
+                width        : pxTrans(104);
+                height       : pxTrans(34);
+                position     : fixed;
+                left         : pxTrans(16);
+                background   : white;
+                border-radius: pxTrans(17);
+                color        : rgba(24, 144, 255, 1);
+                text-align   : center;
+                align-items  : center;
+                display      : flex;
+
+                .folder_Path_icon {
+                    font-size: pxTrans(16);
+                    margin   : pxTrans(9) pxTrans(10) pxTrans(9) pxTrans(14);
+                }
+            }
+
+        }
+    }
+
+    .grid_style {
+        display        : -webkit-flex;
+        display        : flex;
+        justify-content: flex-start;
+        flex-wrap      : wrap;
+        width          : 100%;
+        margin         : 0 auto;
+        margin-top     : pxTrans(120);
+
+        .lattice_style {
+            flex      : 0 0 auto;
+            width     : 32.5%;
+            height    : pxTrans(120);
+            border    : 1px solid #fff;
+            background: rgba(0, 0, 0, 0.09);
+
+            .img_style {
+                width   : 100%;
+                height  : 100%;
+                display : inline-block;
+                overflow: hidden;
+            }
+
+            .other_icon_style {
+                width          : 100%;
+                height         : 100%;
+                text-align     : center;
+                justify-content: center;
+                display        : flex;
+                flex-direction : column;
+                align-items    : center;
+
+                .folder_type_icon {
+                    font-size: pxTrans(36);
+                    top      : pxTrans(22);
+                    color    : rgba(0, 0, 0, 0.25);
+                }
+
+                .other_name_style {
+                    max-height   : pxTrans(40);
+                    font-size    : pxTrans(12);
+                    font-weight  : 400;
+                    color        : rgba(0, 0, 0, 0.45);
+                    line-height  : pxTrans(20);
+                    margin       : 0 pxTrans(10) 0 pxTrans(10);
+                    overflow     : hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+
+        }
+    }
+
+    .contain1 {
+        margin-top: pxTrans(200);
+        text-align: center;
+
+        .file_list_empty {
+            width : pxTrans(167);
+            height: pxTrans(122);
+        }
+    }
+}

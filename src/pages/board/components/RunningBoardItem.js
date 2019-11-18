@@ -13,13 +13,13 @@ import { connect } from '@tarojs/redux';
   sessionlist
 }))
 class RuningBoardItem extends Component {
-  componentWillReceiveProps(nextProps) {}
+  componentWillReceiveProps(nextProps) { }
 
-  componentWillUnmount() {}
+  componentWillUnmount() { }
 
-  componentDidShow() {}
+  componentDidShow() { }
 
-  componentDidHide() {}
+  componentDidHide() { }
 
   gotoBoardDetail = board_id => {
     Taro.navigateTo({
@@ -87,7 +87,7 @@ class RuningBoardItem extends Component {
         <View
           className={`${globalStyles.global_card_out} ${
             indexStyles.card_content
-          }`}
+            }`}
           onClick={this.gotoBoardDetail.bind(this, board_id)}
         >
           <View className={`${indexStyles.card_content_top}`}>
@@ -102,7 +102,7 @@ class RuningBoardItem extends Component {
                     key={key}
                     className={`${globalStyles.global_iconfont} ${
                       indexStyles.star
-                    }`}
+                      }`}
                   >
                     &#xe64b;
                   </Text>

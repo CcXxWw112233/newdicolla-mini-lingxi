@@ -2,12 +2,18 @@
 
 .CustomNavigation_Scss {
   background-color: #1890ff;
+  position        : fixed;
+  width           : 100%;
+  top             : 0;
+  z-index         : 9999999;
 
   .navBar_Scss {
     width          : 100%;
     align-items    : center;
     display        : flex;
     justify-content: space-between;
+
+    .home_Personal_Center {}
 
     .back_Wapper {
       display    : inline-flex;
