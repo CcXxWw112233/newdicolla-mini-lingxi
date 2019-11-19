@@ -323,6 +323,11 @@ class GroupList extends Component {
       rawMessageList
     );
 
+    // console.log(currentBoard,
+    //   sessionlist,
+    //   rawMessageList, 'pppppp');
+    // console.log(integratedCurrentBoardInfo, 'ssss');
+
     return (
       <View className={styles.wrapper}>
         <View className={styles.mainGroupWrapper}>

@@ -25,7 +25,8 @@ export default {
     // 获取当前组织项目列表
     * getOrgBoardList({ payload }, { select, call, put }) {
       const account_info_string = Taro.getStorageSync('account_info')
-      const current_org = getCurrentOrgByStorage()
+      // const current_org = getCurrentOrgByStorage()
+      const current_org = '0'
       const { page_number = '1', page_size = '100' } = payload
       const res = yield call(getOrgBoardList, { _organization_id: current_org, page_number, page_size })
 
@@ -46,7 +47,8 @@ export default {
 
       const selected_timestamp = yield select(select_selected_timestamp)
       const selected_board = yield select(select_selected_board)
-      const current_org = getCurrentOrgByStorage()
+      // const current_org = getCurrentOrgByStorage()
+      const current_org = '0'
       const page_number = yield select(select_page_number)
       let typeSource = payload['type'];
 
@@ -107,7 +109,8 @@ export default {
     //获取没有排期卡片列表
     * getNoScheCardList({ payload }, { select, call, put }) {
 
-      const current_org = getCurrentOrgByStorage()
+      // const current_org = getCurrentOrgByStorage()
+      const current_org = '0'
       const selected_board = yield select(select_selected_board)
 
       const res = yield call(getNoScheCardList, { _organization_id: current_org, board_id: selected_board, page_size: '200', page_number: '1' })
@@ -134,7 +137,8 @@ export default {
       const year_ = date.getFullYear()
       const month_ = date.getMonth() + 1
       const month = month_ < 10 ? `0${month_}` : month_
-      const current_org = getCurrentOrgByStorage()
+      // const current_org = getCurrentOrgByStorage()
+      const current_org = '0'
       const selected_board = yield select(select_selected_board)
       const res = yield call(getSignList, { _organization_id: current_org, board_id: selected_board, month: `${year_}-${month}` })
 
@@ -152,10 +156,10 @@ export default {
 
     // 获取用户下所有组织Id及项目Id
     * getUserAllOrgsAllBoards({ payload }, { select, call, put }) {
-      const current_org = getCurrentOrgByStorage()
+      // const current_org = getCurrentOrgByStorage()
+      const current_org = '0'  //小程序默认为全组织, 不能切换其他组织
       const res = yield call(getUserAllOrgsAllBoards, { _organization_id: current_org })
       if (isApiResponseOk(res)) {
-
         Taro.setStorageSync('userAllOrgsAllBoards', JSON.stringify(res.data))
       } else {
 

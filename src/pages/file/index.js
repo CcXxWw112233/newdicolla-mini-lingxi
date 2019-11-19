@@ -1,4 +1,4 @@
-import Taro, { Component, hideToast } from '@tarojs/taro'
+import Taro, { Component, hideToast, pageScrollTo } from '@tarojs/taro'
 import { View, Text, Image, RichText } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
@@ -68,6 +68,11 @@ export default class File extends Component {
             payload: {
                 isShowBoardList: e,
             },
+        })
+
+        pageScrollTo({
+            scrollTop: 0,
+            duration: 300,
         })
     }
 
