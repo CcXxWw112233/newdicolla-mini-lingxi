@@ -17,6 +17,10 @@ export default class File extends Component {
     config = {
         navigationBarTitleText: '文件',
     }
+    state = {
+        is_tips_longpress_file: false,  //是否显示长按文件前往圈子的提示
+    }
+
     componentDidMount() { }
 
     componentDidShow() {
@@ -51,6 +55,8 @@ export default class File extends Component {
                 page_size: '',
             },
         })
+
+        // this.choiceBoard(false)
     }
 
     onSelectType = ({ show_type }) => {
@@ -79,6 +85,7 @@ export default class File extends Component {
     goFileDetails = (value, fileName) => {
 
         Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
+
 
         const { file_resource_id, board_id } = value
         const { dispatch } = this.props
@@ -112,22 +119,21 @@ export default class File extends Component {
                 fileType: fileType,
             },
         })
+
+        //是否显示长按文件前往圈子的提示
+        const tips_longpress_file = Taro.getStorageSync('tips_longpress_file')
+        if (!tips_longpress_file) {
+            Taro.setStorageSync('tips_longpress_file', 'tips_longpress_file')
+            this.setState({
+                is_tips_longpress_file: true
+            })
+        }
     }
 
 
     onSearch = (value, board_id, file_id) => {
 
         const { dispatch } = this.props
-
-        // const queryConditions = []
-        // if (board_id) {
-        //     const board = { id: '1135447108158099461', value: board_id }
-        //     queryConditions.push(board)
-        //     if (file_id) {
-        //         const file = { id: '1192646538984296448', value: 'file_id' }
-        //         queryConditions.push(file)
-        //     }
-        // }
 
         dispatch({
             type: 'global/globalQuery',
@@ -142,9 +148,24 @@ export default class File extends Component {
         })
     }
 
+    //长按进入圈子
+    longPress = (board_id) => {
+        Taro.navigateTo({
+            url: `/pages/boardDetail/index?boardId=${board_id}`
+        })
+    }
+
+    closeTips = () => {
+        this.setState({
+            is_tips_longpress_file: false
+        })
+    }
+
     render() {
 
         const { file_list, isShowBoardList, } = this.props
+        const { is_tips_longpress_file } = this.state
+        const tips_longpress_file = Taro.getStorageSync('tips_longpress_file')
 
         return (
             <View className={indexStyles.index}>
@@ -174,7 +195,7 @@ export default class File extends Component {
                             const { thumbnail_url } = value
                             const fileType = filterFileFormatType(value.file_name)
                             return (
-                                <View className={indexStyles.lattice_style} onClick={this.goFileDetails.bind(this, value, value.file_name)} >
+                                <View className={indexStyles.lattice_style} onClick={this.goFileDetails.bind(this, value, value.file_name)} onLongPress={this.longPress.bind(this, value.board_id)}>
                                     {
                                         thumbnail_url ?
                                             (<Image mode='aspectFill' className={indexStyles.img_style} src={thumbnail_url}>
@@ -197,6 +218,19 @@ export default class File extends Component {
                         )
                 }
 
+                {
+                    is_tips_longpress_file === true ? (<View className={indexStyles.tips_view_style}>
+                        <View className={indexStyles.tips_style}>
+                            <View className={indexStyles.tips_cell_style}>
+                                <Text className={`${globalStyle.global_iconfont} ${indexStyles.tips_icon_style}`}>&#xe848;</Text>
+                                <View className={indexStyles.tips_text_style}>长按文件可以进入圈子交流</View>
+                                <View onClick={this.closeTips}>
+                                    <Text className={`${globalStyle.global_iconfont} ${indexStyles.tips_close_style}`}>&#xe7fc;</Text>
+                                </View>
+                            </View>
+                        </View>
+                    </View>) : ''
+                }
             </View>
         )
     }

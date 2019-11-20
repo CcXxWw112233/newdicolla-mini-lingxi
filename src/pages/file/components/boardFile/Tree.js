@@ -19,6 +19,13 @@ export default class Tree extends Component {
                 page_size: '',
             },
         })
+
+        dispatch({
+            type: 'file/updateDatas',
+            payload: {
+                isShowBoardList: false,
+            },
+        })
     }
 
     render() {

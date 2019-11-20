@@ -38,7 +38,6 @@ class App extends Component {
       'pages/selectOrg/index',
       'pages/phoneNumberLogin/index',
       'pages/testPage/index',
-      'pages/personalCenter/index',
       'pages/index/index',
       'pages/acceptInvitation/index',
       'pages/nowOpen/index',

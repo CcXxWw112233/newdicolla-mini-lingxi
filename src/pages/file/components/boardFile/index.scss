@@ -49,6 +49,13 @@
                 font-weight: 600;
                 line-height: pxTrans(26);
             }
+
+            .org_name_style {
+                margin-left: pxTrans(10);
+                font-size  : pxTrans(12);
+                color      : rgba(255, 255, 255, 1);
+                line-height: pxTrans(20);
+            }
         }
 
         .folder_tree_view {

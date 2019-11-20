@@ -5,11 +5,12 @@
     // position: relative;
 
     .head_background {
-        height  : pxTrans(123);
-        width   : 100%;
-        position: fixed;
-        left    : 0;
-        top     : pxTrans(44);
+        height    : pxTrans(123);
+        width     : 100%;
+        position  : fixed;
+        left      : 0;
+        top       : pxTrans(44);
+        background: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.6) 70%);
 
         .image_head_background {
             position: absolute;
@@ -82,14 +83,17 @@
                 }
 
                 .other_name_style {
-                    max-height   : pxTrans(40);
-                    font-size    : pxTrans(12);
-                    font-weight  : 400;
-                    color        : rgba(0, 0, 0, 0.45);
-                    line-height  : pxTrans(20);
-                    margin       : 0 pxTrans(10) 0 pxTrans(10);
-                    overflow     : hidden;
-                    text-overflow: ellipsis;
+                    max-height        : pxTrans(40);
+                    font-size         : pxTrans(12);
+                    font-weight       : 400;
+                    color             : rgba(0, 0, 0, 0.45);
+                    line-height       : pxTrans(20);
+                    margin            : 0 pxTrans(10) 0 pxTrans(10);
+                    overflow          : hidden;
+                    text-overflow     : ellipsis;
+                    word-break        : break-all;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 2;
                 }
             }
 
@@ -103,6 +107,51 @@
         .file_list_empty {
             width : pxTrans(167);
             height: pxTrans(122);
+        }
+    }
+
+
+    .tips_view_style {
+        width          : 100%;
+        display        : flex;
+        justify-content: center;
+        position       : fixed;
+        bottom         : pxTrans(24);
+        left           : 0;
+        right          : 0;
+
+        .tips_style {
+            height         : pxTrans(40);
+            display        : flex;
+            align-items    : center;
+            width          : pxTrans(250);
+            background     : rgba(255, 255, 255, 1);
+            box-shadow     : 0px pxTrans(4) pxTrans(12) 0px rgba(0, 0, 0, 0.15);
+            border-radius  : pxTrans(4);
+            justify-content: center;
+
+            .tips_cell_style {
+                display: flex;
+
+                .tips_icon_style {
+                    font-size: pxTrans(14);
+                    color    : rgba(82, 196, 26, 1);
+                    margin   : pxTrans(4);
+                }
+
+                .tips_text_style {
+                    font-size  : pxTrans(14);
+                    font-weight: 400;
+                    color      : rgba(0, 0, 0, 0.65);
+                    line-height: pxTrans(22);
+                }
+
+                .tips_close_style {
+                    font-size: pxTrans(16);
+                    color    : rgba(0, 0, 0, 1);
+                    margin   : pxTrans(6);
+                }
+            }
         }
     }
 }

@@ -5,9 +5,10 @@ import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
 import im from '../../../../models/im'
 import TreeFile from './TreeFile'
+import { getOrgIdByBoardId, setBoardIdStorage, getOrgName } from '../../../../utils/basicFunction'
 
-@connect(({ file: { folder_tree }, board: { v2_board_list, } }) => ({
-    folder_tree, v2_board_list
+@connect(({ file: { folder_tree }, board: { v2_board_list, }, my: { org_list } }) => ({
+    folder_tree, v2_board_list, org_list
 }))
 export default class BoardFile extends Component {
 
@@ -35,7 +36,6 @@ export default class BoardFile extends Component {
     }
 
     componentDidMount() {
-
         // const systemInfo = Taro.getSystemInfoSync()
         // const { windowHeight } = systemInfo
         // this.setState({
@@ -52,9 +52,15 @@ export default class BoardFile extends Component {
         })
     }
 
+    componentWillUnmount() {
+        Taro.removeStorageSync('file_item_board_id')
+    }
+
     selectedBoardItem = (org_id, board_id, file_id) => {
 
+        //选中的那一行的board_id
         Taro.setStorageSync('file_item_board_id', board_id)
+
         this.props.selectedBoardFile(org_id, board_id, file_id)
 
         if (board_id) {
@@ -78,7 +84,7 @@ export default class BoardFile extends Component {
 
     render() {
 
-        const { folder_tree, v2_board_list } = this.props
+        const { folder_tree, v2_board_list, org_list } = this.props
         const file_item_board_id = Taro.getStorageSync('file_item_board_id')
         const { height } = this.state
         return (
@@ -93,24 +99,35 @@ export default class BoardFile extends Component {
 
                 <ScrollView>
                     <View >
-                        {v2_board_list && v2_board_list.map(item => (
+                        {v2_board_list && v2_board_list.map(item => {
+                            const org_id = getOrgIdByBoardId(item.board_id)
+                            return (
+                                <View className={indexStyles.tree_style}>
+                                    <View className={indexStyles.board_item_style} onClick={() => this.selectedBoardItem('0', item.board_id, '')}>
 
-                            <View className={indexStyles.tree_style}>
-                                <View className={indexStyles.board_item_style} onClick={() => this.selectedBoardItem('0', item.board_id, '')}>
-
-                                    <View className={indexStyles.board_item_cell_style}>
-                                        <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_icon}`}>&#xe8ed;</Text>
-                                        <View className={indexStyles.board_item_name}>{item.board_name}</View>
+                                        <View className={indexStyles.board_item_cell_style}>
+                                            {
+                                                file_item_board_id === item.board_id ? (
+                                                    <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_icon}`}>&#xe8ec;</Text>
+                                                ) : (
+                                                        <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_icon}`}>&#xe8ed;</Text>
+                                                    )
+                                            }
+                                            <View className={indexStyles.board_item_name}>{item.board_name}</View>
+                                            {org_list && org_list.length > 0 ? (<View className={indexStyles.org_name_style}>
+                                                {'#'}{getOrgName({ org_id, org_list })}
+                                            </View>) : ''}
+                                        </View>
                                     </View>
-                                </View>
 
-                                {folder_tree && item.board_id === file_item_board_id ?
-                                    <View className={indexStyles.folder_tree_view}>
-                                        <TreeFile folderTree={folder_tree} boardId={item.board_id} orgId={item.org_id} />
-                                    </View> : ''
-                                }
-                            </View>
-                        ))
+                                    {folder_tree && item.board_id === file_item_board_id ?
+                                        <View className={indexStyles.folder_tree_view}>
+                                            <TreeFile folderTree={folder_tree} boardId={item.board_id} orgId={item.org_id} />
+                                        </View> : ''
+                                    }
+                                </View>
+                            )
+                        })
                         }
                     </View>
                 </ScrollView>
