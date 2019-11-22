@@ -2,7 +2,6 @@ import Taro, { Component, hideToast, pageScrollTo } from '@tarojs/taro'
 import { View, Text, Image, RichText } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
-import file_head_background from '../../asset/file/file_head_background.png'
 import { connect } from '@tarojs/redux'
 import SearchAndMenu from '../board/components/SearchAndMenu'
 import { filterFileFormatType } from './../../utils/util';
@@ -10,8 +9,8 @@ import file_list_empty from '../../asset/file/file_list_empty.png'
 import BoardFile from './components/boardFile/index.js'
 import { getOrgIdByBoardId, setBoardIdStorage } from '../../utils/basicFunction'
 
-@connect(({ file: { file_list = [], isShowBoardList } }) => ({
-    file_list, isShowBoardList
+@connect(({ file: { file_list = [], isShowBoardList, header_folder_name } }) => ({
+    file_list, isShowBoardList, header_folder_name,
 }))
 export default class File extends Component {
     config = {
@@ -55,8 +54,6 @@ export default class File extends Component {
                 page_size: '',
             },
         })
-
-        // this.choiceBoard(false)
     }
 
     onSelectType = ({ show_type }) => {
@@ -132,9 +129,7 @@ export default class File extends Component {
 
 
     onSearch = (value, board_id, file_id) => {
-
         const { dispatch } = this.props
-
         dispatch({
             type: 'global/globalQuery',
             payload: {
@@ -144,6 +139,13 @@ export default class File extends Component {
                 // query_conditions: queryConditions,
                 search_term: value, //关键字
                 search_type: '6',  //文件 type = 6
+            },
+        })
+
+        dispatch({
+            type: 'file/updateDatas',
+            payload: {
+                header_folder_name: '全部文件',
             },
         })
     }
@@ -163,9 +165,8 @@ export default class File extends Component {
 
     render() {
 
-        const { file_list, isShowBoardList, } = this.props
+        const { file_list, isShowBoardList, header_folder_name } = this.props
         const { is_tips_longpress_file } = this.state
-        const tips_longpress_file = Taro.getStorageSync('tips_longpress_file')
 
         return (
             <View className={indexStyles.index}>
@@ -180,12 +181,10 @@ export default class File extends Component {
                 </View>
 
                 <View className={indexStyles.head_background}>
-                    <Image src={file_head_background} className={indexStyles.image_head_background} />
-
                     <View className={indexStyles.hear_function}>
                         <View className={indexStyles.folderPath} onClick={() => this.choiceBoard(true)}>
                             <Text className={`${globalStyle.global_iconfont} ${indexStyles.folder_Path_icon}`}>&#xe6c6;</Text>
-                            <View>全部文件</View>
+                            <Text className={indexStyles.header_folder_name_style}>{header_folder_name}</Text>
                         </View>
                     </View>
                 </View>

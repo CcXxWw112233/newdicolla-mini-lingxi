@@ -2,12 +2,12 @@
 
 .choice_board_file_style {
     width         : 100%;
-    height        : pxTrans(10000);
-    position      : absolute;
+    height        : 100%;
+    position      : fixed;
     top           : 0;
-    z-index       : 100;
-    overflow      : scroll;
     left          : 0;
+    z-index       : 100;
+    overflow      : auto;
     background    : rgba(0, 0, 0, .65);
     color         : rgba(255, 255, 255, 1);
     padding-bottom: pxTrans(50);
@@ -64,25 +64,28 @@
     }
 
     .close_view_style {
-        width             : 100%;
-        display           : flex;
-        justify-content   : center;
-        position          : absolute;
-        // bottom         : pxTrans(24);
-
+        width          : 100%;
+        display        : flex;
+        justify-content: center;
+        position       : fixed;
+        bottom         : pxTrans(24);
 
         .close_button_style {
-            width          : pxTrans(24);
-            height         : pxTrans(24);
-            color          : rgba(255, 255, 255, 1);
-            display        : flex;
-            justify-content: center;
-            align-items    : center;
+            width             : pxTrans(40);
+            height            : pxTrans(40);
+            // color          : rgba(255, 255, 255, 1);
+            display           : flex;
+            justify-content   : center;
+            align-items       : center;
+            background        : rgb(255, 255, 255);
+            border-radius     : pxTrans(20);
 
             .close_button_icon_style {
                 font-size: pxTrans(24);
                 margin   : pxTrans(10) auto;
+                color    : rgba(0, 0, 0, .65);
             }
         }
     }
+
 }

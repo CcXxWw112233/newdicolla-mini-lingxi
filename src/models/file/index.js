@@ -8,6 +8,7 @@ export default {
         file_list: [], //文件略缩图信息
         isShowBoardList: false,  //是否显示项目列表
         folder_tree: [],  //文件数据列表
+        header_folder_name: '全部文件',  //当前选中的文件夹名称
     },
     effects: {
         //全部文件信息

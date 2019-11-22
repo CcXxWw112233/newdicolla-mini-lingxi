@@ -39,6 +39,12 @@
                     font-size: pxTrans(16);
                     margin   : pxTrans(9) pxTrans(10) pxTrans(9) pxTrans(14);
                 }
+
+                .header_folder_name_style {
+                    overflow     : hidden;
+                    text-overflow: ellipsis;
+                    white-space  : nowrap;
+                }
             }
 
         }
