@@ -43,16 +43,35 @@ export default class File extends Component {
 
     getFilePage = (org_id, board_id, file_id) => {
 
+        // const { dispatch } = this.props
+        // dispatch({
+        //     type: 'file/getFilePage',
+        //     payload: {
+        //         _organization_id: org_id,
+        //         board_id: board_id,
+        //         folder_id: file_id,
+        //         page_number: '',
+        //         page_size: '',
+        //     },
+        // })
+
         const { dispatch } = this.props
-        dispatch({
-            type: 'file/getFilePage',
-            payload: {
-                _organization_id: org_id,
-                board_id: board_id,
-                folder_id: file_id,
-                page_number: '',
-                page_size: '',
-            },
+        Promise.resolve(
+            dispatch({
+                type: 'file/getFilePage',
+                payload: {
+                    _organization_id: org_id,
+                    board_id: board_id,
+                    folder_id: file_id,
+                    page_number: '',
+                    page_size: '',
+                },
+            })
+        ).then(res => {
+            Taro.pageScrollTo({
+                scrollTop: 100000,
+                duration: 100,
+            })
         })
     }
 
@@ -72,11 +91,10 @@ export default class File extends Component {
                 isShowBoardList: e,
             },
         })
-
-        pageScrollTo({
-            scrollTop: 0,
-            duration: 300,
-        })
+        // pageScrollTo({
+        //     scrollTop: 0,
+        //     duration: 300,
+        // })
     }
 
     goFileDetails = (value, fileName) => {

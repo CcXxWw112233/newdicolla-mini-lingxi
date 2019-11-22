@@ -33,9 +33,9 @@ export default class BoardFile extends Component {
 
     selectedBoardItem = (org_id, board_id, file_id, value) => {
         const { dispatch } = this.props
-
+        console.log(org_id, board_id, file_id, value, 'ffffffffff')
         const file_item_board_id = Taro.getStorageSync('file_item_board_id')
-        if (file_item_board_id === board_id) {
+        if (board_id && file_item_board_id === board_id) {
             dispatch({
                 type: 'file/updateDatas',
                 payload: {
@@ -45,9 +45,16 @@ export default class BoardFile extends Component {
         } else {
             //选中的那一行的board_id
             Taro.setStorageSync('file_item_board_id', board_id)
+            this.props.selectedBoardFile(org_id, board_id, file_id)
+            const { all_file_text } = this.state
+            const titleText = value === all_file_text ? all_file_text : value.board_name
+            dispatch({
+                type: 'file/updateDatas',
+                payload: {
+                    header_folder_name: titleText,
+                },
+            })
         }
-
-        this.props.selectedBoardFile(org_id, board_id, file_id)
 
         if (board_id) {
             dispatch({
@@ -57,15 +64,6 @@ export default class BoardFile extends Component {
                 },
             })
         }
-
-        const { all_file_text } = this.state
-        const titleText = value === all_file_text ? all_file_text : value.board_name
-        dispatch({
-            type: 'file/updateDatas',
-            payload: {
-                header_folder_name: titleText,
-            },
-        })
     }
 
     closeBoardList = () => {
