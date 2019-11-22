@@ -13,14 +13,14 @@ import { handleGlobalNewsPush } from './../utils/activityHandle.js';
 //收到的消息
 function onMsg(msg) {
   // console.log("OnMsg", onMsg);
-  console.log('收到消息', msg.scene, msg.type, msg);
+  // console.log('收到消息', msg.scene, msg.type, msg);
 
   const {
     globalData: {
       store: { dispatch, getState }
     }
   } = Taro.getApp();
-  console.log(msg, ' ================ get msg ========================');
+  // console.log(msg, ' ================ get msg ========================');
   const {
     im: state,
     im: { nim }

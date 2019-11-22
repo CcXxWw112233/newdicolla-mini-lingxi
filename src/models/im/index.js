@@ -17,7 +17,7 @@ import { isApiResponseOk } from './../../utils/request';
 import { onMsg, onTeams } from './actions/index';
 
 function onSendMsgDone(error, msg) {
-  console.log('消息未发出_错误:', error, msg);
+  // console.log('消息未发出_错误:', error, msg);
 
   Taro.hideLoading()
 

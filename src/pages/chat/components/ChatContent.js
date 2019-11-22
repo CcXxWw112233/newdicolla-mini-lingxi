@@ -21,7 +21,8 @@ import globalStyles from './../../../gloalSet/styles/globalStyles.scss';
       currentBoard,
       currentGroupSessionList,
       rawMessageList,
-      isOnlyShowInform
+      isOnlyShowInform,
+      currentGroup,
     },
     chat: { isUserInputFocus, isUserInputHeightChange }
   }) => ({
@@ -32,7 +33,8 @@ import globalStyles from './../../../gloalSet/styles/globalStyles.scss';
     rawMessageList,
     isOnlyShowInform,
     isUserInputFocus,
-    isUserInputHeightChange
+    isUserInputHeightChange,
+    currentGroup,
   }),
   dispatch => ({
     toggleIsOnlyShowInform: flag =>
@@ -182,6 +184,20 @@ class ChatContent extends Component {
 
   }
 
+  //通过from字段从群组用户中去查找头像
+  getAvatar = (val) => {
+    let { currentGroup } = this.props;
+    let { from } = val;
+    let { users } = currentGroup;
+    for (let i = 0; i < users.length; i++) {
+      let item = users[i];
+      if (item.user_id == from) {
+        return item.avatar;
+      }
+    }
+    return "";
+  }
+
   componentDidShow() {
     // 当进入聊天页面的时候，生成该群或者对话的聊天信息流
 
@@ -283,7 +299,8 @@ class ChatContent extends Component {
                 <ChatItem
                   flow={i.flow}
                   fromNick={i.fromNick}
-                  avatar={i.avatar}
+                  avatar={this.getAvatar(i)}
+                  // avatar={i.avatar}
                   status={i.status}
                   time={i.time}
                   type={i.type}

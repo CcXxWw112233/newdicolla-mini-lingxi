@@ -2,7 +2,6 @@ import Taro, { Component, hideToast, pageScrollTo } from '@tarojs/taro'
 import { View, Text, Image, RichText } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
-import file_head_background from '../../asset/file/file_head_background.png'
 import { connect } from '@tarojs/redux'
 import SearchAndMenu from '../board/components/SearchAndMenu'
 import { filterFileFormatType } from './../../utils/util';
@@ -10,13 +9,17 @@ import file_list_empty from '../../asset/file/file_list_empty.png'
 import BoardFile from './components/boardFile/index.js'
 import { getOrgIdByBoardId, setBoardIdStorage } from '../../utils/basicFunction'
 
-@connect(({ file: { file_list = [], isShowBoardList } }) => ({
-    file_list, isShowBoardList
+@connect(({ file: { file_list = [], isShowBoardList, header_folder_name } }) => ({
+    file_list, isShowBoardList, header_folder_name,
 }))
 export default class File extends Component {
     config = {
         navigationBarTitleText: '文件',
     }
+    state = {
+        is_tips_longpress_file: false,  //是否显示长按文件前往圈子的提示
+    }
+
     componentDidMount() { }
 
     componentDidShow() {
@@ -40,16 +43,35 @@ export default class File extends Component {
 
     getFilePage = (org_id, board_id, file_id) => {
 
+        // const { dispatch } = this.props
+        // dispatch({
+        //     type: 'file/getFilePage',
+        //     payload: {
+        //         _organization_id: org_id,
+        //         board_id: board_id,
+        //         folder_id: file_id,
+        //         page_number: '',
+        //         page_size: '',
+        //     },
+        // })
+
         const { dispatch } = this.props
-        dispatch({
-            type: 'file/getFilePage',
-            payload: {
-                _organization_id: org_id,
-                board_id: board_id,
-                folder_id: file_id,
-                page_number: '',
-                page_size: '',
-            },
+        Promise.resolve(
+            dispatch({
+                type: 'file/getFilePage',
+                payload: {
+                    _organization_id: org_id,
+                    board_id: board_id,
+                    folder_id: file_id,
+                    page_number: '',
+                    page_size: '',
+                },
+            })
+        ).then(res => {
+            Taro.pageScrollTo({
+                scrollTop: 100000,
+                duration: 100,
+            })
         })
     }
 
@@ -69,16 +91,16 @@ export default class File extends Component {
                 isShowBoardList: e,
             },
         })
-
-        pageScrollTo({
-            scrollTop: 0,
-            duration: 300,
-        })
+        // pageScrollTo({
+        //     scrollTop: 0,
+        //     duration: 300,
+        // })
     }
 
     goFileDetails = (value, fileName) => {
 
         Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
+
 
         const { file_resource_id, board_id } = value
         const { dispatch } = this.props
@@ -112,23 +134,20 @@ export default class File extends Component {
                 fileType: fileType,
             },
         })
+
+        //是否显示长按文件前往圈子的提示
+        const tips_longpress_file = Taro.getStorageSync('tips_longpress_file')
+        if (!tips_longpress_file) {
+            Taro.setStorageSync('tips_longpress_file', 'tips_longpress_file')
+            this.setState({
+                is_tips_longpress_file: true
+            })
+        }
     }
 
 
     onSearch = (value, board_id, file_id) => {
-
         const { dispatch } = this.props
-
-        // const queryConditions = []
-        // if (board_id) {
-        //     const board = { id: '1135447108158099461', value: board_id }
-        //     queryConditions.push(board)
-        //     if (file_id) {
-        //         const file = { id: '1192646538984296448', value: 'file_id' }
-        //         queryConditions.push(file)
-        //     }
-        // }
-
         dispatch({
             type: 'global/globalQuery',
             payload: {
@@ -140,11 +159,32 @@ export default class File extends Component {
                 search_type: '6',  //文件 type = 6
             },
         })
+
+        dispatch({
+            type: 'file/updateDatas',
+            payload: {
+                header_folder_name: '全部文件',
+            },
+        })
+    }
+
+    //长按进入圈子
+    longPress = (board_id) => {
+        Taro.navigateTo({
+            url: `/pages/boardDetail/index?boardId=${board_id}`
+        })
+    }
+
+    closeTips = () => {
+        this.setState({
+            is_tips_longpress_file: false
+        })
     }
 
     render() {
 
-        const { file_list, isShowBoardList, } = this.props
+        const { file_list, isShowBoardList, header_folder_name } = this.props
+        const { is_tips_longpress_file } = this.state
 
         return (
             <View className={indexStyles.index}>
@@ -159,12 +199,10 @@ export default class File extends Component {
                 </View>
 
                 <View className={indexStyles.head_background}>
-                    <Image src={file_head_background} className={indexStyles.image_head_background} />
-
                     <View className={indexStyles.hear_function}>
                         <View className={indexStyles.folderPath} onClick={() => this.choiceBoard(true)}>
                             <Text className={`${globalStyle.global_iconfont} ${indexStyles.folder_Path_icon}`}>&#xe6c6;</Text>
-                            <View>全部文件</View>
+                            <Text className={indexStyles.header_folder_name_style}>{header_folder_name}</Text>
                         </View>
                     </View>
                 </View>
@@ -174,7 +212,7 @@ export default class File extends Component {
                             const { thumbnail_url } = value
                             const fileType = filterFileFormatType(value.file_name)
                             return (
-                                <View className={indexStyles.lattice_style} onClick={this.goFileDetails.bind(this, value, value.file_name)} >
+                                <View className={indexStyles.lattice_style} onClick={this.goFileDetails.bind(this, value, value.file_name)} onLongPress={this.longPress.bind(this, value.board_id)}>
                                     {
                                         thumbnail_url ?
                                             (<Image mode='aspectFill' className={indexStyles.img_style} src={thumbnail_url}>
@@ -197,6 +235,19 @@ export default class File extends Component {
                         )
                 }
 
+                {
+                    is_tips_longpress_file === true ? (<View className={indexStyles.tips_view_style}>
+                        <View className={indexStyles.tips_style}>
+                            <View className={indexStyles.tips_cell_style}>
+                                <Text className={`${globalStyle.global_iconfont} ${indexStyles.tips_icon_style}`}>&#xe848;</Text>
+                                <View className={indexStyles.tips_text_style}>长按文件可以进入圈子交流</View>
+                                <View onClick={this.closeTips}>
+                                    <Text className={`${globalStyle.global_iconfont} ${indexStyles.tips_close_style}`}>&#xe7fc;</Text>
+                                </View>
+                            </View>
+                        </View>
+                    </View>) : ''
+                }
             </View>
         )
     }

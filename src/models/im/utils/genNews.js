@@ -80,6 +80,7 @@ const genNews = (msg, currentBoard) => {
   } = msg;
 
   return {
+    from,
     flow,
     fromNick,
     avatar: getAvatarByFromNick(from, currentBoard),

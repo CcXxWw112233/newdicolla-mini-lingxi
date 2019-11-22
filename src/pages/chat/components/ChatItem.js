@@ -230,7 +230,8 @@ class ChatItem extends Component {
       status,
       someMsg,
     } = this.props;
-    const isPinupEmoji = pushContent && pushContent === '[贴图表情]';
+    // const isPinupEmoji = pushContent && pushContent === '[贴图表情]';
+    const isPinupEmoji = content && content.type == 3;
     const { isAudioPlaying } = this.state;
 
     return (

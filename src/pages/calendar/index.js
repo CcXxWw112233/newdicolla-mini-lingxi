@@ -292,7 +292,7 @@ export default class Calendar extends Component {
           <CalendarSwiper />
         </View>
         <CardTypeSelect show_card_type_select={show_card_type_select} onSelectType={this.onSelectType} schedule={'1'} />
-        {/* <MilestoneList schedule={'1'} /> */}
+        <MilestoneList schedule={'1'} />
         {/* {no_sche_card_list.length && ( */}
         <View className={`${globalStyles.global_card_out} ${indexStyles.no_scheduling}`} onClick={this.gotoNoSchedule}>暂未排期的工作（{no_sche_card_list.length}）</View>
         {/* )} */}
