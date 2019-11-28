@@ -1,0 +1,145 @@
+.wrapper {
+  position: relative;
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  // background: #FFF;
+}
+.item {
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: #fff;
+}
+.ItemWrapperOne,
+.ItemWrapperTwo,
+.ItemWrapperThree,
+.ItemWrapperFour,
+.ItemWrapperFive
+ {
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  border-radius: 50%;
+  line-height: 36px
+}
+.wrapperOne {
+  height: 92px;
+  line-height: 85px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wrapperTwo {
+  display: flex;
+  height: 92px;
+  line-height: 92px;
+  justify-content: space-around;
+  align-items: center;
+}
+.wrapperThree {
+  height: 75px;
+  display: flex;
+  position: relative;
+  justify-content: space-around;
+  align-items: flex-end;
+}
+.ItemWrapperThree {
+
+}
+.ItemWrapperThreeFirstChild {
+  position: absolute;
+  top: 0px;
+  width: 36px;
+  height: 38px;
+}
+.wrapperFour {
+  height: 76px;
+  line-height: 48px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+}
+.ItemWrapperFour {
+  position: relative;
+  margin: 0 2px;
+  width: 40px;
+  height: 40px;
+}
+.wrapperFive {
+height: 92px;
+position: relative;
+}
+.ItemWrapperFiveFirstChild,
+.ItemWrapperFiveSecondChild,
+.ItemWrapperFiveThirdChild,
+.ItemWrapperFiveFourthChild,
+.ItemWrapperFiveFifthChild {
+  position: absolute
+}
+
+.ItemWrapperFiveFirstChild {
+  z-index: 1;
+  top: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.ItemWrapperFiveSecondChild {
+  z-index: 5;
+  top: 18px;
+  right: 0;
+}
+.ItemWrapperFiveThirdChild {
+  z-index: 10;
+  bottom: 0px;
+  right: 8px;
+}
+.ItemWrapperFiveFourthChild {
+  z-index: 15;
+  bottom: 0px;
+  left: 8px;
+}
+.ItemWrapperFiveFifthChild {
+  z-index: 20;
+  left: 0px;
+  top: 18px;
+}
+
+.newsDot,
+.newsNumber {
+  position: absolute;
+  background-color: #F12C20;
+  color: #FFF;
+}
+
+.newsDot {
+  top: 0px;
+  right: 0px;
+  z-index: 99;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+
+.newsNumber {
+  top: -9px;
+  right: -9px;
+  z-index: 99;
+  text-align: center;
+  height: 36px;
+  min-width: 36px;
+  line-height: 36px;
+  border-radius: 18px;
+  font-size: 26px;
+}
+
+.amendAtIconPosition {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  margin-top: 5px;
+  align-items: center;
+}

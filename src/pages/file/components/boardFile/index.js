@@ -33,37 +33,37 @@ export default class BoardFile extends Component {
 
     selectedBoardItem = (org_id, board_id, file_id, value) => {
         const { dispatch } = this.props
-        console.log(org_id, board_id, file_id, value, 'ffffffffff')
         const file_item_board_id = Taro.getStorageSync('file_item_board_id')
-        if (board_id && file_item_board_id === board_id) {
-            dispatch({
-                type: 'file/updateDatas',
-                payload: {
-                    isShowBoardList: false,
-                },
-            })
-        } else {
-            //选中的那一行的board_id
-            Taro.setStorageSync('file_item_board_id', board_id)
-            this.props.selectedBoardFile(org_id, board_id, file_id)
-            const { all_file_text } = this.state
-            const titleText = value === all_file_text ? all_file_text : value.board_name
-            dispatch({
-                type: 'file/updateDatas',
-                payload: {
-                    header_folder_name: titleText,
-                },
-            })
-        }
+        // if (board_id && file_item_board_id === board_id) {
+        //     dispatch({
+        //         type: 'file/updateDatas',
+        //         payload: {
+        //             isShowBoardList: false,
+        //         },
+        //     })
+        // } else {
+        //选中的那一行的board_id
+        Taro.setStorageSync('file_item_board_id', board_id)
+        this.props.selectedBoardFile(org_id, board_id, file_id)
+        const { all_file_text } = this.state
+        const titleText = value === all_file_text ? all_file_text : value.board_name
+        dispatch({
+            type: 'file/updateDatas',
+            payload: {
+                header_folder_name: titleText,
+                isShowBoardList: false,
+            },
+        })
+        // }
 
-        if (board_id) {
-            dispatch({
-                type: 'file/getFolder',
-                payload: {
-                    board_id: board_id,
-                },
-            })
-        }
+        // if (board_id) {
+        //     dispatch({
+        //         type: 'file/getFolder',
+        //         payload: {
+        //             board_id: board_id,
+        //         },
+        //     })
+        // }
     }
 
     closeBoardList = () => {
@@ -94,24 +94,19 @@ export default class BoardFile extends Component {
                         <View className={indexStyles.board_item_style} onClick={() => this.selectedBoardItem('0', item.board_id, '', item)}>
 
                             <View className={indexStyles.board_item_cell_style}>
-                                {
-                                    file_item_board_id === item.board_id ? (
-                                        <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_icon}`}>&#xe8ec;</Text>
-                                    ) : (
-                                            <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_icon}`}>&#xe8ed;</Text>
-                                        )
-                                }
+                                <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_icon}`}>&#xe662;</Text>
+
                                 <View className={indexStyles.board_item_name}>{item.board_name}</View>
                                 {org_list && org_list.length > 0 ? (<View className={indexStyles.org_name_style}>
                                     {'#'}{getOrgName({ org_id, org_list })}
                                 </View>) : ''}
                             </View>
-
+                            {/* 
                             {folder_tree && item.board_id === file_item_board_id ?
                                 <View className={indexStyles.folder_tree_view}>
                                     <TreeFile folderTree={folder_tree} boardId={item.board_id} orgId={item.org_id} />
                                 </View> : ''
-                            }
+                            } */}
                         </View>
                     )
                 })

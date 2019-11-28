@@ -5,6 +5,7 @@ import styles from './GroupItem.scss';
 import Avatar from './Avatar';
 
 class GroupItem extends Component {
+
   handleClickedOperator = e => {
     if (e) e.stopPropagation();
     const { isExpand, onExpandChange } = this.props;
@@ -14,10 +15,12 @@ class GroupItem extends Component {
     const { onClickedGroupItem } = this.props;
     if (e) e.stopPropagation();
     onClickedGroupItem({ board_id, im_id });
+
   };
   render() {
     const {
       board_id,
+      org_name,
       im_id,
       avatarList,
       label,
@@ -53,6 +56,7 @@ class GroupItem extends Component {
             <View className={styles.groupInfoTitleWrapper}>
               <View className={styles.groupInfoTitleLabel}>{label}</View>
               <View className={styles.groupInfoTitleTitle}>{name}</View>
+              <View className={styles.groupInfoTitleOrg}>{'#'}{org_name}</View>
             </View>
             <View className={styles.groupInfoLastMsg}>{lastMsg}</View>
           </View>
@@ -78,6 +82,7 @@ class GroupItem extends Component {
 
 GroupItem.defaultProps = {
   board_id: '', //项目 id
+  org_name: '', //组织名称
   im_id: '', //项目对应的 群 id
   avatarList: [], //头像 url 字符串数组, 1 - 5 个
   label: '', //群类型

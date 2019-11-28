@@ -91,16 +91,11 @@ export default class File extends Component {
                 isShowBoardList: e,
             },
         })
-        // pageScrollTo({
-        //     scrollTop: 0,
-        //     duration: 300,
-        // })
     }
 
     goFileDetails = (value, fileName) => {
 
         Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
-
 
         const { file_resource_id, board_id } = value
         const { dispatch } = this.props
@@ -171,7 +166,7 @@ export default class File extends Component {
     //长按进入圈子
     longPress = (board_id) => {
         Taro.navigateTo({
-            url: `/pages/boardDetail/index?boardId=${board_id}`
+            url: `/pages/chat/index`
         })
     }
 
@@ -234,7 +229,6 @@ export default class File extends Component {
                             </View>
                         )
                 }
-
                 {
                     is_tips_longpress_file === true ? (<View className={indexStyles.tips_view_style}>
                         <View className={indexStyles.tips_style}>

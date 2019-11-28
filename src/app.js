@@ -52,6 +52,7 @@ class App extends Component {
       'pages/errorPage/index',
       'pages/file/index',
       'pages/webView/index',
+      'pages/boardChat/index',
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -74,6 +75,12 @@ class App extends Component {
         {
           "pagePath": "pages/board/index",
           "text": "项目圈",
+          "iconPath": './asset/tabBar/board.png',
+          "selectedIconPath": './asset/tabBar/board_selected.png',
+        },
+        {
+          "pagePath": "pages/boardChat/index",
+          "text": "boardChat",
           "iconPath": './asset/tabBar/board.png',
           "selectedIconPath": './asset/tabBar/board_selected.png',
         },
