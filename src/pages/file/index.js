@@ -9,8 +9,8 @@ import file_list_empty from '../../asset/file/file_list_empty.png'
 import BoardFile from './components/boardFile/index.js'
 import { getOrgIdByBoardId, setBoardIdStorage } from '../../utils/basicFunction'
 
-@connect(({ file: { file_list = [], isShowBoardList, header_folder_name } }) => ({
-    file_list, isShowBoardList, header_folder_name,
+@connect(({ file: { file_list = [], isShowBoardList, header_folder_name, is_show_album_camera, } }) => ({
+    file_list, isShowBoardList, header_folder_name, is_show_album_camera,
 }))
 export default class File extends Component {
     config = {
@@ -176,10 +176,28 @@ export default class File extends Component {
         })
     }
 
+    // 拍照/选择图片上传
+    fileUploadAlbumCamera = () => {
+        Taro.chooseImage({
+            count: 1, // 默认9
+            sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+            success(res) {
+                let tempFilePaths = res.tempFilePaths; // 返回选定照片的本地路径列表 
+                this.fileUpload(this, tempFilePaths);
+            }
+        })
+    }
+
+    //上传到后端
+    fileUpload = () => {
+
+    }
+
     render() {
 
-        const { file_list, isShowBoardList, header_folder_name } = this.props
-        const { is_tips_longpress_file } = this.state
+        const { file_list, isShowBoardList, header_folder_name, is_show_album_camera, } = this.props
+        const { is_tips_longpress_file, } = this.state
 
         return (
             <View className={indexStyles.index}>
@@ -199,6 +217,15 @@ export default class File extends Component {
                             <Text className={`${globalStyle.global_iconfont} ${indexStyles.folder_Path_icon}`}>&#xe6c6;</Text>
                             <Text className={indexStyles.header_folder_name_style}>{header_folder_name}</Text>
                         </View>
+
+                        {
+                            is_show_album_camera === true ? (
+                                <View className={indexStyles.files_album_camera_view_style}>
+                                    <View className={indexStyles.files_album_camera_button_style} onClick={this.fileUploadAlbumCamera}><Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe664;</Text></View>
+                                    <View className={indexStyles.files_album_camera_button_style} onClick={this.fileUploadAlbumCamera}><Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe663;</Text></View>
+                                </View>
+                            ) : ''
+                        }
                     </View>
                 </View>
                 {

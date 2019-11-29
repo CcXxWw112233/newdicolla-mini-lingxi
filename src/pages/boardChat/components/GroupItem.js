@@ -23,7 +23,6 @@ class GroupItem extends Component {
       org_name,
       im_id,
       avatarList,
-      label,
       name,
       lastMsg,
       newsNum,
@@ -32,6 +31,7 @@ class GroupItem extends Component {
       isExpand,
       isShouldShowExpandOpertor
     } = this.props;
+    console.log(newsNum, '新消息数量');
 
     return (
       <View
@@ -54,7 +54,6 @@ class GroupItem extends Component {
           </View>
           <View className={styles.groupInfoWrapper}>
             <View className={styles.groupInfoTitleWrapper}>
-              <View className={styles.groupInfoTitleLabel}>{label}</View>
               <View className={styles.groupInfoTitleTitle}>{name}</View>
               <View className={styles.groupInfoTitleOrg}>{'#'}{org_name}</View>
             </View>
@@ -85,7 +84,6 @@ GroupItem.defaultProps = {
   org_name: '', //组织名称
   im_id: '', //项目对应的 群 id
   avatarList: [], //头像 url 字符串数组, 1 - 5 个
-  label: '', //群类型
   name: '', //群名称
   lastMsg: '',
   newsNum: 0, //新消息数量

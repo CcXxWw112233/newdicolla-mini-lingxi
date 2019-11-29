@@ -5,6 +5,7 @@ import { connect } from '@tarojs/redux'
 import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import SearchAndMenu from '../board/components/SearchAndMenu'
+import { isPlainObject } from './../../utils/util';
 
 @connect(({
     im: {
@@ -279,41 +280,173 @@ export default class BoardChat extends Component {
         })
     }
 
+    genAvatarList = (users = []) => {
+        const userToAvatar = i => (i && i.avatar ? i.avatar : 'unknown');
+        if (users.length <= 5) {
+            return users.map(userToAvatar);
+        }
+        //获取最多5个头像
+        return users.slice(0, 5).map(userToAvatar);
+    };
+
+    genLastMsg = (lastMsg = {}) => {
+        const { fromNick, type, text } = lastMsg;
+        if (!fromNick) return '';
+        const typeCond = {
+            text,
+            audio: '[语音]',
+            image: '[图片]',
+            video: '[视频]',
+            custom: '[动态消息]',
+            notification: '[系统通知]',
+        };
+        if (type === 'text') {
+            return `${fromNick}: ${text}`;
+        }
+        return typeCond[type] ? typeCond[type] : '[未知类型消息]';
+    };
+
+    isShouldShowNewDot = (unRead = 0, childsUnReadArr) => {
+        //如果主群的未读数量不是0， 那么就不会显示消息点提醒
+        if (unRead) return false;
+        //如果子群中有任意的消息，那么就展开子群列表
+        if (childsUnReadArr.some(Boolean)) {
+            return true;
+        }
+        return false;
+    };
+
+    getGroupLastMsgFromRawMessageList = (im_id, rawMessageList) => {
+        const currentImGroup = rawMessageList[im_id];
+        const filterMsgType = i => i.scene && i.scene === 'team';
+        if (isPlainObject(currentImGroup)) {
+            //过滤出属于群聊的用户消息
+            //这里会出现一个bug, 会丢掉currentImGroup对象的最后一个属性？？？？
+            //Object.entries, for...in, 都会丢失。。。
+            return Object.values(currentImGroup)
+                .filter(filterMsgType)
+                .sort((a, b) => a.time - b.time)
+                .slice(-1)[0];
+        }
+        return {};
+    };
+
+    integrateCurrentBoardWithSessions = (
+        currentBoardInfo,
+        sessionlist = [],
+        rawMessageList = {}
+    ) => {
+        //这里需要整合每个群组的未读消息数量
+        const allGroupIMId = [currentBoardInfo.im_id].concat(
+            currentBoardInfo.childs && currentBoardInfo.childs.length
+                ? currentBoardInfo.childs.map(i => i.im_id)
+                : []
+        );
+        const { im_id } = currentBoardInfo;
+
+        //为 currentBoardInfo 及它下面的子群 添加 unRead(未阅读消息数量)
+        //和 lastMsg(最后一条消息， 用于展示)
+        const currentBoardIdWithDefaultUnReadAndLastMsg = Object.assign(
+            {},
+            currentBoardInfo,
+            {
+                unRead: 0,
+                lastMsg: this.getGroupLastMsgFromRawMessageList(
+                    `team-${im_id}`,
+                    rawMessageList
+                )
+            }
+        );
+        currentBoardIdWithDefaultUnReadAndLastMsg.childs =
+            currentBoardIdWithDefaultUnReadAndLastMsg.childs &&
+                currentBoardIdWithDefaultUnReadAndLastMsg.childs.length
+                ? currentBoardIdWithDefaultUnReadAndLastMsg.childs.map(i => {
+                    return {
+                        ...i,
+                        unRead: 0,
+                        lastMsg: this.getGroupLastMsgFromRawMessageList(
+                            `team-${i.im_id}`,
+                            rawMessageList
+                        )
+                    };
+                })
+                : [];
+
+        const currentBoardSessionList = i =>
+            i && i.scene && i.scene === 'team' && allGroupIMId.find(e => e === i.to);
+        const sortByTime = (a, b) => a.lastMsg.time - b.lastMsg.time;
+
+        return sessionlist
+            .filter(currentBoardSessionList)
+            .sort(sortByTime)
+            .reduce((acc, curr) => {
+                //统计每个群组的未读数。
+
+                if (curr.to === acc.im_id) {
+                    //这里不是累加, 而是直接替换
+                    acc.unRead = curr.unread;
+                    return acc;
+                }
+                let findedIndex = acc.childs.findIndex(i => i.im_id === curr.to);
+                const notFound = index => index === -1;
+                if (notFound(findedIndex)) {
+                    return acc;
+                }
+                acc.childs[findedIndex].unRead = curr.unread;
+                return acc;
+            }, currentBoardIdWithDefaultUnReadAndLastMsg);
+    };
+
     render() {
         const { search_mask_show } = this.state
-        const { allBoardList } = this.props
+        const { allBoardList, sessionlist, rawMessageList } = this.props
+
+        // 过滤掉只有一个人的群组
+        const chatBoardList = allBoardList.filter((item, index) => {
+            if (item.users && item.users.length != 1) {
+                return item
+            }
+        })
+        console.log(chatBoardList, '所有项目列表sssss');
+
+
         return (
             <View className={indexStyles.index}>
 
                 <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
 
-                {allBoardList.map((value, key) => {
+                {chatBoardList.map((value, key) => {
                     const {
                         board_id,
                         board_name,
                         im_id,
-                        name,
-                        org_id,
                         org_name,
-                        type,
-                        type_name,
                         users,
-                    } = value;
+
+                        lastMsg,
+                        unRead,
+                        childs = [],
+                    } = this.integrateCurrentBoardWithSessions(  //把 Value 和 sessionlist, rawMessageList 一起传出去整合成一条消息
+                        value,
+                        sessionlist,
+                        rawMessageList
+                    );
+
                     return (
                         <GroupItem
                             key={board_id}
                             board_id={board_id}
                             org_name={org_name}
                             im_id={im_id}
-                            // lastMsg={lastMsg}
-                            label={type_name}
                             name={board_name}
-                            // newsNum={newsNum}
-                            // showNewsDot={showNewsDot}
-                            avatarList={users}
-                            // isExpand={isShouldExpandSubGroup}
-                            // onExpandChange={this.handleExpandSubGroupChange}
+                            avatarList={this.genAvatarList(users)}
+                            lastMsg={this.genLastMsg(lastMsg)}
+                            newsNum={unRead}
+                            showNewsDot={this.isShouldShowNewDot(unRead, childs.map(i => i.unRead))}
                             onClickedGroupItem={this.hanldClickedGroupItem}
+
+                        // isExpand={isShouldExpandSubGroup}
+                        // onExpandChange={this.handleExpandSubGroupChange}
                         // isSubGroup={false}
                         // isShouldShowExpandOpertor={childs.length}
                         />

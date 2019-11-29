@@ -232,6 +232,7 @@ class GroupList extends Component {
     return typeCond[type] ? typeCond[type] : '[未知类型消息]';
   };
   genAvatarList = (users = []) => {
+
     const userToAvatar = i => (i && i.avatar ? i.avatar : 'unknown');
     if (users.length <= 5) {
       return users.map(userToAvatar);

@@ -9,6 +9,7 @@ export default {
         isShowBoardList: false,  //是否显示项目列表
         folder_tree: [],  //文件数据列表
         header_folder_name: '全部文件',  //当前选中的文件夹名称
+        is_show_album_camera: false, //是否显示图片/拍照按钮
     },
     effects: {
         //全部文件信息
