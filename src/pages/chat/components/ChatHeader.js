@@ -16,7 +16,6 @@ class ChatHeader extends Component {
   };
   render() {
     const { currentGroup: { name = '未知群名' } = {} } = this.props;
-
     return (
       <View className={styles.wrapper}>
         <View className={styles.contentWrapper}>

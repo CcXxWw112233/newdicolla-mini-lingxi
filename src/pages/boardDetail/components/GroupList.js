@@ -315,7 +315,6 @@ class GroupList extends Component {
 
   render() {
     const { currentBoard, sessionlist, rawMessageList } = this.props;
-
     const { isShouldExpandSubGroup } = this.state;
     if (!currentBoard) return null;
     const integratedCurrentBoardInfo = this.integrateCurrentBoardWithSessions(
@@ -323,6 +322,11 @@ class GroupList extends Component {
       sessionlist,
       rawMessageList
     );
+
+    // console.log(currentBoard,
+    //   sessionlist,
+    //   rawMessageList, 'pppppp');
+    // console.log(integratedCurrentBoardInfo, 'ssss');
 
     return (
       <View className={styles.wrapper}>

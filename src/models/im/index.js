@@ -102,7 +102,6 @@ export default {
             const ret = arr.find(i => i.board_id === id);
             return ret ? ret : {};
           };
-
           yield put({
             type: 'updateStateFieldByCover',
             payload: {
@@ -130,7 +129,6 @@ export default {
         select,
         'currentBoardImValid'
       );
-
       const ret = yield call(repairTeam({ id, type }));
       if (isApiResponseOk(ret)) {
         yield put({
@@ -216,6 +214,7 @@ export default {
             Object.assign({}, originObj, {
               [curr.im_id]: Object.assign({}, curr, { isValid })
             });
+
           if (finedInTeams && isValid(finedInTeams)) {
             return genValidInfo(acc, curr, true);
           }
