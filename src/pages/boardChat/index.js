@@ -407,8 +407,6 @@ export default class BoardChat extends Component {
                 return item
             }
         })
-        console.log(chatBoardList, '所有项目列表sssss');
-
 
         return (
             <View className={indexStyles.index}>

@@ -51,3 +51,15 @@ export const getFolder = (data, notShowLoading) => {
     }, notShowLoading)
 }
 
+
+//上传文件
+export const uploadFile = (data, notShowLoading) => {
+    return request({
+        data: {
+            ...data
+        },
+        method: 'POST',
+        url: `${API_BOARD}/file/upload`,
+    }, notShowLoading)
+}
+

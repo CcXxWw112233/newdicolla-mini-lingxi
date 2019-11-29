@@ -7,7 +7,9 @@ import SearchAndMenu from '../board/components/SearchAndMenu'
 import { filterFileFormatType } from './../../utils/util';
 import file_list_empty from '../../asset/file/file_list_empty.png'
 import BoardFile from './components/boardFile/index.js'
-import { getOrgIdByBoardId, setBoardIdStorage } from '../../utils/basicFunction'
+import { getOrgIdByBoardId, setBoardIdStorage, setRequestHeaderBaseInfo } from '../../utils/basicFunction'
+import { request, } from "../../utils/request";
+
 
 @connect(({ file: { file_list = [], isShowBoardList, header_folder_name, is_show_album_camera, } }) => ({
     file_list, isShowBoardList, header_folder_name, is_show_album_camera,
@@ -178,20 +180,67 @@ export default class File extends Component {
 
     // 拍照/选择图片上传
     fileUploadAlbumCamera = () => {
+        let that = this;
         Taro.chooseImage({
             count: 1, // 默认9
-            sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
             sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
             success(res) {
                 let tempFilePaths = res.tempFilePaths; // 返回选定照片的本地路径列表 
-                this.fileUpload(this, tempFilePaths);
+                that.fileUpload(tempFilePaths);
             }
         })
     }
 
     //上传到后端
-    fileUpload = () => {
+    fileUpload = (path) => {
+        Taro.showToast({ icon: "loading", title: "正在上传..." });
+        //开发者服务器访问接口，微信服务器通过这个接口上传文件到开发者服务器
+        Taro.uploadFile({
+            url: 'https://lingxi.di-an.com/api/projects/file/upload', //后端接口
+            filePath: path[0],
+            name: 'file',
+            header: {
+                "Content-Type": "multipart/form-data"
+            },
+            header: { ...Headers, ...setRequestHeaderBaseInfo({ data, headers: Headers }) },
+            formData: { //上传POST参数信息
+                board_id: '1200340152833150976',
+                folder_id: '1200340152858316802',
+                file: path,
+            },
+            success(res) {
+                console.log(res, '上传文件res');
+                if (res.statusCode != 200) {
+                    Taro.showModal({ title: '提示', content: '上传失败', showCancel: false });
+                    return;
+                } else {
+                    console.log(res, "上传成功！ 可对返回的值进行操作，比如：存入imgData；");
+                }
+            },
+            fail(error) {
+                Taro.showModal({ title: '提示', content: '上传失败', showCancel: false });
+                console.log('上传错误:', error)
+            },
+            complete() {
+                Taro.hideToast();
+            }
+        })
+        // uploadTask.onProgressUpdate((res) => {
+        //     console.log('上传进度', res.progress)
+        //     console.log('已经上传的数据长度', res.totalBytesSent)
+        //     console.log('预期需要上传的数据总长度', res.totalBytesExpectedToSend)
+        // })
 
+        // const { dispatch } = this.props
+        // dispatch({
+        //     type: 'file/uploadFile',
+        //     payload: {
+        //         board_id: '1196728085744062464',
+        //         folder_id: '1196728085777616896',
+        //         file: tempFilePaths,
+        //     },
+        // })
     }
 
     render() {

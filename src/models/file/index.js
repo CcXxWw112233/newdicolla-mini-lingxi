@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { getFilePage, getFileDetails, getFolder, getDownloadUrl } from '../../services/file/index'
+import { getFilePage, getFileDetails, getFolder, getDownloadUrl, uploadFile } from '../../services/file/index'
 import { isApiResponseOk } from "../../utils/request";
 
 export default {
@@ -9,7 +9,7 @@ export default {
         isShowBoardList: false,  //是否显示项目列表
         folder_tree: [],  //文件数据列表
         header_folder_name: '全部文件',  //当前选中的文件夹名称
-        is_show_album_camera: false, //是否显示图片/拍照按钮
+        is_show_album_camera: true, //是否显示图片/拍照按钮
     },
     effects: {
         //全部文件信息
@@ -40,7 +40,7 @@ export default {
             const res = yield call(getDownloadUrl, parameter)
             var index = fileType.lastIndexOf(".");
             const file_type = fileType.substring(index + 1, fileType.length)
-            const img_type_arr = ['bmp', 'jpg', 'jpeg', 'png', 'tif', 'gif', 'pcx', 'tga', 'exif', 'fpx', 'svg', 'psd', 'cdr', 'pcd', 'dxf', 'ufo', 'eps', 'ai', 'raw', 'WMF', 'webp']
+            const img_type_arr = ['bmp', 'jpg', 'jpeg', 'png', 'tif', 'gif', 'pcx', 'tga', 'exif', 'fpx', 'svg', 'psd', 'cdr', 'pcd', 'dxf', 'ufo', 'eps', 'ai', 'raw', 'WMF', 'webp']  //文件格式
             if (isApiResponseOk(res)) {
                 if (img_type_arr.indexOf(file_type) != -1) {  //打开图片
                     Taro.previewImage({
@@ -148,6 +148,30 @@ export default {
                 })
             }
         },
+
+        //上传文件
+        * uploadFile({ payload }, { select, call, put }) {
+            Taro.showLoading({
+                title: '上传中...',
+            })
+            const res = yield call(uploadFile, payload)
+            if (isApiResponseOk(res)) {
+                //  yield put({
+                //     type: 'getFilePage',
+                //     payload: {
+
+
+                //     }
+                //   })
+            } else {
+                Taro.showToast({
+                    title: res.message,
+                    icon: 'none',
+                    duration: 2000
+                })
+            }
+            Taro.hideLoading()
+        }
 
     },
 

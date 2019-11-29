@@ -31,7 +31,6 @@ class GroupItem extends Component {
       isExpand,
       isShouldShowExpandOpertor
     } = this.props;
-    console.log(newsNum, '新消息数量');
 
     return (
       <View
