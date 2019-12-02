@@ -63,3 +63,14 @@ export const uploadFile = (data, notShowLoading) => {
     }, notShowLoading)
 }
 
+//发送(新增)文件评论
+export const sendFileComment = (data, notShowLoading) => {
+    return request({
+        data: {
+            ...data
+        },
+        method: 'POST',
+        url: `${API_BOARD}/file/comment`,
+    }, notShowLoading)
+}
+

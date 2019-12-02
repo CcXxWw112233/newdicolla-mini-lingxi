@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { getFilePage, getFileDetails, getFolder, getDownloadUrl, uploadFile } from '../../services/file/index'
+import { getFilePage, getFileDetails, getFolder, getDownloadUrl, uploadFile, sendFileComment } from '../../services/file/index'
 import { isApiResponseOk } from "../../utils/request";
 
 export default {
@@ -10,6 +10,7 @@ export default {
         folder_tree: [],  //文件数据列表
         header_folder_name: '全部文件',  //当前选中的文件夹名称
         is_show_album_camera: true, //是否显示图片/拍照按钮
+        isShowFileComment: false,  //chat页面是否显示文件评论
     },
     effects: {
         //全部文件信息
@@ -171,6 +172,20 @@ export default {
                 })
             }
             Taro.hideLoading()
+        },
+
+        //发送(新增)文件评论
+        * sendFileComment({ payload }, { select, call, put }) {
+            const res = yield call(sendFileComment, payload)
+            if (isApiResponseOk(res)) {
+
+            } else {
+                Taro.showToast({
+                    title: res.message,
+                    icon: 'none',
+                    duration: 2000
+                })
+            }
         }
 
     },

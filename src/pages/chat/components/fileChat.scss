@@ -1,0 +1,130 @@
+@import "../../../gloalSet/styles/constant.scss";
+
+
+
+.mask {
+    margin-top: 0%;
+    height    : 100%;
+    width     : 100%;
+    position  : fixed;
+    z-index   : 9999;
+    top       : 0;
+    left      : 0;
+    background: rgba(0, 0, 0, .35);
+    overflow  : hidden;
+
+    .file_chat_view_style {
+        background   : white;
+        width        : 100%;
+        height       : pxTrans(450);
+        position     : absolute;
+        left         : 0;
+        bottom       : 0;
+        background   : rgba(255, 255, 255, 1);
+        box-shadow   : 0 pxTrans(-2) pxTrans(8) 0 rgba(0, 0, 0, 0.15);
+        border-radius: pxTrans(24) pxTrans(24) 0 0;
+
+        .file_chat_view_content_style {
+            margin: pxTrans(20) pxTrans(16) pxTrans(20) pxTrans(16);
+
+
+            .file_chat_view_hear_style {
+                height: pxTrans(56);
+                width : 100%;
+
+                .file_info_view_style {
+                    height : 100%;
+                    display: flex;
+
+                    .thumbnail_img_style {
+                        width        : pxTrans(56);
+                        height       : pxTrans(56);
+                        border-radius: pxTrans(2);
+                    }
+
+                    .other_icon_style {
+                        width          : pxTrans(56);
+                        height         : pxTrans(56);
+                        display        : flex;
+                        justify-content: center;
+                        align-items    : center;
+                        border         : 1px solid rgba(0, 0, 0, 0.15);
+
+                        .folder_type_icon {
+                            font-size: pxTrans(36);
+                            top      : pxTrans(22);
+                            color    : rgba(0, 0, 0, 0.25);
+                        }
+                    }
+
+                    .file_chat_view_hear_text_style {
+                        margin-left: pxTrans(10);
+                        width      : 100%;
+
+                        .file_chat_hear_tips_style {
+                            height         : pxTrans(22);
+                            display        : flex;
+                            justify-content: space-between;
+
+                            .file_chat_view_hear_tips_style {
+                                font-size  : 14ppxTrans(14);
+                                font-weight: 400;
+                                color      : rgba(0, 0, 0, 0.45);
+                                line-height: pxTrans(22);
+                            }
+
+                            .close_button_style {
+                                font-size : pxTrans(18);
+                                width     : pxTrans(40);
+                                text-align: right;
+                            }
+                        }
+
+
+                        .file_name_style {
+                            height     : pxTrans(24);
+                            font-size  : pxTrans(16);
+                            font-weight: 400;
+                            color      : rgba(0, 0, 0, 0.65);
+                            line-height: pxTrans(24);
+                        }
+                    }
+                }
+            }
+
+            .input_comment_style {
+                width        : 100%;
+                height       : pxTrans(148);
+                background   : rgba(255, 255, 255, 1);
+                border-radius: pxTrans(4);
+                border       : pxTrans(1) solid rgba(0, 0, 0, 0.15);
+                margin-top   : pxTrans(20);
+            }
+
+            .send_file_comment_button_style {
+                height       : pxTrans(38);
+                background   : rgba(24, 144, 255, 1);
+                border-radius: pxTrans(4);
+                margin-top   : pxTrans(20);
+                text-align   : center;
+                font-size    : pxTrans(14);
+                font-weight  : 400;
+                color        : rgba(255, 255, 255, 1);
+                line-height  : pxTrans(38);
+            }
+
+            .prohibit_send_file_comment_button_style {
+                height       : pxTrans(38);
+                background   : rgba(0, 0, 0, 0.04);
+                border-radius: pxTrans(4);
+                border       : pxTrans(1) solid rgba(0, 0, 0, 0.09);
+                margin-top   : pxTrans(20);
+                text-align   : center;
+                font-size    : pxTrans(14);
+                font-weight  : 400;
+                color        : rgba(0, 0, 0, 0.25);
+                line-height  : pxTrans(38);
+            }
+        }
+    }
+}

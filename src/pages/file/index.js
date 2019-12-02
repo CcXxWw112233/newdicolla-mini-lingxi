@@ -166,9 +166,16 @@ export default class File extends Component {
     }
 
     //长按进入圈子
-    longPress = (board_id) => {
+    longPress = (value) => {
+        const { dispatch } = this.props
+        dispatch({
+            type: 'file/updateDatas',
+            payload: {
+                isShowFileComment: true,
+            },
+        })
         Taro.navigateTo({
-            url: `/pages/chat/index`
+            url: `../../pages/chat/index?fileInfo=${JSON.stringify(value)}&pageSource=isFileComment`
         })
     }
 
@@ -280,10 +287,11 @@ export default class File extends Component {
                 {
                     file_list.length !== 0 ? (<View className={indexStyles.grid_style}>
                         {file_list.map((value, key) => {
-                            const { thumbnail_url } = value
+                            const { thumbnail_url, } = value
+
                             const fileType = filterFileFormatType(value.file_name)
                             return (
-                                <View className={indexStyles.lattice_style} onClick={this.goFileDetails.bind(this, value, value.file_name)} onLongPress={this.longPress.bind(this, value.board_id)}>
+                                <View className={indexStyles.lattice_style} onClick={this.goFileDetails.bind(this, value, value.file_name)} onLongPress={this.longPress.bind(this, value)}>
                                     {
                                         thumbnail_url ?
                                             (<Image mode='aspectFill' className={indexStyles.img_style} src={thumbnail_url}>

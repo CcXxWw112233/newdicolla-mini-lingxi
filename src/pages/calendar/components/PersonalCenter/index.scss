@@ -27,11 +27,10 @@
     }
 
     .close_button_style {
-        width   : pxTrans(20);
-        height  : pxTrans(20);
-        position: absolute;
-        top     : pxTrans(20);
-        right   : pxTrans(16);
+        position : absolute;
+        top      : pxTrans(20);
+        right    : pxTrans(16);
+        font-size: pxTrans(20);
     }
 
     .personal_center_content {
