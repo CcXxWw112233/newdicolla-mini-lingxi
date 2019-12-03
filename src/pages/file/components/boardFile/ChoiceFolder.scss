@@ -1,0 +1,103 @@
+@import "../../../../gloalSet/styles/constant.scss";
+
+.choice_folder_modal_mask {
+    width     : 100%;
+    height    : 100%;
+    position  : fixed;
+    top       : 0;
+    left      : 0;
+    z-index   : 100;
+    overflow  : hidden;
+    background: rgba(0, 0, 0, .35);
+
+    .choice_folder_modal_view_style {
+        width        : pxTrans(311);
+        min-height   : pxTrans(268);
+        background   : rgba(255, 255, 255, 1);
+        box-shadow   : 0px pxTrans(2) pxTrans(8) 0 rgba(0, 0, 0, 0.15);
+        border-radius: pxTrans(4);
+
+        position: absolute;
+        top     : 0;
+        right   : 0;
+        left    : 0;
+        bottom  : 0;
+        margin  : pxTrans(100) auto;
+
+        .modal_content_style {
+            margin: pxTrans(18) pxTrans(18) pxTrans(70) pxTrans(18);
+
+            .modal_content_top_style {
+                width      : 100%;
+                height     : pxTrans(56);
+                color      : rgba(0, 0, 0, 0.45);
+                text-align : center;
+                align-items: center;
+                display    : flex;
+
+                .modal_tips_text_style {
+                    width      : pxTrans(56);
+                    height     : pxTrans(22);
+                    font-size  : pxTrans(14);
+                    font-weight: 400;
+                    line-height: pxTrans(22);
+                }
+            }
+
+            .modal_content_center_style {
+                width: 100%;
+
+                .choice_folder_button_style {
+                    width        : 100%;
+                    height       : pxTrans(34);
+                    border-radius: pxTrans(4);
+                    border       : 1px solid rgba(24, 144, 255, 1);
+                    text-align   : center;
+                    color        : rgba(24, 144, 255, 1);
+                    line-height  : pxTrans(34);
+                }
+
+                .thumbnail_view_style {
+                    width     : 100%;
+                    height    : pxTrans(80);
+                    margin-top: pxTrans(28);
+                    text-align: center;
+
+                    .choice_image_thumbnail_style {
+                        width : pxTrans(80);
+                        height: pxTrans(80);
+                    }
+                }
+            }
+        }
+
+        .modal_botton_style {
+            display    : flex;
+            height     : pxTrans(47);
+            width      : 100%;
+            border-top : 0.5px solid rgba(0, 0, 0, 0.45);
+            text-align : center;
+            line-height: 94rpx;
+            position   : absolute;
+            bottom     : 0;
+
+            .cancel_button_style {
+                width       : 50%;
+                font-size   : pxTrans(16);
+                font-weight : 400;
+                color       : rgba(0, 0, 0, 0.45);
+                border-right: 0.5px solid rgba(0, 0, 0, 0.45);
+            }
+
+            .confirm_button_style {
+                width      : 50%;
+                font-size  : pxTrans(16);
+                font-weight: 400;
+                color      : rgba(0, 0, 0, 0.45);
+                border-left: 0.5px solid rgba(0, 0, 0, 0.45);
+            }
+        }
+
+    }
+
+}

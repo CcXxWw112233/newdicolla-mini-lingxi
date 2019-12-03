@@ -7,12 +7,13 @@ import SearchAndMenu from '../board/components/SearchAndMenu'
 import { filterFileFormatType } from './../../utils/util';
 import file_list_empty from '../../asset/file/file_list_empty.png'
 import BoardFile from './components/boardFile/index.js'
+import ChoiceFolder from './components/boardFile/ChoiceFolder.js'
 import { getOrgIdByBoardId, setBoardIdStorage, setRequestHeaderBaseInfo } from '../../utils/basicFunction'
-import { request, } from "../../utils/request";
+import { BASE_URL, API_BOARD } from "../../gloalSet/js/constant";
 
 
-@connect(({ file: { file_list = [], isShowBoardList, header_folder_name, is_show_album_camera, } }) => ({
-    file_list, isShowBoardList, header_folder_name, is_show_album_camera,
+@connect(({ file: { file_list = [], isShowBoardList, header_folder_name, isShowChoiceFolder } }) => ({
+    file_list, isShowBoardList, header_folder_name, isShowChoiceFolder
 }))
 export default class File extends Component {
     config = {
@@ -20,6 +21,7 @@ export default class File extends Component {
     }
     state = {
         is_tips_longpress_file: false,  //是否显示长按文件前往圈子的提示
+        choice_image_temp_file_paths: ''  //从相册选中的图片api返回来的路径
     }
 
     componentDidMount() { }
@@ -44,18 +46,6 @@ export default class File extends Component {
     componentWillUnmount() { }
 
     getFilePage = (org_id, board_id, file_id) => {
-
-        // const { dispatch } = this.props
-        // dispatch({
-        //     type: 'file/getFilePage',
-        //     payload: {
-        //         _organization_id: org_id,
-        //         board_id: board_id,
-        //         folder_id: file_id,
-        //         page_number: '',
-        //         page_size: '',
-        //     },
-        // })
 
         const { dispatch } = this.props
         Promise.resolve(
@@ -185,75 +175,174 @@ export default class File extends Component {
         })
     }
 
-    // 拍照/选择图片上传
-    fileUploadAlbumCamera = () => {
+    // 获取授权
+    getAuthSetting = (imageSourceType) => {
+        let that = this;
+        Taro.getSetting({
+            success(res) {
+                if (imageSourceType === 'camera') {
+                    if (!res.authSetting['scope.camera']) { //获取摄像头权限
+                        Taro.authorize({
+                            scope: 'scope.camera',
+                            success() {
+                                console.log('授权成功')
+                            }, fail() {
+                                Taro.showModal({
+                                    title: '提示',
+                                    content: '尚未进行授权，部分功能将无法使用',
+                                    showCancel: false,
+                                    success(res) {
+                                        if (res.confirm) {
+                                            console.log('用户点击确定')
+                                            Taro.openSetting({
+                                                success: (res) => {
+                                                    if (!res.authSetting['scope.camera']) {
+                                                        Taro.authorize({
+                                                            scope: 'scope.camera',
+                                                            success() {
+                                                                console.log('授权成功')
+                                                            }, fail() {
+                                                                console.log('用户点击取消')
+                                                            }
+                                                        })
+                                                    }
+                                                },
+                                                fail: function () {
+                                                    console.log("授权设置拍照失败");
+                                                }
+                                            })
+                                        } else if (res.cancel) {
+                                            console.log('用户点击取消')
+                                        }
+                                    }
+                                })
+                            }
+                        })
+                    } else {
+                        that.fileUploadAlbumCamera(imageSourceType)
+                    }
+                } else if (imageSourceType === 'album') {
+                    if (!res.authSetting['scope.writePhotosAlbum']) { //获取相册权限
+                        Taro.authorize({
+                            scope: 'scope.writePhotosAlbum',
+                            success() {
+                                console.log('授权成功')
+                            }, fail() {
+                                Taro.showModal({
+                                    title: '提示',
+                                    content: '尚未进行授权，部分功能将无法使用',
+                                    showCancel: false,
+                                    success(res) {
+                                        if (res.confirm) {
+                                            Taro.openSetting({
+                                                success: (res) => {
+                                                    if (!res.authSetting['scope.record']) {
+                                                        Taro.authorize({
+                                                            scope: 'scope.record',
+                                                            success() {
+                                                                console.log('授权成功')
+                                                            }, fail() {
+                                                                console.log('用户点击取消')
+                                                            }
+                                                        })
+                                                    }
+                                                },
+                                                fail: function () {
+                                                    console.log("授权设置相册失败");
+                                                }
+                                            })
+                                        } else if (res.cancel) {
+                                            console.log('用户点击取消')
+                                        }
+                                    }
+                                })
+                            }
+                        })
+                    } else {
+                        that.fileUploadAlbumCamera(imageSourceType)
+                    }
+                }
+            },
+            fail(res) {
+
+            }
+        })
+    }
+
+    //拍照/选择图片上传
+    fileUploadAlbumCamera = (imageSourceType) => {
         let that = this;
         Taro.chooseImage({
-            count: 1, // 默认9
-            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-            sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+            count: 1,
+            sizeType: ['original'],
+            sourceType: [imageSourceType],
             success(res) {
-                let tempFilePaths = res.tempFilePaths; // 返回选定照片的本地路径列表 
-                that.fileUpload(tempFilePaths);
+                let tempFilePaths = res.tempFilePaths;
+                that.uploadChoiceFolder();
+
+                that.setState({
+                    choice_image_temp_file_paths: tempFilePaths,
+                })
             }
+        })
+    }
+
+    uploadChoiceFolder = () => {
+        const { dispatch } = this.props
+        dispatch({
+            type: 'file/updateDatas',
+            payload: {
+                isShowChoiceFolder: true,
+            },
         })
     }
 
     //上传到后端
     fileUpload = (path) => {
+        debugger
+        let that = this;
+        const authorization = Taro.getStorageSync('access_token')
+        const data = {
+            board_id: '1200340152833150976',
+            folder_id: '1200340152858316803',
+        }
+        const base_info = setRequestHeaderBaseInfo({ data, headers: authorization })
+
         Taro.showToast({ icon: "loading", title: "正在上传..." });
         //开发者服务器访问接口，微信服务器通过这个接口上传文件到开发者服务器
         Taro.uploadFile({
-            url: 'https://lingxi.di-an.com/api/projects/file/upload', //后端接口
+            url: BASE_URL + API_BOARD + '/file/upload', //后端接口
             filePath: path[0],
             name: 'file',
             header: {
-                "Content-Type": "multipart/form-data"
+                "Content-Type": "multipart/form-data",
+                Authorization: authorization,
+                ...base_info,
             },
-            header: { ...Headers, ...setRequestHeaderBaseInfo({ data, headers: Headers }) },
-            formData: { //上传POST参数信息
-                board_id: '1200340152833150976',
-                folder_id: '1200340152858316802',
-                file: path,
-            },
+            formData: data, //上传POST参数信息
             success(res) {
-                console.log(res, '上传文件res');
                 if (res.statusCode != 200) {
                     Taro.showModal({ title: '提示', content: '上传失败', showCancel: false });
                     return;
                 } else {
-                    console.log(res, "上传成功！ 可对返回的值进行操作，比如：存入imgData；");
+                    //重新掉列表接口, 刷新列表
+                    that.getFilePage('0', '1200340152833150976', '1200340152858316803')
                 }
             },
             fail(error) {
                 Taro.showModal({ title: '提示', content: '上传失败', showCancel: false });
-                console.log('上传错误:', error)
+                // console.log('上传错误:', error)
             },
             complete() {
                 Taro.hideToast();
             }
         })
-        // uploadTask.onProgressUpdate((res) => {
-        //     console.log('上传进度', res.progress)
-        //     console.log('已经上传的数据长度', res.totalBytesSent)
-        //     console.log('预期需要上传的数据总长度', res.totalBytesExpectedToSend)
-        // })
-
-        // const { dispatch } = this.props
-        // dispatch({
-        //     type: 'file/uploadFile',
-        //     payload: {
-        //         board_id: '1196728085744062464',
-        //         folder_id: '1196728085777616896',
-        //         file: tempFilePaths,
-        //     },
-        // })
     }
 
     render() {
 
-        const { file_list, isShowBoardList, header_folder_name, is_show_album_camera, } = this.props
-        const { is_tips_longpress_file, } = this.state
+        const { file_list, isShowBoardList, header_folder_name, isShowChoiceFolder } = this.props
+        const { is_tips_longpress_file, choice_image_temp_file_paths } = this.state
 
         return (
             <View className={indexStyles.index}>
@@ -262,7 +351,9 @@ export default class File extends Component {
                         <BoardFile closeBoardList={() => this.choiceBoard(false)} selectedBoardFile={(org_id, board_id, file_id) => this.getFilePage(org_id, board_id, file_id)} />
                         : ''
                 }
-
+                {
+                    isShowChoiceFolder === true ? (<ChoiceFolder choiceImageThumbnail={choice_image_temp_file_paths} fileUpload={() => this.fileUpload('')} />) : ''
+                }
                 <View style={{ position: 'sticky', top: 0 + 'px', left: 0 }}>
                     <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={'0'} onSearch={(value) => this.onSearch(value)} isDisabled={false} />
                 </View>
@@ -274,14 +365,11 @@ export default class File extends Component {
                             <Text className={indexStyles.header_folder_name_style}>{header_folder_name}</Text>
                         </View>
 
-                        {
-                            is_show_album_camera === true ? (
-                                <View className={indexStyles.files_album_camera_view_style}>
-                                    <View className={indexStyles.files_album_camera_button_style} onClick={this.fileUploadAlbumCamera}><Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe664;</Text></View>
-                                    <View className={indexStyles.files_album_camera_button_style} onClick={this.fileUploadAlbumCamera}><Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe663;</Text></View>
-                                </View>
-                            ) : ''
-                        }
+                        <View className={indexStyles.files_album_camera_view_style}>
+                            <View className={indexStyles.files_album_camera_button_style} onClick={this.getAuthSetting.bind(this, 'album')}><Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe664;</Text></View>
+                            <View className={indexStyles.files_album_camera_button_style} onClick={this.getAuthSetting.bind(this, 'camera')}><Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe663;</Text></View>
+                        </View>
+
                     </View>
                 </View>
                 {
@@ -326,6 +414,7 @@ export default class File extends Component {
                         </View>
                     </View>) : ''
                 }
+
             </View>
         )
     }
