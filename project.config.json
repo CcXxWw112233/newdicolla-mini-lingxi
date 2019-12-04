@@ -62,9 +62,9 @@
 					"scene": 1008
 				},
 				{
-					"id": -1,
-					"name": "pages/chat/index",
-					"pathName": "pages/chat/index",
+					"id": 2,
+					"name": "pages/boardChat/index",
+					"pathName": "pages/boardChat/index",
 					"query": "id=1156175314305552384",
 					"scene": null
 				},

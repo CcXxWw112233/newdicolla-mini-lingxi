@@ -11,6 +11,7 @@ export default {
         header_folder_name: '全部文件',  //当前选中的文件夹名称
         isShowFileComment: false,  //chat页面是否显示文件评论
         isShowChoiceFolder: false, //是否显示上传文件选择文件夹modal
+        selected_board_folder_info: {}, //选择的哪一个文件夹的信息(包含org_id, board_id, folder_id), 使用model跨多个组件传值
     },
     effects: {
         //全部文件信息
@@ -134,11 +135,12 @@ export default {
         //文件夹树形列表
         * getFolder({ payload }, { select, call, put }) {
             const res = yield call(getFolder, payload)
+
             if (isApiResponseOk(res)) {
                 yield put({
                     type: 'updateDatas',
                     payload: {
-                        folder_tree: res.data.child_data
+                        folder_tree: res.data
                     }
                 })
             } else {

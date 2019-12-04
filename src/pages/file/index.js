@@ -12,19 +12,36 @@ import { getOrgIdByBoardId, setBoardIdStorage, setRequestHeaderBaseInfo } from '
 import { BASE_URL, API_BOARD } from "../../gloalSet/js/constant";
 
 
-@connect(({ file: { file_list = [], isShowBoardList, header_folder_name, isShowChoiceFolder } }) => ({
-    file_list, isShowBoardList, header_folder_name, isShowChoiceFolder
-}))
+@connect(({
+    file: {
+        file_list = [],
+        isShowBoardList,
+        header_folder_name,
+        isShowChoiceFolder,
+        selected_board_folder_info,
+    },
+    im: {
+        allBoardList,
+    } }) => ({
+        file_list,
+        isShowBoardList,
+        header_folder_name,
+        isShowChoiceFolder,
+        allBoardList,
+        selected_board_folder_info,
+    }))
 export default class File extends Component {
     config = {
         navigationBarTitleText: '文件',
     }
     state = {
         is_tips_longpress_file: false,  //是否显示长按文件前往圈子的提示
-        choice_image_temp_file_paths: ''  //从相册选中的图片api返回来的路径
+        choice_image_temp_file_paths: [],  //从相册选中的图片api返回来的路径
     }
 
-    componentDidMount() { }
+    componentDidMount() {
+        this.fetchAllIMTeamList()
+    }
 
     componentDidShow() {
         const org_id = '0'
@@ -44,6 +61,15 @@ export default class File extends Component {
     componentWillReceiveProps() { }
 
     componentWillUnmount() { }
+
+    //获取全部组织和全部项目
+    fetchAllIMTeamList = () => {
+        const { dispatch } = this.props
+        dispatch({
+            type: 'im/fetchAllIMTeamList',
+            payload: {}
+        })
+    }
 
     getFilePage = (org_id, board_id, file_id) => {
 
@@ -157,7 +183,19 @@ export default class File extends Component {
 
     //长按进入圈子
     longPress = (value) => {
+
+        const { allBoardList } = this.props
+        const { board_id } = value
+
+        //查找当前文件对应的board, 对应的im_id
+        const fileIsCurrentBoard = allBoardList.filter((item, index) => {
+            if (item.board_id == board_id) {
+                return item
+            }
+        })
+
         const { dispatch } = this.props
+        const { im_id } = fileIsCurrentBoard[0]
         dispatch({
             type: 'file/updateDatas',
             payload: {
@@ -165,7 +203,7 @@ export default class File extends Component {
             },
         })
         Taro.navigateTo({
-            url: `../../pages/chat/index?fileInfo=${JSON.stringify(value)}&pageSource=isFileComment`
+            url: `../../pages/chat/index?fileInfo=${JSON.stringify(value)}&pageSource=isFileComment&boardId=${board_id}&imId=${im_id}`
         })
     }
 
@@ -271,6 +309,8 @@ export default class File extends Component {
 
     //拍照/选择图片上传
     fileUploadAlbumCamera = (imageSourceType) => {
+        Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
+
         let that = this;
         Taro.chooseImage({
             count: 1,
@@ -279,7 +319,6 @@ export default class File extends Component {
             success(res) {
                 let tempFilePaths = res.tempFilePaths;
                 that.uploadChoiceFolder();
-
                 that.setState({
                     choice_image_temp_file_paths: tempFilePaths,
                 })
@@ -298,13 +337,17 @@ export default class File extends Component {
     }
 
     //上传到后端
-    fileUpload = (path) => {
-        debugger
+    fileUpload = () => {
+
+        const { choice_image_temp_file_paths } = this.state
+        const { selected_board_folder_info } = this.props
+        const { org_id, board_id, folder_id, } = selected_board_folder_info
+
         let that = this;
         const authorization = Taro.getStorageSync('access_token')
         const data = {
-            board_id: '1200340152833150976',
-            folder_id: '1200340152858316803',
+            board_id: board_id,
+            folder_id: folder_id,
         }
         const base_info = setRequestHeaderBaseInfo({ data, headers: authorization })
 
@@ -312,7 +355,7 @@ export default class File extends Component {
         //开发者服务器访问接口，微信服务器通过这个接口上传文件到开发者服务器
         Taro.uploadFile({
             url: BASE_URL + API_BOARD + '/file/upload', //后端接口
-            filePath: path[0],
+            filePath: choice_image_temp_file_paths[0],
             name: 'file',
             header: {
                 "Content-Type": "multipart/form-data",
@@ -326,7 +369,7 @@ export default class File extends Component {
                     return;
                 } else {
                     //重新掉列表接口, 刷新列表
-                    that.getFilePage('0', '1200340152833150976', '1200340152858316803')
+                    that.getFilePage(org_id, board_id, folder_id)
                 }
             },
             fail(error) {
@@ -342,7 +385,7 @@ export default class File extends Component {
     render() {
 
         const { file_list, isShowBoardList, header_folder_name, isShowChoiceFolder } = this.props
-        const { is_tips_longpress_file, choice_image_temp_file_paths } = this.state
+        const { is_tips_longpress_file, choice_image_temp_file_paths = [] } = this.state
 
         return (
             <View className={indexStyles.index}>
@@ -352,7 +395,7 @@ export default class File extends Component {
                         : ''
                 }
                 {
-                    isShowChoiceFolder === true ? (<ChoiceFolder choiceImageThumbnail={choice_image_temp_file_paths} fileUpload={() => this.fileUpload('')} />) : ''
+                    isShowChoiceFolder === true ? (<ChoiceFolder choiceImageThumbnail={choice_image_temp_file_paths} fileUpload={() => this.fileUpload()} />) : ''
                 }
                 <View style={{ position: 'sticky', top: 0 + 'px', left: 0 }}>
                     <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={'0'} onSearch={(value) => this.onSearch(value)} isDisabled={false} />

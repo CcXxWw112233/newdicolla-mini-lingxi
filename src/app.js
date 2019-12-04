@@ -98,11 +98,7 @@ class App extends Component {
     store,
   }
 
-  componentDidMount() {
-    //清除项目的标识
-    //有的时候不是正常退出
-    Taro.removeStorageSync('file_item_board_id')
-  }
+  componentDidMount() { }
 
   componentDidShow() {
 

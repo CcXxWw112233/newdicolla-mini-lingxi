@@ -7,25 +7,21 @@ import { connect } from '@tarojs/redux'
 @connect(({ file }) => ({ file }))
 export default class Tree extends Component {
 
-    selectionTreeFile = (folder_id, folder_name) => {
+    selectionTreeFile = (item) => {
 
         const { dispatch, boardId, orgId } = this.props
-        dispatch({
-            type: 'file/getFilePage',
-            payload: {
-                _organization_id: orgId,
-                board_id: boardId,
-                folder_id: folder_id,
-                page_number: '',
-                page_size: '',
-            },
-        })
+        const { folder_id } = item
+
+        const boardFolderInfo = {
+            org_id: orgId,
+            board_id: boardId,
+            folder_id: folder_id
+        }
 
         dispatch({
             type: 'file/updateDatas',
             payload: {
-                isShowBoardList: false,
-                header_folder_name: folder_name
+                selected_board_folder_info: boardFolderInfo,
             },
         })
     }
@@ -37,10 +33,18 @@ export default class Tree extends Component {
             <View>
                 {arr && arr.map(item => {
                     return (
-                        <View class={indexStyles.li_item} data-itemid={item.folder_id} onClick={() => this.selectionTreeFile(item.folder_id, item.folder_name)}>
-                            {/* <Text className={`${globalStyle.global_iconfont} ${indexStyles.open_item_icon}`}>&#xe8ed;</Text> */}
-                            <Text className={`${globalStyle.global_iconfont} ${indexStyles.folder_Path_icon}`}>&#xe662;</Text>
-                            <View className={indexStyles.file_item_name}>{item.folder_name}</View>
+                        <View class={indexStyles.folder_item_cell_style} data-itemid={item.folder_id} onClick={() => this.selectionTreeFile(item)}>
+
+                            <View className={indexStyles.choice_folder_button_style}>
+                                <Text className={`${globalStyle.global_iconfont} ${indexStyles.choice_folder_button_icon_style}`}>&#xe6df;</Text>
+                            </View>
+
+                            <View className={indexStyles.choice_folder_view_style}>
+                                <Text className={`${globalStyle.global_iconfont} ${indexStyles.choice_folder_icon_style}`}>&#xe662;</Text>
+                            </View>
+
+                            <View className={indexStyles.folder_item_name_cell}>{item.folder_name}</View>
+
                         </View>
                     )
                 })

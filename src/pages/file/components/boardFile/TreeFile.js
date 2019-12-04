@@ -36,9 +36,7 @@ export default class TreeFile extends Component {
 
         return (
             <View>
-                <View className={indexStyles.view_style}>
-                    <Tree arr={arr} boardId={boardId} orgId={orgId} />
-                </View>
+                <Tree arr={arr} boardId={boardId} orgId={orgId} />
             </View>
         )
     }

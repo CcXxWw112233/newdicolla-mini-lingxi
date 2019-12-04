@@ -266,8 +266,9 @@ export default class BoardChat extends Component {
             .then(() => setCurrentGroup(getCurrentGroup(currentBoard, im_id)))
             .then(() => updateCurrentChatUnreadNewsState(id))
             .then(() => {
+                const { board_id } = currentBoard
                 Taro.navigateTo({
-                    url: `/pages/chat/index`
+                    url: `../../pages/chat/index?boardId=${board_id}&imId=${im_id}&pageSource=boardChat`
                 });
             })
             .catch(e => Taro.showToast({ title: String(e), icon: 'none' }));

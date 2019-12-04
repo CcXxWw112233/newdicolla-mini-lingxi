@@ -1,5 +1,6 @@
 @import "../../../../gloalSet/styles/constant.scss";
 
+
 .choice_folder_modal_mask {
     width     : 100%;
     height    : 100%;
@@ -69,6 +70,108 @@
                     }
                 }
             }
+        }
+
+        .choice_board_view_style {
+            margin: pxTrans(18) pxTrans(18) pxTrans(70) pxTrans(18);
+
+            .modal_content_top_style {
+                width      : 100%;
+                height     : pxTrans(56);
+                color      : rgba(0, 0, 0, 0.45);
+                text-align : center;
+                align-items: center;
+                display    : flex;
+
+                .modal_tips_text_style {
+                    width      : pxTrans(56);
+                    height     : pxTrans(22);
+                    font-size  : pxTrans(14);
+                    font-weight: 400;
+                    line-height: pxTrans(22);
+                }
+
+                .folder_name_style {
+                    width: 100%;
+
+                }
+            }
+
+
+            .board_list_view_style {
+                height: pxTrans(260);
+                width : 100%;
+
+                .board_item_style {
+                    width : 100%;
+                    cursor: pointer;
+
+                    .board_item_cell_style {
+                        height     : pxTrans(65);
+                        display    : flex;
+                        text-align : center;
+                        align-items: center;
+                        border-top : 0.5px solid rgba(0, 0, 0, 0.45);
+
+                        .choice_button_style {
+                            width : pxTrans(30);
+                            height: 100%;
+
+                            .choice_button_icon_style {
+                                font-size: pxTrans(18);
+                                color    : rgba(0, 0, 0, 0.25);
+                            }
+                        }
+
+                        .board_item_cell_content_style {
+                            height     : 100%;
+                            width      : 100%;
+                            display    : flex;
+                            align-items: center;
+
+                            .board_folder_view_style,
+                            .board_item_open_view_style {
+                                width : pxTrans(30);
+                                height: 100%;
+
+                                .choice_button_icon_style,
+                                .board_folder_icon_style,
+                                .board_item_open_icon_style {
+                                    font-size: pxTrans(18);
+                                    color    : rgba(0, 0, 0, 0.25);
+                                }
+                            }
+
+                            .board_item_cell_content_top_style {
+                                flex      : 1;
+                                text-align: left;
+                                height    : 100%;
+
+                                .board_item_name {
+                                    height     : pxTrans(22);
+                                    font-size  : pxTrans(14);
+                                    font-weight: 400;
+                                    color      : rgba(0, 0, 0, 0.85);
+                                    line-height: pxTrans(22);
+                                }
+
+                                .org_name_style {
+                                    font-size  : pxTrans(12);
+                                    line-height: pxTrans(20);
+                                    height     : pxTrans(20);
+                                    font-weight: 400;
+                                    color      : rgba(0, 0, 0, 0.45);
+                                }
+                            }
+                        }
+                    }
+
+                    .folder_tree_view {
+                        margin-left: pxTrans(15);
+                    }
+                }
+            }
+
         }
 
         .modal_botton_style {
