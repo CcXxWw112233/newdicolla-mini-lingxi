@@ -106,7 +106,6 @@ class UserInput extends Component {
     emojiType: 'emoji', // emoji | pinup
     emojiAlbum: 'emoji', // emoji | ajmd | lt | xxy
     inputBottomValue: 0,
-    isIphoneX: false, //是否iPhone X及以上设备
   };
   handleInputFocus = e => {
     const { handleUserInputFocus, handleUserInputHeightChange } = this.props;
@@ -510,19 +509,6 @@ class UserInput extends Component {
     });
   }
 
-  componentDidMount() {
-    const res = Taro.getSystemInfoSync()
-    if (res.platform === "devtools") {
-      if (res.system >= 11.0) {
-        if (model.search('iPhone X') != -1 && model.search('iPhone 11') != -1) {
-          this.setState({
-            isIphoneX: true
-          })
-        }
-      }
-    }
-
-  }
   render() {
     const {
       inputValue,
@@ -532,7 +518,6 @@ class UserInput extends Component {
       emojiType,
       emojiAlbum,
       inputBottomValue,
-      isIphoneX,
     } = this.state;
 
     // console.log(inputMode);
@@ -756,3 +741,4 @@ class UserInput extends Component {
 }
 
 export default UserInput;
+

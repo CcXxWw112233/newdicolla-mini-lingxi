@@ -17,13 +17,12 @@
         background   : rgba(255, 255, 255, 1);
         box-shadow   : 0px pxTrans(2) pxTrans(8) 0 rgba(0, 0, 0, 0.15);
         border-radius: pxTrans(4);
-
-        position: absolute;
-        top     : 0;
-        right   : 0;
-        left    : 0;
-        bottom  : 0;
-        margin  : pxTrans(100) auto;
+        position     : absolute;
+        top          : 0;
+        right        : 0;
+        left         : 0;
+        bottom       : 0;
+        margin       : pxTrans(100) auto;
 
         .modal_content_style {
             margin: pxTrans(18) pxTrans(18) pxTrans(70) pxTrans(18);
@@ -60,13 +59,13 @@
 
                 .thumbnail_view_style {
                     width     : 100%;
-                    height    : pxTrans(80);
+                    height    : pxTrans(160);
                     margin-top: pxTrans(28);
                     text-align: center;
 
                     .choice_image_thumbnail_style {
-                        width : pxTrans(80);
-                        height: pxTrans(80);
+                        width : pxTrans(160);
+                        height: pxTrans(160);
                     }
                 }
             }
@@ -84,16 +83,22 @@
                 display    : flex;
 
                 .modal_tips_text_style {
-                    width      : pxTrans(56);
+                    width      : pxTrans(65);
                     height     : pxTrans(22);
                     font-size  : pxTrans(14);
                     font-weight: 400;
                     line-height: pxTrans(22);
+                    color      : rgba(24, 144, 255, 1);
                 }
 
                 .folder_name_style {
-                    width: 100%;
-
+                    width       : 100%;
+                    margin-right: pxTrans(40);
+                    height      : pxTrans(24);
+                    font-size   : pxTrans(16);
+                    font-weight : 400;
+                    color       : rgba(0, 0, 0, 0.85);
+                    line-height : pxTrans(24);
                 }
             }
 
@@ -112,6 +117,7 @@
                         text-align : center;
                         align-items: center;
                         border-top : 0.5px solid rgba(0, 0, 0, 0.45);
+                        padding-top: pxTrans(15);
 
                         .choice_button_style {
                             width : pxTrans(30);

@@ -11,6 +11,7 @@ export default class FileChat extends Component {
 
     state = {
         commentValue: '', //评论内容
+        inputBottonHeight: '0', //输入框弹起高度
     }
 
     handleInput = e => {
@@ -87,21 +88,37 @@ export default class FileChat extends Component {
         })
     }
 
+    //键盘弹起, 获取键盘的高度
+    handleBindfocus = (e) => {
+        if (e.detail.height) {
+            this.setState({
+                inputBottonHeight: e.detail.height
+            })
+        }
+    }
+
+    handBindblur = () => {
+        this.setState({
+            inputBottonHeight: '0'
+        })
+    }
+
     render() {
 
-        const SystemInfo = Taro.getSystemInfoSync()
-        const screen_Height = SystemInfo.screenHeight
-        const statusBar_Height = SystemInfo.statusBarHeight
-        const navBar_Height = SystemInfo.platform == 'ios' ? 44 : 48
-        const { commentValue } = this.state
+        const { commentValue, inputBottonHeight, } = this.state
         const { fileInfo = {} } = this.props
         const { thumbnail_url, file_name, } = fileInfo
 
         const fileType = file_name && filterFileFormatType(file_name)
 
         return (
-            <View className={indexStyles.mask} style={{ height: screen_Height - (statusBar_Height + navBar_Height) + 'px', marginTop: statusBar_Height + navBar_Height + 'px' }}>
-                <View className={indexStyles.file_chat_view_style}>
+            <View className={indexStyles.mask} >
+                <View
+                    className={indexStyles.file_chat_view_style}
+                    style={{
+                        position: inputBottonHeight === '0' ? 'absolute' : 'fixed',
+                        bottom: inputBottonHeight + 'px',
+                    }}>
                     <View className={indexStyles.file_chat_view_content_style}>
                         <View className={indexStyles.file_chat_view_hear_style}>
                             <View className={indexStyles.file_info_view_style} >
@@ -135,7 +152,9 @@ export default class FileChat extends Component {
                                 value={commentValue}
                                 auto-height={false}
                                 show-confirm-bar={false}
-                                focus={true}
+                                adjust-position={true}
+                                onFocus={this.handleBindfocus}
+                                onblur={this.handBindblur}
                             />
                         </View>
                         {commentValue && commentValue.trim() ? (

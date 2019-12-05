@@ -24,6 +24,7 @@ export default class Tree extends Component {
                 type: 'file/updateDatas',
                 payload: {
                     selected_board_folder_id: '',
+                    back_click_name: true,
                 },
             })
         } else {
@@ -31,12 +32,14 @@ export default class Tree extends Component {
             //记录被选中文件夹信息, 
             //更新上方title显示名称,
             //更新项目更目录的选中状态
+            //更新右上角显示文案
             dispatch({
                 type: 'file/updateDatas',
                 payload: {
                     selected_board_folder_id: folder_id,
                     selected_board_folder_info: boardFolderInfo,
                     upload_folder_name: folder_name,
+                    back_click_name: false,
                 },
             })
         }

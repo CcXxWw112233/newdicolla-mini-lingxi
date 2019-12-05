@@ -16,6 +16,7 @@ export default {
         upload_folder_name: '选择文件夹', //要上传的文件夹的名称
         selected_board_folder_id: '',  //选中的那一个的文件夹id
         choice_board_id: '', //当前被选中项目根目录的项目id
+        back_click_name: true, //右上角显示'返回'还是'取消'
     },
     effects: {
         //全部文件信息
