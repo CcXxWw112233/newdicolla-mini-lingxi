@@ -12,6 +12,9 @@ export default {
         isShowFileComment: false,  //chat页面是否显示文件评论
         isShowChoiceFolder: false, //是否显示上传文件选择文件夹modal
         selected_board_folder_info: {}, //选择的哪一个文件夹的信息(包含org_id, board_id, folder_id), 使用model跨多个组件传值
+        upload_folder_name: '选择文件夹', //要上传的文件夹的名称
+        selected_board_folder_id: '',  //选中的那一个的文件夹id
+        choice_board_id: '', //当前被选中项目根目录的项目id
     },
     effects: {
         //全部文件信息

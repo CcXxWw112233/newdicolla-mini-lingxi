@@ -11,6 +11,9 @@ import TreeFile from './TreeFile'
     file: {
         isShowChoiceFolder,
         folder_tree,
+        upload_folder_name,
+        selected_board_folder_id,
+        choice_board_id,
     },
     board: { v2_board_list, },
     my: { org_list },
@@ -19,11 +22,13 @@ import TreeFile from './TreeFile'
     folder_tree,
     v2_board_list,
     org_list,
+    upload_folder_name,
+    selected_board_folder_id,
+    choice_board_id,
 }))
 export default class ChoiceFolder extends Component {
     state = {
         current_selection_board_id: '',  //当前选中项目的id
-        current_selection_board_status: false, //当前项目选中状态
         is_show_board_list: false, //是否显示项目列表
     }
 
@@ -41,6 +46,7 @@ export default class ChoiceFolder extends Component {
     selectedBoardItem = (org_id, board_id, file_id, value) => {
 
         const { current_selection_board_id } = this.state
+        const { board_name } = value
         if (board_id && current_selection_board_id === board_id) {
             this.setState({ current_selection_board_id: '' })
         } else {
@@ -49,18 +55,52 @@ export default class ChoiceFolder extends Component {
             if (board_id) {
                 this.getFolder(board_id, '')
             }
+            const { dispatch } = this.props
+            dispatch({
+                type: 'file/updateDatas',
+                payload: {
+                    upload_folder_name: board_name,
+                },
+            })
         }
     }
 
+
     //选择当前项目的根目录
-    selectionBoardRootDirectory = (boardId, org_id) => {
-        this.getFolder(boardId, org_id)
-        this.setState({
-            current_selection_board_status: !this.state.current_selection_board_status
+    selectionBoardRootDirectory = (value, org_id) => {
+        const { board_id, board_name } = value
+        const { dispatch } = this.props
+
+        const { choice_board_id } = this.props
+        if (board_id && choice_board_id === board_id) {
+            dispatch({
+                type: 'file/updateDatas',
+                payload: {
+                    choice_board_id: '',
+                },
+            })
+        } else {
+            //获取根目录
+            this.getFolder(board_id, org_id, board_name)
+            //记录选中的那一行的board_id
+            dispatch({
+                type: 'file/updateDatas',
+                payload: {
+                    choice_board_id: board_id,
+                },
+            })
+        }
+
+        dispatch({
+            type: 'file/updateDatas',
+            payload: {
+                selected_board_folder_id: '',
+            },
         })
+
     }
 
-    getFolder = (boardId, orgId) => {
+    getFolder = (boardId, orgId, board_name) => {
 
         const { dispatch } = this.props
         Promise.resolve(
@@ -71,31 +111,52 @@ export default class ChoiceFolder extends Component {
                 },
             })
         ).then(res => {
-            const { folder_tree } = this.props
-            const { folder_id } = folder_tree
 
-            const boardFolderInfo = {
-                org_id: orgId,
-                board_id: boardId,
-                folder_id: folder_id
+            if (board_name) {
+                debugger
+                const { folder_tree } = this.props
+                const { folder_id } = folder_tree
+
+                const boardFolderInfo = {
+                    org_id: orgId,
+                    board_id: boardId,
+                    folder_id: folder_id,
+                    current_folder_name: board_name,
+                }
+                dispatch({
+                    type: 'file/updateDatas',
+                    payload: {
+                        selected_board_folder_info: boardFolderInfo,
+                    },
+                })
             }
-            dispatch({
-                type: 'file/updateDatas',
-                payload: {
-                    selected_board_folder_info: boardFolderInfo,
-                },
-            })
         })
     }
 
     handleCancel = () => {
         this.hideChoiceFolder()
+        this.resetCurrentSelection()
     }
 
     handleConfirm = () => {
         this.props.fileUpload()
         this.hideChoiceFolder()
+        this.resetCurrentSelection()
     }
+
+    resetCurrentSelection = () => {
+        const { dispatch } = this.props
+        dispatch({
+            type: 'file/updateDatas',
+            payload: {
+                selected_board_folder_id: '',
+                choice_board_id: '',
+                selected_board_folder_info: {},
+                upload_folder_name: '选择文件夹',
+            },
+        })
+    }
+
 
     hideChoiceFolder = () => {
         const { dispatch } = this.props
@@ -127,9 +188,9 @@ export default class ChoiceFolder extends Component {
 
     render() {
 
-        const { folder_tree, v2_board_list, org_list, choiceImageThumbnail, } = this.props
-        const { child_data = [] } = folder_tree
-        const { current_selection_board_id, current_selection_board_status, is_show_board_list } = this.state
+        const { folder_tree, v2_board_list, org_list, choiceImageThumbnail, upload_folder_name, selected_board_folder_id, choice_board_id, } = this.props
+        const { child_data = [], } = folder_tree
+        const { current_selection_board_id, is_show_board_list } = this.state
 
         return (
 
@@ -153,7 +214,7 @@ export default class ChoiceFolder extends Component {
                             <View className={indexStyles.choice_board_view_style}>
                                 <View className={indexStyles.modal_content_top_style}>
                                     <View className={indexStyles.modal_tips_text_style} onClick={this.backHideBoardList}>{'< '}返回</View>
-                                    <View className={indexStyles.folder_name_style}>选择文件夹</View>
+                                    <View className={indexStyles.folder_name_style}>{upload_folder_name}</View>
                                 </View>
                                 <ScrollView
                                     scrollY
@@ -165,16 +226,14 @@ export default class ChoiceFolder extends Component {
                                             <View className={indexStyles.board_item_style} >
 
                                                 <View className={indexStyles.board_item_cell_style}>
-                                                    <View className={indexStyles.choice_button_style} onClick={() => this.selectionBoardRootDirectory(item.board_id, org_id)}>
-
+                                                    <View className={indexStyles.choice_button_style} onClick={() => this.selectionBoardRootDirectory(item, org_id)}>
                                                         {
-                                                            current_selection_board_status === true ? (
+                                                            item.board_id === choice_board_id ? (
                                                                 <Text className={`${globalStyle.global_iconfont} ${indexStyles.choice_button_icon_style}`}>&#xe844;</Text>
                                                             ) : (
                                                                     <Text className={`${globalStyle.global_iconfont} ${indexStyles.choice_button_icon_style}`}>&#xe6df;</Text>
                                                                 )
                                                         }
-
                                                     </View>
 
                                                     <View className={indexStyles.board_item_cell_content_style} onClick={() => this.selectedBoardItem('0', item.board_id, '', item)}>
@@ -214,7 +273,13 @@ export default class ChoiceFolder extends Component {
 
                     <View className={indexStyles.modal_botton_style}>
                         <View className={indexStyles.cancel_button_style} onClick={this.handleCancel}>取消</View>
-                        <View className={indexStyles.confirm_button_style} onClick={this.handleConfirm}>上传</View>
+                        {
+                            choice_board_id != '' || selected_board_folder_id != '' ? (
+                                <View className={indexStyles.confirm_button_style} onClick={this.handleConfirm}>上传</View>
+                            ) : (
+                                    <View className={indexStyles.un_confirm_button_style}>上传</View>
+                                )
+                        }
                     </View>
 
                 </View>

@@ -93,6 +93,17 @@ export default class File extends Component {
         })
     }
 
+    updateHeaderFolderName = (current_folder_name) => {
+
+        const { dispatch } = this.props
+        dispatch({
+            type: 'file/updateDatas',
+            payload: {
+                header_folder_name: current_folder_name,
+            },
+        })
+    }
+
     onSelectType = ({ show_type }) => {
         this.setState({
             show_card_type_select: show_type,
@@ -341,7 +352,7 @@ export default class File extends Component {
 
         const { choice_image_temp_file_paths } = this.state
         const { selected_board_folder_info } = this.props
-        const { org_id, board_id, folder_id, } = selected_board_folder_info
+        const { org_id, board_id, folder_id, current_folder_name, } = selected_board_folder_info
 
         let that = this;
         const authorization = Taro.getStorageSync('access_token')
@@ -368,6 +379,8 @@ export default class File extends Component {
                     Taro.showModal({ title: '提示', content: '上传失败', showCancel: false });
                     return;
                 } else {
+                    //更新头部显示文件夹名称
+                    that.updateHeaderFolderName(current_folder_name)
                     //重新掉列表接口, 刷新列表
                     that.getFilePage(org_id, board_id, folder_id)
                 }

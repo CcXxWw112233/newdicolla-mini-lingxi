@@ -103,8 +103,8 @@
                 width : 100%;
 
                 .board_item_style {
-                    width : 100%;
-                    cursor: pointer;
+                    width    : 100%;
+                    // cursor: pointer;
 
                     .board_item_cell_style {
                         height     : pxTrans(65);
@@ -193,6 +193,14 @@
             }
 
             .confirm_button_style {
+                width      : 50%;
+                font-size  : pxTrans(16);
+                font-weight: 400;
+                color      : rgba(24, 144, 255, 1);
+                border-left: 0.5px solid rgba(0, 0, 0, 0.45);
+            }
+
+            .un_confirm_button_style {
                 width      : 50%;
                 font-size  : pxTrans(16);
                 font-weight: 400;
