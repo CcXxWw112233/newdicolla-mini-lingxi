@@ -104,17 +104,19 @@ export default class FileChat extends Component {
                 <View className={indexStyles.file_chat_view_style}>
                     <View className={indexStyles.file_chat_view_content_style}>
                         <View className={indexStyles.file_chat_view_hear_style}>
-                            <View className={indexStyles.file_info_view_style} onClick={this.goFileDetails.bind(this, fileInfo)}>
-                                {
-                                    thumbnail_url ?
-                                        (
-                                            <Image mode='aspectFill' className={indexStyles.thumbnail_img_style} src={thumbnail_url}>
-                                            </Image>
-                                        ) : (
-                                            <View className={indexStyles.other_icon_style}>
-                                                <RichText className={`${globalStyles.global_iconfont} ${indexStyles.folder_type_icon}`} nodes={fileType} />
-                                            </View>)
-                                }
+                            <View className={indexStyles.file_info_view_style} >
+                                <View onClick={this.goFileDetails.bind(this, fileInfo)}>
+                                    {
+                                        thumbnail_url ?
+                                            (
+                                                <Image mode='aspectFill' className={indexStyles.thumbnail_img_style} src={thumbnail_url}>
+                                                </Image>
+                                            ) : (
+                                                <View className={indexStyles.other_icon_style}>
+                                                    <RichText className={`${globalStyles.global_iconfont} ${indexStyles.folder_type_icon}`} nodes={fileType} />
+                                                </View>)
+                                    }
+                                </View>
                                 <View className={indexStyles.file_chat_view_hear_text_style}>
                                     <View className={indexStyles.file_chat_hear_tips_style}>
                                         <View className={indexStyles.file_chat_view_hear_tips_style}>发送评论到:</View>
@@ -126,13 +128,16 @@ export default class FileChat extends Component {
                                 </View>
                             </View>
                         </View>
-                        <Textarea className={indexStyles.input_comment_style}
-                            placeholder='请输入评论'
-                            onInput={this.handleInput}
-                            value={commentValue}
-                            auto-height={false}
-                            show-confirm-bar={false}
-                        />
+                        <View className={indexStyles.input_view_style}>
+                            <Textarea className={indexStyles.input_comment_style}
+                                placeholder='请输入评论'
+                                onInput={this.handleInput}
+                                value={commentValue}
+                                auto-height={false}
+                                show-confirm-bar={false}
+                                focus={true}
+                            />
+                        </View>
                         {commentValue && commentValue.trim() ? (
                             <View className={indexStyles.send_file_comment_button_style} onClick={this.sendComment}>发送评论</View>
                         ) : (

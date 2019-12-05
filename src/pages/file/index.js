@@ -41,9 +41,7 @@ export default class File extends Component {
 
     componentDidMount() {
         this.fetchAllIMTeamList()
-    }
 
-    componentDidShow() {
         const org_id = '0'
         const board_id = ''
         const file_id = ''
@@ -55,6 +53,19 @@ export default class File extends Component {
             this.getFilePage(org_id, board_id, file_id)
         }
     }
+
+    // componentDidShow() {
+    //     const org_id = '0'
+    //     const board_id = ''
+    //     const file_id = ''
+
+    //     const is_reload_file_list = Taro.getStorageSync('isReloadFileList')
+    //     if (is_reload_file_list === 'is_reload_file_list') {
+    //         Taro.removeStorageSync('isReloadFileList')
+    //     } else {
+    //         this.getFilePage(org_id, board_id, file_id)
+    //     }
+    // }
 
     componentDidHide() { }
 
@@ -194,27 +205,18 @@ export default class File extends Component {
 
     //长按进入圈子
     longPress = (value) => {
-
-        const { allBoardList } = this.props
+        const { dispatch } = this.props
         const { board_id } = value
 
-        //查找当前文件对应的board, 对应的im_id
-        const fileIsCurrentBoard = allBoardList.filter((item, index) => {
-            if (item.board_id == board_id) {
-                return item
-            }
-        })
-
-        const { dispatch } = this.props
-        const { im_id } = fileIsCurrentBoard[0]
         dispatch({
             type: 'file/updateDatas',
             payload: {
                 isShowFileComment: true,
             },
         })
+
         Taro.navigateTo({
-            url: `../../pages/chat/index?fileInfo=${JSON.stringify(value)}&pageSource=isFileComment&boardId=${board_id}&imId=${im_id}`
+            url: `../../pages/chat/index?fileInfo=${JSON.stringify(value)}&pageSource=isFileComment&boardId=${board_id}`
         })
     }
 

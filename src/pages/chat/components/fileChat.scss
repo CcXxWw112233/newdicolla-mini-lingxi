@@ -58,8 +58,10 @@
                     }
 
                     .file_chat_view_hear_text_style {
-                        margin-left: pxTrans(10);
-                        width      : 100%;
+                        margin-left   : pxTrans(10);
+                        // width      : 100%;
+                        width         : pxTrans(275);
+
 
                         .file_chat_hear_tips_style {
                             height         : pxTrans(22);
@@ -82,23 +84,30 @@
 
 
                         .file_name_style {
-                            height     : pxTrans(24);
-                            font-size  : pxTrans(16);
-                            font-weight: 400;
-                            color      : rgba(0, 0, 0, 0.65);
-                            line-height: pxTrans(24);
+                            height       : pxTrans(24);
+                            font-size    : pxTrans(16);
+                            font-weight  : 400;
+                            color        : rgba(0, 0, 0, 0.65);
+                            line-height  : pxTrans(24);
+                            overflow     : hidden;
+                            text-overflow: ellipsis;
+                            white-space  : nowrap;
                         }
                     }
                 }
             }
 
-            .input_comment_style {
+            .input_view_style {
+                border       : pxTrans(1) solid rgba(0, 0, 0, 0.15);
                 width        : 100%;
                 height       : pxTrans(148);
-                background   : rgba(255, 255, 255, 1);
                 border-radius: pxTrans(4);
-                border       : pxTrans(1) solid rgba(0, 0, 0, 0.15);
                 margin-top   : pxTrans(20);
+
+                .input_comment_style {
+                    width : 100%;
+                    margin: pxTrans(10) auto;
+                }
             }
 
             .send_file_comment_button_style {

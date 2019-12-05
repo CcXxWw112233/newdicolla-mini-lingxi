@@ -268,7 +268,7 @@ export default class BoardChat extends Component {
             .then(() => {
                 const { board_id } = currentBoard
                 Taro.navigateTo({
-                    url: `../../pages/chat/index?boardId=${board_id}&imId=${im_id}&pageSource=boardChat`
+                    url: `../../pages/chat/index?boardId=${board_id}&pageSource=boardChat`
                 });
             })
             .catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
@@ -292,7 +292,7 @@ export default class BoardChat extends Component {
 
     genLastMsg = (lastMsg = {}) => {
         const { fromNick, type, text } = lastMsg;
-        if (!fromNick) return '';
+        // if (!fromNick) return '';
         const typeCond = {
             text,
             audio: '[语音]',

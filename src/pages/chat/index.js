@@ -128,7 +128,7 @@ class Chat extends Component {
   }
 
   componentDidMount() {
-    const { fileInfo, pageSource, boardId, imId, } = this.$router.params
+    const { fileInfo, pageSource, boardId, } = this.$router.params
     this.setState({
       file_info: fileInfo && JSON.parse(fileInfo),
       page_source: pageSource,
@@ -138,8 +138,18 @@ class Chat extends Component {
     if (pageSource === 'boardChat') {
       return
     } else {
+      //根据当前board_id查找im_id
+      const { allBoardList } = this.props
+      const fileIsCurrentBoard = allBoardList.filter((item, index) => {
+        if (item.board_id == boardId) {
+          return item
+        }
+      })
+
+      const { im_id } = fileIsCurrentBoard[0]
+
       //初始化IM相关信息
-      this.initializationChat(boardId, imId)
+      this.initializationChat(boardId, im_id)
     }
   }
 
@@ -291,6 +301,14 @@ class Chat extends Component {
       resetCurrentGroup();
       resetCurrentGroupSessionList();
     }
+
+    if (page_source === 'auccessJoin' || page_source === 'sceneEntrance') {
+      const switchTabCurrentPage = 'currentPage_BoardDetail_or_Login'
+      Taro.setStorageSync('switchTabCurrentPage', switchTabCurrentPage);  //解决wx.switchTab不能传值
+      Taro.switchTab({
+        url: `../../pages/calendar/index`
+      })
+    }
   }
 
   render() {
@@ -319,9 +337,3 @@ class Chat extends Component {
 }
 
 export default Chat;
-
-
-// FileChat.defaultProps = {
-//   fileInfo: '',    //文件信息
-//   pageSource: '',   //页面来源
-// }

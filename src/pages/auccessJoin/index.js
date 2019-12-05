@@ -6,8 +6,8 @@ import pc_Website_image from '../../asset/Invitation/pcWebsite.png'
 import globalStyles from '../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
 
-@connect(({ auccessJoin }) => ({
-  auccessJoin
+@connect(({ im: { allBoardList, }, }) => ({
+  allBoardList,
 }))
 export default class auccessJoin extends Component {
   config = {
@@ -83,9 +83,13 @@ export default class auccessJoin extends Component {
   }
 
   enterUse = () => {
+
+    //查找当前文件对应的board, 对应的im_id
+    const { allBoardList } = this.props
     const { board_id } = this.state
+
     Taro.navigateTo({
-      url: `../../pages/boardDetail/index?push=auccessJoin&&boardId=${board_id}`
+      url: `../../pages/chat/index?pageSource=auccessJoin&boardId=${board_id}`
     })
   }
 

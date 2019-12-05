@@ -4,8 +4,7 @@ import { View, Text } from '@tarojs/components'
 import indexStyles from './ChoiceFolder.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
-import { getOrgIdByBoardId, setBoardIdStorage, getOrgName } from '../../../../utils/basicFunction'
-import { isApiResponseOk } from '../../../../utils/request'
+import { getOrgIdByBoardId, getOrgName } from '../../../../utils/basicFunction'
 import TreeFile from './TreeFile'
 @connect(({
     file: {
@@ -30,6 +29,7 @@ export default class ChoiceFolder extends Component {
     state = {
         current_selection_board_id: '',  //当前选中项目的id
         is_show_board_list: false, //是否显示项目列表
+        current_board_open: false, //文件夹列表展开状态
     }
 
     componentDidMount() {
@@ -48,10 +48,10 @@ export default class ChoiceFolder extends Component {
         const { current_selection_board_id } = this.state
         const { board_name } = value
         if (board_id && current_selection_board_id === board_id) {
-            this.setState({ current_selection_board_id: '' })
+            this.setState({ current_selection_board_id: '', current_board_open: false })
         } else {
             //记录选中的那一行的board_id
-            this.setState({ current_selection_board_id: board_id })
+            this.setState({ current_selection_board_id: board_id, current_board_open: true })
             if (board_id) {
                 this.getFolder(board_id, '')
             }
@@ -113,7 +113,6 @@ export default class ChoiceFolder extends Component {
         ).then(res => {
 
             if (board_name) {
-                debugger
                 const { folder_tree } = this.props
                 const { folder_id } = folder_tree
 
@@ -155,6 +154,8 @@ export default class ChoiceFolder extends Component {
                 upload_folder_name: '选择文件夹',
             },
         })
+
+        this.setState({ current_board_open: false })
     }
 
 
@@ -190,7 +191,7 @@ export default class ChoiceFolder extends Component {
 
         const { folder_tree, v2_board_list, org_list, choiceImageThumbnail, upload_folder_name, selected_board_folder_id, choice_board_id, } = this.props
         const { child_data = [], } = folder_tree
-        const { current_selection_board_id, is_show_board_list } = this.state
+        const { current_selection_board_id, is_show_board_list, current_board_open } = this.state
 
         return (
 
@@ -251,7 +252,14 @@ export default class ChoiceFolder extends Component {
                                                         </View>
 
                                                         <View className={indexStyles.board_item_open_view_style}>
-                                                            <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_open_icon_style}`}>&#xe642;</Text>
+                                                            {
+                                                                item.board_id === current_selection_board_id && current_board_open === true ? (
+                                                                    <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_open_icon_style}`}>&#xe653;</Text>
+                                                                ) : (
+                                                                        <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_open_icon_style}`}>&#xe642;</Text>
+                                                                    )
+                                                            }
+
                                                         </View>
                                                     </View>
                                                 </View>
