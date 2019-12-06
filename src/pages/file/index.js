@@ -227,11 +227,7 @@ export default class File extends Component {
         })
 
         Taro.navigateTo({
-<<<<<<< HEAD
-            url: `/pages/boardDetail/index?boardId=${board_id}`
-=======
             url: `../../pages/chat/index?fileInfo=${JSON.stringify(value)}&pageSource=isFileComment&boardId=${board_id}`
->>>>>>> hxj/boardChat
         })
     }
 

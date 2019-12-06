@@ -78,15 +78,12 @@ class App extends Component {
         //   "selectedIconPath": './asset/tabBar/board_selected.png',
         // },
         {
-<<<<<<< HEAD
-=======
           "pagePath": "pages/boardChat/index",
           "text": "项目圈",
           "iconPath": './asset/tabBar/board.png',
           "selectedIconPath": './asset/tabBar/board_selected.png',
         },
         {
->>>>>>> hxj/boardChat
           "pagePath": "pages/file/index",
           "text": "文件",
           "iconPath": './asset/tabBar/personal.png',
