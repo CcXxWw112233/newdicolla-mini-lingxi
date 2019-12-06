@@ -28,9 +28,9 @@ class App extends Component {
       'pages/calendar/index',
       'pages/im/index',
       'pages/groupMember/index',
-      'pages/boardDetail/index',
       'pages/noSchedulesCard/index',
-      'pages/board/index',
+      // 'pages/boardDetail/index',
+      // 'pages/board/index',
       'pages/my/index',
       'pages/chat/index',
       'pages/chatDetail/index',
@@ -71,13 +71,22 @@ class App extends Component {
           "iconPath": './asset/tabBar/calendar.png',
           "selectedIconPath": './asset/tabBar/calendar_selected.png',
         },
+        // {
+        //   "pagePath": "pages/board/index",
+        //   "text": "boardChat",
+        //   "iconPath": './asset/tabBar/board.png',
+        //   "selectedIconPath": './asset/tabBar/board_selected.png',
+        // },
         {
-          "pagePath": "pages/board/index",
+<<<<<<< HEAD
+=======
+          "pagePath": "pages/boardChat/index",
           "text": "项目圈",
           "iconPath": './asset/tabBar/board.png',
           "selectedIconPath": './asset/tabBar/board_selected.png',
         },
         {
+>>>>>>> hxj/boardChat
           "pagePath": "pages/file/index",
           "text": "文件",
           "iconPath": './asset/tabBar/personal.png',
@@ -94,6 +103,7 @@ class App extends Component {
   componentDidMount() { }
 
   componentDidShow() {
+
     /***
     * 备注: 小程序切换到后台后, im会重连会发送不了消息, 所以每次进入前台连接一次
     * 

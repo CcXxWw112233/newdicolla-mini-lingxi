@@ -18,21 +18,28 @@ export default class BoardFile extends Component {
 
     componentDidMount() {
         const { dispatch } = this.props
-        dispatch({
-            type: 'board/v2BoardList',
-            payload: {
-                _organization_id: '0',
-                contain_type: '0',
-            },
-        })
-    }
 
-    componentWillUnmount() {
-        Taro.removeStorageSync('file_item_board_id')
+        Promise.resolve(
+            // 获取组织列表
+            dispatch({
+                type: 'my/getOrgList',
+                payload: {}
+            })
+        ).then(res => {
+            //获取项目列表
+            dispatch({
+                type: 'board/v2BoardList',
+                payload: {
+                    _organization_id: '0',
+                    contain_type: '0',
+                },
+            })
+        })
     }
 
     selectedBoardItem = (org_id, board_id, file_id, value) => {
         const { dispatch } = this.props
+<<<<<<< HEAD
         console.log(org_id, board_id, file_id, value, 'ffffffffff')
         const file_item_board_id = Taro.getStorageSync('file_item_board_id')
         if (board_id && file_item_board_id === board_id) {
@@ -64,6 +71,18 @@ export default class BoardFile extends Component {
                 },
             })
         }
+=======
+        this.props.selectedBoardFile(org_id, board_id, file_id)
+        const { all_file_text } = this.state
+        const titleText = value === all_file_text ? all_file_text : value.board_name
+        dispatch({
+            type: 'file/updateDatas',
+            payload: {
+                header_folder_name: titleText,
+                isShowBoardList: false,
+            },
+        })
+>>>>>>> hxj/boardChat
     }
 
     closeBoardList = () => {
@@ -78,7 +97,7 @@ export default class BoardFile extends Component {
 
         const { all_file_text } = this.state
         const { folder_tree, v2_board_list, org_list } = this.props
-        const file_item_board_id = Taro.getStorageSync('file_item_board_id')
+
         return (
             <View className={indexStyles.choice_board_file_style} >
                 <View className={indexStyles.whole_file_style}>
@@ -89,11 +108,12 @@ export default class BoardFile extends Component {
                 </View>
 
                 {v2_board_list && v2_board_list.map(item => {
-                    const org_id = getOrgIdByBoardId(item.board_id)
+                    const org_id = item.org_id
                     return (
-                        <View className={indexStyles.board_item_style} onClick={() => this.selectedBoardItem('0', item.board_id, '', item)}>
+                        <View className={indexStyles.board_item_style} hoverClass={indexStyles.board_item_hover_style} onClick={() => this.selectedBoardItem('0', item.board_id, '', item)}>
 
                             <View className={indexStyles.board_item_cell_style}>
+<<<<<<< HEAD
                                 {
                                     file_item_board_id === item.board_id ? (
                                         <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_icon}`}>&#xe8ec;</Text>
@@ -101,17 +121,25 @@ export default class BoardFile extends Component {
                                             <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_icon}`}>&#xe8ed;</Text>
                                         )
                                 }
+=======
+
+                                <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_icon}`}>&#xe662;</Text>
+
+>>>>>>> hxj/boardChat
                                 <View className={indexStyles.board_item_name}>{item.board_name}</View>
                                 {org_list && org_list.length > 0 ? (<View className={indexStyles.org_name_style}>
                                     {'#'}{getOrgName({ org_id, org_list })}
                                 </View>) : ''}
                             </View>
+<<<<<<< HEAD
 
                             {folder_tree && item.board_id === file_item_board_id ?
                                 <View className={indexStyles.folder_tree_view}>
                                     <TreeFile folderTree={folder_tree} boardId={item.board_id} orgId={item.org_id} />
                                 </View> : ''
                             }
+=======
+>>>>>>> hxj/boardChat
                         </View>
                     )
                 })

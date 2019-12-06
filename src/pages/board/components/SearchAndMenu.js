@@ -5,10 +5,6 @@ import globalStyles from '../../../gloalSet/styles/globalStyles.scss'
 
 export default class SearchAndMenu extends Component {
 
-  state = {
-
-  }
-
   componentWillUnmount() { }
 
   componentDidShow() { }

@@ -10,9 +10,28 @@ import MilestoneList from './components/MilestoneList'
 import { connect } from '@tarojs/redux'
 import CustomNavigation from '../acceptInvitation/components/CustomNavigation.js'
 import PersonalCenter from './components/PersonalCenter'
+import { onSysMsgUnread } from '../../models/im/actions'
 
-@connect(({ calendar: { no_sche_card_list, selected_board_name, page_number, isReachBottom, isOtherPageBack, }, accountInfo }) => ({
-  no_sche_card_list, selected_board_name, page_number, isReachBottom, isOtherPageBack, accountInfo,
+@connect(({
+  calendar: {
+    no_sche_card_list,
+    selected_board_name,
+    page_number,
+    isReachBottom,
+    isOtherPageBack,
+  },
+  accountInfo,
+  im: {
+    sessionlist,
+  }
+}) => ({
+  no_sche_card_list,
+  selected_board_name,
+  page_number,
+  isReachBottom,
+  isOtherPageBack,
+  accountInfo,
+  sessionlist,
 }))
 export default class Calendar extends Component {
   constructor(props) {
@@ -79,10 +98,25 @@ export default class Calendar extends Component {
     else {
       this.registerIm()
     }
+
+    //项目圈消息提醒
+    const { sessionlist } = this.props
+    if (sessionlist.length != 0) {
+      //消息未读数
+      var unRead = JSON.stringify(sessionlist.length)
+      Taro.setTabBarBadge({
+        index: 1,
+        text: sessionlist.length > 99 ? '99+' : unRead,
+      })
+    } else {
+      wx.hideTabBarRedDot({
+        index: 1
+      })
+    }
   }
 
   componentDidShow() {
-    const { selected_board_name, isOtherPageBack } = this.props
+    const { selected_board_name, } = this.props
     Taro.setNavigationBarTitle({
       title: selected_board_name
     })

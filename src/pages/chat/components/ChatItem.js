@@ -30,18 +30,21 @@ class ChatItem extends Component {
   isValidImgUrl = url => {
     return /^http[s]?:/.test(url);
   };
+
+  // 点击消息跳页面的消息类型
   handleClickItem = (e, type, customType, customItemId) => {
-    if (e && e.stopPropagation) e.stopPropagation();
 
-    // 需要跳页面的消息类型
-    const shouldJumpType = ['card', 'flow'];
-    if (!shouldJumpType.includes(customType)) return;
+    // if (e && e.stopPropagation) e.stopPropagation();
 
-    // 这里处理跳转
-    Taro.showToast({
-      title: 'clicked custom item',
-      icon: 'none'
-    });
+    // // 需要跳页面的消息类型
+    // const shouldJumpType = ['card', 'flow'];
+    // if (!shouldJumpType.includes(customType)) return;
+
+    // // 这里处理跳转
+    // Taro.showToast({
+    //   title: 'clicked custom item',
+    //   icon: 'none'
+    // });
   };
   handlePlayAudio = file => {
     let { createInnerAudioContext } = this.state;

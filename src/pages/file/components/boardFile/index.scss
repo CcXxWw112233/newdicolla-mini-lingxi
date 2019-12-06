@@ -8,39 +8,54 @@
     left          : 0;
     z-index       : 100;
     overflow      : auto;
-    background    : rgba(0, 0, 0, .65);
+    background    : rgba(0, 0, 0, .8);
     color         : rgba(255, 255, 255, 1);
     padding-bottom: pxTrans(50);
 
     .whole_file_style {
-        margin-top      : pxTrans(20);
-        width           : 100%;
-        height          : pxTrans(50);
-        // background   : rgba(255, 255, 255, 1);
-        // opacity      : 0.19;
-        display         : flex;
-        z-index         : 101;
+        margin-top: pxTrans(20);
+        width     : 100%;
+        height    : pxTrans(50);
+        display   : flex;
+        z-index   : 101;
+        background: rgba(100, 100, 100, 0.9);
 
         .whole_file_hear_style {
             display    : flex;
             align-items: center;
             margin-left: pxTrans(18);
+
+            .folder_Path_icon {
+                font-size: pxTrans(20);
+            }
         }
     }
 
     .board_item_style {
+<<<<<<< HEAD
         width: 100%;
+=======
+        width : 100%;
+        height: pxTrans(50);
+>>>>>>> hxj/boardChat
 
         .board_item_cell_style {
-            height     : pxTrans(40);
+            height     : 100%;
             display    : flex;
             text-align : center;
             align-items: center;
 
             .board_item_icon {
+<<<<<<< HEAD
                 font-size   : pxTrans(12);
                 margin-left : pxTrans(18);
                 margin-right: pxTrans(10);
+=======
+                font-size      : pxTrans(20);
+                margin-left    : pxTrans(18);
+                // margin-left : pxTrans(40);
+                margin-right   : pxTrans(10);
+>>>>>>> hxj/boardChat
             }
 
             .board_item_name {
@@ -63,6 +78,10 @@
         }
     }
 
+    .board_item_hover_style {
+        background: rgba(255, 255, 255, 0.5);
+    }
+
     .close_view_style {
         width          : 100%;
         display        : flex;
@@ -71,14 +90,13 @@
         bottom         : pxTrans(24);
 
         .close_button_style {
-            width             : pxTrans(40);
-            height            : pxTrans(40);
-            // color          : rgba(255, 255, 255, 1);
-            display           : flex;
-            justify-content   : center;
-            align-items       : center;
-            background        : rgb(255, 255, 255);
-            border-radius     : pxTrans(20);
+            width          : pxTrans(40);
+            height         : pxTrans(40);
+            display        : flex;
+            justify-content: center;
+            align-items    : center;
+            background     : rgb(255, 255, 255);
+            border-radius  : pxTrans(20);
 
             .close_button_icon_style {
                 font-size: pxTrans(24);

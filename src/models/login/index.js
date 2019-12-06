@@ -118,7 +118,8 @@ export default {
           ).then(res => {
             if (isApiResponseOk(res)) {
               Taro.navigateTo({
-                url: `../../pages/boardDetail/index?boardId=${boardId}&push=${payload.sourcePage}`
+                // url: `../../pages/boardDetail/index?boardId=${boardId}&push=${payload.sourcePage}`
+                url: `../../pages/chat/index?pageSource=${payload.sourcePage}&boardId=${board_id}`
               })
             }
           })

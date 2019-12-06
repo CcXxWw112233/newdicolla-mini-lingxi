@@ -75,9 +75,7 @@ export default {
           })
           setTimeout(function () {
             if (res.code === '4041') { //如果任务已删除/归档 就去任务列表(首页)
-              Taro.navigateTo({
-                url: `../../pages/boardDetail/index?push=sceneEntrance&&boardId=${boardId}`
-              })
+
             } else {  //其他异常
               Taro.switchTab({
                 url: '../../pages/calendar/index',

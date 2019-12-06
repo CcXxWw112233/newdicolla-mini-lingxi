@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { getFilePage, getFileDetails, getFolder, getDownloadUrl } from '../../services/file/index'
+import { getFilePage, getFileDetails, getFolder, getDownloadUrl, uploadFile, sendFileComment } from '../../services/file/index'
 import { isApiResponseOk } from "../../utils/request";
 
 export default {
@@ -9,6 +9,14 @@ export default {
         isShowBoardList: false,  //是否显示项目列表
         folder_tree: [],  //文件数据列表
         header_folder_name: '全部文件',  //当前选中的文件夹名称
+        isShowFileComment: false,  //chat页面是否显示文件评论
+        isShowChoiceFolder: false, //是否显示上传文件选择文件夹modal
+
+        selected_board_folder_info: {}, //选择的哪一个文件夹的信息(包含org_id, board_id, folder_id), 使用model跨多个组件传值
+        upload_folder_name: '选择文件夹', //要上传的文件夹的名称
+        selected_board_folder_id: '',  //选中的那一个的文件夹id
+        choice_board_id: '', //当前被选中项目根目录的项目id
+        back_click_name: true, //右上角显示'返回'还是'取消'
     },
     effects: {
         //全部文件信息
@@ -39,7 +47,7 @@ export default {
             const res = yield call(getDownloadUrl, parameter)
             var index = fileType.lastIndexOf(".");
             const file_type = fileType.substring(index + 1, fileType.length)
-            const img_type_arr = ['bmp', 'jpg', 'jpeg', 'png', 'tif', 'gif', 'pcx', 'tga', 'exif', 'fpx', 'svg', 'psd', 'cdr', 'pcd', 'dxf', 'ufo', 'eps', 'ai', 'raw', 'WMF', 'webp']
+            const img_type_arr = ['bmp', 'jpg', 'jpeg', 'png', 'tif', 'gif', 'pcx', 'tga', 'exif', 'fpx', 'svg', 'psd', 'cdr', 'pcd', 'dxf', 'ufo', 'eps', 'ai', 'raw', 'WMF', 'webp']  //文件格式
             if (isApiResponseOk(res)) {
                 if (img_type_arr.indexOf(file_type) != -1) {  //打开图片
                     Taro.previewImage({
@@ -132,11 +140,12 @@ export default {
         //文件夹树形列表
         * getFolder({ payload }, { select, call, put }) {
             const res = yield call(getFolder, payload)
+
             if (isApiResponseOk(res)) {
                 yield put({
                     type: 'updateDatas',
                     payload: {
-                        folder_tree: res.data.child_data
+                        folder_tree: res.data
                     }
                 })
             } else {
@@ -147,6 +156,44 @@ export default {
                 })
             }
         },
+
+        //上传文件
+        * uploadFile({ payload }, { select, call, put }) {
+            Taro.showLoading({
+                title: '上传中...',
+            })
+            const res = yield call(uploadFile, payload)
+            if (isApiResponseOk(res)) {
+                //  yield put({
+                //     type: 'getFilePage',
+                //     payload: {
+
+
+                //     }
+                //   })
+            } else {
+                Taro.showToast({
+                    title: res.message,
+                    icon: 'none',
+                    duration: 2000
+                })
+            }
+            Taro.hideLoading()
+        },
+
+        //发送(新增)文件评论
+        * sendFileComment({ payload }, { select, call, put }) {
+            const res = yield call(sendFileComment, payload)
+            if (isApiResponseOk(res)) {
+
+            } else {
+                Taro.showToast({
+                    title: res.message,
+                    icon: 'none',
+                    duration: 2000
+                })
+            }
+        }
 
     },
 
