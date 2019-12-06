@@ -17,13 +17,15 @@ import genEmojiList from './../../../models/im/utils/genEmojiList.js';
 @connect(
   ({
     im: {
-      currentGroup: { im_id },
+      currentGroup: {
+        im_id,
+      },
       isOnlyShowInform,
     },
     chat: {
-      handleInputMode
-    }
-  }) => ({ im_id, handleInputMode, isOnlyShowInform }),
+      handleInputMode,
+    },
+  }) => ({ im_id, isOnlyShowInform, handleInputMode, }),
   dispatch => ({
     sendTeamTextMsg: (text, to) =>
       dispatch({

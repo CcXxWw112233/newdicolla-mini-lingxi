@@ -134,7 +134,15 @@ export default class BoardChat extends Component {
 
     componentWillUnmount() { }
 
-    componentDidShow() { }
+    componentDidShow() {
+
+        //解决, 当在chat页面的时候, 来了新未读消息TabBarBadge不能及时更新, 从chat页面pop回来强制刷新数据
+        const isRefreshNews = Taro.getStorageSync('isRefreshFetchAllIMTeamList')
+        if (isRefreshNews === 'true') {
+            this.fetchAllIMTeamList()
+            Taro.removeStorageSync('isRefreshFetchAllIMTeamList')
+        }
+    }
 
     componentDidHide() { }
 
@@ -266,6 +274,7 @@ export default class BoardChat extends Component {
             .then(() => setCurrentGroup(getCurrentGroup(currentBoard, im_id)))
             .then(() => updateCurrentChatUnreadNewsState(id))
             .then(() => {
+                Taro.setStorageSync('isRefreshFetchAllIMTeamList', 'true')
                 const { board_id } = currentBoard
                 Taro.navigateTo({
                     url: `../../pages/chat/index?boardId=${board_id}&pageSource=boardChat`
@@ -291,20 +300,37 @@ export default class BoardChat extends Component {
     };
 
     genLastMsg = (lastMsg = {}) => {
-        const { fromNick, type, text } = lastMsg;
-        if (!fromNick) return '';
-        const typeCond = {
-            text,
-            audio: '[语音]',
-            image: '[图片]',
-            video: '[视频]',
-            custom: '[动态消息]',
-            notification: '[系统通知]',
-        };
-        if (type === 'text') {
-            return `${fromNick}: ${text}`;
+        // const { fromNick, type, text } = lastMsg;
+        // if (!fromNick) return '';
+        // const typeCond = {
+        //     text,
+        //     audio: '[语音]',
+        //     image: '[图片]',
+        //     video: '[视频]',
+        //     custom: '[动态消息]',
+        //     notification: '[系统通知]',
+        // };
+        // if (type === 'text') {
+        //     return `${fromNick}: ${text}`;
+        // }
+        // return typeCond[type] ? typeCond[type] : '[未知类型消息]';
+
+        if (JSON.stringify(lastMsg) != "{}") {  //lastMsg不为空才执行
+            const { fromNick, type, text } = lastMsg;
+            // if (!fromNick) return '';
+            const typeCond = {
+                text,
+                audio: '[语音]',
+                image: '[图片]',
+                video: '[视频]',
+                custom: '[动态消息]',
+                notification: '[系统通知]',
+            };
+            if (type === 'text') {
+                return `${fromNick}: ${text}`;
+            }
+            return typeCond[type] ? typeCond[type] : '[未知类型消息]';
         }
-        return typeCond[type] ? typeCond[type] : '[未知类型消息]';
     };
 
     isShouldShowNewDot = (unRead = 0, childsUnReadArr) => {
@@ -383,7 +409,6 @@ export default class BoardChat extends Component {
             .sort(sortByTime)
             .reduce((acc, curr) => {
                 //统计每个群组的未读数。
-
                 if (curr.to === acc.im_id) {
                     //这里不是累加, 而是直接替换
                     acc.unRead = curr.unread;
@@ -400,12 +425,13 @@ export default class BoardChat extends Component {
     };
 
     countSumUnRead = (sumArray, unRead) => {
+
         //1.1将没像个项目圈的unRead全部添加到一个数组
         sumArray.push(unRead)
         //1.2把数组里面元素(unRead)全部相加等于总未读数
         var sumUnRead = sumArray.reduce(function (a, b) {
             return a + parseInt(b);
-        }, 0);
+        }, 0)
 
         //消息未读数
         if (sumUnRead != 0) {
@@ -414,7 +440,11 @@ export default class BoardChat extends Component {
              */
             wx.setTabBarBadge({
                 index: 1,
-                text: JSON.stringify(sumUnRead),
+                text: sumUnRead > 99 ? '99+' : JSON.stringify(sumUnRead),
+            })
+        } else {
+            wx.hideTabBarRedDot({
+                index: 1
             })
         }
     }
@@ -435,7 +465,7 @@ export default class BoardChat extends Component {
         return (
             <View className={indexStyles.index}>
 
-                <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} prohibitStyle='prohibitStyle' />
+                <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
 
                 {chatBoardList.map((value, key) => {
                     const {
@@ -453,6 +483,7 @@ export default class BoardChat extends Component {
                         sessionlist,
                         rawMessageList
                     );
+
                     this.countSumUnRead(sumArray, unRead)
 
                     return (

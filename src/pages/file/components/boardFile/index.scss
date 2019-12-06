@@ -8,7 +8,7 @@
     left          : 0;
     z-index       : 100;
     overflow      : auto;
-    background    : rgba(0, 0, 0, .7);
+    background    : rgba(0, 0, 0, .8);
     color         : rgba(255, 255, 255, 1);
     padding-bottom: pxTrans(50);
 
@@ -18,7 +18,7 @@
         height    : pxTrans(50);
         display   : flex;
         z-index   : 101;
-        background: rgba(74, 74, 74, 0.8);
+        background: rgba(100, 100, 100, 0.9);
 
         .whole_file_hear_style {
             display    : flex;

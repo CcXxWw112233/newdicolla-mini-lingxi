@@ -177,25 +177,33 @@ export default class File extends Component {
 
 
     onSearch = (value, board_id, file_id) => {
-        const { dispatch } = this.props
-        dispatch({
-            type: 'global/globalQuery',
-            payload: {
-                _organization_id: '0',
-                page_number: '1',
-                page_size: '5',
-                // query_conditions: queryConditions,
-                search_term: value, //关键字
-                search_type: '6',  //文件 type = 6
-            },
-        })
+        //去掉关键字字符串的首位空格
+        const searchTerm = value.replace(/(^\s*)|(\s*$)/g, "");
+        //判断搜索关键字是否为空或者空格
+        // if (typeof searchTerm != "undefined" && searchTerm != null && searchTerm != "" && searchTerm.length > 0) {
+        if (!searchTerm.match(/^[ ]*$/)) {
+            const { dispatch } = this.props
+            dispatch({
+                type: 'global/globalQuery',
+                payload: {
+                    _organization_id: '0',
+                    page_number: '1',
+                    page_size: '5',
+                    // query_conditions: queryConditions,
+                    search_term: searchTerm, //关键字
+                    search_type: '6',  //文件 type = 6
+                },
+            })
 
-        dispatch({
-            type: 'file/updateDatas',
-            payload: {
-                header_folder_name: '全部文件',
-            },
-        })
+            dispatch({
+                type: 'file/updateDatas',
+                payload: {
+                    header_folder_name: '全部文件',
+                },
+            })
+        } else {
+            this.getFilePage('0', '', '')
+        }
     }
 
     //长按进入圈子

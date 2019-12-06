@@ -284,7 +284,6 @@ class Chat extends Component {
     e.stopPropagation();
   }
 
-
   componentWillUnmount() {
 
     const { page_source } = this.state

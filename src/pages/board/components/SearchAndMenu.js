@@ -28,13 +28,11 @@ export default class SearchAndMenu extends Component {
 
   render() {
     const { search_mask_show } = this.state
-    const { isDisabled, prohibitStyle } = this.props
+    const { isDisabled } = this.props
     const is_disabled = isDisabled === false ? isDisabled : true  //搜索栏是否可点击
 
     return (
-      <View style={{
-        opacity: prohibitStyle ? 0.5 : 1,
-      }} >
+      <View>
         <View className={styles.search_memu_out_back}></View>
         <View className={`${globalStyles.global_horrizontal_padding} ${styles.search_memu_out}`}>
           <View className={`${styles.search_area}`} onClick={this.onSearchFocus}>

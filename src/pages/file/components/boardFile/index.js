@@ -18,18 +18,22 @@ export default class BoardFile extends Component {
 
     componentDidMount() {
         const { dispatch } = this.props
-        //获取项目列表
-        dispatch({
-            type: 'board/v2BoardList',
-            payload: {
-                _organization_id: '0',
-                contain_type: '0',
-            },
-        })
-        // 获取组织列表
-        dispatch({
-            type: 'my/getOrgList',
-            payload: {}
+
+        Promise.resolve(
+            // 获取组织列表
+            dispatch({
+                type: 'my/getOrgList',
+                payload: {}
+            })
+        ).then(res => {
+            //获取项目列表
+            dispatch({
+                type: 'board/v2BoardList',
+                payload: {
+                    _organization_id: '0',
+                    contain_type: '0',
+                },
+            })
         })
     }
 
@@ -59,6 +63,7 @@ export default class BoardFile extends Component {
 
         const { all_file_text } = this.state
         const { folder_tree, v2_board_list, org_list } = this.props
+
         return (
             <View className={indexStyles.choice_board_file_style} >
                 <View className={indexStyles.whole_file_style}>
@@ -69,7 +74,7 @@ export default class BoardFile extends Component {
                 </View>
 
                 {v2_board_list && v2_board_list.map(item => {
-                    const org_id = getOrgIdByBoardId(item.board_id)
+                    const org_id = item.org_id
                     return (
                         <View className={indexStyles.board_item_style} hoverClass={indexStyles.board_item_hover_style} onClick={() => this.selectedBoardItem('0', item.board_id, '', item)}>
 

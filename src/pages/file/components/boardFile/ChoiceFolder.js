@@ -34,18 +34,21 @@ export default class ChoiceFolder extends Component {
 
     componentDidMount() {
         const { dispatch } = this.props
-        //获取项目列表
-        dispatch({
-            type: 'board/v2BoardList',
-            payload: {
-                _organization_id: '0',
-                contain_type: '0',
-            },
-        })
-        // 获取组织列表
-        dispatch({
-            type: 'my/getOrgList',
-            payload: {}
+        Promise.resolve(
+            // 获取组织列表
+            dispatch({
+                type: 'my/getOrgList',
+                payload: {}
+            })
+        ).then(res => {
+            //获取项目列表
+            dispatch({
+                type: 'board/v2BoardList',
+                payload: {
+                    _organization_id: '0',
+                    contain_type: '0',
+                },
+            })
         })
     }
 
@@ -231,7 +234,7 @@ export default class ChoiceFolder extends Component {
                                     scrollWithAnimation
                                     className={indexStyles.board_list_view_style}>
                                     {v2_board_list && v2_board_list.map(item => {
-                                        const org_id = getOrgIdByBoardId(item.board_id)
+                                        const org_id = item.org_id
                                         return (
                                             <View className={indexStyles.board_item_style} >
 

@@ -99,14 +99,18 @@ export default class Calendar extends Component {
       this.registerIm()
     }
 
-
+    //项目圈消息提醒
     const { sessionlist } = this.props
     if (sessionlist.length != 0) {
       //消息未读数
       var unRead = JSON.stringify(sessionlist.length)
       Taro.setTabBarBadge({
         index: 1,
-        text: unRead,
+        text: sessionlist.length > 99 ? '99+' : unRead,
+      })
+    } else {
+      wx.hideTabBarRedDot({
+        index: 1
       })
     }
   }
@@ -318,7 +322,7 @@ export default class Calendar extends Component {
         {is_mask_show_personalCenter && is_mask_show_personalCenter === true ? <PersonalCenter account_info={account_info} closePersonalCenter={() => this.showPersonalCenter(false)} />
           : ''}
         <View style={{ position: 'sticky', top: `${statusBar_Height + navBar_Height}` + 'px', zIndex: 15, left: 0 }}>
-          <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} prohibitStyle='prohibitStyle' />
+          <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
           <CalendarSwiper />
         </View>
         <CardTypeSelect show_card_type_select={show_card_type_select} onSelectType={this.onSelectType} schedule={'1'} />

@@ -68,7 +68,7 @@ export default class Board extends Component {
     const { show_board_select_type, search_mask_show } = this.state
     return (
       <View >
-        <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} prohibitStyle='prohibitStyle' />
+        <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
         <View>
           <BoardTypeSelect show_board_select_type={show_board_select_type} onSelectType={this.onSelectType} />
         </View>
