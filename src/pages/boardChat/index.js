@@ -120,7 +120,7 @@ export default class BoardChat extends Component {
 
     state = {
         show_board_select_type: '0', //出现项目选择
-        search_mask_show: '0', /// 0默认 1 淡入 2淡出
+        search_mask_show: '0', // 0默认 1 淡入 2淡出
     }
 
     componentDidMount() {
@@ -337,6 +337,7 @@ export default class BoardChat extends Component {
         sessionlist = [],
         rawMessageList = {}
     ) => {
+
         //这里需要整合每个群组的未读消息数量
         const allGroupIMId = [currentBoardInfo.im_id].concat(
             currentBoardInfo.childs && currentBoardInfo.childs.length
@@ -398,6 +399,26 @@ export default class BoardChat extends Component {
             }, currentBoardIdWithDefaultUnReadAndLastMsg);
     };
 
+    countSumUnRead = (sumArray, unRead) => {
+        //1.1将没像个项目圈的unRead全部添加到一个数组
+        sumArray.push(unRead)
+        //1.2把数组里面元素(unRead)全部相加等于总未读数
+        var sumUnRead = sumArray.reduce(function (a, b) {
+            return a + parseInt(b);
+        }, 0);
+
+        //消息未读数
+        if (sumUnRead != 0) {
+            /**
+             * 这里只能用wx.setTabBarBadge, 使用Taro.setTabBarBadge会报错
+             */
+            wx.setTabBarBadge({
+                index: 1,
+                text: JSON.stringify(sumUnRead),
+            })
+        }
+    }
+
     render() {
         const { search_mask_show } = this.state
         const { allBoardList, sessionlist, rawMessageList } = this.props
@@ -409,10 +430,12 @@ export default class BoardChat extends Component {
             }
         })
 
+        const sumArray = new Array(0)
+
         return (
             <View className={indexStyles.index}>
 
-                <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
+                <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} prohibitStyle='prohibitStyle' />
 
                 {chatBoardList.map((value, key) => {
                     const {
@@ -430,6 +453,7 @@ export default class BoardChat extends Component {
                         sessionlist,
                         rawMessageList
                     );
+                    this.countSumUnRead(sumArray, unRead)
 
                     return (
                         <GroupItem

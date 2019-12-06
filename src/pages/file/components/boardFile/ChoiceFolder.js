@@ -13,7 +13,6 @@ import TreeFile from './TreeFile'
         upload_folder_name,
         selected_board_folder_id,
         choice_board_id,
-        back_click_name,
     },
     board: { v2_board_list, },
     my: { org_list },
@@ -25,7 +24,6 @@ import TreeFile from './TreeFile'
     upload_folder_name,
     selected_board_folder_id,
     choice_board_id,
-    back_click_name,
 }))
 export default class ChoiceFolder extends Component {
     state = {
@@ -188,19 +186,8 @@ export default class ChoiceFolder extends Component {
     }
 
     backHideBoardList = () => {
-        const { dispatch, back_click_name } = this.props
 
-        if (back_click_name === true) {
-            this.hideBoardList()
-            dispatch({
-                type: 'file/updateDatas',
-                payload: {
-                    isShowChoiceFolder: false,
-                },
-            })
-        } else {
-            return
-        }
+        this.hideBoardList()
     }
 
     hideBoardList = () => {
@@ -211,11 +198,9 @@ export default class ChoiceFolder extends Component {
 
     render() {
 
-        const { folder_tree, v2_board_list, org_list, choiceImageThumbnail, upload_folder_name, selected_board_folder_id, choice_board_id, back_click_name, } = this.props
+        const { folder_tree, v2_board_list, org_list, choiceImageThumbnail, upload_folder_name, selected_board_folder_id, choice_board_id, } = this.props
         const { child_data = [], } = folder_tree
         const { current_selection_board_id, is_show_board_list, current_board_open } = this.state
-
-        const back_button_text = back_click_name === true ? '返回' : '取消'
 
         return (
 
@@ -229,7 +214,7 @@ export default class ChoiceFolder extends Component {
                             </View>
 
                             <View className={indexStyles.modal_content_center_style}>
-                                <View className={indexStyles.choice_folder_button_style} onClick={this.choiceFolder}>选择文件夹</View>
+                                <View className={indexStyles.choice_folder_button_style} onClick={this.choiceFolder}>{upload_folder_name}</View>
                                 <View className={indexStyles.thumbnail_view_style}>
                                     <Image mode='aspectFill' className={indexStyles.choice_image_thumbnail_style} src={choiceImageThumbnail}></Image>
                                 </View>
@@ -238,7 +223,7 @@ export default class ChoiceFolder extends Component {
                     ) : (
                             <View className={indexStyles.choice_board_view_style}>
                                 <View className={indexStyles.modal_content_top_style}>
-                                    <View className={indexStyles.modal_tips_text_style} onClick={this.backHideBoardList}>{'< '}{back_button_text}</View>
+                                    <View className={indexStyles.modal_tips_text_style} onClick={this.backHideBoardList}>{'< '}返回</View>
                                     <View className={indexStyles.folder_name_style}>{upload_folder_name}</View>
                                 </View>
                                 <ScrollView

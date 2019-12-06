@@ -41,20 +41,25 @@ export default class File extends Component {
 
     componentDidMount() {
         this.fetchAllIMTeamList()
-    }
 
-    componentDidShow() {
         const org_id = '0'
         const board_id = ''
         const folder_id = ''
-
-        const is_reload_file_list = Taro.getStorageSync('isReloadFileList')
-        if (is_reload_file_list === 'is_reload_file_list') {
-            Taro.removeStorageSync('isReloadFileList')
-        } else {
-            this.getFilePage(org_id, board_id, folder_id)
-        }
+        this.getFilePage(org_id, board_id, folder_id)
     }
+
+    // componentDidShow() {
+    //     const org_id = '0'
+    //     const board_id = ''
+    //     const folder_id = ''
+
+    //     const is_reload_file_list = Taro.getStorageSync('isReloadFileList')
+    //     if (is_reload_file_list === 'is_reload_file_list') {
+    //         Taro.removeStorageSync('isReloadFileList')
+    //     } else {
+    //         this.getFilePage(org_id, board_id, folder_id)
+    //     }
+    // }
 
     componentDidHide() { }
 

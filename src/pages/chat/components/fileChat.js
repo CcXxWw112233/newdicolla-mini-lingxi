@@ -36,6 +36,7 @@ export default class FileChat extends Component {
         const { dispatch, fileInfo = {} } = this.props
         const { board_id, file_id } = fileInfo
         const { commentValue } = this.state
+
         dispatch({
             type: 'file/sendFileComment',
             payload: {
@@ -49,6 +50,8 @@ export default class FileChat extends Component {
         this.setState({
             commentValue: ''
         });
+
+        this.closeFileComment()
     }
 
     goFileDetails = (fileInfo) => {

@@ -10,9 +10,28 @@ import MilestoneList from './components/MilestoneList'
 import { connect } from '@tarojs/redux'
 import CustomNavigation from '../acceptInvitation/components/CustomNavigation.js'
 import PersonalCenter from './components/PersonalCenter'
+import { onSysMsgUnread } from '../../models/im/actions'
 
-@connect(({ calendar: { no_sche_card_list, selected_board_name, page_number, isReachBottom, isOtherPageBack, }, accountInfo }) => ({
-  no_sche_card_list, selected_board_name, page_number, isReachBottom, isOtherPageBack, accountInfo,
+@connect(({
+  calendar: {
+    no_sche_card_list,
+    selected_board_name,
+    page_number,
+    isReachBottom,
+    isOtherPageBack,
+  },
+  accountInfo,
+  im: {
+    sessionlist,
+  }
+}) => ({
+  no_sche_card_list,
+  selected_board_name,
+  page_number,
+  isReachBottom,
+  isOtherPageBack,
+  accountInfo,
+  sessionlist,
 }))
 export default class Calendar extends Component {
   constructor(props) {
@@ -79,10 +98,21 @@ export default class Calendar extends Component {
     else {
       this.registerIm()
     }
+
+
+    const { sessionlist } = this.props
+    if (sessionlist.length != 0) {
+      //消息未读数
+      var unRead = JSON.stringify(sessionlist.length)
+      Taro.setTabBarBadge({
+        index: 1,
+        text: unRead,
+      })
+    }
   }
 
   componentDidShow() {
-    const { selected_board_name, isOtherPageBack } = this.props
+    const { selected_board_name, } = this.props
     Taro.setNavigationBarTitle({
       title: selected_board_name
     })
@@ -288,7 +318,7 @@ export default class Calendar extends Component {
         {is_mask_show_personalCenter && is_mask_show_personalCenter === true ? <PersonalCenter account_info={account_info} closePersonalCenter={() => this.showPersonalCenter(false)} />
           : ''}
         <View style={{ position: 'sticky', top: `${statusBar_Height + navBar_Height}` + 'px', zIndex: 15, left: 0 }}>
-          <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
+          <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} prohibitStyle='prohibitStyle' />
           <CalendarSwiper />
         </View>
         <CardTypeSelect show_card_type_select={show_card_type_select} onSelectType={this.onSelectType} schedule={'1'} />
