@@ -12,11 +12,17 @@
         width : pxTrans(30);
         height: 100%;
 
-        .choice_folder_button_icon_style,
+        .un_choice_folder_button_icon_style,
         .choice_folder_icon_style {
             font-size: pxTrans(18);
             color    : rgba(0, 0, 0, 0.25);
         }
+
+        .choice_folder_button_icon_style {
+            font-size: pxTrans(18);
+            color    : rgba(24, 144, 255, 1);
+        }
+
     }
 
     .folder_item_name_cell {

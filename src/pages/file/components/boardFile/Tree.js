@@ -9,14 +9,14 @@ export default class Tree extends Component {
 
     selectionTreeFile = (item) => {
 
-        const { dispatch, boardId, orgId, selected_board_folder_id } = this.props
+        const { dispatch, boardId, orgId, selected_board_folder_id, boardName } = this.props
         const { folder_id, folder_name } = item
 
         const boardFolderInfo = {
             org_id: orgId,
             board_id: boardId,
             folder_id: folder_id,
-            current_folder_name: folder_name,
+            current_folder_name: boardName,
         }
 
         if (folder_id && selected_board_folder_id === folder_id) {
@@ -58,6 +58,7 @@ export default class Tree extends Component {
         return (
             <View>
                 {arr && arr.map(item => {
+
                     return (
                         <View class={indexStyles.folder_item_cell_style} data-itemid={item.folder_id} onClick={() => this.selectionTreeFile(item)}>
                             <View className={indexStyles.choice_folder_button_style}>
@@ -65,7 +66,7 @@ export default class Tree extends Component {
                                     selected_board_folder_id === item.folder_id ? (
                                         <Text className={`${globalStyle.global_iconfont} ${indexStyles.choice_folder_button_icon_style}`}>&#xe844;</Text>
                                     ) : (
-                                            <Text className={`${globalStyle.global_iconfont} ${indexStyles.choice_folder_button_icon_style}`}>&#xe6df;</Text>
+                                            <Text className={`${globalStyle.global_iconfont} ${indexStyles.un_choice_folder_button_icon_style}`}>&#xe6df;</Text>
                                         )
                                 }
                             </View>

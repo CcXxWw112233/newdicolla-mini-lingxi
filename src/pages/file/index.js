@@ -41,31 +41,20 @@ export default class File extends Component {
 
     componentDidMount() {
         this.fetchAllIMTeamList()
+    }
 
+    componentDidShow() {
         const org_id = '0'
         const board_id = ''
-        const file_id = ''
+        const folder_id = ''
 
         const is_reload_file_list = Taro.getStorageSync('isReloadFileList')
         if (is_reload_file_list === 'is_reload_file_list') {
             Taro.removeStorageSync('isReloadFileList')
         } else {
-            this.getFilePage(org_id, board_id, file_id)
+            this.getFilePage(org_id, board_id, folder_id)
         }
     }
-
-    // componentDidShow() {
-    //     const org_id = '0'
-    //     const board_id = ''
-    //     const file_id = ''
-
-    //     const is_reload_file_list = Taro.getStorageSync('isReloadFileList')
-    //     if (is_reload_file_list === 'is_reload_file_list') {
-    //         Taro.removeStorageSync('isReloadFileList')
-    //     } else {
-    //         this.getFilePage(org_id, board_id, file_id)
-    //     }
-    // }
 
     componentDidHide() { }
 
@@ -82,7 +71,7 @@ export default class File extends Component {
         })
     }
 
-    getFilePage = (org_id, board_id, file_id) => {
+    getFilePage = (org_id, board_id, folder_id) => {
 
         const { dispatch } = this.props
         Promise.resolve(
@@ -91,7 +80,7 @@ export default class File extends Component {
                 payload: {
                     _organization_id: org_id,
                     board_id: board_id,
-                    folder_id: file_id,
+                    folder_id: folder_id,
                     page_number: '',
                     page_size: '',
                 },
@@ -124,6 +113,7 @@ export default class File extends Component {
 
     //显示关闭项目列表
     choiceBoard = (e) => {
+
         const { dispatch } = this.props
         dispatch({
             type: 'file/updateDatas',
@@ -205,6 +195,9 @@ export default class File extends Component {
 
     //长按进入圈子
     longPress = (value) => {
+
+        Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
+
         const { dispatch } = this.props
         const { board_id } = value
 
@@ -384,7 +377,7 @@ export default class File extends Component {
                     //更新头部显示文件夹名称
                     that.updateHeaderFolderName(current_folder_name)
                     //重新掉列表接口, 刷新列表
-                    that.getFilePage(org_id, board_id, folder_id)
+                    that.getFilePage(org_id, board_id, '')
                 }
             },
             fail(error) {
@@ -406,7 +399,7 @@ export default class File extends Component {
             <View className={indexStyles.index}>
                 {
                     isShowBoardList === true ?
-                        <BoardFile closeBoardList={() => this.choiceBoard(false)} selectedBoardFile={(org_id, board_id, file_id) => this.getFilePage(org_id, board_id, file_id)} />
+                        <BoardFile closeBoardList={() => this.choiceBoard(false)} selectedBoardFile={(org_id, board_id, folder_id) => this.getFilePage(org_id, board_id, folder_id)} />
                         : ''
                 }
                 {
@@ -418,6 +411,7 @@ export default class File extends Component {
 
                 <View className={indexStyles.head_background}>
                     <View className={indexStyles.hear_function}>
+
                         <View className={indexStyles.folderPath} onClick={() => this.choiceBoard(true)}>
                             <Text className={`${globalStyle.global_iconfont} ${indexStyles.folder_Path_icon}`}>&#xe6c6;</Text>
                             <Text className={indexStyles.header_folder_name_style}>{header_folder_name}</Text>

@@ -36,12 +36,18 @@ export default class ChoiceFolder extends Component {
 
     componentDidMount() {
         const { dispatch } = this.props
+        //获取项目列表
         dispatch({
             type: 'board/v2BoardList',
             payload: {
                 _organization_id: '0',
                 contain_type: '0',
             },
+        })
+        // 获取组织列表
+        dispatch({
+            type: 'my/getOrgList',
+            payload: {}
         })
     }
 
@@ -89,6 +95,7 @@ export default class ChoiceFolder extends Component {
                 type: 'file/updateDatas',
                 payload: {
                     choice_board_id: board_id,
+                    upload_folder_name: board_name,
                 },
             })
         }
@@ -124,6 +131,7 @@ export default class ChoiceFolder extends Component {
                     folder_id: folder_id,
                     current_folder_name: board_name,
                 }
+
                 dispatch({
                     type: 'file/updateDatas',
                     payload: {
@@ -248,7 +256,7 @@ export default class ChoiceFolder extends Component {
                                                             item.board_id === choice_board_id ? (
                                                                 <Text className={`${globalStyle.global_iconfont} ${indexStyles.choice_button_icon_style}`}>&#xe844;</Text>
                                                             ) : (
-                                                                    <Text className={`${globalStyle.global_iconfont} ${indexStyles.choice_button_icon_style}`}>&#xe6df;</Text>
+                                                                    <Text className={`${globalStyle.global_iconfont} ${indexStyles.un_choice_button_icon_style}`}>&#xe6df;</Text>
                                                                 )
                                                         }
                                                     </View>
@@ -281,7 +289,7 @@ export default class ChoiceFolder extends Component {
                                                 </View>
                                                 {child_data && item.board_id === current_selection_board_id ?
                                                     <View className={indexStyles.folder_tree_view}>
-                                                        <TreeFile folderTree={child_data} boardId={item.board_id} orgId={item.org_id} />
+                                                        <TreeFile folderTree={child_data} boardId={item.board_id} orgId={item.org_id} boardName={item.board_name} />
                                                     </View> : ''
                                                 }
                                             </View>

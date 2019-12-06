@@ -292,7 +292,7 @@ export default class BoardChat extends Component {
 
     genLastMsg = (lastMsg = {}) => {
         const { fromNick, type, text } = lastMsg;
-        // if (!fromNick) return '';
+        if (!fromNick) return '';
         const typeCond = {
             text,
             audio: '[语音]',
