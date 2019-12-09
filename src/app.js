@@ -52,6 +52,7 @@ class App extends Component {
       'pages/errorPage/index',
       'pages/file/index',
       'pages/webView/index',
+      'pages/boardChat/index',
     ],
     window: {
       backgroundTextStyle: 'light',

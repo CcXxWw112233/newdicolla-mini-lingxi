@@ -79,13 +79,9 @@ export default class BoardFile extends Component {
                         <View className={indexStyles.board_item_style} hoverClass={indexStyles.board_item_hover_style} onClick={() => this.selectedBoardItem('0', item.board_id, '', item)}>
 
                             <View className={indexStyles.board_item_cell_style}>
-                                {
-                                    file_item_board_id === item.board_id ? (
-                                        <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_icon}`}>&#xe8ec;</Text>
-                                    ) : (
-                                            <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_icon}`}>&#xe8ed;</Text>
-                                        )
-                                }
+
+                                <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_icon}`}>&#xe662;</Text>
+
                                 <View className={indexStyles.board_item_name}>{item.board_name}</View>
                                 {org_list && org_list.length > 0 ? (<View className={indexStyles.org_name_style}>
                                     {'#'}{getOrgName({ org_id, org_list })}
