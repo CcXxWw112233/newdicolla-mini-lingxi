@@ -315,7 +315,7 @@ export default class BoardChat extends Component {
         // }
         // return typeCond[type] ? typeCond[type] : '[未知类型消息]';
 
-        if (JSON.stringify(lastMsg) != "{}") {  //lastMsg不为空才执行
+        if (JSON.stringify(lastMsg) != "{}" && lastMsg.status === "success") {  //lastMsg不为空并且成功才执行
             const { fromNick, type, text } = lastMsg;
             // if (!fromNick) return '';
             const typeCond = {

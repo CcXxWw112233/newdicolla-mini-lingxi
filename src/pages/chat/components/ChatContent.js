@@ -65,6 +65,7 @@ class ChatContent extends Component {
       currentBoard,
       isOnlyShowInform
     } = this.props;
+
     return rawMessageList[currentChatTo] &&
       isPlainObject(rawMessageList[currentChatTo])
       ? Object.values(rawMessageList[currentChatTo])
@@ -227,8 +228,6 @@ class ChatContent extends Component {
     //   getCurrentGroupSessionList = this.genCurrentGroupSessionList()
     // }
 
-
-
     const { dispatch } = this.props;
     dispatch({
       type: 'im/updateStateFieldByCover',
@@ -243,7 +242,8 @@ class ChatContent extends Component {
     const {
       currentGroupSessionList,
       isOnlyShowInform,
-      isUserInputHeightChange
+      isUserInputHeightChange,
+      currentChatTo,
     } = this.props;
     const { scrollIntoViewEleId, chatConetntViewHeightStyle, isIosHomeIndicator, } = this.state;
     // console.log("isUserInputHeightChange",isUserInputHeightChange);

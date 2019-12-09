@@ -37,7 +37,6 @@ export default {
     * getTasksDetail({ payload }, { select, call, put }) {
       const { id, boardId } = payload;
       const res = yield call(getTasksDetail, { id: id })
-
       if (isApiResponseOk(res)) {
         yield put({
           type: 'updateDatas',

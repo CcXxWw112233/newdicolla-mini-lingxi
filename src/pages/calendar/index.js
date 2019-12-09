@@ -99,20 +99,21 @@ export default class Calendar extends Component {
       this.registerIm()
     }
 
-    //项目圈消息提醒
-    const { sessionlist } = this.props
-    if (sessionlist.length != 0) {
-      //消息未读数
-      var unRead = JSON.stringify(sessionlist.length)
-      Taro.setTabBarBadge({
-        index: 1,
-        text: sessionlist.length > 99 ? '99+' : unRead,
-      })
-    } else {
-      wx.hideTabBarRedDot({
-        index: 1
-      })
-    }
+    // //项目圈消息提醒
+    // const { sessionlist } = this.props
+
+    // if (sessionlist.length != 0) {
+    //   //消息未读数
+    //   var unRead = JSON.stringify(sessionlist.length)
+    //   Taro.setTabBarBadge({
+    //     index: 1,
+    //     text: sessionlist.length > 99 ? '99+' : unRead,
+    //   })
+    // } else {
+    //   wx.hideTabBarRedDot({
+    //     index: 1
+    //   })
+    // }
   }
 
   componentDidShow() {
