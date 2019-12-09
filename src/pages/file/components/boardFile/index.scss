@@ -32,12 +32,8 @@
     }
 
     .board_item_style {
-<<<<<<< HEAD
-        width: 100%;
-=======
         width : 100%;
         height: pxTrans(50);
->>>>>>> hxj/boardChat
 
         .board_item_cell_style {
             height     : 100%;
@@ -46,16 +42,10 @@
             align-items: center;
 
             .board_item_icon {
-<<<<<<< HEAD
-                font-size   : pxTrans(12);
-                margin-left : pxTrans(18);
-                margin-right: pxTrans(10);
-=======
                 font-size      : pxTrans(20);
                 margin-left    : pxTrans(18);
                 // margin-left : pxTrans(40);
                 margin-right   : pxTrans(10);
->>>>>>> hxj/boardChat
             }
 
             .board_item_name {
