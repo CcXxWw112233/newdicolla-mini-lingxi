@@ -176,6 +176,7 @@ class ChatContent extends Component {
         }
       }
     })
+
   }
 
   componentWillReceiveProps(nextProps) {
@@ -183,6 +184,9 @@ class ChatContent extends Component {
     //导致更新现有消息的消息列表只能在 nim 的  onMsg 的方法回调中处理
     this.updateScrollViewPosition(nextProps);
 
+    //解决长按文件进入聊天页面, 不显示聊天消息列表, 此生命周期里重新渲染一遍
+    this.handleGenSessionListWhenToggleIsOnlyShowInform(
+      false)
   }
 
   //通过from字段从群组用户中去查找头像
@@ -243,13 +247,9 @@ class ChatContent extends Component {
       currentGroupSessionList,
       isOnlyShowInform,
       isUserInputHeightChange,
-      currentChatTo,
     } = this.props;
     const { scrollIntoViewEleId, chatConetntViewHeightStyle, isIosHomeIndicator, } = this.state;
-    // console.log("isUserInputHeightChange",isUserInputHeightChange);
-    // console.log(currentGroupSessionList, '渲染消息列表的数组');
 
-    // console.log(scrollIntoViewEleId);
     return (
       <ScrollView
         id='chatContent'

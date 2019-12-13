@@ -29,7 +29,7 @@ const genRangeObj = (rangeText = '', rangeObj = {}, isNavigate) => {
 //辅助生成 contentCallback 回调函数
 const genContentObj = (contentText = '', contentObj = {}, isNavigate) => {
   return Object.assign({}, {
-    // contentText,  //文件评论内容, 暂时屏蔽掉不显示
+    contentText,
     contentObj,
     isNavigate
   })

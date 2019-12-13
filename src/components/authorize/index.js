@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Button, Image } from '@tarojs/components'
-import { AtModal, AtModalHeader, AtModalContent, AtModalAction,} from "taro-ui"
+import { AtModal, AtModalHeader, AtModalContent, AtModalAction, } from "taro-ui"
 import { connect } from '@tarojs/redux'
 import indexStyles from './index.scss'
 import globalStyles from '../../gloalSet/styles/globalStyles.scss'
@@ -16,15 +16,15 @@ export default class Authorize extends Component {
   componentDidShow() { }
   componentDidHide() { }
   getUserInfo = (userInfo) => {
-    if(userInfo.detail.userInfo){   //同意
-    } else{ //拒绝,保持当前页面，直到同意
+    if (userInfo.detail.userInfo) {   //同意
+    } else { //拒绝,保持当前页面，直到同意
     }
   }
   onCancel = (e) => {
     // console.log('取消')
     this.setShowAuthorize(false)
   }
-  onConfirm =(e) => {
+  onConfirm = (e) => {
     // console.log('确认')
     this.setShowAuthorize(false)
   }
@@ -39,7 +39,7 @@ export default class Authorize extends Component {
   }
   render() {
     const { authorize: { show_authorize } } = this.props
-    return(
+    return (
       <View>
         <AtModal
           isOpened={show_authorize}
@@ -49,11 +49,11 @@ export default class Authorize extends Component {
           </AtModalHeader>
           <AtModalContent>
             <View className={`${indexStyles.contain1}`}>
-              <View  className={`${indexStyles.contain1_inner}`}>
-               <Image src={linxi_logo} className={`${indexStyles.lingxi_logo}`} />
+              <View className={`${indexStyles.contain1_inner}`}>
+                <Image src={linxi_logo} className={`${indexStyles.lingxi_logo}`} />
               </View>
               <View className={`${indexStyles.contain1_inner} ${indexStyles.app_name}`} >
-                灵犀协作
+                聆悉
               </View>
               <View className={`${indexStyles.question}`}>
                 <Text className={`${globalStyles.global_iconfont} ${indexStyles.question_icon}`}>
@@ -73,7 +73,7 @@ export default class Authorize extends Component {
           </AtModalContent>
           <AtModalAction>
             <Button onClick={this.onCancel} className={`${indexStyles.strong}`}>取消</Button>
-            <Button onClick={this.onConfirm} style={{color: '#4FB437'}} className={`${indexStyles.strong}`}>确定</Button>
+            <Button onClick={this.onConfirm} style={{ color: '#4FB437' }} className={`${indexStyles.strong}`}>确定</Button>
           </AtModalAction>
         </AtModal>
       </View>

@@ -16,18 +16,19 @@ import { connect } from '@tarojs/redux';
     currentBoardId,
     currentBoard,
     currentBoardImValid,
-    rawMessageList
+    rawMessageList,
+    currentGroup,
   },
 }) => {
   return {
     isShowFileComment,
-
     allBoardList,
     sessionlist,
     currentBoardId,
     currentBoard,
     rawMessageList,
     currentBoardImValid,
+    currentGroup,
   };
 },
   dispatch => {
@@ -128,6 +129,7 @@ class Chat extends Component {
   }
 
   componentDidMount() {
+
     const { fileInfo, pageSource, boardId, } = this.$router.params
     this.setState({
       file_info: fileInfo && JSON.parse(fileInfo),
@@ -141,7 +143,7 @@ class Chat extends Component {
       //根据当前board_id查找im_id
       const { allBoardList } = this.props
       const fileIsCurrentBoard = allBoardList.filter((item, index) => {
-        if (item.board_id == boardId) {
+        if (item.board_id === boardId) {
           return item
         }
       })
@@ -284,22 +286,25 @@ class Chat extends Component {
     e.stopPropagation();
   }
 
-  componentWillUnmount() {
+  componentWillReceiveProps(nextProps) {
 
+  }
+
+  componentWillUnmount() {
     const { page_source } = this.state
 
     //页面来源不是项目圈boardChat就不需要执行
-    if (!page_source === 'boardChat') {
-      //重置当前聊天群id，和当前聊天群信息
-      const {
-        resetCurrentChatTo,
-        resetCurrentGroup,
-        resetCurrentGroupSessionList
-      } = this.props;
-      resetCurrentChatTo();
-      resetCurrentGroup();
-      resetCurrentGroupSessionList();
-    }
+    // if (page_source != 'boardChat') {
+    //重置当前聊天群id，和当前聊天群信息
+    const {
+      resetCurrentChatTo,
+      resetCurrentGroup,
+      resetCurrentGroupSessionList
+    } = this.props;
+    resetCurrentChatTo();
+    resetCurrentGroup();
+    resetCurrentGroupSessionList();
+    // }
 
     if (page_source === 'auccessJoin' || page_source === 'sceneEntrance') {
       const switchTabCurrentPage = 'currentPage_BoardDetail_or_Login'

@@ -10,7 +10,7 @@ import { connect } from '@tarojs/redux'
 }))
 export default class nowOpen extends Component {
   config = {
-    navigationBarTitleText: '灵犀协作'
+    navigationBarTitleText: '聆悉'
   }
   componentWillReceiveProps() {
   }

@@ -6,13 +6,13 @@ import { NODE_ENV } from '../../gloalSet/js/constant';
 export default {
   namespace: 'invitation',
   state: {
-    qrCodeInfo: {},
+    qrCodeInfo: {},  //扫描小程序码返回的信息
+    joinRelaType: '',  //加入类型
   },
   effects: {
     //检查二维码是否过期
     * qrCodeIsInvitation({ payload }, { select, call, put }) {
       const res = yield call(qrCodeIsInvitation, payload)
-      // if(isApiResponseOk(res)) {
       if (res.code === '1') {  // 1.过期 0.有效
         Taro.reLaunch(
           {
@@ -25,46 +25,77 @@ export default {
           type: 'updateDatas',
           payload: {
             qrCodeInfo: res.data || {},
+            joinRelaType: res.data && res.data.rela_type
           },
         })
       }
-      // }else {
+    },
 
-      // }
+    //2>用户扫码加入项目
+    * commInviteQRCodejoin({ payload }, { select, call, put }) {
+      const { id, relaId, relaType, pageRoute, role_id } = payload
+      const joinData = {
+        id: id,
+        role_id: role_id,
+      }
+      const res = yield call(commInviteQRCodejoin, joinData)
+
+      if (isApiResponseOk(res)) {
+        if (["1", "2", "12"].indexOf(relaType) != -1) {  //项目
+          Taro.navigateTo({
+            url: `../../pages/auccessJoin/index?boardId=${relaId}&pageRoute=${pageRoute}`
+          })
+        }
+        else if (["3", "4", "5"].indexOf(relaType) != -1) {  //任务
+          Taro.navigateTo({
+            url: `../../pages/taksDetails/index?contentId=${relaId}&backIcon=arrow_icon`
+          })
+        }
+        // else if (["11",].indexOf(relaType) != -1) {  //组织
+        // }
+        // else if (["6", "7", "8"].indexOf(relaType) != -1) {  //流程
+        // }
+        // else if (["9", "10"].indexOf(relaType) != -1) {  //文件
+        // }
+        else {
+          Taro.switchTab({
+            url: `../../pages/calendar/index`
+          })
+        }
+      }
+      else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
+      }
     },
 
     // 1>用户扫码加入组织
     * userScanCodeJoinOrganization({ payload }, { select, call, put }) {
-
+      const { id, relaId, relaType, pageRoute, } = payload
       const parameterInfo = {
-        id: payload.id,
+        id: id,
       }
       const res = yield call(userScanCodeJoinOrganization, parameterInfo)
+      const joinBoardData = {
+        id,
+        relaId,
+        relaType,
+        pageRoute,
+        role_id: res.data.role_id,
+      }
       if (isApiResponseOk(res)) {
-        const parameter = {
-          id: payload.id,
-        }
-        const parmar = {
-          id: payload.id,
-          role_id: res.data.role_id,
-        }
-        //2>用户扫码加入项目
-        const result = yield call(commInviteQRCodejoin, parmar)
-        if (isApiResponseOk(result)) {
-          Taro.navigateTo({
-            url: `../../pages/auccessJoin/index?boardId=${payload.board_Id}&&pageRoute=${payload.pageRoute}`
-          })
-        }
-        else {
-          Taro.showToast({
-            title: res.message,
-            icon: 'none',
-            duration: 2000
-          })
-        }
+        yield put({
+          type: 'commInviteQRCodejoin',
+          payload: {
+            ...joinBoardData
+          }
+        })
       } else {
         Taro.showToast({
-          title: res.message,
+          title: '还未登录, 请先登录',
           icon: 'none',
           duration: 2000
         })

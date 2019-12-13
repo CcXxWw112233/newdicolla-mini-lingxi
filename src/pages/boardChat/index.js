@@ -316,18 +316,25 @@ export default class BoardChat extends Component {
         // return typeCond[type] ? typeCond[type] : '[未知类型消息]';
 
         if (JSON.stringify(lastMsg) != "{}" && lastMsg.status === "success") {  //lastMsg不为空并且成功才执行
-            const { fromNick, type, text } = lastMsg;
-            // if (!fromNick) return '';
+            const { fromNick, type, text, file, custom, } = lastMsg;
             const typeCond = {
                 text,
                 audio: '[语音]',
                 image: '[图片]',
                 video: '[视频]',
-                custom: '[动态消息]',
                 notification: '[系统通知]',
+                file,
+                custom,
             };
             if (type === 'text') {
                 return `${fromNick}: ${text}`;
+            }
+            if (type === 'file') {
+                return `${'[文件]'} ${file.name}`;
+            }
+            if (type === 'custom') {
+                const contentJSON = JSON.parse(lastMsg.content)
+                return contentJSON.type === 3 ? '[动态贴图]' : '[动态消息]'
             }
             return typeCond[type] ? typeCond[type] : '[未知类型消息]';
         }
@@ -385,6 +392,7 @@ export default class BoardChat extends Component {
                 )
             }
         );
+
         currentBoardIdWithDefaultUnReadAndLastMsg.childs =
             currentBoardIdWithDefaultUnReadAndLastMsg.childs &&
                 currentBoardIdWithDefaultUnReadAndLastMsg.childs.length
@@ -453,12 +461,26 @@ export default class BoardChat extends Component {
         const { search_mask_show } = this.state
         const { allBoardList, sessionlist, rawMessageList } = this.props
 
-        // 过滤掉只有一个人的群组
+        // 过滤掉只有一个人的群组 和  im_id为空的群组
         const chatBoardList = allBoardList.filter((item, index) => {
-            if (item.users && item.users.length != 1) {
+            if ((item.users && item.users.length != 1) && (item.im_id && !(item.im_id.match(/^[ ]*$/)))) {
                 return item
             }
         })
+
+        // 重新组合每一条的内容
+        const sortTimeArray = new Array(0)
+        chatBoardList.map((value, key) => {
+            const item = this.integrateCurrentBoardWithSessions(  //把 Value 和 sessionlist, rawMessageList 一起传出去整合成一条消息
+                value,
+                sessionlist,
+                rawMessageList
+            );
+            sortTimeArray.push(item)
+        })
+
+        // 对消息进行排序, 根据lastMsg里面的time最新的排在最上面
+        let listArray = sortTimeArray.sort((a, b) => ((b.lastMsg && b.lastMsg.time) || 0) - ((a.lastMsg && a.lastMsg.time) || 0))  //(b-a)时间正序
 
         const sumArray = new Array(0)
 
@@ -467,22 +489,17 @@ export default class BoardChat extends Component {
 
                 <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
 
-                {chatBoardList.map((value, key) => {
+                {listArray.map((value, key) => {
                     const {
                         board_id,
                         board_name,
                         im_id,
                         org_name,
                         users,
-
                         lastMsg,
                         unRead,
                         childs = [],
-                    } = this.integrateCurrentBoardWithSessions(  //把 Value 和 sessionlist, rawMessageList 一起传出去整合成一条消息
-                        value,
-                        sessionlist,
-                        rawMessageList
-                    );
+                    } = value
 
                     this.countSumUnRead(sumArray, unRead)
 

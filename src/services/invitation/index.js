@@ -26,7 +26,7 @@ export const userScanCodeJoinBoard = (data, notShowLoading) => {
 /* 
 * mark - parms 新的加入组织接口
 */
-//用户扫码加入 组织===1
+//用户扫码加入 组织/任务/项目/会议===1
 export const userScanCodeJoinOrganization = (data, notShowLoading, isNewLogin) => {
   return request({
     data: {
@@ -37,7 +37,7 @@ export const userScanCodeJoinOrganization = (data, notShowLoading, isNewLogin) =
   }, notShowLoading, true)
 }
 
-//用户扫码加入 组织===2
+//用户扫码加入 组织/任务/项目/会议===2
 export const commInviteQRCodejoin = (data, notShowLoading) => {
   return request({
     data: {

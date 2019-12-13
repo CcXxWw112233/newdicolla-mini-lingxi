@@ -7,8 +7,8 @@ import { timestampToTimeZH } from '../../../utils/basicFunction'
 import { connect } from '@tarojs/redux'
 
 
-@connect(({ TasksTime }) => ({
-    TasksTime
+@connect(({ tasks: { isPermission, }, }) => ({
+    isPermission,
 }))
 export default class TasksTime extends Component {
 
@@ -47,7 +47,7 @@ export default class TasksTime extends Component {
     }
 
     render() {
-        const { cellInfo = {} } = this.props
+        const { cellInfo = {}, isPermission } = this.props
         const card_name = cellInfo.cardDefinition
         // const input_disabled = !card_name ? false : true
         const sTime = cellInfo.sTime
@@ -55,7 +55,7 @@ export default class TasksTime extends Component {
         const card_id = cellInfo.cardId
         const is_Realize = cellInfo.isRealize
 
-        const inputIcon = is_Realize === '1' ? <Text className={`${globalStyles.global_iconfont}`} style={{ color: '#1890FF' }}>&#xe66a;</Text> : <Text className={`${globalStyles.global_iconfont}`}>&#xe661;</Text>
+        const inputIcon = is_Realize === '1' && isPermission === true ? <Text className={`${globalStyles.global_iconfont}`} style={{ color: '#1890FF' }}>&#xe66a;</Text> : <Text className={`${globalStyles.global_iconfont}`}>&#xe661;</Text>
 
         return (
             <View className={indexStyles.view_Style}>

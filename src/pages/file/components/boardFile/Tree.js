@@ -4,13 +4,28 @@ import indexStyles from './Tree.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
 
-@connect(({ file: { selected_board_folder_id, }, }) => ({ selected_board_folder_id, }))
+@connect(({
+    file: {
+        choice_board_folder_id = '',
+    },
+}) => ({
+    choice_board_folder_id,
+}))
 export default class Tree extends Component {
 
-    selectionTreeFile = (item) => {
+    selectionTreeFile = (item, e) => {
 
-        const { dispatch, boardId, orgId, selected_board_folder_id, boardName } = this.props
+        e.stopPropagation()
+
+        const { dispatch, boardId, orgId, choice_board_folder_id, boardName } = this.props
         const { folder_id, folder_name } = item
+
+        dispatch({
+            type: 'file/updateDatas',
+            payload: {
+                choice_board_id: '',
+            },
+        })
 
         const boardFolderInfo = {
             org_id: orgId,
@@ -19,11 +34,11 @@ export default class Tree extends Component {
             current_folder_name: boardName,
         }
 
-        if (folder_id && selected_board_folder_id === folder_id) {
+        if (choice_board_folder_id === folder_id) {
             dispatch({
                 type: 'file/updateDatas',
                 payload: {
-                    selected_board_folder_id: '',
+                    choice_board_folder_id: '',
                     back_click_name: true,
                 },
             })
@@ -36,34 +51,27 @@ export default class Tree extends Component {
             dispatch({
                 type: 'file/updateDatas',
                 payload: {
-                    selected_board_folder_id: folder_id,
+                    choice_board_folder_id: folder_id,
                     selected_board_folder_info: boardFolderInfo,
                     upload_folder_name: folder_name,
                     back_click_name: false,
                 },
             })
         }
-
-        dispatch({
-            type: 'file/updateDatas',
-            payload: {
-                choice_board_id: '',
-            },
-        })
     }
 
     render() {
-        const { arr, selected_board_folder_id } = this.props
+        const { arr = [], choice_board_folder_id, boardId } = this.props
 
         return (
             <View>
                 {arr && arr.map(item => {
-
                     return (
-                        <View class={indexStyles.folder_item_cell_style} data-itemid={item.folder_id} onClick={() => this.selectionTreeFile(item)}>
+                        <View key={`${boardId}_${item.folder_id}`} class={indexStyles.folder_item_cell_style} data-itemid={item.folder_id} onClick={(e) => this.selectionTreeFile(item, e)}>
+
                             <View className={indexStyles.choice_folder_button_style}>
                                 {
-                                    selected_board_folder_id === item.folder_id ? (
+                                    choice_board_folder_id && item.folder_id && choice_board_folder_id === item.folder_id ? (
                                         <Text className={`${globalStyle.global_iconfont} ${indexStyles.choice_folder_button_icon_style}`}>&#xe844;</Text>
                                     ) : (
                                             <Text className={`${globalStyle.global_iconfont} ${indexStyles.un_choice_folder_button_icon_style}`}>&#xe6df;</Text>
@@ -84,8 +92,4 @@ export default class Tree extends Component {
             </View>
         )
     }
-}
-
-Tree.defaultProps = {
-
 }

@@ -58,7 +58,7 @@
 					"id": 1,
 					"name": "pages/acceptInvitation/index",
 					"pathName": "pages/acceptInvitation/index",
-					"query": "id=1161224388561997824",
+					"query": "boardId=1205025167177289728",
 					"scene": 1008
 				},
 				{
@@ -69,10 +69,10 @@
 					"scene": null
 				},
 				{
-					"id": -1,
+					"id": 3,
 					"name": "pages/auccessJoin/index",
 					"pathName": "pages/auccessJoin/index",
-					"query": "id=1156175314305552384",
+					"query": "id=1193866444404822016",
 					"scene": null
 				},
 				{

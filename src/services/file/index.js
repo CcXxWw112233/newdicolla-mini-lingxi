@@ -33,7 +33,8 @@ export const getDownloadUrl = (data, notShowLoading) => {
         header: {
             BaseInfo: {
                 contentDataType: 'file',
-                contentDataId: data.ids
+                contentDataId: data.ids,
+                requestClientType: "wxapp",
             }
         },
         url: `${API_BOARD}/file/download`
@@ -70,6 +71,11 @@ export const sendFileComment = (data, notShowLoading) => {
             ...data
         },
         method: 'POST',
+        header: {
+            BaseInfo: {
+                requestClientType: "wxapp",
+            }
+        },
         url: `${API_BOARD}/file/comment`,
     }, notShowLoading)
 }

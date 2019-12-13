@@ -4,14 +4,19 @@ import indexStyles from './index.scss'
 import globalStyles from '../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
 import CustomNavigation from './components/CustomNavigation.js'
-import accept_Invitation_Logo from '../../asset/Invitation/accept_Invitation_Logo.png'
+import lingxi_logo from '../../asset/login/lingxi_logo.png'
 import guide_share_01 from '../../asset/Invitation/guide_share_01.png'
 import guide_share_02 from '../../asset/Invitation/guide_share_02.png'
 import guide_share_03 from '../../asset/Invitation/guide_share_03.png'
 import { flush } from 'redux-saga/effects'
 
-@connect(({ invitation: { qrCodeInfo = {} } }) => ({
-  qrCodeInfo
+@connect(({
+  invitation: {
+    qrCodeInfo = {},
+    joinRelaType, }
+}) => ({
+  qrCodeInfo,
+  joinRelaType,
 }))
 export default class acceptInvitation extends Component {
   config = {
@@ -23,7 +28,7 @@ export default class acceptInvitation extends Component {
   onShareAppMessage() {
     const { queryId } = this.state
     return {
-      title: '灵犀',
+      title: '聆悉',
       path: `/pages/acceptInvitation/index?id=${queryId}`,
       // 此处应写pages,官方文档写的是page是错误的.
     }
@@ -80,18 +85,19 @@ export default class acceptInvitation extends Component {
   acceptTheInvitation = () => {
     const { queryId } = this.state
     const { dispatch, qrCodeInfo = {} } = this.props
-    const boardId = qrCodeInfo.rela_id
     Taro.setStorageSync('id', queryId)
-    Taro.setStorageSync('board_Id', boardId)
+    Taro.setStorageSync('board_Id', qrCodeInfo.rela_id)
     dispatch({
       type: 'invitation/userScanCodeJoinOrganization',
       payload: {
         id: queryId,
-        board_Id: boardId,
+        relaId: qrCodeInfo.rela_id,
+        relaType: qrCodeInfo.rela_type,
         pageRoute: 'acceptInvitation',
       }
     })
   }
+
 
   closeMask = () => {
     this.setState({
@@ -99,19 +105,44 @@ export default class acceptInvitation extends Component {
     })
   }
 
+  getJoinRelaType = (joinRelaType) => {
+    let relaTypeName = '';
+    if (["11",].indexOf(joinRelaType) != -1) {
+      relaTypeName = '组织';
+    }
+    else if (["1", "2", "12"].indexOf(joinRelaType) != -1) {
+      relaTypeName = '项目';
+    }
+    else if (["3", "4", "5"].indexOf(joinRelaType) != -1) {
+      relaTypeName = '任务';
+    }
+    else if (["6", "7", "8"].indexOf(joinRelaType) != -1) {
+      relaTypeName = '流程';
+    }
+    else if (["9", "10"].indexOf(joinRelaType) != -1) {
+      relaTypeName = '文件';
+    }
+    else {
+      relaTypeName = ''
+    }
+    return relaTypeName;
+  }
+
   render() {
-    const { qrCodeInfo = {} } = this.props
+    const { qrCodeInfo = {}, joinRelaType, } = this.props
     const user_name = qrCodeInfo.user_name
     const { is_mask_show } = this.state
 
+    const relaType = this.getJoinRelaType(joinRelaType)
+
+    /**
+     * 引导页面遮罩高度 = 屏幕高度 - 导航栏高度
+     */
     const SystemInfo = Taro.getSystemInfoSync()
     const screen_Height = SystemInfo.screenHeight
     const statusBar_Height = SystemInfo.statusBarHeight
     const navBar_Height = SystemInfo.platform == 'ios' ? 44 : 48
 
-    /***
-     * 引导页面遮罩高度 = 屏幕高度 - 导航栏高度
-     */
     return (
       <View>
         <CustomNavigation />
@@ -128,10 +159,18 @@ export default class acceptInvitation extends Component {
 
         <View className={`${globalStyles.global_horrizontal_padding}`}>
           <View className={indexStyles.effective_contain1}>
-            <Image src={accept_Invitation_Logo} className={indexStyles.effective_logo} />
+            <Image src={lingxi_logo} className={indexStyles.effective_logo} />
           </View>
           <View className={indexStyles.effective_tipsText}>
-            <Text>你的好友{user_name}邀请你\n加入项目</Text>
+            <Text>
+              你的好友
+              <Text style={{ display: 'inline-block', width: '6px' }}>  &nbsp; </Text>
+              {user_name}
+              <Text style={{ display: 'inline-block', width: '6px' }}>  &nbsp;  </Text>
+              邀请你\n加入
+              <Text style={{ display: 'inline-block', width: '6px' }}>  &nbsp;  </Text>
+              {relaType}
+            </Text>
           </View>
           <Button className={`${indexStyles.effective_login_btn_wx} ${indexStyles.effective_acceptBtn}`} onClick={this.acceptTheInvitation}>接受邀请</Button>
         </View>

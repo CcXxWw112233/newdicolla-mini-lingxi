@@ -92,13 +92,16 @@
                 }
 
                 .folder_name_style {
-                    width       : 100%;
-                    margin-right: pxTrans(40);
-                    height      : pxTrans(24);
-                    font-size   : pxTrans(16);
-                    font-weight : 400;
-                    color       : rgba(0, 0, 0, 0.85);
-                    line-height : pxTrans(24);
+                    width        : 100%;
+                    margin-right : pxTrans(40);
+                    height       : pxTrans(24);
+                    font-size    : pxTrans(16);
+                    font-weight  : 400;
+                    color        : rgba(0, 0, 0, 0.85);
+                    line-height  : pxTrans(24);
+                    overflow     : hidden;
+                    text-overflow: ellipsis;
+                    white-space  : nowrap;
                 }
             }
 

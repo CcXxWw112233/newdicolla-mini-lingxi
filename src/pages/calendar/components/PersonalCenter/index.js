@@ -45,6 +45,10 @@ export default class PersonalCenter extends Component {
                 is_mask_show_personalCenter: false
             }
         })
+
+        wx.hideTabBarRedDot({
+            index: 1
+        })
     }
 
     render() {

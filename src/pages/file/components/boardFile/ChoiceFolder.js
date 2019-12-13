@@ -11,8 +11,9 @@ import TreeFile from './TreeFile'
         isShowChoiceFolder,
         folder_tree,
         upload_folder_name,
-        selected_board_folder_id,
+        choice_board_folder_id,
         choice_board_id,
+        current_selection_board_id,
     },
     board: { v2_board_list, },
     my: { org_list },
@@ -22,17 +23,22 @@ import TreeFile from './TreeFile'
     v2_board_list,
     org_list,
     upload_folder_name,
-    selected_board_folder_id,
+    choice_board_folder_id,
     choice_board_id,
+    current_selection_board_id,
 }))
 export default class ChoiceFolder extends Component {
     state = {
-        current_selection_board_id: '',  //当前选中项目的id
         is_show_board_list: false, //是否显示项目列表
         current_board_open: false, //文件夹列表展开状态
     }
 
     componentDidMount() {
+        this.loadBoardList()
+    }
+
+    loadBoardList = () => {
+
         const { dispatch } = this.props
         Promise.resolve(
             // 获取组织列表
@@ -53,22 +59,33 @@ export default class ChoiceFolder extends Component {
     }
 
     selectedBoardItem = (org_id, board_id, file_id, value) => {
-
-        const { current_selection_board_id } = this.state
+        const { dispatch, current_selection_board_id } = this.props
         const { board_name } = value
+        dispatch({
+            type: 'file/updateDatas',
+            payload: {
+                choice_board_folder_id: '',
+            },
+        })
         if (board_id && current_selection_board_id === board_id) {
-            this.setState({ current_selection_board_id: '', current_board_open: false })
+            this.setState({ current_board_open: false })
+            dispatch({
+                type: 'file/updateDatas',
+                payload: {
+                    current_selection_board_id: '',
+                },
+            })
         } else {
             //记录选中的那一行的board_id
-            this.setState({ current_selection_board_id: board_id, current_board_open: true })
+            this.setState({ current_board_open: true })
             if (board_id) {
-                this.getFolder(board_id, '')
+                this.getFolder(board_id, '', '')
             }
-            const { dispatch } = this.props
             dispatch({
                 type: 'file/updateDatas',
                 payload: {
                     upload_folder_name: board_name,
+                    current_selection_board_id: board_id,
                 },
             })
         }
@@ -78,14 +95,19 @@ export default class ChoiceFolder extends Component {
     //选择当前项目的根目录
     selectionBoardRootDirectory = (value, org_id) => {
         const { board_id, board_name } = value
-        const { dispatch } = this.props
-
-        const { choice_board_id } = this.props
+        const { dispatch, choice_board_id } = this.props
+        dispatch({
+            type: 'file/updateDatas',
+            payload: {
+                choice_board_folder_id: '',
+            },
+        })
         if (board_id && choice_board_id === board_id) {
             dispatch({
                 type: 'file/updateDatas',
                 payload: {
                     choice_board_id: '',
+                    current_selection_board_id: ''
                 },
             })
         } else {
@@ -97,17 +119,10 @@ export default class ChoiceFolder extends Component {
                 payload: {
                     choice_board_id: board_id,
                     upload_folder_name: board_name,
+                    current_selection_board_id: board_id,
                 },
             })
         }
-
-        dispatch({
-            type: 'file/updateDatas',
-            payload: {
-                selected_board_folder_id: '',
-            },
-        })
-
     }
 
     getFolder = (boardId, orgId, board_name) => {
@@ -159,7 +174,7 @@ export default class ChoiceFolder extends Component {
         dispatch({
             type: 'file/updateDatas',
             payload: {
-                selected_board_folder_id: '',
+                choice_board_folder_id: '',
                 choice_board_id: '',
                 selected_board_folder_info: {},
                 upload_folder_name: '选择文件夹',
@@ -186,6 +201,8 @@ export default class ChoiceFolder extends Component {
         this.setState({
             is_show_board_list: !this.state.is_show_board_list
         })
+
+        this.loadBoardList()
     }
 
     backHideBoardList = () => {
@@ -199,11 +216,20 @@ export default class ChoiceFolder extends Component {
         })
     }
 
+    filterSelectBoard = () => {
+        const { v2_board_list = [], current_selection_board_id } = this.props
+        let new_v2_board_list = [...v2_board_list]
+        if (current_selection_board_id) {
+            new_v2_board_list = new_v2_board_list.filter(item => item.board_id == current_selection_board_id)
+        }
+        return new_v2_board_list
+    }
+
     render() {
 
-        const { folder_tree, v2_board_list, org_list, choiceImageThumbnail, upload_folder_name, selected_board_folder_id, choice_board_id, } = this.props
+        const { folder_tree, v2_board_list, org_list, choiceImageThumbnail, upload_folder_name, choice_board_folder_id, choice_board_id, current_selection_board_id } = this.props
         const { child_data = [], } = folder_tree
-        const { current_selection_board_id, is_show_board_list, current_board_open } = this.state
+        const { is_show_board_list, current_board_open, } = this.state
 
         return (
 
@@ -233,10 +259,10 @@ export default class ChoiceFolder extends Component {
                                     scrollY
                                     scrollWithAnimation
                                     className={indexStyles.board_list_view_style}>
-                                    {v2_board_list && v2_board_list.map(item => {
+                                    {this.filterSelectBoard() && this.filterSelectBoard().map(item => {
                                         const org_id = item.org_id
                                         return (
-                                            <View className={indexStyles.board_item_style} >
+                                            <View key={item.board_id} className={indexStyles.board_item_style} >
 
                                                 <View className={indexStyles.board_item_cell_style}>
                                                     <View className={indexStyles.choice_button_style} onClick={() => this.selectionBoardRootDirectory(item, org_id)}>
@@ -294,16 +320,14 @@ export default class ChoiceFolder extends Component {
                     <View className={indexStyles.modal_botton_style}>
                         <View className={indexStyles.cancel_button_style} onClick={this.handleCancel}>取消</View>
                         {
-                            choice_board_id != '' || selected_board_folder_id != '' ? (
+                            choice_board_id != '' || choice_board_folder_id != '' ? (
                                 <View className={indexStyles.confirm_button_style} onClick={this.handleConfirm}>上传</View>
                             ) : (
                                     <View className={indexStyles.un_confirm_button_style}>上传</View>
                                 )
                         }
                     </View>
-
                 </View>
-
             </View>
         )
     }

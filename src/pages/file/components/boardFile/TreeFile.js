@@ -22,14 +22,6 @@ export default class TreeFile extends Component {
         return r;
     }
 
-    renderTree = (item) => {
-
-        const arr = this.jsonToArray([item])
-        return (
-            <Tree arr={arr} />
-        )
-    }
-
     render() {
         const { folderTree, boardId, orgId, boardName } = this.props
         const arr = this.jsonToArray(folderTree)
