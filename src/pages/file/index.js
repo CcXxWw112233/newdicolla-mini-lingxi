@@ -135,12 +135,7 @@ export default class File extends Component {
     goFileDetails = (value, fileName) => {
         Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
 
-<<<<<<< HEAD
-
-        const { file_resource_id, board_id } = value
-=======
         const { file_resource_id, board_id, } = value
->>>>>>> hxj/boardChat
         const { dispatch } = this.props
         setBoardIdStorage(board_id)
         const fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
