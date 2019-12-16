@@ -47,16 +47,3 @@ export const commInviteQRCodejoin = (data, notShowLoading) => {
     url: `${API_BOARD}/comm/invite/QRCode/join`,
   }, notShowLoading)
 }
-
-/*
-* mark - parms 旧的加入组织接口
-*/
-// export const userScanCodeJoinOrganization = (data, notShowLoading, isNewLogin) => {
-//   return request({
-//     data: {
-//       ...data
-//     },
-//     method: 'PUT',
-//     url: `${API_UPMS}/organization/QRCode/join`,
-//   }, notShowLoading, true)
-// }

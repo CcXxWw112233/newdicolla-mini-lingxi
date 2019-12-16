@@ -15,7 +15,7 @@ class Avatar extends Component {
                 {Number(value) <= 0 && showDot && <View className={styles.newsDot} />}
                 {Number(value) > 0 && !showDot && (
                     <View className={styles.newsNumber}>
-                        {Number(value) <= maxValue ? Number(value) : '+' + Number(value)}
+                        {Number(value) <= maxValue ? Number(value) : maxValue + '+'}
                     </View>
                 )}
                 {urlLen === 1 && (

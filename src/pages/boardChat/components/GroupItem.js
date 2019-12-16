@@ -31,7 +31,6 @@ class GroupItem extends Component {
       isExpand,
       isShouldShowExpandOpertor
     } = this.props;
-
     return (
       <View
         className={styles.wrapper}

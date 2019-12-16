@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro';
-import {isCreatedNewGroupOrAddTeamMembersNews} from './../utils/genNews.js'
+import { isCreatedNewGroupOrAddTeamMembersNews } from './../utils/genNews.js'
 
 
 function onUpdateSession(sessions) {
@@ -17,14 +17,14 @@ function onUpdateSession(sessions) {
   } = getState();
 
   //如果是新建群或者更新了群成员的信息，那么重新拉取所有的群信息的列表
-  if(isCreatedNewGroupOrAddTeamMembersNews(sessions)) {
+  if (isCreatedNewGroupOrAddTeamMembersNews(sessions)) {
     dispatch({
       type: 'im/fetchAllIMTeamList',
       desc: 'fetch all im team list'
     });
   }
 
-  if(!Array.isArray(sessions)) {
+  if (!Array.isArray(sessions)) {
     sessions = [sessions]
   }
 
@@ -38,6 +38,7 @@ function onUpdateSession(sessions) {
 
   // tempState.sessionlist = nim.mergeSessions(state.sessionlist, sessions);
   const filteredSessionList = state.sessionlist.filter(i => !sessions.find(s => s.to === i.to && s.updateTime === i.updateTime))
+
   tempState.sessionlist = [...filteredSessionList, ...sessions]
   tempState.sessionlist.sort((a, b) => {
     return b.updateTime - a.updateTime;

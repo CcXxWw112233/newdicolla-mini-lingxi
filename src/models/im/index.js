@@ -11,7 +11,9 @@ import {
 import {
   getAllIMTeamList,
   getIMAccount,
-  repairTeam
+  repairTeam,
+  getImHistory,
+  setImHistoryRead,
 } from './../../services/im/index';
 import { isApiResponseOk } from './../../utils/request';
 import { onMsg, onTeams } from './actions/index';
@@ -342,13 +344,31 @@ export default {
           onSendMsgDone(error, msg);
         }
       });
-    }
+    },
+
+    //项目圈消息 已读
+    * setImHistoryRead({ payload }, { select, call, put }) {
+      const res = yield call(setImHistoryRead, payload)
+      if (isApiResponseOk(res)) {
+
+      } else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    },
+
   },
   reducers: {
     handleDependOnState,
     updateStateByReplace,
     updateStateFieldByCover,
-    updateStateFieldByExtension
+    updateStateFieldByExtension,
+    updateDatas(state, { payload }) {
+      return { ...state, ...payload };
+    },
   },
   subscriptions: {
     setup({ dispatch }) {

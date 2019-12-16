@@ -6,21 +6,21 @@ import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import SearchAndMenu from '../board/components/SearchAndMenu'
 import { isPlainObject } from './../../utils/util';
+import { isApiResponseOk } from '../../utils/request';
+import { getImHistory } from '../../services/im'
 
 @connect(({
     im: {
         allBoardList,
-
         sessionlist,
         currentBoardId,
         currentBoard,
         currentBoardImValid,
-        rawMessageList
+        rawMessageList,
     }
 }) => {
     return {
         allBoardList,
-
         sessionlist,
         currentBoardId,
         currentBoard,
@@ -121,11 +121,64 @@ export default class BoardChat extends Component {
     state = {
         show_board_select_type: '0', //出现项目选择
         search_mask_show: '0', // 0默认 1 淡入 2淡出
+        chatBoardList: [], //显示在列表中的项目圈列表
     }
 
     componentDidMount() {
         this.getOrgList()
         this.fetchAllIMTeamList()
+
+        const { allBoardList } = this.props
+        // 过滤掉只有一个人的群组 和  im_id为空的群组
+        const boardChatList = allBoardList.filter((item, index) => {
+            if ((item.users && item.users.length != 1) && (item.im_id && !(item.im_id.match(/^[ ]*$/)))) {
+                return item
+            }
+        })
+
+        this.setState({
+            chatBoardList: boardChatList
+        })
+
+        let arr = new Array()
+
+        //获取每个有效项目圈的历史记录
+        boardChatList.forEach((value, key) => {
+            const { im_id } = value;
+            const param = {
+                id: im_id,
+                page_size: '1',
+                page_number: '1',
+            }
+            arr.push(getImHistory(param));
+        })
+        let resList = [];
+        Promise.all(arr).then(response => {
+            let chatList = [...this.state.chatBoardList];
+            response.forEach(item => {
+                let msg = item.data;
+                let { tid, unread, records } = msg || {};
+                if (isApiResponseOk(item)) {
+                    resList.push(item.data)
+                    chatList.map(chat => {
+                        if (tid == chat.im_id) {
+                            // 未读数
+                            chat.unread = unread;
+                            // 最后一条消息
+                            chat.lastMsg = records && records[0];
+                            // 根据最后一条消息更新最后的时间,排序
+                            chat.updateTime = chat.lastMsg && chat.lastMsg.time
+                        }
+                        return chat;
+                    })
+                } else {
+
+                }
+            })
+            this.setState({
+                chatBoardList: chatList
+            })
+        })
     }
 
     componentWillMount() { }
@@ -433,7 +486,6 @@ export default class BoardChat extends Component {
     };
 
     countSumUnRead = (sumArray, unRead) => {
-
         //1.1将没像个项目圈的unRead全部添加到一个数组
         sumArray.push(unRead)
         //1.2把数组里面元素(unRead)全部相加等于总未读数
@@ -458,32 +510,10 @@ export default class BoardChat extends Component {
     }
 
     render() {
-        const { search_mask_show } = this.state
-        const { allBoardList, sessionlist, rawMessageList } = this.props
-
-        // 过滤掉只有一个人的群组 和  im_id为空的群组
-        const chatBoardList = allBoardList.filter((item, index) => {
-            if ((item.users && item.users.length != 1) && (item.im_id && !(item.im_id.match(/^[ ]*$/)))) {
-                return item
-            }
-        })
-
-        // 重新组合每一条的内容
-        const sortTimeArray = new Array(0)
-        chatBoardList.map((value, key) => {
-            const item = this.integrateCurrentBoardWithSessions(  //把 Value 和 sessionlist, rawMessageList 一起传出去整合成一条消息
-                value,
-                sessionlist,
-                rawMessageList
-            );
-            sortTimeArray.push(item)
-        })
-
+        const { search_mask_show, chatBoardList } = this.state
         // 对消息进行排序, 根据lastMsg里面的time最新的排在最上面
-        let listArray = sortTimeArray.sort((a, b) => ((b.lastMsg && b.lastMsg.time) || 0) - ((a.lastMsg && a.lastMsg.time) || 0))  //(b-a)时间正序
-
+        let listArray = chatBoardList.sort((a, b) => ((b.updateTime)) - ((a.updateTime)))  //(b-a)时间正序
         const sumArray = new Array(0)
-
         return (
             <View className={indexStyles.index}>
 
@@ -497,11 +527,11 @@ export default class BoardChat extends Component {
                         org_name,
                         users,
                         lastMsg,
-                        unRead,
+                        unread,
                         childs = [],
                     } = value
 
-                    this.countSumUnRead(sumArray, unRead)
+                    this.countSumUnRead(sumArray, unread)
 
                     return (
                         <GroupItem
@@ -512,8 +542,8 @@ export default class BoardChat extends Component {
                             name={board_name}
                             avatarList={this.genAvatarList(users)}
                             lastMsg={this.genLastMsg(lastMsg)}
-                            newsNum={unRead}
-                            showNewsDot={this.isShouldShowNewDot(unRead, childs.map(i => i.unRead))}
+                            newsNum={unread}
+                            showNewsDot={this.isShouldShowNewDot(unread, childs.map(i => i.unread))}
                             onClickedGroupItem={this.hanldClickedGroupItem}
 
                         // isExpand={isShouldExpandSubGroup}
