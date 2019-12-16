@@ -193,7 +193,7 @@ class ChatContent extends Component {
   getAvatar = (val) => {
     let { currentGroup } = this.props;
     let { from } = val;
-    let { users } = currentGroup;
+    let { users = [] } = currentGroup;
     for (let i = 0; i < users.length; i++) {
       let item = users[i];
       if (item.user_id == from) {
