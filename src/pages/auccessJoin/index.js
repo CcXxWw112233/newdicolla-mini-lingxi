@@ -11,7 +11,7 @@ import { connect } from '@tarojs/redux'
 }))
 export default class auccessJoin extends Component {
   config = {
-    navigationBarTitleText: '灵犀协作'
+    navigationBarTitleText: '聆悉'
   }
   constructor() {
     super(...arguments)
@@ -30,17 +30,17 @@ export default class auccessJoin extends Component {
     this.setState({
       board_id: boardId,
     })
-    const isLoginStatus = Taro.getStorageSync('isLoginStatus')
-    if (route === "acceptInvitation" && isLoginStatus === 'yes') {
-      const { dispatch } = this.props
-      dispatch({
-        type: 'login/registerIm',
-      });
-    }
-    else {
-      this.getOrgList()
-      this.fetchAllIMTeamList()
-    }
+    // const isLoginStatus = Taro.getStorageSync('isLoginStatus')
+    // if (route === "acceptInvitation" && isLoginStatus === 'yes') {
+    //   const { dispatch } = this.props
+    //   dispatch({
+    //     type: 'login/registerIm',
+    //   });
+    // }
+    // else {
+    this.getOrgList()
+    this.fetchAllIMTeamList()
+    // }
   }
   componentWillReceiveProps() { }
 
@@ -85,11 +85,10 @@ export default class auccessJoin extends Component {
   enterUse = () => {
 
     //查找当前文件对应的board, 对应的im_id
-    const { allBoardList } = this.props
     const { board_id } = this.state
 
     Taro.navigateTo({
-      url: `../../pages/chat/index?pageSource=auccessJoin&boardId=${board_id}`
+      url: `../../pages/chat/index?boardId=${board_id}&pageSource=auccessJoin`
     })
   }
 
@@ -102,7 +101,7 @@ export default class auccessJoin extends Component {
         </View>
         <View className={indexStyles.text1}>已成功加入项目</View>
         <View className={indexStyles.text2}>
-          <Text>在PC上输入以下网址可访问灵犀网页版</Text>
+          <Text>在PC上输入以下网址可访问聆悉网页版</Text>
         </View>
         <View className={indexStyles.cardTip}>
           <Image src={pc_Website_image} className={indexStyles.pc_Website_image} />

@@ -13,6 +13,12 @@ import { options } from 'nervjs';
 const dvaApp = dva.createApp({
   initialState: {},
   models: models,
+  onError: function (e) {
+    console.log('sssss_dva_error', e)
+  },
+  onChange: function (e) {
+    console.log('sssss_dva_change', e)
+  }
 });
 const store = dvaApp.getStore();
 
@@ -57,7 +63,7 @@ class App extends Component {
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#1890FF',
-      navigationBarTitleText: '灵犀',
+      navigationBarTitleText: '聆悉',
       navigationBarTextStyle: 'white',
       navigationStyle: 'default',
     },

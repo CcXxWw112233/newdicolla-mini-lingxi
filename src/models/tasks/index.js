@@ -11,7 +11,7 @@ export default {
     content_Link: [],  //关联内容
     executors_list: [], //执行人列表 
     milestone_list: [], //获取里程碑列表
-
+    isPermission: true, //是否有权限更改
   },
   effects: {
     //获取任务列表
@@ -37,7 +37,6 @@ export default {
     * getTasksDetail({ payload }, { select, call, put }) {
       const { id, boardId } = payload;
       const res = yield call(getTasksDetail, { id: id })
-
       if (isApiResponseOk(res)) {
         yield put({
           type: 'updateDatas',
@@ -187,6 +186,13 @@ export default {
       if (isApiResponseOk(res)) {
 
       } else {
+
+        yield put({
+          type: 'updateDatas',
+          payload: {
+            isPermission: false
+          }
+        })
         Taro.showToast({
           title: res.message,
           icon: 'none',

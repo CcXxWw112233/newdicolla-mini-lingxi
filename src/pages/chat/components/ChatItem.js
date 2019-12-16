@@ -237,6 +237,28 @@ class ChatItem extends Component {
     const isPinupEmoji = content && content.type == 3;
     const { isAudioPlaying } = this.state;
 
+    const someMsgContent = someMsg && someMsg.content
+    const someMsgContentData = someMsgContent && someMsgContent.data
+    const someMsgContentDataD = someMsgContentData && someMsgContentData.d
+    const someMsgContentDataDToJSON = someMsgContentDataD && JSON.parse(someMsgContentDataD)
+    const someMsgContentDataDAction = someMsgContentDataDToJSON && someMsgContentDataDToJSON.action
+
+    let iconAvatar;
+    let from_nick;
+    if (someMsgContentDataDAction && (someMsgContentDataDAction.indexOf('board.file') != -1)) {
+      iconAvatar = <Text className={`${globalStyles.global_iconfont} ${styles.icon_avatar_style}`}>&#xe690;
+      </Text>
+      from_nick = '文件助手'
+    } else if (someMsgContentDataDAction && (someMsgContentDataDAction.indexOf('board.card') != -1)) {
+      iconAvatar = <Text className={`${globalStyles.global_iconfont} ${styles.icon_avatar_style}`}>&#xe63c;
+      </Text>
+      from_nick = '任务助手'
+    } else {
+      iconAvatar = <Text className={`${globalStyles.global_iconfont} ${styles.icon_default_avatar_style}`}>&#xe647;
+      </Text>
+      from_nick = fromNick ? fromNick : '聆悉助手'
+    }
+
     return (
       <View className={styles.wrapper}>
 
@@ -260,11 +282,11 @@ class ChatItem extends Component {
                     style={{
                       fontSize: '36px',
                       borderRadius: '50%',
-                      color: '#fff'
+                      color: '#fff',
                     }}
                   >
                     &#xe645;
-                </View>
+              </View>
                 ) : (
                       <View
                         className={`${globalStyles.global_iconfont} ${styles.avatar}`}
@@ -273,8 +295,8 @@ class ChatItem extends Component {
                           borderRadius: '50%'
                         }}
                       >
-                        &#xe647;
-                </View>
+                        {iconAvatar}
+                      </View>
                     )}
               </View>
 
@@ -286,7 +308,7 @@ class ChatItem extends Component {
 
                 <View className={styles.newsWrapper}>
                   {flow === 'in' && (
-                    <View className={styles.newsName}>{fromNick}</View>
+                    <View className={styles.newsName}>{from_nick}</View>
                   )}
                   <View
                     className={`${styles.newsContentWrapper} ${
@@ -365,7 +387,7 @@ class ChatItem extends Component {
                                       }}
                                     >
                                       &nbsp;
-                                </Text>
+                              </Text>
                                   </Text>
                                   {range && range['rangeText'] && (
                                     <Text
@@ -392,7 +414,7 @@ class ChatItem extends Component {
                                       }}
                                     >
                                       &nbsp;
-                                </Text>
+                              </Text>
                                   </Text>
                                   <Text
                                     className={`${styles.thing} ${

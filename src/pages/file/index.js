@@ -133,11 +133,14 @@ export default class File extends Component {
     }
 
     goFileDetails = (value, fileName) => {
-
         Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
 
+<<<<<<< HEAD
 
         const { file_resource_id, board_id } = value
+=======
+        const { file_resource_id, board_id, } = value
+>>>>>>> hxj/boardChat
         const { dispatch } = this.props
         setBoardIdStorage(board_id)
         const fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
@@ -437,7 +440,7 @@ export default class File extends Component {
 
                         <View className={indexStyles.files_album_camera_view_style}>
                             <View className={indexStyles.files_album_camera_button_style} onClick={this.getAuthSetting.bind(this, 'album')}><Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe664;</Text></View>
-                            <View className={indexStyles.files_album_camera_button_style} onClick={this.getAuthSetting.bind(this, 'camera')}><Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe663;</Text></View>
+                            <View className={indexStyles.files_album_camera_button_style} onClick={this.getAuthSetting.bind(this, 'camera')}><Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe86f;</Text></View>
                         </View>
 
                     </View>

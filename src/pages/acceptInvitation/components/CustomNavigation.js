@@ -21,7 +21,7 @@ class CustomNavigation extends Component {
         const statusBar_Height = SystemInfo.statusBarHeight
         const navBar_Height = SystemInfo.platform == 'ios' ? 44 : 48
         const { backIcon, home_personal_center, personal_center_image, title, } = this.props
-        const navTitle = title ? title : '灵犀协作'
+        const navTitle = title ? title : '聆悉'
         return (
             <View className={indexStyles.CustomNavigation_Scss} style={{ height: statusBar_Height + navBar_Height + 'px' }}>
                 <View className={indexStyles.statusBar_Scss} style={{ height: statusBar_Height + 'px' }}></View>
@@ -69,5 +69,5 @@ CustomNavigation.deafultProps = {
     backIcon: '', //自定义导航左侧图标显示back icon 还是 home icon, arrow_icon string 是,
     personal_center_image: '', //个人中心头像
     showPersonalCenter: '',  // 显示个人中心事件
-    title: '灵犀协作',  // 导航栏title
+    title: '聆悉',  // 导航栏title
 }
