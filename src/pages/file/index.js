@@ -40,7 +40,7 @@ export default class File extends Component {
     }
 
     componentDidMount() {
-        this.fetchAllIMTeamList()
+        // this.fetchAllIMTeamList()
 
         const org_id = '0'
         const board_id = ''
