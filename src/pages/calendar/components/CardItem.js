@@ -24,12 +24,15 @@ export default class CardItem extends Component {
     return (<Text className={`${globalStyles.global_iconfont} ${indexStyles.iconfont_size}`}>&#xe633;</Text>)
   }
 
-  gotoTaksDetails = (pramar) => {
+  gotoTaksDetails = (itemValue) => {
+    const { flag, content_id, board_id } = itemValue
 
-    if (pramar.code === '0') {
+    if (itemValue && (['0', '1',].indexOf(flag)) !== -1) {
       Taro.navigateTo({
-        url: `../../pages/taksDetails/index?contentId=${pramar.contentId}&&boardId=${pramar.boardId}&&backIcon=arrow_icon`
+        url: `../../pages/taksDetails/index?flag=${flag}&contentId=${content_id}&boardId=${board_id}&back_icon=arrow_icon`
       })
+    } else {
+
     }
   }
 
@@ -64,14 +67,8 @@ export default class CardItem extends Component {
     }
     // const dis_due_style = `opacity: ${flag == '0'?()}`
 
-    const pramar = {
-      code: flag,
-      contentId: content_id,
-      boardId: board_id
-    }
-
     return (
-      <View onClick={() => this.gotoTaksDetails(pramar)}>
+      <View onClick={() => this.gotoTaksDetails(itemValue)}>
         <View className={`${globalStyles.global_card_out} ${indexStyles.card_content} `} style={`opacity: ${dis_due_style()}`}>
           <View className={`${indexStyles.card_content_left}`}>
             {'0' == flag ? (

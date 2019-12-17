@@ -29,8 +29,8 @@ export default class TasksTime extends Component {
     }
 
     tasksRealizeStatus = () => {
-
-        const { cellInfo = {} } = this.props
+        const { cellInfo = {}, flag } = this.props
+        if (flag != '0') return
         this.props.tasksDetailsRealizeStatus(cellInfo)
     }
 
@@ -47,7 +47,7 @@ export default class TasksTime extends Component {
     }
 
     render() {
-        const { cellInfo = {}, isPermission } = this.props
+        const { cellInfo = {}, isPermission, flag, } = this.props
         const card_name = cellInfo.cardDefinition
         // const input_disabled = !card_name ? false : true
         const sTime = cellInfo.sTime
@@ -55,13 +55,30 @@ export default class TasksTime extends Component {
         const card_id = cellInfo.cardId
         const is_Realize = cellInfo.isRealize
 
-        const inputIcon = is_Realize === '1' && isPermission === true ? <Text className={`${globalStyles.global_iconfont}`} style={{ color: '#1890FF' }}>&#xe66a;</Text> : <Text className={`${globalStyles.global_iconfont}`}>&#xe661;</Text>
+        //当前时间
+        var now = Date.parse(new Date());
+        var unix = now / 1000
 
         return (
             <View className={indexStyles.view_Style}>
                 <View className={indexStyles.input_View}>
                     <View className={`${indexStyles.list_item_iconnext}`} onClick={this.tasksRealizeStatus}>
-                        {inputIcon}
+                        {flag === '0' ? (
+                            //任务
+                            is_Realize === '1' && isPermission === true ? (
+                                <Text className={`${globalStyles.global_iconfont}`} style={{ color: '#1890FF' }}>&#xe66a;</Text>
+                            ) : (
+                                    <Text className={`${globalStyles.global_iconfont}`}>&#xe661;</Text>
+                                )
+                        ) : (
+                                //流程
+                                //当前时间小于结束时间, 流程为: 完成状态
+                                unix > eTime ? (
+                                    <Text className={`${globalStyles.global_iconfont}`} style={{ color: '#1890FF' }}>&#xe63e;</Text>
+                                ) : (
+                                        <Text className={`${globalStyles.global_iconfont}`}>&#xe63e;</Text>
+                                    )
+                            )}
                     </View>
                     <Input
                         className={indexStyles.card_title}
@@ -84,4 +101,9 @@ export default class TasksTime extends Component {
             </View>
         )
     }
+}
+
+TasksTime.defaultProps = {
+    flag: '', //对象类型(任务, 日程...)
+    cellInfo: {}, //当前信息
 }

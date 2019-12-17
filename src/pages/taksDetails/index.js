@@ -24,14 +24,13 @@ export default class taksDetails extends Component {
     }
     state = {
         content_Id: '',
-        backIcon: ''
+        backIcon: '',
+        type_flag: '',
     }
 
     componentDidMount() {
 
-        const board_id = this.$router.params.boardId //项目 Id
-        const content_id = this.$router.params.contentId  //任务Id
-        const back_icon = this.$router.params.backIcon //显示返回箭头图标还是小房子图标
+        const { flag, board_id, content_id, back_icon } = this.$router.params
 
         if (board_id || content_id) {
             Taro.setStorageSync('tasks_detail_boardId', board_id)
@@ -41,6 +40,7 @@ export default class taksDetails extends Component {
         this.setState({
             content_Id: content_id,
             backIcon: back_icon,
+            type_flag: flag,
         })
 
         this.loadTasksDetail(content_id, board_id)
@@ -160,13 +160,15 @@ export default class taksDetails extends Component {
         const statusBar_Height = SystemInfo.statusBarHeight
         const navBar_Height = SystemInfo.platform == 'ios' ? 44 : 48
 
+        const { type_flag } = this.props
+
         return (
             <View >
                 <CustomNavigation backIcon={backIcon} />
 
                 <View style={{ marginTop: `${statusBar_Height + navBar_Height}` + 'px', left: 0 }}>
                     <View className={indexStyles.tasks_time_style}>
-                        <TasksTime cellInfo={timeInfo} tasksDetailsRealizeStatus={(timeInfo) => this.tasksDetailsRealizeStatus(timeInfo)} />
+                        <TasksTime cellInfo={timeInfo} tasksDetailsRealizeStatus={(timeInfo) => this.tasksDetailsRealizeStatus(timeInfo)} flag={type_flag} />
                     </View>
                     <ProjectNameCell title='项目' name={board_name} />
                     <View className={indexStyles.tasks_name_style}>
@@ -204,3 +206,11 @@ export default class taksDetails extends Component {
         )
     }
 }
+
+taksDetails.defaultProps = {
+    board_id: '', //项目 Id
+    content_id: '', //任务Id
+    back_icon: '',//显示返回箭头图标还是小房子图标
+    flag: '',  //对象类型(任务, 日程...)
+    backIcon: '', //自定义导航栏里面的返回图标样式标识
+};

@@ -10,8 +10,6 @@ import BoardFile from './components/boardFile/index.js'
 import ChoiceFolder from './components/boardFile/ChoiceFolder.js'
 import { getOrgIdByBoardId, setBoardIdStorage, setRequestHeaderBaseInfo } from '../../utils/basicFunction'
 import { BASE_URL, API_BOARD } from "../../gloalSet/js/constant";
-
-
 @connect(({
     file: {
         file_list = [],
@@ -33,18 +31,45 @@ import { BASE_URL, API_BOARD } from "../../gloalSet/js/constant";
 export default class File extends Component {
     config = {
         navigationBarTitleText: '文件',
+        "enablePullDownRefresh": true,
     }
     state = {
         is_tips_longpress_file: false,  //是否显示长按文件前往圈子的提示
         choice_image_temp_file_paths: [],  //从相册选中的图片api返回来的路径
     }
 
-    componentDidMount() {
-        this.fetchAllIMTeamList()
+    onPullDownRefresh(res) {
 
-        const org_id = '0'
-        const board_id = ''
-        const folder_id = ''
+        const refreshStr = Taro.getStorageSync('file_pull_down_refresh')
+        const refreshData = JSON.parse(refreshStr)
+        const { org_id, board_id, folder_id } = refreshData
+        const params = {
+            org_id: org_id,
+            board_id: board_id,
+            folder_id: folder_id,
+        }
+        this.loadData(params)
+        Taro.showNavigationBarLoading()
+        setTimeout(function () {
+            Taro.stopPullDownRefresh()
+            Taro.hideNavigationBarLoading()
+        }, 300)
+    }
+
+    componentDidMount() {
+        const params = {
+            org_id: '0',
+            board_id: '',
+            folder_id: ''
+        }
+        //保存数据, 用作下拉刷新参数
+        Taro.setStorageSync('file_pull_down_refresh', JSON.stringify(params))
+        this.loadData(params)
+    }
+
+    loadData = (params) => {
+        const { org_id, board_id, folder_id } = params
+        this.fetchAllIMTeamList()
         this.getFilePage(org_id, board_id, folder_id)
     }
 
@@ -78,6 +103,15 @@ export default class File extends Component {
 
     getFilePage = (org_id, board_id, folder_id) => {
 
+        //保存数据, 用作下拉刷新参数
+        const params = {
+            org_id: org_id,
+            board_id: board_id,
+            folder_id: folder_id,
+        }
+        Taro.setStorageSync('file_pull_down_refresh', JSON.stringify(params))
+
+        //加载数据
         const { dispatch } = this.props
         Promise.resolve(
             dispatch({
@@ -126,10 +160,6 @@ export default class File extends Component {
                 isShowBoardList: e,
             },
         })
-        // pageScrollTo({
-        //     scrollTop: 0,
-        //     duration: 300,
-        // })
     }
 
     goFileDetails = (value, fileName) => {
@@ -365,6 +395,15 @@ export default class File extends Component {
         const { selected_board_folder_info } = this.props
         const { org_id, board_id, folder_id, current_folder_name, } = selected_board_folder_info
 
+        //保存数据, 用作下拉刷新参数
+        const params = {
+            org_id: org_id,
+            board_id: board_id,
+            folder_id: folder_id,
+        }
+        Taro.setStorageSync('file_pull_down_refresh', JSON.stringify(params))
+
+        //上传
         let that = this;
         const authorization = Taro.getStorageSync('access_token')
         const data = {
@@ -483,7 +522,6 @@ export default class File extends Component {
                         </View>
                     </View>) : ''
                 }
-
             </View>
         )
     }

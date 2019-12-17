@@ -17,7 +17,6 @@ export function handleDependOnState(state, { callback }) {
 
 //替换整个 state
 export function updateStateByReplace(state, { state: newState }) {
-  console.log(newState, '啦啦啦啦');
 
   //这个model 的 state 是一个 object,
   if (newState && isPlainObject(newState)) {
