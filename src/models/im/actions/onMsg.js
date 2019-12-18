@@ -8,6 +8,7 @@ import {
   isPinupEmojiNews,
   isNotificationNews
 } from './../utils/genNews.js';
+import { deep } from '../../../utils/util'
 import { handleGlobalNewsPush } from './../utils/activityHandle.js';
 
 //收到的消息
@@ -26,7 +27,8 @@ function onMsg(msg) {
     im: { nim }
   } = getState();
 
-  let tempState = Object.assign({}, state);
+  // let tempState = Object.assign({}, state);
+  let tempState = {...state}
 
   tempState.rawMessageList = Object.assign({}, tempState.rawMessageList);
   // 自己的退群消息就不记录、展示了
@@ -51,6 +53,7 @@ function onMsg(msg) {
   //整合消息进入当前聊天（如果正在聊天页面的话）的消息流
   const isMsgBelongsToCurrentChatGroup =
     tempState.currentChatTo === msg.sessionId && nim;
+
 
   //如果这条消息属于当前打开的群聊，则需要处理，将符合条件的消息合并到当前群的消息列表中
   if (isMsgBelongsToCurrentChatGroup) {
@@ -77,7 +80,32 @@ function onMsg(msg) {
 
     // 更新当前群的未读消息状态
     nim.resetSessionUnread(msg.sessionId);
+    // 打开的群聊持续更新未读数为0
+    dispatch({
+      type:"im/updateBoardUnread",
+      payload:{
+        param:{
+          im_id:msg.target,
+          msgids:[],
+        },
+        im_id: msg.target,
+        unread:0
+      }
+    })
+  }else{
+    // 如果没有打开的群聊，先添加未读数
+    if(msg.type != 'notification')
+    tempState.allBoardList.map(item => {
+      if(item.im_id === msg.target){
+        let unread = +(item.unread || 0);
+        unread += 1;
+        item.unread = unread + "";
+      }
+      item._math = Math.random() * 100000 +1;
+      return item;
+    });
   }
+
 
   //处理全局的消息推送
   if (isGlobalPushNews(msg)) {
@@ -87,7 +115,7 @@ function onMsg(msg) {
 
   dispatch({
     type: 'im/updateStateByReplace',
-    state: tempState,
+    state: {...tempState},
     desc: 'on msg'
   });
 }

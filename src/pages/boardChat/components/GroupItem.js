@@ -5,7 +5,6 @@ import styles from './GroupItem.scss';
 import Avatar from './Avatar';
 
 class GroupItem extends Component {
-
   handleClickedOperator = e => {
     if (e) e.stopPropagation();
     const { isExpand, onExpandChange } = this.props;
@@ -29,7 +28,8 @@ class GroupItem extends Component {
       showNewsDot,
       isSubGroup,
       isExpand,
-      isShouldShowExpandOpertor
+      isShouldShowExpandOpertor,
+      data = {}
     } = this.props;
     return (
       <View
@@ -46,7 +46,7 @@ class GroupItem extends Component {
           <View className={styles.avatarWrapper}>
             <Avatar
               urlList={avatarList}
-              value={newsNum}
+              value={newsNum < 0 ? 0 : newsNum}
               showDot={showNewsDot}
             />
           </View>
@@ -77,22 +77,22 @@ class GroupItem extends Component {
   }
 }
 
-GroupItem.defaultProps = {
-  board_id: '', //项目 id
-  org_name: '', //组织名称
-  im_id: '', //项目对应的 群 id
-  avatarList: [], //头像 url 字符串数组, 1 - 5 个
-  name: '', //群名称
-  lastMsg: '',
-  newsNum: 0, //新消息数量
-  showNewsDot: false, //是否显示消息红点
-  //最后一条消息，消息类型需要父组件处理，这里只接收结果字符串，
-  //比如说消息类型是 text 时可以直接显示消息内容，如果是图片或者表情或者文件等其他内容时，需要另外的显示方式
-  isSubGroup: false, //是否为子群组，外层的群组和子群组的样式有区别
-  isExpand: false, //操作按钮是否展开状态
-  onExpandChange: function () { }, //操作按钮展开状态改变回调
-  onClickedGroupItem: function () { }, //点击 Groupitem 的回调
-  isShouldShowExpandOpertor: false //是否需要显示展开操作按钮， 如果是子群或者即使是主群但是没有子群，那么也不显示
-};
+// GroupItem.defaultProps = {
+//   board_id: '', //项目 id
+//   org_name: '', //组织名称
+//   im_id: '', //项目对应的 群 id
+//   avatarList: [], //头像 url 字符串数组, 1 - 5 个
+//   name: '', //群名称
+//   lastMsg: '',
+//   newsNum: 0, //新消息数量
+//   showNewsDot: false, //是否显示消息红点
+//   //最后一条消息，消息类型需要父组件处理，这里只接收结果字符串，
+//   //比如说消息类型是 text 时可以直接显示消息内容，如果是图片或者表情或者文件等其他内容时，需要另外的显示方式
+//   isSubGroup: false, //是否为子群组，外层的群组和子群组的样式有区别
+//   isExpand: false, //操作按钮是否展开状态
+//   onExpandChange: function () { }, //操作按钮展开状态改变回调
+//   onClickedGroupItem: function () { }, //点击 Groupitem 的回调
+//   isShouldShowExpandOpertor: false //是否需要显示展开操作按钮， 如果是子群或者即使是主群但是没有子群，那么也不显示
+// };
 
 export default GroupItem;

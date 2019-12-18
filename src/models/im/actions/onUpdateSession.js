@@ -36,6 +36,16 @@ function onUpdateSession(sessions) {
     }
   });
 
+  tempState.allBoardList.map(item => {
+    if(item.im_id == sessions[0].to){
+      item.lastMsg = sessions[0].lastMsg;
+      item.updateTime = sessions[0].updateTime;
+      item.scene = sessions[0].scene;
+    }
+    return item;
+  })
+
+
   // tempState.sessionlist = nim.mergeSessions(state.sessionlist, sessions);
   const filteredSessionList = state.sessionlist.filter(i => !sessions.find(s => s.to === i.to && s.updateTime === i.updateTime))
 
@@ -46,9 +56,10 @@ function onUpdateSession(sessions) {
   tempState.sessionlist.forEach(item => {
     tempState.sessionMap[item.id] = item;
   });
+  // console.log(tempState,'onUpdateSession111')
   dispatch({
     type: 'im/updateStateByReplace',
-    state: tempState,
+    state: {...tempState},
     desc: 'update sessions'
   });
 }

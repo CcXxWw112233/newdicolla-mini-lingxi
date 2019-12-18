@@ -90,14 +90,16 @@ export default {
         const filteredAllBoardList = (arr = []) =>
           arr.filter(i => i.type && i.type === '2');
 
+        // 过滤后的列表
+        let arr = filteredAllBoardList(data).filter(item => (item.users && item.users.length != 1) && (item.im_id && !(item.im_id.match(/^[ ]*$/))))
+
         yield put({
           type: 'updateStateFieldByCover',
           payload: {
-            allBoardList: filteredAllBoardList(data)
+            allBoardList: arr
           },
           desc: 'get all team list.'
         });
-
         //如果现在在群聊列表，或者群聊界面，那么需要动态更新当前的群聊列表
         if (currentBoardId && currentBoard) {
           const getCurrentBoard = (arr, id) => {
@@ -124,6 +126,7 @@ export default {
           });
         }
       }
+      return ;
     },
     *repairTeamStatus({ payload }, { select, call, put }) {
       const { id, type, im_id } = payload;
@@ -344,6 +347,32 @@ export default {
           onSendMsgDone(error, msg);
         }
       });
+    },
+    // 更新列表未读数
+    *updateBoardUnread({ payload }, { select, call, put }){
+      let {unread , param, im_id} = payload ;
+      const res = yield call(setImHistoryRead, param);
+      console.log(res,'设置未读数为0')
+      const {  allBoardList } = yield selectFieldsFromIm(select, [
+        'nim',
+        'allBoardList'
+      ]);
+      if (isApiResponseOk(res)) {
+        let list = [...allBoardList];
+        list.map(item => {
+          if(item.im_id === im_id){
+            item.unread = unread;
+          }
+          return item;
+        })
+        yield put({
+          type:"updateStateFieldByCover",
+          payload:{
+            allBoardList: JSON.parse(JSON.stringify(list))
+          }
+        })
+        return ;
+      }
     },
 
     //项目圈消息 已读
