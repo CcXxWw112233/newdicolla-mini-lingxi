@@ -7,7 +7,7 @@ import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import SearchAndMenu from '../board/components/SearchAndMenu'
 import { isPlainObject } from './../../utils/util';
 import { isApiResponseOk } from '../../utils/request';
-import { getImHistory ,getAllIMTeamList ,setImHistoryRead} from '../../services/im'
+import { getImHistory, getAllIMTeamList } from '../../services/im'
 
 @connect(({
     im: {
@@ -123,20 +123,20 @@ export default class BoardChat extends Component {
         search_mask_show: '0', // 0默认 1 淡入 2淡出
         chatBoardList: [], //显示在列表中的项目圈列表
     }
-    getAllTeam = ()=>{
-      return new Promise((resolve,reject)=>{
-        getAllIMTeamList().then(res => {
-          resolve(res.data)
-        }).catch(err => {
-          reject(err);
+    getAllTeam = () => {
+        return new Promise((resolve, reject) => {
+            getAllIMTeamList().then(res => {
+                resolve(res.data)
+            }).catch(err => {
+                reject(err);
+            })
         })
-      })
     }
-    getChatBoardList = async () =>{
+    getChatBoardList = async () => {
         this.getOrgList();
         let list = await this.getAllTeam();
         // let list = await this.getAllTeam();
-        const { allBoardList ,dispatch} = this.props;
+        const { allBoardList, dispatch } = this.props;
 
         // 需要请求历史数据的项目列表
         let promiseList = new Array()
@@ -153,33 +153,33 @@ export default class BoardChat extends Component {
         })
         let resList = [];
         Promise.all(promiseList).then(response => {
-          let chatList = [...list];
-          response.forEach(item => {
-              let msg = item.data;
-              let { tid, unread, records } = msg || {};
-              if (isApiResponseOk(item)) {
-                  resList.push(item.data)
-                  chatList.map(chat => {
-                      if (tid == chat.im_id) {
-                          // 未读数
-                          chat.unread = unread;
-                          // 最后一条消息
-                          chat.lastMsg = records && records[0];
-                          // 根据最后一条消息更新最后的时间,排序
-                          chat.updateTime = chat.lastMsg && chat.lastMsg.time
-                      }
-                      return chat;
-                  })
-              } else {
+            let chatList = [...list];
+            response.forEach(item => {
+                let msg = item.data;
+                let { tid, unread, records } = msg || {};
+                if (isApiResponseOk(item)) {
+                    resList.push(item.data)
+                    chatList.map(chat => {
+                        if (tid == chat.im_id) {
+                            // 未读数
+                            chat.unread = unread;
+                            // 最后一条消息
+                            chat.lastMsg = records && records[0];
+                            // 根据最后一条消息更新最后的时间,排序
+                            chat.updateTime = chat.lastMsg && chat.lastMsg.time
+                        }
+                        return chat;
+                    })
+                } else {
 
-              }
-          })
-          dispatch({
-            type:"im/updateStateFieldByCover",
-            payload:{
-              allBoardList:chatList
-            }
-          })
+                }
+            })
+            dispatch({
+                type: "im/updateStateFieldByCover",
+                payload: {
+                    allBoardList: chatList
+                }
+            })
         })
         // 过滤掉只有一个人的群组 和  im_id为空的群组
         // const boardChatList = allBoardList.filter((item, index) => {
@@ -201,7 +201,7 @@ export default class BoardChat extends Component {
     componentWillMount() { }
 
     componentWillReceiveProps(nextProps) {
-      // console.log(nextProps)
+        // console.log(nextProps)
     }
 
     componentWillUnmount() { }
@@ -235,23 +235,23 @@ export default class BoardChat extends Component {
         })
     }
     // 更新列表的未读数
-    setBoardUnread = (im_id, board_id)=>{
-      return new Promise( async (resolve) => {
-        let { dispatch ,allBoardList} = this.props;
-        await dispatch({
-          type:"im/updateBoardUnread",
-          payload:{
-            param:{
-              im_id,
-              msgids:[]
-            },
-            im_id,
-            unread:0
-          }
-        })
+    setBoardUnread = (im_id, board_id) => {
+        return new Promise(async (resolve) => {
+            let { dispatch, allBoardList } = this.props;
+            await dispatch({
+                type: "im/updateBoardUnread",
+                payload: {
+                    param: {
+                        im_id,
+                        msgids: []
+                    },
+                    im_id,
+                    unread: 0
+                }
+            })
 
-        resolve();
-      })
+            resolve();
+        })
     }
 
     hanldClickedGroupItem = ({ board_id, im_id }) => {
@@ -262,22 +262,22 @@ export default class BoardChat extends Component {
             checkTeamStatus,
         } = this.props;
         // 更新聊天列表的未读消息
-        this.setBoardUnread(im_id,board_id).then(_ => {
-          const getCurrentBoard = (arr, id) => {
-            const ret = arr.find(i => i.board_id === id);
-            return ret ? ret : {};
-          };
+        this.setBoardUnread(im_id, board_id).then(_ => {
+            const getCurrentBoard = (arr, id) => {
+                const ret = arr.find(i => i.board_id === id);
+                return ret ? ret : {};
+            };
 
-        Promise.resolve(setCurrentBoardId(board_id))
-            .then(() => {
-                setCurrentBoard(getCurrentBoard(allBoardList, board_id));
-            })
-            .then(() => {
-                checkTeamStatus(board_id)
-            }).then(() => {
-                this.validGroupChat({ im_id })
-            })
-            .catch(e => console.log('error in boardDetail: ' + e));
+            Promise.resolve(setCurrentBoardId(board_id))
+                .then(() => {
+                    setCurrentBoard(getCurrentBoard(allBoardList, board_id));
+                })
+                .then(() => {
+                    checkTeamStatus(board_id)
+                }).then(() => {
+                    this.validGroupChat({ im_id })
+                })
+                .catch(e => console.log('error in boardDetail: ' + e));
 
         });
 
@@ -370,18 +370,18 @@ export default class BoardChat extends Component {
         };
 
         this.countSumUnRead(allBoardList).then(_ => {
-          console.log('1111111111')
-          Promise.resolve(setCurrentChatTo(id))
-            .then(() => setCurrentGroup(getCurrentGroup(currentBoard, im_id)))
-            .then(() => updateCurrentChatUnreadNewsState(id))
-            .then(() => {
-                Taro.setStorageSync('isRefreshFetchAllIMTeamList', 'true')
-                const { board_id } = currentBoard
-                Taro.navigateTo({
-                    url: `../../pages/chat/index?boardId=${board_id}&pageSource=boardChat`
-                });
-            })
-            .catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
+            console.log('1111111111')
+            Promise.resolve(setCurrentChatTo(id))
+                .then(() => setCurrentGroup(getCurrentGroup(currentBoard, im_id)))
+                .then(() => updateCurrentChatUnreadNewsState(id))
+                .then(() => {
+                    Taro.setStorageSync('isRefreshFetchAllIMTeamList', 'true')
+                    const { board_id } = currentBoard
+                    Taro.navigateTo({
+                        url: `../../pages/chat/index?boardId=${board_id}&pageSource=boardChat`
+                    });
+                })
+                .catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
         });
 
     }
@@ -394,12 +394,13 @@ export default class BoardChat extends Component {
     }
 
     genAvatarList = (users = []) => {
-        const userToAvatar = i => (i && i.avatar ? i.avatar : 'unknown');
-        if (users.length <= 5) {
+        //如果没有头像就获取name的第一个字符生成头像
+        const userToAvatar = i => (i && i.avatar ? i.avatar : ((i.name).substr(0, 1)));
+        if (users.length <= 4) {
             return users.map(userToAvatar);
         }
-        //获取最多5个头像
-        return users.slice(0, 5).map(userToAvatar);
+        //获取最多4个头像
+        return users.slice(0, 4).map(userToAvatar);
     };
 
     genLastMsg = (lastMsg = {}) => {
@@ -536,48 +537,48 @@ export default class BoardChat extends Component {
     };
 
     countSumUnRead = (list) => {
-      return new Promise((resolve) => {
-        //1.1将没像个项目圈的unRead全部添加到一个数组
-        //1.2把数组里面元素(unRead)全部相加等于总未读数
-        var sumUnRead = list.reduce(function (a, b) {
-            return a + parseInt(b.unread);
-        }, 0)
-        //消息未读数
-        if (sumUnRead) {
-            /**
-             * 这里只能用wx.setTabBarBadge, 使用Taro.setTabBarBadge会报错
-             */
-            wx.setTabBarBadge({
-                index: 1,
-                text: sumUnRead > 99 ? '99+' : sumUnRead ? sumUnRead + "" : "0",
-            })
-            resolve()
-        } else if(!sumUnRead) {
-            wx.removeTabBarBadge({
-                index: 1,
-                success:(e)=>{
-                  resolve(e)
-                },
-                complete:(e)=>{
-                }
-            })
-        }
-      })
+        return new Promise((resolve) => {
+            //1.1将没像个项目圈的unRead全部添加到一个数组
+            //1.2把数组里面元素(unRead)全部相加等于总未读数
+            var sumUnRead = list.reduce(function (a, b) {
+                return a + parseInt(b.unread);
+            }, 0)
+            //消息未读数
+            if (sumUnRead) {
+                /**
+                 * 这里只能用wx.setTabBarBadge, 使用Taro.setTabBarBadge会报错
+                 */
+                wx.setTabBarBadge({
+                    index: 1,
+                    text: sumUnRead > 99 ? '99+' : sumUnRead ? sumUnRead + "" : "0",
+                })
+                resolve()
+            } else if (!sumUnRead) {
+                wx.removeTabBarBadge({
+                    index: 1,
+                    success: (e) => {
+                        resolve(e)
+                    },
+                    complete: (e) => {
+                    }
+                })
+            }
+        })
 
     }
-    componentWillReceiveProps(nextProps){
-      this.setState({
-        chatBoardList: nextProps.allBoardList
-      })
-      this.countSumUnRead(nextProps.allBoardList)
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            chatBoardList: nextProps.allBoardList
+        })
+        this.countSumUnRead(nextProps.allBoardList)
     }
 
     render() {
-        const { search_mask_show ,chatBoardList} = this.state
+        const { search_mask_show, chatBoardList } = this.state
         let { allBoardList } = this.props;
         // 对消息进行排序, 根据lastMsg里面的time最新的排在最上面
         let listArray = chatBoardList.sort((a, b) => ((b.updateTime)) - ((a.updateTime)))  //(b-a)时间正序
-        console.log(listArray,'propsdata')
+        console.log(listArray, 'propsdata')
         const sumArray = new Array(0);
         return (
             <View className={indexStyles.index}>
@@ -595,7 +596,7 @@ export default class BoardChat extends Component {
                         unread,
                         childs = [],
                     } = value;
-                    let _math = Math.random() * 100000 +1;
+                    let _math = Math.random() * 100000 + 1;
                     return (
                         <GroupItem
                             key={_math}

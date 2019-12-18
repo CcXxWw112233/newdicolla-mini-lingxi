@@ -63,10 +63,14 @@
 }
 
 .effective_tipsText {
-  font-size : $fontsize_18;
-  margin-top: pxTrans(16);
-  text-align: center;
-  color     : #3f3d56;
+  font-size         : $fontsize_18;
+  margin-top        : pxTrans(16);
+  text-align        : center;
+  color             : #3f3d56;
+  overflow          : hidden;
+  display           : -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 .effective_login_btn_wx {

@@ -160,15 +160,16 @@ export default class ChoiceFolder extends Component {
 
     handleCancel = () => {
         this.hideChoiceFolder()
-        this.resetCurrentSelection()
+        // this.resetCurrentSelection()
     }
 
     handleConfirm = () => {
         this.props.fileUpload()
         this.hideChoiceFolder()
-        this.resetCurrentSelection()
+        // this.resetCurrentSelection()
     }
 
+    //下次进入选中状态重置
     resetCurrentSelection = () => {
         const { dispatch } = this.props
         dispatch({

@@ -13,10 +13,9 @@ import { flush } from 'redux-saga/effects'
 @connect(({
   invitation: {
     qrCodeInfo = {},
-    joinRelaType, }
+  }
 }) => ({
   qrCodeInfo,
-  joinRelaType,
 }))
 export default class acceptInvitation extends Component {
   config = {
@@ -129,11 +128,11 @@ export default class acceptInvitation extends Component {
   }
 
   render() {
-    const { qrCodeInfo = {}, joinRelaType, } = this.props
-    const user_name = qrCodeInfo.user_name
-    const { is_mask_show } = this.state
+    const { qrCodeInfo = {}, } = this.props
+    const { user_name, rela_name, rela_type } = qrCodeInfo
+    const { is_mask_show, } = this.state
 
-    const relaType = this.getJoinRelaType(joinRelaType)
+    const relaType = this.getJoinRelaType(rela_type)
 
     /**
      * 引导页面遮罩高度 = 屏幕高度 - 导航栏高度
@@ -168,6 +167,8 @@ export default class acceptInvitation extends Component {
               {user_name}
               <Text style={{ display: 'inline-block', width: '6px' }}>  &nbsp;  </Text>
               邀请你\n加入
+              <Text style={{ display: 'inline-block', width: '6px' }}>  &nbsp;  </Text>
+              {rela_name}
               <Text style={{ display: 'inline-block', width: '6px' }}>  &nbsp;  </Text>
               {relaType}
             </Text>

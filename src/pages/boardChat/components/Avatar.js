@@ -23,16 +23,12 @@ class Avatar extends Component {
                         {urlList.map(i => {
                             if (this.isValidImgUrl(i)) {
                                 return (
-                                    <View key={i} className={styles.ItemWrapperOne}>
-                                        <Image className={styles.item} mode='aspectFill' src={i} />
-                                    </View>
+                                    <Image key={i} className={styles.ItemWrapperOne} mode='aspectFill' src={i} />
                                 );
                             }
                             return (
-                                <View key={i} className={styles.ItemWrapperOne}>
-                                    <View className={styles.amendAtIconPosition}>
-                                        <AtIcon value='user' size='18' color='#3F536E' />
-                                    </View>
+                                <View className={styles.ItemWrapperOneUnImg}>
+                                    {i}
                                 </View>
                             );
                         })}
@@ -50,8 +46,8 @@ class Avatar extends Component {
                             }
                             return (
                                 <View key={i} className={styles.ItemWrapperTwo}>
-                                    <View className={styles.ItemWrapperTwo_item_one}>
-                                        <AtIcon value='user' size='18' color='#3F536E' />
+                                    <View className={key === 0 ? styles.ItemWrapperTwoFirstChild : styles.ItemWrapperTwoSecondChild}>
+                                        {i}
                                     </View>
                                 </View>
                             );
@@ -67,10 +63,9 @@ class Avatar extends Component {
                                 src={urlList[0]}
                             />
                         ) : (
-                                <View className={styles.ItemWrapperThreeFirstChild}>
-                                    <View className={styles.amendAtIconPosition}>
-                                        <AtIcon value='user' size='18' color='#3F536E' />
-                                    </View>
+                                <View
+                                    className={styles.ItemWrapperThreeFirstChild}>
+                                    {urlList[0]}
                                 </View>
                             )}
                         {this.isValidImgUrl(urlList[1]) ? (
@@ -81,9 +76,7 @@ class Avatar extends Component {
                             />
                         ) : (
                                 <View className={styles.ItemWrapperThreeSecondChild}>
-                                    <View className={styles.amendAtIconPosition}>
-                                        <AtIcon value='user' size='18' color='#3F536E' />
-                                    </View>
+                                    {urlList[1]}
                                 </View>
                             )}
                         {this.isValidImgUrl(urlList[2]) ? (
@@ -94,9 +87,7 @@ class Avatar extends Component {
                             />
                         ) : (
                                 <View className={styles.ItemWrapperThreeThirdChild}>
-                                    <View className={styles.amendAtIconPosition}>
-                                        <AtIcon value='user' size='18' color='#3F536E' />
-                                    </View>
+                                    {urlList[2]}
                                 </View>
                             )}
                     </View>
@@ -111,9 +102,7 @@ class Avatar extends Component {
                             />
                         ) : (
                                 <View className={styles.ItemWrapperFourFirstChild}>
-                                    <View className={styles.amendAtIconPosition}>
-                                        <AtIcon value='user' size='18' color='#3F536E' />
-                                    </View>
+                                    {urlList[0]}
                                 </View>
                             )}
                         {this.isValidImgUrl(urlList[1]) ? (
@@ -124,9 +113,7 @@ class Avatar extends Component {
                             />
                         ) : (
                                 <View className={styles.ItemWrapperFourSecondChild}>
-                                    <View className={styles.amendAtIconPosition}>
-                                        <AtIcon value='user' size='18' color='#3F536E' />
-                                    </View>
+                                    {urlList[1]}
                                 </View>
                             )}
                         {this.isValidImgUrl(urlList[2]) ? (
@@ -137,9 +124,7 @@ class Avatar extends Component {
                             />
                         ) : (
                                 <View className={styles.ItemWrapperFourThirdChild}>
-                                    <View className={styles.amendAtIconPosition}>
-                                        <AtIcon value='user' size='18' color='#3F536E' />
-                                    </View>
+                                    {urlList[2]}
                                 </View>
                             )}
                         {this.isValidImgUrl(urlList[3]) ? (
@@ -150,9 +135,7 @@ class Avatar extends Component {
                             />
                         ) : (
                                 <View className={styles.ItemWrapperFourFourthChild}>
-                                    <View className={styles.amendAtIconPosition}>
-                                        <AtIcon value='user' size='18' color='#3F536E' />
-                                    </View>
+                                    {urlList[3]}
                                 </View>
                             )}
                     </View>

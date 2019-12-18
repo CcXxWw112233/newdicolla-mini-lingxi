@@ -7,7 +7,6 @@ export default {
   namespace: 'invitation',
   state: {
     qrCodeInfo: {},  //扫描小程序码返回的信息
-    joinRelaType: '',  //加入类型
   },
   effects: {
     //检查二维码是否过期
@@ -25,7 +24,6 @@ export default {
           type: 'updateDatas',
           payload: {
             qrCodeInfo: res.data || {},
-            joinRelaType: res.data && res.data.rela_type
           },
         })
       }

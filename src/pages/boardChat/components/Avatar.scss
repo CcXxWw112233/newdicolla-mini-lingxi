@@ -15,7 +15,7 @@
     background   : #fff;
 }
 
-.ItemWrapperOne,
+// .ItemWrapperOne,
 .ItemWrapperThree,
 .ItemWrapperFour,
 .ItemWrapperFive {
@@ -23,7 +23,6 @@
     height       : 36px;
     line-height  : 36px;
     border-radius: 50%;
-    line-height  : 36px
 }
 
 .wrapperOne {
@@ -146,7 +145,10 @@
 }
 
 .ItemWrapperTwo {
-    height: 92px;
+    width        : 92px;
+    height       : 92px;
+    line-height  : 92px;
+    border-radius: 50%;
 }
 
 
@@ -162,6 +164,10 @@
     position     : absolute;
     left         : 0;
     top          : 0;
+    background   : rgb(204, 204, 204);
+    color        : rgb(250, 250, 250);
+    text-align   : center;
+    font-size    : 50px;
 }
 
 .ItemWrapperTwoSecondChild {
@@ -172,6 +178,10 @@
     position     : absolute;
     right        : 0;
     top          : 0;
+    background   : rgb(204, 204, 204);
+    color        : rgb(250, 250, 250);
+    text-align   : center;
+    font-size    : 50px;
 }
 
 .ItemWrapperThreeSecondChild,
@@ -182,6 +192,10 @@
     position     : absolute;
     top          : 0;
     right        : 0;
+    background   : rgb(204, 204, 204);
+    color        : rgb(250, 250, 250);
+    text-align   : center;
+    font-size    : 30px;
 }
 
 .ItemWrapperFourFourthChild,
@@ -192,6 +206,10 @@
     position     : absolute;
     bottom       : 0;
     right        : 0;
+    background   : rgb(204, 204, 204);
+    color        : rgb(250, 250, 250);
+    text-align   : center;
+    font-size    : 30px;
 }
 
 .ItemWrapperFourFirstChild {
@@ -201,6 +219,10 @@
     position     : absolute;
     top          : 0;
     left         : 0;
+    background   : rgb(204, 204, 204);
+    color        : rgb(250, 250, 250);
+    text-align   : center;
+    font-size    : 30px;
 }
 
 .ItemWrapperFourThirdChild {
@@ -210,4 +232,25 @@
     position     : absolute;
     bottom       : 0;
     left         : 0;
+    background   : rgb(204, 204, 204);
+    color        : rgb(250, 250, 250);
+    text-align   : center;
+    font-size    : 30px;
+}
+
+.ItemWrapperOne {
+    width        : 92px;
+    height       : 92px;
+    line-height  : 92px;
+    border-radius: 50%;
+}
+
+.ItemWrapperOneUnImg {
+    text-align   : center;
+    width        : 92px;
+    height       : 92px;
+    font-size    : 60px;
+    border-radius: 50%;
+    background   : rgb(204, 204, 204);
+    color        : rgb(250, 250, 250);
 }
