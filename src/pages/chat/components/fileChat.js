@@ -95,7 +95,8 @@ export default class FileChat extends Component {
     handleBindfocus = (e) => {
         if (e.detail.height) {
             this.setState({
-                inputBottonHeight: e.detail.height
+                // inputBottonHeight: e.detail.height
+                inputBottonHeight: '250'
             })
         }
     }

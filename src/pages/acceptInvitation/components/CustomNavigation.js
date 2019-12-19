@@ -22,6 +22,7 @@ class CustomNavigation extends Component {
         const navBar_Height = SystemInfo.platform == 'ios' ? 44 : 48
         const { backIcon, home_personal_center, personal_center_image, title, } = this.props
         const navTitle = title ? title : '聆悉'
+
         return (
             <View className={indexStyles.CustomNavigation_Scss} style={{ height: statusBar_Height + navBar_Height + 'px' }}>
                 <View className={indexStyles.statusBar_Scss} style={{ height: statusBar_Height + 'px' }}></View>
@@ -38,7 +39,7 @@ class CustomNavigation extends Component {
                             }
                         </View>)
                         :
-                        (backIcon == 'arrow_icon' ?
+                        (backIcon === 'arrow_icon' ?
                             (<View className={indexStyles.back_Wapper} style={{ width: '80px', lineHeight: navBar_Height + 'px' }} onClick={this.goToHomePages}>
                                 <View className={indexStyles.left_back_icon}>
                                     <Text className={`${globalStyle.global_iconfont}`}>&#xe646;</Text>

@@ -127,7 +127,6 @@ class UserInput extends Component {
     //handleUserInputHeightChange(298);
     this.setState({
       inputMode: 'text',
-      //inputBottomValue:'298px'
       inputBottomValue: e.detail.height > 0 ? (e.detail.height - 15) + 'px' : this.state.inputBottomValue
     });
   };
@@ -520,7 +519,6 @@ class UserInput extends Component {
       inputBottomValue,
     } = this.state;
 
-    // console.log(inputMode);
     const { emojiAlbumList, emojiList } = this.genEmojiInfo();
     const findedCurrentEmojiAlbum = emojiList.filter(
       i => i.name === emojiAlbum
@@ -558,16 +556,23 @@ class UserInput extends Component {
           )} */}
           {this.inputModeBelongs('text', 'expression', 'addition') && (
             <View className={styles.input}>
-              <Text className={styles.text_style}>{inputValue}</Text>
+              {/* <Text className={styles.text_style}>{inputValue}</Text> */}
               <Textarea
                 className={styles.textarea_style}
                 onInput={this.handleInput}
-                // value={inputValue}
+                value={inputValue}
                 auto-height={false}
                 show-confirm-bar={false}
                 adjust-position={true}
-                onFocus={this.handleBindfocus}
-                onblur={this.handBindblur}
+                onFocus={this.handleInputFocus}
+                onblur={this.handleInputBlur}
+                onConfirm={this.onInputConfirm}
+                focus={autoFocus}
+                confirmHold={true}
+                ref='inputRef'
+                confirmType='send'
+                adjustPosition={false}
+                cursorSpacing={20}
               />
               {/* <Input
                 ref='inputRef'
@@ -601,27 +606,25 @@ class UserInput extends Component {
               <Text>{`${recordStart ? '松开 结束' : '按住 说话'}`}</Text>
             </View>
           )}
-          <View>
-            {inputMode === 'expression' ? (
+          {inputMode === 'expression' ? (
+            <View
+              className={`${globalStyles.global_iconfont} ${
+                styles.expression
+                }`}
+              onClick={e => this.handleClickedItem(e, 'text')}
+            >
+              &#xe655;
+              </View>
+          ) : (
               <View
                 className={`${globalStyles.global_iconfont} ${
                   styles.expression
                   }`}
-                onClick={e => this.handleClickedItem(e, 'text')}
+                onClick={e => this.handleClickedItem(e, 'expression')}
               >
-                &#xe655;
+                &#xe631;
               </View>
-            ) : (
-                <View
-                  className={`${globalStyles.global_iconfont} ${
-                    styles.expression
-                    }`}
-                  onClick={e => this.handleClickedItem(e, 'expression')}
-                >
-                  &#xe631;
-              </View>
-              )}
-          </View>
+            )}
           {inputValue && inputValue.trim() ? (
             <View
               className={`${globalStyles.global_iconfont} ${styles.sendTextBtn_style}`}>

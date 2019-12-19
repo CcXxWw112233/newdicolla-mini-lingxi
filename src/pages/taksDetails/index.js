@@ -30,20 +30,20 @@ export default class taksDetails extends Component {
 
     componentDidMount() {
 
-        const { flag, board_id, content_id, back_icon } = this.$router.params
+        const { flag, boardId, contentId, back_icon } = this.$router.params
 
-        if (board_id || content_id) {
-            Taro.setStorageSync('tasks_detail_boardId', board_id)
-            Taro.setStorageSync('tasks_detail_contentId', content_id)
+        if (boardId || contentId) {
+            Taro.setStorageSync('tasks_detail_boardId', boardId)
+            Taro.setStorageSync('tasks_detail_contentId', contentId)
         }
 
         this.setState({
-            content_Id: content_id,
+            content_Id: contentId,
             backIcon: back_icon,
             type_flag: flag,
         })
 
-        this.loadTasksDetail(content_id, board_id)
+        this.loadTasksDetail(contentId, boardId)
     }
 
     loadTasksDetail(content_id, board_id) {

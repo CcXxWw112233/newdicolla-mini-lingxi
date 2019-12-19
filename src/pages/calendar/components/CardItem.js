@@ -26,7 +26,6 @@ export default class CardItem extends Component {
 
   gotoTaksDetails = (itemValue) => {
     const { flag, content_id, board_id } = itemValue
-
     if (itemValue && (['0', '1',].indexOf(flag)) !== -1) {
       Taro.navigateTo({
         url: `../../pages/taksDetails/index?flag=${flag}&contentId=${content_id}&boardId=${board_id}&back_icon=arrow_icon`

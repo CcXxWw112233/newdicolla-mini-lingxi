@@ -184,9 +184,13 @@ export default {
     * setTasksRealize({ payload }, { select, call, put }) {
       const res = yield call(setTasksRealize, payload)
       if (isApiResponseOk(res)) {
-
+        yield put({
+          type: 'updateDatas',
+          payload: {
+            isPermission: true
+          }
+        })
       } else {
-
         yield put({
           type: 'updateDatas',
           payload: {

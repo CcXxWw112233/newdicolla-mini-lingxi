@@ -86,6 +86,8 @@ export default class sceneEntrance extends Component {
 
             } else if (redirectType === '5') {
 
+            } else if (redirectType === '7') {  //聊天页面
+                // pageObject = 'chat'
             }
             if (pageObject) {
                 Taro.navigateTo({
