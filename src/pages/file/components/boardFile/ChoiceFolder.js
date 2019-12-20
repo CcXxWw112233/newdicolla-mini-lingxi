@@ -30,7 +30,6 @@ import TreeFile from './TreeFile'
 export default class ChoiceFolder extends Component {
     state = {
         is_show_board_list: false, //是否显示项目列表
-        current_board_open: false, //文件夹列表展开状态
     }
 
     componentDidMount() {
@@ -68,16 +67,15 @@ export default class ChoiceFolder extends Component {
             },
         })
         if (board_id && current_selection_board_id === board_id) {
-            this.setState({ current_board_open: false })
             dispatch({
                 type: 'file/updateDatas',
                 payload: {
                     current_selection_board_id: '',
+                    current_board_open: false,
                 },
             })
         } else {
             //记录选中的那一行的board_id
-            this.setState({ current_board_open: true })
             if (board_id) {
                 this.getFolder(board_id, '', '')
             }
@@ -86,6 +84,7 @@ export default class ChoiceFolder extends Component {
                 payload: {
                     upload_folder_name: board_name,
                     current_selection_board_id: board_id,
+                    current_board_open: true,
                 },
             })
         }
@@ -160,7 +159,7 @@ export default class ChoiceFolder extends Component {
 
     handleCancel = () => {
         this.hideChoiceFolder()
-        // this.resetCurrentSelection()
+        this.resetCurrentSelection()
     }
 
     handleConfirm = () => {
@@ -179,10 +178,9 @@ export default class ChoiceFolder extends Component {
                 choice_board_id: '',
                 selected_board_folder_info: {},
                 upload_folder_name: '选择文件夹',
+                current_board_open: false,
             },
         })
-
-        this.setState({ current_board_open: false })
     }
 
 
@@ -228,9 +226,9 @@ export default class ChoiceFolder extends Component {
 
     render() {
 
-        const { folder_tree, v2_board_list, org_list, choiceImageThumbnail, upload_folder_name, choice_board_folder_id, choice_board_id, current_selection_board_id } = this.props
+        const { folder_tree, v2_board_list, org_list, choiceImageThumbnail, upload_folder_name, choice_board_folder_id, choice_board_id, current_selection_board_id, current_board_open } = this.props
         const { child_data = [], } = folder_tree
-        const { is_show_board_list, current_board_open, } = this.state
+        const { is_show_board_list, } = this.state
 
         return (
 

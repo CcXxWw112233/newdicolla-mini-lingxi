@@ -102,6 +102,7 @@ export default class File extends Component {
     }
 
     getFilePage = (org_id, board_id, folder_id) => {
+        console.log(org_id, board_id, folder_id, 'ssss');
 
         //保存数据, 用作下拉刷新参数
         const params = {
@@ -241,7 +242,7 @@ export default class File extends Component {
 
     //长按进入圈子
     longPress = (value) => {
-
+        Taro.setStorageSync('isRefreshFetchAllIMTeamList', 'true')
         Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
 
         const { dispatch } = this.props

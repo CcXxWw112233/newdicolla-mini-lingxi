@@ -115,7 +115,8 @@ import { getImHistory, getAllIMTeamList } from '../../services/im'
 )
 export default class BoardChat extends Component {
     config = {
-        navigationBarTitleText: '项目圈'
+        navigationBarTitleText: '项目圈',
+        "enablePullDownRefresh": true,
     }
 
     state = {
@@ -123,6 +124,18 @@ export default class BoardChat extends Component {
         search_mask_show: '0', // 0默认 1 淡入 2淡出
         chatBoardList: [], //显示在列表中的项目圈列表
     }
+
+    onPullDownRefresh(res) {
+
+        this.getChatBoardList();
+
+        Taro.showNavigationBarLoading()
+        setTimeout(function () {
+            Taro.stopPullDownRefresh()
+            Taro.hideNavigationBarLoading()
+        }, 300)
+    }
+
     getAllTeam = () => {
         return new Promise((resolve, reject) => {
             getAllIMTeamList().then(res => {
@@ -211,7 +224,7 @@ export default class BoardChat extends Component {
         //解决, 当在chat页面的时候, 来了新未读消息TabBarBadge不能及时更新, 从chat页面pop回来强制刷新数据
         const isRefreshNews = Taro.getStorageSync('isRefreshFetchAllIMTeamList')
         if (isRefreshNews === 'true') {
-            // this.getChatBoardList()
+            this.getChatBoardList()
             Taro.removeStorageSync('isRefreshFetchAllIMTeamList')
         }
     }
@@ -375,7 +388,6 @@ export default class BoardChat extends Component {
                 .then(() => setCurrentGroup(getCurrentGroup(currentBoard, im_id)))
                 .then(() => updateCurrentChatUnreadNewsState(id))
                 .then(() => {
-                    Taro.setStorageSync('isRefreshFetchAllIMTeamList', 'true')
                     const { board_id } = currentBoard
                     Taro.navigateTo({
                         url: `../../pages/chat/index?boardId=${board_id}&pageSource=boardChat`
@@ -441,6 +453,8 @@ export default class BoardChat extends Component {
                 return contentJSON.type === 3 ? '[动态贴图]' : '[动态消息]'
             }
             return typeCond[type] ? typeCond[type] : '[未知类型消息]';
+        } else {
+            return '';
         }
     };
 
@@ -578,7 +592,7 @@ export default class BoardChat extends Component {
         let { allBoardList } = this.props;
         // 对消息进行排序, 根据lastMsg里面的time最新的排在最上面
         let listArray = chatBoardList.sort((a, b) => ((b.updateTime)) - ((a.updateTime)))  //(b-a)时间正序
-        console.log(listArray, 'propsdata')
+        // console.log(listArray, 'propsdata')
         const sumArray = new Array(0);
         return (
             <View className={indexStyles.index}>

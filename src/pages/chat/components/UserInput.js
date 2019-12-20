@@ -1,12 +1,12 @@
 import Taro, { Component } from '@tarojs/taro';
 import {
   View,
+  Input,
   Text,
   Image,
   ScrollView,
   Swiper,
   SwiperItem,
-  Input,
 } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 import styles from './UserInput.scss';
@@ -127,6 +127,7 @@ class UserInput extends Component {
     //handleUserInputHeightChange(298);
     this.setState({
       inputMode: 'text',
+      //inputBottomValue:'298px'
       inputBottomValue: e.detail.height > 0 ? (e.detail.height - 15) + 'px' : this.state.inputBottomValue
     });
   };
@@ -206,7 +207,9 @@ class UserInput extends Component {
     });
     this.sendTextMsg();
   };
+  // handleChange = () => {
 
+  // }
   handleTextInput = () => {
     this.setState(
       {
@@ -519,6 +522,7 @@ class UserInput extends Component {
       inputBottomValue,
     } = this.state;
 
+    // console.log(inputMode);
     const { emojiAlbumList, emojiList } = this.genEmojiInfo();
     const findedCurrentEmojiAlbum = emojiList.filter(
       i => i.name === emojiAlbum
@@ -546,35 +550,17 @@ class UserInput extends Component {
               &#xe648;
             </View>
           )}
-          {/* {inputMode === 'voice' && (
+          {inputMode === 'voice' && (
             <View
               className={`${globalStyles.global_iconfont} ${styles.voice}`}
               onClick={e => this.handleClickedItem(e, 'text')}
             >
               &#xe655;
             </View>
-          )} */}
+          )}
           {this.inputModeBelongs('text', 'expression', 'addition') && (
             <View className={styles.input}>
-              {/* <Text className={styles.text_style}>{inputValue}</Text> */}
-              <Textarea
-                className={styles.textarea_style}
-                onInput={this.handleInput}
-                value={inputValue}
-                auto-height={false}
-                show-confirm-bar={false}
-                adjust-position={true}
-                onFocus={this.handleInputFocus}
-                onblur={this.handleInputBlur}
-                onConfirm={this.onInputConfirm}
-                focus={autoFocus}
-                confirmHold={true}
-                ref='inputRef'
-                confirmType='send'
-                adjustPosition={false}
-                cursorSpacing={20}
-              />
-              {/* <Input
+              <Input
                 ref='inputRef'
                 value={inputValue}
                 confirmType='send'
@@ -584,7 +570,7 @@ class UserInput extends Component {
                   lineHeight: '84px',
                   width: '450px',
                   marginLeft: '10px',
-                  marginRight: '10px',
+                  marginRight: '10px'
                 }}
                 focus={autoFocus}
                 confirmHold={true}
@@ -592,7 +578,8 @@ class UserInput extends Component {
                 onFocus={this.handleInputFocus}
                 onBlur={this.handleInputBlur}
                 onConfirm={this.onInputConfirm}
-              /> */}
+              // onChange={this.handleChange}
+              />
             </View>
           )}
           {inputMode === 'voice' && (
@@ -606,33 +593,31 @@ class UserInput extends Component {
               <Text>{`${recordStart ? '松开 结束' : '按住 说话'}`}</Text>
             </View>
           )}
-          {inputMode === 'expression' ? (
-            <View
-              className={`${globalStyles.global_iconfont} ${
-                styles.expression
-                }`}
-              onClick={e => this.handleClickedItem(e, 'text')}
-            >
-              &#xe655;
-              </View>
-          ) : (
+          <View>
+            {inputMode === 'expression' ? (
               <View
                 className={`${globalStyles.global_iconfont} ${
                   styles.expression
                   }`}
-                onClick={e => this.handleClickedItem(e, 'expression')}
+                onClick={e => this.handleClickedItem(e, 'text')}
               >
-                &#xe631;
+                &#xe655;
               </View>
-            )}
+            ) : (
+                <View
+                  className={`${globalStyles.global_iconfont} ${
+                    styles.expression
+                    }`}
+                  onClick={e => this.handleClickedItem(e, 'expression')}
+                >
+                  &#xe631;
+              </View>
+              )}
+          </View>
           {inputValue && inputValue.trim() ? (
-            <View
-              className={`${globalStyles.global_iconfont} ${styles.sendTextBtn_style}`}>
-              <View className={styles.sendTextBtn} onClick={this.onInputConfirm}>
-                发送
+            <View className={styles.sendTextBtn} onClick={this.onInputConfirm}>
+              发送
             </View>
-            </View>
-
           ) : (
               <View
                 className={`${globalStyles.global_iconfont} ${styles.addition}`}
@@ -645,122 +630,117 @@ class UserInput extends Component {
 
         <View className={styles.bottomView}></View>
 
-        {
-          inputMode === 'expression' && (
-            <View className={styles.contentWrapper}>
-              <View className={styles.emojiListWrapper}>
-                <ScrollView
-                  className={styles.emojiScrollViewContentWrapper}
-                  scrollY
-                  scrollWithAnimation
-                >
-                  <View className={styles.emojiListContentWrapper}>
-                    {shouldDisplayEmojiList.map(i => (
-                      <View
-                        className={styles.emojiScrollViewContentItemWrapper}
-                        key={i.key}
-                        style={{
-                          width: emojiType === 'emoji' ? '50px' : '80px',
-                          height: emojiType === 'emoji' ? '50px' : '80px'
-                        }}
-                        onClick={() => this.handleSelectedEmojiItem(i)}
-                      >
-                        <Image
-                          src={i.img}
-                          mode='aspectFill'
-                          style={{
-                            width: emojiType === 'emoji' ? '30px' : '60px',
-                            height: emojiType === 'emoji' ? '30px' : '60px'
-                          }}
-                        />
-                      </View>
-                    ))}
-                  </View>
-                </ScrollView>
-              </View>
-              <View className={styles.emojiPanelWrapper}>
-                <View className={styles.emojiPanelContentWrapper}>
-                  {emojiAlbumList.map(i => (
+        {inputMode === 'expression' && (
+          <View className={styles.contentWrapper}>
+            <View className={styles.emojiListWrapper}>
+              <ScrollView
+                className={styles.emojiScrollViewContentWrapper}
+                scrollY
+                scrollWithAnimation
+              >
+                <View className={styles.emojiListContentWrapper}>
+                  {shouldDisplayEmojiList.map(i => (
                     <View
-                      className={`${styles.emojiPanelItemWrapper} ${
-                        emojiAlbum === i.name ? styles.emojiPanelItemActive : ''
-                        }`}
-                      key={i.url}
-                      onClick={() => this.handleSelectEmojiList(i)}
+                      className={styles.emojiScrollViewContentItemWrapper}
+                      key={i.key}
+                      style={{
+                        width: emojiType === 'emoji' ? '50px' : '80px',
+                        height: emojiType === 'emoji' ? '50px' : '80px'
+                      }}
+                      onClick={() => this.handleSelectedEmojiItem(i)}
                     >
                       <Image
-                        src={i.url}
+                        src={i.img}
                         mode='aspectFill'
                         style={{
-                          width: '30px',
-                          height: '30px',
-                          justifyItems: 'center',
-                          margin: '0 auto'
+                          width: emojiType === 'emoji' ? '30px' : '60px',
+                          height: emojiType === 'emoji' ? '30px' : '60px'
                         }}
                       />
                     </View>
                   ))}
                 </View>
+              </ScrollView>
+            </View>
+            <View className={styles.emojiPanelWrapper}>
+              <View className={styles.emojiPanelContentWrapper}>
+                {emojiAlbumList.map(i => (
+                  <View
+                    className={`${styles.emojiPanelItemWrapper} ${
+                      emojiAlbum === i.name ? styles.emojiPanelItemActive : ''
+                      }`}
+                    key={i.url}
+                    onClick={() => this.handleSelectEmojiList(i)}
+                  >
+                    <Image
+                      src={i.url}
+                      mode='aspectFill'
+                      style={{
+                        width: '30px',
+                        height: '30px',
+                        justifyItems: 'center',
+                        margin: '0 auto'
+                      }}
+                    />
+                  </View>
+                ))}
               </View>
             </View>
-          )
-        }
-        {
-          inputMode === 'addition' && (
-            <View className={styles.contentWrapper}>
-              <Swiper
-                className={styles.additionWrapper}
-                indicatorColor='#F1F1F1'
-                indicatorActiveColor='#C1C1C1'
-                indicatorDots={false}
-              >
-                <SwiperItem>
-                  <View className={styles.additionContentWrapper}>
-                    <View className={styles.additionItemWrapper}>
-                      <View
-                        className={`${globalStyles.global_iconfont} ${
-                          styles.additionItemBtnIcon
-                          }`}
-                        onClick={() => this.handleClickAdditionItem('file')}
-                      >
-                        &#xe662;
+          </View>
+        )}
+        {inputMode === 'addition' && (
+          <View className={styles.contentWrapper}>
+            <Swiper
+              className={styles.additionWrapper}
+              indicatorColor='#F1F1F1'
+              indicatorActiveColor='#C1C1C1'
+              indicatorDots={false}
+            >
+              <SwiperItem>
+                <View className={styles.additionContentWrapper}>
+                  <View className={styles.additionItemWrapper}>
+                    <View
+                      className={`${globalStyles.global_iconfont} ${
+                        styles.additionItemBtnIcon
+                        }`}
+                      onClick={() => this.handleClickAdditionItem('file')}
+                    >
+                      &#xe662;
                     </View>
-                      <Text className={styles.additionItemText}>文件</Text>
-                    </View>
-                    <View className={styles.additionItemWrapper}>
-                      <View
-                        className={`${globalStyles.global_iconfont} ${
-                          styles.additionItemBtnIcon
-                          }`}
-                        onClick={() => this.handleClickAdditionItem('image')}
-                      >
-                        &#xe664;
-                    </View>
-                      <Text className={styles.additionItemText}>图片</Text>
-                    </View>
-                    <View className={styles.additionItemWrapper}>
-                      <View
-                        className={`${globalStyles.global_iconfont} ${
-                          styles.additionItemBtnIcon
-                          }`}
-                        onClick={() => this.handleClickAdditionItem('photo')}
-                      >
-                        &#xe663;
-                    </View>
-                      <Text className={styles.additionItemText}>拍照</Text>
-                    </View>
+                    <Text className={styles.additionItemText}>文件</Text>
                   </View>
-                </SwiperItem>
-              </Swiper>
-            </View>
-          )
-        }
+                  <View className={styles.additionItemWrapper}>
+                    <View
+                      className={`${globalStyles.global_iconfont} ${
+                        styles.additionItemBtnIcon
+                        }`}
+                      onClick={() => this.handleClickAdditionItem('image')}
+                    >
+                      &#xe664;
+                    </View>
+                    <Text className={styles.additionItemText}>图片</Text>
+                  </View>
+                  <View className={styles.additionItemWrapper}>
+                    <View
+                      className={`${globalStyles.global_iconfont} ${
+                        styles.additionItemBtnIcon
+                        }`}
+                      onClick={() => this.handleClickAdditionItem('photo')}
+                    >
+                      &#xe663;
+                    </View>
+                    <Text className={styles.additionItemText}>拍照</Text>
+                  </View>
+                </View>
+              </SwiperItem>
+            </Swiper>
+          </View>
+        )}
 
-      </View >
+      </View>
     );
   }
 }
 
 export default UserInput;
-
 

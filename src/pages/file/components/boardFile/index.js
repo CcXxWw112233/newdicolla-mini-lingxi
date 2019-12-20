@@ -42,12 +42,34 @@ export default class BoardFile extends Component {
         this.props.selectedBoardFile(org_id, board_id, file_id)
         const { all_file_text } = this.state
         const titleText = value === all_file_text ? all_file_text : value.board_name
-        dispatch({
-            type: 'file/updateDatas',
-            payload: {
-                header_folder_name: titleText,
-                isShowBoardList: false,
-            },
+
+        Promise.resolve(
+            dispatch({
+                type: 'file/updateDatas',
+                payload: {
+                    header_folder_name: titleText,
+                    isShowBoardList: false,
+                    current_selection_board_id: board_id,
+                    current_board_open: true,
+
+                    //切换了项目, 重置弹框里面之前重则的文件夹信息
+                    choice_board_folder_id: '',
+                    choice_board_id: '',
+                    selected_board_folder_info: {},
+                    upload_folder_name: '选择文件夹',
+                },
+            })
+        ).then(res => {
+            //当选择了项目, 也把上传文件弹框的当个项目的树形也调出来
+            //全部文件没有树形, 也不需要调
+            if (board_id) {
+                dispatch({
+                    type: 'file/getFolder',
+                    payload: {
+                        board_id: board_id,
+                    },
+                })
+            }
         })
     }
 

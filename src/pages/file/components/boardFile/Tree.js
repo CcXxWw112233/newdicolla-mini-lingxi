@@ -40,6 +40,7 @@ export default class Tree extends Component {
                 payload: {
                     choice_board_folder_id: '',
                     back_click_name: true,
+                    upload_folder_name: '选择文件夹',
                 },
             })
         } else {

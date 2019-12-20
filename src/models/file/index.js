@@ -18,6 +18,7 @@ export default {
         choice_board_id: '', //当前被选中项目根目录的项目id
         back_click_name: true, //右上角显示'返回'还是'取消'
         current_selection_board_id: '', //当前选择的board_id
+        current_board_open: false, //项目文件夹列表展开状态
     },
     effects: {
         //全部文件信息
@@ -113,10 +114,10 @@ export default {
                                 icon: 'none',
                                 duration: 2000
                             })
-                            console.log('fail', res)
+                            // console.log('fail', res)
                         },
                         complete: function (res) {
-                            console.log('complete', res)
+                            // console.log('complete', res)
                         }
                     })
                 }
