@@ -30,7 +30,7 @@ function onMsg(msg) {
   // let tempState = Object.assign({}, state);
   let tempState = {...state}
 
-  let auth = filterListAuth([val],tempState.userUID);
+  let auth = filterListAuth([msg],tempState.userUID);
   // 无权限--退出
   if(!auth[0]) return ;
 

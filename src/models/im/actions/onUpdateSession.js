@@ -1,6 +1,7 @@
 import Taro from '@tarojs/taro';
 import { isCreatedNewGroupOrAddTeamMembersNews } from './../utils/genNews.js'
-import { filterListAuth } from './../utils/util'
+import { filterListAuth} from '../../../utils/util'
+
 
 
 function onUpdateSession(sessions) {
@@ -17,7 +18,7 @@ function onUpdateSession(sessions) {
     im: { nim }
   } = getState();
 
-  let auth = filterListAuth([val.lastMsg], state.userUID);
+  let auth = filterListAuth([sessions.lastMsg], state.userUID);
   // 无权限
   if(!auth[0]) return ;
 
