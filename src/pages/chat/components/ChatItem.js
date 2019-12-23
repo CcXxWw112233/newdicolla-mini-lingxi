@@ -253,6 +253,10 @@ class ChatItem extends Component {
       iconAvatar = <Text className={`${globalStyles.global_iconfont} ${styles.icon_avatar_style}`}>&#xe63c;
       </Text>
       from_nick = '任务助手'
+    } else if (someMsgContentDataDAction && (someMsgContentDataDAction.indexOf('board.board'))) {
+      iconAvatar = <Text className={`${globalStyles.global_iconfont} ${styles.icon_avatar_style}`}>&#xe649;
+      </Text>
+      from_nick = '项目助手'
     } else {
       iconAvatar = <Text className={`${globalStyles.global_iconfont} ${styles.icon_default_avatar_style}`}>&#xe647;
       </Text>

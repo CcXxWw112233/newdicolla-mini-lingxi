@@ -288,7 +288,6 @@ class UserInput extends Component {
         });
         Promise.resolve(sendImageMsg(res.tempFilePaths, im_id))
           .then(() => {
-            // Taro.hideLoading();
             setInputMode('text');
           })
           .catch(e => {
@@ -326,12 +325,12 @@ class UserInput extends Component {
     Taro.setStorageSync('is_chat_extended_function', 'true')
   };
   handleVoiceTouchEnd = () => {
+    Taro.hideToast();
     this.setState(
       {
         recordStart: false
       },
       () => {
-        Taro.hideToast();
         const { recorderManager } = this.state;
         if (!recorderManager) {
           return;
@@ -348,7 +347,6 @@ class UserInput extends Component {
     const { im_id, sendTeamAudioMsg } = this.props;
     Promise.resolve(sendTeamAudioMsg(tempFilePath, im_id))
       .then(() => {
-        // Taro.hideLoading();
         this.setState({
           recorderManager: null
         });
@@ -360,12 +358,21 @@ class UserInput extends Component {
         })
       );
   };
+  /***
+   * 开始录音
+   */
   startRecord = () => {
-    Taro.showToast({
-      title: '录音中...',
-      icon: 'none',
-      duration: 20000000
-    });
+    //短震动反馈
+    //仅在 iPhone 7 / 7 Plus 以上及 Android 机型生效
+    Taro.vibrateShort()
+    const { recordStart } = this.state
+    if (recordStart) {
+      Taro.showToast({
+        title: '录音中...',
+        icon: 'none',
+        duration: 20000,
+      });
+    }
     const recorderManager =
       this.state.recorderManager || Taro.getRecorderManager();
     const options = {
@@ -378,7 +385,7 @@ class UserInput extends Component {
       recorderManager
     });
     recorderManager.onStop(res => {
-      if (res.duration < 2000) {
+      if (res.duration < 1000) {
         Taro.showToast({
           title: '录音时间太短',
           icon: 'error'
@@ -386,6 +393,7 @@ class UserInput extends Component {
       } else {
         that.sendAudioMsg(res);
       }
+      Taro.hideToast();
     });
   };
   handleVoiceTouchStar = () => {
@@ -446,6 +454,7 @@ class UserInput extends Component {
       }
     );
   };
+
   genEmojiInfo = () => {
     const { emojiList, pinupList } = emojiObj;
     const emojiListMap = [

@@ -870,7 +870,7 @@ let pageConfig = {
    */
   videoCall() {
     if (app.globalData.waitingUseVideoCall) {
-      showToast('text', '请勿频繁操作', {duration: 2000})
+      showToast('text', '请勿频繁操作', { duration: 2000 })
       return
     }
     if (this.data.chatType === 'advanced' || this.data.chatType === 'normal') { // 群组
@@ -1009,7 +1009,7 @@ let pageConfig = {
    * 清除本地记录
    */
   clearAllMessage() {
-      // 刷新本地视图
+    // 刷新本地视图
     this.setData({
       messageArr: []
     })
@@ -1148,7 +1148,7 @@ let pageConfig = {
    */
   convertRawMessageListToRenderMessageArr(rawMsgList) {
     let messageArr = []
-    for(let time in rawMsgList) {
+    for (let time in rawMsgList) {
       let rawMsg = rawMsgList[time]
       let msgType = ''
       if (rawMsg.type === 'custom' && JSON.parse(rawMsg['content'])['type'] === 1) {
@@ -1161,7 +1161,7 @@ let pageConfig = {
       let displayTimeHeader = this.judgeOverTwoMinute(rawMsg.time, messageArr)
       let sendOrReceive = rawMsg.flow === 'in' ? 'receive' : 'send'
       let specifiedObject = {}
-      switch(msgType) {
+      switch (msgType) {
         case 'text': {
           specifiedObject = {
             nodes: generateRichTextNode(rawMsg.text)
@@ -1286,6 +1286,6 @@ let mapStateToData = (state) => {
     messageArr: messageArr
   }
 }
-const mapDispatchToPage = (dispatch) => {}
+const mapDispatchToPage = (dispatch) => { }
 let connectedPageConfig = connect(mapStateToData, mapDispatchToPage)(pageConfig)
 Page(connectedPageConfig)
