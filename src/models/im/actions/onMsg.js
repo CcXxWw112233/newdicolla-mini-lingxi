@@ -63,8 +63,8 @@ function onMsg(msg) {
       if (isValidMsg(msg, tempState.currentChatTo) || isPinupEmojiNews(msg) || isNotificationNews(msg)) {
 
         const { currentBoard } = tempState;
-        tempState.currentGroupSessionList = [
-          ...tempState.currentGroupSessionList,
+        tempState.history_newSession = [
+          ...tempState['history_newSession'],
           genNews(msg, currentBoard)
         ];
       }

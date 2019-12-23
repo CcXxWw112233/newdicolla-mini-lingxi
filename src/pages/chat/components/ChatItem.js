@@ -146,6 +146,11 @@ class ChatItem extends Component {
     return `${ret}px`;
   };
   timestampToTime = timestamp => {
+    if(timestamp.length === 10){
+      timestamp = timestamp + '000';
+    }
+    timestamp = +timestamp;
+    // console.log(timestamp)
     const nowTimestamp = Date.now();
     const oneDayTimestamp = 1000 * 60 * 60 * 24;
     const todayZeroClockTimestamp = new Date(
@@ -366,7 +371,7 @@ class ChatItem extends Component {
                       <View className={styles.customNewsWrapper}>
                         {content && content.data && content.data.d ? (
                           <View className={styles.customNewsContentWrapper}>
-                            {[JSON.parse(content.data.d)].map(data => {
+                            {[JSON.parse(content.data.d)].map((data,index) => {
                               const {
                                 activityType,
                                 creator,
@@ -374,7 +379,6 @@ class ChatItem extends Component {
                                 activityContent,
                                 range
                               } = parseActivityNewsBody(data);
-
                               return (
                                 <View
                                   key={data.creatorId}
@@ -522,7 +526,7 @@ ChatItem.defaultProps = {
   content: {
     //自定义类型的消息体
     data: {
-      d: JSON.stringify({}),
+      d: "",
       e: ''
     }
   },

@@ -128,6 +128,29 @@ export default {
       }
       return ;
     },
+    *mergeHistory({ payload }, { select, call, put }){
+      let { data } = payload;
+      const { currentGroupSessionList } = yield selectFieldsFromIm(
+        select,
+        'currentGroupSessionList'
+      );
+      let obj = {};
+      let h = currentGroupSessionList.concat(data);
+      let history = [];
+      h.forEach(item => {
+        if(item && !obj[item.idServer]){
+          history.push(item);
+          obj[item.idServer] = true;
+        }
+      })
+      console.log(history,'history')
+      yield put({
+        type:"updateStateFieldByCover",
+        payload:{
+          currentGroupSessionList: history.sort((a,b)=> a.time - b.time)
+        }
+      })
+    },
     *repairTeamStatus({ payload }, { select, call, put }) {
       const { id, type, im_id } = payload;
       const { currentBoardImValid } = yield selectFieldsFromIm(
