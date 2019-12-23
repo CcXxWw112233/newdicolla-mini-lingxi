@@ -76,7 +76,7 @@ export default class BoardFile extends Component {
                 {v2_board_list && v2_board_list.map(item => {
                     const org_id = item.org_id
                     return (
-                        <View className={indexStyles.board_item_style} hoverClass={indexStyles.board_item_hover_style} onClick={() => this.selectedBoardItem('0', item.board_id, '', item)}>
+                        <View className={indexStyles.board_item_style} hoverClass={indexStyles.board_item_hover_style} onClick={() => this.selectedBoardItem(org_id, item.board_id, '', item)}>
 
                             <View className={indexStyles.board_item_cell_style}>
 

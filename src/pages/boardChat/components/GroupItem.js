@@ -46,7 +46,7 @@ class GroupItem extends Component {
           <View className={styles.avatarWrapper}>
             <Avatar
               urlList={avatarList}
-              value={newsNum < 0 ? 0: newsNum}
+              value={newsNum < 0 ? 0 : newsNum}
               showDot={showNewsDot}
             />
           </View>

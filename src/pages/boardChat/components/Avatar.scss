@@ -16,7 +16,6 @@
 }
 
 .ItemWrapperOne,
-.ItemWrapperTwo,
 .ItemWrapperThree,
 .ItemWrapperFour,
 .ItemWrapperFive {
@@ -44,25 +43,15 @@
 }
 
 .wrapperThree {
-    height         : 75px;
+    height         : 92px;
     display        : flex;
     position       : relative;
     justify-content: space-around;
     align-items    : flex-end;
 }
 
-.ItemWrapperThree {}
-
-.ItemWrapperThreeFirstChild {
-    position: absolute;
-    top     : 0px;
-    width   : 36px;
-    height  : 38px;
-}
-
 .wrapperFour {
-    height         : 76px;
-    line-height    : 48px;
+    height         : 92px;
     display        : flex;
     flex-wrap      : wrap;
     justify-content: center;
@@ -154,4 +143,71 @@
     display    : flex;
     margin-top : 5px;
     align-items: center;
+}
+
+.ItemWrapperTwo {
+    height: 92px;
+}
+
+
+
+
+
+.ItemWrapperTwoFirstChild,
+.ItemWrapperThreeFirstChild {
+    width        : 46px;
+    height       : 92px;
+    line-height  : 92px;
+    border-radius: 92px 0px 0px 92px;
+    position     : absolute;
+    left         : 0;
+    top          : 0;
+}
+
+.ItemWrapperTwoSecondChild {
+    width        : 46px;
+    height       : 92px;
+    line-height  : 92px;
+    border-radius: 0px 92px 92px 0px;
+    position     : absolute;
+    right        : 0;
+    top          : 0;
+}
+
+.ItemWrapperThreeSecondChild,
+.ItemWrapperFourSecondChild {
+    width        : 46px;
+    height       : 46px;
+    border-radius: 0 46px 0 0;
+    position     : absolute;
+    top          : 0;
+    right        : 0;
+}
+
+.ItemWrapperFourFourthChild,
+.ItemWrapperThreeThirdChild {
+    width        : 46px;
+    height       : 46px;
+    border-radius: 0 0 46px 0;
+    position     : absolute;
+    bottom       : 0;
+    right        : 0;
+}
+
+.ItemWrapperFourFirstChild {
+    width        : 46px;
+    height       : 46px;
+    border-radius: 46px 0 0 0;
+    position     : absolute;
+    top          : 0;
+    left         : 0;
+}
+
+.ItemWrapperFourThirdChild {
+    width        : 46px;
+    height       : 46px;
+    border-radius: 0 0 0 46px;
+    position     : absolute;
+    bottom       : 0;
+    left         : 0;
 }

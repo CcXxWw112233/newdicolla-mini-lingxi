@@ -40,17 +40,17 @@ class Avatar extends Component {
                 )}
                 {urlLen === 2 && (
                     <View className={styles.wrapperTwo}>
-                        {urlList.map(i => {
+                        {urlList.map((i, key) => {
                             if (this.isValidImgUrl(i)) {
                                 return (
                                     <View key={i} className={styles.ItemWrapperTwo}>
-                                        <Image className={styles.item} mode='aspectFill' src={i} />
+                                        <Image className={key === 0 ? styles.ItemWrapperTwoFirstChild : styles.ItemWrapperTwoSecondChild} mode='aspectFill' src={i} />
                                     </View>
                                 );
                             }
                             return (
                                 <View key={i} className={styles.ItemWrapperTwo}>
-                                    <View className={styles.amendAtIconPosition}>
+                                    <View className={styles.ItemWrapperTwo_item_one}>
                                         <AtIcon value='user' size='18' color='#3F536E' />
                                     </View>
                                 </View>
@@ -60,135 +60,96 @@ class Avatar extends Component {
                 )}
                 {urlLen === 3 && (
                     <View className={styles.wrapperThree}>
-                        {urlList.map((i, index) => {
-                            if (this.isValidImgUrl(i)) {
-                                return (
-                                    <View
-                                        key={i}
-                                        className={
-                                            index === 0
-                                                ? styles.ItemWrapperThreeFirstChild
-                                                : styles.ItemWrapperThree
-                                        }
-                                    >
-                                        <Image className={styles.item} mode='aspectFill' src={i} />
-                                    </View>
-                                );
-                            }
-                            return (
-                                <View
-                                    key={i}
-                                    className={
-                                        index === 0
-                                            ? styles.ItemWrapperThreeFirstChild
-                                            : styles.ItemWrapperThree
-                                    }
-                                >
-                                    <View className={styles.amendAtIconPosition}>
-                                        <AtIcon value='user' size='18' color='#3F536E' />
-                                    </View>
-                                </View>
-                            );
-                        })}
-                    </View>
-                )}
-                {urlLen === 4 && (
-                    <View className={styles.wrapperFour}>
-                        {urlList.map(i => {
-                            if (this.isValidImgUrl(i)) {
-                                return (
-                                    <View key={i} className={styles.ItemWrapperFour}>
-                                        <Image className={styles.item} mode='aspectFill' src={i} />
-                                    </View>
-                                );
-                            }
-                            return (
-                                <View key={i} className={styles.ItemWrapperFour}>
-                                    <View className={styles.amendAtIconPosition}>
-                                        <AtIcon
-                                            style={{ height: '20px' }}
-                                            value='user'
-                                            size='18'
-                                            color='#3F536E'
-                                        />
-                                    </View>
-                                </View>
-                            );
-                        })}
-                    </View>
-                )}
-                {urlLen >= 5 && (
-                    <View className={styles.wrapperFive}>
                         {this.isValidImgUrl(urlList[0]) ? (
-                            <View className={styles.ItemWrapperFiveFirstChild}>
-                                <Image
-                                    className={styles.item}
-                                    mode='aspectFill'
-                                    src={urlList[0]}
-                                />
-                            </View>
+                            <Image
+                                className={styles.ItemWrapperThreeFirstChild}
+                                mode='aspectFill'
+                                src={urlList[0]}
+                            />
                         ) : (
-                                <View className={styles.ItemWrapperFiveFirstChild}>
+                                <View className={styles.ItemWrapperThreeFirstChild}>
                                     <View className={styles.amendAtIconPosition}>
                                         <AtIcon value='user' size='18' color='#3F536E' />
                                     </View>
                                 </View>
                             )}
                         {this.isValidImgUrl(urlList[1]) ? (
-                            <View className={styles.ItemWrapperFiveSecondChild}>
-                                <Image
-                                    className={styles.item}
-                                    mode='aspectFill'
-                                    src={urlList[1]}
-                                />
-                            </View>
+                            <Image
+                                className={styles.ItemWrapperThreeSecondChild}
+                                mode='aspectFill'
+                                src={urlList[1]}
+                            />
                         ) : (
-                                <View className={styles.ItemWrapperFiveSecondChild}>
+                                <View className={styles.ItemWrapperThreeSecondChild}>
                                     <View className={styles.amendAtIconPosition}>
                                         <AtIcon value='user' size='18' color='#3F536E' />
                                     </View>
                                 </View>
                             )}
                         {this.isValidImgUrl(urlList[2]) ? (
-                            <View className={styles.ItemWrapperFiveThirdChild}>
-                                <Image
-                                    className={styles.item}
-                                    mode='aspectFill'
-                                    src={urlList[2]}
-                                />
-                            </View>
+                            <Image
+                                className={styles.ItemWrapperThreeThirdChild}
+                                mode='aspectFill'
+                                src={urlList[2]}
+                            />
                         ) : (
-                                <View className={styles.ItemWrapperFiveThirdChild}>
+                                <View className={styles.ItemWrapperThreeThirdChild}>
+                                    <View className={styles.amendAtIconPosition}>
+                                        <AtIcon value='user' size='18' color='#3F536E' />
+                                    </View>
+                                </View>
+                            )}
+                    </View>
+                )}
+                {urlLen >= 4 && (
+                    <View className={styles.wrapperFour}>
+                        {this.isValidImgUrl(urlList[0]) ? (
+                            <Image
+                                className={styles.ItemWrapperFourFirstChild}
+                                mode='aspectFill'
+                                src={urlList[0]}
+                            />
+                        ) : (
+                                <View className={styles.ItemWrapperFourFirstChild}>
+                                    <View className={styles.amendAtIconPosition}>
+                                        <AtIcon value='user' size='18' color='#3F536E' />
+                                    </View>
+                                </View>
+                            )}
+                        {this.isValidImgUrl(urlList[1]) ? (
+                            <Image
+                                className={styles.ItemWrapperFourSecondChild}
+                                mode='aspectFill'
+                                src={urlList[1]}
+                            />
+                        ) : (
+                                <View className={styles.ItemWrapperFourSecondChild}>
+                                    <View className={styles.amendAtIconPosition}>
+                                        <AtIcon value='user' size='18' color='#3F536E' />
+                                    </View>
+                                </View>
+                            )}
+                        {this.isValidImgUrl(urlList[2]) ? (
+                            <Image
+                                className={styles.ItemWrapperFourThirdChild}
+                                mode='aspectFill'
+                                src={urlList[2]}
+                            />
+                        ) : (
+                                <View className={styles.ItemWrapperFourThirdChild}>
                                     <View className={styles.amendAtIconPosition}>
                                         <AtIcon value='user' size='18' color='#3F536E' />
                                     </View>
                                 </View>
                             )}
                         {this.isValidImgUrl(urlList[3]) ? (
-                            <View className={styles.ItemWrapperFiveFourthChild}>
-                                <Image
-                                    className={styles.item}
-                                    mode='aspectFill'
-                                    src={urlList[3]}
-                                />
-                            </View>
+                            <Image
+                                className={styles.ItemWrapperFourFourthChild}
+                                mode='aspectFill'
+                                src={urlList[3]}
+                            />
                         ) : (
-                                <View className={styles.ItemWrapperFiveFourthChild}>
-                                    <View className={styles.amendAtIconPosition}>
-                                        <AtIcon value='user' size='18' color='#3F536E' />
-                                    </View>
-                                </View>
-                            )}
-                        {this.isValidImgUrl(urlList[4]) ? (
-                            <View className={styles.ItemWrapperFiveFifthChild}>
-                                <Image
-                                    className={styles.item}
-                                    mode='aspectFill'
-                                    src={urlList[4]}
-                                />
-                            </View>
-                        ) : (
-                                <View className={styles.ItemWrapperFiveFifthChild}>
+                                <View className={styles.ItemWrapperFourFourthChild}>
                                     <View className={styles.amendAtIconPosition}>
                                         <AtIcon value='user' size='18' color='#3F536E' />
                                     </View>
