@@ -1,5 +1,6 @@
 import Taro from '@tarojs/taro';
 import { isCreatedNewGroupOrAddTeamMembersNews } from './../utils/genNews.js'
+import { filterListAuth } from './../utils/util'
 
 
 function onUpdateSession(sessions) {
@@ -15,6 +16,11 @@ function onUpdateSession(sessions) {
     im: state,
     im: { nim }
   } = getState();
+
+  let auth = filterListAuth([val.lastMsg], state.userUID);
+  // 无权限
+  if(!auth[0]) return ;
+
 
   //如果是新建群或者更新了群成员的信息，那么重新拉取所有的群信息的列表
   if (isCreatedNewGroupOrAddTeamMembersNews(sessions)) {

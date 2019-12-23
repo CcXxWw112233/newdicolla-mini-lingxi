@@ -8,7 +8,7 @@ import {
   isPinupEmojiNews,
   isNotificationNews
 } from './../utils/genNews.js';
-import { deep } from '../../../utils/util'
+import { deep ,filterListAuth} from '../../../utils/util'
 import { handleGlobalNewsPush } from './../utils/activityHandle.js';
 
 //收到的消息
@@ -29,6 +29,13 @@ function onMsg(msg) {
 
   // let tempState = Object.assign({}, state);
   let tempState = {...state}
+
+  let auth = filterListAuth([val],tempState.userUID);
+  // 无权限--退出
+  if(!auth[0]) return ;
+
+
+
 
   tempState.rawMessageList = Object.assign({}, tempState.rawMessageList);
   // 自己的退群消息就不记录、展示了

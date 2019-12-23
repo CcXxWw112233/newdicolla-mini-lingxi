@@ -3,7 +3,7 @@ import { View, ScrollView } from '@tarojs/components';
 import styles from './ChatContent.scss';
 import ChatItem from './ChatItem.js';
 import { connect } from '@tarojs/redux';
-import { isPlainObject } from './../../../utils/util';
+import { isPlainObject,filterListAuth } from './../../../utils/util';
 import {
   genNews,
   isValidMsg,
@@ -193,8 +193,11 @@ class ChatContent extends Component {
     //   });
     // });
   };
+
+
+
   getHistory = (flow = 'up') => {
-    let { dispatch } = this.props;
+    let { dispatch ,userUID} = this.props;
     return new Promise((resolve,reject) =>{
       let { currentBoard, dispatch, userUID } = this.props;
       let { im_id } = currentBoard;
@@ -239,21 +242,25 @@ class ChatContent extends Component {
           if(!obj[item.idServer]){
             arr.push(item);
           }
-          resolve(arr);
-        })
 
+        })
+        // 权限过滤
+        let authList = filterListAuth(arr,userUID);
+        resolve(authList);
         this.page_number += 1 ;
 
         // 保存历史数据
         dispatch({
           type:"im/updateStateFieldByCover",
           payload:{
-            [key]: arr.sort((a,b) => a.time - b.time)
+            [key]: authList.sort((a,b) => a.time - b.time)
           }
         })
+        // 加载中
         this.setState({
           loadPrev:false
         })
+        // 正在加载，加上load锁
         setTimeout(()=>{
           this.isLoading = false ;
         },100)

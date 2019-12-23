@@ -116,3 +116,34 @@ export const filterFileFormatType = (fileName) => {
   }
   return themeCode;
 }
+
+// 权限过滤方法
+export const filterListAuth = (data = [],userid)=>{
+  let arr = [];
+  // 确定权限
+  let hasAuthority = (data)=>{
+    if(!data || !data.length ){
+      return true;
+    }
+    if(data.indexOf(userid) !== -1){
+      return true
+    }
+    return false ;
+  }
+  data.forEach(item => {
+      // 动态通知检查
+      if(item.type === 'custom' && item.content){
+          let content = typeof item.content === 'string' ? JSON.parse(item.content) : item.content;
+          // 动态通知存在权限管控
+          if(content.method === 'newActivity'){
+              let t = content.data.t;
+              // 检查权限
+              hasAuthority(t) && arr.push(item);
+          }else{
+            arr.push(item)
+          }
+      } else arr.push(item);// 普通消息不存在权限管控
+  })
+
+  return arr ;
+}

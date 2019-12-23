@@ -5,7 +5,7 @@ import { connect } from '@tarojs/redux'
 import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import SearchAndMenu from '../board/components/SearchAndMenu'
-import { isPlainObject } from './../../utils/util';
+import { isPlainObject ,filterListAuth} from './../../utils/util';
 import { isApiResponseOk } from '../../utils/request';
 import { getImHistory ,getAllIMTeamList ,setImHistoryRead} from '../../services/im'
 
@@ -17,6 +17,7 @@ import { getImHistory ,getAllIMTeamList ,setImHistoryRead} from '../../services/
         currentBoard,
         currentBoardImValid,
         rawMessageList,
+        userUID
     }
 }) => {
     return {
@@ -26,6 +27,7 @@ import { getImHistory ,getAllIMTeamList ,setImHistoryRead} from '../../services/
         currentBoard,
         rawMessageList,
         currentBoardImValid,
+        userUID
     };
 },
     dispatch => {
@@ -133,6 +135,7 @@ export default class BoardChat extends Component {
       })
     }
     getChatBoardList = async () =>{
+      let { userUID } = this.props;
         this.getOrgList();
         let list = await this.getAllTeam();
         // let list = await this.getAllTeam();
@@ -146,7 +149,7 @@ export default class BoardChat extends Component {
             const { im_id } = value;
             const param = {
                 id: im_id,
-                page_size: '1',
+                page_size: '10',
                 page_number: '1',
             }
             promiseList.push(getImHistory(param));
@@ -157,6 +160,7 @@ export default class BoardChat extends Component {
           response.forEach(item => {
               let msg = item.data;
               let { tid, unread, records } = msg || {};
+              let arr = filterListAuth(records ,userUID);
               if (isApiResponseOk(item)) {
                   resList.push(item.data)
                   chatList.map(chat => {
@@ -164,7 +168,7 @@ export default class BoardChat extends Component {
                           // 未读数
                           chat.unread = unread;
                           // 最后一条消息
-                          chat.lastMsg = records && records[0];
+                          chat.lastMsg = arr && arr[0];
                           // 根据最后一条消息更新最后的时间,排序
                           chat.updateTime = chat.lastMsg && chat.lastMsg.time
                       }

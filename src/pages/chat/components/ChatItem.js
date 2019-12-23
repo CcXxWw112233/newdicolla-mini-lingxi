@@ -48,7 +48,7 @@ class ChatItem extends Component {
   };
   handlePlayAudio = file => {
     let { createInnerAudioContext } = this.state;
-    const { url } = file;
+    const { url } = JSON.parse(file);
     if (!createInnerAudioContext) {
       createInnerAudioContext = Taro.createInnerAudioContext();
       createInnerAudioContext.src = url;
@@ -461,9 +461,9 @@ class ChatItem extends Component {
                         onClick={() => this.handlePlayAudio(file)}
                       >
                         <Text
-                          style={{ width: this.genAudioNewsWidth(file.dur) }}
+                          style={{ width: this.genAudioNewsWidth(JSON.parse(file).dur) }}
                           className={styles.audioDur}
-                        >{`${Math.ceil(file.dur / 1000)}" `}</Text>
+                        >{`${Math.ceil((JSON.parse(file).dur||0) / 1000)}" `}</Text>
                         <View
                           className={`${globalStyles.global_iconfont} ${
                             styles.audioIcon
