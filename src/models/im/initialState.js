@@ -38,7 +38,9 @@ const INITIAL_STATE = {
   // 当前会话ID（即当前聊天列表，只有单聊群聊采用，可用于判别）
   currSessionId: null,
   currSessionMsgs: [],
-  boardChatImAllLastHistoryList: {}, //当前项目圈的历史消息
+  boardChatImAllLastHistoryList: {}, //当前项目圈的历史消息,
+  sessionListMap:{}, //切割聊天历史数据列表
+  history_newSession:[],// 更新版，新消息的记录，包括自己发送的和接受的s
 }
 
 export { INITIAL_STATE }

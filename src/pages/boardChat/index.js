@@ -370,7 +370,6 @@ export default class BoardChat extends Component {
         };
 
         this.countSumUnRead(allBoardList).then(_ => {
-          console.log('1111111111')
           Promise.resolve(setCurrentChatTo(id))
             .then(() => setCurrentGroup(getCurrentGroup(currentBoard, im_id)))
             .then(() => updateCurrentChatUnreadNewsState(id))
@@ -577,7 +576,6 @@ export default class BoardChat extends Component {
         let { allBoardList } = this.props;
         // 对消息进行排序, 根据lastMsg里面的time最新的排在最上面
         let listArray = chatBoardList.sort((a, b) => ((b.updateTime)) - ((a.updateTime)))  //(b-a)时间正序
-        console.log(listArray,'propsdata')
         const sumArray = new Array(0);
         return (
             <View className={indexStyles.index}>

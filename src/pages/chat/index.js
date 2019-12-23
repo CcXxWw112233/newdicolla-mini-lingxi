@@ -6,6 +6,7 @@ import ChatContent from './components/ChatContent.js';
 import UserInput from './components/UserInput.js';
 import FileChat from './components/fileChat.js';
 import { connect } from '@tarojs/redux';
+import { getImHistory } from '../../services/im'
 
 @connect(({
   chat: { },
@@ -18,6 +19,8 @@ import { connect } from '@tarojs/redux';
     currentBoardImValid,
     rawMessageList,
     currentGroup,
+    userUID,
+    currentGroupSessionList
   },
 }) => {
   return {
@@ -29,6 +32,8 @@ import { connect } from '@tarojs/redux';
     rawMessageList,
     currentBoardImValid,
     currentGroup,
+    userUID,
+    currentGroupSessionList
   };
 },
   dispatch => {
@@ -114,12 +119,16 @@ import { connect } from '@tarojs/redux';
     };
   }
 )
-
 class Chat extends Component {
 
   config = {
     disableScroll: true //页面整体不能上下滚动
   };
+  constructor(props) {
+    super(props);
+    this.page_number = 1;
+    this.loadNumber = 1;
+  }
 
   state = {
     file_info: {},  //文件评论信息
@@ -135,7 +144,7 @@ class Chat extends Component {
       file_info: fileInfo && JSON.parse(fileInfo),
       page_source: pageSource,
     })
-
+    // this.getHistory();
     //从项目圈页面过来的不需要初始化IM相关信息
     if (pageSource === 'boardChat') {
       return
@@ -153,7 +162,37 @@ class Chat extends Component {
       //初始化IM相关信息
       this.initializationChat(boardId, im_id)
     }
+
   }
+  concatHistory = (arr) => {
+    let { currentGroupSessionList } = this.props;
+    let obj = {};
+    let h = currentGroupSessionList.concat(arr);
+    let history = [];
+    h.forEach(item => {
+      if (item && !obj[item.idServer]) {
+        history.push(item);
+        obj[item.idServer] = true;
+      }
+    })
+    return history;
+  }
+
+  setNumbers(number,start,end){
+    let arr = [];
+    if(start){
+      for(let i = number; i >= start; i --){
+        arr.push(i);
+      }
+    }
+    if(end){
+      for(let i = number; i <= end; i ++){
+        arr.push(i);
+      }
+    }
+    return arr ;
+  }
+
 
   initializationChat = (board_id, im_id) => {
     const {
@@ -289,8 +328,31 @@ class Chat extends Component {
   componentWillReceiveProps(nextProps) {
 
   }
-
   componentWillUnmount() {
+    const {
+      globalData: {
+        store: { dispatch, getState }
+      }
+    } = Taro.getApp();
+
+    const {
+      im: state,
+      im: { nim }
+    } = getState();
+
+    let tempState = {...state};
+    let keys = Object.keys(tempState).filter(item => item.indexOf('history_') != -1);
+    keys.forEach(item => {
+      delete tempState[item]
+    })
+    tempState.history_newSession = [];
+    // 删除存在的历史记录--防止数据量过大报错
+    dispatch({
+      type: 'im/updateStateByReplace',
+      state: {...tempState},
+      desc: 'update sessions'
+    });
+
     const { page_source } = this.state
 
     //页面来源不是项目圈boardChat就不需要执行
