@@ -130,7 +130,7 @@ export default class File extends Component {
 
     loadData = (params) => {
         const { org_id, board_id, folder_id } = params
-        this.fetchAllIMTeamList()
+        // this.fetchAllIMTeamList()
         this.getFilePage(org_id, board_id, folder_id)
     }
 
@@ -153,14 +153,14 @@ export default class File extends Component {
 
     componentWillUnmount() { }
 
-    //获取全部组织和全部项目
-    fetchAllIMTeamList = () => {
-        const { dispatch } = this.props
-        dispatch({
-            type: 'im/fetchAllIMTeamList',
-            payload: {}
-        })
-    }
+    // //获取全部组织和全部项目
+    // fetchAllIMTeamList = () => {
+    //     const { dispatch } = this.props
+    //     dispatch({
+    //         type: 'im/fetchAllIMTeamList',
+    //         payload: {}
+    //     })
+    // }
 
     getFilePage = (org_id, board_id, folder_id) => {
 
