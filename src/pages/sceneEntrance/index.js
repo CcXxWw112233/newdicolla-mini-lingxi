@@ -164,7 +164,7 @@ export default class sceneEntrance extends Component {
                     })
                 })
 
-            } else if (redirectType === '2') {
+            } else if (redirectType === '2' || redirectType === '8') {  //2 任务类型 8 日程类型
                 pageObject = 'taksDetails'
             } else if (redirectType === '3') {
 
@@ -175,7 +175,7 @@ export default class sceneEntrance extends Component {
             }
             if (pageObject) {
                 Taro.navigateTo({
-                    url: `../../pages/${pageObject}/index?contentId=${contentId}&boardId=${boardId}&push=sceneEntrance`
+                    url: `../../pages/${pageObject}/index?contentId=${contentId}&boardId=${boardId}&push=sceneEntrance&flag=${redirectType}`
                 })
             }
         }

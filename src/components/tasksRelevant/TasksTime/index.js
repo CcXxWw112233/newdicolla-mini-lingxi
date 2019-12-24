@@ -63,7 +63,7 @@ export default class TasksTime extends Component {
             <View className={indexStyles.view_Style}>
                 <View className={indexStyles.input_View}>
                     <View className={`${indexStyles.list_item_iconnext}`} onClick={this.tasksRealizeStatus}>
-                        {flag === '0' ? (
+                        {flag === '0' || flag === '2' ? (
                             //任务
                             is_Realize === '1' && isPermission === true ? (
                                 <Text className={`${globalStyles.global_iconfont}`} style={{ color: '#1890FF' }}>&#xe66a;</Text>
@@ -71,8 +71,8 @@ export default class TasksTime extends Component {
                                     <Text className={`${globalStyles.global_iconfont}`}>&#xe661;</Text>
                                 )
                         ) : (
-                                //流程
-                                //当前时间小于结束时间, 流程为: 完成状态
+                                //日程
+                                //当前时间小于结束时间, 日程为: 完成状态
                                 unix > eTime ? (
                                     <Text className={`${globalStyles.global_iconfont}`} style={{ color: '#1890FF' }}>&#xe63e;</Text>
                                 ) : (
