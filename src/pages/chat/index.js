@@ -6,7 +6,6 @@ import ChatContent from './components/ChatContent.js';
 import UserInput from './components/UserInput.js';
 import FileChat from './components/fileChat.js';
 import { connect } from '@tarojs/redux';
-import { getImHistory } from '../../services/im'
 
 @connect(({
   chat: { },
@@ -140,30 +139,13 @@ class Chat extends Component {
   componentDidMount() {
 
     const { fileInfo, pageSource, boardId, } = this.$router.params
+
     this.setState({
       file_info: fileInfo && JSON.parse(fileInfo),
       page_source: pageSource,
     })
-    // this.getHistory();
-    //从项目圈页面过来的不需要初始化IM相关信息
-    if (pageSource === 'boardChat') {
-      return
-    } else {
-      //根据当前board_id查找im_id
-      const { allBoardList } = this.props
-      const fileIsCurrentBoard = allBoardList.filter((item, index) => {
-        if (item.board_id === boardId) {
-          return item
-        }
-      })
-
-      const { im_id } = fileIsCurrentBoard[0]
-
-      //初始化IM相关信息
-      this.initializationChat(boardId, im_id)
-    }
-
   }
+
   concatHistory = (arr) => {
     let { currentGroupSessionList } = this.props;
     let obj = {};
@@ -178,136 +160,19 @@ class Chat extends Component {
     return history;
   }
 
-  setNumbers(number,start,end){
+  setNumbers(number, start, end) {
     let arr = [];
-    if(start){
-      for(let i = number; i >= start; i --){
+    if (start) {
+      for (let i = number; i >= start; i--) {
         arr.push(i);
       }
     }
-    if(end){
-      for(let i = number; i <= end; i ++){
+    if (end) {
+      for (let i = number; i <= end; i++) {
         arr.push(i);
       }
     }
-    return arr ;
-  }
-
-
-  initializationChat = (board_id, im_id) => {
-    const {
-      allBoardList,
-      setCurrentBoardId,
-      setCurrentBoard,
-      checkTeamStatus,
-    } = this.props;
-
-    const getCurrentBoard = (arr, id) => {
-      const ret = arr.find(i => i.board_id === id);
-      return ret ? ret : {};
-    };
-
-    Promise.resolve(setCurrentBoardId(board_id))
-      .then(() => {
-        setCurrentBoard(getCurrentBoard(allBoardList, board_id));
-      })
-      .then(() => {
-        checkTeamStatus(board_id)
-      }).then(() => {
-        this.validGroupChat({ im_id })
-      })
-      .catch(e => console.log('error in boardDetail: ' + e));
-  }
-
-  validGroupChat = ({ im_id }) => {
-    const {
-      setCurrentChatTo,
-      setCurrentGroup,
-      updateCurrentChatUnreadNewsState,
-      currentBoard,
-      currentBoardImValid
-    } = this.props
-
-    if (!im_id) {
-      Taro.showToast({
-        title: '当前群未注册',
-        icon: 'none'
-      });
-      return;
-    }
-
-    const isValid =
-      currentBoardImValid[im_id] && currentBoardImValid[im_id]['isValid'];
-
-    if (!isValid) {
-      // Taro.showToast({
-      //   title: '当前群数据异常',
-      //   icon: 'none'
-      // });
-      // return;
-
-      // console.log('当前群数据异常...')
-      /**
-       * 遇到群聊数据异常的情况, 重新注入registerIm连接
-       */
-      this.registerIm()
-
-      const { globalData: { store: { getState } } } = Taro.getApp()
-      const { im: { nim } } = getState()
-      if (nim) {
-        nim.disconnect({
-          done: () => {
-            console.log('断开连接成功');
-            setTimeout(() => {
-              nim.connect({})
-            }, 50)
-          }
-        })
-      }
-    }
-
-    //生成与 云信后端返回数据相同格式的 id
-    const id = `team-${im_id}`;
-    //设置currentChatTo之后，会自动将该群的新接收的消息更新为已读，
-    //但是如果该群之前有未读消息的时候，需要先更新该群的未读消息状态
-
-    const getCurrentGroup = (currentBoard, im_id) => {
-      if (!currentBoard.childs || !Array.isArray(currentBoard.childs)) {
-        currentBoard.childs = [];
-      }
-      const ret = [currentBoard, ...currentBoard.childs].find(
-        i => i.im_id === im_id
-      );
-      return ret ? ret : {};
-    };
-    Promise.resolve(setCurrentChatTo(id))
-      .then(() => setCurrentGroup(getCurrentGroup(currentBoard, im_id)))
-      .then(() => updateCurrentChatUnreadNewsState(id))
-      .then(() => {
-        console.log('im_chat初始化完成');
-      })
-      .catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
-  }
-
-  registerIm = () => {
-    // console.log('群聊异常执行重新注入Im');
-    const initImData = async () => {
-      const { dispatch } = this.props;
-      const { account, token } = await dispatch({
-        type: 'im/fetchIMAccount'
-      });
-      await dispatch({
-        type: 'im/initNimSDK',
-        payload: {
-          account,
-          token
-        }
-      });
-      return await dispatch({
-        type: 'im/fetchAllIMTeamList'
-      });
-    };
-    initImData().catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
+    return arr;
   }
 
   inputDown = (e) => {
@@ -325,9 +190,6 @@ class Chat extends Component {
     e.stopPropagation();
   }
 
-  componentWillReceiveProps(nextProps) {
-
-  }
   componentWillUnmount() {
     const {
       globalData: {
@@ -340,24 +202,21 @@ class Chat extends Component {
       im: { nim }
     } = getState();
 
-    let tempState = {...state};
+    let tempState = { ...state };
     let keys = Object.keys(tempState).filter(item => item.indexOf('history_') != -1);
     keys.forEach(item => {
       delete tempState[item]
     })
     tempState.history_newSession = [];
-    tempState.currentBoard = {};
     // 删除存在的历史记录--防止数据量过大报错
     dispatch({
       type: 'im/updateStateByReplace',
-      state: {...tempState},
+      state: { ...tempState },
       desc: 'update sessions'
     });
 
     const { page_source } = this.state
 
-    //页面来源不是项目圈boardChat就不需要执行
-    // if (page_source != 'boardChat') {
     //重置当前聊天群id，和当前聊天群信息
     const {
       resetCurrentChatTo,
@@ -367,13 +226,12 @@ class Chat extends Component {
     resetCurrentChatTo();
     resetCurrentGroup();
     resetCurrentGroupSessionList();
-    // }
 
     if (page_source === 'auccessJoin' || page_source === 'sceneEntrance') {
       const switchTabCurrentPage = 'currentPage_BoardDetail_or_Login'
       Taro.setStorageSync('switchTabCurrentPage', switchTabCurrentPage);  //解决wx.switchTab不能传值
       Taro.switchTab({
-        url: `../../pages/calendar/index`
+        url: `../../pages/boardChat/index`
       })
     }
   }
