@@ -17,9 +17,11 @@ import { connect } from '@tarojs/redux';
   ({
     im: {
       currentGroupSessionList,
+      history_newSession
     },
   }) => ({
     currentGroupSessionList,
+    history_newSession
   }),
 )
 class ChatItem extends Component {
@@ -203,11 +205,7 @@ class ChatItem extends Component {
   };
 
   onResendMessage = (someMsg) => {
-
-    const { currentGroupSessionList } = this.props
-    /**
-     * 重新发送
-     */
+    const { history_newSession , dispatch} = this.props ;
     // 1.1 遍历出失败的那条在本地渲染列表数组中删掉
     Array.prototype.removeByValue = function (val) {
       for (var i = 0; i < this.length; i++) {
@@ -216,11 +214,41 @@ class ChatItem extends Component {
           break;
         }
       }
+      return this ;
     };
-    currentGroupSessionList.removeByValue(someMsg);
+    Taro.showActionSheet({
+      itemList: ['重新发送', '删除']
+    })
+      .then(res => {
+        let { tapIndex } = res;
+        if( tapIndex === 0){
+          /**
+           * 重新发送
+           */
 
-    // 1.2 把需要重新发送的那条消息重新发送
-    onResendMsg(someMsg)
+          // 1.2 把需要重新发送的那条消息重新发送
+          onResendMsg(someMsg)
+          // 删除这条失败的数据
+          let arr = [...history_newSession].removeByValue(someMsg);
+          dispatch({
+            type:"im/updateStateFieldByCover",
+            payload:{
+              history_newSession: arr
+            }
+          })
+        }
+        else if(tapIndex === 1){
+          // 删除
+          let arr = [...history_newSession].removeByValue(someMsg);
+          dispatch({
+            type:"im/updateStateFieldByCover",
+            payload:{
+              history_newSession: arr
+            }
+          })
+        }
+      })
+      .catch(err => console.log(err.errMsg))
   }
 
   render() {

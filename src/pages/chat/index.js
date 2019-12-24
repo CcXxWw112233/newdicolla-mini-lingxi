@@ -346,6 +346,7 @@ class Chat extends Component {
       delete tempState[item]
     })
     tempState.history_newSession = [];
+    tempState.currentBoard = {};
     // 删除存在的历史记录--防止数据量过大报错
     dispatch({
       type: 'im/updateStateByReplace',

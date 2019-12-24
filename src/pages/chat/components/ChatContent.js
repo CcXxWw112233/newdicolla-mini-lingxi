@@ -67,8 +67,8 @@ class ChatContent extends Component {
       chatConetntViewHeightStyle: '',
       isIosHomeIndicator: false,  //是否iPhone X 及以上设备
       firstIn: true,
-      IsBottom: true,
-      loadPrev : false
+      loadPrev : false,
+      newMsg:false
     };
     //是否正在 touch 聊天列表
     this.isTouchingScrollView = false;
@@ -289,7 +289,9 @@ class ChatContent extends Component {
     })
   }
   // 加载下一页
-  loadNext = ()=>{}
+  loadNext = ()=>{
+
+  }
 
   componentDidMount() {
     this.getHistory().then(data => {
@@ -315,10 +317,16 @@ class ChatContent extends Component {
   componentWillReceiveProps(nextProps) {
     //这里接收到的nextProps的值是有问题的
     //导致更新现有消息的消息列表只能在 nim 的  onMsg 的方法回调中处理
-    let { history_newSession } = nextProps;
+    let { history_newSession ,userUID} = nextProps;
     if(history_newSession.length){
-      if(this.IsBottom)
-      this.setCurrentIdServer(history_newSession[history_newSession.length - 1]);
+      let obj = history_newSession[history_newSession.length - 1];
+      if(this.IsBottom || obj.from === userUID)
+      this.setCurrentIdServer(obj);
+      else if(!this.IsBottom && obj.from != userUID && (this.props.history_newSession.length != history_newSession.length)){
+        this.setState({
+          newMsg:true
+        })
+      }
     }
     //解决长按文件进入聊天页面, 不显示聊天消息列表, 此生命周期里重新渲染一遍
     this.handleGenSessionListWhenToggleIsOnlyShowInform(
@@ -380,13 +388,24 @@ class ChatContent extends Component {
   onScrolltolower = () => {
     this.IsBottom = true;
     let { loadNext } = this.props;
-    loadNext && loadNext()
+    // loadNext && loadNext()
+    // 清除有新消息按钮
+    this.setState({
+      newMsg:false
+    })
   }
   renderList = () => {
     let keys = [...Object.keys(this.props)];
     // console.log(keys)
     keys = keys.filter(item => item.indexOf('history_')!= -1);
     return keys ;
+  }
+  readNewMsg = () =>{
+    let { history_newSession } = this.props;
+    this.setState({
+      newMsg:false
+    })
+    this.setCurrentIdServer(history_newSession[0]);
   }
 
   render() {
@@ -395,7 +414,7 @@ class ChatContent extends Component {
       isOnlyShowInform,
       isUserInputHeightChange,
     } = this.props;
-    const { scrollIntoViewEleId, chatConetntViewHeightStyle, isIosHomeIndicator, firstIn ,loadPrev} = this.state;
+    const { scrollIntoViewEleId, chatConetntViewHeightStyle, isIosHomeIndicator, firstIn ,loadPrev ,newMsg} = this.state;
 
     return (
       <ScrollView
@@ -473,6 +492,7 @@ class ChatContent extends Component {
 
         </View>
         <View id={scrollIntoViewEleId} className={styles.scrollToBottomIdEle} />
+        { newMsg && <View className={styles.hasNewMsg} onClick={this.readNewMsg}>有新消息<Text className={`${globalStyles.global_iconfont}`} style={{marginLeft: '5px'}}>&#xe642;</Text></View> }
       </ScrollView>
     );
   }

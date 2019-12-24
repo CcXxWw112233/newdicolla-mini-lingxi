@@ -101,7 +101,7 @@ function onMsg(msg) {
     })
   }else{
     // 如果没有打开的群聊，先添加未读数
-    if(msg.type != 'notification')
+    if(msg.type != 'notification' && msg.from != tempState.userUID)
     tempState.allBoardList.map(item => {
       if(item.im_id === msg.target){
         let unread = +(item.unread || 0);
