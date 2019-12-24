@@ -6,9 +6,75 @@ import pc_Website_image from '../../asset/Invitation/pcWebsite.png'
 import globalStyles from '../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
 
-@connect(({ im: { allBoardList, }, }) => ({
+@connect(({ im:
+  {
+    allBoardList,
+    currentBoard,
+  },
+}) => ({
   allBoardList,
-}))
+  currentBoard,
+}),
+  dispatch => {
+    return {
+      setCurrentBoardId: boardId => {
+        dispatch({
+          type: 'im/updateStateFieldByCover',
+          payload: {
+            currentBoardId: boardId
+          },
+          desc: 'im set current board id.'
+        })
+      },
+      setCurrentBoard: (board = {}) => {
+        dispatch({
+          type: 'im/updateStateFieldByCover',
+          payload: {
+            currentBoard: board
+          },
+          desc: 'im set current board.'
+        })
+      },
+      checkTeamStatus: boardId => {
+        dispatch({
+          type: 'im/checkTeamStatus',
+          payload: {
+            boardId
+          },
+          desc: 'check im team status.'
+        })
+      },
+
+
+      setCurrentChatTo: im_id =>
+        dispatch({
+          type: 'im/updateStateFieldByCover',
+          payload: {
+            currentChatTo: im_id
+          },
+          desc: 'set currentChatTo'
+        }),
+      setCurrentGroup: (group = {}) => {
+        dispatch({
+          type: 'im/updateStateFieldByCover',
+          payload: {
+            currentGroup: group
+          },
+          desc: 'set current chat group.'
+        });
+      },
+      updateCurrentChatUnreadNewsState: im_id =>
+        dispatch({
+          type: 'im/updateCurrentChatUnreadNewsState',
+          payload: {
+            im_id
+          },
+          desc: 'update currentChat unread news'
+        }),
+    }
+  }
+)
+
 export default class auccessJoin extends Component {
   config = {
     navigationBarTitleText: '聆悉'
@@ -30,17 +96,8 @@ export default class auccessJoin extends Component {
     this.setState({
       board_id: boardId,
     })
-    // const isLoginStatus = Taro.getStorageSync('isLoginStatus')
-    // if (route === "acceptInvitation" && isLoginStatus === 'yes') {
-    //   const { dispatch } = this.props
-    //   dispatch({
-    //     type: 'login/registerIm',
-    //   });
-    // }
-    // else {
-    this.getOrgList()
-    this.fetchAllIMTeamList()
-    // }
+
+    // this.getOrgList()
   }
   componentWillReceiveProps() { }
 
@@ -56,16 +113,6 @@ export default class auccessJoin extends Component {
     dispatch({
       type: 'my/getOrgList',
       payload: {}
-    })
-  }
-
-  fetchAllIMTeamList = () => {
-    const { dispatch } = this.props
-    dispatch({
-      type: 'im/fetchAllIMTeamList',
-      payload: {
-
-      }
     })
   }
 
@@ -87,9 +134,71 @@ export default class auccessJoin extends Component {
     //查找当前文件对应的board, 对应的im_id
     const { board_id } = this.state
 
-    Taro.navigateTo({
-      url: `../../pages/chat/index?boardId=${board_id}&pageSource=auccessJoin`
+    const { setCurrentBoardId, setCurrentBoard, allBoardList, checkTeamStatus, } = this.props
+    const fileIsCurrentBoard = allBoardList.filter((item, index) => {
+      if (item.board_id === board_id) {
+        return item
+      }
     })
+
+    if (fileIsCurrentBoard.length === 0) return
+    const { im_id } = fileIsCurrentBoard && fileIsCurrentBoard[0]
+
+    const getCurrentBoard = (arr, id) => {
+      const ret = arr.find(i => i.board_id === id);
+      return ret ? ret : {};
+    };
+    Promise.resolve(setCurrentBoardId(board_id))
+      .then(() => {
+        setCurrentBoard(getCurrentBoard(allBoardList, board_id))
+      }).then(() => {
+        checkTeamStatus(board_id)
+      }).then(() => {
+        this.validGroupChat({ im_id })
+      })
+      .catch(e => console.log('error in boardDetail: ' + e));
+  }
+
+  validGroupChat = ({ im_id }, ) => {
+    const {
+      setCurrentChatTo,
+      setCurrentGroup,
+      updateCurrentChatUnreadNewsState,
+      currentBoard,
+    } = this.props
+
+    if (!im_id) {
+      Taro.showToast({
+        title: '当前群未注册',
+        icon: 'none'
+      });
+      return;
+    }
+
+    //生成与 云信后端返回数据相同格式的 id
+    const id = `team-${im_id}`;
+    //设置currentChatTo之后，会自动将该群的新接收的消息更新为已读，
+    //但是如果该群之前有未读消息的时候，需要先更新该群的未读消息状态
+    const getCurrentGroup = (currentBoard, im_id) => {
+      if (!currentBoard.childs || !Array.isArray(currentBoard.childs)) {
+        currentBoard.childs = [];
+      }
+      const ret = [currentBoard, ...currentBoard.childs].find(
+        i => i.im_id === im_id
+      );
+      return ret ? ret : {};
+    };
+
+    Promise.resolve(setCurrentChatTo(id))
+      .then(() => setCurrentGroup(getCurrentGroup(currentBoard, im_id)))
+      .then(() => updateCurrentChatUnreadNewsState(id))
+      .then(() => {
+        const { board_id } = currentBoard
+        Taro.navigateTo({
+          url: `../../pages/chat/index?boardId=${board_id}&pageSource=auccessJoin`
+        })
+      })
+      .catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
   }
 
   render() {

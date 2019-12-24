@@ -126,9 +126,9 @@ export default {
           });
         }
       }
-      return ;
+      return;
     },
-    *mergeHistory({ payload }, { select, call, put }){
+    *mergeHistory({ payload }, { select, call, put }) {
       let { data } = payload;
       const { currentGroupSessionList } = yield selectFieldsFromIm(
         select,
@@ -138,16 +138,16 @@ export default {
       let h = currentGroupSessionList.concat(data);
       let history = [];
       h.forEach(item => {
-        if(item && !obj[item.idServer]){
+        if (item && !obj[item.idServer]) {
           history.push(item);
           obj[item.idServer] = true;
         }
       })
-      console.log(history,'history')
+      console.log(history, 'history')
       yield put({
-        type:"updateStateFieldByCover",
-        payload:{
-          currentGroupSessionList: history.sort((a,b)=> a.time - b.time)
+        type: "updateStateFieldByCover",
+        payload: {
+          currentGroupSessionList: history.sort((a, b) => a.time - b.time)
         }
       })
     },
@@ -344,7 +344,6 @@ export default {
     },
     *sendMsg({ payload }, { select }) {
       const { scene, to, text } = payload;
-
       const { nim } = yield selectFieldsFromIm(select, 'nim');
       nim.sendText({
         scene,
@@ -372,29 +371,29 @@ export default {
       });
     },
     // 更新列表未读数
-    *updateBoardUnread({ payload }, { select, call, put }){
-      let {unread , param, im_id} = payload ;
+    *updateBoardUnread({ payload }, { select, call, put }) {
+      let { unread, param, im_id } = payload;
       const res = yield call(setImHistoryRead, param);
-      console.log(res,'设置未读数为0')
-      const {  allBoardList } = yield selectFieldsFromIm(select, [
+      console.log(res, '设置未读数为0')
+      const { allBoardList } = yield selectFieldsFromIm(select, [
         'nim',
         'allBoardList'
       ]);
       if (isApiResponseOk(res)) {
         let list = [...allBoardList];
         list.map(item => {
-          if(item.im_id === im_id){
+          if (item.im_id === im_id) {
             item.unread = unread;
           }
           return item;
         })
         yield put({
-          type:"updateStateFieldByCover",
-          payload:{
+          type: "updateStateFieldByCover",
+          payload: {
             allBoardList: JSON.parse(JSON.stringify(list))
           }
         })
-        return ;
+        return;
       }
     },
 

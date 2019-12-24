@@ -88,33 +88,7 @@ export default class Calendar extends Component {
 
   componentWillMount() { }
 
-  componentDidMount() {
-
-    const switchTabCurrentPage = 'currentPage_BoardDetail_or_Login'
-    const routeSource = Taro.getStorageSync('switchTabCurrentPage')
-    if (routeSource === switchTabCurrentPage) {
-      Taro.removeStorageSync('switchTabCurrentPage')
-    }
-    else {
-      this.registerIm()
-    }
-
-    // //项目圈消息提醒
-    // const { sessionlist } = this.props
-
-    // if (sessionlist.length != 0) {
-    //   //消息未读数
-    //   var unRead = JSON.stringify(sessionlist.length)
-    //   Taro.setTabBarBadge({
-    //     index: 1,
-    //     text: sessionlist.length > 99 ? '99+' : unRead,
-    //   })
-    // } else {
-    //   wx.hideTabBarRedDot({
-    //     index: 1
-    //   })
-    // }
-  }
+  componentDidMount() { }
 
   componentDidShow() {
     const { selected_board_name, } = this.props
@@ -268,26 +242,6 @@ export default class Calendar extends Component {
     Taro.navigateTo({
       url: '../../pages/addingTasks/index'
     })
-  }
-
-  registerIm = () => {
-    const initImData = async () => {
-      const { dispatch } = this.props;
-      const { account, token } = await dispatch({
-        type: 'im/fetchIMAccount'
-      });
-      await dispatch({
-        type: 'im/initNimSDK',
-        payload: {
-          account,
-          token
-        }
-      });
-      return await dispatch({
-        type: 'im/fetchAllIMTeamList'
-      });
-    };
-    initImData().catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
   }
 
   showPersonalCenter = (value) => {

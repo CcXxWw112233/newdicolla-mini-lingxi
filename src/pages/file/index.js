@@ -20,6 +20,7 @@ import { BASE_URL, API_BOARD } from "../../gloalSet/js/constant";
     },
     im: {
         allBoardList,
+        currentBoard,
     } }) => ({
         file_list,
         isShowBoardList,
@@ -27,7 +28,67 @@ import { BASE_URL, API_BOARD } from "../../gloalSet/js/constant";
         isShowChoiceFolder,
         allBoardList,
         selected_board_folder_info,
-    }))
+        currentBoard,
+    }),
+    dispatch => {
+        return {
+            setCurrentBoardId: boardId => {
+                dispatch({
+                    type: 'im/updateStateFieldByCover',
+                    payload: {
+                        currentBoardId: boardId
+                    },
+                    desc: 'im set current board id.'
+                })
+            },
+            setCurrentBoard: (board = {}) => {
+                dispatch({
+                    type: 'im/updateStateFieldByCover',
+                    payload: {
+                        currentBoard: board
+                    },
+                    desc: 'im set current board.'
+                })
+            },
+            checkTeamStatus: boardId => {
+                dispatch({
+                    type: 'im/checkTeamStatus',
+                    payload: {
+                        boardId
+                    },
+                    desc: 'check im team status.'
+                })
+            },
+
+
+            setCurrentChatTo: im_id =>
+                dispatch({
+                    type: 'im/updateStateFieldByCover',
+                    payload: {
+                        currentChatTo: im_id
+                    },
+                    desc: 'set currentChatTo'
+                }),
+            setCurrentGroup: (group = {}) => {
+                dispatch({
+                    type: 'im/updateStateFieldByCover',
+                    payload: {
+                        currentGroup: group
+                    },
+                    desc: 'set current chat group.'
+                });
+            },
+            updateCurrentChatUnreadNewsState: im_id =>
+                dispatch({
+                    type: 'im/updateCurrentChatUnreadNewsState',
+                    payload: {
+                        im_id
+                    },
+                    desc: 'update currentChat unread news'
+                }),
+        }
+    }
+)
 export default class File extends Component {
     config = {
         navigationBarTitleText: '文件',
@@ -102,7 +163,6 @@ export default class File extends Component {
     }
 
     getFilePage = (org_id, board_id, folder_id) => {
-        console.log(org_id, board_id, folder_id, 'ssss');
 
         //保存数据, 用作下拉刷新参数
         const params = {
@@ -245,9 +305,8 @@ export default class File extends Component {
         Taro.setStorageSync('isRefreshFetchAllIMTeamList', 'true')
         Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
 
-        const { dispatch } = this.props
+        const { dispatch, setCurrentBoardId, setCurrentBoard, allBoardList, checkTeamStatus, } = this.props
         const { board_id } = value
-
         dispatch({
             type: 'file/updateDatas',
             payload: {
@@ -255,9 +314,72 @@ export default class File extends Component {
             },
         })
 
-        Taro.navigateTo({
-            url: `../../pages/chat/index?fileInfo=${JSON.stringify(value)}&pageSource=isFileComment&boardId=${board_id}`
+        const fileIsCurrentBoard = allBoardList.filter((item, index) => {
+            if (item.board_id === board_id) {
+                return item
+            }
         })
+
+        if (fileIsCurrentBoard.length === 0) return
+        const { im_id } = fileIsCurrentBoard && fileIsCurrentBoard[0]
+
+        const getCurrentBoard = (arr, id) => {
+            const ret = arr.find(i => i.board_id === id);
+            return ret ? ret : {};
+        };
+        Promise.resolve(setCurrentBoardId(board_id))
+            .then(() => {
+                setCurrentBoard(getCurrentBoard(allBoardList, board_id))
+            }).then(() => {
+                checkTeamStatus(board_id)
+            }).then(() => {
+                this.validGroupChat({ im_id }, { value })
+            })
+            .catch(e => console.log('error in boardDetail: ' + e));
+    }
+
+    validGroupChat = ({ im_id }, { value }) => {
+        const {
+            setCurrentChatTo,
+            setCurrentGroup,
+            updateCurrentChatUnreadNewsState,
+            currentBoard,
+        } = this.props
+
+        if (!im_id) {
+            Taro.showToast({
+                title: '当前群未注册',
+                icon: 'none'
+            });
+            return;
+        }
+
+        //生成与 云信后端返回数据相同格式的 id
+        const id = `team-${im_id}`;
+        //设置currentChatTo之后，会自动将该群的新接收的消息更新为已读，
+        //但是如果该群之前有未读消息的时候，需要先更新该群的未读消息状态
+        const getCurrentGroup = (currentBoard, im_id) => {
+            if (!currentBoard.childs || !Array.isArray(currentBoard.childs)) {
+                currentBoard.childs = [];
+            }
+            const ret = [currentBoard, ...currentBoard.childs].find(
+                i => i.im_id === im_id
+            );
+            return ret ? ret : {};
+        };
+
+        Promise.resolve(setCurrentChatTo(id))
+            .then(() => setCurrentGroup(getCurrentGroup(currentBoard, im_id)))
+            .then(() => updateCurrentChatUnreadNewsState(id))
+            .then(() => {
+                Taro.setStorageSync('isRefreshFetchAllIMTeamList', 'true')
+                const { board_id } = currentBoard
+
+                Taro.navigateTo({
+                    url: `../../pages/chat/index?fileInfo=${JSON.stringify(value)}&pageSource=isFileComment&boardId=${board_id}`
+                })
+            })
+            .catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
     }
 
     closeTips = () => {
@@ -448,7 +570,7 @@ export default class File extends Component {
 
     render() {
 
-        const { file_list, isShowBoardList, header_folder_name, isShowChoiceFolder } = this.props
+        const { file_list = [], isShowBoardList, header_folder_name, isShowChoiceFolder } = this.props
         const { is_tips_longpress_file, choice_image_temp_file_paths = [] } = this.state
 
         return (
@@ -481,7 +603,7 @@ export default class File extends Component {
                     </View>
                 </View>
                 {
-                    file_list.length !== 0 ? (<View className={indexStyles.grid_style}>
+                    file_list && file_list.length !== 0 ? (<View className={indexStyles.grid_style}>
                         {file_list.map((value, key) => {
                             const { thumbnail_url, } = value
 

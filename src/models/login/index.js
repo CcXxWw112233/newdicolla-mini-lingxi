@@ -106,8 +106,10 @@ export default {
         //从sceneEntrance页面过来的, 登录后继续去boardDetails页面
         const sceneEntrance_Goto_Other = Taro.getStorageSync('sceneEntrance_Goto_Other')
         //服务消息每日代办进入小程序, 自动切换为全组织,登录成后自动切换 
+        console.log(sceneEntrance_Goto_Other, 'kkkk');
+
         const todoListData = Taro.getStorageSync('isTodoList')
-        if (sceneEntrance_Goto_Other === 'boardDetail') {
+        if (sceneEntrance_Goto_Other === 'chat') {
           Promise.resolve(  //再次查询项目有没有失效
             dispatches({
               type: 'board/getBoardDetail',
@@ -118,13 +120,11 @@ export default {
           ).then(res => {
             if (isApiResponseOk(res)) {
               Taro.navigateTo({
-                // url: `../../pages/boardDetail/index?boardId=${boardId}&push=${payload.sourcePage}`
-                url: `../../pages/chat/index?pageSource=${payload.sourcePage}&boardId=${board_id}`
+                url: `../../pages/chat/index?pageSource=${payload.sourcePage}&boardId=${boardId}`
               })
             }
           })
-        }
-        else if (todoListData) {
+        } else if (todoListData) {
           Promise.resolve(
             dispatches({
               type: 'my/changeCurrentOrg',

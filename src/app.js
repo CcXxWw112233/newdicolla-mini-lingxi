@@ -14,10 +14,10 @@ const dvaApp = dva.createApp({
   initialState: {},
   models: models,
   onError: function (e) {
-    console.log('sssss_dva_error', e)
+    // console.log('sssss_dva_error', e)
   },
   onChange: function (e) {
-    console.log('sssss_dva_change', e)
+    // console.log('sssss_dva_change', e)
   }
 });
 const store = dvaApp.getStore();
@@ -104,7 +104,30 @@ class App extends Component {
     store,
   }
 
-  componentDidMount() { }
+  componentDidMount() {
+    //进入miniapp初始化IM
+    this.registerIm()
+  }
+
+  registerIm = () => {
+    const initImData = async () => {
+      const { dispatch } = store
+      const { account, token } = await dispatch({
+        type: 'im/fetchIMAccount'
+      });
+      await dispatch({
+        type: 'im/initNimSDK',
+        payload: {
+          account,
+          token
+        }
+      });
+      return await dispatch({
+        type: 'im/fetchAllIMTeamList'
+      });
+    };
+    initImData().catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
+  }
 
   componentDidShow() {
 

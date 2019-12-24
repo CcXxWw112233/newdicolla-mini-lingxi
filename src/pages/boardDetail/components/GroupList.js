@@ -89,7 +89,7 @@ class GroupList extends Component {
       /**
        * 遇到群聊数据异常的情况, 重新注入registerIm连接
        */
-      this.registerIm()
+      // this.registerIm()
 
       const { globalData: { store: { getState } } } = Taro.getApp()
       const { im: { nim } } = getState()

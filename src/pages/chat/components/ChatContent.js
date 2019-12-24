@@ -29,7 +29,7 @@ import { getImHistory } from '../../../services/im'
     im,
     chat: { isUserInputFocus, isUserInputHeightChange }
   }) => {
-    let keys = Object.keys(im).filter(item => item.indexOf('history_')!= -1);
+    let keys = Object.keys(im).filter(item => item.indexOf('history_') != -1);
     let obj = {}
     keys.forEach(item => {
       obj[item] = im[item]
@@ -68,7 +68,7 @@ class ChatContent extends Component {
       isIosHomeIndicator: false,  //是否iPhone X 及以上设备
       firstIn: true,
       IsBottom: true,
-      loadPrev : false
+      loadPrev: false
     };
     //是否正在 touch 聊天列表
     this.isTouchingScrollView = false;
@@ -81,7 +81,7 @@ class ChatContent extends Component {
 
     }
     this.renderMapList = [];
-    this.isLoading = false ;
+    this.isLoading = false;
   }
   genCurrentGroupSessionList = () => {
     const {
@@ -195,17 +195,17 @@ class ChatContent extends Component {
   };
   getHistory = (flow = 'up') => {
     let { dispatch } = this.props;
-    return new Promise((resolve,reject) =>{
+    return new Promise((resolve, reject) => {
       let { currentBoard, dispatch, userUID } = this.props;
       let { im_id } = currentBoard;
       this.setState({
-        loadPrev:true
+        loadPrev: true
       })
-      this.isLoading = true ;
+      this.isLoading = true;
       // 获取历史记录
       getImHistory({ id: im_id, page_size: 10, page_number: this.page_number }).then(res => {
         // 查询所有已存在的列表
-        let readyKey = Object.keys(this.props).filter(item => item.indexOf('history_')!= -1);
+        let readyKey = Object.keys(this.props).filter(item => item.indexOf('history_') != -1);
         let readyList = [];
         // 组合成一个数据
         readyKey.forEach(item => {
@@ -217,7 +217,7 @@ class ChatContent extends Component {
         // 去重对象- key => true
         let obj = {}
         readyList.forEach(item => {
-          if(!obj[item.idServer]){
+          if (!obj[item.idServer]) {
             obj[item.idServer] = true;
           }
         })
@@ -236,45 +236,45 @@ class ChatContent extends Component {
             }
           }
           // 如果不存在，就push进去，去重
-          if(!obj[item.idServer]){
+          if (!obj[item.idServer]) {
             arr.push(item);
           }
           resolve(arr);
         })
 
-        this.page_number += 1 ;
+        this.page_number += 1;
 
         // 保存历史数据
         dispatch({
-          type:"im/updateStateFieldByCover",
-          payload:{
-            [key]: arr.sort((a,b) => a.time - b.time)
+          type: "im/updateStateFieldByCover",
+          payload: {
+            [key]: arr.sort((a, b) => a.time - b.time)
           }
         })
         this.setState({
-          loadPrev:false
+          loadPrev: false
         })
-        setTimeout(()=>{
-          this.isLoading = false ;
-        },100)
+        setTimeout(() => {
+          this.isLoading = false;
+        }, 100)
       })
     })
   }
   // 加载下一页数据
-  loadPrev = ()=>{
-    if(!this.isLoading){
+  loadPrev = () => {
+    if (!this.isLoading) {
       let keys = Object.keys(this.props).filter(item => item.indexOf('history_') != -1);
       let data = keys[keys.length - 1];
-      this.getHistory().then( _ => {
+      this.getHistory().then(_ => {
         let current = this.props[data][0];
         this.setCurrentIdServer(current);
       });
     }
 
   }
-  setCurrentIdServer = (data)=> {
+  setCurrentIdServer = (data) => {
     let key = "";
-    if(data){
+    if (data) {
       key = 'item_' + data.idServer
     }
     this.setState({
@@ -282,7 +282,7 @@ class ChatContent extends Component {
     })
   }
   // 加载下一页
-  loadNext = ()=>{}
+  loadNext = () => { }
 
   componentDidMount() {
     this.getHistory().then(data => {
@@ -309,9 +309,9 @@ class ChatContent extends Component {
     //这里接收到的nextProps的值是有问题的
     //导致更新现有消息的消息列表只能在 nim 的  onMsg 的方法回调中处理
     let { history_newSession } = nextProps;
-    if(history_newSession.length){
-      if(this.IsBottom)
-      this.setCurrentIdServer(history_newSession[history_newSession.length - 1]);
+    if (history_newSession.length) {
+      if (this.IsBottom)
+        this.setCurrentIdServer(history_newSession[history_newSession.length - 1]);
     }
     //解决长按文件进入聊天页面, 不显示聊天消息列表, 此生命周期里重新渲染一遍
     this.handleGenSessionListWhenToggleIsOnlyShowInform(
@@ -333,19 +333,6 @@ class ChatContent extends Component {
   }
 
   componentDidShow() {
-    // 当进入聊天页面的时候，生成该群或者对话的聊天信息流
-
-    // const { dispatch } = this.props;
-    // dispatch({
-    //   type: 'im/updateStateFieldByCover',
-    //   payload: {
-    //     currentGroupSessionList: this.genCurrentGroupSessionList()
-    //   },
-    //   desc: 'init currentGroupSessionList'
-    // });
-
-    // 当进入聊天页面的时候，生成该群或者对话的聊天信息流
-    // 遍历循环删除失败的消息(暂时解决方法)
 
     // const pageSource_chat = Taro.getStorageSync('pageSource_chat')
     let getCurrentGroupSessionList = []
@@ -357,18 +344,6 @@ class ChatContent extends Component {
         getCurrentGroupSessionList.splice(i, 1);
       }
     }
-    // } else {
-    //   getCurrentGroupSessionList = this.genCurrentGroupSessionList()
-    // }
-
-    // const { dispatch } = this.props;
-    // dispatch({
-    //   type: 'im/updateStateFieldByCover',
-    //   payload: {
-    //     currentGroupSessionList: getCurrentGroupSessionList
-    //   },
-    //   desc: 'init currentGroupSessionList'
-    // });
   }
   onScrolltolower = () => {
     this.IsBottom = true;
@@ -378,8 +353,8 @@ class ChatContent extends Component {
   renderList = () => {
     let keys = [...Object.keys(this.props)];
     // console.log(keys)
-    keys = keys.filter(item => item.indexOf('history_')!= -1);
-    return keys ;
+    keys = keys.filter(item => item.indexOf('history_') != -1);
+    return keys;
   }
 
   render() {
@@ -388,7 +363,7 @@ class ChatContent extends Component {
       isOnlyShowInform,
       isUserInputHeightChange,
     } = this.props;
-    const { scrollIntoViewEleId, chatConetntViewHeightStyle, isIosHomeIndicator, firstIn ,loadPrev} = this.state;
+    const { scrollIntoViewEleId, chatConetntViewHeightStyle, isIosHomeIndicator, firstIn, loadPrev } = this.state;
 
     return (
       <ScrollView
@@ -408,7 +383,7 @@ class ChatContent extends Component {
         onTouchEnd={this.onScrollViewTouchEnd}
         style={chatConetntViewHeightStyle}
       >
-        { loadPrev &&  <View className={styles.loadMoreChat}>加载中...</View> }
+        {loadPrev && <View className={styles.loadMoreChat}>加载中...</View>}
         <View
           className={`${globalStyles.global_iconfont} ${
             styles.filterInformWrapper
@@ -431,38 +406,38 @@ class ChatContent extends Component {
               ? isUserInputHeightChange + 'px'
               : '0px'
           }}
-        >   { this.renderList().map((item,key) =>{
-              return (
-                <View key={item}>
-                {
-                  this.props[item].map((i, index, arr) => {
-                    return (
-                      <View className={styles.chatItemWrapper} key={i.time} id={'item_' + i.idServer}>
-                        {this.isShouldShowTimestamp(index, arr) && (
-                          <ChatItem type='timestamp' time={i.time} />
-                        )}
-                        <ChatItem
-                          flow={i.flow}
-                          fromNick={i.fromNick}
-                          avatar={this.getAvatar(i)}
-                          // avatar={i.avatar}
-                          status={i.status}
-                          time={i.time}
-                          type={i.type}
-                          text={i.text}
-                          file={i.file}
-                          content={i.content}
-                          pushContent={i.pushContent}
-                          groupNotification={i.groupNotification}
-                          someMsg={i}
-                        />
-                      </View>
-                    );
-                  })
-                }
-                </View>
-              )
-            })}
+        >   {this.renderList().map((item, key) => {
+          return (
+            <View key={item}>
+              {
+                this.props[item].map((i, index, arr) => {
+                  return (
+                    <View className={styles.chatItemWrapper} key={i.time} id={'item_' + i.idServer}>
+                      {this.isShouldShowTimestamp(index, arr) && (
+                        <ChatItem type='timestamp' time={i.time} />
+                      )}
+                      <ChatItem
+                        flow={i.flow}
+                        fromNick={i.fromNick}
+                        avatar={this.getAvatar(i)}
+                        // avatar={i.avatar}
+                        status={i.status}
+                        time={i.time}
+                        type={i.type}
+                        text={i.text}
+                        file={i.file}
+                        content={i.content}
+                        pushContent={i.pushContent}
+                        groupNotification={i.groupNotification}
+                        someMsg={i}
+                      />
+                    </View>
+                  );
+                })
+              }
+            </View>
+          )
+        })}
 
         </View>
         <View id={scrollIntoViewEleId} className={styles.scrollToBottomIdEle} />

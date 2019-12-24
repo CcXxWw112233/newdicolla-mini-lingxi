@@ -284,40 +284,14 @@ export default class BoardChat extends Component {
             Promise.resolve(setCurrentBoardId(board_id))
                 .then(() => {
                     setCurrentBoard(getCurrentBoard(allBoardList, board_id));
-                })
-                .then(() => {
+                }).then(() => {
                     checkTeamStatus(board_id)
                 }).then(() => {
                     this.validGroupChat({ im_id })
                 })
                 .catch(e => console.log('error in boardDetail: ' + e));
-
         });
-
-
     };
-
-    registerIm = () => {
-        // console.log('群聊异常执行重新注入Im');
-        const initImData = async () => {
-            const { dispatch } = this.props;
-            const { account, token } = await dispatch({
-                type: 'im/fetchIMAccount'
-            });
-            await dispatch({
-                type: 'im/initNimSDK',
-                payload: {
-                    account,
-                    token
-                }
-            });
-            // console.log('重新加载了所有列表')
-            return await dispatch({
-                type: 'im/fetchAllIMTeamList'
-            });
-        };
-        initImData().catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
-    }
 
     validGroupChat = ({ im_id }) => {
         const {
@@ -325,7 +299,6 @@ export default class BoardChat extends Component {
             setCurrentGroup,
             updateCurrentChatUnreadNewsState,
             currentBoard,
-            currentBoardImValid,
             allBoardList
         } = this.props
 
@@ -336,36 +309,6 @@ export default class BoardChat extends Component {
             });
             return;
         }
-
-        // const isValid =
-        //     currentBoardImValid[im_id] && currentBoardImValid[im_id]['isValid'];
-        // console.log(currentBoardImValid)
-        // if (!isValid) {
-        //     // Taro.showToast({
-        //     //   title: '当前群数据异常',
-        //     //   icon: 'none'
-        //     // });
-        //     // return;
-
-        //     // console.log('当前群数据异常...')
-        //     /**
-        //      * 遇到群聊数据异常的情况, 重新注入registerIm连接
-        //      */
-        //     this.registerIm()
-
-        //     const { globalData: { store: { getState } } } = Taro.getApp()
-        //     const { im: { nim } } = getState()
-        //     if (nim) {
-        //         nim.disconnect({
-        //             done: () => {
-        //                 console.log('断开连接成功');
-        //                 setTimeout(() => {
-        //                     nim.connect({})
-        //                 }, 50)
-        //             }
-        //         })
-        //     }
-        // }
 
         //生成与 云信后端返回数据相同格式的 id
         const id = `team-${im_id}`;
@@ -395,7 +338,6 @@ export default class BoardChat extends Component {
                 })
                 .catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
         });
-
     }
 
     onSelectType = ({ show_type }) => {
@@ -416,21 +358,6 @@ export default class BoardChat extends Component {
     };
 
     genLastMsg = (lastMsg = {}) => {
-        // const { fromNick, type, text } = lastMsg;
-        // if (!fromNick) return '';
-        // const typeCond = {
-        //     text,
-        //     audio: '[语音]',
-        //     image: '[图片]',
-        //     video: '[视频]',
-        //     custom: '[动态消息]',
-        //     notification: '[系统通知]',
-        // };
-        // if (type === 'text') {
-        //     return `${fromNick}: ${text}`;
-        // }
-        // return typeCond[type] ? typeCond[type] : '[未知类型消息]';
-
         if (JSON.stringify(lastMsg) != "{}" && lastMsg.status === "success") {  //lastMsg不为空并且成功才执行
             const { fromNick, type, text, file, custom, } = lastMsg;
             const typeCond = {
