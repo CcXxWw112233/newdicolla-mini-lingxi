@@ -8,7 +8,7 @@ import {
   isPinupEmojiNews,
   isNotificationNews
 } from './../utils/genNews.js';
-import { deep } from '../../../utils/util'
+import { deep ,filterListAuth} from '../../../utils/util'
 import { handleGlobalNewsPush } from './../utils/activityHandle.js';
 
 //收到的消息
@@ -29,6 +29,13 @@ function onMsg(msg) {
 
   // let tempState = Object.assign({}, state);
   let tempState = {...state}
+
+  let auth = filterListAuth([msg],tempState.userUID);
+  // 无权限--退出
+  if(!auth[0]) return ;
+
+
+
 
   tempState.rawMessageList = Object.assign({}, tempState.rawMessageList);
   // 自己的退群消息就不记录、展示了
@@ -94,7 +101,7 @@ function onMsg(msg) {
     })
   }else{
     // 如果没有打开的群聊，先添加未读数
-    if(msg.type != 'notification')
+    if(msg.type != 'notification' && msg.from != tempState.userUID)
     tempState.allBoardList.map(item => {
       if(item.im_id === msg.target){
         let unread = +(item.unread || 0);

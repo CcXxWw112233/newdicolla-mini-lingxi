@@ -139,7 +139,6 @@ class Chat extends Component {
   componentDidMount() {
 
     const { fileInfo, pageSource, boardId, } = this.$router.params
-    console.log(pageSource, 'hhhhhhh');
 
     this.setState({
       file_info: fileInfo && JSON.parse(fileInfo),

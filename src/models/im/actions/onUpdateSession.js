@@ -1,9 +1,11 @@
 import Taro from '@tarojs/taro';
 import { isCreatedNewGroupOrAddTeamMembersNews } from './../utils/genNews.js'
+import mergeMsgs from './../utils/mergeMsgs'
+import { filterListAuth} from '../../../utils/util'
 
 
 function onUpdateSession(sessions) {
-  // console.log('get session :', sessions);
+  console.log('get session :', sessions);
 
   const {
     globalData: {
@@ -15,6 +17,11 @@ function onUpdateSession(sessions) {
     im: state,
     im: { nim }
   } = getState();
+
+  let auth = filterListAuth([sessions.lastMsg], state.userUID);
+  // 无权限
+  if(!auth[0]) return ;
+
 
   //如果是新建群或者更新了群成员的信息，那么重新拉取所有的群信息的列表
   if (isCreatedNewGroupOrAddTeamMembersNews(sessions)) {
@@ -45,6 +52,16 @@ function onUpdateSession(sessions) {
     return item;
   })
 
+  // 云信的列表和本地接口列表重组
+  let boardList = mergeMsgs({a: [...tempState.allBoardList],b:sessions,akey:'im_id',bkey:"to"});
+  // console.log(boardList)
+  boardList.map(item => {
+    if(item.im_id === tempState.currentBoard.im_id){
+      item.apns = void 0;
+    }
+    return item;
+  })
+  tempState.allBoardList = boardList ;
 
   // tempState.sessionlist = nim.mergeSessions(state.sessionlist, sessions);
   const filteredSessionList = state.sessionlist.filter(i => !sessions.find(s => s.to === i.to && s.updateTime === i.updateTime))

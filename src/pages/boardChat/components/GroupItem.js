@@ -16,6 +16,15 @@ class GroupItem extends Component {
     onClickedGroupItem({ board_id, im_id });
 
   };
+  apnsAtMe = (apns) => {
+    let { userid } = this.props;
+    if(apns){
+      if(apns.accounts && apns.accounts.indexOf(userid)!= -1){
+        return true ;
+      }
+    }
+    return false;
+  }
   render() {
     const {
       board_id,
@@ -29,7 +38,8 @@ class GroupItem extends Component {
       isSubGroup,
       isExpand,
       isShouldShowExpandOpertor,
-      data = {}
+      data = {},
+      apns
     } = this.props;
 
     return (
@@ -56,7 +66,9 @@ class GroupItem extends Component {
               <View className={styles.groupInfoTitleTitle}>{name}</View>
               <View className={styles.groupInfoTitleOrg}>{'#'}{org_name}</View>
             </View>
-            <View className={styles.groupInfoLastMsg}>{lastMsg}</View>
+            <View className={styles.groupInfoLastMsg}>
+              {this.apnsAtMe(apns) && <Text className={styles.apnsAtMe}>[有人@我]</Text> } {lastMsg}
+            </View>
           </View>
           {!isSubGroup && isShouldShowExpandOpertor && (
             <View

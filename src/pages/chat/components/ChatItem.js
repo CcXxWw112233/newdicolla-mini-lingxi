@@ -17,9 +17,11 @@ import { connect } from '@tarojs/redux';
   ({
     im: {
       currentGroupSessionList,
+      history_newSession
     },
   }) => ({
     currentGroupSessionList,
+    history_newSession
   }),
 )
 class ChatItem extends Component {
@@ -48,7 +50,7 @@ class ChatItem extends Component {
   };
   handlePlayAudio = file => {
     let { createInnerAudioContext } = this.state;
-    const { url } = file;
+    const { url } = JSON.parse(file);
     if (!createInnerAudioContext) {
       createInnerAudioContext = Taro.createInnerAudioContext();
       createInnerAudioContext.src = url;
@@ -146,7 +148,7 @@ class ChatItem extends Component {
     return `${ret}px`;
   };
   timestampToTime = timestamp => {
-    if(timestamp.length === 10){
+    if (timestamp.length === 10) {
       timestamp = timestamp + '000';
     }
     timestamp = +timestamp;
@@ -203,11 +205,7 @@ class ChatItem extends Component {
   };
 
   onResendMessage = (someMsg) => {
-
-    const { currentGroupSessionList } = this.props
-    /**
-     * 重新发送
-     */
+    const { history_newSession, dispatch } = this.props;
     // 1.1 遍历出失败的那条在本地渲染列表数组中删掉
     Array.prototype.removeByValue = function (val) {
       for (var i = 0; i < this.length; i++) {
@@ -216,11 +214,41 @@ class ChatItem extends Component {
           break;
         }
       }
+      return this;
     };
-    currentGroupSessionList.removeByValue(someMsg);
+    Taro.showActionSheet({
+      itemList: ['重新发送', '删除']
+    })
+      .then(res => {
+        let { tapIndex } = res;
+        if (tapIndex === 0) {
+          /**
+           * 重新发送
+           */
 
-    // 1.2 把需要重新发送的那条消息重新发送
-    onResendMsg(someMsg)
+          // 1.2 把需要重新发送的那条消息重新发送
+          onResendMsg(someMsg)
+          // 删除这条失败的数据
+          let arr = [...history_newSession].removeByValue(someMsg);
+          dispatch({
+            type: "im/updateStateFieldByCover",
+            payload: {
+              history_newSession: arr
+            }
+          })
+        }
+        else if (tapIndex === 1) {
+          // 删除
+          let arr = [...history_newSession].removeByValue(someMsg);
+          dispatch({
+            type: "im/updateStateFieldByCover",
+            payload: {
+              history_newSession: arr
+            }
+          })
+        }
+      })
+      .catch(err => console.log(err.errMsg))
   }
 
   render() {
@@ -255,11 +283,11 @@ class ChatItem extends Component {
       </Text>
       from_nick = '文件助手'
     } else if (someMsgContentDataDAction && (someMsgContentDataDAction.indexOf('board.card') != -1)) {
-      iconAvatar = <Text className={`${globalStyles.global_iconfont} ${styles.icon_avatar_style}`}>&#xe63c;
+      iconAvatar = <Text className={`${globalStyles.global_iconfont} ${styles.icon_avatar_style}`}>&#xe66a;
       </Text>
       from_nick = '任务助手'
     } else if (someMsgContentDataDAction && (someMsgContentDataDAction.indexOf('board.board'))) {
-      iconAvatar = <Text className={`${globalStyles.global_iconfont} ${styles.icon_avatar_style}`}>&#xe649;
+      iconAvatar = <Text className={`${globalStyles.global_iconfont} ${styles.icon_avatar_style}`}>&#xe63c;
       </Text>
       from_nick = '项目助手'
     } else {
@@ -371,7 +399,7 @@ class ChatItem extends Component {
                       <View className={styles.customNewsWrapper}>
                         {content && content.data && content.data.d ? (
                           <View className={styles.customNewsContentWrapper}>
-                            {[JSON.parse(content.data.d)].map((data,index) => {
+                            {[JSON.parse(content.data.d)].map((data, index) => {
                               const {
                                 activityType,
                                 creator,
@@ -465,9 +493,9 @@ class ChatItem extends Component {
                         onClick={() => this.handlePlayAudio(file)}
                       >
                         <Text
-                          style={{ width: this.genAudioNewsWidth(file.dur) }}
+                          style={{ width: this.genAudioNewsWidth(JSON.parse(file).dur) }}
                           className={styles.audioDur}
-                        >{`${Math.ceil(file.dur / 1000)}" `}</Text>
+                        >{`${Math.ceil((JSON.parse(file).dur || 0) / 1000)}" `}</Text>
                         <View
                           className={`${globalStyles.global_iconfont} ${
                             styles.audioIcon

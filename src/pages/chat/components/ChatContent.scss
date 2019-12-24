@@ -12,6 +12,19 @@
   padding: 5px 0;
   // background-color: ;
 }
+.hasNewMsg{
+  // position:-webkit-sticky;
+  position:fixed;
+  bottom:175rpx;
+  left:530rpx;
+  padding:5rpx 15px;
+  display:inline-block;
+  background: #fff;
+  border: 1px solid #1890FF;
+  color: #1890FF;
+  border-radius: 50px;
+  font-size: 24px;
+}
 .wrapper {
   margin-top: 5px;
   background: #fff;

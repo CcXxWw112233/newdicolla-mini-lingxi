@@ -5,7 +5,7 @@ import { connect } from '@tarojs/redux'
 import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import SearchAndMenu from '../board/components/SearchAndMenu'
-import { isPlainObject } from './../../utils/util';
+import { isPlainObject, filterListAuth } from './../../utils/util';
 import { isApiResponseOk } from '../../utils/request';
 import { getImHistory, getAllIMTeamList } from '../../services/im'
 
@@ -17,6 +17,7 @@ import { getImHistory, getAllIMTeamList } from '../../services/im'
         currentBoard,
         currentBoardImValid,
         rawMessageList,
+        userUID
     }
 }) => {
     return {
@@ -26,6 +27,7 @@ import { getImHistory, getAllIMTeamList } from '../../services/im'
         currentBoard,
         rawMessageList,
         currentBoardImValid,
+        userUID
     };
 },
     dispatch => {
@@ -146,6 +148,7 @@ export default class BoardChat extends Component {
         })
     }
     getChatBoardList = async () => {
+        let { userUID } = this.props;
         this.getOrgList();
         let list = await this.getAllTeam();
         // let list = await this.getAllTeam();
@@ -159,7 +162,7 @@ export default class BoardChat extends Component {
             const { im_id } = value;
             const param = {
                 id: im_id,
-                page_size: '1',
+                page_size: '10',
                 page_number: '1',
             }
             promiseList.push(getImHistory(param));
@@ -170,14 +173,27 @@ export default class BoardChat extends Component {
             response.forEach(item => {
                 let msg = item.data;
                 let { tid, unread, records } = msg || {};
+                let arr = filterListAuth(records, userUID);
                 if (isApiResponseOk(item)) {
                     resList.push(item.data)
                     chatList.map(chat => {
                         if (tid == chat.im_id) {
+                            for (let i = 0; i < arr.length; i++) {
+                                let recor = arr[i];
+                                // 检查是否有艾特我的聊天记录并且是未读的消息
+                                if (recor.apns && recor.isRead === 'false') {
+                                    let apns = typeof recor.apns === 'string' ? JSON.parse(recor.apns) : recor.apns;
+                                    let { accounts } = apns;
+                                    if (accounts.indexOf(userUID) != -1) {
+                                        chat.apns = apns;
+                                        break;
+                                    }
+                                }
+                            }
                             // 未读数
                             chat.unread = unread;
                             // 最后一条消息
-                            chat.lastMsg = records && records[0];
+                            chat.lastMsg = arr && arr[0];
                             // 根据最后一条消息更新最后的时间,排序
                             chat.updateTime = chat.lastMsg && chat.lastMsg.time
                         }
@@ -249,6 +265,7 @@ export default class BoardChat extends Component {
     }
     // 更新列表的未读数
     setBoardUnread = (im_id, board_id) => {
+        let { allBoardList } = this.props;
         return new Promise(async (resolve) => {
             let { dispatch, allBoardList } = this.props;
             await dispatch({
@@ -260,6 +277,20 @@ export default class BoardChat extends Component {
                     },
                     im_id,
                     unread: 0
+                }
+            })
+            let boardList = [...allBoardList];
+            // 去除艾特我的数据
+            boardList.map(item => {
+                if (item.im_id === im_id) {
+                    item.apns = undefined;
+                }
+                return item;
+            })
+            await dispatch({
+                type: "im/updateStateFieldByCover",
+                payload: {
+                    allBoardList: boardList
                 }
             })
 
@@ -280,6 +311,17 @@ export default class BoardChat extends Component {
                 const ret = arr.find(i => i.board_id === id);
                 return ret ? ret : {};
             };
+
+            Promise.resolve(setCurrentBoardId(board_id))
+                .then(() => {
+                    setCurrentBoard(getCurrentBoard(allBoardList, board_id));
+                })
+                .then(() => {
+                    checkTeamStatus(board_id)
+                }).then(() => {
+                    this.validGroupChat({ im_id })
+                })
+                .catch(e => console.log('error in boardDetail: ' + e));
 
             Promise.resolve(setCurrentBoardId(board_id))
                 .then(() => {
@@ -516,7 +558,7 @@ export default class BoardChat extends Component {
 
     render() {
         const { search_mask_show, chatBoardList } = this.state
-        let { allBoardList } = this.props;
+        let { allBoardList, userUID } = this.props;
         // 对消息进行排序, 根据lastMsg里面的time最新的排在最上面
         let listArray = chatBoardList.sort((a, b) => ((b.updateTime)) - ((a.updateTime)))  //(b-a)时间正序
         const sumArray = new Array(0);
@@ -535,6 +577,7 @@ export default class BoardChat extends Component {
                         lastMsg,
                         unread,
                         childs = [],
+                        apns
                     } = value;
                     let _math = Math.random() * 100000 + 1;
                     return (
@@ -549,6 +592,8 @@ export default class BoardChat extends Component {
                             avatarList={this.genAvatarList(users)}
                             lastMsg={this.genLastMsg(lastMsg)}
                             newsNum={unread}
+                            apns={apns}
+                            userid={userUID}
                             showNewsDot={this.isShouldShowNewDot(unread, childs.map(i => i.unread))}
                             onClickedGroupItem={this.hanldClickedGroupItem}
 
