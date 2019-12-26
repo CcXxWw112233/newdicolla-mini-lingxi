@@ -10,6 +10,7 @@ import BoardFile from './components/boardFile/index.js'
 import ChoiceFolder from './components/boardFile/ChoiceFolder.js'
 import { getOrgIdByBoardId, setBoardIdStorage, setRequestHeaderBaseInfo } from '../../utils/basicFunction'
 import { BASE_URL, API_BOARD } from "../../gloalSet/js/constant";
+import { isApiResponseOk } from '../../utils/request'
 @connect(({
     file: {
         file_list = [],
@@ -130,37 +131,15 @@ export default class File extends Component {
 
     loadData = (params) => {
         const { org_id, board_id, folder_id } = params
-        // this.fetchAllIMTeamList()
         this.getFilePage(org_id, board_id, folder_id)
     }
 
-    // componentDidShow() {
-    //     const org_id = '0'
-    //     const board_id = ''
-    //     const folder_id = ''
-
-    //     const is_reload_file_list = Taro.getStorageSync('isReloadFileList')
-    //     if (is_reload_file_list === 'is_reload_file_list') {
-    //         Taro.removeStorageSync('isReloadFileList')
-    //     } else {
-    //         this.getFilePage(org_id, board_id, folder_id)
-    //     }
-    // }
 
     componentDidHide() { }
 
     componentWillReceiveProps() { }
 
     componentWillUnmount() { }
-
-    // //获取全部组织和全部项目
-    // fetchAllIMTeamList = () => {
-    //     const { dispatch } = this.props
-    //     dispatch({
-    //         type: 'im/fetchAllIMTeamList',
-    //         payload: {}
-    //     })
-    // }
 
     getFilePage = (org_id, board_id, folder_id) => {
 
@@ -542,20 +521,28 @@ export default class File extends Component {
             filePath: choice_image_temp_file_paths[0],
             name: 'file',
             header: {
-                "Content-Type": "multipart/form-data",
+                "Content-Type": "multipart/form-data; charset=utf-8",
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Accept-Encoding": "gzip, deflate",
+                "Accept": "*/*",
                 Authorization: authorization,
                 ...base_info,
             },
             formData: data, //上传POST参数信息
             success(res) {
-                if (res.statusCode != 200) {
-                    Taro.showModal({ title: '提示', content: '上传失败', showCancel: false });
-                    return;
+                if (res.statusCode === 200) {
+                    const resData = res.data && JSON.parse(res.data)
+                    console.log(res, 'sssssss', resData);
+                    if (resData.code === '0') {
+                        //更新头部显示文件夹名称
+                        that.updateHeaderFolderName(current_folder_name)
+                        //重新掉列表接口, 刷新列表
+                        that.getFilePage(org_id, board_id, '')
+                    } else {
+                        Taro.showModal({ title: '提示', content: resData.message, showCancel: false });
+                    }
                 } else {
-                    //更新头部显示文件夹名称
-                    that.updateHeaderFolderName(current_folder_name)
-                    //重新掉列表接口, 刷新列表
-                    that.getFilePage(org_id, board_id, '')
+                    Taro.showModal({ title: '提示', content: '上传失败', showCancel: false });
                 }
             },
             fail(error) {

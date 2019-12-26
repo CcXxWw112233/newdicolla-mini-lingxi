@@ -252,7 +252,9 @@ class UserInput extends Component {
     }
   };
   handleClickedItem = (e, type) => {
+    const { handleUserInputFocus } = this.props
     if (e) e.stopPropagation();
+    handleUserInputFocus(false)
     const { handleUserInputHeightChange } = this.props;
     const typeCond = {
       voice: () => this.setInputMode('voice'),

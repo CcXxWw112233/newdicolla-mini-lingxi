@@ -162,26 +162,32 @@ export default class Login extends Component {
           isCoded: isCoded,
           codeMessage: codeMessage
         })
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000,
+        })
+      } else {
+        let messageTime = 60;
+        const fun = () => {
+          messageTime = messageTime - 1;
+          this.setState({
+            codeMessage: messageTime,
+            isCoded: true
+          })
+          if (messageTime === 0) {
+            clearInterval(messageTimeOut);
+            this.setState({
+              codeMessage: "重新获取",
+              isCoded: true
+            })
+          }
+        }
+        fun();
+        let messageTimeOut = setInterval(fun, 1000);
+        this.messageTimeOut = messageTimeOut;
       }
     });
-    let messageTime = 60;
-    const fun = () => {
-      messageTime = messageTime - 1;
-      this.setState({
-        codeMessage: messageTime,
-        isCoded: true
-      })
-      if (messageTime === 0) {
-        clearInterval(messageTimeOut);
-        this.setState({
-          codeMessage: "重新获取",
-          isCoded: true
-        })
-      }
-    }
-    fun();
-    let messageTimeOut = setInterval(fun, 1000);
-    this.messageTimeOut = messageTimeOut;
   }
   //普通登录
   normalLogin = () => {

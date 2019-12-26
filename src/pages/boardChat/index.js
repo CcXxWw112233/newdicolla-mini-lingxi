@@ -322,16 +322,6 @@ export default class BoardChat extends Component {
                     this.validGroupChat({ im_id })
                 })
                 .catch(e => console.log('error in boardDetail: ' + e));
-
-            Promise.resolve(setCurrentBoardId(board_id))
-                .then(() => {
-                    setCurrentBoard(getCurrentBoard(allBoardList, board_id));
-                }).then(() => {
-                    checkTeamStatus(board_id)
-                }).then(() => {
-                    this.validGroupChat({ im_id })
-                })
-                .catch(e => console.log('error in boardDetail: ' + e));
         });
     };
 

@@ -216,11 +216,36 @@ export default class ChoiceFolder extends Component {
     }
 
     filterSelectBoard = () => {
-        const { v2_board_list = [], current_selection_board_id } = this.props
-        let new_v2_board_list = [...v2_board_list]
+        const { v2_board_list = [], current_selection_board_id, org_list } = this.props
+
+        //根据org_id把org_list合并到v2_board_list
+        org_list.forEach(function (o, d) {
+            for (var k in o) {
+                v2_board_list.forEach(function (t) {
+                    for (var key in t) {
+                        if (t.org_id == o.id) {
+                            t[k] = o[k];
+                        }
+
+                    }
+                })
+            }
+        });
+
+        // 根据org的payment_status过滤未付费的项目
+        const filter_board_list = v2_board_list.filter((item, index) => {
+            if (item && item.payment_status === '1') {
+                return item
+            }
+        })
+
+
+        let new_v2_board_list = [...filter_board_list]
+
         if (current_selection_board_id) {
             new_v2_board_list = new_v2_board_list.filter(item => item.board_id == current_selection_board_id)
         }
+
         return new_v2_board_list
     }
 

@@ -109,7 +109,15 @@ export default class sceneEntrance extends Component {
             if (redirectType === '0') {
                 Taro.setStorageSync('sceneEntrance_Goto_Other', 'errorPage')
                 pageObject = 'errorPage'
-            } else if (redirectType === '1' || redirectType === '7') {  //1 项目详情  7 公众号未读消息
+            } else if (redirectType === '1' || redirectType === '7') {  //1 项目详情  7 公众号未读消息(通知路径/统计未读路径)
+                // @通知路径 ： pages/sceneEntrance/index?redirectType=7&boardId=1111111
+                // 统计未读路径 ： pages/sceneEntrance/index?redirectType=7&boardId=
+                // 进不进具体圈子 看 boardId 是不是空
+                if (boardId.match(/^[ ]*$/)) {
+                    Taro.switchTab({ url: `../../pages/boardChat/index` })
+                    return
+                }
+
                 Taro.setStorageSync('sceneEntrance_Goto_Other', 'chat')
                 Taro.setStorageSync('board_Id', boardId)
 

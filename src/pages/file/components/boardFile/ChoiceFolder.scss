@@ -170,11 +170,15 @@
                                 }
 
                                 .org_name_style {
-                                    font-size  : pxTrans(12);
-                                    line-height: pxTrans(20);
-                                    height     : pxTrans(20);
-                                    font-weight: 400;
-                                    color      : rgba(0, 0, 0, 0.45);
+                                    font-size       : pxTrans(12);
+                                    line-height     : pxTrans(20);
+                                    height          : pxTrans(20);
+                                    font-weight     : 400;
+                                    color           : rgba(0, 0, 0, 0.45);
+                                    overflow        : hidden;
+                                    -o-text-overflow: ellipsis;
+                                    text-overflow   : ellipsis;
+                                    white-space     : nowrap;
                                 }
                             }
                         }
@@ -218,7 +222,7 @@
                 width      : 50%;
                 font-size  : pxTrans(16);
                 font-weight: 400;
-                color      : rgba(0, 0, 0, 0.45);
+                color      : rgba(0, 0, 0, 0.25);
                 border-left: 0.5px solid rgba(0, 0, 0, 0.45);
             }
         }
