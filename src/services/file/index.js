@@ -74,6 +74,8 @@ export const sendFileComment = (data, notShowLoading) => {
         header: {
             BaseInfo: {
                 requestClientType: "wxapp",
+                contentDataType: "file",
+                contentDataId: data.file_id,
             }
         },
         url: `${API_BOARD}/file/comment`,
