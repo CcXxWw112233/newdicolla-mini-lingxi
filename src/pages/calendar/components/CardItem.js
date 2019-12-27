@@ -56,9 +56,13 @@ export default class CardItem extends Component {
           opacity = '0.6'
         }
       } else if ('2' == flag) {
-
+        if (is_realize == '1') {
+          opacity = '0.6'
+        }
       } else if ('3' == flag) {
-
+        if (is_realize == '1') {
+          opacity = '0.6'
+        }
       } else {
 
       }

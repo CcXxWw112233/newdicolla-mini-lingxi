@@ -84,7 +84,28 @@ export default class BoardFile extends Component {
     render() {
 
         const { all_file_text } = this.state
-        const { folder_tree, v2_board_list, org_list } = this.props
+        const { v2_board_list, org_list } = this.props
+
+        //根据org_id把org_list合并到v2_board_list
+        org_list.forEach(function (o, d) {
+            for (var k in o) {
+                v2_board_list.forEach(function (t) {
+                    for (var key in t) {
+                        if (t.org_id == o.id) {
+                            t[k] = o[k];
+                        }
+
+                    }
+                })
+            }
+        });
+
+        // 根据org的payment_status过滤未付费的项目
+        const filter_board_list = v2_board_list.filter((item, index) => {
+            if (item && item.payment_status === '1') {
+                return item
+            }
+        })
 
         return (
             <View className={indexStyles.choice_board_file_style} >
@@ -95,7 +116,7 @@ export default class BoardFile extends Component {
                     </View>
                 </View>
 
-                {v2_board_list && v2_board_list.map(item => {
+                {filter_board_list && filter_board_list.map(item => {
                     const org_id = item.org_id
                     return (
                         <View className={indexStyles.board_item_style} hoverClass={indexStyles.board_item_hover_style} onClick={() => this.selectedBoardItem(org_id, item.board_id, '', item)}>
@@ -106,7 +127,7 @@ export default class BoardFile extends Component {
 
                                 <View className={indexStyles.board_item_name}>{item.board_name}</View>
                                 {org_list && org_list.length > 0 ? (<View className={indexStyles.org_name_style}>
-                                    {'#'}{getOrgName({ org_id, org_list })}
+                                    {'#'} {item.name}
                                 </View>) : ''}
                             </View>
                         </View>

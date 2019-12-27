@@ -23,6 +23,9 @@ export default {
     effects: {
         //全部文件信息
         * getFilePage({ payload }, { select, call, put }) {
+            Taro.showLoading({
+                title: '加载中...',
+            })
             const res = yield call(getFilePage, payload)
             if (isApiResponseOk(res)) {
                 yield put({
@@ -38,6 +41,7 @@ export default {
                     duration: 2000
                 })
             }
+            Taro.hideLoading()
         },
 
         //下载文件
