@@ -125,6 +125,7 @@ export default class BoardChat extends Component {
         show_board_select_type: '0', //出现项目选择
         search_mask_show: '0', // 0默认 1 淡入 2淡出
         chatBoardList: [], //显示在列表中的项目圈列表
+        isProhibitRepeatClick: true, //禁止重复点击进入圈子
     }
 
     onPullDownRefresh(res) {
@@ -299,8 +300,21 @@ export default class BoardChat extends Component {
         })
     }
 
+
     hanldClickedGroupItem = ({ board_id, im_id }) => {
-        console.log(arguments)
+        //禁止快速重复点击
+        const { isProhibitRepeatClick } = this.state
+        if (isProhibitRepeatClick) {
+            this.setState({ isProhibitRepeatClick: false })
+            this.isClickedGroupItem({ board_id, im_id })
+            const that = this
+            setTimeout(function () {
+                that.setState({ isProhibitRepeatClick: true })
+            }, 2000);
+        }
+    };
+
+    isClickedGroupItem = ({ board_id, im_id }) => {
         const {
             allBoardList,
             setCurrentBoardId,
@@ -325,7 +339,7 @@ export default class BoardChat extends Component {
                 })
                 .catch(e => console.log('error in boardDetail: ' + e));
         });
-    };
+    }
 
     validGroupChat = ({ im_id }) => {
         const {
