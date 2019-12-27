@@ -108,6 +108,7 @@ class UserInput extends Component {
     emojiType: 'emoji', // emoji | pinup
     emojiAlbum: 'emoji', // emoji | ajmd | lt | xxy
     inputBottomValue: 0,
+    isRecording: false,
   };
   handleInputFocus = e => {
     const { handleUserInputFocus, handleUserInputHeightChange } = this.props;
@@ -252,10 +253,10 @@ class UserInput extends Component {
     }
   };
   handleClickedItem = (e, type) => {
-    const { handleUserInputFocus } = this.props
     if (e) e.stopPropagation();
+    const { handleUserInputFocus, handleUserInputHeightChange } = this.props;
     handleUserInputFocus(false)
-    const { handleUserInputHeightChange } = this.props;
+
     const typeCond = {
       voice: () => this.setInputMode('voice'),
       text: () => this.setInputMode('text'),
@@ -374,29 +375,31 @@ class UserInput extends Component {
         icon: 'none',
         duration: 20000,
       });
+
+      const recorderManager =
+        this.state.recorderManager || Taro.getRecorderManager();
+      const options = {
+        duration: 120 * 1000,
+        format: 'mp3'
+      };
+      let that = this;
+      recorderManager.start(options);
+      this.setState({
+        recorderManager
+      });
+
+      recorderManager.onStop(res => {
+        if (res.duration < 1000) {
+          Taro.showToast({
+            title: '录音时间太短',
+            icon: 'error'
+          });
+        } else {
+          that.sendAudioMsg(res);
+        }
+        Taro.hideToast();
+      });
     }
-    const recorderManager =
-      this.state.recorderManager || Taro.getRecorderManager();
-    const options = {
-      duration: 120 * 1000,
-      format: 'mp3'
-    };
-    let that = this;
-    recorderManager.start(options);
-    this.setState({
-      recorderManager
-    });
-    recorderManager.onStop(res => {
-      if (res.duration < 1000) {
-        Taro.showToast({
-          title: '录音时间太短',
-          icon: 'error'
-        });
-      } else {
-        that.sendAudioMsg(res);
-      }
-      Taro.hideToast();
-    });
   };
   handleVoiceTouchStar = () => {
     this.setState(

@@ -48,13 +48,17 @@
                 width: 100%;
 
                 .choice_folder_button_style {
-                    width        : 100%;
-                    height       : pxTrans(34);
-                    border-radius: pxTrans(4);
-                    border       : 1px solid rgba(24, 144, 255, 1);
-                    text-align   : center;
-                    color        : rgba(24, 144, 255, 1);
-                    line-height  : pxTrans(34);
+                    width           : 100%;
+                    height          : pxTrans(34);
+                    border-radius   : pxTrans(4);
+                    border          : 1px solid rgba(24, 144, 255, 1);
+                    text-align      : center;
+                    color           : rgba(24, 144, 255, 1);
+                    line-height     : pxTrans(34);
+                    overflow        : hidden;
+                    -o-text-overflow: ellipsis;
+                    text-overflow   : ellipsis;
+                    white-space     : nowrap;
                 }
 
                 .thumbnail_view_style {
@@ -162,11 +166,15 @@
                                 height    : 100%;
 
                                 .board_item_name {
-                                    height     : pxTrans(22);
-                                    font-size  : pxTrans(14);
-                                    font-weight: 400;
-                                    color      : rgba(0, 0, 0, 0.85);
-                                    line-height: pxTrans(22);
+                                    height          : pxTrans(22);
+                                    font-size       : pxTrans(14);
+                                    font-weight     : 400;
+                                    color           : rgba(0, 0, 0, 0.85);
+                                    line-height     : pxTrans(22);
+                                    overflow        : hidden;
+                                    -o-text-overflow: ellipsis;
+                                    text-overflow   : ellipsis;
+                                    white-space     : nowrap;
                                 }
 
                                 .org_name_style {

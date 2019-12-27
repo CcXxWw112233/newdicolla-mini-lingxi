@@ -300,7 +300,7 @@ export default class BoardChat extends Component {
     }
 
     hanldClickedGroupItem = ({ board_id, im_id }) => {
-      console.log(arguments)
+        console.log(arguments)
         const {
             allBoardList,
             setCurrentBoardId,
@@ -512,10 +512,18 @@ export default class BoardChat extends Component {
     };
 
     countSumUnRead = (list) => {
+
+        // 过滤 scene === "team"
+        const filter_list = list.filter((item, index) => {
+            if (item.scene && item.scene === "team") {
+                return item
+            }
+        })
+
         return new Promise((resolve) => {
             //1.1将没像个项目圈的unRead全部添加到一个数组
             //1.2把数组里面元素(unRead)全部相加等于总未读数
-            var sumUnRead = list.reduce(function (a, b) {
+            var sumUnRead = filter_list.reduce(function (a, b) {
                 return a + parseInt(b.unread);
             }, 0)
             //消息未读数
@@ -552,8 +560,7 @@ export default class BoardChat extends Component {
         const { search_mask_show, chatBoardList } = this.state
         let { allBoardList, userUID } = this.props;
         // 对消息进行排序, 根据lastMsg里面的time最新的排在最上面
-        let listArray = chatBoardList.filter(item =>{ return item.scene == 'team'}).sort((a, b) => ((b.updateTime)) - ((a.updateTime)))  //(b-a)时间正序
-        const sumArray = new Array(0);
+        let listArray = chatBoardList.filter(item => { return item.scene == 'team' }).sort((a, b) => ((b.updateTime)) - ((a.updateTime)))  //(b-a)时间正序
         return (
             <View className={indexStyles.index}>
 

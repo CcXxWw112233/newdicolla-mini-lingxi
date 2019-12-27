@@ -50,7 +50,7 @@ class ChatItem extends Component {
   };
   handlePlayAudio = file => {
     let { createInnerAudioContext } = this.state;
-    const { url } = JSON.parse(file);
+    const { url } = typeof file === 'string' ? JSON.parse(file) : file;
     if (!createInnerAudioContext) {
       createInnerAudioContext = Taro.createInnerAudioContext();
       createInnerAudioContext.src = url;
