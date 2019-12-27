@@ -493,9 +493,9 @@ class ChatItem extends Component {
                         onClick={() => this.handlePlayAudio(file)}
                       >
                         <Text
-                          style={{ width: this.genAudioNewsWidth(JSON.parse(file).dur) }}
+                          style={{ width: this.genAudioNewsWidth(typeof file === 'string' ? JSON.parse(file).dur : file.dur) }}
                           className={styles.audioDur}
-                        >{`${Math.ceil((JSON.parse(file).dur || 0) / 1000)}" `}</Text>
+                        >{`${Math.ceil(((typeof file === 'string' ? JSON.parse(file).dur : file.dur) || 0) / 1000)}" `}</Text>
                         <View
                           className={`${globalStyles.global_iconfont} ${
                             styles.audioIcon

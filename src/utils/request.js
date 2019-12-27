@@ -38,8 +38,8 @@ export const request = (options, notShowLoading, isNewLogin) => {
         if (pages.length) {
           currPage = pages[pages.length - 1];
         }
-        let route = currPage.route
-        let routePageName = route.slice(6, -6)
+        let route = currPage && currPage.route
+        let routePageName = route && route.slice(6, -6)
 
         if (REQUEST_RES_CODE_TOKEN_INVALID == res.data.code) {
           if (!isNewLogin) {//正常的登录页面

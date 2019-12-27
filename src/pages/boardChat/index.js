@@ -196,6 +196,7 @@ export default class BoardChat extends Component {
                             chat.lastMsg = arr && arr[0];
                             // 根据最后一条消息更新最后的时间,排序
                             chat.updateTime = chat.lastMsg && chat.lastMsg.time
+                            chat.scene = 'team'
                         }
                         return chat;
                     })
@@ -299,6 +300,7 @@ export default class BoardChat extends Component {
     }
 
     hanldClickedGroupItem = ({ board_id, im_id }) => {
+      console.log(arguments)
         const {
             allBoardList,
             setCurrentBoardId,
@@ -317,16 +319,6 @@ export default class BoardChat extends Component {
                     setCurrentBoard(getCurrentBoard(allBoardList, board_id));
                 })
                 .then(() => {
-                    checkTeamStatus(board_id)
-                }).then(() => {
-                    this.validGroupChat({ im_id })
-                })
-                .catch(e => console.log('error in boardDetail: ' + e));
-
-            Promise.resolve(setCurrentBoardId(board_id))
-                .then(() => {
-                    setCurrentBoard(getCurrentBoard(allBoardList, board_id));
-                }).then(() => {
                     checkTeamStatus(board_id)
                 }).then(() => {
                     this.validGroupChat({ im_id })
@@ -560,7 +552,7 @@ export default class BoardChat extends Component {
         const { search_mask_show, chatBoardList } = this.state
         let { allBoardList, userUID } = this.props;
         // 对消息进行排序, 根据lastMsg里面的time最新的排在最上面
-        let listArray = chatBoardList.sort((a, b) => ((b.updateTime)) - ((a.updateTime)))  //(b-a)时间正序
+        let listArray = chatBoardList.filter(item =>{ return item.scene == 'team'}).sort((a, b) => ((b.updateTime)) - ((a.updateTime)))  //(b-a)时间正序
         const sumArray = new Array(0);
         return (
             <View className={indexStyles.index}>
