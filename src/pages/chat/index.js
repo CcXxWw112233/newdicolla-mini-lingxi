@@ -5,6 +5,7 @@ import ChatHeader from './components/ChatHeader.js';
 import ChatContent from './components/ChatContent.js';
 import UserInput from './components/UserInput.js';
 import FileChat from './components/fileChat.js';
+import Contacts from '../Contacts'
 import { connect } from '@tarojs/redux';
 
 @connect(({
@@ -134,10 +135,11 @@ class Chat extends Component {
     page_source: '',  //页面来源
     boardId: '',   //当前项目id
     imId: '',  //当前群聊id
+    showContacts:false,
+    selectedUser:""
   }
 
   componentDidMount() {
-
     const { fileInfo, pageSource, boardId, } = this.$router.params
 
     this.setState({
@@ -235,11 +237,41 @@ class Chat extends Component {
       })
     }
   }
+  // 输入了艾特符号
+  onPrefix = (val)=>{
+    let {currentBoard,userUID } = this.props;
+    if(currentBoard.users.filter(item => item.user_id != userUID).length >= 1)
+    this.setState({
+      showContacts:true
+    })
+  }
+
+  // 关闭回调
+  contactsClose = ()=>{
+    // 动画完成后关闭
+    setTimeout(()=>{
+      this.setState({
+        showContacts:false
+      })
+    },350)
+  }
+  // 选择了艾特别人
+  selectContacts = (val) => {
+    this.setState({
+      selectedUser: val
+    })
+  }
+  // 发送按钮
+  onSend = ()=>{
+    this.setState({
+      selectedUser:""
+    })
+  }
 
   render() {
 
-    const { file_info = {}, page_source } = this.state
-    const { isShowFileComment } = this.props
+    const { file_info = {}, page_source ,showContacts ,selectedUser} = this.state
+    const { isShowFileComment ,currentBoard ,userUID} = this.props
 
     return (
       <View className={styles.wrapper} onClick={this.inputDown}>
@@ -254,8 +286,9 @@ class Chat extends Component {
           <ChatContent />
         </View>
         <View className={styles.userInputWrapper} onClick={this.inputDownChild}>
-          <UserInput />
+          <UserInput onPrefix={this.onPrefix} prefixUser={selectedUser} onSend={this.onSend}/>
         </View>
+        { showContacts && <Contacts onClose={this.contactsClose} users={currentBoard.users.filter(item => item.user_id != userUID)} onSelect={this.selectContacts}/>}
       </View>
     );
   }

@@ -343,12 +343,13 @@ export default {
       });
     },
     *sendMsg({ payload }, { select }) {
-      const { scene, to, text } = payload;
+      const { scene, to, text ,apns} = payload;
       const { nim } = yield selectFieldsFromIm(select, 'nim');
       nim.sendText({
         scene,
         to,
         text,
+        apns,
         // needMsgReceipt: obj.needMsgReceipt || false
         needMsgReceipt: false,
         done: (error, msg) => {
