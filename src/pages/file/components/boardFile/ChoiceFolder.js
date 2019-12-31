@@ -1,11 +1,12 @@
 
-import Taro, { Component } from '@tarojs/taro'
+import Taro, { Component, getApp } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import indexStyles from './ChoiceFolder.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
 import { getOrgIdByBoardId, getOrgName } from '../../../../utils/basicFunction'
 import TreeFile from './TreeFile'
+
 @connect(({
     file: {
         isShowChoiceFolder,
@@ -251,7 +252,7 @@ export default class ChoiceFolder extends Component {
 
     render() {
 
-        const { folder_tree, v2_board_list, org_list, choiceImageThumbnail, upload_folder_name, choice_board_folder_id, choice_board_id, current_selection_board_id, current_board_open } = this.props
+        const { folder_tree, v2_board_list, org_list, choiceImageThumbnail, upload_folder_name, choice_board_folder_id, choice_board_id, current_selection_board_id, current_board_open, uploadImageAddress, } = this.props
         const { child_data = [], } = folder_tree
         const { is_show_board_list, } = this.state
 
@@ -271,6 +272,7 @@ export default class ChoiceFolder extends Component {
                                 <View className={indexStyles.thumbnail_view_style}>
                                     <Image mode='aspectFill' className={indexStyles.choice_image_thumbnail_style} src={choiceImageThumbnail}></Image>
                                 </View>
+                                <View className={indexStyles.image_address_style}>{uploadImageAddress}</View>
                             </View>
                         </View>
                     ) : (

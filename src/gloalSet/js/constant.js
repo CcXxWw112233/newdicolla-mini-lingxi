@@ -1,7 +1,7 @@
 //线上环境
-export const BASE_URL = 'https://lingxi.di-an.com'
+// export const BASE_URL = 'https://lingxi.di-an.com'
 //测试环境
-// export const BASE_URL = 'http://test.lingxi.new-di.com'
+export const BASE_URL = 'http://test.lingxi.new-di.com'
 // export const BASE_URL = 'http://mqws5d.natappfree.cc'
 //稳定版开发服务器
 // export const BASE_URL = 'http://dev.lingxi.new-di.com'
@@ -25,6 +25,7 @@ export const BASE_URL = 'https://lingxi.di-an.com'
 //         BASE_URL = 'https://lingxi.di-an.com'
 //     }
 // }
+
 
 export const NODE_ENV = process.env.NODE_ENV
 export const PAGE_SIZE = 20
@@ -54,3 +55,6 @@ export const REQUEST_RES_CODE_NO_BIND = '4013' //未绑定
 
 //特殊接口字段待修改,（后台定义不规范，前端统一定义，便于修改）
 export const RESPONSE_DATA_CODE_DATA = 'data'
+
+//腾讯位置服务SDK app_key
+export const QQMAPSDK_KEY = 'AECBZ-47EKW-RCCRD-RMJH5-T64O2-HEFTQ'

@@ -208,9 +208,6 @@ class UserInput extends Component {
     });
     this.sendTextMsg();
   };
-  // handleChange = () => {
-
-  // }
   handleTextInput = () => {
     this.setState(
       {
@@ -536,7 +533,6 @@ class UserInput extends Component {
       inputBottomValue,
     } = this.state;
 
-    // console.log(inputMode);
     const { emojiAlbumList, emojiList } = this.genEmojiInfo();
     const findedCurrentEmojiAlbum = emojiList.filter(
       i => i.name === emojiAlbum
@@ -592,7 +588,6 @@ class UserInput extends Component {
                 onFocus={this.handleInputFocus}
                 onBlur={this.handleInputBlur}
                 onConfirm={this.onInputConfirm}
-              // onChange={this.handleChange}
               />
             </View>
           )}

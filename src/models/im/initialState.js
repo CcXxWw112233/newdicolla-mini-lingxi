@@ -39,8 +39,8 @@ const INITIAL_STATE = {
   currSessionId: null,
   currSessionMsgs: [],
   boardChatImAllLastHistoryList: {}, //当前项目圈的历史消息,
-  sessionListMap:{}, //切割聊天历史数据列表
-  history_newSession:[],// 更新版，新消息的记录，包括自己发送的和接受的s
+  sessionListMap: {}, //切割聊天历史数据列表
+  history_newSession: [],// 更新版，新消息的记录，包括自己发送的和接受的
 }
 
 export { INITIAL_STATE }

@@ -286,7 +286,7 @@ class ChatItem extends Component {
       iconAvatar = <Text className={`${globalStyles.global_iconfont} ${styles.icon_avatar_style}`}>&#xe66a;
       </Text>
       from_nick = '任务助手'
-    } else if (someMsgContentDataDAction && (someMsgContentDataDAction.indexOf('board.board'))) {
+    } else if (someMsgContentDataDAction && (someMsgContentDataDAction.indexOf('board.update') != -1)) {
       iconAvatar = <Text className={`${globalStyles.global_iconfont} ${styles.icon_avatar_style}`}>&#xe63c;
       </Text>
       from_nick = '项目助手'
@@ -528,7 +528,7 @@ class ChatItem extends Component {
               }`}
           >{`—— ${this.timestampToTime(time)} ——`}</View>
         )}
-        {type === 'notification' && (
+        {/* {type === 'notification' && (  //此种类型暂时不处理
           <View
             className={`${styles.notificationWrapper} ${
               styles.notificationGroup
@@ -536,7 +536,7 @@ class ChatItem extends Component {
           >
             {groupNotification}
           </View>
-        )}
+        )} */}
       </View>
     );
   }

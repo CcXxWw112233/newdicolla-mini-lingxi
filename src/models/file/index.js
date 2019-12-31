@@ -191,7 +191,11 @@ export default {
         * sendFileComment({ payload }, { select, call, put }) {
             const res = yield call(sendFileComment, payload)
             if (isApiResponseOk(res)) {
-
+                Taro.showToast({
+                    title: '评论发送成功',
+                    icon: 'none',
+                    duration: 2000
+                })
             } else {
                 Taro.showToast({
                     title: res.message,

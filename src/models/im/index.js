@@ -374,7 +374,6 @@ export default {
     *updateBoardUnread({ payload }, { select, call, put }) {
       let { unread, param, im_id } = payload;
       const res = yield call(setImHistoryRead, param);
-      console.log(res, '设置未读数为0')
       const { allBoardList } = yield selectFieldsFromIm(select, [
         'nim',
         'allBoardList'

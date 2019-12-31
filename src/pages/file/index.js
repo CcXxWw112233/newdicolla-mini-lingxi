@@ -1,4 +1,4 @@
-import Taro, { Component, hideToast, pageScrollTo } from '@tarojs/taro'
+import Taro, { Component, hideToast, pageScrollTo, getExtConfig } from '@tarojs/taro'
 import { View, Text, Image, RichText } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
@@ -9,8 +9,11 @@ import file_list_empty from '../../asset/file/file_list_empty.png'
 import BoardFile from './components/boardFile/index.js'
 import ChoiceFolder from './components/boardFile/ChoiceFolder.js'
 import { getOrgIdByBoardId, setBoardIdStorage, setRequestHeaderBaseInfo } from '../../utils/basicFunction'
-import { BASE_URL, API_BOARD } from "../../gloalSet/js/constant";
+import { BASE_URL, API_BOARD, QQMAPSDK_KEY } from "../../gloalSet/js/constant";
 import { isApiResponseOk } from '../../utils/request'
+import EXIF from 'exif-js'  //第三方库获取图片exif信息
+import QQMapWX from '../../utils/qqmap-wx-jssdk1.2/qqmap-wx-jssdk.js'
+
 @connect(({
     file: {
         file_list = [],
@@ -98,6 +101,7 @@ export default class File extends Component {
     state = {
         is_tips_longpress_file: false,  //是否显示长按文件前往圈子的提示
         choice_image_temp_file_paths: [],  //从相册选中的图片api返回来的路径
+        upload_image_address: '', //要上传的图片的位置信息
     }
 
     onPullDownRefresh(res) {
@@ -461,6 +465,17 @@ export default class File extends Component {
         })
     }
 
+    //EXIF坐标转换
+    exifGPSCoordinateTransformation = (LatitudeArry) => {
+        const longLatitude =
+            LatitudeArry[0].numerator / LatitudeArry[0].denominator +
+            LatitudeArry[1].numerator / LatitudeArry[1].denominator / 60 +
+            LatitudeArry[2].numerator / LatitudeArry[2].denominator / 3600;
+        const Latitude = longLatitude.toFixed(6);
+
+        return Latitude;
+    }
+
     //拍照/选择图片上传
     fileUploadAlbumCamera = (imageSourceType) => {
         Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
@@ -475,6 +490,47 @@ export default class File extends Component {
                 that.uploadChoiceFolder();
                 that.setState({
                     choice_image_temp_file_paths: tempFilePaths,
+                })
+
+                //获取图片Exif信息
+                const filePath = tempFilePaths[0]
+                wx.getFileSystemManager().readFile({
+                    filePath,
+                    success: res => {
+                        EXIF.getData(res.data, img => {
+                            const LatitudeArry = EXIF.getTag(res.data, 'GPSLatitude')
+                            const LongitudeArry = EXIF.getTag(res.data, 'GPSLongitude')
+                            if (!LatitudeArry || !LongitudeArry) {
+                                that.setState({
+                                    upload_image_address: '未能识别照片位置'
+                                })
+                                return
+                            }
+                            const longLatitude = that.exifGPSCoordinateTransformation(LatitudeArry)
+                            const longLongitude = that.exifGPSCoordinateTransformation(LongitudeArry)
+
+                            var demo = new QQMapWX({
+                                key: QQMAPSDK_KEY,
+                            })
+                            demo.reverseGeocoder({
+                                location: {
+                                    latitude: longLatitude,
+                                    longitude: longLongitude,
+                                },
+                                success: function (res) {
+                                    that.setState({
+                                        upload_image_address: '照片位置: ' + res.result.address
+                                    })
+                                },
+                                fail: function (res) {
+                                    console.log(res);
+                                },
+                                complete: function (res) {
+                                    console.log(res);
+                                }
+                            });
+                        })
+                    }
                 })
             }
         })
@@ -496,6 +552,8 @@ export default class File extends Component {
         const { choice_image_temp_file_paths } = this.state
         const { selected_board_folder_info } = this.props
         const { org_id, board_id, folder_id, current_folder_name, } = selected_board_folder_info
+
+        // this.onGetLocation()
 
         //保存数据, 用作下拉刷新参数
         const params = {
@@ -532,7 +590,6 @@ export default class File extends Component {
             success(res) {
                 if (res.statusCode === 200) {
                     const resData = res.data && JSON.parse(res.data)
-                    console.log(res, 'sssssss', resData);
                     if (resData.code === '0') {
                         //更新头部显示文件夹名称
                         that.updateHeaderFolderName(current_folder_name)
@@ -555,10 +612,71 @@ export default class File extends Component {
         })
     }
 
+    onGetLocation = () => {
+        Taro.getSetting({
+            success(res) {
+                if (!res.authSetting['scope.userLocation']) { //获取地理位置权限
+                    Taro.authorize({
+                        scope: 'scope.userLocation',
+                        success: (res) => {
+                            this.getLocation()
+                        }, fail() {
+                            Taro.showModal({
+                                title: '提示',
+                                content: '尚未进行授权，部分功能将无法使用',
+                                showCancel: false,
+                                success(res) {
+                                    if (res.confirm) {
+                                        console.log('用户点击确定')
+                                        Taro.openSetting({
+                                            success: (res) => {
+                                                if (!res.authSetting['scope.userLocation']) {
+                                                    Taro.authorize({
+                                                        scope: 'scope.userLocation',
+                                                        success() {
+                                                            this.getLocation()
+                                                        }, fail() {
+                                                            console.log('用户点击取消')
+                                                        }
+                                                    })
+                                                }
+                                            },
+                                            fail: function () {
+                                                console.log("授权设置地理位置失败");
+                                            }
+                                        })
+                                    } else if (res.cancel) {
+                                        console.log('用户点击取消')
+                                    }
+                                }
+                            })
+                        }
+                    })
+                } else {
+                }
+            },
+            fail(res) {
+
+            }
+        })
+    }
+
+    //获取位置
+    getLocation = () => {
+        Taro.getLocation({
+            success: (res) => {
+                console.log(res);
+            },
+            fail: (res) => {
+                console.log('获取位置失败:', res);
+            }
+        })
+    }
+
     render() {
 
         const { file_list = [], isShowBoardList, header_folder_name, isShowChoiceFolder } = this.props
-        const { is_tips_longpress_file, choice_image_temp_file_paths = [] } = this.state
+        const { is_tips_longpress_file, choice_image_temp_file_paths = [], upload_image_address } = this.state
 
         return (
             <View className={indexStyles.index}>
@@ -568,7 +686,7 @@ export default class File extends Component {
                         : ''
                 }
                 {
-                    isShowChoiceFolder === true ? (<ChoiceFolder choiceImageThumbnail={choice_image_temp_file_paths} fileUpload={() => this.fileUpload()} />) : ''
+                    isShowChoiceFolder === true ? (<ChoiceFolder choiceImageThumbnail={choice_image_temp_file_paths} fileUpload={() => this.fileUpload()} uploadImageAddress={upload_image_address} />) : ''
                 }
                 <View style={{ position: 'sticky', top: 0 + 'px', left: 0 }}>
                     <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={'0'} onSearch={(value) => this.onSearch(value)} isDisabled={false} />

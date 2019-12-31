@@ -60,6 +60,11 @@ class App extends Component {
       'pages/webView/index',
       'pages/boardChat/index',
     ],
+    permission: {
+      'scope.userLocation': {
+        desc: "你的位置信息将用于上传图片"
+      }
+    },
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#1890FF',
@@ -96,7 +101,7 @@ class App extends Component {
           "iconPath": './asset/tabBar/personal.png',
           "selectedIconPath": './asset/tabBar/personal_selected.png',
         }
-      ]
+      ],
     }
   }
 
