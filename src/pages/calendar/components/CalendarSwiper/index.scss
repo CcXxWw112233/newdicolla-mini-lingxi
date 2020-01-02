@@ -145,6 +145,11 @@
     height         : pxTrans(30);
     display        : flex;
     justify-content: space-between;
+    background     : rgb(243, 243, 243);
+    position       : fixed;
+    width          : 100%;
+    top            : 0;
+    z-index        : 1;
 
     .week_day {
       line-height: pxTrans(30);

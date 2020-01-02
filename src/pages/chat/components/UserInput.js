@@ -25,7 +25,7 @@ import genEmojiList from './../../../models/im/utils/genEmojiList.js';
     chat: {
       handleInputMode,
     },
-  }) => ({ im_id, isOnlyShowInform, handleInputMode, }),
+  }) => ({ im_id, isOnlyShowInform, handleInputMode }),
   dispatch => ({
     sendTeamTextMsg: (text, to) =>
       dispatch({

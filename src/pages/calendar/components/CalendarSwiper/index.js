@@ -19,6 +19,7 @@ export default class CalendarSwiper extends Component {
     windowWidth: 0,
     selected_timestamp: new Date().getTime(), //当前选择的日期
     show_whole_calendar: '0', // 0 /1 /2 初始/展开/关闭
+    todayMaginTop: 0, //收起日历时日历的位置
   }
   componentWillReceiveProps(nextProps) {
 
@@ -189,16 +190,67 @@ export default class CalendarSwiper extends Component {
     let show_flag = '0'
     if ('0' == show_whole_calendar) {
       show_flag = '2'
+      this.calculationTodayMaginTop('dynamic')
     } else if ('1' == show_whole_calendar) {
       show_flag = '2'
+      this.calculationTodayMaginTop('dynamic')
     } else if ('2' == show_whole_calendar) {
       show_flag = '1'
+      this.calculationTodayMaginTop('initial')
     } else {
 
     }
     this.setState({
       show_whole_calendar: show_flag
     })
+  }
+
+
+  calculationTodayMaginTop = (action) => {
+
+    if (action === 'dynamic') {
+      const { date_array } = this.props
+      var newArr = date_array.filter(function (obj) {
+        return obj.is_today == true;
+      });
+      const index = this.getArrayIndex(date_array, newArr[0])
+
+      const FirstLineOfCalendarArray = [0, 1, 2, 3, 4, 5, 6]
+      const SecondLineOfCalendarArray = [7, 8, 9, 10, 11, 12, 13]
+      const ThirdLineOfCalendarArray = [14, 15, 16, 17, 18, 19, 20]
+      const FourthLineOfCalendarArray = [21, 22, 23, 24, 25, 26, 27]
+      const FifthLineOfCalendarArray = [28, 29, 30, 31, 32, 33, 34]
+
+      let today_magin_top = 0
+      if (FirstLineOfCalendarArray.indexOf(index) > -1) {
+        today_magin_top = 0
+      } else if (SecondLineOfCalendarArray.indexOf(index) > -1) {
+        today_magin_top = -48
+      } else if (ThirdLineOfCalendarArray.indexOf(index) > -1) {
+        today_magin_top = -48 * 2
+      } else if (FourthLineOfCalendarArray.indexOf(index) > -1) {
+        today_magin_top = -48 * 3
+      } else if (FifthLineOfCalendarArray.indexOf(index) > -1) {
+        today_magin_top = -48 * 4
+      }
+      this.setState({
+        todayMaginTop: today_magin_top,
+      })
+    } else if (action === 'initial') {
+      this.setState({
+        todayMaginTop: 0,
+      })
+    }
+  }
+
+  getArrayIndex = (array, obj) => {
+    var i = array.length;
+    while (i--) {
+      if (array[i] === obj) {
+        return i;
+      }
+    }
+    return -1;
   }
 
   updateSelecedTime = (timestamp) => {
@@ -252,7 +304,7 @@ export default class CalendarSwiper extends Component {
   }
 
   render() {
-    const { swiper_list = [], current_indi, windowWidth, date_array = [], selected_timestamp, select_year, select_month, select_date_no, select_week_day_dec, show_whole_calendar } = this.state
+    const { swiper_list = [], current_indi, windowWidth, date_array = [], selected_timestamp, select_year, select_month, select_date_no, select_week_day_dec, show_whole_calendar, todayMaginTop, } = this.state
 
     const week_array = ['日', '一', '二', '三', '四', '五', '六']
     const renderDate = (
@@ -264,7 +316,7 @@ export default class CalendarSwiper extends Component {
             )
           })}
         </View>
-        <View className={indexStyles.date_area}>
+        <View className={indexStyles.date_area} style={{ marginTop: todayMaginTop + 30 + 'px' }}>
           {date_array.map((value, key) => {
             const { date_no, timestamp, is_today, is_has_task, is_has_flow, no_in_select_month } = value
             const is_selected = isSamDay(selected_timestamp, timestamp)

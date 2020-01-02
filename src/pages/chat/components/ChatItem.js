@@ -17,11 +17,11 @@ import { connect } from '@tarojs/redux';
   ({
     im: {
       currentGroupSessionList,
-      history_newSession
+      history_newSession,
     },
   }) => ({
     currentGroupSessionList,
-    history_newSession
+    history_newSession,
   }),
 )
 class ChatItem extends Component {
@@ -110,6 +110,7 @@ class ChatItem extends Component {
       }
     }
   };
+
   handlePreviewImage = file => {
     const { url } = file;
     Taro.previewImage({
