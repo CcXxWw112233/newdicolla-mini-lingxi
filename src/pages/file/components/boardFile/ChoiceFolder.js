@@ -256,35 +256,48 @@ export default class ChoiceFolder extends Component {
         const { child_data = [], } = folder_tree
         const { is_show_board_list, } = this.state
 
+        const SystemInfo = Taro.getSystemInfoSync()
+        const { windowHeight } = SystemInfo
+        const scrollHeight = (windowHeight - (80 * 2) - 47 - 18 - 56 - 10) + 'px'
+        const contentHeight = (windowHeight - (80 * 2) - 47) + 'px'
+        const contentCenterHeight = (windowHeight - (80 * 2) - 47 - 56) + 'px'
+
         return (
 
             <View className={indexStyles.choice_folder_modal_mask} >
-                <View className={indexStyles.choice_folder_modal_view_style}>
-
+                <View className={indexStyles.choice_folder_modal_view_style} style={{
+                    position: 'absolute',
+                    top: 80 + 'px',
+                    right: 32 + 'px',
+                    left: 32 + 'px',
+                    bottom: 80 + 'px',
+                }}>
                     {is_show_board_list === false ? (
-                        <View className={indexStyles.modal_content_style}>
-                            <View className={indexStyles.modal_content_top_style}>
-                                <View className={indexStyles.modal_tips_text_style}>上传到:</View>
-                            </View>
-
-                            <View className={indexStyles.modal_content_center_style}>
-                                <View className={indexStyles.choice_folder_button_style} onClick={this.choiceFolder}>{upload_folder_name}</View>
-                                <View className={indexStyles.thumbnail_view_style}>
-                                    <Image mode='aspectFill' className={indexStyles.choice_image_thumbnail_style} src={choiceImageThumbnail}></Image>
+                        <View style={{ height: contentHeight, width: '100%' }}>
+                            <View className={indexStyles.modal_content_style}>
+                                <View className={indexStyles.modal_content_top_style} style={{ height: 56 + 'px' }}>
+                                    <View className={indexStyles.modal_tips_text_style}>上传到:</View>
                                 </View>
-                                <View className={indexStyles.image_address_style}>{uploadImageAddress}</View>
+
+                                <View className={indexStyles.modal_content_center_style} style={{ height: contentCenterHeight }}>
+                                    <View className={indexStyles.choice_folder_button_style} onClick={this.choiceFolder}>{upload_folder_name}</View>
+                                    <View className={indexStyles.thumbnail_view_style}>
+                                        <Image mode='aspectFill' className={indexStyles.choice_image_thumbnail_style} src={choiceImageThumbnail}></Image>
+                                    </View>
+                                    <View className={indexStyles.image_address_style}>{uploadImageAddress}</View>
+                                </View>
                             </View>
                         </View>
                     ) : (
                             <View className={indexStyles.choice_board_view_style}>
-                                <View className={indexStyles.modal_content_top_style}>
+                                <View className={indexStyles.modal_content_top_style} style={{ height: 56 + 'px' }}>
                                     <View className={indexStyles.modal_tips_text_style} onClick={this.backHideBoardList}>{'< '}返回</View>
                                     <View className={indexStyles.folder_name_style}>{upload_folder_name}</View>
                                 </View>
                                 <ScrollView
                                     scrollY
                                     scrollWithAnimation
-                                    className={indexStyles.board_list_view_style}>
+                                    className={indexStyles.board_list_view_style} style={{ height: scrollHeight }}>
                                     {this.filterSelectBoard() && this.filterSelectBoard().map(item => {
                                         const org_id = item.org_id
                                         return (
@@ -342,8 +355,7 @@ export default class ChoiceFolder extends Component {
                     }
 
 
-
-                    <View className={indexStyles.modal_botton_style}>
+                    <View className={indexStyles.modal_botton_style} style={{ height: 47 + 'px', lineHeight: 47 + 'px' }}>
                         <View className={indexStyles.cancel_button_style} onClick={this.handleCancel}>取消</View>
                         {
                             choice_board_id != '' || choice_board_folder_id != '' ? (

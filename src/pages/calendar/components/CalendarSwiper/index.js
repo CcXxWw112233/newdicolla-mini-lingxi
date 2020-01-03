@@ -309,7 +309,7 @@ export default class CalendarSwiper extends Component {
     const week_array = ['日', '一', '二', '三', '四', '五', '六']
     const renderDate = (
       <View className={indexStyles.month_area}>
-        <View className={indexStyles.week_head}>
+        <View className={indexStyles.week_head} style={{ height: 30 + 'px' }}>
           {week_array.map((value, key) => {
             return (
               <View className={indexStyles.week_day} key={key}>{value}</View>

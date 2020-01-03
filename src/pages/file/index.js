@@ -488,10 +488,10 @@ export default class File extends Component {
             success(res) {
                 let tempFilePaths = res.tempFilePaths;
                 that.uploadChoiceFolder();
+
                 that.setState({
                     choice_image_temp_file_paths: tempFilePaths,
                 })
-
                 //获取图片Exif信息
                 const filePath = tempFilePaths[0]
                 wx.getFileSystemManager().readFile({

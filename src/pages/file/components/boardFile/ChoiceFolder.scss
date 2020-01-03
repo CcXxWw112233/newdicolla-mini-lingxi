@@ -12,28 +12,28 @@
     background: rgba(0, 0, 0, .35);
 
     .choice_folder_modal_view_style {
-        width        : pxTrans(311);
-        min-height   : pxTrans(268);
-        background   : rgba(255, 255, 255, 1);
-        box-shadow   : 0px pxTrans(2) pxTrans(8) 0 rgba(0, 0, 0, 0.15);
-        border-radius: pxTrans(4);
-        position     : absolute;
-        top          : 0;
-        right        : 0;
-        left         : 0;
-        bottom       : 0;
-        margin       : pxTrans(100) auto;
+        // width              : pxTrans(311);
+        // min-height         : pxTrans(268);
+        background            : rgba(255, 255, 255, 1);
+        box-shadow            : 0px pxTrans(2) pxTrans(8) 0 rgba(0, 0, 0, 0.15);
+        border-radius         : pxTrans(4);
+        // position           : absolute;
+        // top                : pxTrans(80);
+        // right              : pxTrans(32);
+        // left               : pxTrans(32);
+        // bottom             : pxTrans(80);
+        // margin             : pxTrans(100) auto;
 
         .modal_content_style {
-            margin: pxTrans(18) pxTrans(18) pxTrans(70) pxTrans(18);
+            margin: 0 pxTrans(18) 0 pxTrans(18);
 
             .modal_content_top_style {
-                width      : 100%;
-                height     : pxTrans(56);
-                color      : rgba(0, 0, 0, 0.45);
-                text-align : center;
-                align-items: center;
-                display    : flex;
+                width         : 100%;
+                // height     : pxTrans(56);
+                color         : rgba(0, 0, 0, 0.45);
+                text-align    : center;
+                align-items   : center;
+                display       : flex;
 
                 .modal_tips_text_style {
                     width      : pxTrans(56);
@@ -45,27 +45,30 @@
             }
 
             .modal_content_center_style {
-                width: 100%;
+                width          : 100%;
+                display        : flex;
+                flex-direction : column;
+                justify-content: space-around;
 
                 .choice_folder_button_style {
-                    width           : 100%;
-                    height          : pxTrans(34);
-                    border-radius   : pxTrans(4);
-                    border          : 1px solid rgba(24, 144, 255, 1);
-                    text-align      : center;
-                    color           : rgba(24, 144, 255, 1);
-                    line-height     : pxTrans(34);
-                    overflow        : hidden;
-                    -o-text-overflow: ellipsis;
-                    text-overflow   : ellipsis;
-                    white-space     : nowrap;
+                    width              : 100%;
+                    height             : pxTrans(34);
+                    border-radius      : pxTrans(4);
+                    border             : 1px solid rgba(24, 144, 255, 1);
+                    text-align         : center;
+                    color              : rgba(24, 144, 255, 1);
+                    line-height        : pxTrans(34);
+                    // overflow        : hidden;
+                    -o-text-overflow   : ellipsis;
+                    text-overflow      : ellipsis;
+                    white-space        : nowrap;
                 }
 
                 .thumbnail_view_style {
-                    width     : 100%;
-                    height    : pxTrans(160);
-                    margin-top: pxTrans(28);
-                    text-align: center;
+                    width        : 100%;
+                    height       : pxTrans(160);
+                    // margin-top: pxTrans(28);
+                    text-align   : center;
 
                     .choice_image_thumbnail_style {
                         width : pxTrans(160);
@@ -78,7 +81,7 @@
                     font-size         : pxTrans(15);
                     font-weight       : 500;
                     color             : rgba(0, 0, 0, 0.45);
-                    margin-top        : pxTrans(20);
+                    margin-bottom     : 0;
                     text-align        : center;
                     overflow          : hidden;
                     display           : -webkit-box;
@@ -92,12 +95,12 @@
             margin: pxTrans(18) pxTrans(18) pxTrans(70) pxTrans(18);
 
             .modal_content_top_style {
-                width      : 100%;
-                height     : pxTrans(56);
-                color      : rgba(0, 0, 0, 0.45);
-                text-align : center;
-                align-items: center;
-                display    : flex;
+                width         : 100%;
+                // height     : pxTrans(56);
+                color         : rgba(0, 0, 0, 0.45);
+                text-align    : center;
+                align-items   : center;
+                display       : flex;
 
                 .modal_tips_text_style {
                     width      : pxTrans(65);
@@ -124,8 +127,8 @@
 
 
             .board_list_view_style {
-                height: pxTrans(225);
-                width : 100%;
+                // height: pxTrans(225);
+                width    : 100%;
 
                 .board_item_style {
                     width    : 100%;
@@ -214,14 +217,15 @@
         }
 
         .modal_botton_style {
-            display    : flex;
-            height     : pxTrans(47);
-            width      : 100%;
-            border-top : 0.5px solid rgba(0, 0, 0, 0.45);
-            text-align : center;
-            line-height: 94rpx;
-            position   : absolute;
-            bottom     : 0;
+            display       : flex;
+            // height     : pxTrans(47);
+            width         : 100%;
+            border-top    : 0.5px solid rgba(0, 0, 0, 0.45);
+            text-align    : center;
+            // line-height: pxTrans(47);
+            position      : absolute;
+            bottom        : 0;
+            background    : rgba(255, 255, 255, 1);
 
             .cancel_button_style {
                 width       : 50%;
