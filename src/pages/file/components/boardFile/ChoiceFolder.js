@@ -6,6 +6,9 @@ import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
 import { getOrgIdByBoardId, getOrgName } from '../../../../utils/basicFunction'
 import TreeFile from './TreeFile'
+import EXIF from 'exif-js'  //第三方库获取图片exif信息
+import QQMapWX from '../../../../utils/qqmap-wx-jssdk1.2/qqmap-wx-jssdk.js'
+import { QQMAPSDK_KEY } from "../../../../gloalSet/js/constant";
 
 @connect(({
     file: {
@@ -31,10 +34,32 @@ import TreeFile from './TreeFile'
 export default class ChoiceFolder extends Component {
     state = {
         is_show_board_list: false, //是否显示项目列表
+        thumb_image_info: [], //图片略缩图
     }
 
     componentDidMount() {
         this.loadBoardList()
+        this.getChoiceImageThumbnail()
+    }
+
+    getChoiceImageThumbnail = () => {
+        const { choiceImageThumbnail = [], } = this.props
+        let array = []
+        choiceImageThumbnail.map((item, index) => {
+            let obj = {}
+            obj['index'] = index
+            obj['filePath'] = item
+            array.push(obj)
+        })
+        let promise = [];
+        array.forEach(item => {
+            promise.push(this.getImageExifInfo(item))
+        })
+        Promise.all(promise).then(resp => {
+            this.setState({
+                thumb_image_info: resp
+            })
+        }).catch(e => console.log('error: ' + e));
     }
 
     loadBoardList = () => {
@@ -250,11 +275,65 @@ export default class ChoiceFolder extends Component {
         return new_v2_board_list
     }
 
+    //EXIF坐标转换
+    exifGPSCoordinateTransformation = (LatitudeArry) => {
+        const longLatitude =
+            LatitudeArry[0].numerator / LatitudeArry[0].denominator +
+            LatitudeArry[1].numerator / LatitudeArry[1].denominator / 60 +
+            LatitudeArry[2].numerator / LatitudeArry[2].denominator / 3600;
+        const Latitude = longLatitude.toFixed(6);
+
+        return Latitude;
+    }
+
+    //获取图片Exif信息
+    getImageExifInfo = (tempFilePaths) => {
+        return new Promise((resolve, reject) => {
+            const { filePath, index, } = tempFilePaths
+            let that = this
+            wx.getFileSystemManager().readFile({
+                filePath,
+                success: res => {
+                    EXIF.getData(res.data, img => {
+                        const LatitudeArry = EXIF.getTag(res.data, 'GPSLatitude')
+                        const LongitudeArry = EXIF.getTag(res.data, 'GPSLongitude')
+
+                        if ((!LatitudeArry && LatitudeArry === undefined) || (!LongitudeArry && LongitudeArry === undefined)) {
+                            resolve({ id: index, filePath: filePath, address: '暂无地址', })
+                            return
+                        }
+
+                        const longLatitude = that.exifGPSCoordinateTransformation(LatitudeArry)
+                        const longLongitude = that.exifGPSCoordinateTransformation(LongitudeArry)
+                        var demo = new QQMapWX({
+                            key: QQMAPSDK_KEY,
+                        })
+                        demo.reverseGeocoder({
+                            location: {
+                                latitude: longLatitude,
+                                longitude: longLongitude,
+                            },
+                            success: function (res) {
+                                resolve({ id: index, filePath: filePath, address: res.result.address, })
+                            },
+                            fail: function (res) {
+                                console.log(res);
+                            },
+                            complete: function (res) {
+                                console.log(res);
+                            }
+                        });
+                    })
+                }
+            })
+        })
+    }
+
     render() {
 
-        const { folder_tree, v2_board_list, org_list, choiceImageThumbnail, upload_folder_name, choice_board_folder_id, choice_board_id, current_selection_board_id, current_board_open, uploadImageAddress, } = this.props
+        const { folder_tree, org_list, upload_folder_name, choice_board_folder_id, choice_board_id, current_selection_board_id, current_board_open, } = this.props
         const { child_data = [], } = folder_tree
-        const { is_show_board_list, } = this.state
+        const { is_show_board_list, thumb_image_info = [], } = this.state
 
         const SystemInfo = Taro.getSystemInfoSync()
         const { windowHeight } = SystemInfo
@@ -281,10 +360,25 @@ export default class ChoiceFolder extends Component {
 
                                 <View className={indexStyles.modal_content_center_style} style={{ height: contentCenterHeight }}>
                                     <View className={indexStyles.choice_folder_button_style} onClick={this.choiceFolder}>{upload_folder_name}</View>
-                                    <View className={indexStyles.thumbnail_view_style}>
-                                        <Image mode='aspectFill' className={indexStyles.choice_image_thumbnail_style} src={choiceImageThumbnail}></Image>
-                                    </View>
-                                    <View className={indexStyles.image_address_style}>{uploadImageAddress}</View>
+                                    <ScrollView
+                                        scrollX
+                                        scrollWithAnimation
+                                        className={indexStyles.thumbnail_view_style}
+                                    >
+                                        {thumb_image_info && thumb_image_info.map((item, key) => {
+                                            const { filePath, address } = item
+                                            return (
+                                                <Image mode='aspectFill' className={indexStyles.choice_image_thumbnail_style} src={filePath}>
+                                                    {address ? (<View className={indexStyles.position_style}>
+                                                        <Text className={`${globalStyle.global_iconfont} ${indexStyles.position_icon_style}`}>&#xe790;</Text>
+                                                        <Text className={indexStyles.position_text_style}>
+                                                            {address}
+                                                        </Text>
+                                                    </View>) : ''}
+                                                </Image>
+                                            )
+                                        })}
+                                    </ScrollView>
                                 </View>
                             </View>
                         </View>

@@ -1,6 +1,5 @@
 @import "../../../../gloalSet/styles/constant.scss";
 
-
 .choice_folder_modal_mask {
     width     : 100%;
     height    : 100%;
@@ -65,28 +64,45 @@
                 }
 
                 .thumbnail_view_style {
-                    width        : 100%;
-                    height       : pxTrans(160);
-                    // margin-top: pxTrans(28);
-                    text-align   : center;
+                    width              : 100%;
+                    height             : pxTrans(160);
+                    // margin-top      : pxTrans(28);
+                    text-align         : center;
+                    // display         : flex;
+                    white-space        : nowrap;
+                    display            : inline-block;
+                    overflow           : hidden;
 
                     .choice_image_thumbnail_style {
-                        width : pxTrans(160);
-                        height: pxTrans(160);
-                    }
-                }
+                        width       : pxTrans(160);
+                        height      : pxTrans(160);
+                        margin-left : pxTrans(3);
+                        margin-right: pxTrans(3);
+                        position    : relative;
 
-                .image_address_style {
-                    width             : 100%;
-                    font-size         : pxTrans(15);
-                    font-weight       : 500;
-                    color             : rgba(0, 0, 0, 0.45);
-                    margin-bottom     : 0;
-                    text-align        : center;
-                    overflow          : hidden;
-                    display           : -webkit-box;
-                    -webkit-line-clamp: 2;
-                    -webkit-box-orient: vertical;
+                        .position_style {
+                            width     : pxTrans(160);
+                            height    : pxTrans(20);
+                            background: rgba(0, 0, 0, 1);
+                            color     : rgba(255, 255, 255, 1);
+                            bottom    : 0;
+                            position  : absolute;
+
+                            .position_icon_style {
+                                font-size : pxTrans(12);
+                                background: rgba(0, 0, 0, 1);
+                            }
+
+                            .position_text_style {
+                                width      : 100%;
+                                height     : 100%;
+                                font-size  : pxTrans(12);
+                                font-weight: 400;
+                                color      : rgba(255, 255, 255, 1);
+                                line-height: pxTrans(20);
+                            }
+                        }
+                    }
                 }
             }
         }
