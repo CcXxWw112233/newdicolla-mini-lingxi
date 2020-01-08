@@ -82,83 +82,82 @@ export default {
         payload: {}
       })
       const boardId = Taro.getStorageSync('board_Id')
-
       //日历页面是否需要注入im方法的标识
       const switchTabCurrentPage = 'currentPage_BoardDetail_or_Login'
       Taro.setStorageSync('switchTabCurrentPage', switchTabCurrentPage);
+      Taro.navigateBack({
+        delta: 1
+      })
+      // if (payload.sourcePage === 'Invitation') {
+      //   //邀请加入,未登录 --> 登录成功 --> 重新调用加入组织和项目请求
+      //   const query_Id = Taro.getStorageSync('id')
+      //   yield put({
+      //     type: 'invitation/userScanCodeJoinOrganization',
+      //     payload: {
+      //       id: query_Id,
+      //       board_Id: boardId,
+      //     }
+      //   })
+      // } else if (payload.sourcePage === 'taksDetails') {
+      //   //从taksDetails页面过来的, 登录后继续去taksDetails页面
+      //   Taro.redirectTo({
+      //     url: `../../pages/taksDetails/index`
+      //   })
+      // } else if (payload.sourcePage === 'sceneEntrance') {
+      //   //从sceneEntrance页面过来的, 登录后继续去boardDetails页面
+      //   const sceneEntrance_Goto_Other = Taro.getStorageSync('sceneEntrance_Goto_Other')
+      //   //服务消息每日代办进入小程序, 自动切换为全组织,登录成后自动切换 
+      //   console.log(sceneEntrance_Goto_Other, 'kkkk');
 
-      if (payload.sourcePage === 'Invitation') {
-        //邀请加入,未登录 --> 登录成功 --> 重新调用加入组织和项目请求
-        const query_Id = Taro.getStorageSync('id')
-        yield put({
-          type: 'invitation/userScanCodeJoinOrganization',
-          payload: {
-            id: query_Id,
-            board_Id: boardId,
-          }
-        })
-      } else if (payload.sourcePage === 'taksDetails') {
-        //从taksDetails页面过来的, 登录后继续去taksDetails页面
-        Taro.redirectTo({
-          url: `../../pages/taksDetails/index`
-        })
-      } else if (payload.sourcePage === 'sceneEntrance') {
-        //从sceneEntrance页面过来的, 登录后继续去boardDetails页面
-        const sceneEntrance_Goto_Other = Taro.getStorageSync('sceneEntrance_Goto_Other')
-        //服务消息每日代办进入小程序, 自动切换为全组织,登录成后自动切换 
-        console.log(sceneEntrance_Goto_Other, 'kkkk');
+      //   const todoListData = Taro.getStorageSync('isTodoList')
+      //   if (sceneEntrance_Goto_Other === 'chat') {
+      //     Promise.resolve(  //再次查询项目有没有失效
+      //       dispatches({
+      //         type: 'board/getBoardDetail',
+      //         payload: {
+      //           id: boardId,
+      //         }
+      //       })
+      //     ).then(res => {
+      //       if (isApiResponseOk(res)) {
+      //         Taro.navigateTo({
+      //           url: `../../pages/chat/index?pageSource=${payload.sourcePage}&boardId=${boardId}`
+      //         })
+      //       }
+      //     })
+      //   } else if (todoListData) {
+      //     Promise.resolve(
+      //       dispatches({
+      //         type: 'my/changeCurrentOrg',
+      //         payload: {
+      //           _organization_id: '0',
+      //           isTodo: 'todoList',
+      //         }
+      //       })
+      //     ).then(res => {
+      //       if (isApiResponseOk(res)) {
 
-        const todoListData = Taro.getStorageSync('isTodoList')
-        if (sceneEntrance_Goto_Other === 'chat') {
-          Promise.resolve(  //再次查询项目有没有失效
-            dispatches({
-              type: 'board/getBoardDetail',
-              payload: {
-                id: boardId,
-              }
-            })
-          ).then(res => {
-            if (isApiResponseOk(res)) {
-              Taro.navigateTo({
-                url: `../../pages/chat/index?pageSource=${payload.sourcePage}&boardId=${boardId}`
-              })
-            }
-          })
-        } else if (todoListData) {
-          Promise.resolve(
-            dispatches({
-              type: 'my/changeCurrentOrg',
-              payload: {
-                _organization_id: '0',
-                isTodo: 'todoList',
-              }
-            })
-          ).then(res => {
-            if (isApiResponseOk(res)) {
-
-              Taro.switchTab({ url: `../../pages/calendar/index` })
-            }
-          })
-        } else if (sceneEntrance_Goto_Other === 'errorPage') {  // 其他错误页面
-          Taro.navigateTo({
-            url: '../../pages/errorPage/index'
-          })
-        } else {
-          Taro.switchTab({ url: `../../pages/calendar/index` })
-        }
-        Taro.removeStorageSync('sceneEntrance_Goto_Other')
-      }
-      else {
-
-        Taro.switchTab({ url: `../../pages/calendar/index` })
-
-        yield put({
-          type: 'calendar/updateDatas',
-          payload: {
-            isReachBottom: true,
-          }
-        })
-      }
+      //         Taro.switchTab({ url: `../../pages/calendar/index` })
+      //       }
+      //     })
+      //   } else if (sceneEntrance_Goto_Other === 'errorPage') {  // 其他错误页面
+      //     Taro.navigateTo({
+      //       url: '../../pages/errorPage/index'
+      //     })
+      //   } else {
+      //     Taro.switchTab({ url: `../../pages/calendar/index` })
+      //   }
+      //   Taro.removeStorageSync('sceneEntrance_Goto_Other')
+      // }
+      // else {
+      //   Taro.switchTab({ url: `../../pages/calendar/index` })
+      //   yield put({
+      //     type: 'calendar/updateDatas',
+      //     payload: {
+      //       isReachBottom: true,
+      //     }
+      //   })
+      // }
     },
     //获取用户信息
     * getAccountInfo({ payload }, { select, call, put }) {

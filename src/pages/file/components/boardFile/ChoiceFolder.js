@@ -220,6 +220,21 @@ export default class ChoiceFolder extends Component {
         })
 
         this.hideBoardList()
+
+
+        // 清除缓存文件
+        Taro.getSavedFileList({
+            success(res) {
+                for (let i = 0; i < res.fileList.length; i++) {
+                    Taro.removeSavedFile({
+                        filePath: res.fileList[i].filePath,
+                        complete(res) {
+                            // console.log('清除成功', res)
+                        }
+                    })
+                }
+            }
+        })
     }
 
     choiceFolder = () => {
@@ -317,10 +332,10 @@ export default class ChoiceFolder extends Component {
                                 resolve({ id: index, filePath: filePath, address: res.result.address, })
                             },
                             fail: function (res) {
-                                console.log(res);
+                                // console.log(res);
                             },
                             complete: function (res) {
-                                console.log(res);
+                                // console.log(res);
                             }
                         });
                     })

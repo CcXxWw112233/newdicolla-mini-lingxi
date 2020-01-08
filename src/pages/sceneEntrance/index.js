@@ -73,9 +73,20 @@ import { connect } from '@tarojs/redux'
 
 export default class sceneEntrance extends Component {
 
+    state = {
+        params_options: {}, //路由传过来的对象
+    }
+
     componentDidMount() {
         const options = this.$router.params
         this.sceneEntrancePages(options)
+        this.setState({
+            params_options: options,
+        })
+    }
+
+    componentDidShow() {
+        this.sceneEntrancePages(this.state.params_options)
     }
 
     sceneEntrancePages(options) {
@@ -120,14 +131,6 @@ export default class sceneEntrance extends Component {
 
                 Taro.setStorageSync('sceneEntrance_Goto_Other', 'chat')
                 Taro.setStorageSync('board_Id', boardId)
-
-                /***
-                * 注入 IM
-                */
-                // dispatch({
-                //     type: 'my/getOrgList',
-                //     payload: {}
-                // })
 
                 Promise.resolve(
                     dispatch({

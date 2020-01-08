@@ -43,7 +43,7 @@ export const request = (options, notShowLoading, isNewLogin) => {
 
         if (REQUEST_RES_CODE_TOKEN_INVALID == res.data.code) {
           if (!isNewLogin) {//正常的登录页面
-            Taro.reLaunch({
+            Taro.navigateTo({
               url: `../../pages/login/index?redirect=${routePageName}`
               // url: `../../pages/login/index`
             })

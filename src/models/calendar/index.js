@@ -88,6 +88,14 @@ export default {
               sche_card_list: arr1
             }
           })
+          if (res.data && res.data.length === 0) {
+            yield put({
+              type: 'updateDatas',
+              payload: {
+                isReachBottom: false
+              }
+            })
+          }
         } else {
           yield put({
             type: 'updateDatas',

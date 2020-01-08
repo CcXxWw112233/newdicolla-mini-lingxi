@@ -573,7 +573,7 @@ class UserInput extends Component {
               <Input
                 ref='inputRef'
                 value={inputValue}
-                confirmType='send'
+                confirmType='done'
                 adjustPosition={false}
                 cursorSpacing={20}
                 style={{
@@ -587,7 +587,7 @@ class UserInput extends Component {
                 onInput={this.handleInput}
                 onFocus={this.handleInputFocus}
                 onBlur={this.handleInputBlur}
-                onConfirm={this.onInputConfirm}
+              // onConfirm={this.onInputConfirm}
               />
             </View>
           )}

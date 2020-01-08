@@ -303,7 +303,8 @@ class ChatItem extends Component {
         {(type === 'text' ||
           type === 'audio' ||
           type === 'custom' ||
-          type === 'image') && (
+          type === 'image' ||
+          type === 'file') && (
             <View
               className={`${styles.contentWrapper} ${
                 flow === 'in' ? styles.contentWrapperIn : styles.contentWrapperOut
@@ -387,6 +388,9 @@ class ChatItem extends Component {
                         }}
                         mode='aspectFill'
                       />
+                    )}
+                    {type === 'file' && (
+                      <View></View>
                     )}
                     {type === 'custom' && isPinupEmoji && (
                       <View className={styles.pinupWrapper}>

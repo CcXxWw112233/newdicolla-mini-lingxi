@@ -70,6 +70,8 @@ export default class CardItem extends Component {
     }
     // const dis_due_style = `opacity: ${flag == '0'?()}`
 
+    var now = Date.parse(new Date());
+
     return (
       <View onClick={() => this.gotoTaksDetails(itemValue)}>
         <View className={`${globalStyles.global_card_out} ${indexStyles.card_content} `} style={`opacity: ${dis_due_style()}`}>
@@ -87,7 +89,7 @@ export default class CardItem extends Component {
               <Text className={`${indexStyles.card_title}`}>{content_name}</Text>
               <Text className={`${indexStyles.organize}`}>#{getOrgName({ org_id, org_list })}>{board_name}</Text>
             </View>
-            <View className={`${indexStyles.card_content_middle_bott}`}>
+            <View className={`${indexStyles.card_content_middle_bott}`} style={{ color: now > due_time ? '#F5222D' : '#8c8c8c' }}>
               {schedule == '0' ? '未排期' : `${start_time ? timestampToTimeZH(start_time) : '开始时间未设置'} - ${due_time ? timestampToTimeZH(due_time) : '截止时间未设置'}`}
             </View>
           </View>
