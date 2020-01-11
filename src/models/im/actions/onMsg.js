@@ -8,7 +8,7 @@ import {
   isPinupEmojiNews,
   isNotificationNews
 } from './../utils/genNews.js';
-import { deep ,filterListAuth} from '../../../utils/util'
+import { deep, filterListAuth } from '../../../utils/util'
 import { handleGlobalNewsPush } from './../utils/activityHandle.js';
 
 //收到的消息
@@ -28,11 +28,11 @@ function onMsg(msg) {
   } = getState();
 
   // let tempState = Object.assign({}, state);
-  let tempState = {...state}
+  let tempState = { ...state }
 
-  let auth = filterListAuth([msg],tempState.userUID);
+  let auth = filterListAuth([msg], tempState.userUID);
   // 无权限--退出
-  if(!auth[0]) return ;
+  if (!auth[0]) return;
 
 
 
@@ -89,31 +89,31 @@ function onMsg(msg) {
     nim.resetSessionUnread(msg.sessionId);
     // 打开的群聊持续更新未读数为0
     dispatch({
-      type:"im/updateBoardUnread",
-      payload:{
-        param:{
-          im_id:msg.target,
-          msgids:[],
+      type: "im/updateBoardUnread",
+      payload: {
+        param: {
+          im_id: msg.target,
+          msgids: [],
         },
         im_id: msg.target,
-        unread:0
+        unread: 0
       }
     })
-  }else{
+  } else {
     // 如果没有打开的群聊，先添加未读数
-    if(msg.type != 'notification' && msg.from != tempState.userUID){
+    if (msg.type != 'notification' && msg.from != tempState.userUID) {
       let arr = [];
       tempState.allBoardList.forEach(item => {
-        if(item.im_id === msg.target){
+        if (item.im_id === msg.target) {
           let unread = +(item.unread || 0);
           unread += 1;
           item.unread = unread + "";
         }
-        item._math = Math.random() * 100000 +1;
+        item._math = Math.random() * 100000 + 1;
         // return item;
         arr.push(item);
       });
-      tempState.allBoardList = JSON.parse(JSON.stringify(arr)) ;
+      tempState.allBoardList = JSON.parse(JSON.stringify(arr));
     }
   }
 
@@ -122,11 +122,124 @@ function onMsg(msg) {
   if (isGlobalPushNews(msg)) {
     console.log('get a global push news ................:', msg);
     handleGlobalNewsPush(msg);
+
+    let { content } = msg;
+    content = content ? JSON.parse(content) : null;
+    if (content && content.method === 'newPush') {
+      let { data: { d, e } } = content;
+      let types = e.split('/');
+      let action = {
+        'change:board': (board_id) => {
+          d = d ? JSON.parse(d) : d;
+          d.is_deleted === undefined && (d.is_deleted = 0);
+          d.is_archived === undefined && (d.is_archived = 0);
+          d.user_count === undefined && (d.user_count = 0);
+          // 删除或者解散项目
+          if (+d.is_deleted || +d.is_archived) {
+            let oldArr = [...tempState.allBoardList];
+            let arr = [];
+            oldArr.forEach(item => {
+              if (item.board_id != board_id) {
+                arr.push(item);
+              }
+            })
+            tempState.allBoardList = arr;
+          }
+          // 人员更新,将返回的人员列表更新上去
+          if (+d.user_count) {
+            let oldArr = [...tempState.allBoardList];
+            let arr = [];
+            oldArr.forEach(item => {
+              if (item.board_id == board_id) {
+                item.users = d.data;
+              }
+              arr.push(item);
+            })
+            tempState.allBoardList = arr;
+          }
+        }
+      }
+      action[types[0]] && action[types[0]](types[1]);
+    }
   }
+
+  // 系统通知
+  if (msg.type === "notification") {
+    // debugger
+    let { attach = {} } = msg;
+    let { type } = attach;
+    if (type === 'removeTeamMembers') {
+      let { accounts } = attach;
+      let List = [...tempState.allBoardList];
+      let arr = [];
+      if (accounts.indexOf(tempState.userUID) != -1) {
+        let newList = List.filter(item => item.im_id != msg.target);
+        tempState.allBoardList = newList;
+        return;
+      }
+      List.forEach(obj => {
+        // 发送给哪个群聊
+        if (obj.im_id == msg.target) {
+          // 如果是子圈
+          if (obj.type == 3) {
+            let users = obj.users;
+            // 过滤accounts里面有的用户
+            accounts.forEach(item => {
+              users = users.filter(user => user.user_id != item);
+            })
+            obj.users = users;
+          }
+        }
+        arr.push(obj)
+      });
+      // 删除了某个项目
+      tempState.allBoardList = arr;
+    }
+    if (type === "dismissTeam") {
+      let List = [...tempState.allBoardList];
+      let arr = [];
+      List.forEach(item => {
+        if (item.im_id != msg.target) {
+          arr.push(item)
+        }
+      })
+      tempState.allBoardList = arr;
+    }
+    // 项目添加了人员
+    if (type === 'addTeamMembers') {
+      let { accounts } = attach;
+      let List = [...tempState.allBoardList];
+      let arr = [];
+      let p = List.filter(item => item.type == 2);
+      List.forEach(obj => {
+        // 发送给哪个群聊
+        if (obj.im_id == msg.target) {
+          // 如果是子圈，项目圈有单独的添加人员处理方式
+          // if (obj.type == 3) {
+          //   // 获取父群的人员，添加到子圈里
+          //   let parent = p.find(sub => sub.board_id == obj.board_id);
+          //   // 父群人员列表
+          //   let users = parent.users;
+          //   // 如果添加的人员存在，就更新当前群聊的人员
+          //   accounts.forEach(item => {
+          //     let subuser = users.find(user => user.user_id == item);
+          //     if (subuser) {
+          //       // console.log('加入了',subuser)
+          //       obj.users.push(subuser);
+          //     }
+          //   })
+          // }
+        }
+        arr.push(obj)
+      });
+      tempState.allBoardList = arr;
+    }
+  }
+
 
   dispatch({
     type: 'im/updateStateByReplace',
-    state: {...tempState},
+    state: { ...tempState },
     desc: 'on msg'
   });
 }

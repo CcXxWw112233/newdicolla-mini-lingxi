@@ -27,14 +27,14 @@ import genEmojiList from './../../../models/im/utils/genEmojiList.js';
     },
   }) => ({ im_id, isOnlyShowInform, handleInputMode }),
   dispatch => ({
-    sendTeamTextMsg: (text, to,apns) =>
+    sendTeamTextMsg: (text, to, apns) =>
       dispatch({
         type: 'im/sendMsg',
         payload: {
           type: 'text',
           text,
           scene: 'team',
-          apns:apns,
+          apns: apns,
           to
         },
         desc: 'im send msg'
@@ -100,7 +100,7 @@ import genEmojiList from './../../../models/im/utils/genEmojiList.js';
   })
 )
 class UserInput extends Component {
-  constructor(props){
+  constructor(props) {
     super(props)
     this.TextInput = "";
   }
@@ -114,7 +114,7 @@ class UserInput extends Component {
     emojiAlbum: 'emoji', // emoji | ajmd | lt | xxy
     inputBottomValue: 0,
     isRecording: false,
-    atIds:[]
+    atIds: []
   };
   handleInputFocus = e => {
     const { handleUserInputFocus, handleUserInputHeightChange } = this.props;
@@ -149,9 +149,9 @@ class UserInput extends Component {
   handleInput = e => {
     let text = e.currentTarget.value;
     let { detail } = e;
-    let last = text.substring(text.length -1 ,text.length);
+    let last = text.substring(text.length - 1, text.length);
     // 如果输入的符合@符号，并且不是删除时触发的
-    if(last === '@' && detail.keyCode != 8){
+    if (last === '@' && detail.keyCode != 8) {
       this.props.onPrefix && this.props.onPrefix(text);
     }
     this.setState({
@@ -161,13 +161,13 @@ class UserInput extends Component {
     this.preFixUserDelete(e.currentTarget.value);
   };
   preFixUserDelete = (text) => {
-    let { atIds:willSendUser } = this.state;
+    let { atIds: willSendUser } = this.state;
     let arr = [];
     // 检测是否存在已经删除的艾特人员，手动输入的艾特消息将不计入艾特效果中
     willSendUser && willSendUser.forEach(item => {
-      let reg = new RegExp("@"+item.name,"g");
-      if(reg.test(text)){
-          arr.push(item);
+      let reg = new RegExp("@" + item.name, "g");
+      if (reg.test(text)) {
+        arr.push(item);
       }
     })
     // 更新列表
@@ -176,19 +176,19 @@ class UserInput extends Component {
     })
   }
   // 获取那些艾特中了的人员ID
-  getApns = () =>{
+  getApns = () => {
     let { atIds } = this.state;
     let arr = [];
     atIds.forEach(item => {
       arr.push(item.user_id)
     })
-    return arr ;
+    return arr;
   }
   // 发送消息
   sendTextMsg = () => {
 
     const { inputValue } = this.state;
-    const { im_id, sendTeamTextMsg ,onSend} = this.props;
+    const { im_id, sendTeamTextMsg, onSend } = this.props;
 
     if (!im_id) {
       Taro.showToast({
@@ -219,19 +219,19 @@ class UserInput extends Component {
     });
     let users = this.getApns();
     let apns = {};
-    if(users.length){
+    if (users.length) {
       apns.accounts = users;
-    }else{
-      apns = undefined ;
+    } else {
+      apns = undefined;
     }
-    Promise.resolve(sendTeamTextMsg(inputValue, im_id,apns))
-      .then(() =>{
+    Promise.resolve(sendTeamTextMsg(inputValue, im_id, apns))
+      .then(() => {
         this.setState({
           inputValue: '',
-          atIds:[]
+          atIds: []
         })
         onSend && onSend(inputValue)
-        })
+      })
       .catch(e =>
         Taro.showToast({
           title: String(e),
@@ -568,25 +568,25 @@ class UserInput extends Component {
     let list = [...this.state.atIds];
     list.push(val);
     this.setState({
-      atIds:list,
-      inputValue: this.state.inputValue + val.name+ ' '
+      atIds: list,
+      inputValue: this.state.inputValue + val.name + ' '
     })
     // this.TextInput && this.TextInput.current.focus();
   }
 
   componentWillReceiveProps(nextProps) {
-    const { handleInputMode ,prefixUser} = nextProps;
+    const { handleInputMode, prefixUser } = nextProps;
     // console.log(handleInputMode);
     this.setState({
       inputMode: handleInputMode
     });
-    if(prefixUser && (prefixUser != this.props.prefixUser)){
+    if (prefixUser && (prefixUser != this.props.prefixUser)) {
       this.addPrefixNames(prefixUser)
     }
 
   }
 
-  setInput = (node)=> { this.TextInput = node ;}
+  setInput = (node) => { this.TextInput = node; }
 
   render() {
     const {

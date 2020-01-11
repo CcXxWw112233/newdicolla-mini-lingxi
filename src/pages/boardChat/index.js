@@ -548,17 +548,26 @@ export default class BoardChat extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({
-            chatBoardList: nextProps.allBoardList
+        // 列表去重
+        let list = [...nextProps.allBoardList];
+        let obj = {};
+        let arr = [];
+        list.forEach(item => {
+            let key = item.im_id
+            if (!obj[key]) {
+                arr.push(item);
+                obj[key] = true;
+            }
         })
-        this.countSumUnRead(nextProps.allBoardList)
-
-        // this.getChatBoardList()
+        this.setState({
+            chatBoardList: arr
+        })
+        this.countSumUnRead(arr)
     }
 
     render() {
         const { search_mask_show, chatBoardList } = this.state
-        let { allBoardList, userUID } = this.props;
+        let { userUID } = this.props;
         // 对消息进行排序, 根据lastMsg里面的time最新的排在最上面
         let listArray = chatBoardList.filter(item => { return item.scene == 'team' }).sort((a, b) => ((b.updateTime)) - ((a.updateTime)))  //(b-a)时间正序
         return (

@@ -188,14 +188,23 @@ const isNotificationNews = msg => {
 
 //是否是创建新的群聊的系统通知消息
 const isCreatedNewGroupOrAddTeamMembersNews = session => {
-  const {
-    lastMsg: { fromClientType, type, attach: { type: attachType } = {} } = {}
-  } = session;
-  return (
-    fromClientType === 'Server' &&
-    type === 'notification' &&
-    attachType === 'addTeamMembers'
-  );
+  let { lastMsg: { type, content } } = session;
+  if (type === 'custom') {
+    let data = content ? JSON.parse(content) : {};
+    if (content && data.method === 'newPush') {
+      console.log(content)
+    }
+
+  }
+  return false;
+  // const {
+  //   lastMsg: { fromClientType, type, attach: { type: attachType } = {} } = {}
+  // } = session;
+  // return (
+  //   fromClientType === 'Server' &&
+  //   type === 'notification' &&
+  //   attachType === 'addTeamMembers'
+  // );
 };
 
 export {
