@@ -3,7 +3,6 @@ import { isCreatedNewGroupOrAddTeamMembersNews } from './../utils/genNews.js'
 import mergeMsgs from './../utils/mergeMsgs'
 import { filterListAuth } from '../../../utils/util'
 
-
 function onUpdateSession(sessions) {
   console.log('get session :', sessions);
 
@@ -25,11 +24,10 @@ function onUpdateSession(sessions) {
 
   //如果是新建群或者更新了群成员的信息，那么重新拉取所有的群信息的列表
   if (isCreatedNewGroupOrAddTeamMembersNews(sessions)) {
-    // dispatch({
-    //   type: 'im/fetchAllIMTeamList',
-    //   payload: {},
-    //   desc: 'fetch all im team list'
-    // });
+    dispatch({
+      type: 'im/fetchAllIMTeamList',
+      desc: 'fetch all im team list'
+    });
   }
 
   if (!Array.isArray(sessions)) {

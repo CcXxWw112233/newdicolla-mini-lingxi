@@ -89,7 +89,6 @@ export default {
         //但是目前还混有其他数据，所以这里过滤一下
         const filteredAllBoardList = (arr = []) =>
           arr.filter(i => i.type && i.type === '2');
-
         // 过滤后的列表
         let arr = filteredAllBoardList(data).filter(item => (item.users && item.users.length != 1) && (item.im_id && !(item.im_id.match(/^[ ]*$/))))
 

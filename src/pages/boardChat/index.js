@@ -3,7 +3,6 @@ import { View, Text } from '@tarojs/components'
 import GroupItem from './components/GroupItem';
 import { connect } from '@tarojs/redux'
 import indexStyles from './index.scss'
-import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import SearchAndMenu from '../board/components/SearchAndMenu'
 import { isPlainObject, filterListAuth } from './../../utils/util';
 import { isApiResponseOk } from '../../utils/request';
@@ -222,23 +221,17 @@ export default class BoardChat extends Component {
         // this.setState({
         //     chatBoardList: boardChatList
         // })
-
-
     }
+
     componentDidMount() {
         this.getChatBoardList();
     }
 
     componentWillMount() { }
 
-    componentWillReceiveProps(nextProps) {
-        // console.log(nextProps)
-    }
-
     componentWillUnmount() { }
 
     componentDidShow() {
-
         //解决, 当在chat页面的时候, 来了新未读消息TabBarBadge不能及时更新, 从chat页面pop回来强制刷新数据
         const isRefreshNews = Taro.getStorageSync('isRefreshFetchAllIMTeamList')
         if (isRefreshNews === 'true') {
@@ -249,14 +242,6 @@ export default class BoardChat extends Component {
 
     componentDidHide() { }
 
-    //获取全部组织和全部项目
-    fetchAllIMTeamList = () => {
-        const { dispatch } = this.props;
-        return dispatch({
-            type: 'im/fetchAllIMTeamList',
-            payload: {}
-        })
-    }
     // 获取组织列表
     getOrgList = () => {
         const { dispatch } = this.props
@@ -299,7 +284,6 @@ export default class BoardChat extends Component {
             resolve();
         })
     }
-
 
     hanldClickedGroupItem = ({ board_id, im_id }) => {
         //禁止快速重复点击
@@ -561,13 +545,15 @@ export default class BoardChat extends Component {
                 })
             }
         })
-
     }
+
     componentWillReceiveProps(nextProps) {
         this.setState({
             chatBoardList: nextProps.allBoardList
         })
         this.countSumUnRead(nextProps.allBoardList)
+
+        // this.getChatBoardList()
     }
 
     render() {
