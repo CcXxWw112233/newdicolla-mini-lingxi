@@ -170,7 +170,8 @@ export default class auccessJoin extends Component {
     if (!im_id) {
       Taro.showToast({
         title: '当前群未注册',
-        icon: 'none'
+        icon: 'none',
+        duration: 2000
       });
       return;
     }
@@ -198,7 +199,7 @@ export default class auccessJoin extends Component {
           url: `../../pages/chat/index?boardId=${board_id}&pageSource=auccessJoin`
         })
       })
-      .catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
+      .catch(e => Taro.showToast({ title: String(e), icon: 'none', duration: 2000 }));
   }
 
   render() {

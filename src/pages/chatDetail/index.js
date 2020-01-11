@@ -16,7 +16,7 @@ class ChatDetail extends Component {
     console.log('should show history page.');
   };
   pageJump = url => {
-    if(!url) return
+    if (!url) return
     Taro.navigateTo({
       url,
     })

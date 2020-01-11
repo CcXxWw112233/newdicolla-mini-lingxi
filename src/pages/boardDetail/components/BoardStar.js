@@ -33,7 +33,8 @@ class BoardStar extends Component {
     }
     Taro.showToast({
       title: '未完成功能',
-      icon: 'none'
+      icon: 'none',
+      duration: 2000
     });
   };
   getCurrentBoardStar = (list = [], id) => {

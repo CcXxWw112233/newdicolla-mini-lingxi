@@ -62,7 +62,8 @@ export default {
         // 微信已绑定系统，给出提示
         Taro.showToast({
           icon: 'none',
-          title: res.message
+          title: res.message,
+          duration: 2000
         })
       }
     },
@@ -152,7 +153,7 @@ export default {
           type: 'im/fetchAllIMTeamList'
         });
       };
-      initImData().catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
+      initImData().catch(e => Taro.showToast({ title: String(e), icon: 'none', duration: 2000 }));
     }
   },
 

@@ -243,7 +243,8 @@ export default class Login extends Component {
       } else if (res.code === '4005' || res.code === '4006' || res.code === '4007') {
         Taro.showToast({
           title: res.message,
-          icon: 'none'
+          icon: 'none',
+          duration: 2000
         });
         this.setState({
           verifyShow: true,
@@ -253,7 +254,8 @@ export default class Login extends Component {
       } else {
         Taro.showToast({
           title: res.message,
-          icon: 'none'
+          icon: 'none',
+          duration: 2000
         });
       }
     }).catch(() => { })

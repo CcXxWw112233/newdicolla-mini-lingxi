@@ -58,7 +58,8 @@ export default class phoneNumberLogin extends Component {
     } else { //拒绝,保持当前页面，直到同意
       Taro.showToast({
         icon: 'none',
-        title: '您拒绝了授权手机号登录'
+        title: '您拒绝了授权手机号登录',
+        duration: 2000
       })
     }
 

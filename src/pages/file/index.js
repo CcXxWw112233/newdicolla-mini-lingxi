@@ -328,7 +328,8 @@ export default class File extends Component {
         if (!im_id) {
             Taro.showToast({
                 title: '当前群未注册',
-                icon: 'none'
+                icon: 'none',
+                duration: 2000
             });
             return;
         }
@@ -358,7 +359,7 @@ export default class File extends Component {
                     url: `../../pages/chat/index?fileInfo=${JSON.stringify(value)}&pageSource=isFileComment&boardId=${board_id}`
                 })
             })
-            .catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
+            .catch(e => Taro.showToast({ title: String(e), icon: 'none', duration: 2000 }));
     }
 
     closeTips = () => {
@@ -467,7 +468,8 @@ export default class File extends Component {
 
         let that = this;
         Taro.chooseImage({
-            count: 9 - that.state.choice_image_temp_file_paths.length,
+            // count: 9 - that.state.choice_image_temp_file_paths.length,
+            count: 9,
             sizeType: ['original'],
             sourceType: [imageSourceType],
             success(res) {

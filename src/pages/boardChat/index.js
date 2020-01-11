@@ -368,7 +368,7 @@ export default class BoardChat extends Component {
                         url: `../../pages/chat/index?boardId=${board_id}&pageSource=boardChat`
                     });
                 })
-                .catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
+                .catch(e => Taro.showToast({ title: String(e), icon: 'none', duration: 2000 }));
         });
     }
 

@@ -69,7 +69,8 @@ class ChatItem extends Component {
         () => {
           Taro.showToast({
             title: '开始播放',
-            icon: 'none'
+            icon: 'none',
+            duration: 2000
           });
           this.setState(
             {
@@ -85,7 +86,8 @@ class ChatItem extends Component {
       if (createInnerAudioContext.paused) {
         Taro.showToast({
           title: '开始播放',
-          icon: 'none'
+          icon: 'none',
+          duration: 2000
         });
         this.setState(
           {
@@ -98,7 +100,8 @@ class ChatItem extends Component {
       } else {
         Taro.showToast({
           title: '暂停播放',
-          icon: 'none'
+          icon: 'none',
+          duration: 2000
         });
         this.setState(
           {

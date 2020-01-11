@@ -204,7 +204,8 @@ export default class sceneEntrance extends Component {
         if (!im_id) {
             Taro.showToast({
                 title: '当前群未注册',
-                icon: 'none'
+                icon: 'none',
+                duration: 2000
             });
             return;
         }
@@ -232,7 +233,7 @@ export default class sceneEntrance extends Component {
                     url: `../../pages/${pageObject}/index?contentId=${contentId}&boardId=${board_id}&pageSource=sceneEntrance`
                 })
             })
-            .catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
+            .catch(e => Taro.showToast({ title: String(e), icon: 'none', duration: 2000 }));
     }
 }
 

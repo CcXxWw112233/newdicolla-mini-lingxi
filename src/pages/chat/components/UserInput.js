@@ -193,14 +193,16 @@ class UserInput extends Component {
     if (!im_id) {
       Taro.showToast({
         title: '未获取到群消息',
-        icon: 'none'
+        icon: 'none',
+        duration: 2000
       });
       return;
     }
     if (!inputValue || !inputValue.trim()) {
       Taro.showToast({
         title: '请不要发空消息',
-        icon: 'none'
+        icon: 'none',
+        duration: 2000
       });
       this.setState({
         inputValue: ''
@@ -210,7 +212,8 @@ class UserInput extends Component {
     if (inputValue.length > 800) {
       Taro.showToast({
         title: '请不要超过800个字',
-        icon: 'none'
+        icon: 'none',
+        duration: 2000
       });
       return;
     }
@@ -235,7 +238,8 @@ class UserInput extends Component {
       .catch(e =>
         Taro.showToast({
           title: String(e),
-          icon: 'none'
+          icon: 'none',
+          duration: 2000
         })
       );
 
@@ -313,7 +317,8 @@ class UserInput extends Component {
     if (!typeCond[type]) {
       Taro.showToast({
         title: '未完成功能',
-        icon: 'none'
+        icon: 'none',
+        duration: 2000
       });
       return;
     }
@@ -343,14 +348,16 @@ class UserInput extends Component {
           .catch(e => {
             Taro.showToast({
               title: String(e),
-              icon: 'none'
+              icon: 'none',
+              duration: 2000
             });
           });
       },
       fail: function () {
         Taro.showToast({
           title: '未选择任何图片',
-          icon: 'none'
+          icon: 'none',
+          duration: 2000
         });
       },
       complete: function () { }
@@ -360,6 +367,7 @@ class UserInput extends Component {
     Taro.showToast({
       title: '未完成功能',
       icon: 'none',
+      duration: 2000
     })
   }
   handleClickAdditionItem = type => {
@@ -404,7 +412,8 @@ class UserInput extends Component {
       .catch(e =>
         Taro.showToast({
           title: String(e),
-          icon: 'none'
+          icon: 'none',
+          duration: 2000
         })
       );
   };
@@ -439,7 +448,8 @@ class UserInput extends Component {
         if (res.duration < 1000) {
           Taro.showToast({
             title: '录音时间太短',
-            icon: 'error'
+            icon: 'error',
+            duration: 2000
           });
         } else {
           that.sendAudioMsg(res);
@@ -466,12 +476,14 @@ class UserInput extends Component {
                   if (recordAuth == true) {
                     Taro.showToast({
                       title: '授权成功',
-                      icon: 'success'
+                      icon: 'success',
+                      duration: 2000
                     });
                   } else {
                     Taro.showToast({
                       title: '请授权录音',
-                      icon: 'success'
+                      icon: 'success',
+                      duration: 2000
                     });
                   }
                   that.setState({
@@ -490,7 +502,8 @@ class UserInput extends Component {
                   //授权成功
                   Taro.showToast({
                     title: '授权成功',
-                    icon: 'success'
+                    icon: 'success',
+                    duration: 2000
                   });
                 }
               });
@@ -499,7 +512,8 @@ class UserInput extends Component {
           fail: function () {
             Taro.showToast({
               title: '鉴权失败，请重试',
-              icon: 'error'
+              icon: 'error',
+              duration: 2000
             });
           }
         });

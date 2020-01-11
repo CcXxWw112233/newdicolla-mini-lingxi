@@ -70,7 +70,8 @@ class GroupList extends Component {
     if (!im_id) {
       Taro.showToast({
         title: '当前群未注册',
-        icon: 'none'
+        icon: 'none',
+        duration: 2000
       });
       return;
     }
@@ -128,7 +129,7 @@ class GroupList extends Component {
           url: `/pages/chat/index`
         });
       })
-      .catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
+      .catch(e => Taro.showToast({ title: String(e), icon: 'none', duration: 2000 }));
   };
   handleExpandSubGroupChange = flag => {
     this.setState({
@@ -311,7 +312,7 @@ class GroupList extends Component {
         type: 'im/fetchAllIMTeamList'
       });
     };
-    initImData().catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
+    initImData().catch(e => Taro.showToast({ title: String(e), icon: 'none', duration: 2000 }));
   }
 
   render() {

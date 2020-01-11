@@ -70,7 +70,8 @@ export const request = (options, notShowLoading, isNewLogin) => {
         }
         Taro.showToast({
           title: "系统繁忙，请稍后重试",
-          icon: "none"
+          icon: "none",
+          duration: 2000
         });
         reject({ error: "系统繁忙，请稍后重试" });
       },

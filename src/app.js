@@ -131,7 +131,7 @@ class App extends Component {
         type: 'im/fetchAllIMTeamList'
       });
     };
-    initImData().catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
+    initImData().catch(e => Taro.showToast({ title: String(e), icon: 'none', duration: 2000 }));
   }
 
   componentDidShow() {

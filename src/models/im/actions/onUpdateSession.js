@@ -59,7 +59,6 @@ function onUpdateSession(sessions) {
 
 
 
-
   let List = [...tempState.allBoardList];
   // 判断这条消息是不是新建群聊
   let oldMsg = List.find(item => item.im_id === sessions[0].to);
