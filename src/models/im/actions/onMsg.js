@@ -101,16 +101,20 @@ function onMsg(msg) {
     })
   }else{
     // 如果没有打开的群聊，先添加未读数
-    if(msg.type != 'notification' && msg.from != tempState.userUID)
-    tempState.allBoardList.map(item => {
-      if(item.im_id === msg.target){
-        let unread = +(item.unread || 0);
-        unread += 1;
-        item.unread = unread + "";
-      }
-      item._math = Math.random() * 100000 +1;
-      return item;
-    });
+    if(msg.type != 'notification' && msg.from != tempState.userUID){
+      let arr = [];
+      tempState.allBoardList.forEach(item => {
+        if(item.im_id === msg.target){
+          let unread = +(item.unread || 0);
+          unread += 1;
+          item.unread = unread + "";
+        }
+        item._math = Math.random() * 100000 +1;
+        // return item;
+        arr.push(item);
+      });
+      tempState.allBoardList = JSON.parse(JSON.stringify(arr)) ;
+    }
   }
 
 
