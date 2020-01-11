@@ -152,9 +152,13 @@ function onMsg(msg) {
             oldArr.forEach(item => {
               if (item.board_id == board_id) {
                 item.users = d.data;
+
               }
               arr.push(item);
             })
+            if (board_id == tempState.currentGroup.board_id) {
+              tempState.currentGroup.users = d.data;
+            }
             tempState.allBoardList = arr;
           }
         }
