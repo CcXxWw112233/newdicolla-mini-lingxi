@@ -77,7 +77,7 @@ export default class ChoiceFolder extends Component {
                 type: 'board/v2BoardList',
                 payload: {
                     _organization_id: '0',
-                    contain_type: '0',
+                    app_type: '4',
                 },
             })
         })
@@ -310,6 +310,7 @@ export default class ChoiceFolder extends Component {
                 filePath,
                 success: res => {
                     EXIF.getData(res.data, img => {
+
                         const LatitudeArry = EXIF.getTag(res.data, 'GPSLatitude')
                         const LongitudeArry = EXIF.getTag(res.data, 'GPSLongitude')
 
@@ -332,10 +333,10 @@ export default class ChoiceFolder extends Component {
                                 resolve({ id: index, filePath: filePath, address: res.result.address, })
                             },
                             fail: function (res) {
-                                // console.log(res);
+                                console.log('读取失败: ', res);
                             },
                             complete: function (res) {
-                                // console.log(res);
+                                console.log('读取完成: ', res);
                             }
                         });
                     })

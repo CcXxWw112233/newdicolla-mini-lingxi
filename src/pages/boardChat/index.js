@@ -153,7 +153,7 @@ export default class BoardChat extends Component {
         this.getOrgList();
         let list = await this.getAllTeam();
         // let list = await this.getAllTeam();
-        const { allBoardList, dispatch } = this.props;
+        const { dispatch } = this.props;
 
         // 需要请求历史数据的项目列表
         let promiseList = new Array()

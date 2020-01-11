@@ -27,7 +27,8 @@ import { connect } from '@tarojs/redux';
 class ChatItem extends Component {
   state = {
     isAudioPlaying: false, // 是否正在播放音频消息
-    createInnerAudioContext: null // 一个音频实例
+    createInnerAudioContext: null, // 一个音频实例
+    _index: '',
   };
   isValidImgUrl = url => {
     return /^http[s]?:/.test(url);
@@ -252,6 +253,27 @@ class ChatItem extends Component {
       .catch(err => console.log(err.errMsg))
   }
 
+  bindpause = (e) => {
+    console.log(e, 'sssssssssss');
+  }
+  startPlay = (e) => {
+    console.log(e, 'sssssssssss');
+
+    var _index = e.currentTarget.dataset.id
+    this.setState({
+      _index: _index
+    })
+    //停止正在播放的视频
+    var videoContextPrev = Taro.createVideoContext(_index + "")
+
+    videoContextPrev.stop();
+    setTimeout(function () {
+      //将点击视频进行播放
+      var videoContext = Taro.createVideoContext(_index + "")
+      videoContext.play();
+    }, 500)
+  }
+
   render() {
     const {
       flow,
@@ -304,7 +326,7 @@ class ChatItem extends Component {
           type === 'audio' ||
           type === 'custom' ||
           type === 'image' ||
-          type === 'file') && (
+          type === 'video') && (
             <View
               className={`${styles.contentWrapper} ${
                 flow === 'in' ? styles.contentWrapperIn : styles.contentWrapperOut
@@ -373,7 +395,7 @@ class ChatItem extends Component {
                     {type === 'image' && (
                       <Image
                         onClick={() => this.handlePreviewImage(file)}
-                        src={file.url}
+                        src={typeof file === 'string' ? (JSON.parse(file).url) : file.url}
                         style={{
                           width: this.genImageSize(
                             file.w,
@@ -389,8 +411,28 @@ class ChatItem extends Component {
                         mode='aspectFill'
                       />
                     )}
-                    {type === 'file' && (
-                      <View></View>
+                    {type === 'video' && (
+                      <Video
+                        poster-for-crawler={file.url + '&vframe'}
+                        src={typeof file === 'string' ? (JSON.parse(file).url) : file.url}
+                        duration={parseInt(`${Math.ceil(((typeof file === 'string' ? JSON.parse(file).dur : file.dur) || 0) / 1000)}" `)}
+                        loop={true}
+                        onPlay={this.startPlay}
+                        onPause={this.bindpause}
+                        bindplause
+                        style={{
+                          width: this.genImageSize(
+                            file.w,
+                            Number(file.w / file.h),
+                            'w'
+                          ),
+                          height: this.genImageSize(
+                            file.h,
+                            Number(file.w / file.h),
+                            'h'
+                          ),
+                        }}
+                      ></Video>
                     )}
                     {type === 'custom' && isPinupEmoji && (
                       <View className={styles.pinupWrapper}>
@@ -428,7 +470,18 @@ class ChatItem extends Component {
                                       }}
                                     >
                                       &nbsp;
-                              </Text>
+                                   </Text>
+                                  </Text>
+                                  <Text className={styles.action}>
+                                    {action ? `${action}` : ''}
+                                    <Text
+                                      style={{
+                                        display: 'inline-block',
+                                        width: '6px'
+                                      }}
+                                    >
+                                      &nbsp;
+                                    </Text>
                                   </Text>
                                   {range && range['rangeText'] && (
                                     <Text
@@ -446,17 +499,6 @@ class ChatItem extends Component {
                                         : ''}
                                     </Text>
                                   )}
-                                  <Text className={styles.action}>
-                                    {action ? `${action}` : ''}
-                                    <Text
-                                      style={{
-                                        display: 'inline-block',
-                                        width: '6px'
-                                      }}
-                                    >
-                                      &nbsp;
-                              </Text>
-                                  </Text>
                                   <Text
                                     className={`${styles.thing} ${
                                       activityType === 'card' ||

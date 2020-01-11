@@ -32,14 +32,14 @@
     }
 
     .board_item_style {
-        width : 100%;
-        height: pxTrans(50);
+        width     : 100%;
+        min-height: pxTrans(50);
 
         .board_item_cell_style {
-            height     : 100%;
-            display    : flex;
-            text-align : center;
-            align-items: center;
+            height        : 100%;
+            display       : flex;
+            // text-align : center;
+            align-items   : baseline;
 
             .board_item_icon {
                 font-size      : pxTrans(20);
@@ -49,10 +49,12 @@
             }
 
             .board_item_name {
-                height     : pxTrans(26);
-                font-size  : pxTrans(18);
-                font-weight: 600;
-                line-height: pxTrans(26);
+                // height     : pxTrans(26);
+                font-size     : pxTrans(18);
+                font-weight   : 600;
+                line-height   : pxTrans(26);
+                max-width     : pxTrans(500);
+                padding       : pxTrans(5) 0 pxTrans(5) 0;
             }
 
             .org_name_style {
