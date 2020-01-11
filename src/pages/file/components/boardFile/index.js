@@ -31,7 +31,7 @@ export default class BoardFile extends Component {
                 type: 'board/v2BoardList',
                 payload: {
                     _organization_id: '0',
-                    contain_type: '0',
+                    app_type: '4',
                 },
             })
         })

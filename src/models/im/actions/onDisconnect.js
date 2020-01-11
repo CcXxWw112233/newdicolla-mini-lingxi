@@ -14,7 +14,7 @@ function onDisconnect(error) {
         console.log('onError: 账号或者密码错误');
         Taro.showToast({
           title: 'im 账号或密码错误',
-          duration: '2000'
+          duration: 2000
         });
         dispatch({
           type: 'updateStateFieldByCover',
@@ -92,7 +92,7 @@ function onDisconnect(error) {
               } = getState();
               if (nim) {
                 nim.destroy({
-                  done: function() {
+                  done: function () {
                     console.log('destroy nim done !!!');
 
                     //这里做一些清理工作
@@ -116,10 +116,10 @@ function onDisconnect(error) {
           }
         });
         break;
-      case 'logout':{
+      case 'logout': {
         // console.log(error.code,"主动destroy");
       }
-      break;
+        break;
       default:
         // console.log(error.code,"im 异常错误");
         // console.log(error,"im 异常错误");
@@ -147,7 +147,7 @@ function onDisconnect(error) {
         //   });
         //   // registerIM
         // }
-       
+
         break;
     }
   }

@@ -153,7 +153,7 @@ export default class BoardChat extends Component {
         this.getOrgList();
         let list = await this.getAllTeam();
         // let list = await this.getAllTeam();
-        const { allBoardList, dispatch } = this.props;
+        const { dispatch } = this.props;
 
         // 需要请求历史数据的项目列表
         let promiseList = new Array()
@@ -414,15 +414,15 @@ export default class BoardChat extends Component {
                 image: '[图片]',
                 video: '[视频]',
                 notification: '[系统通知]',
-                file,
+                file: '[文件]',
                 custom,
             };
             if (type === 'text') {
                 return `${fromNick}: ${text}`;
             }
-            if (type === 'file') {
-                return `${'[文件]'} ${file.name}`;
-            }
+            // if (type === 'file') {
+            //     return `${'[文件]'} ${file.name}`;
+            // }
             if (type === 'custom') {
                 const contentJSON = JSON.parse(lastMsg.content)
                 return contentJSON.type === 3 ? '[动态贴图]' : '[动态消息]'

@@ -410,7 +410,7 @@ class ChatContent extends Component {
         style={chatConetntViewHeightStyle}
       >
         {loadPrev && <View className={styles.loadMoreChat}>加载中...</View>}
-        <View
+        {/* <View
           className={`${globalStyles.global_iconfont} ${
             styles.filterInformWrapper
             }`}
@@ -424,7 +424,8 @@ class ChatContent extends Component {
           }
         >
           &#xe645;
-        </View>
+        </View> */}
+
         <View
           className={styles.contentWrapper}
           style={{

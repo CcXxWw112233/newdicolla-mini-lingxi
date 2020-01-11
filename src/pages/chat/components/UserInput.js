@@ -25,7 +25,7 @@ import genEmojiList from './../../../models/im/utils/genEmojiList.js';
     chat: {
       handleInputMode,
     },
-  }) => ({ im_id, isOnlyShowInform, handleInputMode, }),
+  }) => ({ im_id, isOnlyShowInform, handleInputMode }),
   dispatch => ({
     sendTeamTextMsg: (text, to,apns) =>
       dispatch({
@@ -258,9 +258,6 @@ class UserInput extends Component {
     });
     this.sendTextMsg();
   };
-  // handleChange = () => {
-
-  // }
   handleTextInput = () => {
     this.setState(
       {
@@ -602,7 +599,6 @@ class UserInput extends Component {
       inputBottomValue,
     } = this.state;
 
-    // console.log(inputMode);
     const { emojiAlbumList, emojiList } = this.genEmojiInfo();
     const findedCurrentEmojiAlbum = emojiList.filter(
       i => i.name === emojiAlbum
@@ -643,7 +639,7 @@ class UserInput extends Component {
               <Input
                 ref={this.setInput}
                 value={inputValue}
-                confirmType='send'
+                confirmType='done'
                 adjustPosition={false}
                 cursorSpacing={20}
                 style={{
@@ -657,8 +653,7 @@ class UserInput extends Component {
                 onInput={this.handleInput}
                 onFocus={this.handleInputFocus}
                 onBlur={this.handleInputBlur}
-                onConfirm={this.onInputConfirm}
-              // onChange={this.handleChange}
+              // onConfirm={this.onInputConfirm}
               />
             </View>
           )}

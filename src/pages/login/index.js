@@ -206,7 +206,7 @@ export default class Login extends Component {
         }
       }
       if (verifycode === '') {
-        if (!showCode) {
+        if (showCode) {
           verifycodeErrorType = 1
         }
       }

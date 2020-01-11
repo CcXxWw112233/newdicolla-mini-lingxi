@@ -64,6 +64,6 @@ export const v2BoardList = (data, notShowLoading) => {
       ...data
     },
     method: 'GET',
-    url: `${API_BOARD}/v2/board/list`,
+    url: `${API_BOARD}/board/list/filter/app`,
   }, notShowLoading)
 }

@@ -1,4 +1,4 @@
-import Taro, { Component, hideToast, pageScrollTo } from '@tarojs/taro'
+import Taro, { Component, hideToast, pageScrollTo, getExtConfig } from '@tarojs/taro'
 import { View, Text, Image, RichText } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
@@ -10,7 +10,7 @@ import BoardFile from './components/boardFile/index.js'
 import ChoiceFolder from './components/boardFile/ChoiceFolder.js'
 import { getOrgIdByBoardId, setBoardIdStorage, setRequestHeaderBaseInfo } from '../../utils/basicFunction'
 import { BASE_URL, API_BOARD } from "../../gloalSet/js/constant";
-import { isApiResponseOk } from '../../utils/request'
+
 @connect(({
     file: {
         file_list = [],
@@ -467,7 +467,7 @@ export default class File extends Component {
 
         let that = this;
         Taro.chooseImage({
-            count: 1,
+            count: 9 - that.state.choice_image_temp_file_paths.length,
             sizeType: ['original'],
             sourceType: [imageSourceType],
             success(res) {
@@ -511,54 +511,56 @@ export default class File extends Component {
         const data = {
             board_id: board_id,
             folder_id: folder_id,
+            type: 1,
+            upload_type: 1,
         }
         const base_info = setRequestHeaderBaseInfo({ data, headers: authorization })
 
         Taro.showToast({ icon: "loading", title: "正在上传..." });
         //开发者服务器访问接口，微信服务器通过这个接口上传文件到开发者服务器
-        Taro.uploadFile({
-            url: BASE_URL + API_BOARD + '/file/upload', //后端接口
-            filePath: choice_image_temp_file_paths[0],
-            name: 'file',
-            header: {
-                "Content-Type": "multipart/form-data; charset=utf-8",
-                "Accept-Language": "zh-CN,zh;q=0.9",
-                "Accept-Encoding": "gzip, deflate",
-                "Accept": "*/*",
-                Authorization: authorization,
-                ...base_info,
-            },
-            formData: data, //上传POST参数信息
-            success(res) {
-                if (res.statusCode === 200) {
-                    const resData = res.data && JSON.parse(res.data)
-                    console.log(res, 'sssssss', resData);
-                    if (resData.code === '0') {
-                        //更新头部显示文件夹名称
-                        that.updateHeaderFolderName(current_folder_name)
-                        //重新掉列表接口, 刷新列表
-                        that.getFilePage(org_id, board_id, '')
+        for (var i = 0; i < choice_image_temp_file_paths.length; i++) {
+            Taro.uploadFile({
+                url: BASE_URL + API_BOARD + '/file/batch/upload', //后端接口
+                filePath: choice_image_temp_file_paths[i],
+                name: 'file',
+                header: {
+                    "Content-Type": "multipart/form-data; charset=utf-8",
+                    "Accept-Language": "zh-CN,zh;q=0.9",
+                    "Accept-Encoding": "gzip, deflate",
+                    "Accept": "*/*",
+                    Authorization: authorization,
+                    ...base_info,
+                },
+                formData: data, //上传POST参数信息
+                success(res) {
+                    if (res.statusCode === 200) {
+                        const resData = res.data && JSON.parse(res.data)
+                        if (resData.code === '0') {
+                            //更新头部显示文件夹名称
+                            that.updateHeaderFolderName(current_folder_name)
+                            //重新掉列表接口, 刷新列表
+                            that.getFilePage(org_id, board_id, '')
+                        } else {
+                            Taro.showModal({ title: '提示', content: resData.message, showCancel: false });
+                        }
                     } else {
-                        Taro.showModal({ title: '提示', content: resData.message, showCancel: false });
+                        Taro.showModal({ title: '提示', content: `${'第' + i + '张' + '上传失败'}`, showCancel: false });
                     }
-                } else {
-                    Taro.showModal({ title: '提示', content: '上传失败', showCancel: false });
+                },
+                fail(error) {
+                    Taro.showModal({ title: '提示', content: `${'第' + i + '张' + '上传失败'}`, showCancel: false });
+                },
+                complete() {
+                    Taro.hideToast();
                 }
-            },
-            fail(error) {
-                Taro.showModal({ title: '提示', content: '上传失败', showCancel: false });
-                // console.log('上传错误:', error)
-            },
-            complete() {
-                Taro.hideToast();
-            }
-        })
+            })
+        }
     }
 
     render() {
 
         const { file_list = [], isShowBoardList, header_folder_name, isShowChoiceFolder } = this.props
-        const { is_tips_longpress_file, choice_image_temp_file_paths = [] } = this.state
+        const { is_tips_longpress_file, choice_image_temp_file_paths = [], } = this.state
 
         return (
             <View className={indexStyles.index}>

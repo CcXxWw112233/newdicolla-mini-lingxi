@@ -1,11 +1,15 @@
 
-import Taro, { Component } from '@tarojs/taro'
+import Taro, { Component, getApp } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import indexStyles from './ChoiceFolder.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
 import { getOrgIdByBoardId, getOrgName } from '../../../../utils/basicFunction'
 import TreeFile from './TreeFile'
+import EXIF from 'exif-js'  //第三方库获取图片exif信息
+import QQMapWX from '../../../../utils/qqmap-wx-jssdk1.2/qqmap-wx-jssdk.js'
+import { QQMAPSDK_KEY } from "../../../../gloalSet/js/constant";
+
 @connect(({
     file: {
         isShowChoiceFolder,
@@ -30,10 +34,32 @@ import TreeFile from './TreeFile'
 export default class ChoiceFolder extends Component {
     state = {
         is_show_board_list: false, //是否显示项目列表
+        thumb_image_info: [], //图片略缩图
     }
 
     componentDidMount() {
         this.loadBoardList()
+        this.getChoiceImageThumbnail()
+    }
+
+    getChoiceImageThumbnail = () => {
+        const { choiceImageThumbnail = [], } = this.props
+        let array = []
+        choiceImageThumbnail.map((item, index) => {
+            let obj = {}
+            obj['index'] = index
+            obj['filePath'] = item
+            array.push(obj)
+        })
+        let promise = [];
+        array.forEach(item => {
+            promise.push(this.getImageExifInfo(item))
+        })
+        Promise.all(promise).then(resp => {
+            this.setState({
+                thumb_image_info: resp
+            })
+        }).catch(e => console.log('error: ' + e));
     }
 
     loadBoardList = () => {
@@ -51,7 +77,7 @@ export default class ChoiceFolder extends Component {
                 type: 'board/v2BoardList',
                 payload: {
                     _organization_id: '0',
-                    contain_type: '0',
+                    app_type: '4',
                 },
             })
         })
@@ -194,6 +220,21 @@ export default class ChoiceFolder extends Component {
         })
 
         this.hideBoardList()
+
+
+        // 清除缓存文件
+        Taro.getSavedFileList({
+            success(res) {
+                for (let i = 0; i < res.fileList.length; i++) {
+                    Taro.removeSavedFile({
+                        filePath: res.fileList[i].filePath,
+                        complete(res) {
+                            // console.log('清除成功', res)
+                        }
+                    })
+                }
+            }
+        })
     }
 
     choiceFolder = () => {
@@ -249,40 +290,124 @@ export default class ChoiceFolder extends Component {
         return new_v2_board_list
     }
 
+    //EXIF坐标转换
+    exifGPSCoordinateTransformation = (LatitudeArry) => {
+        const longLatitude =
+            LatitudeArry[0].numerator / LatitudeArry[0].denominator +
+            LatitudeArry[1].numerator / LatitudeArry[1].denominator / 60 +
+            LatitudeArry[2].numerator / LatitudeArry[2].denominator / 3600;
+        const Latitude = longLatitude.toFixed(6);
+
+        return Latitude;
+    }
+
+    //获取图片Exif信息
+    getImageExifInfo = (tempFilePaths) => {
+        return new Promise((resolve, reject) => {
+            const { filePath, index, } = tempFilePaths
+            let that = this
+            wx.getFileSystemManager().readFile({
+                filePath,
+                success: res => {
+                    EXIF.getData(res.data, img => {
+
+                        const LatitudeArry = EXIF.getTag(res.data, 'GPSLatitude')
+                        const LongitudeArry = EXIF.getTag(res.data, 'GPSLongitude')
+
+                        if ((!LatitudeArry && LatitudeArry === undefined) || (!LongitudeArry && LongitudeArry === undefined)) {
+                            resolve({ id: index, filePath: filePath, address: '暂无地址', })
+                            return
+                        }
+
+                        const longLatitude = that.exifGPSCoordinateTransformation(LatitudeArry)
+                        const longLongitude = that.exifGPSCoordinateTransformation(LongitudeArry)
+                        var demo = new QQMapWX({
+                            key: QQMAPSDK_KEY,
+                        })
+                        demo.reverseGeocoder({
+                            location: {
+                                latitude: longLatitude,
+                                longitude: longLongitude,
+                            },
+                            success: function (res) {
+                                resolve({ id: index, filePath: filePath, address: res.result.address, })
+                            },
+                            fail: function (res) {
+                                console.log('读取失败: ', res);
+                            },
+                            complete: function (res) {
+                                console.log('读取完成: ', res);
+                            }
+                        });
+                    })
+                }
+            })
+        })
+    }
+
     render() {
 
-        const { folder_tree, v2_board_list, org_list, choiceImageThumbnail, upload_folder_name, choice_board_folder_id, choice_board_id, current_selection_board_id, current_board_open } = this.props
+        const { folder_tree, org_list, upload_folder_name, choice_board_folder_id, choice_board_id, current_selection_board_id, current_board_open, } = this.props
         const { child_data = [], } = folder_tree
-        const { is_show_board_list, } = this.state
+        const { is_show_board_list, thumb_image_info = [], } = this.state
+
+        const SystemInfo = Taro.getSystemInfoSync()
+        const { windowHeight } = SystemInfo
+        const scrollHeight = (windowHeight - (80 * 2) - 47 - 18 - 56 - 10) + 'px'
+        const contentHeight = (windowHeight - (80 * 2) - 47) + 'px'
+        const contentCenterHeight = (windowHeight - (80 * 2) - 47 - 56) + 'px'
 
         return (
 
             <View className={indexStyles.choice_folder_modal_mask} >
-                <View className={indexStyles.choice_folder_modal_view_style}>
-
+                <View className={indexStyles.choice_folder_modal_view_style} style={{
+                    position: 'absolute',
+                    top: 80 + 'px',
+                    right: 32 + 'px',
+                    left: 32 + 'px',
+                    bottom: 80 + 'px',
+                }}>
                     {is_show_board_list === false ? (
-                        <View className={indexStyles.modal_content_style}>
-                            <View className={indexStyles.modal_content_top_style}>
-                                <View className={indexStyles.modal_tips_text_style}>上传到:</View>
-                            </View>
+                        <View style={{ height: contentHeight, width: '100%' }}>
+                            <View className={indexStyles.modal_content_style}>
+                                <View className={indexStyles.modal_content_top_style} style={{ height: 56 + 'px' }}>
+                                    <View className={indexStyles.modal_tips_text_style}>上传到:</View>
+                                </View>
 
-                            <View className={indexStyles.modal_content_center_style}>
-                                <View className={indexStyles.choice_folder_button_style} onClick={this.choiceFolder}>{upload_folder_name}</View>
-                                <View className={indexStyles.thumbnail_view_style}>
-                                    <Image mode='aspectFill' className={indexStyles.choice_image_thumbnail_style} src={choiceImageThumbnail}></Image>
+                                <View className={indexStyles.modal_content_center_style} style={{ height: contentCenterHeight }}>
+                                    <View className={indexStyles.choice_folder_button_style} onClick={this.choiceFolder}>{upload_folder_name}</View>
+                                    <ScrollView
+                                        scrollX
+                                        scrollWithAnimation
+                                        className={indexStyles.thumbnail_view_style}
+                                    >
+                                        {thumb_image_info && thumb_image_info.map((item, key) => {
+                                            const { filePath, address } = item
+                                            return (
+                                                <Image mode='aspectFill' className={indexStyles.choice_image_thumbnail_style} src={filePath}>
+                                                    {address ? (<View className={indexStyles.position_style}>
+                                                        <Text className={`${globalStyle.global_iconfont} ${indexStyles.position_icon_style}`}>&#xe790;</Text>
+                                                        <Text className={indexStyles.position_text_style}>
+                                                            {address}
+                                                        </Text>
+                                                    </View>) : ''}
+                                                </Image>
+                                            )
+                                        })}
+                                    </ScrollView>
                                 </View>
                             </View>
                         </View>
                     ) : (
                             <View className={indexStyles.choice_board_view_style}>
-                                <View className={indexStyles.modal_content_top_style}>
+                                <View className={indexStyles.modal_content_top_style} style={{ height: 56 + 'px' }}>
                                     <View className={indexStyles.modal_tips_text_style} onClick={this.backHideBoardList}>{'< '}返回</View>
                                     <View className={indexStyles.folder_name_style}>{upload_folder_name}</View>
                                 </View>
                                 <ScrollView
                                     scrollY
                                     scrollWithAnimation
-                                    className={indexStyles.board_list_view_style}>
+                                    className={indexStyles.board_list_view_style} style={{ height: scrollHeight }}>
                                     {this.filterSelectBoard() && this.filterSelectBoard().map(item => {
                                         const org_id = item.org_id
                                         return (
@@ -340,8 +465,7 @@ export default class ChoiceFolder extends Component {
                     }
 
 
-
-                    <View className={indexStyles.modal_botton_style}>
+                    <View className={indexStyles.modal_botton_style} style={{ height: 47 + 'px', lineHeight: 47 + 'px' }}>
                         <View className={indexStyles.cancel_button_style} onClick={this.handleCancel}>取消</View>
                         {
                             choice_board_id != '' || choice_board_folder_id != '' ? (

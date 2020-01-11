@@ -44,13 +44,14 @@ export default class phoneNumberLogin extends Component {
         }
         const { dispatch } = this.props
         const sourcePage = this.state.sourcePage
-
+        const phoneNumberBind = 'phoneNumberBind'
 
         dispatch({
           type: getEffectOrReducerByName('weChatPhoneLogin'),
           payload: {
             parmas,
-            sourcePage
+            sourcePage,
+            phoneNumberBind,
           }
         })
       })

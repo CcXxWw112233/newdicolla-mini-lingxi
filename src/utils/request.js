@@ -2,6 +2,7 @@ import Taro from "@tarojs/taro";
 import { BASE_URL, INT_REQUEST_OK, REQUEST_RES_CODE_TOKEN_INVALID } from "../gloalSet/js/constant";
 import { setRequestHeaderBaseInfo } from "./basicFunction";
 
+var isNavigatePushLogin = true;
 export const request = (options, notShowLoading, isNewLogin) => {
   const { url = "", data = {}, method = "GET", header = {} } = options;
   let Headers = { ...header };
@@ -41,18 +42,24 @@ export const request = (options, notShowLoading, isNewLogin) => {
         let route = currPage && currPage.route
         let routePageName = route && route.slice(6, -6)
 
-        if (REQUEST_RES_CODE_TOKEN_INVALID == res.data.code) {
-          if (!isNewLogin) {//正常的登录页面
-            Taro.reLaunch({
-              url: `../../pages/login/index?redirect=${routePageName}`
-              // url: `../../pages/login/index`
-            })
+        //防止执行两遍
+        if (isNavigatePushLogin) {
+          isNavigatePushLogin = false
+          if (REQUEST_RES_CODE_TOKEN_INVALID == res.data.code) {
+            if (!isNewLogin) {//正常的登录页面
+              Taro.navigateTo({
+                url: `../../pages/login/index?redirect=${routePageName}`
+              })
+            }
+            else {  //扫码登录的新的登录页面
+              Taro.navigateTo({
+                url: '../../pages/nowOpen/index'
+              })
+            }
           }
-          else {  //扫码登录的新的登录页面
-            Taro.navigateTo({
-              url: '../../pages/nowOpen/index'
-            })
-          }
+          setTimeout(() => {
+            isNavigatePushLogin = true
+          }, 1000)
         }
 
         resolve(res.data);
