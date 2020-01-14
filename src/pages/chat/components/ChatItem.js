@@ -227,12 +227,7 @@ class ChatItem extends Component {
       .then(res => {
         let { tapIndex } = res;
         if (tapIndex === 0) {
-          /**
-           * 重新发送
-           */
 
-          // 1.2 把需要重新发送的那条消息重新发送
-          onResendMsg(someMsg)
           // 删除这条失败的数据
           let arr = [...history_newSession].removeByValue(someMsg);
           dispatch({
@@ -254,6 +249,15 @@ class ChatItem extends Component {
         }
       })
       .catch(err => console.log(err.errMsg))
+
+    /**
+       * 重新发送
+       */
+
+    let contentStr = someMsg && someMsg.content ? JSON.stringify(someMsg.content) : ''
+    someMsg.content = contentStr
+    // 1.2 把需要重新发送的那条消息重新发送
+    onResendMsg(someMsg)
   }
 
   bindpause = (e) => {
