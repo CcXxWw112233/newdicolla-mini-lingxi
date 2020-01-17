@@ -1,6 +1,6 @@
 
 import Taro, { Component, getApp } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { View, Text ,Image} from '@tarojs/components'
 import indexStyles from './ChoiceFolder.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'

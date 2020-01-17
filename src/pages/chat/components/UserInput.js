@@ -103,6 +103,7 @@ class UserInput extends Component {
   constructor(props) {
     super(props)
     this.TextInput = "";
+    this.isRecording = false;
   }
   state = {
     inputValue: '', // 文本类型输入框 value
@@ -394,6 +395,7 @@ class UserInput extends Component {
           return;
         }
         recorderManager.stop();
+        this.isRecording = false;
       }
     );
   };
@@ -441,10 +443,15 @@ class UserInput extends Component {
 
       let that = this;
       recorderManager.start(options);
+      this.isRecording = true;
       this.setState({
         recorderManager
       });
-
+      recorderManager.onStart( res => {
+        if(!this.isRecording){
+          recorderManager.stop();
+        }
+      })
       recorderManager.onStop(res => {
         Taro.hideToast();
 

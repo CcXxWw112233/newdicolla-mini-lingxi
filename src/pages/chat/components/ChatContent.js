@@ -224,6 +224,7 @@ class ChatContent extends Component {
             obj[item.idServer] = true;
           }
         })
+
         // 设定props的key
         let key = 'history_' + new Date().getTime();
         // promise resolve返回数据
@@ -244,22 +245,34 @@ class ChatContent extends Component {
           }
 
         })
-        // 权限过滤
-        let authList = filterListAuth(arr, userUID);
-        resolve(authList);
-        this.page_number += 1;
 
-        // 保存历史数据
-        dispatch({
-          type: "im/updateStateFieldByCover",
-          payload: {
-            [key]: authList.sort((a, b) => a.time - b.time)
-          }
-        })
         // 加载中
         this.setState({
           loadPrev: false
         })
+
+        if(data.length === 0){
+          Taro.showToast({
+            title: '没有更多数据了',
+            icon: 'none',
+            duration: 2000
+          });
+          return ;
+        }
+        // 权限过滤
+        let authList = filterListAuth(arr, userUID);
+
+        this.page_number += 1;
+
+        let arrList = authList.sort((a, b) => a.time - b.time)
+        // 保存历史数据
+        dispatch({
+          type: "im/updateStateFieldByCover",
+          payload: {
+            [key]: arrList
+          }
+        })
+        resolve(authList);
         // 正在加载，加上load锁
         setTimeout(() => {
           this.isLoading = false;
@@ -273,7 +286,9 @@ class ChatContent extends Component {
       let keys = Object.keys(this.props).filter(item => item.indexOf('history_') != -1);
       let data = keys[keys.length - 1];
       this.getHistory().then(_ => {
-        let current = this.props[data][0];
+        // console.log(_)
+        // let current = this.props[data][this.props[data].length - 1 ];
+        let current = _[_.length - 1]
         this.setCurrentIdServer(current);
       });
     }
@@ -295,7 +310,14 @@ class ChatContent extends Component {
 
   componentDidMount() {
     this.getHistory().then(data => {
-      this.setCurrentIdServer(data[data.length - 1])
+      if(data.length < 8){
+        this.getHistory().then(res => {
+          this.setCurrentIdServer(data[data.length - 1])
+        })
+      }else{
+        this.setCurrentIdServer(data[data.length - 1])
+      }
+
     });
     Taro.getSystemInfo({
       success: (res) => {
