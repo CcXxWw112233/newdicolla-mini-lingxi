@@ -50,6 +50,7 @@
     width  : 686px;
     display:flex;
     flex-direction:column-reverse;
+    min-height: 100%;
 
     .chatItemWrapper {
       margin-bottom: 32px;

@@ -429,7 +429,7 @@ class UserInput extends Component {
       Taro.showToast({
         title: '录音中...',
         icon: 'none',
-        duration: 20000,
+        duration: 120 * 1000,
       });
 
       const recorderManager =
@@ -445,6 +445,16 @@ class UserInput extends Component {
       });
 
       recorderManager.onStop(res => {
+        Taro.hideToast();
+        // 超出最大时长
+        if(res.duration >= options.duration){
+          Taro.showToast({
+            title: '录音最长时间是'+ (options.duration / 1000) +'s',
+            icon: 'error',
+            duration: 2000
+          });
+        }
+        // console.log(res);
         if (res.duration < 1000) {
           Taro.showToast({
             title: '录音时间太短',
@@ -454,7 +464,6 @@ class UserInput extends Component {
         } else {
           that.sendAudioMsg(res);
         }
-        Taro.hideToast();
       });
     }
   };
