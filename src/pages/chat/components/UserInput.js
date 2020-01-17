@@ -426,18 +426,19 @@ class UserInput extends Component {
     Taro.vibrateShort()
     const { recordStart } = this.state
     if (recordStart) {
-      Taro.showToast({
-        title: '录音中...',
-        icon: 'none',
-        duration: 120 * 1000,
-      });
-
-      const recorderManager =
-        this.state.recorderManager || Taro.getRecorderManager();
       const options = {
         duration: 120 * 1000,
         format: 'mp3'
       };
+      Taro.showToast({
+        title: '录音中...',
+        icon: 'none',
+        duration: options.duration,
+      });
+
+      const recorderManager =
+        this.state.recorderManager || Taro.getRecorderManager();
+
       let that = this;
       recorderManager.start(options);
       this.setState({
@@ -446,14 +447,7 @@ class UserInput extends Component {
 
       recorderManager.onStop(res => {
         Taro.hideToast();
-        // 超出最大时长
-        if(res.duration >= options.duration){
-          Taro.showToast({
-            title: '录音最长时间是'+ (options.duration / 1000) +'s',
-            icon: 'error',
-            duration: 2000
-          });
-        }
+
         // console.log(res);
         if (res.duration < 1000) {
           Taro.showToast({
@@ -461,8 +455,24 @@ class UserInput extends Component {
             icon: 'error',
             duration: 2000
           });
-        } else {
+        } else if(res.duration >= 1000 && res.duration < (options.duration - 50) ){
+          // console.log('发送中小于120',res.duration,options.duration)
           that.sendAudioMsg(res);
+        }
+
+
+        // 超出最大时长
+        if(res.duration >= (options.duration - 50)){
+          let title = `时间超过${(options.duration / 1000)}s`
+          Taro.showToast({
+            title: title,
+            icon: 'error',
+            duration: 2000
+          });
+          setTimeout(()=>{
+            // console.log('发送中，大于最大的')
+            that.sendAudioMsg(res);
+          },2000)
         }
       });
     }
