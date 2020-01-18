@@ -231,7 +231,7 @@ class ChatContent extends Component {
 
         data.forEach(item => {
           // 更新数据流方向
-          if (item.from == userUID && item.type != 'custom') {
+          if ((item.from == userUID && (item.type == 'custom' && JSON.parse(item.content).type == 3))||(item.from == userUID && item.type != 'custom') ) {
             item.flow = 'out'
           }
           if (item.type == 'custom') {
