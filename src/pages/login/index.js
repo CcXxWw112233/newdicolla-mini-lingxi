@@ -304,7 +304,8 @@ export default class Login extends Component {
     let userErrorMessage;
     switch (userMessageType) {      //userMessageType === 2 通过正则表达式校验
       case 1: userErrorMessage = '请输入正确的手机号或邮箱'; break;
-      case 3: userErrorMessage = '登录的手机号不存在'; break;
+      // case 3: userErrorMessage = '登录的手机号不存在'; break;
+      case 3: userErrorMessage = '输入的手机号不存在'; break;
       default: userErrorMessage = '';
     }
 
@@ -341,7 +342,7 @@ export default class Login extends Component {
     }
     return (
       <View className={`${indexStyles.login}`}>
-        <View className={`${indexStyles.login_header}`}>{!showCode ? '账号密码' : '手机验证码'}登录</View>
+        <View className={`${indexStyles.login_header}`}>{!showCode ? '账号密码' : '手机验证码'}进入</View>
         <View className={`${indexStyles.login_content}`}>
           <View>
             <View className={`${indexStyles.login_item}`}>
@@ -363,11 +364,11 @@ export default class Login extends Component {
           {verifycodeView}
         </View>
         <View className={`${indexStyles.login_footer}`}>
-          <Button className={`${indexStyles.login_btn_normal} ${indexStyles.login_btn}`} type='primary' onClick={this.normalLogin}>登录</Button>
-          <Button className={`${indexStyles.login_btn_wx} ${indexStyles.login_btn}`} open-type={'getUserInfo'} onGetUserInfo={this.getUserInfo}>微信快捷登录</Button>
+          <Button className={`${indexStyles.login_btn_normal} ${indexStyles.login_btn}`} type='primary' onClick={this.normalLogin}>开始使用</Button>
+          <Button className={`${indexStyles.login_btn_wx} ${indexStyles.login_btn}`} open-type={'getUserInfo'} onGetUserInfo={this.getUserInfo}>微信快捷进入</Button>
         </View>
         <View className={`${indexStyles.change_login_type_out}`}>
-          <View onClick={this.ChangeLoginType} className={`${indexStyles.change_login_type}`}>{showCode ? '账号密码' : '验证码'}登录</View>
+          <View onClick={this.ChangeLoginType} className={`${indexStyles.change_login_type}`}>{showCode ? '账号密码' : '验证码'}进入</View>
         </View>
       </View >
     )
