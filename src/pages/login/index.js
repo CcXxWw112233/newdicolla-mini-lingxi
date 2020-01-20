@@ -65,6 +65,10 @@ export default class Login extends Component {
             token_invalid: true
           })
         }
+      }).catch(err => {
+        this.setState({
+          token_invalid: true
+        })
       })
 
     } else {
