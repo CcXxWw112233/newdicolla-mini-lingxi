@@ -1,6 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { isApiResponseOk } from '../../utils/request'
 import { connect } from '@tarojs/redux'
+import CustomNavigation from '../acceptInvitation/components/CustomNavigation.js'
 
 @connect(({ im:
     {
@@ -76,7 +77,9 @@ export default class sceneEntrance extends Component {
     state = {
         params_options: {}, //路由传过来的对象
     }
-
+    config = {
+        navigationStyle: 'custom',
+    }
     componentDidMount() {
         const options = this.$router.params
         this.sceneEntrancePages(options)
@@ -234,6 +237,12 @@ export default class sceneEntrance extends Component {
                 })
             })
             .catch(e => Taro.showToast({ title: String(e), icon: 'none', duration: 2000 }));
+    }
+
+    render() {
+        return (
+            <CustomNavigation />
+        )
     }
 }
 

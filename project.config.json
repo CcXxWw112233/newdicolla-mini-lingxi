@@ -92,9 +92,9 @@
 				},
 				{
 					"id": 6,
-					"name": "pages/sceneEntrance/index",
+					"name": "消息跳转",
 					"pathName": "pages/sceneEntrance/index",
-					"query": "contentId=1209439669922697216&boardId=1206886569806532608&redirectType=7&currentDate=1572437967000",
+					"query": "contentId=1218939078247059456&boardId=1218939078247059456&redirectType=1&orgId=1164926825101660160",
 					"scene": null
 				},
 				{
@@ -102,6 +102,20 @@
 					"name": "pages/file/index",
 					"pathName": "pages/file/index",
 					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/calendar/index",
+					"pathName": "pages/calendar/index",
+					"query": "contentId=1209439669922697216&boardId=1206886569806532608&redirectType=7&currentDate=1572437967000",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/sceneEntrance/index",
+					"pathName": "pages/sceneEntrance/index",
+					"query": "contentId=1209439669922697216&boardId=1206886569806532608&redirectType=7&orgId= 1107307923551424512",
 					"scene": null
 				}
 			]

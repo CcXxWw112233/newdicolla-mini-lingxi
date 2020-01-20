@@ -72,7 +72,7 @@ export default {
           setTimeout(function () {
             if (res.code === '4041') { //如果项目已删除/归档 就去项目列表
               Taro.switchTab({
-                url: `../../pages/board/index`
+                url: `../../pages/boardChat/index`
               })
             } else {  //其他异常
               Taro.switchTab({

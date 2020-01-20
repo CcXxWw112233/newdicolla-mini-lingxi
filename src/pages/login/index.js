@@ -3,11 +3,12 @@ import { View, Text, Button, Input } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyles from '../../gloalSet/styles/globalStyles.scss'
 import { validateTel, validateEmail } from '../../utils/verify';
-import { sendVerifyCode, normalLogin, getVerifycodeImg } from "../../services/login";
+import { sendVerifyCode, normalLogin, getVerifycodeImg, getAccountInfo } from "../../services/login";
 import Authorize from '../../components/authorize/index'
 import sha256 from 'js-sha256'
 import { AtModal, AtModalHeader, AtModalContent, AtModalAction, AtSwitch, AtRadio, AtList, AtListItem, AtButton } from "taro-ui"
 import { connect } from '@tarojs/redux'
+import { isApiResponseOk } from '../../utils/request';
 
 @connect(({ login }) => ({
   login
@@ -27,15 +28,52 @@ export default class Login extends Component {
     verifycodeErrorType: 0,
     verifyShow: false,
     verifycodeBase64Img: '',
-    captchaKey: ''
+    captchaKey: '',
+    token_invalid: false,
+    show_copywriting: false,
   }
   componentWillMount() {
     const sourcePage = this.$router.params;
-
+    this.checkTokenValid(sourcePage)
     this.setState({
       sourcePage,
     })
   }
+  // 登录页面初始化时调用接口验证是否存在token有效,如果有效就直接进入 '主页', 否则
+  checkTokenValid = (params = {}) => {
+    const { redirect } = params
+    if (!redirect) {
+      let flag = true
+      setTimeout(() => { //为了做网络延时白页面显示文案
+        if (flag) {
+          this.setState({
+            show_copywriting: true
+          })
+        }
+      }, 2000)
+      getAccountInfo().then(res => {
+        flag = false
+        this.setState({
+          show_copywriting: false
+        })
+        if (isApiResponseOk(res)) {
+          Taro.switchTab({
+            url: '../../pages/calendar/index'
+          })
+        } else {
+          this.setState({
+            token_invalid: true
+          })
+        }
+      })
+
+    } else {
+      this.setState({
+        token_invalid: true
+      })
+    }
+  }
+
   componentDidMount() { }
   componentWillUnmount() { }
   componentDidShow() { }
@@ -300,8 +338,9 @@ export default class Login extends Component {
   }
 
   render() {
-    let { showCode, codeMessage = '', userMessageType, pswdErrorType, verifycodeErrorType, user, pswd, verifycode, captcha_key, verifyShow, verifycodeBase64Img } = this.state;
+    let { showCode, codeMessage = '', userMessageType, pswdErrorType, verifycodeErrorType, user, pswd, verifycode, captcha_key, verifyShow, verifycodeBase64Img, token_invalid, show_copywriting } = this.state;
     let userErrorMessage;
+    console.log('show_copywriting', show_copywriting)
     switch (userMessageType) {      //userMessageType === 2 通过正则表达式校验
       case 1: userErrorMessage = '请输入正确的手机号或邮箱'; break;
       // case 3: userErrorMessage = '登录的手机号不存在'; break;
@@ -342,6 +381,17 @@ export default class Login extends Component {
     }
     return (
       <View className={`${indexStyles.login}`}>
+        {
+          !token_invalid && (
+            <View className={`${indexStyles.login_mask}`}>
+              {
+                show_copywriting && (
+                  <View className={`${indexStyles.login_mask_copywrite}`}>加载中,请稍候...</View>
+                )
+              }
+            </View>
+          )
+        }
         <View className={`${indexStyles.login_header}`}>{!showCode ? '账号密码' : '手机验证码'}登录</View>
         <View className={`${indexStyles.login_content}`}>
           <View>
