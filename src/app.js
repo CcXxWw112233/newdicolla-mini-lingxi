@@ -31,6 +31,7 @@ const store = dvaApp.getStore();
 class App extends Component {
   config = {
     pages: [
+      'pages/login/index',
       'pages/calendar/index',
       'pages/im/index',
       'pages/groupMember/index',
@@ -40,7 +41,7 @@ class App extends Component {
       'pages/my/index',
       'pages/chat/index',
       'pages/chatDetail/index',
-      'pages/login/index',
+      // 'pages/login/index',
       'pages/selectOrg/index',
       'pages/phoneNumberLogin/index',
       'pages/testPage/index',

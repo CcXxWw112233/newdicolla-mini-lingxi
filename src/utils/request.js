@@ -47,9 +47,11 @@ export const request = (options, notShowLoading, isNewLogin) => {
           isNavigatePushLogin = false
           if (REQUEST_RES_CODE_TOKEN_INVALID == res.data.code) {
             if (!isNewLogin) {//正常的登录页面
-              Taro.navigateTo({
-                url: `../../pages/login/index?redirect=${routePageName}`
-              })
+              if (route.indexOf('pages/login/index') == -1) {
+                Taro.navigateTo({
+                  url: `../../pages/login/index?redirect=${routePageName}`
+                })
+              }
             }
             else {  //扫码登录的新的登录页面
               Taro.navigateTo({
