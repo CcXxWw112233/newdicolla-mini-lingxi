@@ -252,11 +252,7 @@ class ChatContent extends Component {
         })
 
         if(data.length === 0){
-          Taro.showToast({
-            title: '没有更多数据了',
-            icon: 'none',
-            duration: 2000
-          });
+          reject()
           return ;
         }
         // 权限过滤
@@ -288,8 +284,18 @@ class ChatContent extends Component {
       this.getHistory().then(_ => {
         // console.log(_)
         // let current = this.props[data][this.props[data].length - 1 ];
-        let current = _[_.length - 1]
-        this.setCurrentIdServer(current);
+        if(_.length){
+          let current = _[_.length - 1]
+          this.setCurrentIdServer(current);
+        }
+      }).catch(err => {
+        // else{
+          Taro.showToast({
+            title: '没有更多数据了',
+            icon: 'none',
+            duration: 2000
+          });
+        // }
       });
     }
 
