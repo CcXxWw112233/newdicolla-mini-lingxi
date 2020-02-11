@@ -4,11 +4,8 @@ import indexStyles from './index.scss'
 import globalStyles from '../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
 import CustomNavigation from './components/CustomNavigation.js'
-import lingxi_logo from '../../asset/login/lingxi_logo.png'
-import guide_share_01 from '../../asset/Invitation/guide_share_01.png'
-import guide_share_02 from '../../asset/Invitation/guide_share_02.png'
-import guide_share_03 from '../../asset/Invitation/guide_share_03.png'
-import { flush } from 'redux-saga/effects'
+import invitation_cover_img from '../../asset/Invitation/invitation_cover.png'
+import guide_share_img from '../../asset/Invitation/guide_share.png'
 
 @connect(({
   invitation: {
@@ -130,50 +127,45 @@ export default class acceptInvitation extends Component {
   render() {
     const { qrCodeInfo = {}, } = this.props
     const { user_name, rela_name, rela_type } = qrCodeInfo
-    const { is_mask_show, } = this.state
-
     const relaType = this.getJoinRelaType(rela_type)
 
     /**
      * 引导页面遮罩高度 = 屏幕高度 - 导航栏高度
      */
     const SystemInfo = Taro.getSystemInfoSync()
-    const screen_Height = SystemInfo.screenHeight
-    const statusBar_Height = SystemInfo.statusBarHeight
-    const navBar_Height = SystemInfo.platform == 'ios' ? 44 : 48
-
+    // const screen_Height = SystemInfo.screenHeight
+    const statusBar_Height = SystemInfo.statusBarHeight;
+    const navBar_Height = SystemInfo.platform == 'ios' ? 44 : 48;
+    // console.log("我们",wx.getMenuButtonBoundingClientRect());
     return (
       <View>
         <CustomNavigation />
 
-        {is_mask_show && is_mask_show === true ? <View className={indexStyles.mask} style={{ height: screen_Height - (statusBar_Height + navBar_Height) + 'px', marginTop: statusBar_Height + navBar_Height + 'px' }}>
-
-          <Image src={guide_share_01} className={indexStyles.guide_share_style_01} />
-          <Image src={guide_share_02} className={indexStyles.guide_share_style_02} />
-          <View onClick={this.closeMask} className={indexStyles.guide_close_style}>
-            <Image src={guide_share_03} className={indexStyles.guide_close_image_style} />
+        <View className={`${indexStyles.PageStyle}`}  style={{ marginTop: statusBar_Height + navBar_Height + 'px' }}>
+          <View className={indexStyles.guide_share_wrapper}>
+            <Image src={guide_share_img} className={indexStyles.guide_share} />
           </View>
-
-        </View> : ''}
-
-        <View className={`${globalStyles.global_horrizontal_padding}`}>
-          <View className={indexStyles.effective_contain1}>
-            <Image src={lingxi_logo} className={indexStyles.effective_logo} />
-          </View>
-          <View className={indexStyles.effective_tipsText}>
-            <Text>
+          <View className={`${globalStyles.global_horrizontal_padding} `}>
+            <View className={indexStyles.effective_contain1}>
+              <Image src={invitation_cover_img} className={indexStyles.invitation_cover} />
+            </View>
+            <View className={indexStyles.effective_tipsText}>
+              <Text>
               你的好友
               <Text style={{ display: 'inline-block', width: '6px' }}>  &nbsp; </Text>
-              {user_name}
-              <Text style={{ display: 'inline-block', width: '6px' }}>  &nbsp;  </Text>
-              邀请你\n加入
-              <Text style={{ display: 'inline-block', width: '6px' }}>  &nbsp;  </Text>
-              {rela_name}
-              <Text style={{ display: 'inline-block', width: '6px' }}>  &nbsp;  </Text>
-              {relaType}
-            </Text>
+                {user_name}
+                <Text style={{ display: 'inline-block', width: '6px' }}>  &nbsp;  </Text>
+                邀请你\n加入项目
+                <Text style={{ display: 'inline-block', width: '6px' }}>  &nbsp;  </Text>
+                {rela_name}
+                <Text style={{ display: 'inline-block', width: '6px' }}>  &nbsp;  </Text>
+                {relaType}
+              </Text>
+            </View>
+            <Button className={`${indexStyles.effective_login_btn_wx} ${indexStyles.effective_acceptBtn}`} onClick={this.acceptTheInvitation}>接受邀请</Button>
+
           </View>
-          <Button className={`${indexStyles.effective_login_btn_wx} ${indexStyles.effective_acceptBtn}`} onClick={this.acceptTheInvitation}>接受邀请</Button>
+
         </View>
       </View>
     )

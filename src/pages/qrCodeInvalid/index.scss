@@ -1,9 +1,11 @@
 @import "../../gloalSet/styles/constant";
 .contain1 {
   margin-top: pxTrans(106);
+  text-align: center;
   .qrCode_Invalid {
     width: pxTrans(297);
     height: pxTrans(186);
+    margin: 0 auto;
   }
 }
 .text1 {
