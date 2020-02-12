@@ -240,6 +240,34 @@ function onMsg(msg) {
     }
   }
 
+  //任务/项目发生变化，首页日历下面列表同步更新
+  if (msg.type === 'custom') {
+    dispatch({
+      type: 'calendar/getOrgBoardList',
+      payload: {}
+    })
+
+ dispatch({
+      type: 'calendar/getNoScheCardList',
+      payload: {}
+    })
+
+ dispatch({
+      type: 'calendar/getNoScheCardList',
+      payload: {}
+    })
+
+   dispatch({
+      type: 'calendar/getScheCardList',
+      payload: {}
+    })
+
+  dispatch({
+      type: 'calendar/getSignList',
+      payload: {}
+    })
+  }
+
 
   dispatch({
     type: 'im/updateStateByReplace',

@@ -344,7 +344,6 @@ export default class Login extends Component {
   render() {
     let { showCode, codeMessage = '', userMessageType, pswdErrorType, verifycodeErrorType, user, pswd, verifycode, captcha_key, verifyShow, verifycodeBase64Img, token_invalid, show_copywriting } = this.state;
     let userErrorMessage;
-    console.log('show_copywriting', show_copywriting)
     switch (userMessageType) {      //userMessageType === 2 通过正则表达式校验
       case 1: userErrorMessage = '请输入正确的手机号或邮箱'; break;
       // case 3: userErrorMessage = '登录的手机号不存在'; break;

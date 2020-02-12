@@ -100,6 +100,13 @@ export default class File extends Component {
         choice_image_temp_file_paths: [],  //从相册选中的图片api返回来的路径
     }
 
+    onShareAppMessage(){
+        return {
+            title: '文件',
+            path: `/pages/file/index`,
+          }
+    }
+
     onPullDownRefresh(res) {
 
         const refreshStr = Taro.getStorageSync('file_pull_down_refresh')

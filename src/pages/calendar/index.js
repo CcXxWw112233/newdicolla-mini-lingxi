@@ -51,6 +51,15 @@ export default class Calendar extends Component {
     "onReachBottomDistance": 50,  //默认值50
   }
 
+  onShareAppMessage(){
+    return {
+        title: '日历',
+        path: `/pages/Calendar/index`,
+      }
+}
+
+isGlobalPushNews
+
   onPullDownRefresh(res) {  //下拉刷新...
 
     const { dispatch } = this.props

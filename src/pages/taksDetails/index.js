@@ -28,6 +28,13 @@ export default class taksDetails extends Component {
         type_flag: '',
     }
 
+    onShareAppMessage(){
+        return {
+            title: '任务详情',
+            path: `/pages/taksDetails/index`,
+          }
+    }
+
     componentDidMount() {
 
         const { flag, boardId, contentId, back_icon } = this.$router.params

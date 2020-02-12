@@ -127,6 +127,13 @@ export default class BoardChat extends Component {
         isProhibitRepeatClick: true, //禁止重复点击进入圈子
     }
 
+    onShareAppMessage(){
+        return {
+            title: '项目圈',
+            path: `/pages/boardChat/index`,
+          }
+    }
+
     onPullDownRefresh(res) {
 
         this.getChatBoardList();
