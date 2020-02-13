@@ -1,30 +1,20 @@
 Arguments: 
-  /usr/local/Cellar/node/12.5.0/bin/node /usr/local/bin/yarn add @~taro-ui/dist/style/components/noticebar.scss --silent --no-progress
+  D:\huangxiongjin\node.exe D:\黄雄进\bin\yarn.js
 
 PATH: 
-  /usr/local/lib/node_modules/npm/node_modules/npm-lifecycle/node-gyp-bin:/Users/mac/Documents/newdicolla-mini-lingxi/node_modules/.bin:/var/folders/7n/jbbqrr1x14lg0kw9xkrgd35m0000gn/T/yarn--1578302242076-0.36242798370192664:/Users/mac/Documents/newdicolla-mini-lingxi/node_modules/.bin:/Users/mac/.config/yarn/link/node_modules/.bin:/usr/local/Cellar/node/12.5.0/libexec/lib/node_modules/npm/bin/node-gyp-bin:/usr/local/Cellar/node/12.5.0/lib/node_modules/npm/bin/node-gyp-bin:/usr/local/Cellar/node/12.5.0/bin/node_modules/npm/bin/node-gyp-bin:/Users/mac/flutter/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Apple/bin:/Users/mac/flutter/bin
+  C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;D:\黄雄进\Git\cmd;D:\黄雄进\bin\;D:\huangxiongjin\;C:\Users\15623\AppData\Local\Microsoft\WindowsApps;;D:\黄雄进\Microsoft VS Code\bin;C:\Users\15623\AppData\Local\Yarn\bin;C:\Users\15623\AppData\Roaming\npm
 
 Yarn version: 
-  1.16.0
+  1.22.0
 
 Node version: 
-  12.5.0
+  12.16.0
 
 Platform: 
-  darwin x64
+  win32 x64
 
 Trace: 
-  Error: https://registry.npm.taobao.org/@~taro-ui%2fdist/style/components/noticebar.scss: [not_found] document not found
-      at Request.params.callback [as _callback] (/usr/local/lib/node_modules/yarn/lib/cli.js:66091:18)
-      at Request.self.callback (/usr/local/lib/node_modules/yarn/lib/cli.js:129590:22)
-      at Request.emit (events.js:200:13)
-      at Request.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:130562:10)
-      at Request.emit (events.js:200:13)
-      at Gunzip.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:130484:12)
-      at Object.onceWrapper (events.js:288:20)
-      at Gunzip.emit (events.js:205:15)
-      at endReadableNT (_stream_readable.js:1154:12)
-      at processTicksAndRejections (internal/process/task_queues.js:74:11)
+  Error: EPERM: operation not permitted, unlink 'D:\huangxiongjin\xiangmu\newdicolla-mini-lingxi\node_modules\pbkdf2\node_modules\.bin'
 
 npm manifest: 
   {
@@ -3143,6 +3133,11 @@ Lockfile:
       p-finally "^1.0.0"
       signal-exit "^3.0.0"
       strip-eof "^1.0.0"
+  
+  exif-js@^2.3.0:
+    version "2.3.0"
+    resolved "https://registry.yarnpkg.com/exif-js/-/exif-js-2.3.0.tgz#9d10819bf571f873813e7640241255ab9ce1a814"
+    integrity sha1-nRCBm/Vx+HOBPnZAJBJVq5zhqBQ=
   
   expand-brackets@^2.1.4:
     version "2.1.4"

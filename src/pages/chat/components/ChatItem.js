@@ -36,7 +36,7 @@ class ChatItem extends Component {
 
   // 点击消息跳页面的消息类型
   handleClickItem = (e, type, customType, customItemId) => {
-
+    
     // if (e && e.stopPropagation) e.stopPropagation();
 
     // // 需要跳页面的消息类型
@@ -49,6 +49,7 @@ class ChatItem extends Component {
     //   icon: 'none'
     // });
   };
+
   handlePlayAudio = file => {
     let { createInnerAudioContext } = this.state;
     const { url } = typeof file === 'string' ? JSON.parse(file) : file;
@@ -281,6 +282,15 @@ class ChatItem extends Component {
     }, 500)
   }
 
+  getSubStr(str) {
+    if (!str.match(/^[ ]*$/) && str.length > 20) {
+      var subStr1 = str.substr(0,8);
+      var subStr2 = str.substr(str.length-8);
+      var subStr = subStr1 + "..." + subStr2 ;
+      return subStr;
+    }
+    return str;
+  }
   render() {
     const {
       flow,
@@ -480,7 +490,10 @@ class ChatItem extends Component {
                                    </Text>
                                   </Text>
                                   <Text className={styles.action}>
-                                    {action ? `${action}` : ''}
+
+                                    {/* {action ? `${action}` : ''} */}
+                                      {action ==='项目成员发生变更' ? (`${'将' + (activityContent && activityContent.rela_users[0]) + '在' + (activityContent && activityContent.board.name) + '项目中的角色设置为' + (activityContent && activityContent.rela_data)}`): `${action}`}
+
                                     <Text
                                       style={{
                                         display: 'inline-block',
@@ -526,11 +539,11 @@ class ChatItem extends Component {
                                       )
                                     }
                                   >
-                                    {activityContent['contentText']
-                                      ? `“${activityContent['contentText']}”`
-                                      : activityContent[activityType]
-                                        ? `“${activityContent[activityType]['name']}”`
-                                        : ''}
+                                     {this.getSubStr(activityContent['contentText']
+                                    ? `“${activityContent['contentText']}”`
+                                    : activityContent[activityType]
+                                      ? `“${activityContent[activityType]['name']}”`
+                                      : '')}
                                   </Text>
                                 </View>
                               );
