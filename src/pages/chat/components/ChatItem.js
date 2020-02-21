@@ -492,7 +492,7 @@ class ChatItem extends Component {
                                   <Text className={styles.action}>
 
                                     {/* {action ? `${action}` : ''} */}
-                                      {action ==='项目成员发生变更' ? (`${'将' + (activityContent && activityContent.rela_users[0]) + '在' + (activityContent && activityContent.board.name) + '项目中的角色设置为' + (activityContent && activityContent.rela_data)}`): `${action}`}
+                                      {action ==='项目成员角色发生变更' ? (`${'将' + (activityContent && activityContent.rela_users[0]) + '在' + (activityContent && activityContent.board.name) + '项目中的角色设置为' + (activityContent && activityContent.rela_data)}`): `${action}`}
 
                                     <Text
                                       style={{

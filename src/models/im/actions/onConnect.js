@@ -2,7 +2,7 @@ import Taro from '@tarojs/taro'
 
 function onConnect({ account, token }) {
   const { globalData: { store: { dispatch } } } = Taro.getApp()
-
+debugger
   console.log(
     '%c connect im success',
     'background:#FFFBE6;color: #54B258',

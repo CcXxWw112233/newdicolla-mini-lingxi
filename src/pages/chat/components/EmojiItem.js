@@ -4,6 +4,10 @@ import { Text, Image } from '@tarojs/components';
 class EmojiItem extends Component {
   render() {
     const { categ, cont } = this.props;
+
+    //过滤掉<dev>等标签
+    const newCont = cont.replace(/<\/?[^>]*>/g, '\n')
+    
     if (categ === 'emoji') {
       return (
         <Image
@@ -18,10 +22,10 @@ class EmojiItem extends Component {
       );
     }
     return (
-      <Text
+      <Text decode='true' 
         style={{ lineHeight: '24px', height: '24px', verticalAlign: 'middle' }}
       >
-        {cont}
+        {newCont}
       </Text>
     );
   }
