@@ -30,6 +30,7 @@ import onBroadcastMsg from './onBroadcastMsg'
 import onBroadcastMsgs from './onBroadcastMsgs'
 import onPushEvents from './onPushEvents'
 import onResendMsg from './onResendMsg'
+import onDeleteMsg from './onDeleteMsg'
 
 export {
   onDisconnect,
@@ -64,4 +65,5 @@ export {
   onBroadcastMsgs,
   onPushEvents,
   onResendMsg,
+  onDeleteMsg,
 }

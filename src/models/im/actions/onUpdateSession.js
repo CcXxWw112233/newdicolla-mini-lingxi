@@ -44,8 +44,6 @@ function onUpdateSession(sessions) {
     }
   });
 
-
-
   // tempState.sessionlist = nim.mergeSessions(state.sessionlist, sessions);
   const filteredSessionList = state.sessionlist.filter(i => !sessions.find(s => s.to === i.to && s.updateTime === i.updateTime))
 
@@ -168,6 +166,12 @@ function onUpdateSession(sessions) {
         item.lastMsg = sessions[0].lastMsg;
         item.updateTime = sessions[0].updateTime;
         item.scene = sessions[0].scene;
+        if (item.lastMsg.type === 'tip') {  //撤回消息，未读数减1
+          const newUnread = item.unread - 1;
+          item.unread = newUnread;
+          item.lastMsg.text = sessions[0].lastMsg.tip;
+          return
+        }
       }
       return item;
     })
@@ -181,6 +185,7 @@ function onUpdateSession(sessions) {
       }
       return item;
     })
+
     tempState.allBoardList = boardList;
     dispatch({
       type: 'im/updateStateByReplace',

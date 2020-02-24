@@ -10,7 +10,8 @@ import {
   parseEmoji,
   parsePinup
 } from './../../../models/im/utils/parseEmoji.js';
-import { onResendMsg } from './../../../models/im/actions/onResendMsg.js'
+import { onResendMsg, } from './../../../models/im/actions/onResendMsg.js'
+import { onDeleteMsg, } from './../../../models/im/actions/onDeleteMsg.js'
 import { connect } from '@tarojs/redux';
 
 @connect(
@@ -29,6 +30,7 @@ class ChatItem extends Component {
     isAudioPlaying: false, // 是否正在播放音频消息
     createInnerAudioContext: null, // 一个音频实例
     _index: '',
+
   };
   isValidImgUrl = url => {
     return /^http[s]?:/.test(url);
@@ -36,7 +38,7 @@ class ChatItem extends Component {
 
   // 点击消息跳页面的消息类型
   handleClickItem = (e, type, customType, customItemId) => {
-    
+
     // if (e && e.stopPropagation) e.stopPropagation();
 
     // // 需要跳页面的消息类型
@@ -262,10 +264,8 @@ class ChatItem extends Component {
   }
 
   bindpause = (e) => {
-    console.log(e, 'sssssssssss');
   }
   startPlay = (e) => {
-    console.log(e, 'sssssssssss');
 
     var _index = e.currentTarget.dataset.id
     this.setState({
@@ -284,13 +284,35 @@ class ChatItem extends Component {
 
   getSubStr(str) {
     if (!str.match(/^[ ]*$/) && str.length > 20) {
-      var subStr1 = str.substr(0,8);
-      var subStr2 = str.substr(str.length-8);
-      var subStr = subStr1 + "..." + subStr2 ;
+      var subStr1 = str.substr(0, 8);
+      var subStr2 = str.substr(str.length - 8);
+      var subStr = subStr1 + "..." + subStr2;
       return subStr;
     }
     return str;
   }
+
+  longPressRecallAction = (someMsg) => {
+
+    const { time, flow, } = someMsg
+
+    var currentTime = new Date().getTime();    //当前时间(毫秒)
+    const subtractTime = currentTime - time  // 时间差的毫秒数
+    //自己发送并且2分钟之内才可以撤回
+    if (flow === 'out' && (subtractTime / 1000) < 120) {
+      Taro.showActionSheet({
+        itemList: ['撤回',]
+      })
+        .then(res => {
+          let { tapIndex } = res;
+          if (tapIndex === 0) {
+            onDeleteMsg(someMsg)
+          }
+        })
+        .catch(err => console.log(err.errMsg))
+    }
+  }
+
   render() {
     const {
       flow,
@@ -308,7 +330,7 @@ class ChatItem extends Component {
     } = this.props;
     // const isPinupEmoji = pushContent && pushContent === '[贴图表情]';
     const isPinupEmoji = content && content.type == 3;
-    const { isAudioPlaying } = this.state;
+    const { isAudioPlaying, } = this.state;
 
     const someMsgContent = someMsg && someMsg.content
     const someMsgContentData = someMsgContent && someMsgContent.data
@@ -378,12 +400,11 @@ class ChatItem extends Component {
                     )}
               </View>
 
-              <View className={styles.messageConcentWrapper}>
+              <View className={styles.messageConcentWrapper} onLongPress={this.longPressRecallAction.bind(this, someMsg)}>
                 {
                   status === 'fail' ? (<View onClick={this.onResendMessage.bind(this, someMsg)}><Text className={`${globalStyles.global_iconfont} ${styles.failWrapper}`}>&#xe848;</Text></View>
                   ) : ''
                 }
-
                 <View className={styles.newsWrapper}>
                   {flow === 'in' && (
                     <View className={styles.newsName}>{from_nick}</View>
@@ -492,7 +513,7 @@ class ChatItem extends Component {
                                   <Text className={styles.action}>
 
                                     {/* {action ? `${action}` : ''} */}
-                                      {action ==='项目成员角色发生变更' ? (`${'将' + (activityContent && activityContent.rela_users[0]) + '在' + (activityContent && activityContent.board.name) + '项目中的角色设置为' + (activityContent && activityContent.rela_data)}`): `${action}`}
+                                    {action === '项目成员角色发生变更' ? (`${'将' + (activityContent && activityContent.rela_users[0]) + '在' + (activityContent && activityContent.board.name) + '项目中的角色设置为' + (activityContent && activityContent.rela_data)}`) : `${action}`}
 
                                     <Text
                                       style={{
@@ -539,11 +560,11 @@ class ChatItem extends Component {
                                       )
                                     }
                                   >
-                                     {this.getSubStr(activityContent['contentText']
-                                    ? `“${activityContent['contentText']}”`
-                                    : activityContent[activityType]
-                                      ? `“${activityContent[activityType]['name']}”`
-                                      : '')}
+                                    {this.getSubStr(activityContent['contentText']
+                                      ? `“${activityContent['contentText']}”`
+                                      : activityContent[activityType]
+                                        ? `“${activityContent[activityType]['name']}”`
+                                        : '')}
                                   </Text>
                                 </View>
                               );
@@ -594,6 +615,15 @@ class ChatItem extends Component {
               styles.notificationTime
               }`}
           >{`—— ${this.timestampToTime(time)} ——`}</View>
+        )}
+        {type === 'tip' && (
+          <View
+            className={`${styles.notificationWrapperTip} ${
+              styles.notificationTip
+              }`}
+          >
+            <View className={styles.notificationTipText}>{`${text ? text : '"' + fromNick + '"' + ' 撤回了一条消息'}`}</View>
+          </View>
         )}
         {/* {type === 'notification' && (  //此种类型暂时不处理
           <View

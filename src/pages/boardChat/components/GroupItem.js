@@ -18,9 +18,9 @@ class GroupItem extends Component {
   };
   apnsAtMe = (apns) => {
     let { userid } = this.props;
-    if(apns){
-      if(apns.accounts && apns.accounts.indexOf(userid)!= -1){
-        return true ;
+    if (apns) {
+      if (apns.accounts && apns.accounts.indexOf(userid) != -1) {
+        return true;
       }
     }
     return false;
@@ -67,7 +67,7 @@ class GroupItem extends Component {
               <View className={styles.groupInfoTitleOrg}>{'#'}{org_name}</View>
             </View>
             <View className={styles.groupInfoLastMsg}>
-              {this.apnsAtMe(apns) && <Text className={styles.apnsAtMe}>[有人@我]</Text> } {lastMsg}
+              {this.apnsAtMe(apns) && <Text className={styles.apnsAtMe}>[有人@我]</Text>} {lastMsg && lastMsg.replace(/<\/?[^>]*>/g, '\n')}
             </View>
           </View>
           {!isSubGroup && isShouldShowExpandOpertor && (

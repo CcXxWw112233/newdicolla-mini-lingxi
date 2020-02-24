@@ -257,6 +257,29 @@
   line-height: 44px;
 }
 
+.notificationWrapperTip {
+  display        : flex;
+  justify-content: center;
+  align-items    : center;
+  flex-wrap      : wrap;
+  text-align     : center;
+}
+
+.notificationTip {
+  height     : 44px;
+  font-size  : 24px;
+  font-weight: 400;
+  color      : rgba(140, 140, 140, 1);
+  line-height: 44px;
+}
+
+.notificationTipText {
+  background   : rgba(200, 200, 200, 1);
+  width        : 400rpx;
+  border-radius: 10rpx;
+
+}
+
 .audioIconPlayingOut {
   animation: blinkOut 1s ease 0 infinite reverse both;
 }

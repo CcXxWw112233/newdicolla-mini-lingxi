@@ -12,14 +12,13 @@ import {
   getAllIMTeamList,
   getIMAccount,
   repairTeam,
-  getImHistory,
   setImHistoryRead,
 } from './../../services/im/index';
 import { isApiResponseOk } from './../../utils/request';
 import { onMsg, onTeams } from './actions/index';
 
 function onSendMsgDone(error, msg) {
-  // console.log('消息未发出_错误:', error, msg);
+  console.log('消息未发出_错误:', error, msg);
 
   Taro.hideLoading()
 
@@ -29,12 +28,6 @@ function onSendMsgDone(error, msg) {
       msg.status = 'fail';
       alert(error.message);
     } else {
-      // Taro.showToast({
-      //   // title: `发送消息失败: ${String(error)}`,
-      //   title: `消息未发出: 请重发`,
-      //   icon: 'none',
-      //   duration: 2000,
-      // });
 
       msg.status = 'fail';
       onMsg(msg);
@@ -342,7 +335,7 @@ export default {
       });
     },
     *sendMsg({ payload }, { select }) {
-      const { scene, to, text ,apns} = payload;
+      const { scene, to, text, apns } = payload;
       const { nim } = yield selectFieldsFromIm(select, 'nim');
       nim.sendText({
         scene,
@@ -365,6 +358,18 @@ export default {
         to,
         pushContent,
         content: JSON.stringify(content),
+        done: (error, msg) => {
+          onSendMsgDone(error, msg);
+        }
+      });
+    },
+    *sendTip({ payload }, { select }) {
+      const { scene, to, tip } = payload;
+      const { nim } = yield selectFieldsFromIm(select, 'nim');
+      nim.sendTipMsg({
+        scene,
+        to,
+        tip,
         done: (error, msg) => {
           onSendMsgDone(error, msg);
         }

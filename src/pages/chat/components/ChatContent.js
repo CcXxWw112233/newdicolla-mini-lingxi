@@ -254,13 +254,15 @@ class ChatContent extends Component {
         if(data.length === 0){
           reject()
           return ;
-        }
+        } 
         // 权限过滤
         let authList = filterListAuth(arr, userUID);
 
         this.page_number += 1;
 
         let arrList = authList.sort((a, b) => a.time - b.time)
+
+
         // 保存历史数据
         dispatch({
           type: "im/updateStateFieldByCover",
@@ -465,7 +467,7 @@ class ChatContent extends Component {
           return (
             <View key={item}>
               {
-                this.props[item].map((i, index, arr) => {
+                this.props[item].map((i, index, arr) => {                  
                   return (
                     <View className={styles.chatItemWrapper} key={i.time} id={'item_' + i.idServer}>
                       {this.isShouldShowTimestamp(index, arr) && (

@@ -398,7 +398,7 @@ export default class BoardChat extends Component {
 
     genLastMsg = (lastMsg = {}) => {
         if (JSON.stringify(lastMsg) != "{}" && lastMsg.status === "success") {  //lastMsg不为空并且成功才执行
-            const { fromNick, type, text, file, custom, } = lastMsg;
+            const { fromNick, type, text, file, custom, tip,} = lastMsg;
             const typeCond = {
                 text,
                 audio: '[语音]',
@@ -407,6 +407,7 @@ export default class BoardChat extends Component {
                 notification: '[系统通知]',
                 file: '[文件]',
                 custom,
+                tip,
             };
             if (type === 'text') {
                 return `${fromNick}: ${text}`;
@@ -417,6 +418,9 @@ export default class BoardChat extends Component {
             if (type === 'custom') {
                 const contentJSON = JSON.parse(lastMsg.content)
                 return contentJSON.type === 3 ? '[动态贴图]' : '[动态消息]'
+            }
+            if (type === 'tip') {
+                return `${text}`
             }
             return typeCond[type] ? typeCond[type] : '[未知类型消息]';
         } else {

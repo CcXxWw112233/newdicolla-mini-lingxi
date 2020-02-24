@@ -34,6 +34,7 @@ import {
   onBroadcastMsgs,
   onPushEvents,
   onResendMsg,
+  onDeleteMsg,
 } from './actions/index';
 
 const { appkey, openPrivateConf } = ENVIRONMENT_CONFIG;
@@ -129,6 +130,9 @@ function* initNimSDK(loginInfo = {}) {
     onpushevents: onPushEvents,
     //重发消息
     onresendmsg: onResendMsg,
+    //撤回消息
+    ondeleteMsg: onDeleteMsg,
+
   });
 }
 
