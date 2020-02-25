@@ -53,7 +53,8 @@ export default {
             const res = yield call(getDownloadUrl, parameter)
             var index = fileType.lastIndexOf(".");
             const file_type = fileType.substring(index + 1, fileType.length)
-            const img_type_arr = ['bmp', 'jpg', 'jpeg', 'png', 'tif', 'gif', 'pcx', 'tga', 'exif', 'fpx', 'svg', 'psd', 'cdr', 'pcd', 'dxf', 'ufo', 'eps', 'ai', 'raw', 'WMF', 'webp']  //文件格式
+            // const img_type_arr = ['bmp', 'jpg', 'jpeg', 'png', 'tif', 'gif', 'pcx', 'tga', 'exif', 'fpx', 'svg', 'psd', 'cdr', 'pcd', 'dxf', 'ufo', 'eps', 'ai', 'raw', 'WMF', 'webp']  //文件格式
+            const img_type_arr = ['bmp', 'jpg', 'jpeg', 'png', 'gif',]  //文件格式
             if (isApiResponseOk(res)) {
                 if (img_type_arr.indexOf(file_type) != -1) {  //打开图片
                     Taro.previewImage({
