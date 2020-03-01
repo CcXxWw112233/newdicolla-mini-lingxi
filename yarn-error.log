@@ -1,20 +1,20 @@
 Arguments: 
-  D:\huangxiongjin\node.exe D:\黄雄进\bin\yarn.js
+  C:\Program Files\nodejs\node.exe C:\Users\Administrator\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add @tarojs/async-await --silent --no-progress
 
 PATH: 
-  C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;D:\黄雄进\Git\cmd;D:\黄雄进\bin\;D:\huangxiongjin\;C:\Users\15623\AppData\Local\Microsoft\WindowsApps;;D:\黄雄进\Microsoft VS Code\bin;C:\Users\15623\AppData\Local\Yarn\bin;C:\Users\15623\AppData\Roaming\npm
+  C:\Program Files\nodejs\node_modules\npm\node_modules\npm-lifecycle\node-gyp-bin;C:\Users\Administrator\Desktop\projectDoc\workspace\newdicolla-mini-lingxi\node_modules\.bin;C:\Program Files\nodejs\node_modules\npm\node_modules\npm-lifecycle\node-gyp-bin;C:\Users\Administrator\Desktop\projectDoc\workspace\newdicolla-mini-lingxi\node_modules\.bin;C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\windows\System32\WindowsPowerShell\v1.0\;C:\windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\TortoiseGit\bin;C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps;C:\Users\Administrator\AppData\Roaming\npm;C:\Users\Administrator\AppData\Local\Programs\Microsoft VS Code\bin;
 
 Yarn version: 
   1.22.0
 
 Node version: 
-  12.16.0
+  10.15.3
 
 Platform: 
   win32 x64
 
 Trace: 
-  Error: EPERM: operation not permitted, unlink 'D:\huangxiongjin\xiangmu\newdicolla-mini-lingxi\node_modules\pbkdf2\node_modules\.bin'
+  Error: EPERM: operation not permitted, unlink 'C:\Users\Administrator\Desktop\projectDoc\workspace\newdicolla-mini-lingxi\node_modules\_@babel_code-frame@7.0.0-beta.44@@babel\code-frame'
 
 npm manifest: 
   {

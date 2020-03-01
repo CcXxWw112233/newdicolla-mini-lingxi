@@ -7,12 +7,14 @@ import {
   ScrollView,
   Swiper,
   SwiperItem,
+  Canvas
 } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 import styles from './UserInput.scss';
 import globalStyles from './../../../gloalSet/styles/globalStyles.scss';
 import emojiObj from './../../../models/im/config/emoji.js';
 import genEmojiList from './../../../models/im/utils/genEmojiList.js';
+import { init } from '../../../utils/canvasImage'
 
 @connect(
   ({
@@ -104,6 +106,7 @@ class UserInput extends Component {
     super(props)
     this.TextInput = "";
     this.isRecording = false;
+    this.canvasImg = null ;
   }
   state = {
     inputValue: '', // 文本类型输入框 value
@@ -115,7 +118,8 @@ class UserInput extends Component {
     emojiAlbum: 'emoji', // emoji | ajmd | lt | xxy
     inputBottomValue: 0,
     isRecording: false,
-    atIds: []
+    atIds: [],
+    showCanvas:false
   };
   handleInputFocus = e => {
     const { handleUserInputFocus, handleUserInputHeightChange } = this.props;
@@ -332,27 +336,50 @@ class UserInput extends Component {
 
     typeCond[type]();
   };
-  handleChooseImage = (...types) => {
+
+  sendChooseImage = (res)=>{
     const { im_id, sendImageMsg } = this.props;
     const { setInputMode } = this;
-
+    Taro.showLoading({
+      title: '发送中...',
+    });
+    Promise.resolve(sendImageMsg(res.tempFilePaths, im_id))
+      .then(() => {
+        setInputMode('text');
+      })
+      .catch(e => {
+        Taro.showToast({
+          title: String(e),
+          icon: 'none',
+          duration: 2000
+        });
+      });
+  }
+  handleChooseImage = (...types) => {
+    let _this = this;
     Taro.chooseImage({
       sourceType: types,
       success: function (res) {
-        Taro.showLoading({
-          title: '发送中...',
-        });
-        Promise.resolve(sendImageMsg(res.tempFilePaths, im_id))
-          .then(() => {
-            setInputMode('text');
+        // 发送图片
+        // this.sendChooseImage(res);
+        // 获取屏幕大小-打开canvas
+        _this.setState({
+          showCanvas:true
+        },()=>{
+          setTimeout(()=>{
+            wx.getSystemInfo({
+              success:function (msg){
+                let { screenHeight ,screenWidth } = msg ; 
+                // 构建图片编辑器s
+                init({
+                  width: screenWidth, height: screenHeight,scope: _this,
+                  urls: res.tempFilePaths ,activeUrl: res.tempFilePaths[0]
+                });
+              }
+            })
           })
-          .catch(e => {
-            Taro.showToast({
-              title: String(e),
-              icon: 'none',
-              duration: 2000
-            });
-          });
+        })
+        
       },
       fail: function () {
         Taro.showToast({
@@ -541,6 +568,16 @@ class UserInput extends Component {
               icon: 'error',
               duration: 2000
             });
+          },
+          complete:function (res){
+            let recordAuth = res.authSetting['scope.record'];
+            if(recordAuth === false){
+              Taro.showToast({
+                title: '未开启麦克风',
+                icon: 'error',
+                duration: 2000
+              });
+            }
           }
         });
       }
@@ -637,6 +674,7 @@ class UserInput extends Component {
       emojiType,
       emojiAlbum,
       inputBottomValue,
+      showCanvas
     } = this.state;
 
     const { emojiAlbumList, emojiList } = this.genEmojiInfo();
@@ -851,7 +889,13 @@ class UserInput extends Component {
             </Swiper>
           </View>
         )}
-
+        {
+          showCanvas && 
+          <View className={styles.canvasView}>
+            <Canvas type='2d' id="canvasImg" disable-scroll='true' canvas-id='canvasImg'/>
+          </View>
+        }
+        
       </View>
     );
   }

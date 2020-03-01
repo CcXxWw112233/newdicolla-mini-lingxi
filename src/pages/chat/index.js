@@ -1,4 +1,4 @@
-import Taro, { Component, } from '@tarojs/taro';
+import Taro, { Component,Canvas } from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import styles from './index.scss';
 import ChatHeader from './components/ChatHeader.js';
