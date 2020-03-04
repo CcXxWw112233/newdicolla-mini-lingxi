@@ -15,6 +15,7 @@ import globalStyles from './../../../gloalSet/styles/globalStyles.scss';
 import emojiObj from './../../../models/im/config/emoji.js';
 import genEmojiList from './../../../models/im/utils/genEmojiList.js';
 import { init } from '../../../utils/canvasImage'
+import DrawCanvas from '../../drawCanvas/index.js'
 
 @connect(
   ({
@@ -119,7 +120,9 @@ class UserInput extends Component {
     inputBottomValue: 0,
     isRecording: false,
     atIds: [],
-    showCanvas:false
+    showCanvas:false,
+    canvasPic:null,
+    sourceType:null
   };
   handleInputFocus = e => {
     const { handleUserInputFocus, handleUserInputHeightChange } = this.props;
@@ -357,39 +360,43 @@ class UserInput extends Component {
   }
   handleChooseImage = (...types) => {
     let _this = this;
-    Taro.chooseImage({
+    this.setState({
       sourceType: types,
-      success: function (res) {
-        // 发送图片
-        // this.sendChooseImage(res);
-        // 获取屏幕大小-打开canvas
-        _this.setState({
-          showCanvas:true
-        },()=>{
-          setTimeout(()=>{
-            wx.getSystemInfo({
-              success:function (msg){
-                let { screenHeight ,screenWidth } = msg ; 
-                // 构建图片编辑器s
-                init({
-                  width: screenWidth, height: screenHeight,scope: _this,
-                  urls: res.tempFilePaths ,activeUrl: res.tempFilePaths[0]
-                });
-              }
-            })
-          })
-        })
-        
-      },
-      fail: function () {
-        Taro.showToast({
-          title: '未选择任何图片',
-          icon: 'none',
-          duration: 2000
-        });
-      },
-      complete: function () { }
-    });
+      showCanvas: true
+    })
+    // Taro.chooseImage({
+    //   sourceType: types,
+    //   success: function (res) {
+    //     // 发送图片
+    //     // this.sendChooseImage(res);
+    //     // 获取屏幕大小-打开canvas
+    //     _this.setState({
+    //       showCanvas:true
+    //     },()=>{
+    //       setTimeout(()=>{
+    //         wx.getSystemInfo({
+    //           success:function (msg){
+    //             let { screenHeight ,screenWidth ,windowHeight, windowWidth} = msg ;
+    //             // 构建图片编辑器
+    //             init({
+    //               width: windowWidth, height: windowHeight,scope: _this,
+    //               urls: res.tempFilePaths ,activeUrl: res.tempFilePaths[0]
+    //             });
+    //           }
+    //         })
+    //       })
+    //     })
+
+    //   },
+    //   fail: function () {
+    //     Taro.showToast({
+    //       title: '未选择任何图片',
+    //       icon: 'none',
+    //       duration: 2000
+    //     });
+    //   },
+    //   complete: function () { }
+    // });
   };
   handleChooseFile = () => {
     Taro.showToast({
@@ -674,7 +681,8 @@ class UserInput extends Component {
       emojiType,
       emojiAlbum,
       inputBottomValue,
-      showCanvas
+      showCanvas,
+      sourceType
     } = this.state;
 
     const { emojiAlbumList, emojiList } = this.genEmojiInfo();
@@ -890,12 +898,13 @@ class UserInput extends Component {
           </View>
         )}
         {
-          showCanvas && 
-          <View className={styles.canvasView}>
-            <Canvas type='2d' id="canvasImg" disable-scroll='true' canvas-id='canvasImg'/>
-          </View>
+          showCanvas && <DrawCanvas sourceType={sourceType}/>
+          // <View className={styles.canvasView}>
+          //   <Canvas type='2d' id="canvasImg" disable-scroll='true' canvas-id='canvasImg'/>
+          // </View>
+
         }
-        
+
       </View>
     );
   }

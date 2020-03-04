@@ -117,6 +117,13 @@
 					"pathName": "pages/sceneEntrance/index",
 					"query": "contentId=1209439669922697216&boardId=1206886569806532608&redirectType=7&orgId= 1107307923551424512",
 					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/chat/index",
+					"pathName": "pages/chat/index",
+					"query": "boardId=1173504770590248960&pageSource=boardChat&__key_=15831402416051",
+					"scene": null
 				}
 			]
 		}
