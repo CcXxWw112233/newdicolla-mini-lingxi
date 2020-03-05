@@ -146,6 +146,9 @@ class Chat extends Component {
       file_info: fileInfo && JSON.parse(fileInfo),
       page_source: pageSource,
     })
+    wx.setNavigationBarTitle({
+      title:"聆悉"
+    })
   }
 
   concatHistory = (arr) => {
@@ -267,11 +270,23 @@ class Chat extends Component {
       selectedUser:""
     })
   }
+  onTapName = ()=>{
+    let { dispatch,currentGroup } = this.props;
+    dispatch({
+      type:"im/updateStateFieldByCover",
+      payload:{
+        currentBoardDetail:currentGroup
+      }
+    })
+    Taro.navigateTo({
+      url: `/pages/chatDetail/index`
+    })
+  }
 
   render() {
 
     const { file_info = {}, page_source ,showContacts ,selectedUser} = this.state
-    const { isShowFileComment ,currentBoard ,userUID} = this.props
+    const { isShowFileComment ,currentBoard ,userUID,currentGroup} = this.props
 
     return (
       <View className={styles.wrapper} onClick={this.inputDown}>
@@ -280,13 +295,13 @@ class Chat extends Component {
           ) : ''
         }
         <View className={styles.headerWraper}>
-          <ChatHeader />
+          <ChatHeader onTapBoardName={this.onTapName} currentProject={currentGroup}/>
         </View>
         <View className={styles.chatContentWrapper}>
           <ChatContent />
         </View>
         <View className={styles.userInputWrapper} onClick={this.inputDownChild}>
-          <UserInput onPrefix={this.onPrefix} prefixUser={selectedUser} onSend={this.onSend}/>
+          <UserInput onPrefix={this.onPrefix} prefixUser={selectedUser} onSend={this.onSend} im_id={currentGroup.im_id}/>
         </View>
         { showContacts && <Contacts onClose={this.contactsClose} users={currentBoard.users.filter(item => item.user_id != userUID)} onSelect={this.selectContacts}/>}
       </View>

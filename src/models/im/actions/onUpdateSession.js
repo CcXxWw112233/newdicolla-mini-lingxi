@@ -179,14 +179,31 @@ function onUpdateSession(sessions) {
     // 云信的列表和本地接口列表重组
     let boardList = mergeMsgs({ a: [...tempState.allBoardList], b: sessions, akey: 'im_id', bkey: "to" });
     // console.log(boardList)
-    boardList.map(item => {
+    // 小组圈
+    let subList = boardList.filter(item => item.type == 3);
+    let boardArr = []
+    boardList.forEach(item => {
       if (item.im_id === tempState.currentBoard.im_id) {
         item.apns = void 0;
       }
-      return item;
+      // 将子圈归附于项目圈
+      if(item.type == 2){
+        let subs = subList.filter(sub => sub.board_id == item.board_id);
+        item.children = subs;
+        let number = subs.reduce((total,sub)=>{
+          return total += +(sub.unread||0)
+        },0)
+        item.subUnread = number;
+      }
+      // 更新正在聊天的圈子内容
+      if(item.im_id == tempState.currentGroup.im_id){
+        tempState.currentGroup = {...item};
+      }
+      boardArr.push({...item})
     })
 
-    tempState.allBoardList = boardList;
+    tempState.allBoardList = boardArr;
+
     dispatch({
       type: 'im/updateStateByReplace',
       state: { ...tempState },

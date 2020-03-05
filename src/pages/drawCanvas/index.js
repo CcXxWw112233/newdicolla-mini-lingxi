@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro';
-import { View ,Canvas ,Image,CoverView} from '@tarojs/components';
+import { View ,Canvas ,Image,CoverView ,Button} from '@tarojs/components';
 
 import styles from './index.scss'
 
@@ -30,7 +30,8 @@ export default class DrawCanvas extends Component {
         style:{},
         addStyle:{},
         canvasWidth:null,
-        canvasHeight:null
+        canvasHeight:null,
+        showCover:false
     }
     this.imgX = 0;
     this.imgY = 0;
@@ -40,7 +41,7 @@ export default class DrawCanvas extends Component {
     this.obj = {
       img:null,
       canvas:null ,
-      maxHeight:wx.getSystemInfoSync().screenHeight,
+      maxHeight:wx.getSystemInfoSync().screenHeight - 40,
       maxWidth: wx.getSystemInfoSync().screenWidth,
 
     }
@@ -99,7 +100,7 @@ export default class DrawCanvas extends Component {
   getImage = (picture)=>{
     let that = this;
     let src = picture.tempFilePaths[0];
-    let width = this.state.screenW,height = this.state.screenH;
+    let width = this.obj.maxWidth,height = this.obj.maxHeight;
     let {scaled} = this.state;
     wx.getImageInfo({
       src:src,
@@ -314,7 +315,7 @@ export default class DrawCanvas extends Component {
         node.width = ctxStyle.width;
         node.height = ctxStyle.height;
         ctx.drawImage( img , 0,0, ctxStyle.width, ctxStyle.height)
-
+        this.setShow();
       }
 
       // this.obj.img = img;
@@ -340,15 +341,28 @@ export default class DrawCanvas extends Component {
     this.ctx.clearRect(0, 0, canvas.width, canvas.height);
     this.ctx.drawImage(img, this.imgX,this.imgY, img.width ,img.height );
   }
+  setShow = ()=>{
+    setTimeout(()=>{
+      this.setState({
+        showCover:true
+      })
+    },1000)
+  }
 
   render(){
     let { src ,style,addStyle,
       canvasWidth,
-      canvasHeight} = this.state;
+      canvasHeight,showCover} = this.state;
     let { scale } = this.data;
     return (
       <View className={styles.canvasView}>
-        <Image src={""}  onTouchStart={this.onStart}
+        { <CoverView className={styles.coverviewbox}>
+          <Button>12321</Button>
+          <CoverView className={styles.editImageBtn}>
+            编辑
+          </CoverView>
+        </CoverView>}
+        <Image src={src}  onTouchStart={this.onStart}
         mode="scaleToFill"
         onLoad={this.imgLoad}
         onTouchMove={this.onMove} onTouchEnd={this.onEnd}
@@ -365,15 +379,12 @@ export default class DrawCanvas extends Component {
           width:canvasWidth+'px',
           height:canvasHeight +'px',
           ...addStyle,
-          pointerEvents:"none"
+          pointerEvents:"none",
+          zIndex:0
         }}
-        className={styles.previewImage}/>
-        <CoverView className={styles.coverviewbox}>
-          <CoverView className={styles.editImageBtn}>
-            编辑
-          </CoverView>
-        </CoverView>
+        className={styles.previewImage}>
 
+        </Canvas>
       </View>
     )
   }

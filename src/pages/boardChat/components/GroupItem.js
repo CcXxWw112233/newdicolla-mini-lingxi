@@ -2,6 +2,7 @@ import Taro, { Component } from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import { AtIcon } from 'taro-ui';
 import styles from './GroupItem.scss';
+import globalStyle from '../../../gloalSet/styles/globalStyles.scss'
 import Avatar from './Avatar';
 
 class GroupItem extends Component {
@@ -13,7 +14,7 @@ class GroupItem extends Component {
   handleClickedGroupItem = ({ board_id, im_id }, e) => {
     const { onClickedGroupItem } = this.props;
     if (e) e.stopPropagation();
-    onClickedGroupItem({ board_id, im_id });
+    onClickedGroupItem && onClickedGroupItem({ board_id, im_id });
 
   };
   apnsAtMe = (apns) => {
@@ -63,8 +64,8 @@ class GroupItem extends Component {
           </View>
           <View className={styles.groupInfoWrapper}>
             <View className={styles.groupInfoTitleWrapper}>
-              <View className={styles.groupInfoTitleTitle}>{name}</View>
-              <View className={styles.groupInfoTitleOrg}>{'#'}{org_name}</View>
+            <View className={styles.groupInfoTitleTitle}><Text className={ data.mark ? globalStyle.global_itemMark :""} style={{backgroundColor:data.mark?data.mark:""}}></Text> {name}</View>
+              {org_name && <View className={styles.groupInfoTitleOrg}>{'#'}{org_name}</View> }
             </View>
             <View className={styles.groupInfoLastMsg}>
               {this.apnsAtMe(apns) && <Text className={styles.apnsAtMe}>[有人@我]</Text>} {lastMsg && lastMsg.replace(/<\/?[^>]*>/g, '\n')}

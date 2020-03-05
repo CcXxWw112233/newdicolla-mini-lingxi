@@ -15,6 +15,13 @@
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing  : grayscale;
 }
+.global_itemMark{
+  display: inline-block;
+  width: 6px;
+  line-height: 24px;
+  height: 24px;
+  margin-right: 10px;
+}
 
 //卡片
 .global_card_out {

@@ -377,8 +377,9 @@ export default {
     },
     // 更新列表未读数
     *updateBoardUnread({ payload }, { select, call, put }) {
-      let { unread, param, im_id } = payload;
+      let { unread, param, im_id ,board_id} = payload;
       const res = yield call(setImHistoryRead, param);
+
       const { allBoardList } = yield selectFieldsFromIm(select, [
         'nim',
         'allBoardList'

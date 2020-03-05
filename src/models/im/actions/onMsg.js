@@ -61,28 +61,38 @@ function onMsg(msg) {
   const isMsgBelongsToCurrentChatGroup =
     tempState.currentChatTo === msg.sessionId && nim;
 
+  const isSubChatOpenMsg = tempState.currentSubChat.im_id == msg.target && nim;
 
-  //如果这条消息属于当前打开的群聊，则需要处理，将符合条件的消息合并到当前群的消息列表中
-  if (isMsgBelongsToCurrentChatGroup) {
+  //如果这条消息属于当前打开的群聊，则需要处理，将符合条件的消息合并到当前群的消息列表中(项目圈)
+  if (isMsgBelongsToCurrentChatGroup || isSubChatOpenMsg) {
     //如果是一条属于当前打开的群聊的需要整合的消息，
     //那么就整合数据
-    const mergeNews = () => {
-      if (isValidMsg(msg, tempState.currentChatTo) || isPinupEmojiNews(msg) || isNotificationNews(msg)) {
+    if(isMsgBelongsToCurrentChatGroup ){
+      const mergeNews = () => {
+        if (isValidMsg(msg, tempState.currentChatTo) || isPinupEmojiNews(msg) || isNotificationNews(msg)) {
 
-        const { currentBoard } = tempState;
-        tempState.history_newSession = [
-          ...tempState['history_newSession'],
-          genNews(msg, currentBoard)
-        ];
-      }
-    };
+          const { currentBoard } = tempState;
+          tempState.history_newSession = [
+            ...tempState['history_newSession'],
+            genNews(msg, currentBoard)
+          ];
+        }
+      };
 
-    if (tempState.isOnlyShowInform) {
-      if (isActivityCustomNews(msg)) {
+      if (tempState.isOnlyShowInform) {
+        if (isActivityCustomNews(msg)) {
+          mergeNews();
+        }
+      } else {
         mergeNews();
       }
-    } else {
-      mergeNews();
+    }
+    if(isSubChatOpenMsg){
+      let { currentSubChat } = tempState
+      tempState.historySub_newSession = [
+        ...tempState['historySub_newSession'],
+        genNews(msg, currentSubChat)
+      ];
     }
 
     // 更新当前群的未读消息状态

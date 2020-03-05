@@ -197,7 +197,6 @@ class ChatContent extends Component {
 
 
   getHistory = (flow = 'up') => {
-    let { dispatch, userUID } = this.props;
     return new Promise((resolve, reject) => {
       let { currentBoard, dispatch, userUID } = this.props;
       let { im_id } = currentBoard;
@@ -254,7 +253,7 @@ class ChatContent extends Component {
         if(data.length === 0){
           reject()
           return ;
-        } 
+        }
         // 权限过滤
         let authList = filterListAuth(arr, userUID);
 
@@ -281,6 +280,7 @@ class ChatContent extends Component {
   // 加载下一页数据
   loadPrev = () => {
     if (!this.isLoading) {
+      this.isLoading = true;
       let keys = Object.keys(this.props).filter(item => item.indexOf('history_') != -1);
       let data = keys[keys.length - 1];
       this.getHistory().then(_ => {
@@ -467,7 +467,7 @@ class ChatContent extends Component {
           return (
             <View key={item}>
               {
-                this.props[item].map((i, index, arr) => {                  
+                this.props[item].map((i, index, arr) => {
                   return (
                     <View className={styles.chatItemWrapper} key={i.time} id={'item_' + i.idServer}>
                       {this.isShouldShowTimestamp(index, arr) && (

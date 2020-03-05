@@ -6,7 +6,7 @@ import indexStyles from './index.scss'
 import SearchAndMenu from '../board/components/SearchAndMenu'
 import { isPlainObject, filterListAuth } from './../../utils/util';
 import { isApiResponseOk } from '../../utils/request';
-import { getImHistory, getAllIMTeamList } from '../../services/im'
+import { getImHistory, getAllIMTeamList ,setImHistoryRead} from '../../services/im'
 
 @connect(({
     im: {
@@ -211,6 +211,23 @@ export default class BoardChat extends Component {
 
                 }
             })
+
+            // 分离项目圈和子圈
+            // 小组圈
+            let subList = chatList.filter(item => item.type == 3);
+            chatList.map(item => {
+              // 将子圈归附于项目圈
+              if(item.type == 2){
+                let subs = subList.filter(sub => sub.board_id == item.board_id);
+                item.children = subs;
+                let number = subs.reduce((total,sub)=>{
+                  return total += +(sub.unread||0)
+                },0)
+                item.subUnread = number;
+              }
+              return item;
+            })
+
             dispatch({
                 type: "im/updateStateFieldByCover",
                 payload: {
@@ -218,16 +235,6 @@ export default class BoardChat extends Component {
                 }
             })
         })
-        // 过滤掉只有一个人的群组 和  im_id为空的群组
-        // const boardChatList = allBoardList.filter((item, index) => {
-        //     if ((item.users && item.users.length != 1) && (item.im_id && !(item.im_id.match(/^[ ]*$/)))) {
-        //         return item
-        //     }
-        // })
-
-        // this.setState({
-        //     chatBoardList: boardChatList
-        // })
     }
 
     componentDidMount() {
@@ -259,7 +266,6 @@ export default class BoardChat extends Component {
     }
     // 更新列表的未读数
     setBoardUnread = (im_id, board_id) => {
-        let { allBoardList } = this.props;
         return new Promise(async (resolve) => {
             let { dispatch, allBoardList } = this.props;
             await dispatch({
@@ -270,6 +276,7 @@ export default class BoardChat extends Component {
                         msgids: []
                     },
                     im_id,
+                    board_id,
                     unread: 0
                 }
             })
@@ -533,7 +540,7 @@ export default class BoardChat extends Component {
             //1.1将没像个项目圈的unRead全部添加到一个数组
             //1.2把数组里面元素(unRead)全部相加等于总未读数
             var sumUnRead = filter_list.reduce(function (a, b) {
-                return a + parseInt(b.unread);
+                return a + parseInt(b.unread) + +b.subUnread;
             }, 0)
             //消息未读数
             if (sumUnRead) {
@@ -580,7 +587,7 @@ export default class BoardChat extends Component {
         const { search_mask_show, chatBoardList } = this.state
         let { userUID } = this.props;
         // 对消息进行排序, 根据lastMsg里面的time最新的排在最上面
-        let listArray = chatBoardList.filter(item => { return item.scene == 'team' }).sort((a, b) => ((b.updateTime)) - ((a.updateTime)))  //(b-a)时间正序
+        let listArray = chatBoardList.filter(item => item.scene == 'team' && item.type == 2).sort((a, b) => ((b.updateTime)) - ((a.updateTime)))  //(b-a)时间正序
         return (
             <View className={indexStyles.index}>
 
@@ -596,7 +603,9 @@ export default class BoardChat extends Component {
                         lastMsg,
                         unread,
                         childs = [],
-                        apns
+                        apns,
+                        name,
+                        subUnread
                     } = value;
                     let _math = Math.random() * 100000 + 1;
                     return (
@@ -607,10 +616,10 @@ export default class BoardChat extends Component {
                             board_id={board_id}
                             org_name={org_name}
                             im_id={im_id}
-                            name={board_name}
+                            name={board_name || name}
                             avatarList={this.genAvatarList(users)}
                             lastMsg={this.genLastMsg(lastMsg)}
-                            newsNum={unread}
+                            newsNum={(unread + subUnread)}
                             apns={apns}
                             userid={userUID}
                             showNewsDot={this.isShouldShowNewDot(unread, childs.map(i => i.unread))}

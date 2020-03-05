@@ -169,7 +169,7 @@
 
   .bottomView {
     background: #f5f5f5;
-    height    : pxTrans(40);
+    // height    : pxTrans(40);
     width     : 100%;
   }
 
@@ -186,4 +186,9 @@
       height: 100%;
     }
   }
+
+}
+
+page {
+  overflow: hidden;
 }

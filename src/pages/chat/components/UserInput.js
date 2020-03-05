@@ -20,15 +20,12 @@ import DrawCanvas from '../../drawCanvas/index.js'
 @connect(
   ({
     im: {
-      currentGroup: {
-        im_id,
-      },
       isOnlyShowInform,
     },
     chat: {
       handleInputMode,
     },
-  }) => ({ im_id, isOnlyShowInform, handleInputMode }),
+  }) => ({ isOnlyShowInform, handleInputMode }),
   dispatch => ({
     sendTeamTextMsg: (text, to, apns) =>
       dispatch({
@@ -304,11 +301,14 @@ class UserInput extends Component {
     });
   };
   toggleInputMode = (aMode, bMode) => {
+    const { handleUserInputHeightChange } = this.props;
     const { inputMode } = this.state;
     if (inputMode === aMode) {
       this.setInputMode(bMode);
+      handleUserInputHeightChange(0)
     } else {
       this.setInputMode(aMode);
+      handleUserInputHeightChange(280)
     }
   };
   handleClickedItem = (e, type) => {
@@ -360,43 +360,43 @@ class UserInput extends Component {
   }
   handleChooseImage = (...types) => {
     let _this = this;
-    this.setState({
-      sourceType: types,
-      showCanvas: true
-    })
-    // Taro.chooseImage({
+    // this.setState({
     //   sourceType: types,
-    //   success: function (res) {
-    //     // 发送图片
-    //     // this.sendChooseImage(res);
-    //     // 获取屏幕大小-打开canvas
-    //     _this.setState({
-    //       showCanvas:true
-    //     },()=>{
-    //       setTimeout(()=>{
-    //         wx.getSystemInfo({
-    //           success:function (msg){
-    //             let { screenHeight ,screenWidth ,windowHeight, windowWidth} = msg ;
-    //             // 构建图片编辑器
-    //             init({
-    //               width: windowWidth, height: windowHeight,scope: _this,
-    //               urls: res.tempFilePaths ,activeUrl: res.tempFilePaths[0]
-    //             });
-    //           }
-    //         })
-    //       })
-    //     })
+    //   showCanvas: true
+    // })
+    Taro.chooseImage({
+      sourceType: types,
+      success: function (res) {
+        // 发送图片
+        _this.sendChooseImage(res);
+        // 获取屏幕大小-打开canvas
+        // _this.setState({
+        //   showCanvas:true
+        // },()=>{
+        //   setTimeout(()=>{
+        //     wx.getSystemInfo({
+        //       success:function (msg){
+        //         let { screenHeight ,screenWidth ,windowHeight, windowWidth} = msg ;
+        //         // 构建图片编辑器
+        //         init({
+        //           width: windowWidth, height: windowHeight,scope: _this,
+        //           urls: res.tempFilePaths ,activeUrl: res.tempFilePaths[0]
+        //         });
+        //       }
+        //     })
+        //   })
+        // })
 
-    //   },
-    //   fail: function () {
-    //     Taro.showToast({
-    //       title: '未选择任何图片',
-    //       icon: 'none',
-    //       duration: 2000
-    //     });
-    //   },
-    //   complete: function () { }
-    // });
+      },
+      fail: function () {
+        Taro.showToast({
+          title: '未选择任何图片',
+          icon: 'none',
+          duration: 2000
+        });
+      },
+      complete: function () { }
+    });
   };
   handleChooseFile = () => {
     Taro.showToast({
@@ -700,7 +700,7 @@ class UserInput extends Component {
           position: this.inputModeBelongs('expression', 'addition')
             ? 'fixed'
             : 'relative',
-          bottom: this.inputModeBelongs('expression', 'addition') ? '20px' : inputBottomValue
+          bottom: this.inputModeBelongs('expression', 'addition') ? '10px' : inputBottomValue
         }}
       >
         <View className={styles.panelWrapper}>

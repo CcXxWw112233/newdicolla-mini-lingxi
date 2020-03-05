@@ -38,6 +38,8 @@ class App extends Component {
       'pages/noSchedulesCard/index',
       // 'pages/boardDetail/index',
       // 'pages/board/index',
+      'pages/subBoardChat/index',
+      'pages/subChatDetail/index',
       'pages/my/index',
       'pages/chat/index',
       'pages/chatDetail/index',
@@ -142,9 +144,9 @@ class App extends Component {
 
     /***
     * 备注: 小程序切换到后台后, im会重连会发送不了消息, 所以每次进入前台连接一次
-    * 
+    *
     * 注意: 进入前台时判断, 聊天页面中发送文件/图片/拍照都会进入后台, 选中之后小程序进入前台, 这次不用去连接, 连接的话会导致发送图片失败
-    * 
+    *
     * isChat 是否从聊天页面中选择文件/图片/拍照后进入前台
     * is_chat_extended_function --标识符条件成立的时候清除Storage, 防止下次从其他场景进入前台受影响,   --不成立的走备注流程
     */
