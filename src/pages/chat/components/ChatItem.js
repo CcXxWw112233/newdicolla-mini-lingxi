@@ -119,6 +119,7 @@ class ChatItem extends Component {
   };
 
   handlePreviewImage = file => {
+    file = typeof file === 'string' ? JSON.parse(file): file;
     const { url } = file;
     Taro.previewImage({
       urls: [url],

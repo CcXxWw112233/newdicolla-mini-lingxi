@@ -487,6 +487,7 @@ class ChatContent extends Component {
                         pushContent={i.pushContent}
                         groupNotification={i.groupNotification}
                         someMsg={i}
+                        fromKey="history_"
                       />
                     </View>
                   );
