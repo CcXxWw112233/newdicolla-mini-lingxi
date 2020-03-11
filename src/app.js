@@ -2,6 +2,8 @@ import '@tarojs/async-await'
 import Taro, { Component } from '@tarojs/taro'
 import { Provider } from '@tarojs/redux'
 import Index from './pages/index'
+import { getAccountInfo } from './services/login/index'
+import { isApiResponseOk } from './utils/request'
 import './app.scss'
 // import 'taro-ui/dist/style/index.scss' //taro-ui默认
 // import './gloalSet/styles/taro-ui1890ff.global.css' //taro-ui带主题
@@ -31,6 +33,7 @@ const store = dvaApp.getStore();
 class App extends Component {
   config = {
     pages: [
+      'pages/index/index',
       'pages/login/index',
       'pages/calendar/index',
       'pages/im/index',
@@ -43,11 +46,11 @@ class App extends Component {
       'pages/my/index',
       'pages/chat/index',
       'pages/chatDetail/index',
+      'pages/filesChat/index',
       // 'pages/login/index',
       'pages/selectOrg/index',
       'pages/phoneNumberLogin/index',
       'pages/testPage/index',
-      'pages/index/index',
       'pages/acceptInvitation/index',
       'pages/nowOpen/index',
       'pages/auccessJoin/index',
@@ -114,7 +117,18 @@ class App extends Component {
 
   componentDidMount() {
     //进入miniapp初始化IM
-    this.registerIm()
+    this.registerIm();
+    // 重定向到日历页面
+    this.recordtoHome();
+  }
+  recordtoHome = ()=>{
+    getAccountInfo().then(res => {
+      if (isApiResponseOk(res)) {
+        Taro.switchTab({
+          url: '/pages/calendar/index'
+        })
+      }
+    })
   }
 
   registerIm = () => {

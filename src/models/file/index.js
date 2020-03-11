@@ -19,6 +19,9 @@ export default {
         back_click_name: true, //右上角显示'返回'还是'取消'
         current_selection_board_id: '', //当前选择的board_id
         current_board_open: false, //项目文件夹列表展开状态
+        current_custom_message:{},// 点击的动态通知数据
+        current_custom_comment:[],// 加载的comment数据
+        load_custom_file_msg:{},// 通过接口加载的文件数据
     },
     effects: {
         //全部文件信息

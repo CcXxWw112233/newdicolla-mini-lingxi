@@ -4,8 +4,8 @@ import styles from './ChatHeader.scss';
 import globalStyles from './../../../gloalSet/styles/globalStyles.scss';
 import { connect } from '@tarojs/redux';
 
-@connect(({ im: { currentGroup } }) => ({
-  currentGroup
+@connect(({ im: { currentGroup ,allBoardList} }) => ({
+  currentGroup,allBoardList
 }))
 class ChatHeader extends Component {
   onShowBoardDetail = e => {
@@ -24,8 +24,18 @@ class ChatHeader extends Component {
     console.log(this.props)
     console.log('打开子圈列表')
   }
+  getSubUnread = ()=>{
+    let { allBoardList ,currentGroup} = this.props;
+    let sub = allBoardList.filter(item => item.type == 3 && item.board_id == currentGroup.board_id);
+
+    let number = sub.reduce((total,item) => {
+      return total += Number(item.unread || 0);
+    },0)
+    return number ;
+  }
   render() {
-    const { currentProject: { name = '未知群名',subUnread = 0 } = {} , hideSubList ,currentProject} = this.props;
+    const { currentProject: { name = '未知群名'} = {} , hideSubList ,currentProject} = this.props;
+    let subUnread = this.getSubUnread();
     return (
       <View className={styles.wrapper}>
         <View className={styles.contentWrapper}>

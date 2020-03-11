@@ -540,7 +540,7 @@ export default class BoardChat extends Component {
             //1.1将没像个项目圈的unRead全部添加到一个数组
             //1.2把数组里面元素(unRead)全部相加等于总未读数
             var sumUnRead = filter_list.reduce(function (a, b) {
-                return a + parseInt(b.unread) + +b.subUnread;
+                return a + parseInt(b.unread);
             }, 0)
             //消息未读数
             if (sumUnRead) {
@@ -582,6 +582,15 @@ export default class BoardChat extends Component {
         })
         this.countSumUnRead(arr)
     }
+    getSubUnread = (val)=>{
+      let { chatBoardList } = this.state;
+      let sub = chatBoardList.filter(item => item.type == 3 && item.board_id == val.board_id);
+
+      let number = sub.reduce((total,item) => {
+        return total += Number(item.unread);
+      },0)
+      return number ;
+    }
 
     render() {
         const { search_mask_show, chatBoardList } = this.state
@@ -619,7 +628,7 @@ export default class BoardChat extends Component {
                             name={board_name || name}
                             avatarList={this.genAvatarList(users)}
                             lastMsg={this.genLastMsg(lastMsg)}
-                            newsNum={(unread + subUnread)}
+                            newsNum={(+unread + this.getSubUnread(value))}
                             apns={apns}
                             userid={userUID}
                             showNewsDot={this.isShouldShowNewDot(unread, childs.map(i => i.unread))}

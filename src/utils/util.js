@@ -147,3 +147,34 @@ export const filterListAuth = (data = [],userid)=>{
 
   return arr ;
 }
+
+export const transformTime = (val,format='HH:mm')=>{
+  // let type = typeof val;
+  let addZero = (num)=>{
+      return num < 10 ? '0'+ num : num;
+  }
+  if(val){
+      let date = new Date(+val);
+      let year = date.getFullYear() ;
+      let mon = date.getMonth() + 1;
+      let day = date.getDate();
+      let hour = date.getHours();
+      let minu = date.getMinutes();
+      let sec = date.getSeconds();
+
+      let obj = {
+          yyyy: year,
+          MM: addZero(mon),
+          dd: addZero(day),
+          HH: addZero(hour),
+          mm: addZero(minu),
+          ss: addZero(sec)
+      }
+      let keys = Object.keys(obj);
+      let text = format;
+      keys.forEach(item => {
+          text = text.replace(item, obj[item])
+      })
+      return text;
+  }
+}

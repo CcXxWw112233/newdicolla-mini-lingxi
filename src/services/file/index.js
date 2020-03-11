@@ -82,3 +82,44 @@ export const sendFileComment = (data, notShowLoading) => {
     }, notShowLoading)
 }
 
+// 获取文件信息
+export const getFileInfo = (data, header, notShowLoading)=>{
+  return request({
+    data:{
+      ...data
+    },
+    header:{
+      ...header
+    },
+    method :"GET",
+    url:`${API_BOARD}/file/info/${data['id']}`
+  },notShowLoading)
+}
+
+// 获取文件评论列表
+export const getFileComment = (data,header, notShowLoading)=>{
+  return request({
+    data:{
+      ...data
+    },
+    header:{
+      ...header
+    },
+    method:"GET",
+    url:`${API_BOARD}/file/comment`
+  },notShowLoading)
+}
+
+// 发送文件评论消息
+export const setFileComment = (data,header, notShowLoading)=>{
+  return request({
+    data:{
+      ...data
+    },
+    header:{
+      ...header
+    },
+    method:"POST",
+    url:`${API_BOARD}/file/comment`
+  },notShowLoading)
+}

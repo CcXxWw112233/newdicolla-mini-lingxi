@@ -196,12 +196,17 @@ class UserInput extends Component {
     const { im_id, sendTeamTextMsg, onSend } = this.props;
 
     if (!im_id) {
-      Taro.showToast({
-        title: '未获取到群消息',
-        icon: 'none',
-        duration: 2000
+      onSend && onSend(inputValue.trim());
+      this.setState({
+        inputValue: ''
       });
-      return;
+      return ;
+      // Taro.showToast({
+      //   title: '未获取到群消息',
+      //   icon: 'none',
+      //   duration: 2000
+      // });
+      // return;
     }
     if (!inputValue || !inputValue.trim()) {
       Taro.showToast({
@@ -519,6 +524,8 @@ class UserInput extends Component {
     }
   };
   handleVoiceTouchStar = () => {
+    const recorderManager =
+        this.state.recorderManager || Taro.getRecorderManager();
     this.setState(
       {
         recordStart: true
@@ -570,20 +577,46 @@ class UserInput extends Component {
             }
           },
           fail: function () {
+            recorderManager.stop();
             Taro.showToast({
-              title: '鉴权失败，请重试',
-              icon: 'error',
-              duration: 2000
-            });
+              title:"未开启麦克风",
+              icon:'error',
+              duration:2000
+            })
           },
           complete:function (res){
             let recordAuth = res.authSetting['scope.record'];
             if(recordAuth === false){
-              Taro.showToast({
-                title: '未开启麦克风',
-                icon: 'error',
-                duration: 2000
-              });
+              recorderManager.stop();
+              Taro.showModal({
+                title: '提示',
+                content: '尚未进行授权，部分功能将无法使用',
+                showCancel: false,
+                success(res) {
+                    if (res.confirm) {
+                        console.log('用户点击确定')
+                        Taro.openSetting({
+                            success: (res) => {
+                                if (!res.authSetting['scope.record']) {
+                                    Taro.authorize({
+                                        scope: 'scope.record',
+                                        success() {
+                                            console.log('授权成功')
+                                        }, fail() {
+                                            console.log('用户点击取消')
+                                        }
+                                    })
+                                }
+                            },
+                            fail: function () {
+                                console.log("授权失败");
+                            }
+                        })
+                    } else if (res.cancel) {
+                        console.log('用户点击取消')
+                    }
+                }
+            })
             }
           }
         });

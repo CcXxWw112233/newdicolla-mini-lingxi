@@ -314,6 +314,46 @@ class ChatItem extends Component {
     }
   }
 
+  // 转换type的值
+  getCustomType = (type)=>{
+    if(!type){return ""}
+    let ActionTypes = {
+      "board.card.*":"card",
+      "board.file.*":"file",
+      "board.folder.*":"folder",
+      "board.flow.*" : "flow",
+      "board.milestone.*" :"milestone"
+  }
+    let t = "board";
+    for(let o in ActionTypes){
+        let reg = new RegExp("("+ o +")");
+        if(reg.test(type)){
+            t = ActionTypes[o]
+        }
+    }
+    return t ;
+  }
+  // 动态通知点击
+  activityClick = (val)=>{
+    let { dispatch ,fromType} = this.props;
+    if(fromType && fromType == 'file'){
+      return ;
+    }
+    let type = this.getCustomType(val.action);
+    val.actionType = type ;
+    if(type == 'file'){
+      dispatch({
+        type:"file/updateDatas",
+        payload:{
+          current_custom_message: val
+        }
+      })
+      Taro.navigateTo({
+        url: '/pages/filesChat/index'
+      })
+    }
+  }
+
   render() {
     const {
       flow,
@@ -484,7 +524,7 @@ class ChatItem extends Component {
                     {type === 'custom' && !isPinupEmoji && (
                       <View className={styles.customNewsWrapper}>
                         {content && content.data && content.data.d ? (
-                          <View className={styles.customNewsContentWrapper}>
+                          <View className={styles.customNewsContentWrapper} >
                             {[JSON.parse(content.data.d)].map((data, index) => {
                               const {
                                 activityType,
@@ -497,6 +537,7 @@ class ChatItem extends Component {
                                 <View
                                   key={data.creatorId}
                                   className={styles.customNewsContent}
+                                  onClick={this.activityClick.bind(this, data)}
                                 >
                                   <Text className={styles.creator}>
                                     {creator && creator.name
