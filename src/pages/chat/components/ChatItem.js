@@ -284,6 +284,7 @@ class ChatItem extends Component {
   }
 
   getSubStr(str) {
+    str = str && str.replace(/<\/?.+?>/g,"");
     if (!str.match(/^[ ]*$/) && str.length > 20) {
       var subStr1 = str.substr(0, 8);
       var subStr2 = str.substr(str.length - 8);
@@ -340,12 +341,17 @@ class ChatItem extends Component {
       return ;
     }
     let type = this.getCustomType(val.action);
-    val.actionType = type ;
+    let { content = {} } = val;
+    let { board_file = {} ,board = {}} = content;
     if(type == 'file'){
       dispatch({
         type:"file/updateDatas",
         payload:{
-          current_custom_message: val
+          current_custom_message: {
+            id: board_file.id,
+            actionType: type,
+            board_id: board.id
+          }
         }
       })
       Taro.navigateTo({

@@ -8,6 +8,12 @@ import { connect } from '@tarojs/redux';
   currentGroup,allBoardList
 }))
 class ChatHeader extends Component {
+  constructor(){
+    super(...arguments)
+    this.state = {
+      hasSublist:true
+    }
+  }
   onShowBoardDetail = e => {
     if (e) e.stopPropagation();
     let { onTapBoardName } = this.props;
@@ -24,10 +30,19 @@ class ChatHeader extends Component {
     console.log(this.props)
     console.log('打开子圈列表')
   }
+  componentDidMount(){
+    // console.log(this.props)
+    let { currentProject = {} } = this.props;
+    let { children = [] } = currentProject;
+    if(!children.length){
+      this.setState({
+        hasSublist: false
+      })
+    }
+  }
   getSubUnread = ()=>{
     let { allBoardList ,currentGroup} = this.props;
     let sub = allBoardList.filter(item => item.type == 3 && item.board_id == currentGroup.board_id);
-
     let number = sub.reduce((total,item) => {
       return total += Number(item.unread || 0);
     },0)
@@ -35,6 +50,7 @@ class ChatHeader extends Component {
   }
   render() {
     const { currentProject: { name = '未知群名'} = {} , hideSubList ,currentProject} = this.props;
+    let { hasSublist } = this.state;
     let subUnread = this.getSubUnread();
     return (
       <View className={styles.wrapper}>
@@ -45,7 +61,7 @@ class ChatHeader extends Component {
             {name}
             &#xe8ed;
           </View>
-          {!hideSubList &&
+          {!hideSubList && hasSublist &&
           <View
             className={styles.operatorWrapper}
             onClick={this.onGoToSubChatList}>

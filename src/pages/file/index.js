@@ -288,40 +288,60 @@ export default class File extends Component {
 
     //长按进入圈子
     longPress = (value) => {
-        Taro.setStorageSync('isRefreshFetchAllIMTeamList', 'true')
-        Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
+        let { dispatch } = this.props;
+        // Taro.setStorageSync('isRefreshFetchAllIMTeamList', 'true')
+        // Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
+        // console.log(value)
 
-        const { dispatch, setCurrentBoardId, setCurrentBoard, allBoardList, checkTeamStatus, } = this.props
-        const { board_id } = value
+        let obj = {
+          id: value.id,
+          actionType:"file",
+          board_id: value.board_id
+        }
+
         dispatch({
-            type: 'file/updateDatas',
-            payload: {
-                isShowFileComment: true,
-            },
+          type:"file/updateDatas",
+          payload:{
+            current_custom_message: obj
+          }
         })
+        setTimeout(()=>{
+          Taro.navigateTo({
+            url:"/pages/filesChat/index"
+          })
+        },50)
 
-        const fileIsCurrentBoard = allBoardList.filter((item, index) => {
-            if (item.board_id === board_id) {
-                return item
-            }
-        })
+        // const { dispatch, setCurrentBoardId, setCurrentBoard, allBoardList, checkTeamStatus, } = this.props
+        // const { board_id } = value
+        // dispatch({
+        //     type: 'file/updateDatas',
+        //     payload: {
+        //         isShowFileComment: true,
+        //     },
+        // })
 
-        if (fileIsCurrentBoard.length === 0) return
-        const { im_id } = fileIsCurrentBoard && fileIsCurrentBoard[0]
+        // const fileIsCurrentBoard = allBoardList.filter((item, index) => {
+        //     if (item.board_id === board_id) {
+        //         return item
+        //     }
+        // })
 
-        const getCurrentBoard = (arr, id) => {
-            const ret = arr.find(i => i.board_id === id);
-            return ret ? ret : {};
-        };
-        Promise.resolve(setCurrentBoardId(board_id))
-            .then(() => {
-                setCurrentBoard(getCurrentBoard(allBoardList, board_id))
-            }).then(() => {
-                checkTeamStatus(board_id)
-            }).then(() => {
-                this.validGroupChat({ im_id }, { value })
-            })
-            .catch(e => console.log('error in boardDetail: ' + e));
+        // if (fileIsCurrentBoard.length === 0) return
+        // const { im_id } = fileIsCurrentBoard && fileIsCurrentBoard[0]
+
+        // const getCurrentBoard = (arr, id) => {
+        //     const ret = arr.find(i => i.board_id === id);
+        //     return ret ? ret : {};
+        // };
+        // Promise.resolve(setCurrentBoardId(board_id))
+        //     .then(() => {
+        //         setCurrentBoard(getCurrentBoard(allBoardList, board_id))
+        //     }).then(() => {
+        //         checkTeamStatus(board_id)
+        //     }).then(() => {
+        //         this.validGroupChat({ im_id }, { value })
+        //     })
+        //     .catch(e => console.log('error in boardDetail: ' + e));
     }
 
     validGroupChat = ({ im_id }, { value }) => {

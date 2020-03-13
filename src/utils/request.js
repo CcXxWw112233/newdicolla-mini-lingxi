@@ -27,7 +27,7 @@ export const request = (options, notShowLoading, isNewLogin) => {
         ...data
       },
       method,
-      header: { ...Headers, ...setRequestHeaderBaseInfo({ data, headers: Headers }) },
+      header: {...Headers, ...setRequestHeaderBaseInfo({ data, headers: Headers }) },
       success: function (res) {
         // if (!notShowLoading) {
         //   Taro.hideLoading();

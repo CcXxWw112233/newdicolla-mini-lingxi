@@ -195,6 +195,18 @@ class UserInput extends Component {
     const { inputValue } = this.state;
     const { im_id, sendTeamTextMsg, onSend } = this.props;
 
+    if (!inputValue || !inputValue.trim()) {
+      Taro.showToast({
+        title: '请不要发空消息',
+        icon: 'none',
+        duration: 2000
+      });
+      this.setState({
+        inputValue: ''
+      });
+      return;
+    }
+
     if (!im_id) {
       onSend && onSend(inputValue.trim());
       this.setState({
@@ -208,17 +220,7 @@ class UserInput extends Component {
       // });
       // return;
     }
-    if (!inputValue || !inputValue.trim()) {
-      Taro.showToast({
-        title: '请不要发空消息',
-        icon: 'none',
-        duration: 2000
-      });
-      this.setState({
-        inputValue: ''
-      });
-      return;
-    }
+
     if (inputValue.length > 800) {
       Taro.showToast({
         title: '请不要超过800个字',
@@ -318,7 +320,14 @@ class UserInput extends Component {
   };
   handleClickedItem = (e, type) => {
     if (e) e.stopPropagation();
-    const { handleUserInputFocus, handleUserInputHeightChange } = this.props;
+    const { handleUserInputFocus, handleUserInputHeightChange,hideVoice } = this.props;
+    if(hideVoice && type == 'voice'){
+      Taro.showToast({
+        title:"暂不支持发送语音",
+        icon:"none"
+      })
+      return ;
+    }
     handleUserInputFocus(false)
 
     const typeCond = {
@@ -645,7 +654,7 @@ class UserInput extends Component {
   };
   handleSelectedEmojiItem = i => {
     const { type, name, key } = i;
-    const { im_id, sendPinupEmoji } = this.props;
+    const { im_id, sendPinupEmoji ,fromPage = 'chat' } = this.props;
 
     // emoji 类型的表情会混合进 type = 'text' 的文本信息流
     // pinup 类型的表情会作为一种自定义的消息类型直接发送
@@ -659,7 +668,14 @@ class UserInput extends Component {
       });
     }
     if (type === 'pinup') {
-      sendPinupEmoji(im_id, name, key);
+      if(fromPage == 'chat'){
+        sendPinupEmoji(im_id, name, key);
+      }else{
+        Taro.showToast({
+          title:'暂不支持此表情',
+          icon:"none"
+        })
+      }
     }
   };
   handleSelectEmojiList = i => {
@@ -717,6 +733,7 @@ class UserInput extends Component {
       showCanvas,
       sourceType
     } = this.state;
+    let { hideAddition, hideVoice, fromPage = 'chat' } = this.props;
 
     const { emojiAlbumList, emojiList } = this.genEmojiInfo();
     const findedCurrentEmojiAlbum = emojiList.filter(
@@ -813,12 +830,18 @@ class UserInput extends Component {
               发送
             </View>
           ) : (
+            !hideAddition ?
               <View
                 className={`${globalStyles.global_iconfont} ${styles.addition}`}
                 onClick={e => this.handleClickedItem(e, 'addition')}
               >
                 &#xe632;
             </View>
+            :(
+              <View className={styles.sendTextBtn} onClick={this.onInputConfirm}>
+                发送
+              </View>
+            )
             )}
         </View>
 

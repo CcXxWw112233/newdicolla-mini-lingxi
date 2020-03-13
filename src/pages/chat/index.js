@@ -301,7 +301,7 @@ class Chat extends Component {
           <ChatContent />
         </View>
         <View className={styles.userInputWrapper} onClick={this.inputDownChild}>
-          <UserInput onPrefix={this.onPrefix} prefixUser={selectedUser} onSend={this.onSend} im_id={currentGroup.im_id}/>
+          <UserInput onPrefix={this.onPrefix} prefixUser={selectedUser} onSend={this.onSend} im_id={currentGroup.im_id} fromPage='chat'/>
         </View>
         { showContacts && <Contacts onClose={this.contactsClose} users={currentBoard.users.filter(item => item.user_id != userUID)} onSelect={this.selectContacts}/>}
       </View>

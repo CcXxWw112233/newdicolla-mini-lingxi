@@ -36,6 +36,7 @@ export default class FilesChat extends Component {
       loadPrev:false,
       fileTypeText:""
     }
+    this.closeTime = null ;
     this.IsBottom = true;
     this.isLoading = false;
     this.fileExts =
@@ -55,47 +56,65 @@ export default class FilesChat extends Component {
       }
   }
   getCurrentDetail = ()=>{
-    let {current_custom_message,dispatch} = this.props;
-    // 文件类型
-    // console.log(current_custom_message)
-    if(current_custom_message.actionType == 'file'){
-      let { content = {} } = current_custom_message;
-      let { board_file = {} } = content;
-      let param = {
-        id: board_file.id
-      }
-      let header = this.setHeader();
-      getFileInfo(param,header).then(res => {
-        let { data = {} } = res;
-        let { base_info = {}, preview_info = {} , version_list = []} = data ;
-        console.log(res)
-        // 获取版本中的数据
-        let imgMsg = this.getCurrentVersion(base_info.id, version_list) || {};
-        let { update_time,file_size,creator } = imgMsg;
-        let time = transformTime(update_time,'yyyy/MM/dd');
-        let name = base_info.file_name;
-        let ext = name.split('.');
-        // 文件格式
-        ext = ext[ext.length - 1];
-        this.setState({
-          imgSrc: preview_info.url,
-          imgTitle: base_info.file_name,
-          imgSize:file_size,
-          creator:creator,
-          imgUpdateTime: time,
-          fileTypeText: ext && ext.toLowerCase()
-        })
-        // 更新到全局
-        dispatch({
-           type: 'file/updateDatas',
-           payload: {
-            load_custom_file_msg: data
-           }
-        })
-      })
-    }
-  }
+    return new Promise((resolve,reject)=>{
+      let {current_custom_message,dispatch} = this.props;
+      // 文件类型
+      // console.log(current_custom_message)
+      if(current_custom_message.actionType == 'file'){
+        let { id } = current_custom_message;
+        let param = {
+          id: id
+        }
+        let header = this.setHeader();
+        // console.log(header)
+        getFileInfo(param,header).then(res => {
+          if(res.code == 0){
+            let { data = {} } = res;
+            let { base_info = {}, preview_info = {} , version_list = []} = data ;
+            console.log(res)
+            // 获取版本中的数据
+            let imgMsg = this.getCurrentVersion(base_info.id, version_list) || {};
+            let { update_time,file_size,creator } = imgMsg;
+            let time = transformTime(update_time,'yyyy/MM/dd');
+            let name = base_info.file_name;
+            let ext = name.split('.');
+            // 文件格式
+            ext = ext[ext.length - 1];
+            this.setState({
+              imgSrc: preview_info.url,
+              imgTitle: base_info.file_name,
+              imgSize:file_size,
+              creator:creator,
+              imgUpdateTime: time,
+              fileTypeText: ext && ext.toLowerCase()
+            })
+            // 更新到全局
+            dispatch({
+              type: 'file/updateDatas',
+              payload: {
+                load_custom_file_msg: data
+              }
+            })
 
+            resolve(data)
+          }else {
+            reject(res)
+            Taro.showToast({
+              title: res.message,
+              icon:"none",
+              duration:2000
+            })
+            this.closeTime = setTimeout(()=>{
+              Taro.navigateBack({delta:1});
+            },2000)
+          }
+        })
+      }
+    })
+  }
+  componentWillUnmount(){
+    clearTimeout(this.closeTime);
+  }
   // 获取当前版本数据中的版本
   getCurrentVersion = (id,versions)=>{
     let version = versions.find(item => item.id == id);
@@ -118,15 +137,14 @@ export default class FilesChat extends Component {
       }
     }else{
       let { fileTypeText } = this.state;
-      let { current_custom_message = {} ,dispatch ,load_custom_file_msg = {}} = this.props;
+      let { dispatch ,load_custom_file_msg = {}} = this.props;
       // console.log(current_custom_message)
-      let { org_id  ,content :{ board = {}, board_file = {} }} = current_custom_message ;
       let { base_info = {} } = load_custom_file_msg;
 
       const parameter = {
-        board_id:board.id,
+        board_id:base_info.board_id,
         ids: base_info.file_resource_id,
-        _organization_id: org_id,
+        _organization_id: base_info.org_id,
       }
 
       // 清除缓存文件
@@ -188,32 +206,28 @@ export default class FilesChat extends Component {
   }
 
   setHeader = ()=>{
-    let { current_custom_message } = this.props;
-    let { content = {} } = current_custom_message ||{}
-    let { board_file = {} } = content;
-    let board = content.board || {};
+    let { load_custom_file_msg = {},current_custom_message} = this.props;
     let base64Data = {
       orgId:"0",
-      boardId: board.id ,
+      boardId: current_custom_message.board_id ,
       aboutBoardOrganizationId: "0",
       contentDataType: current_custom_message.actionType,
-      contentDataId: board_file.id
+      contentDataId: current_custom_message.id
     }
     // console.log(base64Data)
     let textJson = JSON.stringify(base64Data);
     // textJson = encodeURI(textJson);
     let header = {
-        baseinfo: Base64.encode(textJson)
+        BaseInfo: base64Data
     }
     return header;
   }
 
   getCommentList = ()=>{
     let { current_custom_message,dispatch } = this.props;
-    let { content = {} } = current_custom_message;
-    let { board_file = {} } = content;
+    let { id } = current_custom_message;
     let param = {
-      id: board_file.id,
+      id: id,
       flag:0
     }
     let header = this.setHeader();
@@ -232,7 +246,7 @@ export default class FilesChat extends Component {
         })
         if(list.length)
         this.setCurrentIdServer(list[list.length - 1]);
-        console.log(list[list.length - 1])
+        // console.log(list[list.length - 1])
       }
     })
   }
@@ -300,8 +314,10 @@ export default class FilesChat extends Component {
   }
 
   componentDidMount(){
-    this.getCurrentDetail();
-    this.getCommentList()
+    console.log(this.props.current_custom_message)
+    this.getCurrentDetail().then(res => {
+      this.getCommentList()
+    });
   }
   componentWillReceiveProps(nextProps){
     if(nextProps.current_custom_comment.length != this.props.current_custom_comment.length){
@@ -333,13 +349,11 @@ export default class FilesChat extends Component {
     })
   }
   onSend = (val)=>{
-    let { current_custom_message,current_custom_comment, currentGroup,dispatch} = this.props;
-    let { content = {} } = current_custom_message;
-    let { board_file = {} } = content;
-    let board = content.board || {};
+    let { current_custom_comment, currentGroup,dispatch,load_custom_file_msg} = this.props;
+    let { base_info = {} } = load_custom_file_msg;
     let param = {
-      file_id:board_file.id,
-      board_id:board.id,
+      file_id:base_info.id,
+      board_id:base_info.board_id,
       type:"0",
       comment:val.trim()
     }
@@ -365,6 +379,12 @@ export default class FilesChat extends Component {
           payload:{
             current_custom_comment: old
           }
+        })
+      }else{
+        Taro.showToast({
+          title:"没有评论权限",
+          icon:"none",
+          duration: 2000
         })
       }
 
@@ -478,7 +498,7 @@ export default class FilesChat extends Component {
               {/* })} */}
             </View>
           </ScrollView>
-          <UserInput onSend={this.onSend}/>
+          <UserInput onSend={this.onSend} hideVoice={true} hideAddition={true} fromPage='filesChat'/>
         </View>
       </View>
     )
