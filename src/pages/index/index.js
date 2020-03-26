@@ -45,7 +45,10 @@ class Index extends Component {
 
   componentWillUnmount () { }
 
-  componentDidShow () {}
+  componentDidShow () {
+    // console.log('indexShow')
+    this.toLogin();
+  }
 
   componentDidHide () { }
 

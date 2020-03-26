@@ -163,7 +163,7 @@ class App extends Component {
   }
 
   componentDidShow() {
-
+    // this.recordtoHome();
     /***
     * 备注: 小程序切换到后台后, im会重连会发送不了消息, 所以每次进入前台连接一次
     *
