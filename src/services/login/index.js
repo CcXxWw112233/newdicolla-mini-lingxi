@@ -27,7 +27,7 @@ export const normalLogin = (data, notShowLoading) => {
     },
     method: 'POST',
     url: `${API_UPMS}/user/signin`,
-  }, notShowLoading)
+  }, notShowLoading,false,false)
 }
 
 
@@ -55,14 +55,14 @@ export const weChatPhoneLogin = (data, notShowLoading) => {
 
 //微信暂未绑定，需要手机号绑定登录
 //获取当前用户信息
-export const getAccountInfo = (data, notShowLoading) => {
+export const getAccountInfo = (data, notShowLoading,redirectPage) => {
   return request({
     data: {
       ...data
     },
     method: 'GET',
     url: `${API_UPMS}/v2/user`,
-  }, notShowLoading)
+  }, notShowLoading,false,redirectPage)
 }
 
 //新用户如果没有组织 => 默认初始化一个组织

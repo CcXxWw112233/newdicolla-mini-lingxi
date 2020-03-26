@@ -117,23 +117,18 @@ class App extends Component {
 
   componentDidMount() {
     //进入miniapp初始化IM
-    this.registerIm();
+    // this.registerIm();
     // 重定向到日历页面
     this.recordtoHome();
   }
-  recordtoHome = ()=>{
-    getAccountInfo().then(res => {
-      if (isApiResponseOk(res)) {
-        Taro.switchTab({
-          url: '/pages/calendar/index'
-        })
-      }
-    })
-  }
-
+  // 注册im
   registerIm = () => {
     const initImData = async () => {
-      const { dispatch } = store
+      const {
+        globalData: {
+          store: { dispatch }
+        }
+      } = Taro.getApp();
       const { account, token } = await dispatch({
         type: 'im/fetchIMAccount'
       });
@@ -152,6 +147,19 @@ class App extends Component {
       e => console.log(String(e))
       // Taro.showToast({ title: String(e), icon: 'none', duration: 2000 })
     );
+  }
+  recordtoHome = ()=>{
+    // 验证token
+    getAccountInfo({},false,false).then(res => {
+      if (isApiResponseOk(res)) {
+        // 注册im
+        this.registerIm();
+
+        Taro.switchTab({
+          url: '../../pages/calendar/index'
+        })
+      }
+    })
   }
 
   componentDidShow() {

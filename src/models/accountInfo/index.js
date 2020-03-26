@@ -40,7 +40,7 @@ export default {
       if (isApiResponseOk(res)) {
         Taro.clearStorageSync();  //清除所有的Storage
         Taro.reLaunch({
-          url: '../../pages/login/index'
+          url: '../../pages/index/index'
         })
       } else {
 

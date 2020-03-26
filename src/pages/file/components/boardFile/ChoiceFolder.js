@@ -35,11 +35,17 @@ export default class ChoiceFolder extends Component {
     state = {
         is_show_board_list: false, //是否显示项目列表
         thumb_image_info: [], //图片略缩图
+        addressName:"正在获取中...",// 转换好的中文地址
+        address:{
+          longitude:"",
+          latitude:""
+        }
     }
 
     componentDidMount() {
         this.loadBoardList()
         this.getChoiceImageThumbnail()
+
     }
 
     getChoiceImageThumbnail = () => {
@@ -51,15 +57,20 @@ export default class ChoiceFolder extends Component {
             obj['filePath'] = item
             array.push(obj)
         })
-        let promise = [];
-        array.forEach(item => {
-            promise.push(this.getImageExifInfo(item))
+        // let promise = [];
+        // console.log(array)
+        this.setState({
+          thumb_image_info: array
         })
-        Promise.all(promise).then(resp => {
-            this.setState({
-                thumb_image_info: resp
-            })
-        }).catch(e => console.log('error: ' + e));
+        this.getLocation()
+        // array.forEach(item => {
+        //     promise.push(this.getImageExifInfo(item))
+        // })
+        // Promise.all(promise).then(resp => {
+        //     this.setState({
+        //         thumb_image_info: resp
+        //     })
+        // }).catch(e => console.log('error: ' + e));
     }
 
     loadBoardList = () => {
@@ -189,7 +200,8 @@ export default class ChoiceFolder extends Component {
     }
 
     handleConfirm = () => {
-        this.props.fileUpload()
+        let { address :{ longitude,latitude } } = this.state;
+        this.props.fileUpload && this.props.fileUpload({latitude,longitude})
         this.hideChoiceFolder()
         // this.resetCurrentSelection()
     }
@@ -300,6 +312,65 @@ export default class ChoiceFolder extends Component {
 
         return Latitude;
     }
+    GETWXSDKGEO({latitude, longitude}){
+      return new Promise((resolve,reject) => {
+        var demo = new QQMapWX({
+          key: QQMAPSDK_KEY,
+        })
+        demo.reverseGeocoder({
+            location: {
+                latitude: latitude,
+                longitude: longitude,
+            },
+            success: function (res) {
+                resolve({ address: res.result.address , latitude, longitude})
+            },
+            fail: function (res) {
+                console.log('读取失败: ', res);
+                reject(res)
+            },
+            complete: function (res) {
+                console.log('读取完成: ', res);
+            }
+        });
+      })
+    }
+    getLocation = ()=>{
+      let that = this;
+      // return new Promise((resolve,reject) => {
+        Taro.getLocation({
+          type:"gcj02",
+          success(resp){
+            // console.log(res)
+            let { latitude, longitude } = resp;
+            that.GETWXSDKGEO({latitude,longitude}).then(res => {
+              that.setState({
+                addressName: res.address,
+                address:{
+                  latitude,longitude
+                }
+              })
+            })
+          }
+        })
+      // })
+    }
+    // 选择位置
+    choosePosition = ()=>{
+      let that = this;
+      wx.chooseLocation({
+        success:(val)=>{
+          // console.log(val)
+          let { latitude ,longitude ,address,name} = val;
+          that.setState({
+            addressName: address + name,
+            address:{
+              latitude,longitude
+            }
+          })
+        }
+      })
+    }
 
     //获取图片Exif信息
     getImageExifInfo = (tempFilePaths) => {
@@ -349,13 +420,14 @@ export default class ChoiceFolder extends Component {
 
         const { folder_tree, org_list, upload_folder_name, choice_board_folder_id, choice_board_id, current_selection_board_id, current_board_open, } = this.props
         const { child_data = [], } = folder_tree
-        const { is_show_board_list, thumb_image_info = [], } = this.state
+        const { is_show_board_list, thumb_image_info = [], addressName} = this.state
 
         const SystemInfo = Taro.getSystemInfoSync()
         const { windowHeight } = SystemInfo
         const scrollHeight = (windowHeight - (80 * 2) - 47 - 18 - 56 - 10) + 'px'
         const contentHeight = (windowHeight - (80 * 2) - 47) + 'px'
         const contentCenterHeight = (windowHeight - (80 * 2) - 47 - 56) + 'px'
+        let board_list = this.filterSelectBoard();
 
         return (
 
@@ -382,19 +454,25 @@ export default class ChoiceFolder extends Component {
                                         className={indexStyles.thumbnail_view_style}
                                     >
                                         {thumb_image_info && thumb_image_info.map((item, key) => {
-                                            const { filePath, address } = item
+                                            const { filePath } = item
                                             return (
                                                 <Image mode='aspectFill' className={indexStyles.choice_image_thumbnail_style} src={filePath}>
-                                                    {address ? (<View className={indexStyles.position_style}>
+                                                    {/* {address ? (<View className={indexStyles.position_style}>
                                                         <Text className={`${globalStyle.global_iconfont} ${indexStyles.position_icon_style}`}>&#xe790;</Text>
                                                         <Text className={indexStyles.position_text_style}>
                                                             {address}
                                                         </Text>
-                                                    </View>) : ''}
+                                                    </View>) : ''} */}
                                                 </Image>
                                             )
                                         })}
                                     </ScrollView>
+                                    <View className={indexStyles.addressBox}>
+                                      <View className={`${indexStyles.addressText} ${globalStyle.global_iconfont}`}
+                                      onClick={this.choosePosition}>
+                                        &#xe790; {addressName}
+                                      </View>
+                                    </View>
                                 </View>
                             </View>
                         </View>
@@ -408,7 +486,7 @@ export default class ChoiceFolder extends Component {
                                     scrollY
                                     scrollWithAnimation
                                     className={indexStyles.board_list_view_style} style={{ height: scrollHeight }}>
-                                    {this.filterSelectBoard() && this.filterSelectBoard().map(item => {
+                                    {board_list && board_list.map(item => {
                                         const org_id = item.org_id
                                         return (
                                             <View key={item.board_id} className={indexStyles.board_item_style} >

@@ -34,7 +34,7 @@ export default class Login extends Component {
   }
   componentWillMount() {
     const sourcePage = this.$router.params;
-    this.checkTokenValid(sourcePage)
+    // this.checkTokenValid(sourcePage)
     this.setState({
       sourcePage,
     })
@@ -303,31 +303,6 @@ export default class Login extends Component {
     }).catch(() => { })
   }
 
-  //获取授权信息，然后进行微信授权登录
-  getUserInfo = (res) => {
-    const { detail = {} } = res
-    const { encryptedData, iv } = detail
-    if (!!encryptedData) {
-      const { dispatch } = this.props
-      Taro.login().then(res => {
-        const code = res.code
-        Taro.getUserInfo().then(res2 => {
-          const parmas = {
-            encryptedData: res2.encryptedData, iv: res2.iv, code: code
-          }
-          const { sourcePage } = this.state
-          dispatch({
-            type: 'login/weChatAuthLogin',
-            payload: {
-              parmas,
-              sourcePage: sourcePage.redirect,
-            }
-          })
-        })
-      })
-    }
-  }
-
   getVerifyCodeImg = () => {
     getVerifycodeImg().then(res => {
       const code = res.code
@@ -384,7 +359,7 @@ export default class Login extends Component {
     }
     return (
       <View className={`${indexStyles.login}`}>
-        {
+        {/* {
           !token_invalid && (
             <View className={`${indexStyles.login_mask}`}>
               {
@@ -394,7 +369,7 @@ export default class Login extends Component {
               }
             </View>
           )
-        }
+        } */}
         <View className={`${indexStyles.login_header}`}>{!showCode ? '账号密码' : '手机验证码'}登录</View>
         <View className={`${indexStyles.login_content}`}>
           <View>
@@ -418,7 +393,6 @@ export default class Login extends Component {
         </View>
         <View className={`${indexStyles.login_footer}`}>
           <Button className={`${indexStyles.login_btn_normal} ${indexStyles.login_btn}`} type='primary' onClick={this.normalLogin}>登录</Button>
-          <Button className={`${indexStyles.login_btn_wx} ${indexStyles.login_btn}`} open-type={'getUserInfo'} onGetUserInfo={this.getUserInfo}>微信快捷登录</Button>
         </View>
         <View className={`${indexStyles.change_login_type_out}`}>
           <View onClick={this.ChangeLoginType} className={`${indexStyles.change_login_type}`}>{showCode ? '账号密码' : '验证码'}登录</View>

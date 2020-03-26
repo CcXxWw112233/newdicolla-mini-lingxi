@@ -3,7 +3,7 @@ import { BASE_URL, INT_REQUEST_OK, REQUEST_RES_CODE_TOKEN_INVALID } from "../glo
 import { setRequestHeaderBaseInfo } from "./basicFunction";
 
 var isNavigatePushLogin = true;
-export const request = (options, notShowLoading, isNewLogin) => {
+export const request = (options, notShowLoading, isNewLogin, redirectPage = true) => {
   const { url = "", data = {}, method = "GET", header = {} } = options;
   let Headers = { ...header };
   Headers['Authorization'] = Taro.getStorageSync('access_token')
@@ -46,14 +46,14 @@ export const request = (options, notShowLoading, isNewLogin) => {
         if (isNavigatePushLogin) {
           isNavigatePushLogin = false
           if (REQUEST_RES_CODE_TOKEN_INVALID == res.data.code) {
-            if (!isNewLogin) {//正常的登录页面
-              if (route.indexOf('pages/login/index') == -1) {
+            if (!isNewLogin && redirectPage) {//正常的登录页面
+              if (route.indexOf('pages/index/index') == -1) {
                 Taro.navigateTo({
-                  url: `../../pages/login/index?redirect=${routePageName}`
+                  url: `../../pages/index/index?redirect=${routePageName}`
                 })
               }
             }
-            else {  //扫码登录的新的登录页面
+            else if(redirectPage){  //扫码登录的新的登录页面
               Taro.navigateTo({
                 url: '../../pages/nowOpen/index'
               })
