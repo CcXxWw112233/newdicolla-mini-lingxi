@@ -47,7 +47,20 @@ class Index extends Component {
 
   componentDidShow () {
     // console.log('indexShow')
-    this.toLogin();
+    getAccountInfo().then(res => {
+      if (isApiResponseOk(res)) {
+        // 注册im
+        this.registerIm();
+
+        Taro.switchTab({
+          url: '../../pages/calendar/index'
+        })
+      }
+    }).catch(err => {
+      // Taro.redirectTo({
+      //   url:"../../pages/login/index"
+      // })
+    })
   }
 
   componentDidHide () { }
