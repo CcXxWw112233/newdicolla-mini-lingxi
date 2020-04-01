@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Button, Text ,Image ,Swiper, SwiperItem} from '@tarojs/components'
+import { View, Button, Text, Image, Swiper, SwiperItem } from '@tarojs/components'
 import { getAccountInfo } from "../../services/login";
 import { isApiResponseOk } from '../../utils/request';
 import { connect } from '@tarojs/redux'
@@ -13,7 +13,7 @@ class Index extends Component {
   config = {
     navigationBarTitleText: '首页'
   }
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       is_to_login: false,
@@ -22,30 +22,30 @@ class Index extends Component {
 
     this.swiperItems = [
       {
-        title:"日历清单",
-        subTitle:"灵巧清晰管理项目任务",
+        title: "日历清单",
+        subTitle: "灵巧清晰管理项目任务",
         imgUrl: "https://dian-lingxi-public.oss-cn-beijing.aliyuncs.com/common/1242739187501895680.png"
       },
       {
-        title:"项目圈",
-        subTitle:"高效专注地讨论项目事项",
+        title: "项目圈",
+        subTitle: "高效专注地讨论项目事项",
         imgUrl: "https://dian-lingxi-public.oss-cn-beijing.aliyuncs.com/common/1242739259660701696.png"
       },
       {
-        title:"文件",
-        subTitle:"随时查阅圈评项目文件",
+        title: "文件",
+        subTitle: "随时查阅圈评项目文件",
         imgUrl: "https://dian-lingxi-public.oss-cn-beijing.aliyuncs.com/common/1242739366732894208.png"
       }
     ]
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     // console.log(this.props, nextProps)
   }
 
-  componentWillUnmount () { }
+  componentWillUnmount() { }
 
-  componentDidShow () {
+  componentDidShow() {
     // console.log('indexShow')
     getAccountInfo().then(res => {
       if (isApiResponseOk(res)) {
@@ -63,10 +63,10 @@ class Index extends Component {
     })
   }
 
-  componentDidHide () { }
+  componentDidHide() { }
 
-  componentDidMount(){
-    setTimeout(()=>{
+  componentDidMount() {
+    setTimeout(() => {
       this.setState({
         isLoading: false
       }, 800)
@@ -99,7 +99,7 @@ class Index extends Component {
     );
   }
 
-  toLogin = ()=>{
+  toLogin = () => {
     // 验证token
     getAccountInfo().then(res => {
       if (isApiResponseOk(res)) {
@@ -111,7 +111,7 @@ class Index extends Component {
         })
       } else {
         Taro.redirectTo({
-          url:"../../pages/login/index"
+          url: "../../pages/login/index"
         })
       }
     }).catch(err => {
@@ -146,8 +146,8 @@ class Index extends Component {
     }
   }
 
-  render () {
-    let { is_to_login ,isLoading } = this.state;
+  render() {
+    let { is_to_login, isLoading } = this.state;
     return (
       <View className={styles.index}>
         {isLoading && (
@@ -165,43 +165,43 @@ class Index extends Component {
             <View className={styles.subTitle}># 城市规划、地产投资行业的远程办公新方式 #</View>
           </View> */}
           {/* <View className={styles.banner}> */}
-            <Swiper indicatorDots={true} className={styles.swipers}
+          <Swiper indicatorDots={true} className={styles.swipers}
             indicatorActiveColor="#1890FF"
             indicatorColor="rgba(0,0,0,0.09)"
             circular={true}>
-              {this.swiperItems.map(item => {
-                return (
-                  <SwiperItem key={item.imgUrl}>
-                    <Image className={styles.bannerImage} mode="aspectFit" src={item.imgUrl}/>
-                    <View className={styles.bannerTitle}>
-                      {item.title}
-                    </View>
-                    <View className={styles.bannerSubTitle}>
-                      {item.subTitle}
-                    </View>
-                  </SwiperItem>
-                )
-              })}
-            </Swiper>
+            {this.swiperItems.map(item => {
+              return (
+                <SwiperItem key={item.imgUrl}>
+                  <Image className={styles.bannerImage} mode="aspectFit" src={item.imgUrl} />
+                  <View className={styles.bannerTitle}>
+                    {item.title}
+                  </View>
+                  <View className={styles.bannerSubTitle}>
+                    {item.subTitle}
+                  </View>
+                </SwiperItem>
+              )
+            })}
+          </Swiper>
           {/* </View> */}
           {
             !is_to_login ? <View>
-            <Button className={styles.startBtn} onClick={()=> this.setState({is_to_login: true})}>
-              登录/注册
+              <Button className={styles.startBtn} onClick={() => this.setState({ is_to_login: true })}>
+                登录/注册
             </Button>
-            <View className={styles.startTips}>
-              登录后可使用上述所有功能
+              <View className={styles.startTips}>
+                登录后可使用上述所有功能
             </View>
-          </View> :(
-            <View>
-              <Button className={`${styles.startBtn_wx}`}
-              open-type={'getUserInfo'}
-              onGetUserInfo={this.getUserInfo}>微信授权登录</Button>
-              <Button className={styles.startBtn} onClick={this.toLogin}>
-                已有账号登录
+            </View> : (
+                <View>
+                  <Button className={`${styles.startBtn_wx}`}
+                    open-type={'getUserInfo'}
+                    onGetUserInfo={this.getUserInfo}>微信授权登录</Button>
+                  <Button className={styles.startBtn} onClick={this.toLogin}>
+                    已有账号登录
               </Button>
-            </View>
-          )
+                </View>
+              )
           }
         </View>
       </View>

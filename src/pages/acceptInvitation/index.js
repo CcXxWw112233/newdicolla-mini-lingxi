@@ -126,7 +126,7 @@ export default class acceptInvitation extends Component {
 
   render() {
     const { qrCodeInfo = {}, } = this.props
-    const { user_name, rela_name, rela_type } = qrCodeInfo
+    const { user_name, rela_name, rela_type, has_join } = qrCodeInfo
     const relaType = this.getJoinRelaType(rela_type)
 
     /**
@@ -141,7 +141,7 @@ export default class acceptInvitation extends Component {
       <View>
         <CustomNavigation />
 
-        <View className={`${indexStyles.PageStyle}`}  style={{ marginTop: statusBar_Height + navBar_Height + 'px' }}>
+        <View className={`${indexStyles.PageStyle}`} style={{ marginTop: statusBar_Height + navBar_Height + 'px' }}>
           <View className={indexStyles.guide_share_wrapper}>
             <Image src={guide_share_img} className={indexStyles.guide_share} />
           </View>
@@ -150,24 +150,27 @@ export default class acceptInvitation extends Component {
               <Image src={invitation_cover_img} className={indexStyles.invitation_cover} />
             </View>
             <View className={indexStyles.effective_tipsText}>
-              <Text>
-              你的好友
-              <Text style={{ display: 'inline-block', width: '6px' }}>  &nbsp; </Text>
-                {user_name}
-                <Text style={{ display: 'inline-block', width: '6px' }}>  &nbsp;  </Text>
-                邀请你\n加入项目
-                <Text style={{ display: 'inline-block', width: '6px' }}>  &nbsp;  </Text>
-                {rela_name}
-                <Text style={{ display: 'inline-block', width: '6px' }}>  &nbsp;  </Text>
-                {relaType}
-              </Text>
+              {has_join ? (<Text> 转发给团队成员\n马上开启协作 </Text>) :
+                <Text>
+                  你的好友
+<Text style={{ display: 'inline-block', width: '6px' }}>  &nbsp; </Text>
+                  {user_name}
+                  <Text style={{ display: 'inline-block', width: '6px' }}>  &nbsp;  </Text>
+邀请你\n加入项目
+<Text style={{ display: 'inline-block', width: '6px' }}>  &nbsp;  </Text>
+                  {rela_name}
+                  <Text style={{ display: 'inline-block', width: '6px' }}>  &nbsp;  </Text>
+                  {relaType}
+                </Text>
+              }
+
             </View>
-            <Button className={`${indexStyles.effective_login_btn_wx} ${indexStyles.effective_acceptBtn}`} onClick={this.acceptTheInvitation}>接受邀请</Button>
-
+            {
+              has_join ? ('') : (<Button className={`${indexStyles.effective_login_btn_wx} ${indexStyles.effective_acceptBtn}`} onClick={this.acceptTheInvitation}>接受邀请</Button>)
+            }
           </View>
-
         </View>
-      </View>
+      </View >
     )
   }
 }
