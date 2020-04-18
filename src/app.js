@@ -148,16 +148,16 @@ class App extends Component {
       // Taro.showToast({ title: String(e), icon: 'none', duration: 2000 })
     );
   }
-  recordtoHome = ()=>{
+  recordtoHome = () => {
     // 验证token
-    getAccountInfo({},false,false).then(res => {
+    getAccountInfo({}, false, false).then(res => {
       if (isApiResponseOk(res)) {
         // 注册im
         this.registerIm();
 
-        Taro.switchTab({
-          url: '../../pages/calendar/index'
-        })
+        // Taro.switchTab({
+        //   url: '../../pages/calendar/index'
+        // })
       }
     })
   }
