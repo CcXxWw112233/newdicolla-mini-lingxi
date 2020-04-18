@@ -10,8 +10,9 @@ import ChatItem from '../chat/components/ChatItem'
 import UserInput from '../chat/components/UserInput'
 
 @connect(({
+  chat:{isUserInputHeightChange},
   file:{current_custom_message,current_custom_comment,load_custom_file_msg},
-  im:{userUID,currentGroup,isUserInputHeightChange}
+  im:{userUID,currentGroup}
 })=>({
   current_custom_message,
   current_custom_comment,
@@ -413,11 +414,19 @@ export default class FilesChat extends Component {
     // return keys;
     return [];
   }
+  InputHeight = (val)=>{
+    console.log(val)
+  }
+
+  InputIsFocus = (val)=>{
+    console.log(val)
+  }
 
   render(){
     let { imgSrc,imgTitle ,imgSize, imgUpdateTime, creator,
       scrollIntoViewEleId,isIosHomeIndicator,loadPrev,fileTypeText} = this.state;
     let { isUserInputHeightChange ,userUID,current_custom_comment} = this.props;
+    console.log(isUserInputHeightChange)
     return (
       <View>
         <View className={styles.fileChatComment}>
@@ -461,10 +470,12 @@ export default class FilesChat extends Component {
             <View
             className={styles.contentWrapper}
             style={{
+              boxSizing:'border-box',
               paddingBottom: isUserInputHeightChange
                 ? isUserInputHeightChange + 'px'
                 : '0px'
-            }}>
+            }}
+            >
               {/* {this.renderList().map(mapkey => { */}
                 {/* return ( */}
                   <View>
@@ -498,7 +509,8 @@ export default class FilesChat extends Component {
               {/* })} */}
             </View>
           </ScrollView>
-          <UserInput onSend={this.onSend} hideVoice={true} hideAddition={true} fromPage='filesChat'/>
+          <UserInput onSend={this.onSend} hideVoice={true} hideAddition={true} fromPage='filesChat'
+          handleUserInputHeightChange={this.InputHeight} handleUserInputFocus={this.InputIsFocus}/>
         </View>
       </View>
     )
