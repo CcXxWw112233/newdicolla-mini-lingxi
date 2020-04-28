@@ -778,7 +778,7 @@ class UserInput extends Component {
                 ref={this.setInput}
                 value={inputValue}
                 confirmType='done'
-                adjustPosition={false}
+                adjustPosition={true}
                 cursorSpacing={20}
                 style={{
                   lineHeight: '84px',
@@ -789,7 +789,7 @@ class UserInput extends Component {
                 focus={autoFocus}
                 confirmHold={true}
                 onInput={this.handleInput}
-                onFocus={this.handleInputFocus}
+                // onFocus={this.handleInputFocus}
                 onBlur={this.handleInputBlur}
               // onConfirm={this.onInputConfirm}
               />
