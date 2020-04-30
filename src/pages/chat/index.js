@@ -289,7 +289,9 @@ class Chat extends Component {
     const { isShowFileComment ,currentBoard ,userUID,currentGroup} = this.props
 
     return (
-      <View className={styles.wrapper} onClick={this.inputDown}>
+      <View className={styles.wrapper} 
+      // onClick={this.inputDown}
+      >
         {
           isShowFileComment === true && page_source && page_source === 'isFileComment' ? (<FileChat fileInfo={file_info} />
           ) : ''

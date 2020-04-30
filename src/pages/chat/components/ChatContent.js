@@ -68,7 +68,8 @@ class ChatContent extends Component {
       isIosHomeIndicator: false,  //是否iPhone X 及以上设备
       firstIn: true,
       loadPrev: false,
-      newMsg: false
+      newMsg: false,
+      toBottom:1100
     };
     //是否正在 touch 聊天列表
     this.isTouchingScrollView = false;
@@ -82,6 +83,8 @@ class ChatContent extends Component {
     }
     this.renderMapList = [];
     this.isLoading = false;
+    this.scrollTimer = null ;
+    this.windowHeight = Taro.getSystemInfoSync().windowHeight;
   }
   genCurrentGroupSessionList = () => {
     const {
@@ -347,7 +350,7 @@ class ChatContent extends Component {
   componentWillReceiveProps(nextProps) {
     //这里接收到的nextProps的值是有问题的
     //导致更新现有消息的消息列表只能在 nim 的  onMsg 的方法回调中处理
-    let { history_newSession, userUID } = nextProps;
+    let { history_newSession, userUID ,isUserInputHeightChange} = nextProps;
     if (history_newSession.length) {
       let obj = history_newSession[history_newSession.length - 1];
       if (this.IsBottom || obj.from === userUID)
@@ -357,6 +360,14 @@ class ChatContent extends Component {
           newMsg: true
         })
       }
+    }
+    if(isUserInputHeightChange){
+      clearTimeout(this.scrollTimer)
+      this.scrollTimer = setTimeout(()=>{
+        this.setState({
+          toBottom: this.state.toBottom + 4000
+        })
+      },800)
     }
     //解决长按文件进入聊天页面, 不显示聊天消息列表, 此生命周期里重新渲染一遍
     this.handleGenSessionListWhenToggleIsOnlyShowInform(
@@ -419,7 +430,7 @@ class ChatContent extends Component {
       isOnlyShowInform,
       isUserInputHeightChange,
     } = this.props;
-    const { scrollIntoViewEleId, chatConetntViewHeightStyle, isIosHomeIndicator, firstIn, loadPrev, newMsg } = this.state;
+    const { scrollIntoViewEleId, chatConetntViewHeightStyle, isIosHomeIndicator, firstIn, loadPrev, newMsg ,toBottom} = this.state;
 
     return (
       <ScrollView
@@ -437,7 +448,8 @@ class ChatContent extends Component {
         scrollIntoView={scrollIntoViewEleId}
         onTouchStart={this.onScrollViewTouchStart}
         onTouchEnd={this.onScrollViewTouchEnd}
-        style={chatConetntViewHeightStyle}
+        style={{...chatConetntViewHeightStyle,height: this.windowHeight - isUserInputHeightChange - 120 +'px'}}
+        scrollTop={toBottom}
       >
         {loadPrev && <View className={styles.loadMoreChat}>加载中...</View>}
         {/* <View
@@ -458,11 +470,11 @@ class ChatContent extends Component {
 
         <View
           className={styles.contentWrapper}
-          style={{
-            paddingBottom: isUserInputHeightChange
-              ? isUserInputHeightChange + 'px'
-              : '0px'
-          }}
+          // style={{
+          //   paddingBottom: isUserInputHeightChange
+          //     ? isUserInputHeightChange + 'px'
+          //     : '0px'
+          // }}
         >   {this.renderList().map((item, key) => {
           return (
             <View key={item}>

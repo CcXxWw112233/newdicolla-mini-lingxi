@@ -148,7 +148,7 @@ class UserInput extends Component {
   handleInputBlur = () => {
     const { handleUserInputFocus, handleUserInputHeightChange } = this.props;
     handleUserInputFocus && handleUserInputFocus(false)
-    handleUserInputHeightChange && handleUserInputHeightChange(0);
+    // handleUserInputHeightChange && handleUserInputHeightChange(0);
     this.setState({
       inputBottomValue: 0
     });
