@@ -357,7 +357,7 @@ class UserInput extends Component {
   };
 
   sendChooseImage = (res)=>{
-    const { im_id, sendImageMsg } = this.props;
+    const { im_id, sendImageMsg ,handleUserInputHeightChange} = this.props;
     const { setInputMode } = this;
     Taro.showLoading({
       title: '发送中...',
@@ -365,6 +365,7 @@ class UserInput extends Component {
     Promise.resolve(sendImageMsg(res.tempFilePaths, im_id))
       .then(() => {
         setInputMode('text');
+        handleUserInputHeightChange && handleUserInputHeightChange(0);
       })
       .catch(e => {
         Taro.showToast({
