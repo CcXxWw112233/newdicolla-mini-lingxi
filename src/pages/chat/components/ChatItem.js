@@ -1,3 +1,4 @@
+import { connect } from '@tarojs/redux';
 import Taro, { Component } from '@tarojs/taro';
 import { View, Image, Text } from '@tarojs/components';
 import styles from './ChatItem.scss';
@@ -12,7 +13,6 @@ import {
 } from './../../../models/im/utils/parseEmoji.js';
 import { onResendMsg, } from './../../../models/im/actions/onResendMsg.js'
 import { onDeleteMsg, } from './../../../models/im/actions/onDeleteMsg.js'
-import { connect } from '@tarojs/redux';
 
 @connect(
   ({
@@ -119,7 +119,7 @@ class ChatItem extends Component {
   };
 
   handlePreviewImage = file => {
-    file = typeof file === 'string' ? JSON.parse(file): file;
+    file = typeof file === 'string' ? JSON.parse(file) : file;
     const { url } = file;
     Taro.previewImage({
       urls: [url],
@@ -284,7 +284,7 @@ class ChatItem extends Component {
   }
 
   getSubStr(str) {
-    str = str && str.replace(/<\/?.+?>/g,"");
+    str = str && str.replace(/<\/?.+?>/g, "");
     if (!str.match(/^[ ]*$/) && str.length > 20) {
       var subStr1 = str.substr(0, 8);
       var subStr2 = str.substr(str.length - 8);
@@ -316,37 +316,37 @@ class ChatItem extends Component {
   }
 
   // 转换type的值
-  getCustomType = (type)=>{
-    if(!type){return ""}
+  getCustomType = (type) => {
+    if (!type) { return "" }
     let ActionTypes = {
-      "board.card.*":"card",
-      "board.file.*":"file",
-      "board.folder.*":"folder",
-      "board.flow.*" : "flow",
-      "board.milestone.*" :"milestone"
-  }
-    let t = "board";
-    for(let o in ActionTypes){
-        let reg = new RegExp("("+ o +")");
-        if(reg.test(type)){
-            t = ActionTypes[o]
-        }
+      "board.card.*": "card",
+      "board.file.*": "file",
+      "board.folder.*": "folder",
+      "board.flow.*": "flow",
+      "board.milestone.*": "milestone"
     }
-    return t ;
+    let t = "board";
+    for (let o in ActionTypes) {
+      let reg = new RegExp("(" + o + ")");
+      if (reg.test(type)) {
+        t = ActionTypes[o]
+      }
+    }
+    return t;
   }
   // 动态通知点击
-  activityClick = (val)=>{
-    let { dispatch ,fromType} = this.props;
-    if(fromType && fromType == 'file'){
-      return ;
+  activityClick = (val) => {
+    let { dispatch, fromType } = this.props;
+    if (fromType && fromType == 'file') {
+      return;
     }
     let type = this.getCustomType(val.action);
     let { content = {} } = val;
-    let { board_file = {} ,board = {}} = content;
-    if(type == 'file'){
+    let { board_file = {}, board = {} } = content;
+    if (type == 'file') {
       dispatch({
-        type:"file/updateDatas",
-        payload:{
+        type: "file/updateDatas",
+        payload: {
           current_custom_message: {
             id: board_file.id,
             actionType: type,
@@ -433,7 +433,7 @@ class ChatItem extends Component {
                     }}
                   >
                     &#xe645;
-              </View>
+                  </View>
                 ) : (
                       <View
                         className={`${globalStyles.global_iconfont} ${styles.avatar}`}

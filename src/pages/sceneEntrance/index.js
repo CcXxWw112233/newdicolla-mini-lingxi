@@ -120,7 +120,7 @@ export default class sceneEntrance extends Component {
                 }
             })
         } else {
-            if (redirectType === '0') {
+            if (redirectType === '0') {  //未知错误
                 Taro.setStorageSync('sceneEntrance_Goto_Other', 'errorPage')
                 pageObject = 'errorPage'
             } else if (redirectType === '1' || redirectType === '7') {  //1 项目详情  7 公众号未读消息(通知路径/统计未读路径)
@@ -180,12 +180,22 @@ export default class sceneEntrance extends Component {
 
             } else if (redirectType === '2' || redirectType === '8') {  //2 任务类型 8 日程类型
                 pageObject = 'taksDetails'
-            } else if (redirectType === '3') {
+            } else if (redirectType === '3') { //会议
 
-            } else if (redirectType === '4') {
+            } else if (redirectType === '4') { //流程
 
-            } else if (redirectType === '5') {
-
+            } else if (redirectType === '5') {  //文件预览
+                Promise.resolve(
+                    //解决wx.switchTab不能传值
+                    Taro.setStorageSync('switchTabFileInfo', {
+                        contentId: contentId,
+                        boardId: boardId,
+                        push: 'officialAccount',
+                    })
+                ).then(() => {
+                    Taro.switchTab({ url: `../../pages/file/index` })
+                    return
+                })
             }
             if (pageObject) {
                 Taro.navigateTo({

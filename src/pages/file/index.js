@@ -1,8 +1,8 @@
+import { connect } from '@tarojs/redux'
 import Taro, { Component, hideToast, pageScrollTo, getExtConfig } from '@tarojs/taro'
 import { View, Text, Image, RichText } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
-import { connect } from '@tarojs/redux'
 import SearchAndMenu from '../board/components/SearchAndMenu'
 import { filterFileFormatType } from './../../utils/util';
 import file_list_empty from '../../asset/file/file_list_empty.png'
@@ -99,6 +99,7 @@ export default class File extends Component {
         is_tips_longpress_file: false,  //是否显示长按文件前往圈子的提示
         choice_image_temp_file_paths: [],  //从相册选中的图片api返回来的路径
         makePho: "", //是上传文件还是拍照
+        officialAccountFileInfo: {}, //获取从公众号进入小程序预览文件
     }
 
     onShareAppMessage() {
@@ -109,7 +110,6 @@ export default class File extends Component {
     }
 
     onPullDownRefresh(res) {
-
         const refreshStr = Taro.getStorageSync('file_pull_down_refresh')
         const refreshData = JSON.parse(refreshStr)
         const { org_id, board_id, folder_id } = refreshData
@@ -143,19 +143,18 @@ export default class File extends Component {
                 header_folder_name: '全部文件',
             },
         })
+
+        /// 获取从公众号进入小程序预览文件
+         this.setState({
+           officialAccountFileInfo: Taro.getStorageSync('switchTabFileInfo'),
+        })
     }
 
+    //加载数据
     loadData = (params) => {
         const { org_id, board_id, folder_id } = params
         this.getFilePage(org_id, board_id, folder_id)
     }
-
-
-    componentDidHide() { }
-
-    componentWillReceiveProps() { }
-
-    componentWillUnmount() { }
 
     getFilePage = (org_id, board_id, folder_id) => {
 
@@ -167,6 +166,7 @@ export default class File extends Component {
         }
         Taro.setStorageSync('file_pull_down_refresh', JSON.stringify(params))
 
+        let that = this;
         //加载数据
         const { dispatch } = this.props
         Promise.resolve(
@@ -185,6 +185,27 @@ export default class File extends Component {
                 scrollTop: 100000,
                 duration: 100,
             })
+            ///从公众号消息推送过来查看文件详情
+            const {officialAccountFileInfo = { }} = this.state
+
+            if ( officialAccountFileInfo && officialAccountFileInfo.push == 'officialAccount') {
+                const { file_list = [] } = this.props
+                //根据公众号消息的文件id在文件列表中查找出文件item
+                var previewFileInfo = file_list.find(item => item.id == officialAccountFileInfo.contentId);
+                const {file_name} = previewFileInfo
+                ///进行预览
+                that.goFileDetails(previewFileInfo, file_name);
+                //同时清除缓存
+                try {
+                     Taro.removeStorageSync('switchTabFileInfo');
+                     this.setState({
+                         officialAccountFileInfo: null,
+                     })
+                } catch (e) {
+                    // Do something when catch error
+                    console.log(e);
+                }
+            }
         })
     }
 
@@ -218,6 +239,7 @@ export default class File extends Component {
         })
     }
 
+    //预览文件详情
     goFileDetails = (value, fileName) => {
         Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
         const { file_resource_id, board_id, } = value
@@ -402,6 +424,7 @@ export default class File extends Component {
             is_tips_longpress_file: false
         })
     }
+
     getLocationAuth() {
         return new Promise((resolve, reject) => {
             Taro.getSetting({
@@ -711,7 +734,6 @@ export default class File extends Component {
                     file_list && file_list.length !== 0 ? (<View className={indexStyles.grid_style}>
                         {file_list.map((value, key) => {
                             const { thumbnail_url, } = value
-
                             const fileType = filterFileFormatType(value.file_name)
                             return (
                                 <View className={indexStyles.lattice_style} onClick={this.goFileDetails.bind(this, value, value.file_name)} onLongPress={this.longPress.bind(this, value)}>

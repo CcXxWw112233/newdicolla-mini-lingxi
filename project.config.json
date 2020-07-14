@@ -124,6 +124,13 @@
 					"pathName": "pages/chat/index",
 					"query": "boardId=1173504770590248960&pageSource=boardChat&__key_=15831402416051",
 					"scene": null
+				},
+				{
+					"id": 11,
+					"name": "公众号跳转文件预览",
+					"pathName": "pages/sceneEntrance/index",
+					"query": "contentId=1252188271249854464&boardId=1206886569806532608&redirectType=5&orgId=1107307923551424512",
+					"scene": null
 				}
 			]
 		}
