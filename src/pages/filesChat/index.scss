@@ -28,7 +28,9 @@
 .wrapper {
   margin-top: 5px;
   background: #fff;
-  padding   : 0px 32px 0px;
+  // padding   : 0px 32px 0px;
+  position: relative;
+  top:0;
 
   .filterInformWrapper {
     position       : fixed;
@@ -51,6 +53,7 @@
     display:flex;
     flex-direction:column-reverse;
     min-height: 100%;
+    margin: 0 auto;
 
     .chatItemWrapper {
       margin-bottom: 32px;

@@ -145,8 +145,8 @@ export default class File extends Component {
         })
 
         /// 获取从公众号进入小程序预览文件
-         this.setState({
-           officialAccountFileInfo: Taro.getStorageSync('switchTabFileInfo'),
+        this.setState({
+            officialAccountFileInfo: Taro.getStorageSync('switchTabFileInfo'),
         })
     }
 
@@ -186,21 +186,20 @@ export default class File extends Component {
                 duration: 100,
             })
             ///从公众号消息推送过来查看文件详情
-            const {officialAccountFileInfo = { }} = this.state
-
-            if ( officialAccountFileInfo && officialAccountFileInfo.push == 'officialAccount') {
+            const { officialAccountFileInfo = {} } = this.state
+            if (officialAccountFileInfo && officialAccountFileInfo.push == 'officialAccount') {
                 const { file_list = [] } = this.props
                 //根据公众号消息的文件id在文件列表中查找出文件item
                 var previewFileInfo = file_list.find(item => item.id == officialAccountFileInfo.contentId);
-                const {file_name} = previewFileInfo
+                const { file_name } = previewFileInfo
                 ///进行预览
                 that.goFileDetails(previewFileInfo, file_name);
                 //同时清除缓存
                 try {
-                     Taro.removeStorageSync('switchTabFileInfo');
-                     this.setState({
-                         officialAccountFileInfo: null,
-                     })
+                    Taro.removeStorageSync('switchTabFileInfo');
+                    this.setState({
+                        officialAccountFileInfo: null,
+                    })
                 } catch (e) {
                     // Do something when catch error
                     console.log(e);

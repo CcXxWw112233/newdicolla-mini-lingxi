@@ -10,8 +10,9 @@ import ChatItem from '../chat/components/ChatItem'
 import UserInput from '../chat/components/UserInput'
 
 @connect(({
+  chat:{isUserInputHeightChange},
   file:{current_custom_message,current_custom_comment,load_custom_file_msg},
-  im:{userUID,currentGroup,isUserInputHeightChange}
+  im:{userUID,currentGroup}
 })=>({
   current_custom_message,
   current_custom_comment,
@@ -34,7 +35,8 @@ export default class FilesChat extends Component {
       selectedUser:"",
       scrollIntoViewEleId:"",
       loadPrev:false,
-      fileTypeText:""
+      fileTypeText:"",
+      toBottom:1100
     }
     this.closeTime = null ;
     this.IsBottom = true;
@@ -53,7 +55,9 @@ export default class FilesChat extends Component {
         obj:"&#xe660;","xlsx":"&#xe665;",
         "psd":"&#xe666;",xls:"&#xe667;",
         "ma":"&#xe668;"
-      }
+      };
+    this.scrollTimer = null ;
+    this.windowHeight = Taro.getSystemInfoSync().windowHeight;
   }
   getCurrentDetail = ()=>{
     return new Promise((resolve,reject)=>{
@@ -320,6 +324,7 @@ export default class FilesChat extends Component {
     });
   }
   componentWillReceiveProps(nextProps){
+    let { isUserInputHeightChange } = nextProps;
     if(nextProps.current_custom_comment.length != this.props.current_custom_comment.length){
       let item = nextProps.current_custom_comment;
       if(item && item.length){
@@ -327,6 +332,16 @@ export default class FilesChat extends Component {
       }
 
     }
+
+    if(isUserInputHeightChange){
+      clearTimeout(this.scrollTimer)
+      this.scrollTimer = setTimeout(()=>{
+        this.setState({
+          toBottom: this.state.toBottom + 4000
+        })
+      },800)
+    }
+
   }
   componentWillUnmount(){
     let { dispatch } = this.props;
@@ -413,11 +428,19 @@ export default class FilesChat extends Component {
     // return keys;
     return [];
   }
+  InputHeight = (val)=>{
+    console.log(val)
+  }
+
+  InputIsFocus = (val)=>{
+    console.log(val)
+  }
 
   render(){
     let { imgSrc,imgTitle ,imgSize, imgUpdateTime, creator,
-      scrollIntoViewEleId,isIosHomeIndicator,loadPrev,fileTypeText} = this.state;
+      scrollIntoViewEleId,isIosHomeIndicator,loadPrev,fileTypeText,toBottom} = this.state;
     let { isUserInputHeightChange ,userUID,current_custom_comment} = this.props;
+    console.log(isUserInputHeightChange)
     return (
       <View>
         <View className={styles.fileChatComment}>
@@ -456,15 +479,20 @@ export default class FilesChat extends Component {
           onScrolltoupper={this.onScrolltoupper}
           upperThreshold={5}
           onScroll={this.onScroll}
-          onScrollToLower={this.onScrollToLower}>
+          onScrollToLower={this.onScrollToLower}
+          scrollTop={toBottom}
+          style={{height: this.windowHeight - isUserInputHeightChange - 156 + 'px'}}
+          >
             {loadPrev && <View className={styles.loadMoreChat}>加载中...</View>}
             <View
             className={styles.contentWrapper}
             style={{
-              paddingBottom: isUserInputHeightChange
-                ? isUserInputHeightChange + 'px'
-                : '0px'
-            }}>
+              boxSizing:'border-box',
+              // paddingBottom: isUserInputHeightChange
+              //   ? isUserInputHeightChange + 'px'
+              //   : '0px'
+            }}
+            >
               {/* {this.renderList().map(mapkey => { */}
                 {/* return ( */}
                   <View>
@@ -498,7 +526,8 @@ export default class FilesChat extends Component {
               {/* })} */}
             </View>
           </ScrollView>
-          <UserInput onSend={this.onSend} hideVoice={true} hideAddition={true} fromPage='filesChat'/>
+          <UserInput onSend={this.onSend} hideVoice={true} hideAddition={true} fromPage='filesChat'
+          handleUserInputHeightChange={this.InputHeight} handleUserInputFocus={this.InputIsFocus}/>
         </View>
       </View>
     )

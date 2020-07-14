@@ -8,7 +8,7 @@ export const BASE_URL = 'http://test.lingxi.new-di.com'
 //本地环境
 // export const BASE_URL = 'http://192.168.1.68'
 //预发布地址
-// export const BASE_URL = 'http://gsuv9b.natappfree.cc'
+// export const BASE_URL = 'http://ygk5cq.natappfree.cc'
 
 /***
  * 根据环境自动配置url

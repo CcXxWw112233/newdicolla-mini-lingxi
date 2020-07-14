@@ -123,7 +123,7 @@ class UserInput extends Component {
   };
   handleInputFocus = e => {
     const { handleUserInputFocus, handleUserInputHeightChange } = this.props;
-    handleUserInputFocus(true)
+    handleUserInputFocus && handleUserInputFocus(true)
     // console.log('sssss', this.refs.inputRef)
     // let chatContentHeight = 0;
     // const query = Taro.createSelectorQuery();
@@ -134,7 +134,9 @@ class UserInput extends Component {
     //   chatContentHeight = res[0].height;
     // });
     if (e.detail.height > 0) {
-      handleUserInputHeightChange(e.detail.height);
+      handleUserInputHeightChange && handleUserInputHeightChange(e.detail.height);
+    }else{
+      // handleUserInputHeightChange(303)
     }
     //handleUserInputHeightChange(298);
     this.setState({
@@ -145,8 +147,8 @@ class UserInput extends Component {
   };
   handleInputBlur = () => {
     const { handleUserInputFocus, handleUserInputHeightChange } = this.props;
-    handleUserInputFocus(false)
-    handleUserInputHeightChange(0);
+    handleUserInputFocus && handleUserInputFocus(false)
+    // handleUserInputHeightChange && handleUserInputHeightChange(0);
     this.setState({
       inputBottomValue: 0
     });
@@ -355,7 +357,7 @@ class UserInput extends Component {
   };
 
   sendChooseImage = (res)=>{
-    const { im_id, sendImageMsg } = this.props;
+    const { im_id, sendImageMsg ,handleUserInputHeightChange} = this.props;
     const { setInputMode } = this;
     Taro.showLoading({
       title: '发送中...',
@@ -363,6 +365,7 @@ class UserInput extends Component {
     Promise.resolve(sendImageMsg(res.tempFilePaths, im_id))
       .then(() => {
         setInputMode('text');
+        handleUserInputHeightChange && handleUserInputHeightChange(0);
       })
       .catch(e => {
         Taro.showToast({
@@ -776,7 +779,7 @@ class UserInput extends Component {
                 ref={this.setInput}
                 value={inputValue}
                 confirmType='done'
-                adjustPosition={false}
+                adjustPosition={true}
                 cursorSpacing={20}
                 style={{
                   lineHeight: '84px',
@@ -787,7 +790,7 @@ class UserInput extends Component {
                 focus={autoFocus}
                 confirmHold={true}
                 onInput={this.handleInput}
-                onFocus={this.handleInputFocus}
+                // onFocus={this.handleInputFocus}
                 onBlur={this.handleInputBlur}
               // onConfirm={this.onInputConfirm}
               />

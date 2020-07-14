@@ -592,11 +592,17 @@ export default class BoardChat extends Component {
       return number ;
     }
 
+    boardListForView = ()=>{
+        let { chatBoardList } = this.state;
+        let listArray = chatBoardList.filter(item => item.scene == 'team' && item.type == 2).sort((a, b) => (+(b.updateTime||0)) - (+(a.updateTime || 0)))  //(b-a)时间正序
+        return listArray ;
+    }
+
     render() {
-        const { search_mask_show, chatBoardList } = this.state
+        const { search_mask_show } = this.state
         let { userUID } = this.props;
         // 对消息进行排序, 根据lastMsg里面的time最新的排在最上面
-        let listArray = chatBoardList.filter(item => item.scene == 'team' && item.type == 2).sort((a, b) => ((b.updateTime)) - ((a.updateTime)))  //(b-a)时间正序
+        let listArray = this.boardListForView();
         return (
             <View className={indexStyles.index}>
 
