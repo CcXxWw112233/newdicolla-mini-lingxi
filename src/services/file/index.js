@@ -1,125 +1,140 @@
 import { request, } from "../../utils/request";
-import { API_BOARD, } from "../../gloalSet/js/constant";
+import { API_BOARD, API_MORE } from "../../gloalSet/js/constant";
 
 //获取项目列表
 export const getFilePage = (data, notShowLoading) => {
-    return request({
-        data: {
-            ...data
-        },
-        method: 'GET',
-        url: `${API_BOARD}/file/page`,
-    }, notShowLoading)
+  return request({
+    data: {
+      ...data
+    },
+    method: 'GET',
+    url: `${API_BOARD}/file/page`,
+  }, notShowLoading)
 }
 
 //获取文件列表
 export const getFileDetails = (data, notShowLoading) => {
-    return request({
-        data: {
-            ...data
-        },
-        method: 'GET',
-        url: `${API_BOARD}/file/preview/${data['id']}`
-    }, notShowLoading)
+  return request({
+    data: {
+      ...data
+    },
+    method: 'GET',
+    url: `${API_BOARD}/file/preview/${data['id']}`
+  }, notShowLoading)
 }
 
 //下载文件
 export const getDownloadUrl = (data, notShowLoading) => {
-    return request({
-        data: {
-            ...data
-        },
-        method: 'GET',
-        header: {
-            BaseInfo: {
-                contentDataType: 'file',
-                contentDataId: data.ids,
-                requestClientType: "wxapp",
-            }
-        },
-        url: `${API_BOARD}/file/download`
-    }, notShowLoading)
+  return request({
+    data: {
+      ...data
+    },
+    method: 'GET',
+    header: {
+      BaseInfo: {
+        contentDataType: 'file',
+        contentDataId: data.ids,
+        requestClientType: "wxapp",
+      }
+    },
+    url: `${API_BOARD}/file/download`
+  }, notShowLoading)
 }
 
 //获取文件列表
 export const getFolder = (data, notShowLoading) => {
-    return request({
-        data: {
-            ...data
-        },
-        method: 'GET',
-        url: `${API_BOARD}/folder`,
-    }, notShowLoading)
+  return request({
+    data: {
+      ...data
+    },
+    method: 'GET',
+    url: `${API_BOARD}/folder`,
+  }, notShowLoading)
 }
 
 
 //上传文件
 export const uploadFile = (data, notShowLoading) => {
-    return request({
-        data: {
-            ...data
-        },
-        method: 'POST',
-        url: `${API_BOARD}/file/upload`,
-    }, notShowLoading)
+  return request({
+    data: {
+      ...data
+    },
+    method: 'POST',
+    url: `${API_BOARD}/file/upload`,
+  }, notShowLoading)
 }
 
 //发送(新增)文件评论
 export const sendFileComment = (data, notShowLoading) => {
-    return request({
-        data: {
-            ...data
-        },
-        method: 'POST',
-        header: {
-            BaseInfo: {
-                requestClientType: "wxapp",
-                contentDataType: "file",
-                contentDataId: data.file_id,
-            }
-        },
-        url: `${API_BOARD}/file/comment`,
-    }, notShowLoading)
+  return request({
+    data: {
+      ...data
+    },
+    method: 'POST',
+    header: {
+      BaseInfo: {
+        requestClientType: "wxapp",
+        contentDataType: "file",
+        contentDataId: data.file_id,
+      }
+    },
+    url: `${API_BOARD}/file/comment`,
+  }, notShowLoading)
 }
 
 // 获取文件信息
-export const getFileInfo = (data, header, notShowLoading)=>{
+export const getFileInfo = (data, header, notShowLoading) => {
   return request({
-    data:{
+    data: {
       ...data
     },
-    header:{
+    header: {
       ...header
     },
-    method :"GET",
-    url:`${API_BOARD}/file/info/${data['id']}`
-  },notShowLoading)
+    method: "GET",
+    url: `${API_BOARD}/file/info/${data['id']}`
+  }, notShowLoading)
 }
 
 // 获取文件评论列表
-export const getFileComment = (data,header, notShowLoading)=>{
+export const getFileComment = (data, header, notShowLoading) => {
   return request({
-    data:{
+    data: {
       ...data
     },
-    header:{
+    header: {
       ...header
     },
-    method:"GET",
-    url:`${API_BOARD}/file/comment`
-  },notShowLoading)
+    method: "GET",
+    url: `${API_BOARD}/file/comment`
+  }, notShowLoading)
 }
 
 // 发送文件评论消息
-export const setFileComment = (data,header, notShowLoading)=>{
+export const setFileComment = (data, header, notShowLoading) => {
   return request({
-    data:{
+    data: {
       ...data
     },
-    header:{
+    header: {
       ...header
     },
-    method:"POST",
-    url:`${API_BOARD}/file/comment`
-  },notShowLoading)
+    method: "POST",
+    url: `${API_BOARD}/file/comment`
+  }, notShowLoading)
+}
+
+
+// 获取文件列表未读文件id 、 type=3代表文件 返回文件id数组
+export const getFileUnreadList = (data, header, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    header: {
+      ...header
+    },
+    method: "GET",
+    url: `${API_MORE}/im/history/point`
+  }, notShowLoading)
 }

@@ -132,6 +132,13 @@
                 }
             }
 
+            .unread_red {
+                width           : pxTrans(10);
+                height          : pxTrans(10);
+                border-radius   : pxTrans(5);
+                background-color: red;
+                position        : absolute;
+            }
         }
     }
 

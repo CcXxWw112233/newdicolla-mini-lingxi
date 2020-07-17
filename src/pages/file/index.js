@@ -18,6 +18,7 @@ import { BASE_URL, API_BOARD } from "../../gloalSet/js/constant";
         header_folder_name,
         isShowChoiceFolder,
         selected_board_folder_info,
+        unread_file_list = [],
     },
     im: {
         allBoardList,
@@ -30,6 +31,7 @@ import { BASE_URL, API_BOARD } from "../../gloalSet/js/constant";
         allBoardList,
         selected_board_folder_info,
         currentBoard,
+        unread_file_list,
     }),
     dispatch => {
         return {
@@ -100,6 +102,8 @@ export default class File extends Component {
         choice_image_temp_file_paths: [],  //从相册选中的图片api返回来的路径
         makePho: "", //是上传文件还是拍照
         officialAccountFileInfo: {}, //获取从公众号进入小程序预览文件
+        file_list_state: [], //最终文件列表
+        un_read_file_array: [], //文件未读数组
     }
 
     onShareAppMessage() {
@@ -124,6 +128,14 @@ export default class File extends Component {
             Taro.stopPullDownRefresh()
             Taro.hideNavigationBarLoading()
         }, 300)
+    }
+
+    componentDidHide() {
+        const { dispatch } = this.props
+        const { un_read_file_array } = this.state
+
+        ///清除全部未读
+        this.readFile(dispatch, un_read_file_array);
     }
 
     componentDidMount() {
@@ -169,6 +181,7 @@ export default class File extends Component {
         let that = this;
         //加载数据
         const { dispatch } = this.props
+
         Promise.resolve(
             dispatch({
                 type: 'file/getFilePage',
@@ -180,15 +193,13 @@ export default class File extends Component {
                     page_size: '',
                 },
             })
-        ).then(res => {
-            Taro.pageScrollTo({
-                scrollTop: 100000,
-                duration: 100,
-            })
+        ).then(() => {
+
             ///从公众号消息推送过来查看文件详情
             const { officialAccountFileInfo = {} } = this.state
             if (officialAccountFileInfo && officialAccountFileInfo.push == 'officialAccount') {
                 const { file_list = [] } = this.props
+
                 //根据公众号消息的文件id在文件列表中查找出文件item
                 var previewFileInfo = file_list.find(item => item.id == officialAccountFileInfo.contentId);
                 const { file_name } = previewFileInfo
@@ -201,10 +212,65 @@ export default class File extends Component {
                         officialAccountFileInfo: null,
                     })
                 } catch (e) {
-                    // Do something when catch error
+                    // Do something when c      atch error
                     console.log(e);
                 }
             }
+
+            //获取未读文件list
+            this.getUnreadFileList(dispatch);
+
+        })
+    }
+
+    //获取未读文件list
+    getUnreadFileList = (dispatch) => {
+
+        dispatch({
+            type: 'file/getFileUnreadList',
+            payload: {
+                type: '3',  //文件
+            },
+        }).then(() => {
+            //查找出未读的
+            const { unread_file_list = [], file_list = [], un_read_file_array = [], } = this.props;
+
+            //定义一个空的数组, 用来存储未读id, 后面一次性清除未读
+            var cardNumArr = [];
+
+            var arrayC = unread_file_list.map(item => {
+                for (let _key in item) {
+                    cardNumArr.push(_key);
+                    return {
+                        id: item[_key],
+                        msg_ids: _key
+                    }
+                }
+            })
+            var d = file_list.map(item => {
+                const _item = arrayC.find(el => el.id === item.id) || {};
+                return {
+                    ...item,
+                    ..._item
+                }
+            })
+
+
+            Promise.resolve(
+                this.setState({
+                    // eslint-disable-next-line react/no-unused-state
+                    file_list_state: d,
+                    // eslint-disable-next-line react/no-unused-state
+                    un_read_file_array: cardNumArr,
+                })
+            ).then(() => {
+                Taro.pageScrollTo({
+                    scrollTop: 100000,
+                    duration: 100,
+                })
+
+                console.log('定位到最下面...');
+            })
         })
     }
 
@@ -245,7 +311,6 @@ export default class File extends Component {
         const { dispatch } = this.props
         setBoardIdStorage(board_id)
         const fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
-
         const parameter = {
             board_id,
             ids: file_resource_id,
@@ -282,8 +347,38 @@ export default class File extends Component {
                 is_tips_longpress_file: true
             })
         }
+
+
+        var arr = [];
+        arr.push(value.msg_ids);
+        //把文件改为已读
+        this.readFile(dispatch, arr);
     }
 
+    readFile = (dispatch, msg_ids) => {
+        dispatch({
+            type: 'im/setImHistoryRead',
+            payload: {
+                msgids: msg_ids,
+            },
+        })
+
+        const refreshStr = Taro.getStorageSync('file_pull_down_refresh')
+        const refreshData = JSON.parse(refreshStr)
+        const { org_id, board_id, folder_id } = refreshData
+        const params = {
+            org_id: org_id,
+            board_id: board_id,
+            folder_id: folder_id,
+        }
+
+        Taro.removeStorageSync('switchTabFileInfo');
+        this.setState({
+            officialAccountFileInfo: null,
+        })
+
+        this.loadData(params);
+    }
 
     onSearch = (value, board_id, file_id) => {
         //去掉关键字字符串的首位空格
@@ -697,8 +792,8 @@ export default class File extends Component {
 
     render() {
 
-        const { file_list = [], isShowBoardList, header_folder_name, isShowChoiceFolder } = this.props
-        const { is_tips_longpress_file, choice_image_temp_file_paths = [], makePho } = this.state
+        const { isShowBoardList, header_folder_name, isShowChoiceFolder } = this.props
+        const { is_tips_longpress_file, choice_image_temp_file_paths = [], makePho, file_list_state } = this.state
 
         return (
             <View className={indexStyles.index}>
@@ -730,12 +825,16 @@ export default class File extends Component {
                     </View>
                 </View>
                 {
-                    file_list && file_list.length !== 0 ? (<View className={indexStyles.grid_style}>
-                        {file_list.map((value, key) => {
-                            const { thumbnail_url, } = value
+                    file_list_state && file_list_state.length !== 0 ? (<View className={indexStyles.grid_style}>
+                        {file_list_state.map((value, key) => {
+                            const { thumbnail_url, msg_ids } = value
                             const fileType = filterFileFormatType(value.file_name)
                             return (
-                                <View className={indexStyles.lattice_style} onClick={this.goFileDetails.bind(this, value, value.file_name)} onLongPress={this.longPress.bind(this, value)}>
+                                <View className={indexStyles.lattice_style} onClick={this.goFileDetails.bind(this, value, value.file_name)} onLongPress={this.longPress.bind(this, value)} key={key}>
+                                    {
+                                        msg_ids != null ? <View className={indexStyles.unread_red}>
+                                        </View> : (<View></View>)
+                                    }
                                     {
                                         thumbnail_url ?
                                             (<Image mode='aspectFill' className={indexStyles.img_style} src={thumbnail_url}>
@@ -746,7 +845,6 @@ export default class File extends Component {
                                                 <View className={indexStyles.other_name_style}>{value.file_name}</View>
                                             </View>)
                                     }
-
                                 </View>
                             )
                         })}

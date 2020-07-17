@@ -6,7 +6,7 @@ import indexStyles from './index.scss'
 import SearchAndMenu from '../board/components/SearchAndMenu'
 import { isPlainObject, filterListAuth } from './../../utils/util';
 import { isApiResponseOk } from '../../utils/request';
-import { getImHistory, getAllIMTeamList ,setImHistoryRead} from '../../services/im'
+import { getImHistory, getAllIMTeamList } from '../../services/im'
 
 @connect(({
     im: {
@@ -127,11 +127,11 @@ export default class BoardChat extends Component {
         isProhibitRepeatClick: true, //禁止重复点击进入圈子
     }
 
-    onShareAppMessage(){
+    onShareAppMessage() {
         return {
             title: '项目圈',
             path: `/pages/boardChat/index`,
-          }
+        }
     }
 
     onPullDownRefresh(res) {
@@ -216,16 +216,16 @@ export default class BoardChat extends Component {
             // 小组圈
             let subList = chatList.filter(item => item.type == 3);
             chatList.map(item => {
-              // 将子圈归附于项目圈
-              if(item.type == 2){
-                let subs = subList.filter(sub => sub.board_id == item.board_id);
-                item.children = subs;
-                let number = subs.reduce((total,sub)=>{
-                  return total += +(sub.unread||0)
-                },0)
-                item.subUnread = number;
-              }
-              return item;
+                // 将子圈归附于项目圈
+                if (item.type == 2) {
+                    let subs = subList.filter(sub => sub.board_id == item.board_id);
+                    item.children = subs;
+                    let number = subs.reduce((total, sub) => {
+                        return total += +(sub.unread || 0)
+                    }, 0)
+                    item.subUnread = number;
+                }
+                return item;
             })
 
             dispatch({
@@ -405,7 +405,7 @@ export default class BoardChat extends Component {
 
     genLastMsg = (lastMsg = {}) => {
         if (JSON.stringify(lastMsg) != "{}" && lastMsg.status === "success") {  //lastMsg不为空并且成功才执行
-            const { fromNick, type, text, file, custom, tip,} = lastMsg;
+            const { fromNick, type, text, file, custom, tip, } = lastMsg;
             const typeCond = {
                 text,
                 audio: '[语音]',
@@ -582,20 +582,20 @@ export default class BoardChat extends Component {
         })
         this.countSumUnRead(arr)
     }
-    getSubUnread = (val)=>{
-      let { chatBoardList } = this.state;
-      let sub = chatBoardList.filter(item => item.type == 3 && item.board_id == val.board_id);
+    getSubUnread = (val) => {
+        let { chatBoardList } = this.state;
+        let sub = chatBoardList.filter(item => item.type == 3 && item.board_id == val.board_id);
 
-      let number = sub.reduce((total,item) => {
-        return total += Number(item.unread);
-      },0)
-      return number ;
+        let number = sub.reduce((total, item) => {
+            return total += Number(item.unread);
+        }, 0)
+        return number;
     }
 
-    boardListForView = ()=>{
+    boardListForView = () => {
         let { chatBoardList } = this.state;
-        let listArray = chatBoardList.filter(item => item.scene == 'team' && item.type == 2).sort((a, b) => (+(b.updateTime||0)) - (+(a.updateTime || 0)))  //(b-a)时间正序
-        return listArray ;
+        let listArray = chatBoardList.filter(item => item.scene == 'team' && item.type == 2).sort((a, b) => (+(b.updateTime || 0)) - (+(a.updateTime || 0)))  //(b-a)时间正序
+        return listArray;
     }
 
     render() {

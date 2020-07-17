@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { getFilePage, getFileDetails, getFolder, getDownloadUrl, uploadFile, sendFileComment } from '../../services/file/index'
+import { getFilePage, getFileDetails, getFolder, getDownloadUrl, uploadFile, sendFileComment, getFileUnreadList } from '../../services/file/index'
 import { isApiResponseOk } from "../../utils/request";
 
 export default {
@@ -11,6 +11,7 @@ export default {
         header_folder_name: '全部文件',  //当前选中的文件夹名称
         isShowFileComment: false,  //chat页面是否显示文件评论
         isShowChoiceFolder: false, //是否显示上传文件选择文件夹modal
+        unread_file_list: [],   //未读文件列表
 
         selected_board_folder_info: {}, //选择的哪一个文件夹的信息(包含org_id, board_id, folder_id), 使用model跨多个组件传值
         upload_folder_name: '选择文件夹', //要上传的文件夹的名称
@@ -19,9 +20,9 @@ export default {
         back_click_name: true, //右上角显示'返回'还是'取消'
         current_selection_board_id: '', //当前选择的board_id
         current_board_open: false, //项目文件夹列表展开状态
-        current_custom_message:{},// 点击的动态通知数据
-        current_custom_comment:[],// 加载的comment数据
-        load_custom_file_msg:{},// 通过接口加载的文件数据
+        current_custom_message: {},// 点击的动态通知数据
+        current_custom_comment: [],// 加载的comment数据
+        load_custom_file_msg: {},// 通过接口加载的文件数据
     },
     effects: {
         //全部文件信息
@@ -137,6 +138,7 @@ export default {
                 })
             }
         },
+
         //文件详情
         * getFileDetails({ payload }, { select, call, put }) {
             const { parameter, fileType } = payload
@@ -207,8 +209,22 @@ export default {
                     duration: 2000
                 })
             }
-        }
+        },
 
+        //全部未读文件list
+        * getFileUnreadList({ payload }, { select, call, put }) {
+            const res = yield call(getFileUnreadList, payload)
+            if (isApiResponseOk(res)) {
+                yield put({
+                    type: 'updateDatas',
+                    payload: {
+                        unread_file_list: res.data
+                    }
+                })
+            } else {
+                console.log('res:', res);
+            }
+        },
     },
 
     reducers: {
