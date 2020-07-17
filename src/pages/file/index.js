@@ -138,6 +138,19 @@ export default class File extends Component {
         this.readFile(dispatch, un_read_file_array);
     }
 
+    componentDidShow() {
+        const refreshStr = Taro.getStorageSync('file_pull_down_refresh')
+        const refreshData = JSON.parse(refreshStr)
+        const { org_id, board_id, folder_id } = refreshData
+        const params = {
+            org_id: org_id,
+            board_id: board_id,
+            folder_id: folder_id,
+        }
+
+        this.loadData(params);
+    }
+
     componentDidMount() {
         const params = {
             org_id: '0',
@@ -256,20 +269,16 @@ export default class File extends Component {
             })
 
 
-            Promise.resolve(
-                this.setState({
-                    // eslint-disable-next-line react/no-unused-state
-                    file_list_state: d,
-                    // eslint-disable-next-line react/no-unused-state
-                    un_read_file_array: cardNumArr,
-                })
-            ).then(() => {
+            this.setState({
+                // eslint-disable-next-line react/no-unused-state
+                file_list_state: d,
+                // eslint-disable-next-line react/no-unused-state
+                un_read_file_array: cardNumArr,
+            }, () => {
                 Taro.pageScrollTo({
                     scrollTop: 100000,
                     duration: 100,
                 })
-
-                console.log('定位到最下面...');
             })
         })
     }
@@ -372,12 +381,12 @@ export default class File extends Component {
             folder_id: folder_id,
         }
 
+        this.loadData(params);
+
         Taro.removeStorageSync('switchTabFileInfo');
         this.setState({
             officialAccountFileInfo: null,
         })
-
-        this.loadData(params);
     }
 
     onSearch = (value, board_id, file_id) => {

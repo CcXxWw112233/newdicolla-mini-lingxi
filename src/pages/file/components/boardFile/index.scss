@@ -50,11 +50,11 @@
 
             .board_item_name {
                 // height     : pxTrans(26);
-                font-size     : pxTrans(18);
-                font-weight   : 600;
-                line-height   : pxTrans(26);
-                max-width     : pxTrans(500);
-                padding       : pxTrans(5) 0 pxTrans(5) 0;
+                font-size  : pxTrans(18);
+                font-weight: 600;
+                line-height: pxTrans(26);
+                max-width  : pxTrans(500);
+                padding    : pxTrans(5) 0 pxTrans(5) 0;
             }
 
             .org_name_style {
@@ -75,11 +75,14 @@
     }
 
     .close_view_style {
-        width          : 100%;
+        // width              : 100%;
+        width          : pxTrans(40);
         display        : flex;
         justify-content: center;
         position       : fixed;
         bottom         : pxTrans(24);
+        right          : 49%;
+        left           : 49%;
 
         .close_button_style {
             width          : pxTrans(40);
