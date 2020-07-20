@@ -28,11 +28,11 @@ export default class taksDetails extends Component {
         type_flag: '',
     }
 
-    onShareAppMessage(){
+    onShareAppMessage() {
         return {
             title: '任务详情',
             path: `/pages/taksDetails/index`,
-          }
+        }
     }
 
     componentDidMount() {

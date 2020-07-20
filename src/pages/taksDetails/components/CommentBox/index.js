@@ -36,16 +36,6 @@ export default class index extends Component {
     })
   }
 
-  componentWillReceiveProps() { }
-
-  componentDidMount() { }
-
-  componentWillUnmount() { }
-
-  componentDidShow() { }
-
-  componentDidHide() { }
-
   render() {
 
     const { value } = this.state

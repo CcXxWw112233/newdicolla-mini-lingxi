@@ -131,6 +131,13 @@
 					"pathName": "pages/sceneEntrance/index",
 					"query": "contentId=1249518026181709824&boardId=1206886569806532608&redirectType=5&orgId=1107307923551424512",
 					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/templateDetails/index",
+					"pathName": "pages/templateDetails/index",
+					"query": "",
+					"scene": null
 				}
 			]
 		}

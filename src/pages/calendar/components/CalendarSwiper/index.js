@@ -330,9 +330,9 @@ export default class CalendarSwiper extends Component {
                     {this.isHasNormalTask(timestamp) && (
                       <View className={`${indexStyles.has_task}`} style={`background-color: ${is_selected ? '#ffffff' : '#1890FF'}`}></View>
                     )}
-                    {this.isHasMiletone(timestamp) && (
+                    {/* {this.isHasMiletone(timestamp) && (
                       <View className={`${indexStyles.has_flow}`}></View>
-                    )}
+                    )} */}
                   </View>
                 </View>
               </View>

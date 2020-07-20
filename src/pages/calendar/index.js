@@ -51,14 +51,14 @@ export default class Calendar extends Component {
     "onReachBottomDistance": 50,  //默认值50
   }
 
-  onShareAppMessage(){
+  onShareAppMessage() {
     return {
-        title: '日历',
-        path: `/pages/Calendar/index`,
-      }
-}
+      title: '日历',
+      path: `/pages/Calendar/index`,
+    }
+  }
 
-isGlobalPushNews
+  isGlobalPushNews
 
   onPullDownRefresh(res) {  //下拉刷新...
 
@@ -290,7 +290,7 @@ isGlobalPushNews
           <CalendarSwiper />
         </View>
         <CardTypeSelect show_card_type_select={show_card_type_select} onSelectType={this.onSelectType} schedule={'1'} />
-        <MilestoneList schedule={'1'} />
+        {/* <MilestoneList schedule={'1'} /> */}
         {/* {no_sche_card_list.length && ( */}
         <View className={`${globalStyles.global_card_out} ${indexStyles.no_scheduling}`} onClick={this.gotoNoSchedule}>暂未排期的工作（{no_sche_card_list.length}）</View>
         {/* )} */}

@@ -10,6 +10,7 @@ import chat from './chat/index'
 import invitation from './invitation/index'
 import tasks from './tasks/index'
 import file from './file/index'
+import workflow from './workflow/index'
 import global from './global/index'
 
 const models = [
@@ -25,6 +26,7 @@ const models = [
   invitation,
   tasks,
   file,
+  workflow,
   global,
 ]
 export default models

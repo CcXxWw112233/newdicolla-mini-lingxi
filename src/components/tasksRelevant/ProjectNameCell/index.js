@@ -11,14 +11,6 @@ import { connect } from '@tarojs/redux';
 }))
 export default class ProjectNameCell extends Component {
 
-    componentWillReceiveProps() { }
-
-    componentWillUnmount() { }
-
-    componentDidShow() { }
-
-    componentDidHide() { }
-
     gotoChangeChoiceInfoPage = (value) => {
         const { title, name } = value
         const { dispatch, boardId } = this.props

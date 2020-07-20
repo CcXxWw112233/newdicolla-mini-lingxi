@@ -65,6 +65,7 @@ class App extends Component {
       'pages/file/index',
       'pages/webView/index',
       'pages/boardChat/index',
+      'pages/templateDetails/index',
     ],
     permission: {
       'scope.userLocation': {

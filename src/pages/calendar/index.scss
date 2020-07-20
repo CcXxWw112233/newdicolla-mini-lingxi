@@ -13,7 +13,6 @@
     .card {
       flex    : 1;
       overflow: hidden;
-      //height: 100px;
     }
   }
 
@@ -22,7 +21,7 @@
     font-size : pxTrans(14);
     text-align: center;
     margin    : 0 $paddingValue 0 $paddingValue;
-    margin-top: pxTrans(10);
+    margin-top: pxTrans(100);
   }
 
   .plusTasks {

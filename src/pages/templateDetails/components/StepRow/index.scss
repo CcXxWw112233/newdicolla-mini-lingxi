@@ -1,0 +1,56 @@
+@import "../../../../gloalSet/styles/constant";
+
+.viewStyle {
+    display         : flex;
+    align-items     : center;
+    background-color: #FFFFFF;
+    height          : pxTrans(60);
+
+    .step_number {
+        width        : pxTrans(28);
+        height       : pxTrans(28);
+        border-radius: pxTrans(14);
+        background   : rgba(24, 144, 255, 1);
+        margin-left  : pxTrans(16);
+        margin-right : pxTrans(20);
+
+        text-align : center;
+        font-size  : pxTrans(16);
+        color      : rgba(255, 255, 255, 1);
+        line-height: pxTrans(24);
+        font-weight: 400;
+    }
+
+    .select_step_number {
+        width        : pxTrans(28);
+        height       : pxTrans(28);
+        border-radius: pxTrans(14);
+        background   : rgba(230, 247, 255, 1);
+        border       : 1px solid rgba(145, 213, 255, 1);
+        margin-left  : pxTrans(16);
+        margin-right : pxTrans(20);
+
+        text-align : center;
+        font-size  : pxTrans(16);
+        color      : #1890FF;
+        line-height: pxTrans(24);
+        font-weight: 400;
+    }
+
+    .step_name {
+        flex         : 1;
+        font-size    : pxTrans(16);
+        font-weight  : 400;
+        color        : rgba(0, 0, 0, 0.65);
+        line-height  : pxTrans(24);
+        overflow     : hidden;
+        text-overflow: ellipsis;
+        white-space  : nowrap;
+    }
+
+    .open_icon {
+        color       : #000000;
+        font-size   : pxTrans(20);
+        margin-right: pxTrans(16);
+    }
+}
