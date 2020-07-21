@@ -16,11 +16,13 @@ export default class index extends Component {
 
     render() {
 
+        const { recipients, assignees, last_complete_time, } = this.props
+
         return (
             <View className={indexStyles.viewStyle}>
 
                 <View className={indexStyles.other_cell}>
-                    <RelevantPersonnel />
+                    <RelevantPersonnel recipients={recipients} assignees={assignees} last_complete_time={last_complete_time} />
                 </View>
 
                 <View className={indexStyles.other_cell}>

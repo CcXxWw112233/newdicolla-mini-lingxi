@@ -3,7 +3,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Text, } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
-
+import { timestampToTimeEN, } from '../../../../utils/basicFunction'
 
 @connect(({ workfile }) => ({
 
@@ -18,6 +18,8 @@ export default class index extends Component {
 
     render() {
 
+        const { create_time, name } = this.props
+
         return (
             <View className={indexStyles.viewStyle}>
 
@@ -26,13 +28,13 @@ export default class index extends Component {
                 </View>
 
                 <View class={indexStyles.workflow_name}>
-                    沙寮审批流程
+                    {name ? name : ''}
                 </View>
-
-                <View class={indexStyles.workflow_start_time}>
-                    07/15 09:00 开始
-                </View>
-
+                {
+                    create_time ? (<View class={indexStyles.workflow_start_time}>
+                        {timestampToTimeEN(create_time) + ' ' + '开始'}
+                    </View>) : (<View></View>)
+                }
             </View>
         )
     }

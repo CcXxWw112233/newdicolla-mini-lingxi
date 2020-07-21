@@ -50,6 +50,14 @@
         white-space  : nowrap;
     }
 
+    .runtime_type {
+        font-size   : pxTrans(16);
+        font-weight : 400;
+        line-height : pxTrans(24);
+        margin-right: pxTrans(5);
+        color       : rgba(245, 34, 45, 1);
+    }
+
     .open_icon {
         color       : #000000;
         font-size   : pxTrans(20);

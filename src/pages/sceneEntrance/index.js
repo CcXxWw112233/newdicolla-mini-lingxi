@@ -183,7 +183,7 @@ export default class sceneEntrance extends Component {
             } else if (redirectType === '3') { //会议
 
             } else if (redirectType === '4') { //流程
-
+                pageObject = 'templateDetails'
             } else if (redirectType === '5') {  //文件预览
                 Promise.resolve(
                     //解决wx.switchTab不能传值

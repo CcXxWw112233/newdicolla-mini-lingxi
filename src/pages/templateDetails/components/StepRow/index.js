@@ -13,14 +13,20 @@ export default class index extends Component {
 
     render() {
 
+        const { sort, name, runtime_type } = this.props
+
         return (
             <View className={indexStyles.viewStyle}>
                 <View className={indexStyles.select_step_number}>
-                    1
+                    {sort ? sort : ''}
                 </View>
 
                 <View class={indexStyles.step_name}>
-                    资料收集1
+                    {name ? name : ''}
+                </View>
+
+                <View className={indexStyles.runtime_type}>
+                    {runtime_type == '1' ? '被驳回' : ''}
                 </View>
 
                 <View className={indexStyles.open_icon}>

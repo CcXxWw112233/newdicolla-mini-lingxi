@@ -41,6 +41,27 @@ export const timestampToTimeZH = (timestamp) => {
   return `${year}年${month}月${date_no}日 ${hours}:${min}`
 }
 
+export const timestampToTimeEN = (timestamp) => {
+  if (!timestamp) {
+    return ''
+  }
+  const length = timestamp.length
+  const newTimestampStr = length < 13 ? Number(timestamp) * 1000 : Number(timestamp)
+  const date = new Date(newTimestampStr)
+  const current_year = new Date().getFullYear()
+  let year = date.getFullYear()
+  let month = date.getMonth() + 1
+  let date_no = date.getDate()
+  let hours = date.getHours()
+  let min = date.getMinutes()
+  month = month < 10 ? `0${month}` : month
+  date_no = date_no < 10 ? `0${date_no}` : date_no
+  hours = hours < 10 ? `0${hours}` : hours
+  min = min < 10 ? `0${min}` : min
+
+  return `${month}/${date_no} ${hours}:${min}`
+}
+
 export const timestampFormat = (timestamp, format = 'yyyy-MM-dd h:m:s') => {
   if (!timestamp) {
     return ''

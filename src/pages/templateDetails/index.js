@@ -9,8 +9,8 @@ import DataCollection from './components/DataCollection/index'
 import Approval from './components/Approval/index'
 import Score from './components/Score/index'
 
-@connect(({ }) => ({
-
+@connect(({ workflow: { workflowDatas = {}, }, },) => ({
+    workflowDatas,
 }))
 export default class templateDetails extends Component {
     config = {
@@ -45,10 +45,10 @@ export default class templateDetails extends Component {
             type_flag: flag,
         })
 
-        this.loadTasksDetail(contentId, boardId)
+        this.loadTemplateDetails(contentId, boardId)
     }
 
-    loadTasksDetail(content_id, board_id) {
+    loadTemplateDetails(content_id, board_id) {
         let contentId
         let boardId
         if (content_id || board_id) {
@@ -101,25 +101,47 @@ export default class templateDetails extends Component {
 
         const { content_Id, backIcon } = this.state
 
+        const { workflowDatas, } = this.props
+        console.log('workflowDatas====', workflowDatas);
+
+        const { name, create_time, nodes = [], } = workflowDatas
+
         return (
             <View >
                 <CustomNavigation backIcon={backIcon} />
                 <View style={{ marginTop: `${statusBar_Height + navBar_Height}` + 'px', left: 0 }}>
                     <View className={indexStyles.interval}></View>
-                    <TitileRow />
+                    <TitileRow name={name} create_time={create_time} />
 
-                    <View className={indexStyles.interval}></View>
-                    <StepRow />
-                    {/* <DataCollection /> */}
+                    {nodes.map((value, key) => {
+                        const { id, node_type, sort, runtime_type, recipients, assignees, last_complete_time, } = value
+                        return (
+                            <View key={id}>
+                                {node_type === '1' && (
+                                    <View>
+                                        <View className={indexStyles.interval}></View>
+                                        <StepRow sort={sort} name={value.name} runtime_type={runtime_type} />
+                                        <DataCollection recipients={recipients} assignees={assignees} last_complete_time={last_complete_time} />
+                                    </View>
+                                )}
 
-                    <View className={indexStyles.interval}></View>
-                    <StepRow />
-                    {/* <Approval /> */}
+                                {node_type === '2' && (
+                                    <View>
+                                        <View className={indexStyles.interval}></View>
+                                        <StepRow sort={sort} name={value.name} runtime_type={runtime_type} />                                        <Approval recipients={recipients} assignees={assignees} last_complete_time={last_complete_time} />
+                                    </View>
+                                )}
 
-                    <View className={indexStyles.interval}></View>
-                    <StepRow />
-                    <Score />
-
+                                {node_type === '3' && (
+                                    <View>
+                                        <View className={indexStyles.interval}></View>
+                                        <StepRow sort={sort} name={value.name} runtime_type={runtime_type} />
+                                        <Score recipients={recipients} assignees={assignees} last_complete_time={last_complete_time} />
+                                    </View>
+                                )}
+                            </View>
+                        )
+                    })}
                 </View>
             </View>
         )
