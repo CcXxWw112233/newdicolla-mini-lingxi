@@ -4,6 +4,8 @@ import indexStyles from './index.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import RelevantPersonnel from './../CommonComponents/RelevantPersonnel/index'
 import OtherCell from './../CommonComponents/OtherCell/index'
+import Enclosure from './components/Enclosure/index'
+import OnlineTable from './components/OnlineTable/index'
 
 export default class index extends Component {
 
@@ -36,6 +38,14 @@ export default class index extends Component {
 
                 <View className={indexStyles.other_cell}>
                     <OtherCell />
+                </View>
+
+                <View className={indexStyles.other_cell}>
+                    <Enclosure />
+                </View>
+
+                <View className={indexStyles.other_cell}>
+                    <OnlineTable />
                 </View>
 
             </View>

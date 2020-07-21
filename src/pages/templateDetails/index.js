@@ -6,7 +6,8 @@ import CustomNavigation from '../acceptInvitation/components/CustomNavigation.js
 import TitileRow from './components/TitileRow/index'
 import StepRow from './components/StepRow/index'
 import DataCollection from './components/DataCollection/index'
-
+import Approval from './components/Approval/index'
+import Score from './components/Score/index'
 
 @connect(({ }) => ({
 
@@ -109,13 +110,15 @@ export default class templateDetails extends Component {
 
                     <View className={indexStyles.interval}></View>
                     <StepRow />
-                    <DataCollection />
+                    {/* <DataCollection /> */}
 
                     <View className={indexStyles.interval}></View>
                     <StepRow />
+                    {/* <Approval /> */}
 
                     <View className={indexStyles.interval}></View>
                     <StepRow />
+                    <Score />
 
                 </View>
             </View>

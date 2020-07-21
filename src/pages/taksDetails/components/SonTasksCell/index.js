@@ -5,16 +5,6 @@ import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 
 export default class index extends Component {
 
-  componentWillReceiveProps() { }
-
-  componentDidMount() { }
-
-  componentWillUnmount() { }
-
-  componentDidShow() { }
-
-  componentDidHide() { }
-
   render() {
     const { child_data } = this.props
     return (

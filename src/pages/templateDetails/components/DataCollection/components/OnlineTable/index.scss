@@ -1,0 +1,55 @@
+@import "../../../../../../gloalSet/styles/constant";
+
+.viewStyle {
+    display         : flex;
+    flex-direction  : column;
+    align-items     : center;
+    background-color: #FFFFFF;
+    height          : pxTrans(56);
+
+    .line_cell {
+        display       : flex;
+        flex-direction: row;
+        width         : 100%;
+
+        .line_empty {
+            width: pxTrans(44);
+        }
+
+        .line {
+            flex      : 1;
+            height    : pxTrans(1);
+            background: rgba(0, 0, 0, 0.09);
+        }
+    }
+
+    .content_cell {
+        flex          : 1;
+        display       : flex;
+        flex-direction: row;
+        margin-right  : pxTrans(16);
+        width         : 100%;
+        align-items   : center;
+
+        .title {
+            margin-left : pxTrans(16);
+            margin-right: pxTrans(16);
+            font-size   : pxTrans(14);
+            font-weight : 500;
+            line-height : pxTrans(24);
+            color       : rgba(0, 0, 0, 0.45);
+            line-height : pxTrans(22);
+        }
+
+        .time {
+            flex           : 1;
+            display        : flex;
+            flex-direction : row;
+            font-size      : pxTrans(14);
+            font-weight    : 400;
+            line-height    : pxTrans(22);
+            color          : rgba(0, 0, 0, 0.25);
+            justify-content: flex-end;
+        }
+    }
+}
