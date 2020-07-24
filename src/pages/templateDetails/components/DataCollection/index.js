@@ -19,13 +19,22 @@ export default class index extends Component {
 
     render() {
 
-        const { recipients, assignees, last_complete_time, forms, description, board_id, status, deadline_time_type, deadline_value, deadline_type, } = this.props
+        const { recipients, assignees, last_complete_time, forms, description, board_id, status, deadline_time_type, deadline_value, deadline_type, complete_time, } = this.props
 
         return (
             <View className={indexStyles.viewStyle}>
 
                 <View className={indexStyles.other_cell}>
-                    <RelevantPersonnel recipients={recipients} assignees={assignees} last_complete_time={last_complete_time} status={status} deadline_time_type={deadline_time_type} deadline_value={deadline_value} deadline_type={deadline_type} />
+                    <RelevantPersonnel
+                        recipients={recipients}
+                        assignees={assignees}
+                        last_complete_time={last_complete_time}
+                        status={status}
+                        deadline_time_type={deadline_time_type}
+                        deadline_value={deadline_value}
+                        deadline_type={deadline_type}
+                        complete_time={complete_time}
+                    />
                 </View>
 
                 {description ? (<View className={indexStyles.other_cell}>
@@ -89,4 +98,5 @@ index.defaultProps = {
     deadline_time_type: '',  //截止时间类型
     deadline_value: '',    //截止时间数
     deadline_type: '', //限制时间类型 0未限制时间 1有限制时间
+    complete_time: '', //完成时间
 };

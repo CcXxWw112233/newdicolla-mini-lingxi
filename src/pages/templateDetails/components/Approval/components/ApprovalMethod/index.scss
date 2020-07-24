@@ -5,7 +5,6 @@
     flex-direction  : column;
     align-items     : center;
     background-color: #FFFFFF;
-    height          : pxTrans(100);
 
     .line_cell {
         display       : flex;
@@ -59,6 +58,9 @@
                     display       : flex;
                     flex-direction: row;
                     align-items   : center;
+                    align-items   : flex-start;
+                    margin-top    : pxTrans(5);
+                    margin-bottom : pxTrans(5);
 
                     .avatar_image_style {
                         width          : pxTrans(24);
@@ -71,22 +73,134 @@
                         justify-content: center;
                     }
 
-                    .name {
-                        font-size   : pxTrans(16);
-                        font-weight : 400;
-                        color       : rgba(0, 0, 0, 0.65);
-                        line-height : pxTrans(24);
-                        margin-right: pxTrans(24);
+                    .make_copy_content {
+                        width         : 100%;
+                        display       : flex;
+                        flex-direction: column;
+
+                        .name_status_row {
+                            width         : 100%;
+                            display       : flex;
+                            flex-direction: row;
+
+                            .name {
+                                font-size   : pxTrans(16);
+                                font-weight : 400;
+                                color       : rgba(0, 0, 0, 0.65);
+                                line-height : pxTrans(24);
+                                margin-right: pxTrans(24);
+                            }
+
+                            .status {
+                                font-size  : pxTrans(16);
+                                font-weight: 400;
+                                color      : rgba(0, 0, 0, 0.65);
+                                line-height: pxTrans(24);
+                            }
+                        }
+
+                        .comment_cell {
+                            font-size  : pxTrans(16);
+                            font-weight: 400;
+                            color      : rgba(0, 0, 0, 0.65);
+                            line-height: pxTrans(24);
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
+    .his_comments {
+        flex          : 1;
+        display       : flex;
+        flex-direction: row;
+        margin-right  : pxTrans(16);
+        width         : 100%;
+
+        .his_content_padding {
+            display       : flex;
+            flex-direction: column;
+            width         : 100%;
+
+            .fill_in {
+                width: 100%;
+
+                .title_content {
+                    width       : 100%;
+                    font-size   : pxTrans(16);
+                    font-weight : 400;
+                    color       : rgba(0, 0, 0, 0.25);
+                    line-height : pxTrans(24);
+                    margin-left : pxTrans(16);
+                    margin-right: pxTrans(16);
+                }
+            }
+
+            .his_comments_view {
+                width         : 100%;
+                display       : flex;
+                flex-direction: row;
+                align-items   : center;
+                align-items   : flex-start;
+                margin-top    : pxTrans(5);
+                margin-bottom : pxTrans(5);
+
+                .his_avatar_image_style {
+                    width          : pxTrans(24);
+                    height         : pxTrans(24);
+                    border-radius  : pxTrans(12);
+                    margin-left    : pxTrans(16);
+                    margin-right   : pxTrans(8);
+                    display        : flex;
+                    align-items    : center;
+                    justify-content: center;
+                }
+
+                .his_comments_content {
+                    display       : flex;
+                    flex-direction: column;
+                    flex          : 1;
+
+                    .name_status_cell {
+                        display       : flex;
+                        flex-direction: row;
+
+                        .his_name {
+                            font-size   : pxTrans(16);
+                            font-weight : 400;
+                            color       : rgba(0, 0, 0, 0.65);
+                            line-height : pxTrans(24);
+                            margin-right: pxTrans(24);
+                        }
+
+                        .his_status {
+                            font-size  : pxTrans(16);
+                            font-weight: 400;
+                            color      : rgba(0, 0, 0, 0.65);
+                            line-height: pxTrans(24);
+                        }
                     }
 
-                    .status {
+                    .his_comment {
                         font-size  : pxTrans(16);
                         font-weight: 400;
                         color      : rgba(0, 0, 0, 0.65);
                         line-height: pxTrans(24);
                     }
+
                 }
+
+                .his_time {
+                    font-size  : pxTrans(16);
+                    font-weight: 400;
+                    color      : rgba(0, 0, 0, 0.65);
+                    line-height: pxTrans(24);
+                }
+
             }
         }
+
     }
 }

@@ -31,7 +31,7 @@ export default class StepRow extends Component {
 
 
     render() {
-        const { sort, name, runtime_type, step_id, } = this.props
+        const { sort, name, runtime_type, step_id, isOpen, } = this.props
         return (
             <View className={indexStyles.viewStyle} >
                 <View className={indexStyles.select_step_number}>
@@ -47,7 +47,13 @@ export default class StepRow extends Component {
                 </View>
 
                 <View className={indexStyles.open_icon} onClick={() => this.clickOpen(step_id)} >
-                    <Text className={`${globalStyle.global_iconfont}`}>&#xe8ec;</Text>
+                    {
+                        isOpen ? (
+                            <Text className={`${globalStyle.global_iconfont}`}>&#xe675;</Text>
+                        ) : (
+                                <Text className={`${globalStyle.global_iconfont}`}>&#xe8ec;</Text>
+                            )
+                    }
                 </View>
             </ View>
         )
@@ -60,4 +66,5 @@ StepRow.defaultProps = {
     runtime_type: '', //是否被驳回 , 1 = 是, 0 = 否
     setIsOpen: function () { },   //是否展开详情
     step_id: '', //流程id
+    isOpen: '', //是否展开
 };

@@ -3,7 +3,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyles from '../../../../../gloalSet/styles/globalStyles.scss'
-import { renderRestrictionsTime, } from '../../../../../utils/basicFunction'
+import { renderRestrictionsTime, timestampToTimeEN, } from '../../../../../utils/basicFunction'
 
 export default class index extends Component {
 
@@ -15,17 +15,30 @@ export default class index extends Component {
     }
 
     getTime = () => {
-        const { status, deadline_time_type, deadline_value, last_complete_time, deadline_type } = this.props
+        const { status, deadline_time_type, deadline_value, last_complete_time, deadline_type, complete_time, } = this.props
         let description = ''
         if (status == '0') {
-            description = '步骤开始后' + deadline_value + this.getDeadlineTimeType(deadline_time_type) + '内'
+            if (deadline_type == '1') {
+                description = '未限制时间'
+            } else if (deadline_type == '2') {
+                description = '步骤开始后' + deadline_value + this.getDeadlineTimeType(deadline_time_type) + '内'
+            }
             return description
         } else if (status == '1') {
-            var itemValue = { deadline_time_type, deadline_value, last_complete_time, deadline_type };
-            description = renderRestrictionsTime(itemValue);
+            if (deadline_type == '1') {
+                description = '未限制时间'
+            } else if (deadline_type == '2') {
+                var itemValue = { deadline_time_type, deadline_value, last_complete_time, deadline_type };
+                description = renderRestrictionsTime(itemValue);
+            }
             return description
         } else if (status == '2') {
-            return '已完成'
+            if (deadline_type == '1') {
+                description = '未限制时间'
+            } else if (deadline_type == '2') {
+                description = '完成时间' + ' ' + timestampToTimeEN(complete_time)
+                return description
+            }
         }
     }
 
@@ -50,7 +63,7 @@ export default class index extends Component {
 
     render() {
 
-        const { recipients, assignees, last_complete_time, } = this.props
+        const { recipients, assignees, } = this.props
 
         return (
             <View className={indexStyles.viewStyle}>
@@ -84,7 +97,6 @@ export default class index extends Component {
                             </View>
                             {
                                 <View className={indexStyles.content}>
-                                    {/* {'完成时间' + ' ' + timestampToTimeEN(last_complete_time)} */}
                                     {this.getTime()}
                                 </View>
                             }
@@ -124,4 +136,5 @@ index.defaultProps = {
     deadline_time_type: '',  //截止时间类型
     deadline_value: '',    //截止时间数
     deadline_type: '', //限制时间类型 0未限制时间 1有限制时间
+    complete_time: '', //完成时间
 };

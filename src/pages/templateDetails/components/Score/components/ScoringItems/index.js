@@ -3,7 +3,8 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Input, } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyles from '../../../../../../gloalSet/styles/globalStyles.scss'
-import { validateTwoDecimal, loadFindAssignees, } from '../../../../../../utils/verify';
+import { validateTwoDecimal, } from '../../../../../../utils/verify';
+import { loadFindAssignees, } from '../../../../../../utils/basicFunction';
 
 export default class index extends Component {
 
@@ -14,9 +15,9 @@ export default class index extends Component {
             inputWarning: false,  //输入错误警告
             selectInputId: '', //当前选中输入框的id
             commentValue: '', //审批意见内容
+            isFindAssignees: false, //当前人是否在这个审批人数组中
         }
     }
-
 
     handleInput = e => {
         this.setState({
@@ -86,12 +87,12 @@ export default class index extends Component {
     complete = () => {
         const { score_items } = this.props
         // 使用map()生成数组
-        let new_arr = score_items.map(obj => { return { 'field_id': obj.id, 'field_value': obj.value } })
+        let new_arr = score_items && score_items.map(obj => { return { 'field_id': obj.id, 'field_value': obj.value } })
 
-        const { commentValue, isSocreInpit, } = this.state
-        if (!isSocreInpit) {
-            const { globalData: { store: { dispatch } } } = Taro.getApp();
-            const { flow_instance_id, flow_node_instance_id, } = this.props
+        const { commentValue, } = this.state
+        const { globalData: { store: { dispatch } } } = Taro.getApp();
+        const { flow_instance_id, flow_node_instance_id, } = this.props
+        if (new_arr.length == score_items.length) {
             dispatch({
                 type: 'workflow/putApprovalComplete',
                 payload: {
@@ -101,12 +102,18 @@ export default class index extends Component {
                     content_values: new_arr,
                 },
             })
+        } else {
+            Taro.showToast({
+                title: '请填写完整评分',
+                icon: 'none',
+                duration: 2000,
+            })
         }
     }
 
     render() {
         const { assignees, score_items, status, } = this.props
-        const { isSocreInpit, inputWarning, selectInputId } = this.state
+        const { isSocreInpit, inputWarning, selectInputId, } = this.state
         return (
             <View className={indexStyles.viewStyle}>
 
@@ -125,8 +132,7 @@ export default class index extends Component {
                                     <View key={id} className={indexStyles.scoring_items}>
                                         <View className={indexStyles.scoring_items_title}>{title}</View>
                                         {
-                                            ((selectInputId == id) &&
-                                                isSocreInpit && status == '1') || item.value ?
+                                            loadFindAssignees(assignees) && status == '1' && selectInputId == id ?
                                                 (<Input
                                                     className={indexStyles.score_view_input}
                                                     type='digit'
@@ -138,9 +144,9 @@ export default class index extends Component {
                                                 ></Input>)
                                                 :
                                                 (<View className={indexStyles.score_view} onClick={() => this.clickScoreView(id, assignees, status)}>
-                                                    <View className={indexStyles.score_view_title}>最高</View>
-                                                    <View className={indexStyles.score_view_double}>{max_score}</View>
-                                                    <View className={indexStyles.score_view_title}>分</View>
+                                                    <View className={indexStyles.score_view_title}>{item.value ? '' : '最高'}</View>
+                                                    <View className={item.value ? indexStyles.score_view_double_black : indexStyles.score_view_double}>{item.value ? item.value : max_score}</View>
+                                                    <View className={indexStyles.score_view_title}>{item.value ? '' : '分'}</View>
                                                 </View>)
                                         }
                                         {
@@ -164,7 +170,7 @@ export default class index extends Component {
                                                 <Text className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}>&#xe647;</Text>)
                                     }
                                     <View className={indexStyles.rater_name}>{name}</View>
-                                    <View className={indexStyles.average_number}>{this.loadProcessedState(processed, score_items && score_items[score_items.length - 1]['value'])}</View>
+                                    {/* <View className={indexStyles.average_number}>{this.loadProcessedState(processed, score_items && score_items[score_items.length - 1]['value'])}</View> */}
                                 </View>
                             )
                         })}
@@ -184,9 +190,12 @@ export default class index extends Component {
                             />
                         </View>
                     </View>
-                    <View class={indexStyles.complete}>
-                        <View class={`${indexStyles.button} ${isSocreInpit ? indexStyles.complete_button_disabled : indexStyles.complete_button}`} onClick={this.complete}>完成</View>
-                    </View>
+                    {
+                        status == '2' ? (<View></View>) : (<View class={indexStyles.complete}>
+                            {/* <View class={`${indexStyles.button} ${isSocreInpit ? indexStyles.complete_button_disabled : indexStyles.complete_button}`} onClick={this.complete}>完成</View> */}
+                            <View class={`${indexStyles.button} ${indexStyles.complete_button_disabled}`} onClick={this.complete}>完成</View>
+                        </View>)
+                    }
                 </View>
             </View>
         )

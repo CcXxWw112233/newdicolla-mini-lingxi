@@ -72,6 +72,11 @@ export default {
                         id: flow_instance_id,
                     }
                 })
+                Taro.showToast({
+                    title: '已通过!',
+                    icon: 'none',
+                    duration: 2000,
+                })
             } else {
                 Taro.showToast({
                     title: res.message,
@@ -95,6 +100,11 @@ export default {
                     payload: {
                         id: flow_instance_id,
                     }
+                })
+                Taro.showToast({
+                    title: '已经驳回!',
+                    icon: 'none',
+                    duration: 2000,
                 })
             } else {
                 Taro.showToast({

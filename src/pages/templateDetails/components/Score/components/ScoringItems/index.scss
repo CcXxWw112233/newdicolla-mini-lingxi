@@ -73,6 +73,13 @@
                     color      : rgba(0, 0, 0, 0.15);
                     line-height: pxTrans(40);
                 }
+
+                .score_view_double_black {
+                    font-size  : pxTrans(40);
+                    font-weight: 400;
+                    color      : rgba(0, 0, 0, 1);
+                    line-height: pxTrans(40);
+                }
             }
 
             .score_view_input {
