@@ -59,8 +59,12 @@
     }
 
     .open_icon {
-        color       : #000000;
-        font-size   : pxTrans(20);
-        margin-right: pxTrans(16);
+        color          : #000000;
+        font-size      : pxTrans(20);
+        width          : pxTrans(40);
+        height         : 100%;
+        justify-content: center;
+        align-items    : center;
+        display        : flex;
     }
 }

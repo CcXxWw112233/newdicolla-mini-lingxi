@@ -82,3 +82,9 @@ export default class index extends Component {
         )
     }
 }
+
+index.defaultProps = {
+    recipients: [], //填写人array
+    assignees: [], //抄送人array
+    last_complete_time: '', //最后完成时间
+};

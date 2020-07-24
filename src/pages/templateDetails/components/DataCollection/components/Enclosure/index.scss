@@ -31,7 +31,6 @@
         width         : 100%;
 
         .content_padding {
-            width         : 100%;
             display       : flex;
             flex-direction: row;
             align-items   : center;
@@ -46,30 +45,36 @@
                 margin-right: pxTrans(16);
             }
 
-            .enclosure {
+            .enclosure_view {
                 flex          : 1;
                 display       : flex;
-                flex-direction: row;
-                font-size     : pxTrans(16);
-                font-weight   : 400;
-                color         : rgba(0, 0, 0, 0.65);
-                line-height   : pxTrans(24);
+                flex-direction: column;
 
-                .enclosure_icon {
-                    font-size   : pxTrans(15);
-                    color       : rgba(24, 144, 255, 1);
-                    margin-right: pxTrans(8);
-                }
+                .enclosure {
+                    flex          : 1;
+                    display       : flex;
+                    flex-direction: row;
+                    font-size     : pxTrans(16);
+                    font-weight   : 400;
+                    color         : rgba(0, 0, 0, 0.65);
+                    line-height   : pxTrans(24);
 
-                .enclosure_name {
-                    flex         : 1;
-                    font-size    : pxTrans(16);
-                    font-weight  : 400;
-                    color        : rgba(0, 0, 0, 0.65);
-                    line-height  : pxTrans(24);
-                    overflow     : hidden;
-                    text-overflow: ellipsis;
-                    white-space  : nowrap;
+                    .enclosure_icon {
+                        font-size   : pxTrans(15);
+                        color       : rgba(24, 144, 255, 1);
+                        margin-right: pxTrans(8);
+                    }
+
+                    .enclosure_name {
+                        flex         : 1;
+                        font-size    : pxTrans(16);
+                        font-weight  : 400;
+                        color        : rgba(0, 0, 0, 0.65);
+                        line-height  : pxTrans(24);
+                        overflow     : hidden;
+                        text-overflow: ellipsis;
+                        white-space  : nowrap;
+                    }
                 }
             }
         }

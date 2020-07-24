@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { getTemplateDetails, } from '../../services/workflow/index'
+import { getTemplateDetails, putApprovalComplete, putApprovalReject, } from '../../services/workflow/index'
 import { isApiResponseOk } from "../../utils/request";
 import { setBoardIdStorage } from '../../utils/basicFunction'
 
@@ -53,6 +53,55 @@ export default {
                         }
                     }, 2000)
                 }
+            }
+        },
+
+        //流程-审批,通过
+        * putApprovalComplete({ payload }, { select, call, put }) {
+            const { flow_instance_id, flow_node_instance_id, message, content_values, } = payload
+            const res = yield call(putApprovalComplete, {
+                flow_instance_id: flow_instance_id,
+                flow_node_instance_id: flow_node_instance_id,
+                message: message,
+                content_values: content_values,
+            })
+            if (isApiResponseOk(res)) {
+                yield put({
+                    type: 'getTemplateDetails',
+                    payload: {
+                        id: flow_instance_id,
+                    }
+                })
+            } else {
+                Taro.showToast({
+                    title: res.message,
+                    icon: 'none',
+                    duration: 2000,
+                })
+            }
+        },
+
+        //流程-审批,驳回
+        * putApprovalReject({ payload }, { select, call, put }) {
+            const { flow_instance_id, flow_node_instance_id, message } = payload
+            const res = yield call(putApprovalReject, {
+                flow_instance_id: flow_instance_id,
+                flow_node_instance_id: flow_node_instance_id,
+                message: message,
+            })
+            if (isApiResponseOk(res)) {
+                yield put({
+                    type: 'getTemplateDetails',
+                    payload: {
+                        id: flow_instance_id,
+                    }
+                })
+            } else {
+                Taro.showToast({
+                    title: res.message,
+                    icon: 'none',
+                    duration: 2000,
+                })
             }
         },
     },

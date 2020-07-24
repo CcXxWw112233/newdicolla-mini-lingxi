@@ -46,6 +46,11 @@
                 margin-right: pxTrans(16);
             }
 
+            .options {
+                display       : flex;
+                flex-direction: column;
+            }
+
             .content {
                 flex         : 1;
                 font-size    : pxTrans(16);

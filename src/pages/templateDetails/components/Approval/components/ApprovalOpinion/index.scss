@@ -30,12 +30,11 @@
         flex-direction: column;
 
         .content_padding {
-            margin: pxTrans(16) pxTrans(16) 0 pxTrans(16);
+            margin: pxTrans(16) pxTrans(16) pxTrans(16) pxTrans(16);
 
             .textarea {
-                flex        : 1;
-                width       : 100%;
-                margin-right: pxTrans(16);
+                flex : 1;
+                width: 100%;
             }
 
             .operation {

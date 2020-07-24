@@ -14,10 +14,24 @@ export const getTemplateDetails = (data, notShowLoading) => {
     }, notShowLoading)
 }
 
-export const aa = (data, notShowLoading) => {
-
+//流程-审批,通过
+export const putApprovalComplete = (data, notShowLoading) => {
+    return request({
+        data: {
+            ...data
+        },
+        method: 'PUT',
+        url: `${API_BOARD}/v2/flow/task/complete`,
+    }, notShowLoading, true)
 }
 
-
-
-
+//流程-审批/评分,驳回
+export const putApprovalReject = (data, notShowLoading) => {
+    return request({
+        data: {
+            ...data
+        },
+        method: 'PUT',
+        url: `${API_BOARD}/v2/flow/task/reject`,
+    }, notShowLoading, true)
+}

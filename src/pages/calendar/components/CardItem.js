@@ -25,6 +25,7 @@ export default class CardItem extends Component {
   }
 
   gotoListItemDetails = (itemValue) => {
+    console.log('itemValue===', itemValue);
     const { flag, content_id, board_id } = itemValue
     if (itemValue && (['0', '1',].indexOf(flag)) !== -1) {
       Taro.navigateTo({

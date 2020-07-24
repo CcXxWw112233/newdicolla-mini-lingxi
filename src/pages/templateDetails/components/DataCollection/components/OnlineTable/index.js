@@ -25,9 +25,9 @@ export default class index extends Component {
 
                 <View className={indexStyles.content_cell}>
                     <View className={indexStyles.title}>在线表格</View>
-                    <View className={indexStyles.time}>
-                        2018年5月24日 22:30
-                        </View>
+                    {/* <View className={indexStyles.time}>
+                        完成期限:
+                        </View> */}
                 </View>
 
             </View>

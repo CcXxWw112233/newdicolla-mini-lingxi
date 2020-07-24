@@ -39,3 +39,8 @@ export default class index extends Component {
         )
     }
 }
+
+index.defaultProps = {
+    create_time: '', //完成时间
+    name: '', //流程名称
+};

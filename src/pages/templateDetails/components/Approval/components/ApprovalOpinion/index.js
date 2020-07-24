@@ -9,8 +9,45 @@ export default class index extends Component {
     constructor() {
         super(...arguments)
         this.state = {
-
+            commentValue: '', //审批意见内容
         }
+    }
+
+
+    handleInput = e => {
+        this.setState({
+            commentValue: e.currentTarget.value
+        });
+    };
+
+    //驳回
+    onReject = () => {
+        const { globalData: { store: { dispatch } } } = Taro.getApp();
+        const { flow_instance_id, flow_node_instance_id, } = this.props
+        const { commentValue } = this.state
+        dispatch({
+            type: 'workflow/putApprovalReject',
+            payload: {
+                flow_instance_id: flow_instance_id,
+                flow_node_instance_id: flow_node_instance_id,
+                message: commentValue,
+            },
+        })
+    }
+
+    //通过
+    onAdopt = () => {
+        const { globalData: { store: { dispatch } } } = Taro.getApp();
+        const { flow_instance_id, flow_node_instance_id, } = this.props
+        const { commentValue } = this.state
+        dispatch({
+            type: 'workflow/putApprovalComplete',
+            payload: {
+                flow_instance_id: flow_instance_id,
+                flow_node_instance_id: flow_node_instance_id,
+                message: commentValue,
+            },
+        })
     }
 
     render() {
@@ -27,23 +64,26 @@ export default class index extends Component {
                     <View className={indexStyles.content_padding}>
                         <Textarea className={indexStyles.textarea}
                             placeholder='填写审批意见'
-                        // onInput={this.handleInput}
-                        // value={commentValue}
-                        // auto-height={false}
-                        // show-confirm-bar={false}
-                        // adjust-position={true}
-                        // onFocus={this.handleBindfocus}
-                        // onblur={this.handBindblur}
+                            onInput={this.handleInput}
+                            value={commentValue}
+                            auto-height={false}
+                            show-confirm-bar={false}
+                            adjust-position={true}
                         />
 
                         <View className={indexStyles.operation}>
-                            <View className={`${indexStyles.opinion_button} ${indexStyles.reject}`}>驳回</View>
-                            <View className={`${indexStyles.opinion_button} ${indexStyles.adopt}`}>通过</View>
+                            <View className={`${indexStyles.opinion_button} ${indexStyles.reject}`} onClick={this.onReject}>驳回</View>
+                            <View className={`${indexStyles.opinion_button} ${indexStyles.adopt}`} onClick={this.onAdopt}>通过</View>
                         </View>
                     </View>
                 </View>
-
             </View>
         )
     }
 }
+
+
+index.defaultProps = {
+    flow_instance_id: '', //流程id
+    flow_node_instance_id: '', //流程节点id
+};

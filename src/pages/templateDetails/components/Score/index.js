@@ -16,7 +16,7 @@ export default class index extends Component {
 
     render() {
 
-        const { recipients, assignees, last_complete_time, } = this.props
+        const { recipients, assignees, last_complete_time, description, score_items, status, flow_instance_id, flow_node_instance_id, } = this.props
 
         return (
             <View className={indexStyles.viewStyle}>
@@ -25,15 +25,26 @@ export default class index extends Component {
                     <RelevantPersonnel recipients={recipients} assignees={assignees} last_complete_time={last_complete_time} />
                 </View>
 
-                <View className={indexStyles.other_cell}>
-                    <OtherCell />
-                </View>
+                {description ? (<View className={indexStyles.other_cell}>
+                    <OtherCell title='备注' description={description} />
+                </View>) : (<View></View>)}
 
                 <View className={indexStyles.other_cell}>
-                    <ScoringItems />
+                    <ScoringItems assignees={assignees} score_items={score_items} status={status} flow_instance_id={flow_instance_id} flow_node_instance_id={flow_node_instance_id} />
                 </View>
 
             </View>
         )
     }
 }
+
+index.defaultProps = {
+    recipients: [], //填写人array
+    assignees: [], //抄送人array
+    last_complete_time: '', //最后完成时间
+    description: '', //备注
+    score_items: [], //评分数组   
+    status: '', //当前节点进度 0未进行 1进行中 2完成
+    flow_instance_id: '', //流程id
+    flow_node_instance_id: '', //流程节点id
+};
