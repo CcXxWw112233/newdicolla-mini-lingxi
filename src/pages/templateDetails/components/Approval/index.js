@@ -6,6 +6,7 @@ import RelevantPersonnel from './../CommonComponents/RelevantPersonnel/index'
 import OtherCell from './../CommonComponents/OtherCell/index'
 import ApprovalMethod from './components/ApprovalMethod/index'
 import ApprovalOpinion from './components/ApprovalOpinion/index'
+import { loadFindAssignees, } from '../../../../utils/verify';
 
 export default class index extends Component {
 
@@ -15,35 +16,13 @@ export default class index extends Component {
         }
     }
 
-    loadFindAssignees = (assignees = []) => {
-        const account_info_string = Taro.getStorageSync('account_info')
-        const account_info = JSON.parse(account_info_string)
-        const { id } = account_info
-        //判断当前等登录用户 在不在审批人assignees当中
-        //不在就返回false
-        //在当中根据processed状态为1,返回true,不在为返回false
-        var currntAssignees = assignees.find(item => item.id == id);
-        if (currntAssignees) {
-            const { processed } = currntAssignees
-            if (processed == '1') {
-                return true
-            } else {
-                return false
-            }
-        }
-        else {
-            return false;
-        }
-    }
-
     render() {
-
-        const { recipients, assignees, last_complete_time, description, approve_type, flow_instance_id, flow_node_instance_id, status, } = this.props
+        const { recipients, assignees, last_complete_time, description, approve_type, flow_instance_id, flow_node_instance_id, status, deadline_time_type, deadline_value, deadline_type } = this.props
         return (
             <View className={indexStyles.viewStyle}>
 
                 <View className={indexStyles.other_cell}>
-                    <RelevantPersonnel recipients={recipients} assignees={assignees} last_complete_time={last_complete_time} />
+                    <RelevantPersonnel recipients={recipients} assignees={assignees} last_complete_time={last_complete_time} status={status} deadline_time_type={deadline_time_type} deadline_value={deadline_value} deadline_type={deadline_type} />
                 </View>
 
                 {description ? (<View className={indexStyles.other_cell}>
@@ -55,7 +34,7 @@ export default class index extends Component {
                 </View>
 
                 {
-                    ((status && status === '1') && (this.loadFindAssignees(assignees))) ? (<View className={indexStyles.other_cell}>
+                    ((status && status === '1') && (loadFindAssignees(assignees))) ? (<View className={indexStyles.other_cell}>
                         <ApprovalOpinion flow_instance_id={flow_instance_id} flow_node_instance_id={flow_node_instance_id} />
                     </View>) : (<View></View>)
                 }
@@ -74,4 +53,7 @@ index.defaultProps = {
     flow_node_instance_id: '', //流程节点id
     status: '', //当前节点进度 0未进行 1进行中 2完成
     assignees: [],//审批人array
+    deadline_time_type: '',  //截止时间类型
+    deadline_value: '',    //截止时间数
+    deadline_type: '', //限制时间类型 0未限制时间 1有限制时间
 };

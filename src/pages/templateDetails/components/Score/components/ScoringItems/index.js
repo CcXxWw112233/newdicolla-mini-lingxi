@@ -3,7 +3,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Input, } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyles from '../../../../../../gloalSet/styles/globalStyles.scss'
-import { checkDecimal, validateTwoDecimal, clearNoNum, } from '../../../../../../utils/verify';
+import { validateTwoDecimal, loadFindAssignees, } from '../../../../../../utils/verify';
 
 export default class index extends Component {
 
@@ -24,31 +24,10 @@ export default class index extends Component {
         });
     };
 
-    loadFindAssignees = (assignees = []) => {
-        const account_info_string = Taro.getStorageSync('account_info')
-        const account_info = JSON.parse(account_info_string)
-        const { id } = account_info
-        //判断当前等登录用户 在不在审批人assignees当中
-        //不在就返回false
-        //在当中根据processed状态为1,返回true,不在为返回false
-        var currntAssignees = assignees.find(item => item.id == id);
-        if (currntAssignees) {
-            const { processed } = currntAssignees
-            if (processed == '1') {
-                return true
-            } else {
-                return false
-            }
-        }
-        else {
-            return false;
-        }
-    }
-
     clickScoreView = (id, assignees = [], status) => {
 
         //先查询状态是不是进行中, 在查看用户在不在审批人中
-        if (((status && status === '1') && (this.loadFindAssignees(assignees)))) {
+        if (((status && status === '1') && (loadFindAssignees(assignees)))) {
             //是否可编辑
             const { isSocreInpit } = this.state
             if (isSocreInpit) {
@@ -76,13 +55,6 @@ export default class index extends Component {
         return processed_status;
     }
 
-
-    //失去焦点
-    // checkSocreInpit = (e) => {
-    //     let value = e.target.value;
-    //     console.log('value=====', value);
-    // }
-
     //失去焦点
     bindblur = (e, obj) => {
         let value = e.target.value;
@@ -97,9 +69,9 @@ export default class index extends Component {
     }
 
     //实时监测输入
-    inputSocreInpit = (e) => {
+    inputSocreInpit = (e, max_score) => {
         let value = e.target.value;
-        if (value > 100.0 || validateTwoDecimal(value)) {
+        if (value > max_score || validateTwoDecimal(value)) {
             this.setState({
                 inputWarning: true,
             })
@@ -160,9 +132,7 @@ export default class index extends Component {
                                                     type='digit'
                                                     maxLength='5'
                                                     placeholder={item.value}
-                                                    // onBlur={this.checkSocreInpit}
-                                                    // onConfirm={this.checkSocreInpit}
-                                                    onInput={this.inputSocreInpit}
+                                                    onInput={(e) => this.inputSocreInpit(e, max_score)}
                                                     onblur={(e) => this.bindblur(e, item)}
                                                 // disabled={true}
                                                 ></Input>)
@@ -181,6 +151,7 @@ export default class index extends Component {
                             })}
                         </View>
                     </ScrollView>
+
                     <View className={indexStyles.assignees}>
                         {assignees && assignees.map((value, key) => {
                             const { id, avatar, name, processed, score_items, comment } = value

@@ -4,6 +4,7 @@ import indexStyles from './index.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import RelevantPersonnel from './../CommonComponents/RelevantPersonnel/index'
 import OtherCell from './../CommonComponents/OtherCell/index'
+import Choice from './components/Choice/index'
 import Enclosure from './components/Enclosure/index'
 import OnlineTable from './components/OnlineTable/index'
 import { timestampToTimeZH } from '../../../../utils/basicFunction'
@@ -18,13 +19,13 @@ export default class index extends Component {
 
     render() {
 
-        const { recipients, assignees, last_complete_time, forms, description, board_id } = this.props
+        const { recipients, assignees, last_complete_time, forms, description, board_id, status, deadline_time_type, deadline_value, deadline_type, } = this.props
 
         return (
             <View className={indexStyles.viewStyle}>
 
                 <View className={indexStyles.other_cell}>
-                    <RelevantPersonnel recipients={recipients} assignees={assignees} last_complete_time={last_complete_time} />
+                    <RelevantPersonnel recipients={recipients} assignees={assignees} last_complete_time={last_complete_time} status={status} deadline_time_type={deadline_time_type} deadline_value={deadline_value} deadline_type={deadline_type} />
                 </View>
 
                 {description ? (<View className={indexStyles.other_cell}>
@@ -46,11 +47,9 @@ export default class index extends Component {
                                 )}
                                 {field_type === '2' && (
                                     <View>
-                                        {
-                                            options ? (<View className={indexStyles.other_cell}>
-                                                <OtherCell title='选择' options={options} />
-                                            </View>) : (<View></View>)
-                                        }
+                                        <View className={indexStyles.other_cell}>
+                                            <Choice title='选择' options={options} />
+                                        </View>
                                     </View>
                                 )}
                                 {field_type === '3' && (
@@ -86,4 +85,8 @@ index.defaultProps = {
     forms: '', //资料收集类型
     description: '', //备注
     board_id: '', //项目id
+    status: '', //当前节点进度 0未进行 1进行中 2完成
+    deadline_time_type: '',  //截止时间类型
+    deadline_value: '',    //截止时间数
+    deadline_type: '', //限制时间类型 0未限制时间 1有限制时间
 };

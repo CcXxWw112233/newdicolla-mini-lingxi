@@ -16,13 +16,13 @@ export default class index extends Component {
 
     render() {
 
-        const { recipients, assignees, last_complete_time, description, score_items, status, flow_instance_id, flow_node_instance_id, } = this.props
+        const { recipients, assignees, last_complete_time, description, score_items, status, flow_instance_id, flow_node_instance_id, deadline_time_type, deadline_value, deadline_type } = this.props
 
         return (
             <View className={indexStyles.viewStyle}>
 
                 <View className={indexStyles.other_cell}>
-                    <RelevantPersonnel recipients={recipients} assignees={assignees} last_complete_time={last_complete_time} />
+                    <RelevantPersonnel recipients={recipients} assignees={assignees} last_complete_time={last_complete_time} status={status} deadline_time_type={deadline_time_type} deadline_value={deadline_value} deadline_type={deadline_type} />
                 </View>
 
                 {description ? (<View className={indexStyles.other_cell}>
@@ -47,4 +47,7 @@ index.defaultProps = {
     status: '', //当前节点进度 0未进行 1进行中 2完成
     flow_instance_id: '', //流程id
     flow_node_instance_id: '', //流程节点id
+    deadline_time_type: '',  //截止时间类型
+    deadline_value: '',    //截止时间数
+    deadline_type: '', //限制时间类型 0未限制时间 1有限制时间
 };

@@ -28,6 +28,7 @@
         flex-direction: column;
         margin-left   : pxTrans(16);
         width         : 100%;
+        overflow      : hidden; //scrollView 截掉滚动条
 
         .scoring_items {
             display       : flex;

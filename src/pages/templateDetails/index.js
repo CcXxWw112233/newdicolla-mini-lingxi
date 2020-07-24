@@ -129,23 +129,58 @@ export default class templateDetails extends Component {
 
 
                     {nodes && nodes.map((value, key) => {
-                        const { id, node_type, sort, runtime_type, recipients, assignees, last_complete_time, forms, description, approve_type, status, score_items, } = value
+                        const { id, node_type, sort, runtime_type, recipients, assignees, last_complete_time, forms, description, approve_type, status, score_items, deadline_time_type, deadline_value, deadline_type, } = value
 
                         return (
                             <View key={id}>
                                 <View className={indexStyles.interval}></View>
                                 <StepRow sort={sort} name={value.name} runtime_type={runtime_type} step_id={value.id} onClicked={this.onChangeOpen.bind(this)} />
                                 {
-                                    current_step_id == id && is_change_open ? (
+                                    // current_step_id == id && 
+                                    is_change_open ? (
                                         <View>
                                             {node_type === '1' && (
-                                                <DataCollection recipients={recipients} assignees={assignees} last_complete_time={last_complete_time} forms={forms} description={description} board_id={board_id} />
+                                                <DataCollection
+                                                    recipients={recipients}
+                                                    assignees={assignees}
+                                                    last_complete_time={last_complete_time}
+                                                    forms={forms}
+                                                    description={description}
+                                                    board_id={board_id}
+                                                    status={status}
+                                                    deadline_time_type={deadline_time_type}
+                                                    deadline_value={deadline_value}
+                                                    deadline_type={deadline_type}
+                                                />
                                             )}
                                             {node_type === '2' && (
-                                                <Approval recipients={recipients} assignees={assignees} last_complete_time={last_complete_time} description={description} approve_type={approve_type} flow_instance_id={workflowDatas.id} flow_node_instance_id={value.id} status={status} />
+                                                <Approval
+                                                    recipients={recipients}
+                                                    assignees={assignees}
+                                                    last_complete_time={last_complete_time}
+                                                    description={description}
+                                                    approve_type={approve_type}
+                                                    flow_instance_id={workflowDatas.id}
+                                                    flow_node_instance_id={value.id}
+                                                    status={status}
+                                                    deadline_time_type={deadline_time_type}
+                                                    deadline_value={deadline_value}
+                                                    deadline_type={deadline_type}
+                                                />
                                             )}
                                             {node_type === '3' && (
-                                                <Score recipients={recipients} assignees={assignees} last_complete_time={last_complete_time} description={description} score_items={score_items} status={status} flow_instance_id={workflowDatas.id} flow_node_instance_id={value.id} />
+                                                <Score
+                                                    recipients={recipients}
+                                                    assignees={assignees}
+                                                    last_complete_time={last_complete_time}
+                                                    description={description}
+                                                    score_items={score_items}
+                                                    status={status}
+                                                    flow_instance_id={workflowDatas.id} flow_node_instance_id={value.id}
+                                                    deadline_time_type={deadline_time_type}
+                                                    deadline_value={deadline_value}
+                                                    deadline_type={deadline_type}
+                                                />
                                             )}
                                         </View>
                                     ) : (<View></View>)
