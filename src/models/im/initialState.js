@@ -6,7 +6,7 @@ const INITIAL_STATE = {
   isRegister: false, // 是否正在注册
   userInfo: {}, // 登录用户信息
 
-  currentSubChat:{},// 当前真正聊天的子圈
+  currentSubChat: {},// 当前真正聊天的子圈
   currentChatTo: '', // 正在聊天 sessionId
   currentGroup: {}, //当前的聊天群信息
   currentGroupSessionList: [],  //当前群的聊天信息
@@ -42,8 +42,9 @@ const INITIAL_STATE = {
   boardChatImAllLastHistoryList: {}, //当前项目圈的历史消息,
   sessionListMap: {}, //切割聊天历史数据列表
   history_newSession: [],// 更新版，新消息的记录，包括自己发送的和接受的
-  historySub_newSession:[],// 子圈的消息记录
-  currentBoardDetail:{},
+  historySub_newSession: [],// 子圈的消息记录
+  currentBoardDetail: {},
+  unread_all_number: '',  //全部未读数
 }
 
 export { INITIAL_STATE }

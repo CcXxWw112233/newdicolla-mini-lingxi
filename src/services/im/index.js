@@ -37,3 +37,14 @@ export const setImHistoryRead = (data, notShowLoading) => {
         url: `${API_MORE}/im/history/read`,
     }, notShowLoading)
 }
+
+//项目圈未读总数
+export const getImAllHistoryUnread = (data, notShowLoading) => {
+    return request({
+        data: {
+            ...data
+        },
+        method: 'GET',
+        url: `${API_MORE}/im/history/unread`,
+    }, notShowLoading)
+}

@@ -23,6 +23,7 @@ import { onSysMsgUnread } from '../../models/im/actions'
   accountInfo,
   im: {
     sessionlist,
+    unread_all_number,
   }
 }) => ({
   no_sche_card_list,
@@ -32,6 +33,7 @@ import { onSysMsgUnread } from '../../models/im/actions'
   isOtherPageBack,
   accountInfo,
   sessionlist,
+  unread_all_number,
 }))
 export default class Calendar extends Component {
   constructor(props) {
@@ -90,14 +92,27 @@ export default class Calendar extends Component {
       this.pagingGet()
     }
   }
+  componentDidMount() {
 
-  componentWillReceiveProps(nextProps) { }
+    //显示未读总数
+    const { dispatch } = this.props
+    Promise.resolve(
+      dispatch({
+        type: 'im/getImAllHistoryUnread',
+        payload: {
 
-  componentWillUnmount() { }
+        }
+      })
+    ).then(res => {
 
-  componentWillMount() { }
+      const { unread_all_number, } = this.props
 
-  componentDidMount() { }
+      wx.setTabBarBadge({
+        index: 1,
+        text: unread_all_number,
+      })
+    })
+  }
 
   componentDidShow() {
     const { selected_board_name, } = this.props

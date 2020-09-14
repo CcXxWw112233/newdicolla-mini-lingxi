@@ -4,17 +4,17 @@ import styles from './index.scss';
 import GroupItem from '../boardChat/components/GroupItem';
 import { connect } from '@tarojs/redux';
 
-@connect(({ im: { currentGroup = {},userUID ,allBoardList = []} }) => ({
-  currentGroup,userUID,allBoardList
+@connect(({ im: { currentGroup = {}, userUID, allBoardList = [] } }) => ({
+  currentGroup, userUID, allBoardList
 }))
-export default class SubChat extends Component{
-  constructor(){
+export default class SubChat extends Component {
+  constructor() {
     super(...arguments);
     this.state = {
-      chatlist :[]
+      chatlist: []
     }
   }
-  componentDidMount(){
+  componentDidMount() {
     this.filterSubChat();
   }
 
@@ -23,7 +23,7 @@ export default class SubChat extends Component{
     //如果没有头像就获取name的第一个字符生成头像
     const userToAvatar = i => (i && i.avatar ? i.avatar : ((i.name).substr(0, 1)));
     if (users.length <= 4) {
-        return users.map(userToAvatar);
+      return users.map(userToAvatar);
     }
     //获取最多4个头像
     return users.slice(0, 4).map(userToAvatar);
@@ -31,73 +31,73 @@ export default class SubChat extends Component{
 
   genLastMsg = (lastMsg = {}) => {
     if (JSON.stringify(lastMsg) != "{}" && lastMsg.status === "success") {  //lastMsg不为空并且成功才执行
-        const { fromNick, type, text, file, custom, tip,} = lastMsg;
-        const typeCond = {
-            text,
-            audio: '[语音]',
-            image: '[图片]',
-            video: '[视频]',
-            notification: '[系统通知]',
-            file: '[文件]',
-            custom,
-            tip,
-        };
-        if (type === 'text') {
-            return `${fromNick}: ${text}`;
-        }
-        // if (type === 'file') {
-        //     return `${'[文件]'} ${file.name}`;
-        // }
-        if (type === 'custom') {
-            const contentJSON = JSON.parse(lastMsg.content)
-            return contentJSON.type === 3 ? '[动态贴图]' : '[动态消息]'
-        }
-        if (type === 'tip') {
-            return `${text}`
-        }
-        return typeCond[type] ? typeCond[type] : '[未知类型消息]';
+      const { fromNick, type, text, file, custom, tip, } = lastMsg;
+      const typeCond = {
+        text,
+        audio: '[语音]',
+        image: '[图片]',
+        video: '[视频]',
+        notification: '[系统通知]',
+        file: '[文件]',
+        custom,
+        tip,
+      };
+      if (type === 'text') {
+        return `${fromNick}: ${text}`;
+      }
+      // if (type === 'file') {
+      //     return `${'[文件]'} ${file.name}`;
+      // }
+      if (type === 'custom') {
+        const contentJSON = JSON.parse(lastMsg.content)
+        return contentJSON.type === 3 ? '[动态贴图]' : '[动态消息]'
+      }
+      if (type === 'tip') {
+        return `${text}`
+      }
+      return typeCond[type] ? typeCond[type] : '[未知类型消息]';
     } else {
-        return '';
+      return '';
     }
   };
-  handleSubChatClick = async (val)=>{
-    let { dispatch,currentGroup } = this.props;
-    let { im_id,board_id } = val;
+  handleSubChatClick = async (val) => {
+    let { dispatch, currentGroup } = this.props;
+    let { im_id, board_id } = val;
     // console.log(val)
 
     await dispatch({
       type: "im/updateBoardUnread",
       payload: {
-          param: {
-              im_id,
-              msgids: []
-          },
+        param: {
           im_id,
-          board_id,
-          unread: 0
+          msgids: []
+        },
+        im_id,
+        board_id,
+        unread: 0
       }
     })
 
-    let obj = {...currentGroup};
+    let obj = { ...currentGroup };
     obj.subUnread = obj.subUnread - val.unread;
     dispatch({
-      type:"im/updateStateFieldByCover",
-      payload:{
+      type: "im/updateStateFieldByCover",
+      payload: {
         currentSubChat: val,
         currentGroup: obj
       }
     })
 
     Taro.redirectTo({
-      url:"/pages/subChatDetail/index"
+      url: "/pages/subChatDetail/index"
     })
   }
-  componentWillReceiveProps(){
+  componentWillReceiveProps() {
     this.filterSubChat();
   }
 
-  filterSubChat = ()=>{
-    let { currentGroup ,allBoardList } = this.props;
+  filterSubChat = () => {
+    let { currentGroup, allBoardList } = this.props;
     // console.log(currentGroup.children)
     let child = allBoardList.filter(item => item.type == 3 && item.board_id == currentGroup.board_id);
     this.setState({
@@ -105,7 +105,7 @@ export default class SubChat extends Component{
     })
     console.log(child)
   }
-  render(){
+  render() {
     let { chatlist } = this.state;
     let { userUID } = this.props;
     return (
@@ -132,7 +132,7 @@ export default class SubChat extends Component{
               newsNum={(unread)}
               apns={apns}
               userid={userUID}
-              onClickedGroupItem={this.handleSubChatClick.bind(this,value)}
+              onClickedGroupItem={this.handleSubChatClick.bind(this, value)}
             />
           )
         })}

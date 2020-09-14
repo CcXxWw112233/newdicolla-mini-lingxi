@@ -13,6 +13,7 @@ import {
   getIMAccount,
   repairTeam,
   setImHistoryRead,
+  getImAllHistoryUnread,
 } from './../../services/im/index';
 import { isApiResponseOk } from './../../utils/request';
 import { onMsg, onTeams } from './actions/index';
@@ -32,9 +33,9 @@ function onSendMsgDone(error, msg) {
       msg.status = 'fail';
       onMsg(msg);
 
-      /***
-       * 消息发送失败, 重新连接, 并提示用户再次发送
-       */
+      /***
+       * 消息发送失败, 重新连接, 并提示用户再次发送
+       */
       const { globalData: { store: { getState } } } = Taro.getApp()
       const { im: { nim } } = getState()
       if (nim) {
@@ -413,6 +414,21 @@ export default {
           icon: 'none',
           duration: 2000
         })
+      }
+    },
+
+    //项目圈未读总数
+    * getImAllHistoryUnread({ payload }, { select, call, put }) {
+      const res = yield call(getImAllHistoryUnread, payload)
+      if (isApiResponseOk(res)) {
+        yield put({
+          type: 'updateDatas',
+          payload: {
+            unread_all_number: res.data
+          }
+        })
+      } else {
+
       }
     },
 
