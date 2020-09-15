@@ -6,14 +6,6 @@ import { timestampToTimeZH } from '../../../../utils/basicFunction'
 
 export default class ChoiceTimes extends Component {
 
-    componentWillReceiveProps(nextProps) { }
-
-    componentWillUnmount() { }
-
-    componentDidShow() { }
-
-    componentDidHide() { }
-
     render() {
         const time = this.props.time
         const timeTable = timestampToTimeZH(time)
@@ -22,13 +14,13 @@ export default class ChoiceTimes extends Component {
 
         return (
             <View className={indexStyles.viewStyle}>
-               {/* <View className={indexStyles.timeStyle}> */}
-                   {/* <View>{timeTable}</View> */}
+                {/* <View className={indexStyles.timeStyle}> */}
+                {/* <View>{timeTable}</View> */}
                    timeTable
 
-                   {/* <View>{hour}</View> */}
-               {/* </View> */}
-               {/* <View>周一</View> */}
+                {/* <View>{hour}</View> */}
+                {/* </View> */}
+                {/* <View>周一</View> */}
             </View>
         )
     }

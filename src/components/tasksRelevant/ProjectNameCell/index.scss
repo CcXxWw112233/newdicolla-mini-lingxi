@@ -25,6 +25,8 @@
   }
 
   .right_style {
+    display        : flex;
+    flex-direction : row;
     flex           : 1;
     justify-content: space-between;
 
@@ -49,9 +51,11 @@
     }
 
     .list_item_iconnext {
-      margin-left: pxTrans(12);
-      color      : $color_3;
-      font-size  : pxTrans(11);
+      color       : $color_3;
+      font-size   : pxTrans(11);
+      margin-left : pxTrans(12);
+      margin-right: pxTrans(12);
+      margin-top  : pxTrans(6);
     }
   }
 }

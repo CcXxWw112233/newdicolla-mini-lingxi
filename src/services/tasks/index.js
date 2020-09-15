@@ -1,55 +1,55 @@
 import { request, packagePromise, } from "../../utils/request";
 import { API_BOARD } from "../../gloalSet/js/constant";
 import { createHeaderContentDataByCardId } from '../constant'
- 
+
 
 // 任务列表
-export const getTaskGroupList = (data , notShowLoading) => {
-    return request({
-      data: {
-        ...data
-      },
-      method: 'GET',
-      url: `${API_BOARD}/card`,
-    }, notShowLoading)
-  }
-  
-  //任务详情
-  export const getTasksDetail = (data , notShowLoading) => {
-    return request({
-      data: {
-        ...data
-      },
-      headers: createHeaderContentDataByCardId(data.card_id),
-      method: 'GET',
-      url: `${API_BOARD}/card/detail/${data['id']}`,
-    }, notShowLoading)
-  }
+export const getTaskGroupList = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'GET',
+    url: `${API_BOARD}/card`,
+  }, notShowLoading)
+}
 
-  //新增任务(工作台中)
-  export const addTask = (data , notShowLoading) => {
-    return request({
-      data: {
-        ...data
-      },
-      method: 'POST',
-      url: `${API_BOARD}/card/add`,
-    }, notShowLoading)
-  }
+//任务详情
+export const getTasksDetail = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    headers: createHeaderContentDataByCardId(data.card_id),
+    method: 'GET',
+    url: `${API_BOARD}/card/detail/${data['id']}`,
+  }, notShowLoading)
+}
 
-  //获取任务评论列表
-  export const getCardCommentListAll = (data , notShowLoading) => {
-    return request({
-      data: {
-        ...data
-      },
-      method: 'GET',
-      url: `${API_BOARD}/card/comment`,
-    }, notShowLoading)
-  }
+//新增任务(工作台中)
+export const addTask = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'POST',
+    url: `${API_BOARD}/card/add`,
+  }, notShowLoading)
+}
+
+//获取任务评论列表
+export const getCardCommentListAll = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'GET',
+    url: `${API_BOARD}/card/comment`,
+  }, notShowLoading)
+}
 
 //新增评论
-export const addComment = (data , notShowLoading) => {  
+export const addComment = (data, notShowLoading) => {
   return request({
     data: {
       ...data
@@ -61,7 +61,7 @@ export const addComment = (data , notShowLoading) => {
 
 
 //查看内容关联
-export const checkContentLink = (data , notShowLoading) => {
+export const checkContentLink = (data, notShowLoading) => {
   return request({
     data: {
       ...data
@@ -95,7 +95,7 @@ export const getTaskMilestoneList = (data, notShowLoading) => {
 
 
 //完成/未任务
-export const setTasksRealize = (data , notShowLoading) => {
+export const setTasksRealize = (data, notShowLoading) => {
   return request({
     data: {
       ...data
@@ -106,7 +106,7 @@ export const setTasksRealize = (data , notShowLoading) => {
 }
 
 //更新任务
-export const updataTasks = (data , notShowLoading) => {
+export const updataTasks = (data, notShowLoading) => {
   return request({
     data: {
       ...data
@@ -116,5 +116,49 @@ export const updataTasks = (data , notShowLoading) => {
   }, notShowLoading, true)
 }
 
+//修改任务
+export const putCardBaseInfo = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    header: createHeaderContentDataByCardId(data.id),
+    method: 'PUT',
+    url: `${API_BOARD}/v2/card/${data.id}`,
+  }, notShowLoading, true)
+}
 
- 
+
+//标签列表
+export const getLabelList = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'GET',
+    url: `${API_BOARD}/label`,
+  }, notShowLoading)
+}
+
+//新增标签
+export const postCardLabel = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'POST',
+    url: `${API_BOARD}/card/label`,
+  }, notShowLoading)
+}
+
+//删除标签
+export const deleteCardLabel = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'DELETE',
+    url: `${API_BOARD}/card/label`,
+  }, notShowLoading)
+}
+

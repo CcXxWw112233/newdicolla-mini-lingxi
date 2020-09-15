@@ -56,6 +56,7 @@ class App extends Component {
       'pages/auccessJoin/index',
       'pages/qrCodeInvalid/index',
       'pages/taksDetails/index',
+      'pages/labelSelection/index',
       // 'pages/addingTasks/index',
       // 'pages/choiceProject/index',
       // 'pages/fillDescribe/index',

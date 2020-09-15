@@ -1,8 +1,10 @@
-.tasks_time_style, .tasks_name_style{
+@import "~taro-ui/dist/style/components/list.scss";
+
+.tasks_time_style,
+.tasks_name_style {
     margin-bottom: 16px;
 }
 
 .add_function_style {
     padding: 16px 16px 16px 16px;
 }
- 

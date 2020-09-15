@@ -6,20 +6,15 @@ import { AtTag } from 'taro-ui'
 
 export default class index extends Component {
 
-  componentWillReceiveProps() { }
+  clickTagCell = () => {
 
-  componentDidMount() { }
-
-  componentWillUnmount() { }
-
-  componentDidShow() { }
-
-  componentDidHide() { }
+    this.props.clickTagCell();
+  }
 
   render() {
     const { label_data = [] } = this.props
     return (
-      <View className={indexStyles.list_item}>
+      <View className={indexStyles.list_item} onClick={this.clickTagCell}>
         <View className={`${indexStyles.list_item_left_iconnext}`}>
           <Text className={`${globalStyle.global_iconfont}`}>&#xe6ac;</Text>
         </View>

@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { getTaskGroupList, addTask, getTasksDetail, getCardCommentListAll, boardAppRelaMiletones, addComment, checkContentLink, getTaskExecutorsList, getTaskMilestoneList, setTasksRealize, updataTasks, } from '../../services/tasks/index'
+import { getTaskGroupList, addTask, getTasksDetail, getCardCommentListAll, boardAppRelaMiletones, addComment, checkContentLink, getTaskExecutorsList, getTaskMilestoneList, setTasksRealize, updataTasks, putCardBaseInfo, getLabelList, postCardLabel, deleteCardLabel, } from '../../services/tasks/index'
 import { isApiResponseOk } from "../../utils/request";
 import { setBoardIdStorage } from '../../utils/basicFunction'
 
@@ -12,6 +12,7 @@ export default {
     executors_list: [], //执行人列表 
     milestone_list: [], //获取里程碑列表
     isPermission: true, //是否有权限更改
+    label_list: [], // 标签列表
   },
   effects: {
     //获取任务列表
@@ -46,7 +47,6 @@ export default {
         }
         )
         setBoardIdStorage(boardId)
-
         // yield put({
         //   type: 'getCardCommentListAll',
         //   payload: {
@@ -218,6 +218,75 @@ export default {
         })
       }
     },
+
+    //修改任务名称
+    * putCardBaseInfo({ payload }, { select, call, put }) {
+      const { card_id, card_name, name, due_time } = payload;
+      const res = yield call(putCardBaseInfo, { id: card_id, card_name: card_name, name: name, due_time: due_time, })
+
+      if (isApiResponseOk(res)) {
+
+        yield call(getTasksDetail, { id: card_id })
+      }
+      else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    },
+
+
+    //标签列表
+    * getLabelList({ payload }, { select, call, put }) {
+      const res = yield call(getLabelList, payload)
+      if (isApiResponseOk(res)) {
+        yield put({
+          type: 'updateDatas',
+          payload: {
+            label_list: res.data
+          }
+        })
+      }
+      else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    },
+
+
+    //新增标签
+    * postCardLabel({ payload }, { select, call, put }) {
+      const res = yield call(postCardLabel, payload)
+      if (isApiResponseOk(res)) {
+        yield call(getTasksDetail, { id: card_id })
+      } else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    },
+
+    //删除标签
+    * deleteCardLabel({ payload }, { select, call, put }) {
+      const res = yield call(deleteCardLabel, payload)
+      if (isApiResponseOk(res)) {
+        yield call(getTasksDetail, { id: card_id })
+      } else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    },
+
 
   },
 

@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { View, Text, Picker, } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyles from '../../../gloalSet/styles/globalStyles.scss'
 import ChoiceTimes from './ChoiceTimes/index'
@@ -12,16 +12,12 @@ import { connect } from '@tarojs/redux'
 }))
 export default class TasksTime extends Component {
 
-    componentWillReceiveProps(nextProps) { }
-
-    componentWillUnmount() { }
-
-    componentDidShow() { }
-
-    componentDidHide() { }
+    state = {
+        is_show_time_picks: false,
+    }
 
     ejectTimePicks = () => {
-        this.props.timePicks()
+        this.props.ejectTimePicks();
     }
 
     modifyInput = () => {
@@ -38,15 +34,37 @@ export default class TasksTime extends Component {
     updataCardName = (cardId, value) => {
         const { dispatch } = this.props
         dispatch({
-            type: 'tasks/updataTasks',
+            type: 'tasks/putCardBaseInfo',
             payload: {
                 card_id: cardId,
+                card_name: value['detail']["value"],
                 name: value['detail']["value"],
             }
         })
     }
 
+    onDateChange = e => {
+        const { cellInfo = {}, } = this.props
+        const { cardId } = cellInfo
+        //更新任务时间
+        const { dispatch } = this.props
+        dispatch({
+            type: 'tasks/putCardBaseInfo',
+            payload: {
+                card_id: cardId,
+                due_time: 1600325377331,
+            }
+        })
+
+        this.setState({
+            is_show_time_picks: true,
+        })
+    }
+
     render() {
+
+        const { is_show_time_picks } = this.state
+
         const { cellInfo = {}, isPermission, flag, } = this.props
         const card_name = cellInfo.cardDefinition
         // const input_disabled = !card_name ? false : true
@@ -89,15 +107,24 @@ export default class TasksTime extends Component {
                     ></Input>
                 </View>
                 <View className={indexStyles.selectionTime}>
-                    <View className={indexStyles.startTime} >
+                    <Picker mode='date' onChange={this.onDateChange} className={indexStyles.startTime} onClick={this.ejectTimePicks}>
                         {/* <ChoiceTimes onClick={this.ejectTimePicks} time={sTime} /> */}
                         {sTime ? timestampToTimeZH(sTime) : '开始时间'}
-                    </View>
-                    <View className={indexStyles.endTime} >
+                    </Picker>
+                    <Picker mode='date' onChange={this.onDateChange} className={indexStyles.endTime} onClick={this.ejectTimePicks}>
                         {/* <ChoiceTimes onClick={this.ejectTimePicks} time={eTime} /> */}
                         {eTime ? timestampToTimeZH(eTime) : '结束时间'}
-                    </View>
+                    </Picker>
                 </View>
+
+                {
+                    is_show_time_picks == true ? <Picker mode='time' onChange={this.onTimeChange}>
+                        <AtList>
+                            <AtListItem title='请选择时间' extraText={this.state.timeSel} />
+                        </AtList>
+                    </Picker> : <View> </View>
+                }
+
             </View>
         )
     }

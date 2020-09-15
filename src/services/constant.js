@@ -8,14 +8,14 @@ export const CONTENT_DATA_TYPE_FOLDER = 'folder'
 export const CONTENT_DATA_TYPE_FLOW = 'flow'
 
 export const createHeaderContentDataByCardId = (cardId) => {
-    if (cardId) {
-      return {
-        BaseInfo: {
-          contentDataType: CONTENT_DATA_TYPE_CARD,
-          contentDataId: cardId
-        }
+  if (cardId) {
+    return {
+      BaseInfo: {
+        contentDataType: CONTENT_DATA_TYPE_CARD,
+        contentDataId: cardId
       }
-    } else {
-      return {}
     }
+  } else {
+    return {}
   }
+}

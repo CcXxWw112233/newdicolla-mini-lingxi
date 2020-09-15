@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { View, Picker } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import TasksTime from '../../components/tasksRelevant/TasksTime/index'
@@ -13,6 +13,7 @@ import CommentCell from './components/CommentCell/index'
 import CommentBox from './components/CommentBox/index'
 import CustomNavigation from '../acceptInvitation/components/CustomNavigation.js'
 import { connect } from '@tarojs/redux'
+import { AtList, AtListItem } from 'taro-ui'
 
 @connect(({ tasks: { tasksDetailDatas = {}, }, calendar: { isOtherPageBack = {} } }) => ({
     tasksDetailDatas, isOtherPageBack
@@ -26,6 +27,7 @@ export default class taksDetails extends Component {
         content_Id: '',
         backIcon: '',
         type_flag: '',
+        board_id: '',
     }
 
     onShareAppMessage() {
@@ -48,6 +50,7 @@ export default class taksDetails extends Component {
             content_Id: contentId,
             backIcon: back_icon,
             type_flag: flag,
+            board_id: boardId,
         })
 
         this.loadTasksDetail(contentId, boardId)
@@ -61,7 +64,7 @@ export default class taksDetails extends Component {
             boardId = board_id
         } else {
             contentId = Taro.getStorageSync('tasks_detail_contentId')
-            boardId = Taro.getStorageSync('tasks_detail_contentId')
+            boardId = Taro.getStorageSync('tasks_detail_boardId')
         }
         const { dispatch } = this.props
         dispatch({
@@ -73,8 +76,6 @@ export default class taksDetails extends Component {
         })
     }
 
-    componentWillReceiveProps() { }
-
     componentDidShow() {
         const { dispatch } = this.props
         dispatch({
@@ -84,8 +85,6 @@ export default class taksDetails extends Component {
             }
         })
     }
-
-    componentDidHide() { }
 
     componentWillUnmount() {
         const { sourcePage } = this.state
@@ -120,6 +119,11 @@ export default class taksDetails extends Component {
         })
     }
 
+    ejectTimePicks = () => {
+
+        console.log('ejectTimePicks========');
+    }
+
     modifyRealize = (new_data = {}) => {
 
         const { tasksDetailDatas = {}, dispatch } = this.props
@@ -131,6 +135,28 @@ export default class taksDetails extends Component {
                     ...new_data
                 }
             }
+        })
+    }
+
+    clickTagCell = () => {
+
+        const { dispatch } = this.props
+
+        let boardId = Taro.getStorageSync('tasks_detail_boardId')
+        let contentId = Taro.getStorageSync('tasks_detail_contentId')
+
+        Promise.resolve(
+            dispatch({
+                type: 'tasks/getLabelList',
+                payload: {
+                    board_id: boardId,
+                },
+            })
+        ).then(res => {
+
+            Taro.navigateTo({
+                url: `../../pages/labelSelection/index?contentId=${contentId}`
+            })
         })
     }
 
@@ -175,7 +201,12 @@ export default class taksDetails extends Component {
 
                 <View style={{ marginTop: `${statusBar_Height + navBar_Height}` + 'px', left: 0 }}>
                     <View className={indexStyles.tasks_time_style}>
-                        <TasksTime cellInfo={timeInfo} tasksDetailsRealizeStatus={(timeInfo) => this.tasksDetailsRealizeStatus(timeInfo)} flag={type_flag} />
+                        <TasksTime
+                            cellInfo={timeInfo}
+                            tasksDetailsRealizeStatus={(timeInfo) => this.tasksDetailsRealizeStatus(timeInfo)}
+                            flag={type_flag}
+                            ejectTimePicks={() => this.ejectTimePicks()}
+                        />
                     </View>
                     <ProjectNameCell title='项目' name={board_name} />
                     <View className={indexStyles.tasks_name_style}>
@@ -196,7 +227,10 @@ export default class taksDetails extends Component {
                         }
                         <RelationContentCell />
                         {
-                            label_data.length > 0 ? <TagCell label_data={label_data} /> : ''
+                            label_data && label_data.length > 0 ? <TagCell
+                                label_data={label_data}
+                                clickTagCell={() => this.clickTagCell()}
+                            /> : ''
                         }
                     </View>
                     {

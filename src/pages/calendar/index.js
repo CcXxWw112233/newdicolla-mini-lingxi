@@ -107,10 +107,12 @@ export default class Calendar extends Component {
 
       const { unread_all_number, } = this.props
 
-      wx.setTabBarBadge({
-        index: 1,
-        text: unread_all_number,
-      })
+      if (unread_all_number != 0) {
+        wx.setTabBarBadge({
+          index: 1,
+          text: unread_all_number > 99 ? '99+' : unread_all_number ? unread_all_number + "" : "0",
+        })
+      }
     })
   }
 

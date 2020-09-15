@@ -87,27 +87,25 @@ export default class ProjectNameCell extends Component {
                 <View className={indexStyles.list_item_name}>{title}</View>
 
                 <View className={indexStyles.right_style}>
-                    <View className={indexStyles.right_content_style}>
-                        <View className={indexStyles.right_centre_style}>
-                            <View>
-                                {title === '执行人' ? (
-                                    <View className={indexStyles.executors_list_item_detail}>
-                                        <View className={`${indexStyles.avata_area}`}>
-                                            <Avatar avartarTotal={'multiple'} userList={executors} />
-                                        </View>
+                    <View className={indexStyles.right_centre_style}>
+                        <View>
+                            {title === '执行人' ? (
+                                <View className={indexStyles.executors_list_item_detail}>
+                                    <View className={`${indexStyles.avata_area}`}>
+                                        <Avatar avartarTotal={'multiple'} userList={executors} />
                                     </View>
-                                ) : (
-                                        <View className={indexStyles.list_item_detail}>
-                                            {
-                                                title === "描述" ? (<View><RichText className='text' nodes={name} /></View>) : (<View>{name}</View>)
-                                            }
-                                        </View>
-                                    )}
-                            </View>
+                                </View>
+                            ) : (
+                                    <View className={indexStyles.list_item_detail}>
+                                        {
+                                            title === "描述" ? (<View><RichText className='text' nodes={name} /></View>) : (<View>{name}</View>)
+                                        }
+                                    </View>
+                                )}
                         </View>
-                        {/* <View className={`${indexStyles.list_item_iconnext}`}>
-                            <Text className={`${globalStyle.global_iconfont}`}>&#xe654;</Text>
-                        </View> */}
+                    </View>
+                    <View className={`${indexStyles.list_item_iconnext}`}>
+                        <Text className={`${globalStyle.global_iconfont}`}>&#xe654;</Text>
                     </View>
                 </View>
             </View>

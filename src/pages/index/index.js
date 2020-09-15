@@ -39,12 +39,6 @@ class Index extends Component {
     ]
   }
 
-  componentWillReceiveProps(nextProps) {
-    // console.log(this.props, nextProps)
-  }
-
-  componentWillUnmount() { }
-
   componentDidShow() {
     // console.log('indexShow')
     getAccountInfo().then(res => {
@@ -62,8 +56,6 @@ class Index extends Component {
       // })
     })
   }
-
-  componentDidHide() { }
 
   componentDidMount() {
     setTimeout(() => {
