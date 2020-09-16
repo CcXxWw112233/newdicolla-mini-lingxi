@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { getTaskGroupList, addTask, getTasksDetail, getCardCommentListAll, boardAppRelaMiletones, addComment, checkContentLink, getTaskExecutorsList, getTaskMilestoneList, setTasksRealize, updataTasks, putCardBaseInfo, getLabelList, postCardLabel, deleteCardLabel, } from '../../services/tasks/index'
+import { getTaskGroupList, addTask, getTasksDetail, getCardCommentListAll, boardAppRelaMiletones, addComment, checkContentLink, getTaskExecutorsList, getTaskMilestoneList, setTasksRealize, updataTasks, putCardBaseInfo, getLabelList, postCardLabel, deleteCardLabel, getCardList, deleteCardExecutor, addCardExecutor, } from '../../services/tasks/index'
 import { isApiResponseOk } from "../../utils/request";
 import { setBoardIdStorage } from '../../utils/basicFunction'
 
@@ -13,6 +13,7 @@ export default {
     milestone_list: [], //获取里程碑列表
     isPermission: true, //是否有权限更改
     label_list: [], // 标签列表
+    group_list: [], //任务分组
   },
   effects: {
     //获取任务列表
@@ -160,6 +161,34 @@ export default {
           }
         })
       } else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    },
+
+    //删除执行人
+    * deleteCardExecutor({ payload }, { select, call, put }) {
+      const res = yield call(deleteCardExecutor, payload)
+      if (isApiResponseOk(res)) {
+        yield call(getTasksDetail, { id: payload.card_id })
+      } else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    },
+
+    //添加执行人
+    * addCardExecutor({ payload }, { select, call, put }) {
+      const res = yield call(addCardExecutor, payload)
+      if (isApiResponseOk(res)) {
+        yield call(getTasksDetail, { id: payload.card_id })
+      } else {
 
       }
     },
@@ -176,7 +205,11 @@ export default {
           }
         })
       } else {
-
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
       }
     },
 
@@ -287,6 +320,26 @@ export default {
       }
     },
 
+
+    //任务分组列表
+    * getCardList({ payload }, { select, call, put }) {
+      const res = yield call(getCardList, payload)
+      if (isApiResponseOk(res)) {
+        yield put({
+          type: 'updateDatas',
+          payload: {
+            group_list: res.data
+          }
+        })
+      }
+      else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    },
 
   },
 

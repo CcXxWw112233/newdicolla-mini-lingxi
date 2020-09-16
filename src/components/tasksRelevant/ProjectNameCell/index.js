@@ -5,56 +5,79 @@ import globalStyle from '../../../gloalSet/styles/globalStyles.scss'
 import index from '../../../pages/taksDetails/components/CommentBox';
 import Avatar from '../../avatar';
 import { connect } from '@tarojs/redux';
+import { AtDrawer } from 'taro-ui'
 
-@connect(({ ProjectNameCell }) => ({
-    ProjectNameCell
+@connect(({ tasks: { tasksDetailDatas = {}, }, }) => ({
+    tasksDetailDatas,
 }))
 export default class ProjectNameCell extends Component {
 
     gotoChangeChoiceInfoPage = (value) => {
-        const { title, name } = value
-        const { dispatch, boardId } = this.props
+
+        const { title, name, } = value
+        const { dispatch, tasksDetailDatas = {} } = this.props
+        const { list_id } = tasksDetailDatas
+
+        let board_id = Taro.getStorageSync('tasks_detail_boardId')
+        let contentId = Taro.getStorageSync('tasks_detail_contentId')
 
         if (title === '描述') {
             Taro.navigateTo({
                 url: `../../pages/fillDescribe/index?describeInfo=${name}`
             })
         } else {
-            if (title === '项目') {
-                dispatch({
-                    type: 'board/getBoardList',
-                    payload: {
-                    },
+            if (title === '任务分组') {
+                Promise.resolve(
+                    dispatch({
+                        type: 'tasks/getCardList',
+                        payload: {
+                            board_id: board_id,
+                        },
+                    })
+                ).then(res => {
+                    Taro.navigateTo({
+                        url: `../../pages/tasksGroup/index?contentId=${contentId}&listId=${list_id}`
+                    })
                 })
-            } else if (title === '任务分组') {
-                dispatch({
-                    type: 'tasks/getTaskGroupList',
-                    payload: {
-                        board_id: boardId,
-                        type: 2,
-                        arrange_type: 1,
-                    },
-                })
+
             } else if (title === '执行人') {
-                dispatch({
-                    type: 'tasks/getTaskExecutorsList',
-                    payload: {
-                        board_id: boardId,
-                    },
+                Promise.resolve(
+                    dispatch({
+                        type: 'tasks/getTaskExecutorsList',
+                        payload: {
+                            board_id: board_id,
+                        },
+                    })
+                ).then(res => {
+                    Taro.navigateTo({
+                        url: `../../pages/executorsList/index?contentId=${contentId}`
+                    })
                 })
             }
             else if (title === '里程碑') {
-                dispatch({
-                    type: 'tasks/getTaskMilestoneList',
-                    payload: {
-                        board_id: boardId,
-                    },
+
+                Promise.resolve(
+                    dispatch({
+                        type: 'tasks/getTaskMilestoneList',
+                        payload: {
+                            board_id: board_id,
+                        },
+                    })
+                ).then(res => {
+                    Taro.navigateTo({
+                        url: `../../pages/milestoneList/index?contentId=${contentId}`
+                    })
                 })
             }
-            Taro.navigateTo({
-                url: `../../pages/choiceProject/index?title=${title}`
-            })
+            // Taro.navigateTo({
+            //     url: `../../pages/choiceProject/index?title=${title}`
+            // })
         }
+
+    }
+
+    clickProjectNameCell = () => {
+        this.props.clickProjectNameCell();
     }
 
     render() {
@@ -78,8 +101,8 @@ export default class ProjectNameCell extends Component {
         }
 
         return (
-            // <View className={indexStyles.list_item} onClick={this.gotoChangeChoiceInfoPage.bind(this, { title: title, name: name })}>
-            <View className={indexStyles.list_item}>
+            <View className={indexStyles.list_item} onClick={this.gotoChangeChoiceInfoPage.bind(this, { title: title, name: name, })}>
+                {/* <View className={indexStyles.list_item} onClick={this.clickProjectNameCell}> */}
                 <View className={`${indexStyles.list_item_left_iconnext}`}>
                     {icon}
                 </View>
@@ -104,9 +127,11 @@ export default class ProjectNameCell extends Component {
                                 )}
                         </View>
                     </View>
-                    <View className={`${indexStyles.list_item_iconnext}`}>
-                        <Text className={`${globalStyle.global_iconfont}`}>&#xe654;</Text>
-                    </View>
+                    {
+                        title != '项目' ? <View className={`${indexStyles.list_item_iconnext}`}>
+                            <Text className={`${globalStyle.global_iconfont}`}>&#xe654;</Text>
+                        </View> : <View></View>
+                    }
                 </View>
             </View>
         )

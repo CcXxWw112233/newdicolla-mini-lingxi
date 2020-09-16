@@ -13,7 +13,6 @@ import CommentCell from './components/CommentCell/index'
 import CommentBox from './components/CommentBox/index'
 import CustomNavigation from '../acceptInvitation/components/CustomNavigation.js'
 import { connect } from '@tarojs/redux'
-import { AtList, AtListItem } from 'taro-ui'
 
 @connect(({ tasks: { tasksDetailDatas = {}, }, calendar: { isOtherPageBack = {} } }) => ({
     tasksDetailDatas, isOtherPageBack
@@ -28,6 +27,7 @@ export default class taksDetails extends Component {
         backIcon: '',
         type_flag: '',
         board_id: '',
+        milestone_show: false,
     }
 
     onShareAppMessage() {
@@ -160,6 +160,12 @@ export default class taksDetails extends Component {
         })
     }
 
+    // clickProjectNameCell = () => {
+    //     this.setState({
+    //         milestone_show: true,
+    //     })
+    // }
+
     render() {
         const { tasksDetailDatas } = this.props
         const card_id = tasksDetailDatas['card_id'] || ''
@@ -195,6 +201,8 @@ export default class taksDetails extends Component {
 
         const { type_flag } = this.props
 
+        let board_id = Taro.getStorageSync('tasks_detail_boardId')
+
         return (
             <View >
                 <CustomNavigation backIcon={backIcon} />
@@ -208,19 +216,20 @@ export default class taksDetails extends Component {
                             ejectTimePicks={() => this.ejectTimePicks()}
                         />
                     </View>
-                    <ProjectNameCell title='项目' name={board_name} />
+                    <ProjectNameCell title='项目' name={board_name} boardId={board_id} />
                     <View className={indexStyles.tasks_name_style}>
-                        <ProjectNameCell title='任务分组' name={list_name} />
+                        {/* <ProjectNameCell title='任务分组' name={list_name} clickProjectNameCell={() => this.clickProjectNameCell()} /> */}
+                        <ProjectNameCell title='任务分组' name={list_name} boardId={board_id} />
                     </View>
                     <View>
                         {
-                            executors ? <ProjectNameCell title='执行人' name='' executors={executors} /> : ''
+                            executors ? <ProjectNameCell title='执行人' name='' executors={executors} boardId={board_id} /> : ''
                         }
                         {
-                            milestone_data.name ? <ProjectNameCell title='里程碑' name={milestone_data.name} /> : ''
+                            milestone_data.name ? <ProjectNameCell title='里程碑' name={milestone_data.name} boardId={board_id} /> : ''
                         }
                         {
-                            description ? <ProjectNameCell title='描述' name={description} /> : ''
+                            description ? <ProjectNameCell title='描述' name={description} boardId={board_id} /> : ''
                         }
                         {
                             child_data.length > 0 ? <SonTasksCell child_data={child_data} /> : ''

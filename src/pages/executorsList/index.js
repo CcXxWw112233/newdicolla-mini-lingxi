@@ -1,46 +1,48 @@
-import { connect } from '@tarojs/redux'
-import Taro, { Component, } from '@tarojs/taro'
+import Taro, { Component } from '@tarojs/taro'
 import { View, } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
-import { AtCheckbox, } from 'taro-ui'
+import { connect } from '@tarojs/redux'
+import { AtCheckbox } from 'taro-ui'
 
-
-@connect(({ tasks: { label_list = [], tasksDetailDatas = {}, }, }) => ({
-    label_list, tasksDetailDatas,
+@connect(({ tasks: { executors_list = [], tasksDetailDatas = {}, }, }) => ({
+    executors_list, tasksDetailDatas,
 }))
-export default class LabelSelection extends Component {
+export default class executorsList extends Component {
     config = {
-        navigationBarTitleText: '标签选择',
+        navigationBarTitleText: '选择任务分组'
     }
 
-    state = {
-        card_id: '',
-        checkedList: [],  //已选中数组
-        checkboxOption: [],  //全部数组
+    constructor() {
+        super(...arguments)
+        this.state = {
+            checkedList: [],  //已选中数组
+            checkboxOption: [],  //全部数组
+        }
     }
 
     componentDidMount() {
 
-        const { contentId } = this.$router.params
+        const { contentId, } = this.$router.params
 
         this.setState({
             card_id: contentId,
+            // value: listId,
         })
 
-        const { label_list = [], tasksDetailDatas = {}, } = this.props
-        const { label_data = [] } = tasksDetailDatas
+        const { executors_list = [], tasksDetailDatas = {}, } = this.props
+        const { executors = [] } = tasksDetailDatas
 
-        label_list.forEach(item => {
+        executors_list.forEach(item => {
             item['label'] = item.name
             item['value'] = item.id
         })
 
         //取出已经是执行人的id, 组成新数组(已选中)
-        let new_arr = label_data.map(obj => { return obj.label_id });
+        let new_arr = executors.map(obj => { return obj.user_id });
 
         this.setState({
-            checkboxOption: label_list,
+            checkboxOption: executors_list,
             checkedList: new_arr,
         })
     }
@@ -49,6 +51,7 @@ export default class LabelSelection extends Component {
 
         var sa = new Set(this.state.checkedList);
         var sb = new Set(value);
+
 
         this.setState({
             checkedList: value
@@ -60,38 +63,37 @@ export default class LabelSelection extends Component {
         if (this.state.checkedList.length > value.length) {  //删减
             // 差集
             let minus = this.state.checkedList.filter(x => !sb.has(x));
-            let labelId = minus[0];
+            let executor_id = minus[0];
 
             dispatch({
-                type: 'tasks/deleteCardLabel',
+                type: 'tasks/deleteCardExecutor',
                 payload: {
-                    label_id: labelId,
                     card_id: card_id,
+                    executor: executor_id,
                 },
             })
         }
         else if (this.state.checkedList.length < value.length) {  //增加
             //补集
             let complement = [...this.state.checkedList.filter(x => !sb.has(x)), ...value.filter(x => !sa.has(x))];
-            let labelId = complement[0];
+            let executor_id = complement[0];
 
             dispatch({
-                type: 'tasks/postCardLabel',
+                type: 'tasks/addCardExecutor',
                 payload: {
-                    label_id: labelId,
                     card_id: card_id,
+                    executor: executor_id,
                 },
             })
         }
     }
-
 
     render() {
 
         const { checkboxOption = [] } = this.state
 
         return (
-            <View className={indexStyles.index}>
+            <View >
                 <AtCheckbox
                     options={checkboxOption}
                     selectedList={this.state.checkedList}
@@ -102,3 +104,6 @@ export default class LabelSelection extends Component {
     }
 }
 
+executorsList.defaultProps = {
+
+};

@@ -82,6 +82,28 @@ export const getTaskExecutorsList = (data, notShowLoading) => {
   }, notShowLoading)
 }
 
+//新增执行人
+export const addCardExecutor = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'POST',
+    url: `${API_BOARD}/card/executor`,
+  }, notShowLoading)
+}
+
+//删除执行人
+export const deleteCardExecutor = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'DELETE',
+    url: `${API_BOARD}/card/executor`,
+  }, notShowLoading)
+}
+
 //里程碑列表
 export const getTaskMilestoneList = (data, notShowLoading) => {
   return request({
@@ -161,4 +183,17 @@ export const deleteCardLabel = (data, notShowLoading) => {
     url: `${API_BOARD}/card/label`,
   }, notShowLoading)
 }
+
+
+//任务分组列表
+export const getCardList = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'GET',
+    url: `${API_BOARD}/card/lists`,
+  }, notShowLoading)
+}
+
 
