@@ -56,6 +56,8 @@ export default class ProjectNameCell extends Component {
             }
             else if (title === '里程碑') {
 
+                const { milestoneId } = this.props
+
                 Promise.resolve(
                     dispatch({
                         type: 'tasks/getTaskMilestoneList',
@@ -65,7 +67,7 @@ export default class ProjectNameCell extends Component {
                     })
                 ).then(res => {
                     Taro.navigateTo({
-                        url: `../../pages/milestoneList/index?contentId=${contentId}`
+                        url: `../../pages/milestoneList/index?contentId=${contentId}&milestoneId=${milestoneId}`
                     })
                 })
             }

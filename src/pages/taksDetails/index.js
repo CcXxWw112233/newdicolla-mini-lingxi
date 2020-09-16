@@ -226,7 +226,7 @@ export default class taksDetails extends Component {
                             executors ? <ProjectNameCell title='执行人' name='' executors={executors} boardId={board_id} /> : ''
                         }
                         {
-                            milestone_data.name ? <ProjectNameCell title='里程碑' name={milestone_data.name} boardId={board_id} /> : ''
+                            milestone_data.name ? <ProjectNameCell title='里程碑' name={milestone_data.name} boardId={board_id} milestoneId={milestone_data.id} /> : ''
                         }
                         {
                             description ? <ProjectNameCell title='描述' name={description} boardId={board_id} /> : ''

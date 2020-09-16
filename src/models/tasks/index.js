@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { getTaskGroupList, addTask, getTasksDetail, getCardCommentListAll, boardAppRelaMiletones, addComment, checkContentLink, getTaskExecutorsList, getTaskMilestoneList, setTasksRealize, updataTasks, putCardBaseInfo, getLabelList, postCardLabel, deleteCardLabel, getCardList, deleteCardExecutor, addCardExecutor, } from '../../services/tasks/index'
+import { getTaskGroupList, addTask, getTasksDetail, getCardCommentListAll, boardAppRelaMiletones, addComment, checkContentLink, getTaskExecutorsList, getTaskMilestoneList, setTasksRealize, updataTasks, putCardBaseInfo, getLabelList, postCardLabel, deleteCardLabel, getCardList, deleteCardExecutor, addCardExecutor, deleteAppRelaMiletones, } from '../../services/tasks/index'
 import { isApiResponseOk } from "../../utils/request";
 import { setBoardIdStorage } from '../../utils/basicFunction'
 
@@ -125,12 +125,30 @@ export default {
 
     //任务, 日程， 节点数据关联里程碑
     * boardAppRelaMiletones({ payload }, { select, call, put }) {
-      const { parmas } = payload
-      const res = yield call(boardAppRelaMiletones, parmas)
+      const res = yield call(boardAppRelaMiletones, payload)
       if (isApiResponseOk(res)) {
-
+        yield call(getTasksDetail, { id: payload.id })
       } else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    },
 
+
+    //任务, 日程， 节点数据 删除里程碑
+    * deleteAppRelaMiletones({ payload }, { select, call, put }) {
+      const res = yield call(deleteAppRelaMiletones, payload)
+      if (isApiResponseOk(res)) {
+        yield call(getTasksDetail, { payload })
+      } else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
       }
     },
 
@@ -146,7 +164,11 @@ export default {
           }
         })
       } else {
-
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
       }
     },
     //执行人列表

@@ -3,9 +3,10 @@ import { View, } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
-import { AtAccordion, AtList, AtListItem } from 'taro-ui'
 
-@connect(({ tasks: { milestone_list = [], }, }) => ({
+@connect(({
+    tasks: { milestone_list = [], },
+}) => ({
     milestone_list,
 }))
 export default class milestoneList extends Component {
@@ -16,39 +17,72 @@ export default class milestoneList extends Component {
     constructor() {
         super(...arguments)
         this.state = {
-            open: false,
+            card_id: '',
+            current_select_milestone_id: '',  //当前关联选中里程碑
         }
     }
-    handleClick(value) {
+
+    componentDidMount() {
+
+        const { contentId, milestoneId } = this.$router.params
+
         this.setState({
-            open: value
+            card_id: contentId,
+            current_select_milestone_id: milestoneId,
         })
     }
 
-    // componentDidMount() {
+    selectMilestone = (value) => {
 
-    //     const { contentId, listId } = this.$router.params
+        const { dispatch } = this.props
+        const { current_select_milestone_id, card_id } = this.state
 
-    //     this.setState({
-    //         card_id: contentId,
-    //         value: listId,
-    //     })
+        if (current_select_milestone_id == value) { //删除关联里程碑
 
-    //     const { group_list = [] } = this.props
+            this.setState({
+                current_select_milestone_id: '',
+            })
 
-    //     group_list.forEach(item => {
-    //         item['label'] = item.list_name
-    //         item['value'] = item.list_id
-    //     })
+            dispatch({
+                type: 'tasks/deleteAppRelaMiletones',
+                payload: {
+                    id: value,
+                    rela_id: card_id,
+                },
+            })
+        }
+        else {  //添加关联里程碑
 
-    //     this.setState({
-    //         groupList: group_list,
-    //     })
-    // }
+            this.setState({
+                current_select_milestone_id: value,
+            })
+
+            //先删除, 再关联
+            Promise.resolve(
+                dispatch({
+                    type: 'tasks/deleteAppRelaMiletones',
+                    payload: {
+                        id: value,
+                        rela_id: card_id,
+                    },
+                })
+            ).then(res => {
+                dispatch({
+                    type: 'tasks/boardAppRelaMiletones',
+                    payload: {
+                        id: value,
+                        origin_type: '0',
+                        rela_id: card_id,
+                    },
+                })
+            })
+        }
+    }
 
     render() {
 
         const { milestone_list = [] } = this.props
+        const { current_select_milestone_id } = this.state
 
         return (
             <View className={indexStyles.viewStyle}>
@@ -57,26 +91,36 @@ export default class milestoneList extends Component {
                     const { board_id, id, milestone_chird = [], name, } = value
                     return (
                         <View key={key}>
-                            <AtAccordion
-                                open={true}
-                                onClick={this.handleClick.bind(this)}
-                                title={name}
-                            >
+                            <View className={indexStyles.milestone_list_row} onClick={() => this.selectMilestone(id)}>
+                                <View className={indexStyles.milestone_list_style}>
+                                    {name}
+                                </View>
                                 {
-                                    milestone_chird.map((item, key) => {
-                                        return (
-                                            <View key={key}>
-                                                <AtList hasBorder={false}>
-                                                    <AtListItem
-                                                        title={item.name}
-                                                        arrow='right'
-                                                    />
-                                                </AtList>
-                                            </View>
-                                        )
-                                    })
+                                    current_select_milestone_id == id ? (<View className={indexStyles.cleck_milestone_styles}>
+                                        <Text className={`${globalStyle.global_iconfont}`}>&#xe641;</Text>
+                                    </View>) : <View></View>
                                 }
-                            </AtAccordion>
+                            </View>
+                            {
+                                milestone_chird.map((item, key1) => {
+
+                                    return (
+                                        <View key={key1}
+                                            className={indexStyles.milestone_chird_row}
+                                            onClick={() => this.selectMilestone(item.id)}
+                                        >
+                                            <View key={key1} className={indexStyles.milestone_chird_style}>
+                                                {item.name}
+                                            </View>
+                                            {
+                                                current_select_milestone_id == item.id ? (<View className={indexStyles.cleck_milestone_chird_styles}>
+                                                    <Text className={`${globalStyle.global_iconfont}`}>&#xe641;</Text>
+                                                </View>) : <View></View>
+                                            }
+                                        </View>
+                                    )
+                                })
+                            }
                         </View>
                     )
                 })}

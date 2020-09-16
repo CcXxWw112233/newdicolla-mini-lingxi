@@ -35,17 +35,6 @@ export async function getProjectList(params) {
   });
 }
 
-//任务, 日程， 节点数据关联里程碑
-export const boardAppRelaMiletones = (data, notShowLoading) => {
-  return request({
-    data: {
-      ...data
-    },
-    method: 'POST',
-    url: `${API_BOARD}/milestone/rela`,
-  }, notShowLoading)
-}
-
 // 获取项目详情
 export const getBoardDetail = (data, notShowLoading) => {
   return request({

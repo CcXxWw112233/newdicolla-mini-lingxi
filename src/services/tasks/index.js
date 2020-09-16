@@ -184,7 +184,6 @@ export const deleteCardLabel = (data, notShowLoading) => {
   }, notShowLoading)
 }
 
-
 //任务分组列表
 export const getCardList = (data, notShowLoading) => {
   return request({
@@ -196,4 +195,24 @@ export const getCardList = (data, notShowLoading) => {
   }, notShowLoading)
 }
 
+//任务, 日程， 节点数据关联里程碑 origin_type: 0=任务 1=日程 2=节点
+export const boardAppRelaMiletones = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'POST',
+    url: `${API_BOARD}/milestone/rela`,
+  }, notShowLoading)
+}
 
+//删除关联里程碑
+export const deleteAppRelaMiletones = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'DELETE',
+    url: `${API_BOARD}/milestone/rela`,
+  }, notShowLoading)
+}
