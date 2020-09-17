@@ -615,16 +615,6 @@ export default class File extends Component {
                                             if (res.confirm) {
                                                 Taro.openSetting({
                                                     success: (res) => {
-                                                        // if (!res.authSetting['scope.writePhotosAlbum']) {
-                                                        //     Taro.authorize({
-                                                        //         scope: 'scope.writePhotosAlbum',
-                                                        //         success() {
-                                                        //             console.log('授权成功')
-                                                        //         }, fail() {
-                                                        //             console.log('用户点击取消')
-                                                        //         }
-                                                        //     })
-                                                        // }
                                                     },
                                                     fail: function () {
                                                         console.log("授权设置相册失败");

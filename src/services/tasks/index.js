@@ -150,6 +150,18 @@ export const putCardBaseInfo = (data, notShowLoading) => {
   }, notShowLoading, true)
 }
 
+//删除任务
+export const deleteCard = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    header: createHeaderContentDataByCardId(data.id),
+    method: 'DELETE',
+    url: `${API_BOARD}/v2/card/${data.id}`,
+  }, notShowLoading, true)
+}
+
 
 //标签列表
 export const getLabelList = (data, notShowLoading) => {
@@ -216,3 +228,15 @@ export const deleteAppRelaMiletones = (data, notShowLoading) => {
     url: `${API_BOARD}/milestone/rela`,
   }, notShowLoading)
 }
+
+//删除子任务交付物
+export const deleteCardAttachment = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'DELETE',
+    url: `${API_BOARD}/card/attachment/${data.attachment_id}`,
+  }, notShowLoading)
+}
+

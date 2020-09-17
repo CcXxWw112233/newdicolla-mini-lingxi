@@ -13,6 +13,7 @@ import CommentCell from './components/CommentCell/index'
 import CommentBox from './components/CommentBox/index'
 import CustomNavigation from '../acceptInvitation/components/CustomNavigation.js'
 import { connect } from '@tarojs/redux'
+import SonTasks from './components/SonTasks/index'
 
 @connect(({ tasks: { tasksDetailDatas = {}, }, calendar: { isOtherPageBack = {} } }) => ({
     tasksDetailDatas, isOtherPageBack
@@ -231,8 +232,15 @@ export default class taksDetails extends Component {
                         {
                             description ? <ProjectNameCell title='描述' name={description} boardId={board_id} /> : ''
                         }
-                        {
+                        {/* {
                             child_data.length > 0 ? <SonTasksCell child_data={child_data} /> : ''
+                        } */}
+                        {
+                            child_data && child_data.length > 0 ? <SonTasks
+                                child_data={child_data}
+                                tasksDetailsRealizeStatus={(timeInfo) => this.tasksDetailsRealizeStatus(timeInfo)}
+
+                            /> : ''
                         }
                         <RelationContentCell />
                         {

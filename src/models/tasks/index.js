@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { getTaskGroupList, addTask, getTasksDetail, getCardCommentListAll, boardAppRelaMiletones, addComment, checkContentLink, getTaskExecutorsList, getTaskMilestoneList, setTasksRealize, updataTasks, putCardBaseInfo, getLabelList, postCardLabel, deleteCardLabel, getCardList, deleteCardExecutor, addCardExecutor, deleteAppRelaMiletones, } from '../../services/tasks/index'
+import { getTaskGroupList, addTask, getTasksDetail, getCardCommentListAll, boardAppRelaMiletones, addComment, checkContentLink, getTaskExecutorsList, getTaskMilestoneList, setTasksRealize, updataTasks, putCardBaseInfo, getLabelList, postCardLabel, deleteCardLabel, getCardList, deleteCardExecutor, addCardExecutor, deleteAppRelaMiletones, deleteCard, deleteCardAttachment, } from '../../services/tasks/index'
 import { isApiResponseOk } from "../../utils/request";
 import { setBoardIdStorage } from '../../utils/basicFunction'
 
@@ -293,6 +293,21 @@ export default {
     },
 
 
+    //删除任务
+    * deleteCard({ payload }, { select, call, put }) {
+      const res = yield call(deleteCard, payload)
+      const { card_id } = payload
+      if (isApiResponseOk(res)) {
+        yield call(getTasksDetail, { id: card_id })
+      } else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    },
+
     //标签列表
     * getLabelList({ payload }, { select, call, put }) {
       const res = yield call(getLabelList, payload)
@@ -331,6 +346,21 @@ export default {
     //删除标签
     * deleteCardLabel({ payload }, { select, call, put }) {
       const res = yield call(deleteCardLabel, payload)
+      if (isApiResponseOk(res)) {
+        yield call(getTasksDetail, { id: card_id })
+      } else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    },
+
+    //删除子任务交付物
+    * deleteCardAttachment({ payload }, { select, call, put }) {
+      const { card_id, attachment_id } = payload
+      const res = yield call(deleteCardAttachment, { attachment_id: attachment_id })
       if (isApiResponseOk(res)) {
         yield call(getTasksDetail, { id: card_id })
       } else {

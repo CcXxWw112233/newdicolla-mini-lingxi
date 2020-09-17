@@ -14,7 +14,7 @@ export default class index extends Component {
         </View>
         <View className={indexStyles.list_item_name}>子任务</View>
         <View className={indexStyles.content_list_item_detail}>
-          {child_data.map((item, key) => (
+          {child_data && child_data.map((item, key) => (
             <View className={indexStyles.content_list_item} key={key}>
               <View className={`${indexStyles.content_list_item_left_iconnext}`}>
                 <Text className={`${globalStyle.global_iconfont}`}>&#xe661;</Text>
