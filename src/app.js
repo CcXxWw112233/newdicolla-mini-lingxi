@@ -62,7 +62,7 @@ class App extends Component {
       'pages/milestoneList/index',
       // 'pages/addingTasks/index',
       // 'pages/choiceProject/index',
-      // 'pages/fillDescribe/index',
+      'pages/fillDescribe/index',
       // 'pages/DateTimePicker/index',
       'pages/sceneEntrance/index',
       'pages/errorPage/index',
@@ -70,6 +70,7 @@ class App extends Component {
       'pages/webView/index',
       'pages/boardChat/index',
       'pages/templateDetails/index',
+      // 'pages/native/native',
     ],
     permission: {
       'scope.userLocation': {

@@ -1,0 +1,102 @@
+@import "../../../../gloalSet/styles/constant";
+@import "~taro-ui/dist/style/components/drawer.scss";
+@import "~taro-ui/dist/style/components/list.scss";
+
+.wapper {
+    width         : 100%;
+    display       : flex;
+    flex-direction: column;
+
+    .list_item {
+        min-height   : pxTrans(56);
+        font-size    : pxTrans(16);
+        display      : flex;
+        align-items  : baseline;
+        margin-left  : pxTrans(0);
+        margin-right : pxTrans(0);
+        border-bottom: pxTrans(1) solid rgba(0, 0, 0, 0.09);
+        background   : rgb(255, 255, 255);
+
+        .list_item_left_iconnext {
+            color       : rgb(0, 0, 0, 0.25);
+            font-size   : pxTrans(20);
+            margin-left : pxTrans(20);
+            margin-right: pxTrans(10);
+            margin-top  : pxTrans(18);
+        }
+
+        .list_item_name {
+            color      : rgba(0, 0, 0, 0.25);
+            margin-left: pxTrans(4);
+            white-space: nowrap;
+        }
+
+        .right_style {
+            display        : flex;
+            flex-direction : row;
+            flex           : 1;
+            justify-content: space-between;
+
+            .right_centre_style {
+                display     : flex;
+                margin-right: pxTrans(16);
+                align-items : baseline;
+
+                .list_item_detail {
+                    margin-left: pxTrans(6);
+                    font-size  : pxTrans(16);
+                    font-weight: 400;
+                    color      : rgba(0, 0, 0, 0.65);
+                    line-height: pxTrans(24);
+                }
+
+                .executors_list_item_detail {
+                    flex       : 1;
+                    color      : rgba(0, 0, 0, 0.65);
+                    margin-left: pxTrans(6);
+                }
+            }
+
+            .list_item_iconnext {
+                color       : $color_3;
+                font-size   : pxTrans(11);
+                margin-left : pxTrans(12);
+                margin-right: pxTrans(12);
+                margin-top  : pxTrans(6);
+            }
+        }
+
+        .list_item_iconnext {
+            color       : $color_3;
+            margin-left : pxTrans(12);
+            color       : rgb(0, 0, 0, 0.25);
+            font-size   : pxTrans(20);
+            margin-right: pxTrans(10);
+        }
+    }
+
+    .song_tasks_file {
+        height        : pxTrans(56);
+        display       : flex;
+        flex-direction: row;
+        align-items   : center;
+        width         : 100%;
+        background    : rgb(255, 255, 255);
+
+        // border-bottom : pxTrans(1) solid rgba(0, 0, 0, 0.09);
+
+        .list_item_file_iconnext {
+            color       : rgb(0, 0, 0, 0.25);
+            font-size   : pxTrans(20);
+            margin-left : pxTrans(20);
+            margin-right: pxTrans(10);
+        }
+
+        .song_tasks_file_name {
+            margin-right: pxTrans(20);
+            font-size   : pxTrans(16);
+            font-weight : 400;
+            color       : rgba(0, 0, 0, 0.65);
+        }
+    }
+}

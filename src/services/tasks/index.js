@@ -15,6 +15,17 @@ export const getTaskGroupList = (data, notShowLoading) => {
 }
 
 //任务详情
+// export const getTasksDetail = (data, notShowLoading) => {
+//   return request({
+//     data: {
+//       ...data
+//     },
+//     headers: createHeaderContentDataByCardId(data.card_id),
+//     method: 'GET',
+//     url: `${API_BOARD}/card/detail/${data['id']}`,
+//   }, notShowLoading)
+// }
+
 export const getTasksDetail = (data, notShowLoading) => {
   return request({
     data: {
@@ -22,7 +33,7 @@ export const getTasksDetail = (data, notShowLoading) => {
     },
     headers: createHeaderContentDataByCardId(data.card_id),
     method: 'GET',
-    url: `${API_BOARD}/card/detail/${data['id']}`,
+    url: `${API_BOARD}/v2/card/detail/`,
   }, notShowLoading)
 }
 
@@ -237,6 +248,17 @@ export const deleteCardAttachment = (data, notShowLoading) => {
     },
     method: 'DELETE',
     url: `${API_BOARD}/card/attachment/${data.attachment_id}`,
+  }, notShowLoading)
+}
+
+//删除自定义字段
+export const deleteCardProperty = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'DELETE',
+    url: `${API_BOARD}/card/property?card_id=${data.card_id}&property_id=${data.property_id}`,
   }, notShowLoading)
 }
 

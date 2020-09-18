@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { View, Text, RichText, } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { AtActionSheet, AtActionSheetItem } from "taro-ui"
@@ -20,16 +20,6 @@ export default class index extends Component {
         file_resource_id: '',
         board_id: '',
         fileName: '',
-    }
-
-    tasksRealizeStatus = (cardId, isRealize) => {
-
-        const cellInfo = {
-            cardId: cardId,
-            isRealize: isRealize,
-        }
-
-        this.props.tasksDetailsRealizeStatus(cellInfo)
     }
 
     handleCancel = () => {
@@ -330,68 +320,55 @@ export default class index extends Component {
                 property_id: propertyId,
             },
         })
+
     }
 
     render() {
-        const { child_data } = this.props
+        const { tasksDetailDatas = {} } = this.props
+        const { dec_files = [] } = tasksDetailDatas
+        const name = this.props.name || ''
+
         return (
-            <View className={indexStyles.list_item}>
-                <View className={indexStyles.title_row}>
+
+            <View className={indexStyles.wapper}>
+
+                <View className={indexStyles.list_item} onClick={this.gotoChangeChoiceInfoPage.bind(this,)}>
                     <View className={`${indexStyles.list_item_left_iconnext}`}>
-                        <Text className={`${globalStyle.global_iconfont}`}>&#xe7f4;</Text>
+                        <Text className={`${globalStyle.global_iconfont}`}>&#xe7f5;</Text>
                     </View>
-                    <View className={indexStyles.list_item_name}>子任务</View>
-                    <View className={`${indexStyles.list_item_rigth_iconnext}`} onClick={this.deleteCardProperty}>
+                    <View className={indexStyles.list_item_name}>描述</View>
+                    <View className={indexStyles.right_style}>
+                        <View className={indexStyles.right_centre_style}>
+                            <View>
+                                <View className={indexStyles.list_item_detail}>
+                                    {
+                                        <RichText className='text' nodes={name} />
+                                    }
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+
+                    <View className={`${indexStyles.list_item_iconnext}`} onClick={this.deleteCardProperty}>
                         <Text className={`${globalStyle.global_iconfont}`}>&#xe7fc;</Text>
                     </View>
+
                 </View>
 
-                <View className={indexStyles.song_task_centent}>
-                    {
-                        child_data && child_data.map((value, key) => {
-                            const { card_name, deliverables = [], card_id, is_realize } = value
-                            return (
-                                <View className={indexStyles.content}>
-                                    <View className={indexStyles.song_row_instyle}>
-                                        {
-                                            is_realize == '0' ? (<View className={`${indexStyles.list_item_select_iconnext}`} onClick={() => this.tasksRealizeStatus(card_id, is_realize)}>
-                                                <Text className={`${globalStyle.global_iconfont}`}>&#xe6df;</Text>
-                                            </View>) : (<View className={`${indexStyles.list_item_select_iconnext}`} onClick={() => this.tasksRealizeStatus(card_id, is_realize)}>
-                                                <Text className={`${globalStyle.global_iconfont}`}>&#xe844;</Text>
-                                            </View>)
-                                        }
-                                        <View className={indexStyles.song_task_name}>{card_name}</View>
-                                        <View className={`${indexStyles.list_item_rigth_iconnext}`} onClick={() => this.tasksOption(card_id)}>
-                                            <Text className={`${globalStyle.global_iconfont}`}>&#xe63f;</Text>
-                                        </View>
-                                    </View>
-
-                                    {
-                                        deliverables.map((item, key1) => {
-                                            const { id, name, file_resource_id, board_id } = item
-                                            return (
-                                                <View className={indexStyles.song_tasks_file}>
-                                                    <View className={`${indexStyles.list_item_file_iconnext}`}>
-                                                        <Text className={`${globalStyle.global_iconfont}`}>&#xe669;</Text>
-                                                    </View>
-                                                    <View className={indexStyles.song_tasks_file_name} onClick={() => this.fileOption(id, file_resource_id, board_id, name,)}>{name}</View>
-                                                </View>
-                                            )
-                                        })
-                                    }
-
+                {
+                    dec_files && dec_files.map((item, key) => {
+                        const { id, file_resource_id, board_id } = item
+                        return (
+                            <View key={key} className={indexStyles.song_tasks_file}>
+                                <View className={`${indexStyles.list_item_file_iconnext}`}>
+                                    <Text className={`${globalStyle.global_iconfont}`}>&#xe669;</Text>
                                 </View>
-                            )
-                        })
-                    }
-                </View>
+                                <View className={indexStyles.song_tasks_file_name} onClick={() => this.fileOption(id, file_resource_id, board_id, name,)}>{item.name}</View>
+                            </View>
+                        )
+                    })
+                }
 
-                <View className={indexStyles.add_task_row}>
-                    <View className={`${indexStyles.list_item_left_iconnext}`}>
-                        <Text className={`${globalStyle.global_iconfont}`}>&#xe7b7;</Text>
-                    </View>
-                    <View className={indexStyles.add_item_name}>添加子任务</View>
-                </View>
 
                 <AtActionSheet isOpened={this.state.song_task_isOpen} cancelText='取消' onCancel={this.handleCancel} onClose={this.handleClose}>
                     <AtActionSheetItem onClick={this.uploadFile}>
@@ -415,3 +392,5 @@ export default class index extends Component {
         )
     }
 }
+
+

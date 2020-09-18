@@ -11,6 +11,19 @@ export default class index extends Component {
     this.props.clickTagCell();
   }
 
+  deleteCardProperty = () => {
+
+    const { dispatch, propertyId, cardId } = this.props
+
+    dispatch({
+      type: 'tasks/deleteCardProperty',
+      payload: {
+        card_id: cardId,
+        property_id: propertyId,
+      },
+    })
+  }
+
   render() {
     const { label_data = [] } = this.props
     return (
@@ -36,6 +49,9 @@ export default class index extends Component {
               )
             })
           }
+        </View>
+        <View className={`${indexStyles.list_item_iconnext}`} onClick={this.deleteCardProperty}>
+          <Text className={`${globalStyle.global_iconfont}`}>&#xe7fc;</Text>
         </View>
       </View>
     )

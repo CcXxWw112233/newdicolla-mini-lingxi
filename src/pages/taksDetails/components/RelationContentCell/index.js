@@ -9,21 +9,11 @@ import { connect } from '@tarojs/redux';
 }))
 export default class index extends Component {
 
-  componentWillReceiveProps() { }
-
-  componentDidMount() { }
-
-  componentWillUnmount() { }
-
-  componentDidShow() { }
-
-  componentDidHide() { }
-
   render() {
     const { content_Link } = this.props
 
     return (
-      
+
       <View>
         {
           content_Link.length > 0 ? <View className={indexStyles.list_item}>

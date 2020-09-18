@@ -22,8 +22,11 @@ export default class ProjectNameCell extends Component {
         let contentId = Taro.getStorageSync('tasks_detail_contentId')
 
         if (title === '描述') {
+            // Taro.navigateTo({
+            //     url: `../../pages/fillDescribe/index?describeInfo=${name}`
+            // })
             Taro.navigateTo({
-                url: `../../pages/fillDescribe/index?describeInfo=${name}`
+                url: '../../pages/native/native'
             })
         } else {
             if (title === '任务分组') {
@@ -82,6 +85,19 @@ export default class ProjectNameCell extends Component {
         this.props.clickProjectNameCell();
     }
 
+    deleteCardProperty = () => {
+
+        const { dispatch, propertyId, cardId } = this.props
+
+        dispatch({
+            type: 'tasks/deleteCardProperty',
+            payload: {
+                card_id: cardId,
+                property_id: propertyId,
+            },
+        })
+    }
+
     render() {
         const title = this.props.title || ''
         const name = this.props.name || ''
@@ -94,7 +110,7 @@ export default class ProjectNameCell extends Component {
             icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe6a7;</Text>
         } else if (title === '里程碑') {
             icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe6a9;</Text>
-        } else if (title === '执行人') {
+        } else if (title === '负责人') {
             icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe7ae;</Text>
             executors = this.props.executors || []
         } else if (title === '描述') {
@@ -114,7 +130,7 @@ export default class ProjectNameCell extends Component {
                 <View className={indexStyles.right_style}>
                     <View className={indexStyles.right_centre_style}>
                         <View>
-                            {title === '执行人' ? (
+                            {title === '负责人' ? (
                                 <View className={indexStyles.executors_list_item_detail}>
                                     <View className={`${indexStyles.avata_area}`}>
                                         <Avatar avartarTotal={'multiple'} userList={executors} />
@@ -123,16 +139,22 @@ export default class ProjectNameCell extends Component {
                             ) : (
                                     <View className={indexStyles.list_item_detail}>
                                         {
-                                            title === "描述" ? (<View><RichText className='text' nodes={name} /></View>) : (<View>{name}</View>)
+                                            title === "描述" ? (<View><RichText className='text' nodes={name} /></View>) : (<View>{name.name}</View>)
                                         }
                                     </View>
                                 )}
                         </View>
                     </View>
                     {
-                        title != '项目' ? <View className={`${indexStyles.list_item_iconnext}`}>
-                            <Text className={`${globalStyle.global_iconfont}`}>&#xe654;</Text>
-                        </View> : <View></View>
+                        title != '项目' ? (
+                            title === '任务分组' ? (<View className={`${indexStyles.list_item_iconnext}`}>
+                                <Text className={`${globalStyle.global_iconfont}`}>&#xe654;</Text>
+                            </View>) : (
+                                    <View className={`${indexStyles.list_item_iconnext}`} onClick={this.deleteCardProperty}>
+                                        <Text className={`${globalStyle.global_iconfont}`}>&#xe7fc;</Text>
+                                    </View>
+                                )
+                        ) : <View></View>
                     }
                 </View>
             </View>

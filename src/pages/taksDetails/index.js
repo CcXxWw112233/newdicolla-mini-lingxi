@@ -14,6 +14,8 @@ import CommentBox from './components/CommentBox/index'
 import CustomNavigation from '../acceptInvitation/components/CustomNavigation.js'
 import { connect } from '@tarojs/redux'
 import SonTasks from './components/SonTasks/index'
+import DescribeTasks from './components/DescribeTasks/index'
+
 
 @connect(({ tasks: { tasksDetailDatas = {}, }, calendar: { isOtherPageBack = {} } }) => ({
     tasksDetailDatas, isOtherPageBack
@@ -202,6 +204,8 @@ export default class taksDetails extends Component {
 
         const { type_flag } = this.props
 
+        const { properties = [] } = tasksDetailDatas
+
         let board_id = Taro.getStorageSync('tasks_detail_boardId')
 
         return (
@@ -217,38 +221,61 @@ export default class taksDetails extends Component {
                             ejectTimePicks={() => this.ejectTimePicks()}
                         />
                     </View>
-                    <ProjectNameCell title='项目' name={board_name} boardId={board_id} />
+                    <ProjectNameCell title='项目' name={{ name: board_name }} boardId={board_id} />
                     <View className={indexStyles.tasks_name_style}>
                         {/* <ProjectNameCell title='任务分组' name={list_name} clickProjectNameCell={() => this.clickProjectNameCell()} /> */}
-                        <ProjectNameCell title='任务分组' name={list_name} boardId={board_id} />
+                        <ProjectNameCell title='任务分组' name={{ name: list_name }} boardId={board_id} />
                     </View>
                     <View>
-                        {
-                            executors ? <ProjectNameCell title='执行人' name='' executors={executors} boardId={board_id} /> : ''
-                        }
-                        {
-                            milestone_data.name ? <ProjectNameCell title='里程碑' name={milestone_data.name} boardId={board_id} milestoneId={milestone_data.id} /> : ''
-                        }
-                        {
-                            description ? <ProjectNameCell title='描述' name={description} boardId={board_id} /> : ''
-                        }
-                        {/* {
-                            child_data.length > 0 ? <SonTasksCell child_data={child_data} /> : ''
-                        } */}
-                        {
-                            child_data && child_data.length > 0 ? <SonTasks
-                                child_data={child_data}
-                                tasksDetailsRealizeStatus={(timeInfo) => this.tasksDetailsRealizeStatus(timeInfo)}
 
-                            /> : ''
-                        }
-                        <RelationContentCell />
                         {
-                            label_data && label_data.length > 0 ? <TagCell
-                                label_data={label_data}
-                                clickTagCell={() => this.clickTagCell()}
-                            /> : ''
+                            properties && properties.map((item, key) => {
+                                const { code, name, id, data = [], } = item
+                                return (
+                                    <View key={key}>
+                                        <View>
+                                            {
+                                                code == 'EXECUTOR' ? <ProjectNameCell title={name} name='' executors={data} boardId={board_id} propertyId={id} cardId={card_id} /> : ''
+                                            }
+                                        </View>
+                                        <View>
+                                            {
+                                                code == 'MILESTONE' ? <ProjectNameCell title={name} name={data} boardId={board_id}
+                                                    // milestoneId={milestone_data.id} 
+                                                    propertyId={id} cardId={card_id}
+                                                /> : ''
+                                            }
+                                        </View>
+                                        {
+                                            code == 'SUBTASK' ? <SonTasks
+                                                child_data={data}
+                                                propertyId={id}
+                                                cardId={card_id}
+                                                tasksDetailsRealizeStatus={(timeInfo) => this.tasksDetailsRealizeStatus(timeInfo)}
+
+                                            /> : ''
+                                        }
+                                        {
+                                            code == 'LABEL' ? <TagCell
+                                                label_data={data}
+                                                propertyId={id}
+                                                cardId={card_id}
+                                                clickTagCell={() => this.clickTagCell()}
+                                            /> : ''
+                                        }
+
+                                        {
+                                            code == 'REMARK' ? <DescribeTasks name={data} boardId={board_id} propertyId={id} cardId={card_id} /> : ''
+                                        }
+                                    </View>
+
+                                )
+                            })
                         }
+
+
+                        <RelationContentCell />
+
                     </View>
                     {
                         <View className={indexStyles.add_function_style}> {
@@ -260,7 +287,7 @@ export default class taksDetails extends Component {
                 <CommentCell />
                 <CommentBox content={content_Id} /> */}
                 </View>
-            </View>
+            </View >
         )
     }
 }
