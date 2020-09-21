@@ -15,6 +15,9 @@ import CustomNavigation from '../acceptInvitation/components/CustomNavigation.js
 import { connect } from '@tarojs/redux'
 import SonTasks from './components/SonTasks/index'
 import DescribeTasks from './components/DescribeTasks/index'
+import MultipleSelectionField from './components/MultipleSelectionField/index'
+import { timestampToTimeZH } from '../../utils/basicFunction'
+
 
 
 @connect(({ tasks: { tasksDetailDatas = {}, }, calendar: { isOtherPageBack = {} } }) => ({
@@ -163,11 +166,20 @@ export default class taksDetails extends Component {
         })
     }
 
-    // clickProjectNameCell = () => {
-    //     this.setState({
-    //         milestone_show: true,
-    //     })
-    // }
+    getCustomFieldSingleChoiceValue = (field_value, items = []) => {
+
+        if (!field_value) return;
+
+        let item_value = '';
+
+        items.forEach(value => {
+            if (value['id'] === field_value) {
+                item_value = value['item_value'];
+            }
+        })
+
+        return { name: item_value };
+    }
 
     render() {
         const { tasksDetailDatas } = this.props
@@ -204,7 +216,7 @@ export default class taksDetails extends Component {
 
         const { type_flag } = this.props
 
-        const { properties = [] } = tasksDetailDatas
+        const { properties = [], fields = [], } = tasksDetailDatas
 
         let board_id = Taro.getStorageSync('tasks_detail_boardId')
 
@@ -221,10 +233,18 @@ export default class taksDetails extends Component {
                             ejectTimePicks={() => this.ejectTimePicks()}
                         />
                     </View>
-                    <ProjectNameCell title='项目' name={{ name: board_name }} boardId={board_id} />
+                    <ProjectNameCell
+                        title='项目'
+                        data={{ name: board_name }}
+                        boardId={board_id}
+                        type='1'
+                    />
                     <View className={indexStyles.tasks_name_style}>
-                        {/* <ProjectNameCell title='任务分组' name={list_name} clickProjectNameCell={() => this.clickProjectNameCell()} /> */}
-                        <ProjectNameCell title='任务分组' name={{ name: list_name }} boardId={board_id} />
+                        <ProjectNameCell
+                            title='任务分组'
+                            data={{ name: list_name }}
+                            boardId={board_id}
+                            type='2' />
                     </View>
                     <View>
 
@@ -235,40 +255,59 @@ export default class taksDetails extends Component {
                                     <View key={key}>
                                         <View>
                                             {
-                                                code == 'EXECUTOR' ? <ProjectNameCell title={name} name='' executors={data} boardId={board_id} propertyId={id} cardId={card_id} /> : ''
+                                                code == 'EXECUTOR' ?
+                                                    <ProjectNameCell
+                                                        title={name}
+                                                        data={data}
+                                                        boardId={board_id}
+                                                        propertyId={id}
+                                                        cardId={card_id}
+                                                        type='3'
+                                                    /> : ''
                                             }
                                         </View>
                                         <View>
                                             {
-                                                code == 'MILESTONE' ? <ProjectNameCell title={name} name={data} boardId={board_id}
-                                                    // milestoneId={milestone_data.id} 
-                                                    propertyId={id} cardId={card_id}
-                                                /> : ''
+                                                code == 'MILESTONE' ?
+                                                    <ProjectNameCell
+                                                        title={name}
+                                                        data={data}
+                                                        boardId={board_id}
+                                                        propertyId={id}
+                                                        cardId={card_id}
+                                                        type='4'
+                                                    /> : ''
                                             }
                                         </View>
                                         {
-                                            code == 'SUBTASK' ? <SonTasks
-                                                child_data={data}
-                                                propertyId={id}
-                                                cardId={card_id}
-                                                tasksDetailsRealizeStatus={(timeInfo) => this.tasksDetailsRealizeStatus(timeInfo)}
-
-                                            /> : ''
+                                            code == 'SUBTASK' ?
+                                                <SonTasks
+                                                    child_data={data}
+                                                    propertyId={id}
+                                                    cardId={card_id}
+                                                    tasksDetailsRealizeStatus={(timeInfo) => this.tasksDetailsRealizeStatus(timeInfo)}
+                                                /> : ''
                                         }
                                         {
-                                            code == 'LABEL' ? <TagCell
-                                                label_data={data}
-                                                propertyId={id}
-                                                cardId={card_id}
-                                                clickTagCell={() => this.clickTagCell()}
-                                            /> : ''
+                                            code == 'LABEL' ?
+                                                <TagCell
+                                                    label_data={data}
+                                                    propertyId={id}
+                                                    cardId={card_id}
+                                                    clickTagCell={() => this.clickTagCell()}
+                                                /> : ''
                                         }
 
                                         {
-                                            code == 'REMARK' ? <DescribeTasks name={data} boardId={board_id} propertyId={id} cardId={card_id} /> : ''
+                                            code == 'REMARK' ?
+                                                <DescribeTasks
+                                                    name={data}
+                                                    boardId={board_id}
+                                                    propertyId={id}
+                                                    cardId={card_id}
+                                                /> : ''
                                         }
                                     </View>
-
                                 )
                             })
                         }
@@ -286,6 +325,91 @@ export default class taksDetails extends Component {
                     {/* <NewBuilders />
                 <CommentCell />
                 <CommentBox content={content_Id} /> */}
+
+                    <ProjectNameCell
+                        title='字段'
+                        data={{ name: '更多' }}
+                        boardId={board_id}
+                        // propertyId={id}
+                        // cardId={card_id}
+                        type='5'
+                    />
+
+                    {
+                        fields && fields.map((item, key) => {
+
+                            const { id, relation_id, field_id, field_content = {}, field_value } = item
+                            const { name, items, field_status, field_type } = field_content
+
+                            return (
+                                <View key={key}>
+                                    <View className={indexStyles.custom_field_interval}></View>
+                                    {
+                                        field_type == '1' ?
+                                            <ProjectNameCell
+                                                title={name}
+                                                data={this.getCustomFieldSingleChoiceValue(field_value, items)}
+                                                boardId={board_id}
+                                                items={items}
+                                                field_value={field_value}
+                                                // propertyId={id}
+                                                // cardId={card_id}
+                                                type='6'
+                                            /> : ''
+                                    }
+                                    {/* {
+                                        field_type == '2' ?
+                                            <MultipleSelectionField
+                                                title={name}
+                                                data={items}
+                                                fieldValue={field_value}
+                                                type='7'
+                                            /> : ''
+                                    } */}
+                                    {
+                                        field_type == '3' ?
+                                            <ProjectNameCell
+                                                title={name}
+                                                data={{ name: timestampToTimeZH(field_value) }}
+                                                boardId={board_id}
+                                                // propertyId={id}
+                                                // cardId={card_id}
+                                                items={items}
+                                                field_value={field_value}
+                                                type='8'
+                                            /> : ''
+                                    }
+                                    {
+                                        field_type == '4' ?
+                                            <ProjectNameCell
+                                                title={name}
+                                                data={{ name: field_value }}
+                                                boardId={board_id}
+                                                items={items}
+                                                field_value={field_value}
+                                                // propertyId={id}
+                                                // cardId={card_id}
+                                                type='9'
+                                            /> : ''
+                                    }
+                                    {
+                                        field_type == '5' ?
+                                            <ProjectNameCell
+                                                title={name}
+                                                data={{ name: field_value }}
+                                                boardId={board_id}
+                                                items={items}
+                                                field_value={field_value}
+                                                // propertyId={id}
+                                                // cardId={card_id}
+                                                type='10'
+                                            /> : ''
+                                    }
+                                </View>
+
+                            )
+                        })
+                    }
                 </View>
             </View >
         )

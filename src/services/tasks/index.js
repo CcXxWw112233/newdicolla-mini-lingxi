@@ -262,3 +262,13 @@ export const deleteCardProperty = (data, notShowLoading) => {
   }, notShowLoading)
 }
 
+//获取自定义字段列表
+export const getBoardFieldGroupList = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'GET',
+    url: `${API_BOARD}/board/field/group/list?_organization_id=${data.org_id}&field_status=0`,
+  }, notShowLoading)
+}

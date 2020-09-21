@@ -60,6 +60,7 @@ class App extends Component {
       'pages/tasksGroup/index',
       'pages/executorsList/index',
       'pages/milestoneList/index',
+      'pages/fieldSelection/index',
       // 'pages/addingTasks/index',
       // 'pages/choiceProject/index',
       'pages/fillDescribe/index',

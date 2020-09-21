@@ -1,0 +1,50 @@
+@import "../../../../gloalSet/styles/constant";
+
+.list_item {
+    min-height   : pxTrans(56);
+    font-size    : pxTrans(16);
+    display      : flex;
+    align-items  : baseline;
+    margin-left  : pxTrans(0);
+    margin-right : pxTrans(0);
+    border-bottom: pxTrans(1) solid rgba(0, 0, 0, 0.09);
+    background   : rgb(255, 255, 255);
+
+    .list_item_left_iconnext {
+        color       : rgb(0, 0, 0, 0.25);
+        font-size   : pxTrans(20);
+        margin-left : pxTrans(20);
+        margin-right: pxTrans(10);
+        margin-top  : pxTrans(18);
+    }
+
+    .list_item_name {
+        color      : rgba(0, 0, 0, 0.25);
+        margin-left: pxTrans(4);
+    }
+
+    .tagCell_list_item_detail {
+        flex         : 1;
+        color        : rgba(0, 0, 0, 0.65);
+        margin-left  : pxTrans(12);
+        overflow     : hidden;
+        text-overflow: ellipsis;
+        white-space  : nowrap;
+        flex-wrap    : wrap;
+        display      : flex;
+        align-items  : center;
+        margin-bottom: pxTrans(12);
+
+        .tagCell_list_item {
+            margin: pxTrans(5) pxTrans(5) pxTrans(5) pxTrans(5);
+        }
+    }
+
+    .list_item_iconnext {
+        color       : $color_3;
+        margin-left : pxTrans(12);
+        color       : rgb(0, 0, 0, 0.25);
+        font-size   : pxTrans(20);
+        margin-right: pxTrans(10);
+    }
+}

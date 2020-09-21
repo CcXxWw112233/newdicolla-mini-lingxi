@@ -5,12 +5,12 @@ import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
 import { AtCheckbox } from 'taro-ui'
 
-@connect(({ tasks: { executors_list = [], tasksDetailDatas = {}, }, }) => ({
-    executors_list, tasksDetailDatas,
+@connect(({ tasks: { tasksDetailDatas = {}, field_selection_list = [], }, }) => ({
+    tasksDetailDatas, field_selection_list,
 }))
-export default class executorsList extends Component {
+export default class fieldSelection extends Component {
     config = {
-        navigationBarTitleText: '选择执行人'
+        navigationBarTitleText: '字段分组'
     }
 
     constructor() {
@@ -23,27 +23,28 @@ export default class executorsList extends Component {
 
     componentDidMount() {
 
-        const { contentId, } = this.$router.params
+        // const { contentId, } = this.$router.params
+
+        // this.setState({
+        //     card_id: contentId,
+        //     // value: listId,
+        // })
+
+        const { items } = this.$router.params
+
+        // executors_list.forEach(item => {
+        //     item['label'] = item.name
+        //     item['value'] = item.id
+        // })
+
+        // //取出已经是执行人的id, 组成新数组(已选中)
+        // let new_arr = executors.map(obj => { return obj.user_id });
+
+        const { field_selection_list } = this.props
 
         this.setState({
-            card_id: contentId,
-            // value: listId,
-        })
-
-        const { executors_list = [], tasksDetailDatas = {}, } = this.props
-        const { executors = [] } = tasksDetailDatas
-
-        executors_list.forEach(item => {
-            item['label'] = item.name
-            item['value'] = item.id
-        })
-
-        //取出已经是执行人的id, 组成新数组(已选中)
-        let new_arr = executors.map(obj => { return obj.user_id });
-
-        this.setState({
-            checkboxOption: executors_list,
-            checkedList: new_arr,
+            checkboxOption: field_selection_list,
+            // checkedList: new_arr,
         })
     }
 
@@ -96,7 +97,7 @@ export default class executorsList extends Component {
             <View >
                 <AtCheckbox
                     options={checkboxOption}
-                    selectedList={this.state.checkedList}
+                    // selectedList={this.state.checkedList}
                     onChange={this.handleChange.bind(this)}
                 />
             </View>
@@ -104,6 +105,6 @@ export default class executorsList extends Component {
     }
 }
 
-executorsList.defaultProps = {
+fieldSelection.defaultProps = {
 
 };
