@@ -20,6 +20,8 @@ export default class index extends Component {
         file_resource_id: '',
         board_id: '',
         fileName: '',
+        cardId: '',
+        fileId: '',
     }
 
     tasksRealizeStatus = (cardId, isRealize) => {
@@ -222,29 +224,66 @@ export default class index extends Component {
     }
 
     deleteSongTasks = () => {
+
         const { dispatch, tasksDetailDatas = {} } = this.props
         const { card_id } = tasksDetailDatas
         const { song_task_id } = this.state
+
         dispatch({
             type: 'tasks/deleteCard',
             payload: {
                 id: song_task_id,
                 card_id: card_id,
+                callBack: this.deleteCard(song_task_id),
             }
         })
 
         this.setSongTaskIsOpen()
     }
 
-    fileOption = (id, file_resource_id, board_id, fileName) => {
+
+    deleteCard = (song_task_id) => {
+
+        const { dispatch, tasksDetailDatas, child_data } = this.props
+        const { properties = [] } = tasksDetailDatas
+
+
+        child_data.forEach(obj => {
+
+            if (obj.card_id === song_task_id) {
+
+                this.removeObjWithArr(child_data, obj);
+            }
+        })
+
+        properties.forEach(item => {
+            if (item['code'] === 'SUBTASK') {
+                item.data = child_data;
+            }
+        })
+
+        dispatch({
+            type: 'tasks/updateDatas',
+            payload: {
+                tasksDetailDatas: {
+                    ...tasksDetailDatas,
+                    ...properties
+                }
+            }
+        })
+    }
+
+
+    fileOption = (id, file_resource_id, board_id, fileName, card_id, file_id,) => {
 
         this.setState({
             file_option_isOpen: true,
-            file_id: id,
-
+            file_id: file_id,
+            fileId: id,
             file_resource_id: file_resource_id,
             board_id: board_id,
             fileName: fileName,
+            cardId: card_id,
         })
     }
 
@@ -284,7 +323,6 @@ export default class index extends Component {
             },
         })
 
-
         this.setFileOptionIsOpen()
     }
 
@@ -292,12 +330,13 @@ export default class index extends Component {
 
         const { dispatch, tasksDetailDatas = {} } = this.props
         const { card_id } = tasksDetailDatas
-        const { file_id } = this.state
+        const { file_id, cardId, fileId, } = this.state
         dispatch({
             type: 'tasks/deleteCardAttachment',
             payload: {
-                attachment_id: file_id,
+                attachment_id: fileId,
                 card_id: card_id,
+                calback: this.deleteCardAttachment(cardId, file_id,),
             }
         })
 
@@ -318,6 +357,91 @@ export default class index extends Component {
 
         this.setFileOptionIsOpen()
     }
+
+    deleteCardAttachment = (cardId, file_id) => {
+
+        const { dispatch, tasksDetailDatas, child_data } = this.props
+        const { properties = [] } = tasksDetailDatas
+
+
+        child_data.forEach(obj => {
+
+            if (obj.card_id === cardId) {
+
+                obj.deliverables.forEach(item => {
+
+                    if (item.file_id === file_id) {
+
+                        this.removeObjWithArr(obj.deliverables, item);
+                    }
+                })
+            }
+        })
+
+        properties.forEach(item => {
+            if (item['code'] === 'SUBTASK') {
+                item.data = child_data;
+            }
+        })
+
+        dispatch({
+            type: 'tasks/updateDatas',
+            payload: {
+                tasksDetailDatas: {
+                    ...tasksDetailDatas,
+                    ...properties
+                }
+            }
+        })
+    }
+
+    //传入的数组arr和需删除的对象obj
+    removeObjWithArr(_arr, _obj) {
+        var length = _arr.length;
+        for (var i = 0; i < length; i++) {
+            if (this.isObjectValueEqual(_arr[i], _obj)) {
+                if (i == 0) {
+                    _arr.shift(); //删除并返回数组的第一个元素
+                    return;
+                }
+                else if (i == length - 1) {
+                    _arr.pop();  //删除并返回数组的最后一个元素
+                    return;
+                }
+                else {
+                    _arr.splice(i, 1); //删除下标为i的元素
+                    return;
+                }
+            }
+        }
+    };
+
+    isObjectValueEqual = (a, b) => {
+        if (typeof (a) != "object" && typeof (b) != "object") {
+            if (a == b) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        var aProps = Object.getOwnPropertyNames(a);
+        var bProps = Object.getOwnPropertyNames(b);
+
+        if (aProps.length != bProps.length) {
+            return false;
+        }
+
+        for (var i = 0; i < aProps.length; i++) {
+            var propName = aProps[i];
+
+            if (a[propName] !== b[propName]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 
     deleteCardProperty = () => {
 
@@ -351,7 +475,7 @@ export default class index extends Component {
                         child_data && child_data.map((value, key) => {
                             const { card_name, deliverables = [], card_id, is_realize } = value
                             return (
-                                <View className={indexStyles.content}>
+                                <View key={key} className={indexStyles.content}>
                                     <View className={indexStyles.song_row_instyle}>
                                         {
                                             is_realize == '0' ? (<View className={`${indexStyles.list_item_select_iconnext}`} onClick={() => this.tasksRealizeStatus(card_id, is_realize)}>
@@ -368,13 +492,13 @@ export default class index extends Component {
 
                                     {
                                         deliverables.map((item, key1) => {
-                                            const { id, name, file_resource_id, board_id } = item
+                                            const { id, name, file_resource_id, board_id, file_id, } = item
                                             return (
                                                 <View className={indexStyles.song_tasks_file}>
                                                     <View className={`${indexStyles.list_item_file_iconnext}`}>
                                                         <Text className={`${globalStyle.global_iconfont}`}>&#xe669;</Text>
                                                     </View>
-                                                    <View className={indexStyles.song_tasks_file_name} onClick={() => this.fileOption(id, file_resource_id, board_id, name,)}>{name}</View>
+                                                    <View className={indexStyles.song_tasks_file_name} onClick={() => this.fileOption(id, file_resource_id, board_id, name, item.card_id, file_id,)}>{name}</View>
                                                 </View>
                                             )
                                         })

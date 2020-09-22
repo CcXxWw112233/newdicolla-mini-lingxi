@@ -6,8 +6,8 @@ import { connect } from '@tarojs/redux'
 import { AtRadio } from 'taro-ui'
 import Item from 'antd-mobile-rn/lib/list/ListItem.native'
 
-@connect(({ tasks: { group_list = [], }, }) => ({
-    group_list,
+@connect(({ tasks: { group_list = [], tasksDetailDatas = {}, }, }) => ({
+    group_list, tasksDetailDatas,
 }))
 export default class tasksGroup extends Component {
     config = {
@@ -23,20 +23,48 @@ export default class tasksGroup extends Component {
         }
     }
 
-    handleChange(value) {
+    handleChange(value,) {
 
         this.setState({
-            value
+            value,
         })
 
         //更新任务分组
-        const { dispatch } = this.props
-        const { cardId } = this.state
+        const { dispatch, tasksDetailDatas, } = this.props
+        const { card_id, } = this.state
+
         dispatch({
             type: 'tasks/putCardBaseInfo',
             payload: {
-                card_id: cardId,
-                list_id: value
+                card_id: card_id,
+                list_id: value,
+                calback: this.putCardBaseInfo(value),
+            }
+
+        }).then(res => {
+            // if () {
+            // }
+        })
+    }
+
+    putCardBaseInfo = (value) => {
+        const { groupList = [], } = this.state
+
+        let listName = ''
+        groupList.forEach(obj => {
+            if (obj['list_id'] === value) {
+                listName = obj.list_name;
+            }
+        })
+
+        const { dispatch, tasksDetailDatas, } = this.props
+        dispatch({
+            type: 'tasks/updateDatas',
+            payload: {
+                tasksDetailDatas: {
+                    ...tasksDetailDatas,
+                    ...{ list_name: listName },
+                }
             }
         })
     }

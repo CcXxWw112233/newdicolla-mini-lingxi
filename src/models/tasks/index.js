@@ -126,9 +126,10 @@ export default {
 
     //任务, 日程， 节点数据关联里程碑
     * boardAppRelaMiletones({ payload }, { select, call, put }) {
+      const { callBack } = payload
       const res = yield call(boardAppRelaMiletones, payload)
       if (isApiResponseOk(res)) {
-        yield call(getTasksDetail, { id: payload.id })
+        if (typeof callBack == 'function') callBack()
       } else {
         Taro.showToast({
           title: res.message,
@@ -141,9 +142,10 @@ export default {
 
     //任务, 日程， 节点数据 删除里程碑
     * deleteAppRelaMiletones({ payload }, { select, call, put }) {
+      const { callBack } = payload
       const res = yield call(deleteAppRelaMiletones, payload)
       if (isApiResponseOk(res)) {
-        yield call(getTasksDetail, { payload })
+        if (typeof callBack == 'function') callBack()
       } else {
         Taro.showToast({
           title: res.message,
@@ -194,9 +196,10 @@ export default {
 
     //删除执行人
     * deleteCardExecutor({ payload }, { select, call, put }) {
+      const { callBack } = payload
       const res = yield call(deleteCardExecutor, payload)
       if (isApiResponseOk(res)) {
-        yield call(getTasksDetail, { id: payload.card_id })
+        if (typeof callBack == 'function') callBack()
       } else {
         Taro.showToast({
           title: res.message,
@@ -208,11 +211,16 @@ export default {
 
     //添加执行人
     * addCardExecutor({ payload }, { select, call, put }) {
+      const { callBack } = payload
       const res = yield call(addCardExecutor, payload)
       if (isApiResponseOk(res)) {
-        yield call(getTasksDetail, { id: payload.card_id })
+        if (typeof callBack == 'function') callBack()
       } else {
-
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
       }
     },
 
@@ -275,14 +283,13 @@ export default {
       }
     },
 
-    //修改任务名称
+    //修改任务
     * putCardBaseInfo({ payload }, { select, call, put }) {
-      const { card_id, card_name, name, due_time } = payload;
-      const res = yield call(putCardBaseInfo, { id: card_id, card_name: card_name, name: name, due_time: due_time, })
+      const { card_id, card_name, name, due_time, list_id, calback } = payload;
+      const res = yield call(putCardBaseInfo, { id: card_id, card_name: card_name, name: name, due_time: due_time, list_id: list_id, })
 
       if (isApiResponseOk(res)) {
-
-        yield call(getTasksDetail, { id: card_id })
+        if (typeof calback == 'function') calback()
       }
       else {
         Taro.showToast({
@@ -291,15 +298,16 @@ export default {
           duration: 2000
         })
       }
+      // return res || {}
     },
 
 
     //删除任务
     * deleteCard({ payload }, { select, call, put }) {
+      const { callBack } = payload
       const res = yield call(deleteCard, payload)
-      const { card_id } = payload
       if (isApiResponseOk(res)) {
-        yield call(getTasksDetail, { id: card_id })
+        if (typeof callBack == 'function') callBack()
       } else {
         Taro.showToast({
           title: res.message,
@@ -360,10 +368,10 @@ export default {
 
     //删除子任务交付物
     * deleteCardAttachment({ payload }, { select, call, put }) {
-      const { card_id, attachment_id } = payload
+      const { card_id, attachment_id, calback } = payload
       const res = yield call(deleteCardAttachment, { attachment_id: attachment_id })
       if (isApiResponseOk(res)) {
-        yield call(getTasksDetail, { id: card_id })
+        if (typeof calback == 'function') calback()
       } else {
         Taro.showToast({
           title: res.message,

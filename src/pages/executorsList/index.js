@@ -23,15 +23,15 @@ export default class executorsList extends Component {
 
     componentDidMount() {
 
-        const { contentId, } = this.$router.params
+        const { contentId, executors = [], } = this.$router.params
+        const executorsData = JSON.parse(executors);
 
         this.setState({
             card_id: contentId,
             // value: listId,
         })
 
-        const { executors_list = [], tasksDetailDatas = {}, } = this.props
-        const { executors = [] } = tasksDetailDatas
+        const { executors_list = [], } = this.props
 
         executors_list.forEach(item => {
             item['label'] = item.name
@@ -39,7 +39,7 @@ export default class executorsList extends Component {
         })
 
         //取出已经是执行人的id, 组成新数组(已选中)
-        let new_arr = executors.map(obj => { return obj.user_id });
+        let new_arr = executorsData.map(obj => { return obj.user_id });
 
         this.setState({
             checkboxOption: executors_list,
@@ -51,7 +51,6 @@ export default class executorsList extends Component {
 
         var sa = new Set(this.state.checkedList);
         var sb = new Set(value);
-
 
         this.setState({
             checkedList: value
@@ -70,6 +69,7 @@ export default class executorsList extends Component {
                 payload: {
                     card_id: card_id,
                     executor: executor_id,
+                    callBack: this.deleteCardExecutor(value),
                 },
             })
         }
@@ -83,9 +83,44 @@ export default class executorsList extends Component {
                 payload: {
                     card_id: card_id,
                     executor: executor_id,
+                    callBack: this.deleteCardExecutor(value),
                 },
             })
         }
+    }
+
+    //更改本地数据
+    deleteCardExecutor = (value) => {
+        const { dispatch, tasksDetailDatas, executors_list = [], } = this.props
+        const { properties = [] } = tasksDetailDatas
+
+
+        let array = [];
+        for (let i = 0; i < value.length; i++) {
+
+            executors_list.forEach(obj => {
+
+                if (obj.id === value[i]) {
+
+                    array.push(obj);
+                }
+            })
+        }
+        properties.forEach(item => {
+            if (item['code'] === 'EXECUTOR') {
+                item.data = array
+            }
+        })
+
+        dispatch({
+            type: 'tasks/updateDatas',
+            payload: {
+                tasksDetailDatas: {
+                    ...tasksDetailDatas,
+                    ...properties,
+                }
+            }
+        })
     }
 
     render() {

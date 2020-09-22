@@ -14,7 +14,7 @@ export default class ProjectNameCell extends Component {
     gotoChangeChoiceInfoPage = (value) => {
 
         const { type, items, field_value, } = value
-        const { dispatch, tasksDetailDatas = {} } = this.props
+        const { dispatch, tasksDetailDatas = {}, data, } = this.props
         const { list_id, org_id, } = tasksDetailDatas
 
         let board_id = Taro.getStorageSync('tasks_detail_boardId')
@@ -44,14 +44,13 @@ export default class ProjectNameCell extends Component {
                 })
             ).then(res => {
                 Taro.navigateTo({
-                    url: `../../pages/executorsList/index?contentId=${contentId}`
+                    url: `../../pages/executorsList/index?contentId=${contentId}&executors=${JSON.stringify(data)}`
                 })
             })
         }
         else if (type === '4') { //里程碑
 
-            const { milestoneId } = this.props
-
+            const { data, } = this.props
             Promise.resolve(
                 dispatch({
                     type: 'tasks/getTaskMilestoneList',
@@ -61,7 +60,7 @@ export default class ProjectNameCell extends Component {
                 })
             ).then(res => {
                 Taro.navigateTo({
-                    url: `../../pages/milestoneList/index?contentId=${contentId}&milestoneId=${milestoneId}`
+                    url: `../../pages/milestoneList/index?contentId=${contentId}&milestoneId=${data.id}`
                 })
             })
         }
