@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { getTaskGroupList, addTask, getTasksDetail, getCardCommentListAll, boardAppRelaMiletones, addComment, checkContentLink, getTaskExecutorsList, getTaskMilestoneList, setTasksRealize, updataTasks, putCardBaseInfo, getLabelList, postCardLabel, deleteCardLabel, getCardList, deleteCardExecutor, addCardExecutor, deleteAppRelaMiletones, deleteCard, deleteCardAttachment, deleteCardProperty, getBoardFieldGroupList, } from '../../services/tasks/index'
+import { getTaskGroupList, addTask, getTasksDetail, getCardCommentListAll, boardAppRelaMiletones, addComment, checkContentLink, getTaskExecutorsList, getTaskMilestoneList, setTasksRealize, updataTasks, putCardBaseInfo, getLabelList, postCardLabel, deleteCardLabel, getCardList, deleteCardExecutor, addCardExecutor, deleteAppRelaMiletones, deleteCard, deleteCardAttachment, deleteCardProperty, getBoardFieldGroupList, putBoardFieldRelation, } from '../../services/tasks/index'
 import { isApiResponseOk } from "../../utils/request";
 import { setBoardIdStorage } from '../../utils/basicFunction'
 
@@ -340,9 +340,10 @@ export default {
 
     //新增标签
     * postCardLabel({ payload }, { select, call, put }) {
+      const { callBack } = payload
       const res = yield call(postCardLabel, payload)
       if (isApiResponseOk(res)) {
-        yield call(getTasksDetail, { id: card_id })
+        if (typeof callBack == 'function') callBack()
       } else {
         Taro.showToast({
           title: res.message,
@@ -354,9 +355,10 @@ export default {
 
     //删除标签
     * deleteCardLabel({ payload }, { select, call, put }) {
+      const { callBack } = payload
       const res = yield call(deleteCardLabel, payload)
       if (isApiResponseOk(res)) {
-        yield call(getTasksDetail, { id: card_id })
+        if (typeof callBack == 'function') callBack()
       } else {
         Taro.showToast({
           title: res.message,
@@ -418,25 +420,41 @@ export default {
       }
     },
 
-  },
+    //获取自定义字段列表
+    * getBoardFieldGroupList({ payload }, { select, call, put }) {
+      const res = yield call(getBoardFieldGroupList, payload)
+      if (isApiResponseOk(res)) {
+        yield put({
+          type: 'updateDatas',
+          payload: {
+            field_selection_list: res.data.fields
+          }
+        })
+      } else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    },
 
-  //获取自定义字段列表
-  * getBoardFieldGroupList({ payload }, { select, call, put }) {
-    const res = yield call(getBoardFieldGroupList, payload)
-    if (isApiResponseOk(res)) {
-      yield put({
-        type: 'updateDatas',
-        payload: {
-          field_selection_list: res.data
-        }
-      })
-    } else {
-      Taro.showToast({
-        title: res.message,
-        icon: 'none',
-        duration: 2000
-      })
-    }
+    //自定义字段单选
+    * putBoardFieldRelation({ payload }, { select, call, put }) {
+      const { callBack } = payload
+      const res = yield call(putBoardFieldRelation, payload)
+      if (isApiResponseOk(res)) {
+        if (typeof callBack == 'function') callBack()
+      } else {
+
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    },
+
   },
 
   reducers: {

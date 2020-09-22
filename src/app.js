@@ -61,6 +61,7 @@ class App extends Component {
       'pages/executorsList/index',
       'pages/milestoneList/index',
       'pages/fieldSelection/index',
+      'pages/singleChoice/index',
       // 'pages/addingTasks/index',
       // 'pages/choiceProject/index',
       'pages/fillDescribe/index',

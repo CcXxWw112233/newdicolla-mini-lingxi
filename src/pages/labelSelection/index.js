@@ -22,14 +22,13 @@ export default class LabelSelection extends Component {
 
     componentDidMount() {
 
-        const { contentId } = this.$router.params
+        const { contentId, data, } = this.$router.params
 
         this.setState({
             card_id: contentId,
         })
 
         const { label_list = [], tasksDetailDatas = {}, } = this.props
-        const { label_data = [] } = tasksDetailDatas
 
         label_list.forEach(item => {
             item['label'] = item.name
@@ -37,7 +36,7 @@ export default class LabelSelection extends Component {
         })
 
         //取出已经是执行人的id, 组成新数组(已选中)
-        let new_arr = label_data.map(obj => { return obj.label_id });
+        let new_arr = JSON.parse(data).map(obj => { return obj.label_id });
 
         this.setState({
             checkboxOption: label_list,
@@ -67,6 +66,7 @@ export default class LabelSelection extends Component {
                 payload: {
                     label_id: labelId,
                     card_id: card_id,
+                    callBack: this.putCardLabel(value),
                 },
             })
         }
@@ -80,9 +80,47 @@ export default class LabelSelection extends Component {
                 payload: {
                     label_id: labelId,
                     card_id: card_id,
+                    callBack: this.putCardLabel(value),
                 },
             })
         }
+    }
+
+    putCardLabel = (value) => {
+
+        const { dispatch, tasksDetailDatas, label_list = [], } = this.props
+        const { properties = [] } = tasksDetailDatas
+        let array = [];
+        for (let i = 0; i < value.length; i++) {
+
+            label_list.forEach(obj => {
+
+                if (obj.id === value[i]) {
+
+                    obj.label_id = obj.id
+                    obj.label_name = obj.name
+                    obj.label_color = obj.color
+
+                    array.push(obj);
+                }
+            })
+        }
+
+        properties.forEach(item => {
+            if (item['code'] === 'LABEL') {
+                item.data = array
+            }
+        })
+
+        dispatch({
+            type: 'tasks/updateDatas',
+            payload: {
+                tasksDetailDatas: {
+                    ...tasksDetailDatas,
+                    ...properties,
+                }
+            }
+        })
     }
 
 

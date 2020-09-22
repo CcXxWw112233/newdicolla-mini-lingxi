@@ -13,9 +13,9 @@ export default class ProjectNameCell extends Component {
 
     gotoChangeChoiceInfoPage = (value) => {
 
-        const { type, items, field_value, } = value
+        const { type, items, field_value, field_item_id, } = value
         const { dispatch, tasksDetailDatas = {}, data, } = this.props
-        const { list_id, org_id, } = tasksDetailDatas
+        const { list_id, org_id, fields, } = tasksDetailDatas
 
         let board_id = Taro.getStorageSync('tasks_detail_boardId')
         let contentId = Taro.getStorageSync('tasks_detail_contentId')
@@ -65,7 +65,6 @@ export default class ProjectNameCell extends Component {
             })
         }
         else if (type === '5') {  //字段
-
             Promise.resolve(
                 dispatch({
                     type: 'tasks/getBoardFieldGroupList',
@@ -75,12 +74,14 @@ export default class ProjectNameCell extends Component {
                 })
             ).then(res => {
                 Taro.navigateTo({
-                    url: `../../pages/fieldSelection/index?items=${items}&field_value=${field_value}`
+                    url: `../../pages/fieldSelection/index?items=${items}&fields=${JSON.stringify(fields)}`
                 })
             })
         }
         else if (type === '6') {  //单选
-
+            Taro.navigateTo({
+                url: `../../pages/singleChoice/index?items=${JSON.stringify(items)}&field_value=${field_value}&field_item_id=${field_item_id}`
+            })
         }
         else if (type === '8') {  //日期
 
@@ -116,6 +117,7 @@ export default class ProjectNameCell extends Component {
         const type = this.props.type || ''
         const items = this.props.items || []
         const field_value = this.props.field_value || ''
+        const field_item_id = this.props.field_item_id || ''
 
 
         //左边icon
@@ -153,7 +155,7 @@ export default class ProjectNameCell extends Component {
 
         return (
 
-            <View className={indexStyles.list_item} onClick={this.gotoChangeChoiceInfoPage.bind(this, { data: data, type: type, items: items, field_value: field_value })}>
+            <View className={indexStyles.list_item} onClick={this.gotoChangeChoiceInfoPage.bind(this, { data: data, type: type, items: items, field_value: field_value, field_item_id: field_item_id })}>
 
 
                 <View className={`${indexStyles.list_item_left_iconnext}`}>

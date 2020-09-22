@@ -144,28 +144,6 @@ export default class taksDetails extends Component {
         })
     }
 
-    clickTagCell = () => {
-
-        const { dispatch } = this.props
-
-        let boardId = Taro.getStorageSync('tasks_detail_boardId')
-        let contentId = Taro.getStorageSync('tasks_detail_contentId')
-
-        Promise.resolve(
-            dispatch({
-                type: 'tasks/getLabelList',
-                payload: {
-                    board_id: boardId,
-                },
-            })
-        ).then(res => {
-
-            Taro.navigateTo({
-                url: `../../pages/labelSelection/index?contentId=${contentId}`
-            })
-        })
-    }
-
     getCustomFieldSingleChoiceValue = (field_value, items = []) => {
 
         if (!field_value) return;
@@ -294,7 +272,6 @@ export default class taksDetails extends Component {
                                                     label_data={data}
                                                     propertyId={id}
                                                     cardId={card_id}
-                                                    clickTagCell={() => this.clickTagCell()}
                                                 /> : ''
                                         }
 
@@ -338,7 +315,7 @@ export default class taksDetails extends Component {
                     {
                         fields && fields.map((item, key) => {
 
-                            const { id, relation_id, field_id, field_content = {}, field_value } = item
+                            const { relation_id, field_id, field_content = {}, field_value } = item
                             const { name, items, field_status, field_type } = field_content
 
                             return (
@@ -352,6 +329,7 @@ export default class taksDetails extends Component {
                                                 boardId={board_id}
                                                 items={items}
                                                 field_value={field_value}
+                                                field_item_id={item.id}
                                                 // propertyId={id}
                                                 // cardId={card_id}
                                                 type='6'

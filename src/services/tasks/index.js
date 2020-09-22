@@ -272,3 +272,15 @@ export const getBoardFieldGroupList = (data, notShowLoading) => {
     url: `${API_BOARD}/board/field/group/list?_organization_id=${data.org_id}&field_status=0`,
   }, notShowLoading)
 }
+
+
+//自定义字段单选
+export const putBoardFieldRelation = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'PUT',
+    url: `${API_BOARD}/board/field/relation`,
+  }, notShowLoading, true)
+}

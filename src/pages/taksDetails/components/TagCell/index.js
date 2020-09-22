@@ -3,12 +3,33 @@ import { View, Text } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { AtTag } from 'taro-ui'
+import { connect } from '@tarojs/redux'
 
+@connect(({ tasks: { tasksDetailDatas = {}, } }) => ({
+  tasksDetailDatas,
+}))
 export default class index extends Component {
 
   clickTagCell = () => {
 
-    this.props.clickTagCell();
+    const { dispatch, label_data, } = this.props
+
+    let boardId = Taro.getStorageSync('tasks_detail_boardId')
+    let contentId = Taro.getStorageSync('tasks_detail_contentId')
+
+    Promise.resolve(
+      dispatch({
+        type: 'tasks/getLabelList',
+        payload: {
+          board_id: boardId,
+        },
+      })
+    ).then(res => {
+
+      Taro.navigateTo({
+        url: `../../pages/labelSelection/index?contentId=${contentId}&data=${JSON.stringify(label_data)}`
+      })
+    })
   }
 
   deleteCardProperty = () => {
