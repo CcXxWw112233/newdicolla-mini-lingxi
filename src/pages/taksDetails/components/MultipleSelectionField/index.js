@@ -68,7 +68,7 @@ export default class index extends Component {
         data.forEach(value => {
 
             //1.2 过滤出包含的
-            if (array.indexOf(value['id']) != -1) {
+            if (array && array.indexOf(value['id']) != -1) {
 
                 //1.3 包含的就加入新的数组
                 dataArray.push(value)

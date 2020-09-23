@@ -308,7 +308,7 @@ export default class taksDetails extends Component {
                         data={{ name: '更多' }}
                         boardId={board_id}
                         // propertyId={id}
-                        // cardId={card_id}
+                        cardId={card_id}
                         type='5'
                     />
 

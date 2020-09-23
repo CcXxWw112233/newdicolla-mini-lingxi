@@ -295,3 +295,14 @@ export const deleteBoardFieldRelation = (data, notShowLoading) => {
     url: `${API_BOARD}/board/field/relation?id=${data.id}`,
   }, notShowLoading, true)
 }
+
+//自定义字段增加
+export const postBoardFieldRelation = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'POST',
+    url: `${API_BOARD}/board/field/relation`,
+  }, notShowLoading, true)
+}

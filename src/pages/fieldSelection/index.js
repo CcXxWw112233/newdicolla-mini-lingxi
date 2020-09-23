@@ -18,12 +18,13 @@ export default class fieldSelection extends Component {
         this.state = {
             checkedList: [],  //已选中数组
             checkboxOption: [],  //全部数组
+            card_id: '', //card_id, relation_id
         }
     }
 
     componentDidMount() {
 
-        const { contentId, fields, } = this.$router.params
+        const { contentId, fields, card_id, } = this.$router.params
         const fieldsData = JSON.parse(fields);
 
         const { field_selection_list = [], } = this.props
@@ -39,6 +40,7 @@ export default class fieldSelection extends Component {
         this.setState({
             checkboxOption: field_selection_list,
             checkedList: new_arr,
+            card_id: card_id,
         })
     }
 
@@ -48,40 +50,35 @@ export default class fieldSelection extends Component {
         var sb = new Set(value);
 
 
-        this.setState({
-            checkedList: value
-        })
 
         const { dispatch } = this.props
         const { card_id } = this.state
 
         if (this.state.checkedList.length > value.length) {  //删减
-            // 差集
-            let minus = this.state.checkedList.filter(x => !sb.has(x));
-            let executor_id = minus[0];
 
-            dispatch({
-                type: 'tasks/deleteCardExecutor',
-                payload: {
-                    card_id: card_id,
-                    executor: executor_id,
-                },
-            })
         }
         else if (this.state.checkedList.length < value.length) {  //增加
+
+
+            this.setState({
+                checkedList: value
+            })
+
             //补集
             let complement = [...this.state.checkedList.filter(x => !sb.has(x)), ...value.filter(x => !sa.has(x))];
             let executor_id = complement[0];
 
             dispatch({
-                type: 'tasks/addCardExecutor',
+                type: 'tasks/postBoardFieldRelation',
                 payload: {
-                    card_id: card_id,
-                    executor: executor_id,
+                    fields: [executor_id],
+                    relation_id: card_id,
+                    source_type: '2',
                 },
             })
         }
     }
+
 
     render() {
 

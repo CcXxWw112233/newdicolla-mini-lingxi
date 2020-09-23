@@ -14,7 +14,7 @@ export default class ProjectNameCell extends Component {
     gotoChangeChoiceInfoPage = (value) => {
 
         const { type, items, field_value, field_item_id, item_id, } = value
-        const { dispatch, tasksDetailDatas = {}, data, } = this.props
+        const { dispatch, tasksDetailDatas = {}, data, cardId, } = this.props
         const { list_id, org_id, fields, } = tasksDetailDatas
 
         let board_id = Taro.getStorageSync('tasks_detail_boardId')
@@ -74,7 +74,7 @@ export default class ProjectNameCell extends Component {
                 })
             ).then(res => {
                 Taro.navigateTo({
-                    url: `../../pages/fieldSelection/index?items=${items}&fields=${JSON.stringify(fields)}`
+                    url: `../../pages/fieldSelection/index?items=${items}&fields=${JSON.stringify(fields)}&card_id=${cardId}`
                 })
             })
         }
