@@ -35,7 +35,6 @@ export default class LabelSelection extends Component {
             item['value'] = item.id
         })
 
-        //取出已经是执行人的id, 组成新数组(已选中)
         let new_arr = JSON.parse(data).map(obj => { return obj.label_id });
 
         this.setState({

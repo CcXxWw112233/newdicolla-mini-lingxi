@@ -333,17 +333,19 @@ export default class taksDetails extends Component {
                                                 // propertyId={id}
                                                 // cardId={card_id}
                                                 type='6'
+                                                item_id={item.id}
                                             /> : ''
                                     }
-                                    {/* {
+                                    {
                                         field_type == '2' ?
                                             <MultipleSelectionField
                                                 title={name}
                                                 data={items}
                                                 fieldValue={field_value}
                                                 type='7'
+                                                item_id={item.id}
                                             /> : ''
-                                    } */}
+                                    }
                                     {
                                         field_type == '3' ?
                                             <ProjectNameCell

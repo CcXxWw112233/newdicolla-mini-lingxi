@@ -64,6 +64,7 @@ class App extends Component {
       'pages/singleChoice/index',
       'pages/textField/index',
       'pages/dateField/index',
+      'pages/multipleSelectionField/index',
       // 'pages/addingTasks/index',
       // 'pages/choiceProject/index',
       'pages/fillDescribe/index',

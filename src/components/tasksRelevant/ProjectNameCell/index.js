@@ -104,20 +104,41 @@ export default class ProjectNameCell extends Component {
         }
     }
 
-    clickProjectNameCell = () => {
-        this.props.clickProjectNameCell();
+    deleteCardProperty = (type, item_id) => {
+        const { dispatch, } = this.props
+
+        if (type === '6' || type === '8' || type === '9' || type === '10') {
+
+            dispatch({
+                type: 'tasks/deleteBoardFieldRelation',
+                payload: {
+                    id: item_id,
+                    callBack: this.deleteBoardFieldRelation(item_id),
+                },
+            })
+        }
     }
 
-    deleteCardProperty = () => {
+    deleteBoardFieldRelation = (item_id) => {
+        const { dispatch, tasksDetailDatas } = this.props
+        const { fields = [], } = tasksDetailDatas
 
-        const { dispatch, propertyId, cardId } = this.props
+        let new_array = []
+        fields.forEach(element => {
+
+            if (element.id !== item_id) {
+                new_array.push(element)
+            }
+        });
 
         dispatch({
-            type: 'tasks/deleteCardProperty',
+            type: 'tasks/updateDatas',
             payload: {
-                card_id: cardId,
-                property_id: propertyId,
-            },
+                tasksDetailDatas: {
+                    ...tasksDetailDatas,
+                    ...{ fields: new_array },
+                }
+            }
         })
     }
 
@@ -166,43 +187,43 @@ export default class ProjectNameCell extends Component {
 
         return (
 
-            <View className={indexStyles.list_item} onClick={this.gotoChangeChoiceInfoPage.bind(this, { data: data, type: type, items: items, field_value: field_value, field_item_id: field_item_id, item_id: item_id })}>
+            <View className={indexStyles.list_item} >
+
+                <View className={indexStyles.list_left} onClick={this.gotoChangeChoiceInfoPage.bind(this, { data: data, type: type, items: items, field_value: field_value, field_item_id: field_item_id, item_id: item_id })}>
+
+                    <View className={`${indexStyles.list_item_left_iconnext}`}>
+                        {icon}
+                    </View>
 
 
-                <View className={`${indexStyles.list_item_left_iconnext}`}>
-                    {icon}
+
+                    <View className={indexStyles.list_item_name}>{title}</View>
+
+
+
+                    <View className={indexStyles.right_style}>
+                        <View className={indexStyles.right_centre_style}>
+                            <View>
+                                {type === '3' ? (
+                                    <View className={indexStyles.executors_list_item_detail}>
+                                        <View className={`${indexStyles.avata_area}`}>
+                                            <Avatar avartarTotal={'multiple'} userList={data} />
+                                        </View>
+                                    </View>
+                                ) : (
+                                        <View className={indexStyles.list_item_detail}>
+                                            <View>{data.name}</View>
+                                        </View>
+                                    )}
+                            </View>
+                        </View>
+
+                    </View>
+
                 </View>
 
-
-
-                <View className={indexStyles.list_item_name}>{title}</View>
-
-
-
-                <View className={indexStyles.right_style}>
-                    <View className={indexStyles.right_centre_style}>
-                        <View>
-                            {type === '3' ? (
-                                <View className={indexStyles.executors_list_item_detail}>
-                                    <View className={`${indexStyles.avata_area}`}>
-                                        <Avatar avartarTotal={'multiple'} userList={data} />
-                                    </View>
-                                </View>
-                            ) : (
-                                    <View className={indexStyles.list_item_detail}>
-                                        <View>{data.name}</View>
-                                    </View>
-                                )}
-                        </View>
-                    </View>
-
-
-
-                    <View className={`${indexStyles.list_item_iconnext}`} onClick={this.deleteCardProperty}>
-                        {rightIcon}
-                    </View>
-
-
+                <View className={`${indexStyles.list_item_iconnext}`} onClick={() => this.deleteCardProperty(type, item_id)}>
+                    {rightIcon}
                 </View>
 
             </View>
