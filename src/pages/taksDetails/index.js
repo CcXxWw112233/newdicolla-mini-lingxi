@@ -355,6 +355,7 @@ export default class taksDetails extends Component {
                                                 items={items}
                                                 field_value={field_value}
                                                 type='8'
+                                                item_id={item.id}
                                             /> : ''
                                     }
                                     {
@@ -368,6 +369,7 @@ export default class taksDetails extends Component {
                                                 // propertyId={id}
                                                 // cardId={card_id}
                                                 type='9'
+                                                item_id={item.id}
                                             /> : ''
                                     }
                                     {
@@ -381,6 +383,7 @@ export default class taksDetails extends Component {
                                                 // propertyId={id}
                                                 // cardId={card_id}
                                                 type='10'
+                                                item_id={item.id}
                                             /> : ''
                                     }
                                 </View>

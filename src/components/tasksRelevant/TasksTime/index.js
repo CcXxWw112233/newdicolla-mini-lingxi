@@ -3,7 +3,7 @@ import { View, Text, Picker, } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyles from '../../../gloalSet/styles/globalStyles.scss'
 import ChoiceTimes from './ChoiceTimes/index'
-import { timestampToTimeZH } from '../../../utils/basicFunction'
+import { timestampToTimeZH, } from '../../../utils/basicFunction'
 import { connect } from '@tarojs/redux'
 
 

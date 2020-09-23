@@ -1,7 +1,7 @@
 const current_date = new Date()
 const current_year = current_date.getFullYear()
 const current_month = current_date.getMonth() + 1
-const current_date_no= current_date.getDate()
+const current_date_no = current_date.getDate()
 const current_date_timestamp = current_date.getTime()
 const current_week_day = current_date.getDay()
 
@@ -24,7 +24,7 @@ function getDaysNumInMonth(year, month) {
 function getOneMonthDateDetail(year, month) {
   const total_day = getDaysNumInMonth(year, month)
   const date_arr = []
-  for(let i = 1; i < total_day + 1; i ++) {
+  for (let i = 1; i < total_day + 1; i++) {
     const obj = getNeedDate(`${year}/${month}/${i}`)
     date_arr.push(obj)
   }
@@ -46,7 +46,7 @@ function getWeekDay(index) {
 
 //传入日期，获取所需传入日期的年月日周几
 function getNeedDate(timestring) {
-  if(!timestring) {
+  if (!timestring) {
     return {}
   }
   const date = new Date(timestring)
@@ -77,7 +77,7 @@ function getDateTop(gold_year, gold_month) {
   return current_year == gold_year ? `${gold_month}月` : `${gold_year}年${gold_month}月`
 }
 //传入年份，月份获取当前月和前后一个月的数据
-function getAroundDate ({year = current_year, month = current_month}) {
+function getAroundDate({ year = current_year, month = current_month }) {
   //前一个月
   const front_one_year = month == 1 ? year - 1 : year
   const front_one_month = month == 1 ? 12 : month - 1
@@ -92,7 +92,7 @@ function getAroundDate ({year = current_year, month = current_month}) {
     {
       date_top: getDateTop(front_one_year, front_one_month),
       date_inner: front_month_date,
-     },
+    },
     {
       date_top: getDateTop(year, month),
       date_inner: base_month_date,
@@ -124,11 +124,11 @@ function getCalendarData(gold_date_arr) {
   //处理上一个月和下一个月所在日历表中的数据
   let calendar_date_last_month_new = []
   let calendar_date_next_month_new = []
-  for(let val of calendar_date_last_month) {
+  for (let val of calendar_date_last_month) {
     val['no_in_select_month'] = true
     calendar_date_last_month_new.push(val)
   }
-  for(let val of calendar_date_next_month) {
+  for (let val of calendar_date_next_month) {
     val['no_in_select_month'] = true
     calendar_date_next_month_new.push(val)
   }
@@ -137,8 +137,8 @@ function getCalendarData(gold_date_arr) {
   return date_list
 }
 
-export const getMonthDate = ({year = current_year, month = current_month}) => {
-  return getAroundDate({year, month})
+export const getMonthDate = ({ year = current_year, month = current_month }) => {
+  return getAroundDate({ year, month })
 }
 
 export const isToday = (timestamp) => {

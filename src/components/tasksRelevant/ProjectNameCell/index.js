@@ -13,7 +13,7 @@ export default class ProjectNameCell extends Component {
 
     gotoChangeChoiceInfoPage = (value) => {
 
-        const { type, items, field_value, field_item_id, } = value
+        const { type, items, field_value, field_item_id, item_id, } = value
         const { dispatch, tasksDetailDatas = {}, data, } = this.props
         const { list_id, org_id, fields, } = tasksDetailDatas
 
@@ -85,12 +85,22 @@ export default class ProjectNameCell extends Component {
         }
         else if (type === '8') {  //日期
 
+            Taro.navigateTo({
+                url: `../../pages/dateField/index?field_value=${field_value}&item_id=${item_id}`
+            })
         }
-        else if (type === '9') {  //文本
+        else if (type === '9') {  //数字
+
+            Taro.navigateTo({
+                url: `../../pages/textField/index?field_value=${field_value}&item_id=${item_id}&type='number'`
+            })
 
         }
-        else if (type === '10') {  //数字
+        else if (type === '10') {  //文本
 
+            Taro.navigateTo({
+                url: `../../pages/textField/index?field_value=${field_value}&item_id=${item_id}&type='text'`
+            })
         }
     }
 
@@ -118,6 +128,7 @@ export default class ProjectNameCell extends Component {
         const items = this.props.items || []
         const field_value = this.props.field_value || ''
         const field_item_id = this.props.field_item_id || ''
+        const item_id = this.props.item_id || ''
 
 
         //左边icon
@@ -139,9 +150,9 @@ export default class ProjectNameCell extends Component {
         } else if (type === '8') {
             icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe7c1;</Text>
         } else if (type === '9') {
-            icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe7c1;</Text>
-        } else if (type === '10') {
             icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe7c0;</Text>
+        } else if (type === '10') {
+            icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe7c1;</Text>
         }
 
         //右边icon
@@ -155,7 +166,7 @@ export default class ProjectNameCell extends Component {
 
         return (
 
-            <View className={indexStyles.list_item} onClick={this.gotoChangeChoiceInfoPage.bind(this, { data: data, type: type, items: items, field_value: field_value, field_item_id: field_item_id })}>
+            <View className={indexStyles.list_item} onClick={this.gotoChangeChoiceInfoPage.bind(this, { data: data, type: type, items: items, field_value: field_value, field_item_id: field_item_id, item_id: item_id })}>
 
 
                 <View className={`${indexStyles.list_item_left_iconnext}`}>
