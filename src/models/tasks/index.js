@@ -407,10 +407,10 @@ export default {
 
     //删除任务自定义字段
     * deleteCardProperty({ payload }, { select, call, put }) {
-      const { card_id, } = payload
+      const { callBack, } = payload
       const res = yield call(deleteCardProperty, payload)
       if (isApiResponseOk(res)) {
-        yield call(getTasksDetail, { id: card_id })
+        if (typeof callBack == 'function') callBack()
       } else {
         Taro.showToast({
           title: res.message,

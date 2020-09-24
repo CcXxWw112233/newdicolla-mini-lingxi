@@ -459,9 +459,35 @@ export default class index extends Component {
         dispatch({
             type: 'tasks/deleteCardProperty',
             payload: {
-                card_id: cardId,
                 property_id: propertyId,
+                card_id: cardId,
+                callBack: this.deleteTasksFieldRelation(propertyId),
             },
+        })
+
+    }
+
+    deleteTasksFieldRelation = (propertyId) => {
+
+        const { dispatch, tasksDetailDatas, } = this.props
+        const { properties = [], } = tasksDetailDatas
+
+        let new_array = []
+        properties.forEach(element => {
+
+            if (element.id !== propertyId) {
+                new_array.push(element)
+            }
+        });
+
+        dispatch({
+            type: 'tasks/updateDatas',
+            payload: {
+                tasksDetailDatas: {
+                    ...tasksDetailDatas,
+                    ...{ properties: new_array },
+                }
+            }
         })
     }
 
@@ -469,6 +495,7 @@ export default class index extends Component {
         const { child_data } = this.props
         return (
             <View className={indexStyles.list_item}>
+
                 <View className={indexStyles.title_row}>
                     <View className={`${indexStyles.list_item_left_iconnext}`}>
                         <Text className={`${globalStyle.global_iconfont}`}>&#xe7f4;</Text>

@@ -112,7 +112,7 @@ export default class taksDetails extends Component {
 
 
     tasksDetailsRealizeStatus = (timeInfo, type) => {
-        console.log(timeInfo, 'timeInfo=========');
+
         let isRealize
         if (timeInfo.isRealize === '1') {
             this.modifyRealize({ is_realize: '0' }, type, timeInfo.cardId)
@@ -333,7 +333,7 @@ export default class taksDetails extends Component {
                         }
 
 
-                        <RelationContentCell />
+                        {/* <RelationContentCell /> */}
 
                     </View>
                     {

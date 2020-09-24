@@ -104,8 +104,8 @@ export default class ProjectNameCell extends Component {
         }
     }
 
-    deleteCardProperty = (type, item_id) => {
-        const { dispatch, } = this.props
+    deleteCardProperty = (type, item_id, propertyId) => {
+        const { dispatch, cardId, } = this.props
 
         if (type === '6' || type === '8' || type === '9' || type === '10') {
 
@@ -117,10 +117,46 @@ export default class ProjectNameCell extends Component {
                 },
             })
         }
+
+        if (type === '3' || type === '4') {
+
+            dispatch({
+                type: 'tasks/deleteCardProperty',
+                payload: {
+                    property_id: propertyId,
+                    card_id: cardId,
+                    callBack: this.deleteTasksFieldRelation(propertyId),
+                },
+            })
+        }
+    }
+
+    deleteTasksFieldRelation = (propertyId) => {
+
+        const { dispatch, tasksDetailDatas, } = this.props
+        const { properties = [], } = tasksDetailDatas
+
+        let new_array = []
+        properties.forEach(element => {
+
+            if (element.id !== propertyId) {
+                new_array.push(element)
+            }
+        });
+
+        dispatch({
+            type: 'tasks/updateDatas',
+            payload: {
+                tasksDetailDatas: {
+                    ...tasksDetailDatas,
+                    ...{ properties: new_array },
+                }
+            }
+        })
     }
 
     deleteBoardFieldRelation = (item_id) => {
-        const { dispatch, tasksDetailDatas } = this.props
+        const { dispatch, tasksDetailDatas, } = this.props
         const { fields = [], } = tasksDetailDatas
 
         let new_array = []
@@ -150,6 +186,7 @@ export default class ProjectNameCell extends Component {
         const field_value = this.props.field_value || ''
         const field_item_id = this.props.field_item_id || ''
         const item_id = this.props.item_id || ''
+        const propertyId = this.props.propertyId || ''
 
 
         //左边icon
@@ -222,7 +259,7 @@ export default class ProjectNameCell extends Component {
 
                 </View>
 
-                <View className={`${indexStyles.list_item_iconnext}`} onClick={() => this.deleteCardProperty(type, item_id)}>
+                <View className={`${indexStyles.list_item_iconnext}`} onClick={() => this.deleteCardProperty(type, item_id, propertyId,)}>
                     {rightIcon}
                 </View>
 

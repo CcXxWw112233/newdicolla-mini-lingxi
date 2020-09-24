@@ -39,37 +39,64 @@ export default class index extends Component {
     dispatch({
       type: 'tasks/deleteCardProperty',
       payload: {
-        card_id: cardId,
         property_id: propertyId,
+        card_id: cardId,
+        callBack: this.deleteTasksFieldRelation(propertyId),
       },
+    })
+  }
+
+  deleteTasksFieldRelation = (propertyId) => {
+
+    const { dispatch, tasksDetailDatas, } = this.props
+    const { properties = [], } = tasksDetailDatas
+
+    let new_array = []
+    properties.forEach(element => {
+
+      if (element.id !== propertyId) {
+        new_array.push(element)
+      }
+    });
+
+    dispatch({
+      type: 'tasks/updateDatas',
+      payload: {
+        tasksDetailDatas: {
+          ...tasksDetailDatas,
+          ...{ properties: new_array },
+        }
+      }
     })
   }
 
   render() {
     const { label_data = [] } = this.props
     return (
-      <View className={indexStyles.list_item} onClick={this.clickTagCell}>
-        <View className={`${indexStyles.list_item_left_iconnext}`}>
-          <Text className={`${globalStyle.global_iconfont}`}>&#xe6ac;</Text>
-        </View>
-        <View className={indexStyles.list_item_name}>标签</View>
-        <View className={indexStyles.tagCell_list_item_detail}>
-          {
-            label_data.map((tag, key) => {
-              const rgb = tag.label_color;
-              return (
-                <View className={indexStyles.tagCell_list_item}>
-                  <AtTag type='primary' customStyle={{
-                    color: `rgba(${rgb},1)`,
-                    backgroundColor: `rgba(${rgb},.2)`,
-                    border: `1px solid rgba(${rgb},1)`,
-                  }}>
-                    {tag.label_name}
-                  </AtTag>
-                </View>
-              )
-            })
-          }
+      <View className={indexStyles.list_item} >
+        <View className={indexStyles.list_left} onClick={this.clickTagCell}>
+          <View className={`${indexStyles.list_item_left_iconnext}`}>
+            <Text className={`${globalStyle.global_iconfont}`}>&#xe6ac;</Text>
+          </View>
+          <View className={indexStyles.list_item_name}>标签</View>
+          <View className={indexStyles.tagCell_list_item_detail}>
+            {
+              label_data.map((tag, key) => {
+                const rgb = tag.label_color;
+                return (
+                  <View className={indexStyles.tagCell_list_item}>
+                    <AtTag type='primary' customStyle={{
+                      color: `rgba(${rgb},1)`,
+                      backgroundColor: `rgba(${rgb},.2)`,
+                      border: `1px solid rgba(${rgb},1)`,
+                    }}>
+                      {tag.label_name}
+                    </AtTag>
+                  </View>
+                )
+              })
+            }
+          </View>
         </View>
         <View className={`${indexStyles.list_item_iconnext}`} onClick={this.deleteCardProperty}>
           <Text className={`${globalStyle.global_iconfont}`}>&#xe7fc;</Text>
