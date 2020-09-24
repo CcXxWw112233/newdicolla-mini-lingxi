@@ -48,6 +48,17 @@ export const addTask = (data, notShowLoading) => {
   }, notShowLoading)
 }
 
+//新增子任务
+export const postV2Card = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'POST',
+    url: `${API_BOARD}/v2/card`,
+  }, notShowLoading)
+}
+
 //获取任务评论列表
 export const getCardCommentListAll = (data, notShowLoading) => {
   return request({

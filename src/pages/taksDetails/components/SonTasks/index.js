@@ -24,13 +24,22 @@ export default class index extends Component {
         fileId: '',
     }
 
-    tasksRealizeStatus = (cardId, isRealize) => {
+    addSonTask = () => {
 
+        const { boardId, tasksDetailDatas = {}, } = this.props
+        const { list_id, card_id } = tasksDetailDatas
+
+        Taro.navigateTo({
+            url: `../../pages/addSonTask/index?propertyId=${card_id}&boardId=${boardId}&listId=${list_id}`
+        })
+    }
+
+    tasksRealizeStatus = (cardId, isRealize) => {
+        console.log(this.props, 'this.props');
         const cellInfo = {
             cardId: cardId,
             isRealize: isRealize,
         }
-
         this.props.tasksDetailsRealizeStatus(cellInfo)
     }
 
@@ -510,7 +519,7 @@ export default class index extends Component {
                     }
                 </View>
 
-                <View className={indexStyles.add_task_row}>
+                <View className={indexStyles.add_task_row} onClick={this.addSonTask}>
                     <View className={`${indexStyles.list_item_left_iconnext}`}>
                         <Text className={`${globalStyle.global_iconfont}`}>&#xe7b7;</Text>
                     </View>

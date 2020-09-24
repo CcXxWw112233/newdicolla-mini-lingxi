@@ -62,6 +62,13 @@ export default class taksDetails extends Component {
         this.loadTasksDetail(contentId, boardId)
     }
 
+
+    componentDidShow() {
+
+        const { content_Id, board_id } = this.state
+        this.loadTasksDetail(content_Id, board_id)
+    }
+
     loadTasksDetail(content_id, board_id) {
         let contentId
         let boardId
@@ -103,8 +110,10 @@ export default class taksDetails extends Component {
         }
     }
 
+
     tasksDetailsRealizeStatus = (timeInfo) => {
 
+        debugger
         let isRealize
         if (timeInfo.isRealize === '1') {
             this.modifyRealize({ is_realize: '0' })
@@ -261,6 +270,7 @@ export default class taksDetails extends Component {
                                             code == 'SUBTASK' ?
                                                 <SonTasks
                                                     child_data={data}
+                                                    boardId={board_id}
                                                     propertyId={id}
                                                     cardId={card_id}
                                                     tasksDetailsRealizeStatus={(timeInfo) => this.tasksDetailsRealizeStatus(timeInfo)}

@@ -49,8 +49,6 @@ export default class fieldSelection extends Component {
         var sa = new Set(this.state.checkedList);
         var sb = new Set(value);
 
-
-
         const { dispatch } = this.props
         const { card_id } = this.state
 
@@ -58,7 +56,6 @@ export default class fieldSelection extends Component {
 
         }
         else if (this.state.checkedList.length < value.length) {  //增加
-
 
             this.setState({
                 checkedList: value

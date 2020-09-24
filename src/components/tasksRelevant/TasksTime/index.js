@@ -5,6 +5,7 @@ import globalStyles from '../../../gloalSet/styles/globalStyles.scss'
 import ChoiceTimes from './ChoiceTimes/index'
 import { timestampToTimeZH, } from '../../../utils/basicFunction'
 import { connect } from '@tarojs/redux'
+import { AtList, AtListItem } from 'taro-ui'
 
 
 @connect(({ tasks: { isPermission, }, }) => ({
