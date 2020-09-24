@@ -25,17 +25,19 @@ export default class addSonTask extends Component {
             property_id: '',
             board_id: '',
             list_id: '',
+            card_id: '',
         }
     }
 
     componentDidMount() {
 
-        const { propertyId, boardId, listId } = this.$router.params
+        const { propertyId, boardId, listId, cardId } = this.$router.params
 
         this.setState({
             property_id: propertyId,
             board_id: boardId,
             list_id: listId,
+            card_id: cardId,
         })
     }
 
@@ -47,6 +49,25 @@ export default class addSonTask extends Component {
 
     }
 
+    addExecutors = () => {
+
+        const { dispatch } = this.props
+        const { board_id, card_id } = this.state
+
+        Promise.resolve(
+            dispatch({
+                type: 'tasks/getTaskExecutorsList',
+                payload: {
+                    board_id: board_id,
+                },
+            })
+        ).then(res => {
+            Taro.navigateTo({
+                url: `../../pages/sonTaskExecutors/index?contentId=${card_id}`
+            })
+        })
+    }
+
     updataInput = (value) => {
 
         this.setState({
@@ -56,9 +77,38 @@ export default class addSonTask extends Component {
 
     confirm = () => {
 
+        const { dispatch } = this.props
+
         const { start_time, due_time, inputText, list_id, property_id, board_id, } = this.state
 
-        const { dispatch } = this.props
+        if (inputText === '') {
+            Taro.showToast({
+                title: '请填写子任务名称',
+                icon: 'none',
+                duration: 2000
+            })
+
+            return
+        }
+
+        if ((due_time - start_time) < 0) {
+            Taro.showToast({
+                title: '截止时间大于开始时间',
+                icon: 'none',
+                duration: 2000
+            })
+
+            return
+        }
+
+
+        var users = Taro.getStorageSync('son_tasks_executors')
+        var userData = JSON.parse(users)
+        var userStr;
+        if (userData.length > 0) {
+            userStr = userData.join(",");
+        }
+
         dispatch({
             type: 'tasks/postV2Card',
             payload: {
@@ -68,8 +118,12 @@ export default class addSonTask extends Component {
                 name: inputText,
                 parent_id: property_id,
                 start_time: start_time,
-                users: '',
+                users: userStr,
             }
+        }).then(() => {
+
+            Taro.removeStorageSync('son_tasks_executors')
+            Taro.navigateBack()
         })
     }
 
@@ -101,8 +155,6 @@ export default class addSonTask extends Component {
                 due_time: time,
             })
         }
-
-        console.log(type, 'aaaaaaa', time);
     }
 
 
@@ -115,7 +167,7 @@ export default class addSonTask extends Component {
     render() {
 
         const { start_time_str, due_time_str, due_start_range } = this.state
-        console.log(due_start_range, 'due_start_range========');
+
         return (
             <View >
 
@@ -166,7 +218,7 @@ export default class addSonTask extends Component {
                             {due_time_str}
                         </Picker>
                     </View>
-                    <View>添加执行人</View>
+                    <View onClick={this.addExecutors}>添加执行人</View>
                 </View>
 
 

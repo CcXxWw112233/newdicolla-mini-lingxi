@@ -24,7 +24,14 @@ export default class executorsList extends Component {
     componentDidMount() {
 
         const { contentId, executors = [], } = this.$router.params
-        const executorsData = JSON.parse(executors);
+
+        let executorsData;
+        let new_arr
+        if (executors.length > 0) {
+            executorsData = JSON.parse(executors);
+            //取出已经是执行人的id, 组成新数组(已选中)
+            new_arr = executorsData.map(obj => { return obj.user_id });
+        }
 
         this.setState({
             card_id: contentId,
@@ -37,9 +44,6 @@ export default class executorsList extends Component {
             item['label'] = item.name
             item['value'] = item.id
         })
-
-        //取出已经是执行人的id, 组成新数组(已选中)
-        let new_arr = executorsData.map(obj => { return obj.user_id });
 
         this.setState({
             checkboxOption: executors_list,

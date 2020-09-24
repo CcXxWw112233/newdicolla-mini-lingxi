@@ -30,7 +30,7 @@ export default class index extends Component {
         const { list_id, card_id } = tasksDetailDatas
 
         Taro.navigateTo({
-            url: `../../pages/addSonTask/index?propertyId=${card_id}&boardId=${boardId}&listId=${list_id}`
+            url: `../../pages/addSonTask/index?propertyId=${card_id}&boardId=${boardId}&listId=${list_id}&cardId=${card_id}`
         })
     }
 
