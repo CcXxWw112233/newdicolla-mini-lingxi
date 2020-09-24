@@ -10,13 +10,13 @@
     margin-right  : pxTrans(0);
     border-bottom : pxTrans(1) solid rgba(0, 0, 0, 0.09);
     background    : rgb(255, 255, 255);
-    align-items   : center;
+    align-items   : baseline;
 
     .list_left {
         display       : flex;
         flex-direction: row;
         flex          : 1;
-        align-items   : center;
+        align-items   : baseline;
 
         .list_item_left_iconnext {
             color       : rgb(0, 0, 0, 0.25);

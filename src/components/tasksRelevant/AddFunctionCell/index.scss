@@ -1,24 +1,15 @@
 .list_item {
-    background     : white;
-    display        : flex;
-    justify-content: space-around;
-    align-items    : center;
-    height         : pxTrans(56);
+    background   : white;
+    margin-left  : pxTrans(12);
+    overflow     : hidden;
+    text-overflow: ellipsis;
+    white-space  : nowrap;
+    flex-wrap    : wrap;
+    display      : flex;
+    align-items  : center;
+    margin-bottom: pxTrans(12);
 
-    .itemStyle {
-        text-align: center;
-        margin    : 16px 16px;
-
-        .list_item_iconnext {
-            font-size: pxTrans(40);
-            color    : rgb(0, 0, 0, 0.25);
-        }
-
-        .name_style {
-            font-size  : pxTrans(12);
-            font-weight: 400;
-            color      : rgba(0, 0, 0, 0.45);
-            line-height: pxTrans(20);
-        }
+    .tagCell_list_item {
+        margin: pxTrans(5) pxTrans(5) pxTrans(5) pxTrans(5);
     }
 }

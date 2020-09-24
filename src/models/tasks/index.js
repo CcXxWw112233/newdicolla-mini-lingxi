@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { getTaskGroupList, addTask, getTasksDetail, getCardCommentListAll, boardAppRelaMiletones, addComment, checkContentLink, getTaskExecutorsList, getTaskMilestoneList, setTasksRealize, updataTasks, putCardBaseInfo, getLabelList, postCardLabel, deleteCardLabel, getCardList, deleteCardExecutor, addCardExecutor, deleteAppRelaMiletones, deleteCard, deleteCardAttachment, deleteCardProperty, getBoardFieldGroupList, putBoardFieldRelation, deleteBoardFieldRelation, postBoardFieldRelation, postV2Card, } from '../../services/tasks/index'
+import { getTaskGroupList, addTask, getTasksDetail, getCardCommentListAll, boardAppRelaMiletones, addComment, checkContentLink, getTaskExecutorsList, getTaskMilestoneList, setTasksRealize, updataTasks, putCardBaseInfo, getLabelList, postCardLabel, deleteCardLabel, getCardList, deleteCardExecutor, addCardExecutor, deleteAppRelaMiletones, deleteCard, deleteCardAttachment, deleteCardProperty, getBoardFieldGroupList, putBoardFieldRelation, deleteBoardFieldRelation, postBoardFieldRelation, postV2Card, getCardProperties, } from '../../services/tasks/index'
 import { isApiResponseOk } from "../../utils/request";
 import { setBoardIdStorage } from '../../utils/basicFunction'
 
@@ -8,13 +8,14 @@ export default {
   state: {
     tasks_list: [], //任务列表
     tasksDetailDatas: {}, //任务详情
-    content_Link: [],  //关联内容
+    content_Link: [],  //关联内容 
     executors_list: [], //执行人列表 
     milestone_list: [], //获取里程碑列表
     isPermission: true, //是否有权限更改
     label_list: [], // 标签列表
     group_list: [], //任务分组
     field_selection_list: [], //字段选择list
+    properties_list: [], //任务属性列表
   },
   effects: {
     //获取任务列表
@@ -501,6 +502,26 @@ export default {
         })
       }
     },
+
+    //获取子任务属性
+    * getCardProperties({ payload }, { select, call, put }) {
+      const res = yield call(getCardProperties, payload)
+      if (isApiResponseOk(res)) {
+        yield put({
+          type: 'updateDatas',
+          payload: {
+            properties_list: res.data
+          }
+        })
+      } else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    },
+
 
 
   },

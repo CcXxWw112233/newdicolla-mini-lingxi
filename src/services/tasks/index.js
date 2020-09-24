@@ -317,3 +317,14 @@ export const postBoardFieldRelation = (data, notShowLoading) => {
     url: `${API_BOARD}/board/field/relation`,
   }, notShowLoading, true)
 }
+
+//任务属性
+export const getCardProperties = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'GET',
+    url: `${API_BOARD}/card/properties`,
+  }, notShowLoading)
+}
