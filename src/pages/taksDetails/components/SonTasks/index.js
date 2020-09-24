@@ -35,12 +35,12 @@ export default class index extends Component {
     }
 
     tasksRealizeStatus = (cardId, isRealize) => {
-        console.log(this.props, 'this.props');
+
         const cellInfo = {
             cardId: cardId,
             isRealize: isRealize,
         }
-        this.props.tasksDetailsRealizeStatus(cellInfo)
+        typeof this.props.onTasksDetailsRealizeStatus == 'function' && this.props.onTasksDetailsRealizeStatus(cellInfo)
     }
 
     handleCancel = () => {

@@ -111,16 +111,15 @@ export default class taksDetails extends Component {
     }
 
 
-    tasksDetailsRealizeStatus = (timeInfo) => {
-
-        debugger
+    tasksDetailsRealizeStatus = (timeInfo, type) => {
+        console.log(timeInfo, 'timeInfo=========');
         let isRealize
         if (timeInfo.isRealize === '1') {
-            this.modifyRealize({ is_realize: '0' })
+            this.modifyRealize({ is_realize: '0' }, type, timeInfo.cardId)
             isRealize = 0
 
         } else {
-            this.modifyRealize({ is_realize: '1' })
+            this.modifyRealize({ is_realize: '1' }, type, timeInfo.cardId)
             isRealize = 1
         }
 
@@ -139,18 +138,52 @@ export default class taksDetails extends Component {
         console.log('ejectTimePicks========');
     }
 
-    modifyRealize = (new_data = {}) => {
+    modifyRealize = (new_data = {}, type, card_id) => {
 
         const { tasksDetailDatas = {}, dispatch } = this.props
-        dispatch({
-            type: 'tasks/updateDatas',
-            payload: {
-                tasksDetailDatas: {
-                    ...tasksDetailDatas,
-                    ...new_data
+
+        if (type === 'TasksTime') {
+
+            dispatch({
+                type: 'tasks/updateDatas',
+                payload: {
+                    tasksDetailDatas: {
+                        ...tasksDetailDatas,
+                        ...new_data
+                    }
                 }
-            }
-        })
+            })
+
+        } else if (type === 'SonTasks') {
+
+            const { properties = [] } = tasksDetailDatas
+
+            properties.forEach(item => {
+
+                if (item['code'] === 'SUBTASK') {
+
+                    item['data'] && item['data'].forEach(obj => {
+
+                        if (obj.card_id === card_id) {
+
+                            obj.is_realize = new_data.is_realize
+                        }
+                    })
+                }
+            })
+
+
+            dispatch({
+                type: 'tasks/updateDatas',
+                payload: {
+                    tasksDetailDatas: {
+                        ...tasksDetailDatas,
+                        ...properties
+                    }
+                }
+            })
+        }
+
     }
 
     getCustomFieldSingleChoiceValue = (field_value, items = []) => {
@@ -215,7 +248,7 @@ export default class taksDetails extends Component {
                     <View className={indexStyles.tasks_time_style}>
                         <TasksTime
                             cellInfo={timeInfo}
-                            tasksDetailsRealizeStatus={(timeInfo) => this.tasksDetailsRealizeStatus(timeInfo)}
+                            tasksDetailsRealizeStatus={(timeInfo, type) => this.tasksDetailsRealizeStatus(timeInfo, 'TasksTime')}
                             flag={type_flag}
                             ejectTimePicks={() => this.ejectTimePicks()}
                         />
@@ -273,7 +306,7 @@ export default class taksDetails extends Component {
                                                     boardId={board_id}
                                                     propertyId={id}
                                                     cardId={card_id}
-                                                    tasksDetailsRealizeStatus={(timeInfo) => this.tasksDetailsRealizeStatus(timeInfo)}
+                                                    onTasksDetailsRealizeStatus={(timeInfo, type) => this.tasksDetailsRealizeStatus(timeInfo, 'SonTasks')}
                                                 /> : ''
                                         }
                                         {
