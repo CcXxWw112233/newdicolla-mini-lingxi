@@ -236,6 +236,14 @@ export default class index extends Component {
             board_id: board_id,
             fileName: fileName,
         })
+
+        const { cardId, dispatch, } = this.this.props
+        dispatch({
+            type: 'tasks/updateDatas',
+            payload: {
+                song_task_id: cardId,
+            }
+        })
     }
 
     previewFile = () => {
@@ -311,16 +319,16 @@ export default class index extends Component {
 
     deleteCardProperty = () => {
 
-        const { dispatch, propertyId, cardId } = this.props
+        // const { dispatch, propertyId, cardId } = this.props
 
-        dispatch({
-            type: 'tasks/deleteCardProperty',
-            payload: {
-                property_id: propertyId,
-                card_id: cardId,
-                callBack: this.deleteTasksFieldRelation(propertyId),
-            },
-        })
+        // dispatch({
+        //     type: 'tasks/deleteCardProperty',
+        //     payload: {
+        //         property_id: propertyId,
+        //         card_id: cardId,
+        //         callBack: this.deleteTasksFieldRelation(propertyId),
+        //     },
+        // })
     }
 
     deleteTasksFieldRelation = (propertyId) => {
@@ -374,7 +382,7 @@ export default class index extends Component {
                     </View>
 
                     <View className={`${indexStyles.list_item_iconnext}`} onClick={this.deleteCardProperty}>
-                        <Text className={`${globalStyle.global_iconfont}`}>&#xe7fc;</Text>
+                        <Text className={`${globalStyle.global_iconfont}`}>&#xe63f;</Text>
                     </View>
 
                 </View>

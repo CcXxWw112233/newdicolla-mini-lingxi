@@ -38,8 +38,10 @@ export default class milestoneList extends Component {
         const { dispatch } = this.props
         const { current_select_milestone_id, card_id } = this.state
 
-        if (current_select_milestone_id == value) { //删除关联里程碑
+        console.log(current_select_milestone_id, 'value=======', value);
 
+        if (current_select_milestone_id == value) { //删除关联里程碑
+            debugger
             this.setState({
                 current_select_milestone_id: '',
                 current_select_milestone_name: '',
@@ -56,8 +58,19 @@ export default class milestoneList extends Component {
         }
         else {  //添加关联里程碑
 
-            if (current_select_milestone_id != '') {
-
+            if (current_select_milestone_id == '' || current_select_milestone_id == 'undefined' || current_select_milestone_id) {
+                debugger
+                dispatch({
+                    type: 'tasks/boardAppRelaMiletones',
+                    payload: {
+                        id: value,
+                        origin_type: '0',
+                        rela_id: card_id,
+                        callBack: this.boardAppRelaMiletones(name),
+                    },
+                })
+            } else {
+                debugger
                 //先删除, 再关联
                 Promise.resolve(
                     dispatch({
@@ -84,21 +97,10 @@ export default class milestoneList extends Component {
                         },
                     })
                 })
-            } else {
 
                 this.setState({
                     current_select_milestone_id: value,
                     current_select_milestone_name: name,
-                })
-
-                dispatch({
-                    type: 'tasks/boardAppRelaMiletones',
-                    payload: {
-                        id: value,
-                        origin_type: '0',
-                        rela_id: card_id,
-                        callBack: this.boardAppRelaMiletones(name),
-                    },
                 })
             }
         }

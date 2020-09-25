@@ -180,9 +180,9 @@ export default class addSonTask extends Component {
                     <View className={indexStyles.list_item_name}>子任务</View>
 
 
-                    <View className={`${indexStyles.list_item_iconnext}`}>
+                    {/* <View className={`${indexStyles.list_item_iconnext}`}>
                         <Text className={`${globalStyle.global_iconfont}`}>&#xe7fc;</Text>
-                    </View>
+                    </View> */}
 
                 </View>
 

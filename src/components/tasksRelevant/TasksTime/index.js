@@ -8,8 +8,8 @@ import { connect } from '@tarojs/redux'
 import { AtList, AtListItem } from 'taro-ui'
 
 
-@connect(({ tasks: { isPermission, }, }) => ({
-    isPermission,
+@connect(({ tasks: { isPermission, tasksDetailDatas = {}, }, }) => ({
+    isPermission, tasksDetailDatas,
 }))
 export default class TasksTime extends Component {
 
@@ -45,21 +45,79 @@ export default class TasksTime extends Component {
         })
     }
 
-    onDateChange = e => {
+    onDateChangeStart = e => {
+
+        var value = e['detail']['value']
+        let myDate = new Date();
+        let str = myDate.toTimeString();
+        let timeStr = str.substring(0, 8);
+
+        var strTime = value + ' ' + timeStr
+        var date = new Date(strTime);
+        var time = date.getTime()
+
         const { cellInfo = {}, } = this.props
         const { cardId } = cellInfo
         //更新任务时间
-        const { dispatch } = this.props
+        const { dispatch, tasksDetailDatas, } = this.props
         dispatch({
             type: 'tasks/putCardBaseInfo',
             payload: {
                 card_id: cardId,
-                due_time: 1600325377331,
+                start_time: time,
             }
         })
 
         this.setState({
             is_show_time_picks: true,
+        })
+
+        dispatch({
+            type: 'tasks/updateDatas',
+            payload: {
+                tasksDetailDatas: {
+                    ...tasksDetailDatas,
+                    ...{ start_time: time }
+                }
+            }
+        })
+    }
+
+    onDateChangeDue = e => {
+
+        let value = e['detail']['value']
+        let myDate = new Date();
+        let str = myDate.toTimeString();
+        let timeStr = str.substring(0, 8);
+
+        var strTime = value + ' ' + timeStr
+        var date = new Date(strTime);
+        var time = date.getTime()
+
+        const { cellInfo = {}, } = this.props
+        const { cardId } = cellInfo
+        //更新任务时间
+        const { dispatch, tasksDetailDatas, } = this.props
+        dispatch({
+            type: 'tasks/putCardBaseInfo',
+            payload: {
+                card_id: cardId,
+                due_time: time,
+            }
+        })
+
+        this.setState({
+            is_show_time_picks: true,
+        })
+
+        dispatch({
+            type: 'tasks/updateDatas',
+            payload: {
+                tasksDetailDatas: {
+                    ...tasksDetailDatas,
+                    ...{ due_time: time }
+                }
+            }
         })
     }
 
@@ -109,23 +167,23 @@ export default class TasksTime extends Component {
                     ></Input>
                 </View>
                 <View className={indexStyles.selectionTime}>
-                    <Picker mode='date' onChange={this.onDateChange} className={indexStyles.startTime} onClick={this.ejectTimePicks}>
+                    <Picker mode='date' onChange={this.onDateChangeStart} className={indexStyles.startTime} onClick={this.ejectTimePicks}>
                         {/* <ChoiceTimes onClick={this.ejectTimePicks} time={sTime} /> */}
                         {sTime ? timestampToTimeZH(sTime) : '开始时间'}
                     </Picker>
-                    <Picker mode='date' onChange={this.onDateChange} className={indexStyles.endTime} onClick={this.ejectTimePicks}>
+                    <Picker mode='date' onChange={this.onDateChangeDue} className={indexStyles.endTime} onClick={this.ejectTimePicks}>
                         {/* <ChoiceTimes onClick={this.ejectTimePicks} time={eTime} /> */}
                         {eTime ? timestampToTimeZH(eTime) : '结束时间'}
                     </Picker>
                 </View>
 
-                {
+                {/* {
                     is_show_time_picks == true ? <Picker mode='time' onChange={this.onTimeChange}>
                         <AtList>
                             <AtListItem title='请选择时间' extraText={this.state.timeSel} />
                         </AtList>
                     </Picker> : <View> </View>
-                }
+                } */}
 
             </View>
         )

@@ -41,7 +41,7 @@ export const getDownloadUrl = (data, notShowLoading) => {
   }, notShowLoading)
 }
 
-//获取文件列表
+//获取文件夹列表
 export const getFolder = (data, notShowLoading) => {
   return request({
     data: {

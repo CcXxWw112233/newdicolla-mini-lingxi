@@ -15,12 +15,15 @@ import CustomNavigation from '../acceptInvitation/components/CustomNavigation.js
 import { connect } from '@tarojs/redux'
 import SonTasks from './components/SonTasks/index'
 import DescribeTasks from './components/DescribeTasks/index'
+import TaksChoiceFolder from './components/TaksChoiceFolder/index'
 import MultipleSelectionField from './components/MultipleSelectionField/index'
 import { timestampToTimeZH } from '../../utils/basicFunction'
 
 
-@connect(({ tasks: { tasksDetailDatas = {}, properties_list = [], }, calendar: { isOtherPageBack = {} } }) => ({
-    tasksDetailDatas, isOtherPageBack, properties_list,
+@connect(({ tasks: { tasksDetailDatas = {}, properties_list = [], }, calendar: { isOtherPageBack = {} }, file: {
+    folder_tree, isShowChoiceFolder,
+}, }) => ({
+    tasksDetailDatas, isOtherPageBack, properties_list, folder_tree, isShowChoiceFolder,
 }))
 export default class taksDetails extends Component {
     config = {
@@ -60,9 +63,11 @@ export default class taksDetails extends Component {
 
         this.loadTasksDetail(contentId, boardId)
         this.getCardProperties()
+        this.getBoardFileList(boardId)
     }
 
     loadTasksDetail(content_id, board_id) {
+
         let contentId
         let boardId
         if (content_id || board_id) {
@@ -88,6 +93,16 @@ export default class taksDetails extends Component {
             type: 'tasks/getCardProperties',
             payload: {
             }
+        })
+    }
+
+    getBoardFileList = (boardId) => {
+        const { dispatch } = this.props
+        dispatch({
+            type: 'file/getFolder',
+            payload: {
+                board_id: boardId,
+            },
         })
     }
 
@@ -212,7 +227,7 @@ export default class taksDetails extends Component {
 
     render() {
 
-        const { tasksDetailDatas = {}, properties_list = [], } = this.props
+        const { tasksDetailDatas = {}, properties_list = [], folder_tree, isShowChoiceFolder, } = this.props
         const card_id = tasksDetailDatas['card_id'] || ''
         const card_name = tasksDetailDatas['card_name'] || ''
         const due_time = tasksDetailDatas['due_time'] || ''
@@ -246,7 +261,7 @@ export default class taksDetails extends Component {
 
         const { type_flag } = this.props
 
-        const { properties = [], fields = [], } = tasksDetailDatas
+        const { properties = [], fields = [], org_id } = tasksDetailDatas
 
         let board_id = Taro.getStorageSync('tasks_detail_boardId')
 
@@ -448,6 +463,10 @@ export default class taksDetails extends Component {
                         })
                     }
                 </View>
+
+                {(folder_tree && folder_tree.child_data && folder_tree.child_data.length > 0) && isShowChoiceFolder == true ? <TaksChoiceFolder folder_tree={folder_tree} org_id={org_id}
+                    board_id={board_id} card_id={card_id} onLoadTasksDetail={(board_id, card_id) => this.loadTasksDetail(board_id, card_id)} /> : <View></View>}
+
             </View >
         )
     }

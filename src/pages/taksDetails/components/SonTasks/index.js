@@ -6,8 +6,8 @@ import { AtActionSheet, AtActionSheetItem } from "taro-ui"
 import { connect } from '@tarojs/redux'
 import { getOrgIdByBoardId, setBoardIdStorage } from '../../../../utils/basicFunction'
 
-@connect(({ tasks: { tasksDetailDatas = {}, }, }) => ({
-    tasksDetailDatas,
+@connect(({ tasks: { tasksDetailDatas = {}, choice_image_temp_file_paths = '' }, }) => ({
+    tasksDetailDatas, choice_image_temp_file_paths,
 }))
 export default class index extends Component {
 
@@ -63,6 +63,14 @@ export default class index extends Component {
             song_task_isOpen: true,
             song_task_id: cardId,
         })
+
+        const { dispatch } = this.props
+        dispatch({
+            type: 'tasks/updateDatas',
+            payload: {
+                song_task_id: cardId,
+            }
+        })
     }
 
     uploadFile = () => {
@@ -75,79 +83,35 @@ export default class index extends Component {
         this.getLocationAuth().then(msg => {
             Taro.getSetting({
                 success(res) {
-                    if (imageSourceType === 'camera') {
-                        if (!res.authSetting['scope.camera']) { //获取摄像头权限
-                            Taro.authorize({
-                                scope: 'scope.camera',
-                                success() {
-                                    // console.log('授权成功')
-                                    that.fileUploadAlbumCamera(imageSourceType)
-                                }, fail() {
-                                    Taro.showModal({
-                                        title: '提示',
-                                        content: '尚未进行授权，部分功能将无法使用',
-                                        showCancel: false,
-                                        success(res) {
-                                            if (res.confirm) {
-                                                console.log('用户点击确定')
-                                                Taro.openSetting({
-                                                    success: (res) => {
-                                                        if (!res.authSetting['scope.camera']) {
-                                                            Taro.authorize({
-                                                                scope: 'scope.camera',
-                                                                success() {
-                                                                    console.log('授权成功')
-                                                                }, fail() {
-                                                                    console.log('用户点击取消')
-                                                                }
-                                                            })
-                                                        }
-                                                    },
-                                                    fail: function () {
-                                                        console.log("授权设置拍照失败");
-                                                    }
-                                                })
-                                            } else if (res.cancel) {
-                                                console.log('用户点击取消')
-                                            }
+                    if (!res.authSetting['scope.writePhotosAlbum']) { //获取相册权限
+                        Taro.authorize({
+                            scope: 'scope.writePhotosAlbum',
+                            success() {
+                                // console.log('授权成功')
+                                that.fileUploadAlbumCamera(imageSourceType)
+                            }, fail() {
+                                Taro.showModal({
+                                    title: '提示',
+                                    content: '尚未进行授权，部分功能将无法使用',
+                                    showCancel: false,
+                                    success(res) {
+                                        if (res.confirm) {
+                                            Taro.openSetting({
+                                                success: (res) => {
+                                                },
+                                                fail: function () {
+                                                    console.log("授权设置相册失败");
+                                                }
+                                            })
+                                        } else if (res.cancel) {
+                                            console.log('用户点击取消')
                                         }
-                                    })
-                                }
-                            })
-                        } else {
-                            that.fileUploadAlbumCamera(imageSourceType)
-                        }
-                    } else if (imageSourceType === 'album') {
-                        if (!res.authSetting['scope.writePhotosAlbum']) { //获取相册权限
-                            Taro.authorize({
-                                scope: 'scope.writePhotosAlbum',
-                                success() {
-                                    // console.log('授权成功')
-                                    that.fileUploadAlbumCamera(imageSourceType)
-                                }, fail() {
-                                    Taro.showModal({
-                                        title: '提示',
-                                        content: '尚未进行授权，部分功能将无法使用',
-                                        showCancel: false,
-                                        success(res) {
-                                            if (res.confirm) {
-                                                Taro.openSetting({
-                                                    success: (res) => {
-                                                    },
-                                                    fail: function () {
-                                                        console.log("授权设置相册失败");
-                                                    }
-                                                })
-                                            } else if (res.cancel) {
-                                                console.log('用户点击取消')
-                                            }
-                                        }
-                                    })
-                                }
-                            })
-                        } else {
-                            that.fileUploadAlbumCamera(imageSourceType)
-                        }
+                                    }
+                                })
+                            }
+                        })
+                    } else {
+                        that.fileUploadAlbumCamera(imageSourceType)
                     }
                 },
                 fail(res) {
@@ -184,18 +148,30 @@ export default class index extends Component {
         let that = this;
         Taro.chooseImage({
             // count: 9 - that.state.choice_image_temp_file_paths.length,
-            count: 9,
+            count: 1,
             sizeType: ['original'],
             sourceType: [imageSourceType],
             success(res) {
                 console.log(res)
                 let tempFilePaths = res.tempFilePaths;
+                that.setFileOptionIsOpen()
                 that.uploadChoiceFolder();
-                that.setState({
-                    makePho: imageSourceType,
-                    choice_image_temp_file_paths: tempFilePaths,
-                })
+                // that.setState({
+                //     makePho: imageSourceType,
+                //     choice_image_temp_file_paths: tempFilePaths,
+                // })
+                that.saveChoiceImageTempFilePaths(tempFilePaths)
             }
+        })
+    }
+
+    saveChoiceImageTempFilePaths = (tempFilePaths) => {
+        const { dispatch } = this.props
+        dispatch({
+            type: 'tasks/updateDatas',
+            payload: {
+                choice_image_temp_file_paths: tempFilePaths,
+            },
         })
     }
 

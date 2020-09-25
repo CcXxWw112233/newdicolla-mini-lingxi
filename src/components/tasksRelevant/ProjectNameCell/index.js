@@ -29,9 +29,12 @@ export default class ProjectNameCell extends Component {
                     },
                 })
             ).then(res => {
-                Taro.navigateTo({
-                    url: `../../pages/tasksGroup/index?contentId=${contentId}&listId=${list_id}`
-                })
+                if (res.data.length > 0) {
+
+                    Taro.navigateTo({
+                        url: `../../pages/tasksGroup/index?contentId=${contentId}&listId=${list_id}`
+                    })
+                }
             })
 
         } else if (type === '3') {  //执行人
@@ -58,9 +61,14 @@ export default class ProjectNameCell extends Component {
                     },
                 })
             ).then(res => {
-                Taro.navigateTo({
-                    url: `../../pages/milestoneList/index?contentId=${contentId}&milestoneId=${data.id}`
-                })
+                console.log(res, '888888888', res.data);
+
+                if (res.data.length > 0) {
+
+                    Taro.navigateTo({
+                        url: `../../pages/milestoneList/index?contentId=${contentId}&milestoneId=${data.id}`
+                    })
+                }
             })
         }
         else if (type === '5') {  //字段
@@ -151,8 +159,6 @@ export default class ProjectNameCell extends Component {
                 }
             }
         })
-
-        console.log(properties_list, 'properties_list========');
 
         dispatch({
             type: 'tasks/updateDatas',

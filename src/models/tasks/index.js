@@ -16,6 +16,8 @@ export default {
     group_list: [], //任务分组
     field_selection_list: [], //字段选择list
     properties_list: [], //任务属性列表
+    choice_image_temp_file_paths: '', //选择文件上传保存在本地的路径
+    song_task_id: '', //子任务id
   },
   effects: {
     //获取任务列表
@@ -286,8 +288,8 @@ export default {
 
     //修改任务
     * putCardBaseInfo({ payload }, { select, call, put }) {
-      const { card_id, card_name, name, due_time, list_id, calback } = payload;
-      const res = yield call(putCardBaseInfo, { id: card_id, card_name: card_name, name: name, due_time: due_time, list_id: list_id, })
+      const { card_id, card_name, name, due_time, list_id, calback, start_time } = payload;
+      const res = yield call(putCardBaseInfo, { id: card_id, card_name: card_name, name: name, due_time: due_time, list_id: list_id, start_time: start_time })
 
       if (isApiResponseOk(res)) {
         if (typeof calback == 'function') calback()

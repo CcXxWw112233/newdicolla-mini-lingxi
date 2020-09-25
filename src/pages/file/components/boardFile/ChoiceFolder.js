@@ -1,6 +1,6 @@
 
 import Taro, { Component, getApp } from '@tarojs/taro'
-import { View, Text ,Image} from '@tarojs/components'
+import { View, Text, Image } from '@tarojs/components'
 import indexStyles from './ChoiceFolder.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
@@ -35,10 +35,10 @@ export default class ChoiceFolder extends Component {
     state = {
         is_show_board_list: false, //是否显示项目列表
         thumb_image_info: [], //图片略缩图
-        addressName:"正在获取中...",// 转换好的中文地址
-        address:{
-          longitude:"",
-          latitude:""
+        addressName: "正在获取中...",// 转换好的中文地址
+        address: {
+            longitude: "",
+            latitude: ""
         }
     }
 
@@ -60,7 +60,7 @@ export default class ChoiceFolder extends Component {
         // let promise = [];
         // console.log(array)
         this.setState({
-          thumb_image_info: array
+            thumb_image_info: array
         })
         this.getLocation()
         // array.forEach(item => {
@@ -200,8 +200,8 @@ export default class ChoiceFolder extends Component {
     }
 
     handleConfirm = () => {
-        let { address :{ longitude,latitude } } = this.state;
-        this.props.fileUpload && this.props.fileUpload({latitude,longitude})
+        let { address: { longitude, latitude } } = this.state;
+        this.props.fileUpload && this.props.fileUpload({ latitude, longitude })
         this.hideChoiceFolder()
         // this.resetCurrentSelection()
     }
@@ -312,64 +312,64 @@ export default class ChoiceFolder extends Component {
 
         return Latitude;
     }
-    GETWXSDKGEO({latitude, longitude}){
-      return new Promise((resolve,reject) => {
-        var demo = new QQMapWX({
-          key: QQMAPSDK_KEY,
-        })
-        demo.reverseGeocoder({
-            location: {
-                latitude: latitude,
-                longitude: longitude,
-            },
-            success: function (res) {
-                resolve({ address: res.result.address , latitude, longitude})
-            },
-            fail: function (res) {
-                console.log('读取失败: ', res);
-                reject(res)
-            },
-            complete: function (res) {
-                console.log('读取完成: ', res);
-            }
-        });
-      })
-    }
-    getLocation = ()=>{
-      let that = this;
-      // return new Promise((resolve,reject) => {
-        Taro.getLocation({
-          type:"gcj02",
-          success(resp){
-            // console.log(res)
-            let { latitude, longitude } = resp;
-            that.GETWXSDKGEO({latitude,longitude}).then(res => {
-              that.setState({
-                addressName: res.address,
-                address:{
-                  latitude,longitude
-                }
-              })
+    GETWXSDKGEO({ latitude, longitude }) {
+        return new Promise((resolve, reject) => {
+            var demo = new QQMapWX({
+                key: QQMAPSDK_KEY,
             })
-          }
+            demo.reverseGeocoder({
+                location: {
+                    latitude: latitude,
+                    longitude: longitude,
+                },
+                success: function (res) {
+                    resolve({ address: res.result.address, latitude, longitude })
+                },
+                fail: function (res) {
+                    console.log('读取失败: ', res);
+                    reject(res)
+                },
+                complete: function (res) {
+                    console.log('读取完成: ', res);
+                }
+            });
         })
-      // })
+    }
+    getLocation = () => {
+        let that = this;
+        // return new Promise((resolve,reject) => {
+        Taro.getLocation({
+            type: "gcj02",
+            success(resp) {
+                // console.log(res)
+                let { latitude, longitude } = resp;
+                that.GETWXSDKGEO({ latitude, longitude }).then(res => {
+                    that.setState({
+                        addressName: res.address,
+                        address: {
+                            latitude, longitude
+                        }
+                    })
+                })
+            }
+        })
+        // })
     }
     // 选择位置
-    choosePosition = ()=>{
-      let that = this;
-      wx.chooseLocation({
-        success:(val)=>{
-          // console.log(val)
-          let { latitude ,longitude ,address,name} = val;
-          that.setState({
-            addressName: address + name,
-            address:{
-              latitude,longitude
+    choosePosition = () => {
+        let that = this;
+        wx.chooseLocation({
+            success: (val) => {
+                // console.log(val)
+                let { latitude, longitude, address, name } = val;
+                that.setState({
+                    addressName: address + name,
+                    address: {
+                        latitude, longitude
+                    }
+                })
             }
-          })
-        }
-      })
+        })
     }
 
     //获取图片Exif信息
@@ -420,7 +420,7 @@ export default class ChoiceFolder extends Component {
 
         const { folder_tree, org_list, upload_folder_name, choice_board_folder_id, choice_board_id, current_selection_board_id, current_board_open, } = this.props
         const { child_data = [], } = folder_tree
-        const { is_show_board_list, thumb_image_info = [], addressName} = this.state
+        const { is_show_board_list, thumb_image_info = [], addressName } = this.state
 
         const SystemInfo = Taro.getSystemInfoSync()
         const { windowHeight } = SystemInfo
@@ -468,10 +468,10 @@ export default class ChoiceFolder extends Component {
                                         })}
                                     </ScrollView>
                                     <View className={indexStyles.addressBox}>
-                                      <View className={`${indexStyles.addressText} ${globalStyle.global_iconfont}`}
-                                      onClick={this.choosePosition}>
-                                        &#xe790; {addressName}
-                                      </View>
+                                        <View className={`${indexStyles.addressText} ${globalStyle.global_iconfont}`}
+                                            onClick={this.choosePosition}>
+                                            &#xe790; {addressName}
+                                        </View>
                                     </View>
                                 </View>
                             </View>
