@@ -273,6 +273,18 @@ export const deleteCardProperty = (data, notShowLoading) => {
   }, notShowLoading)
 }
 
+
+//删除自定义字段
+export const postCardProperty = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'POST',
+    url: `${API_BOARD}/card/property`,
+  }, notShowLoading)
+}
+
 //获取自定义字段列表
 export const getBoardFieldGroupList = (data, notShowLoading) => {
   return request({

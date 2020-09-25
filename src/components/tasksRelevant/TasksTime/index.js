@@ -33,6 +33,7 @@ export default class TasksTime extends Component {
 
     //更新任务名称
     updataCardName = (cardId, value) => {
+        console.log('更新任务名称================', cardId, value);
         const { dispatch } = this.props
         dispatch({
             type: 'tasks/putCardBaseInfo',

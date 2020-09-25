@@ -16,11 +16,25 @@ export default class AddFunctionCell extends Component {
         dataArray: [],
     }
 
-    selectFunction = (code) => {
+    selectFunction = (code, id) => {
+
+        const { dispatch, tasksDetailDatas, } = this.props
+        const { card_id } = tasksDetailDatas
+
+        dispatch({
+            type: 'tasks/postCardProperty',
+            payload: {
+                card_id: card_id,
+                property_id: id,
+                callBack: this.postCardProperty(code)
+            }
+        })
+    }
+
+    postCardProperty = (code) => {
 
         const { dispatch, tasksDetailDatas, properties_list, } = this.props
         const { properties = [], } = tasksDetailDatas
-        const { propertiesList } = this.state
 
         properties_list.forEach(element => {
 
@@ -28,13 +42,16 @@ export default class AddFunctionCell extends Component {
 
                 properties.push(element)
             }
-
-            // if (element.code != code) {
-            //     properties_list.push(element)
-            // }
-
         });
 
+
+        for (var i = 0; i < properties_list.length; i++) {
+
+            if (properties_list[i].code == code) {
+
+                properties_list.splice(i, 1);
+            }
+        }
 
         dispatch({
             type: 'tasks/updateDatas',
@@ -42,17 +59,30 @@ export default class AddFunctionCell extends Component {
                 tasksDetailDatas: {
                     ...tasksDetailDatas,
                     ...properties,
-                    ...propertiesList,
                 }
             }
         })
 
+        Promise.resolve(
+            dispatch({
+                type: 'tasks/updateDatas',
+                payload: {
+                    ...properties_list,
+                }
+            })
+        ).then(res => {
+            this.overwriteData()
+        })
     }
 
     componentDidMount() {
 
-        const { properties_list = [], properties = [], } = this.props
+        this.overwriteData()
+    }
 
+    overwriteData = () => {
+
+        const { properties_list = [], properties = [], } = this.props
         let new_array = [];
 
         new_array = properties_list.filter(item => {
@@ -61,7 +91,7 @@ export default class AddFunctionCell extends Component {
                     return n
                 }
             }) || {}).code
-            // console.log(gold_code);
+
             if (item.code != gold_code) {
                 return item
             }
@@ -72,8 +102,12 @@ export default class AddFunctionCell extends Component {
         })
     }
 
-    render() {
+    componentWillReceiveProps() {
 
+        this.overwriteData()
+    }
+
+    render() {
         const { dataArray = [] } = this.state
 
         return (
@@ -87,7 +121,7 @@ export default class AddFunctionCell extends Component {
                         return (
                             <View key={key}
                                 className={indexStyles.tagCell_list_item}
-                                onClick={() => this.selectFunction(code)}
+                                onClick={() => this.selectFunction(code, id)}
                             >
                                 <AtTag type='primary'
                                     customStyle={{

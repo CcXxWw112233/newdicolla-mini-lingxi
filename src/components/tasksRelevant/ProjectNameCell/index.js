@@ -6,8 +6,8 @@ import index from '../../../pages/taksDetails/components/CommentBox';
 import Avatar from '../../avatar';
 import { connect } from '@tarojs/redux';
 
-@connect(({ tasks: { tasksDetailDatas = {}, }, }) => ({
-    tasksDetailDatas,
+@connect(({ tasks: { tasksDetailDatas = {}, properties_list = [], }, }) => ({
+    tasksDetailDatas, properties_list,
 }))
 export default class ProjectNameCell extends Component {
 
@@ -50,7 +50,6 @@ export default class ProjectNameCell extends Component {
         }
         else if (type === '4') { //里程碑
 
-            const { data, } = this.props
             Promise.resolve(
                 dispatch({
                     type: 'tasks/getTaskMilestoneList',
@@ -92,14 +91,13 @@ export default class ProjectNameCell extends Component {
         else if (type === '9') {  //数字
 
             Taro.navigateTo({
-                url: `../../pages/textField/index?field_value=${field_value}&item_id=${item_id}&type='number'`
+                url: `../../pages/textField/index?field_value=${field_value}&item_id=${item_id}&type=${'number'}`
             })
-
         }
         else if (type === '10') {  //文本
 
             Taro.navigateTo({
-                url: `../../pages/textField/index?field_value=${field_value}&item_id=${item_id}&type='text'`
+                url: `../../pages/textField/index?field_value=${field_value}&item_id=${item_id}&type=${'text'}`
             })
         }
     }
@@ -133,7 +131,7 @@ export default class ProjectNameCell extends Component {
 
     deleteTasksFieldRelation = (propertyId) => {
 
-        const { dispatch, tasksDetailDatas, } = this.props
+        const { dispatch, tasksDetailDatas = {}, properties_list = [], } = this.props
         const { properties = [], } = tasksDetailDatas
 
         let new_array = []
@@ -151,6 +149,15 @@ export default class ProjectNameCell extends Component {
                     ...tasksDetailDatas,
                     ...{ properties: new_array },
                 }
+            }
+        })
+
+        console.log(properties_list, 'properties_list========');
+
+        dispatch({
+            type: 'tasks/updateDatas',
+            payload: {
+                ...properties_list,
             }
         })
     }
@@ -206,7 +213,7 @@ export default class ProjectNameCell extends Component {
         } else if (type === '7') {
             icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe7b8;</Text>
         } else if (type === '8') {
-            icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe7c1;</Text>
+            icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe63e;</Text>
         } else if (type === '9') {
             icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe7c0;</Text>
         } else if (type === '10') {

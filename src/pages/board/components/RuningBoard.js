@@ -10,16 +10,16 @@ import { connect } from '@tarojs/redux'
 }))
 export default class RuningBoard extends Component {
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
   }
 
-  componentWillUnmount () { }
+  componentWillUnmount() { }
 
-  componentDidShow () {
+  componentDidShow() {
     this.getBoardList()
   }
 
-  componentDidHide () { }
+  componentDidHide() { }
 
   getBoardList = () => {
     const { dispatch } = this.props
@@ -31,15 +31,15 @@ export default class RuningBoard extends Component {
     })
   }
 
-  render () {
-    const { board: { board_list = [] }} = this.props
+  render() {
+    const { board: { board_list = [] } } = this.props
     return (
       <View className={`${indexStyles.board_item_out} ${globalStyles.global_horrizontal_padding}`}>
         {board_list.map((value, key) => {
           const { board_id } = value
           return (
             <View key={board_id}>
-              <RunningBoardItem board_item={value}/>
+              <RunningBoardItem board_item={value} />
             </View>
           )
         })}

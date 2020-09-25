@@ -12,7 +12,7 @@ import index from '../taksDetails/components/CommentBox'
 }))
 export default class textField extends Component {
     config = {
-        navigationBarTitleText: '文本字段'
+        navigationBarTitleText: '填写字段信息'
     }
 
     constructor() {
@@ -85,13 +85,17 @@ export default class textField extends Component {
                 <View className={indexStyles.contentStyles}>
 
 
-                    <View className={`${indexStyles.list_item_left_iconnext}`}>
-                        <Text className={`${globalStyle.global_iconfont}`}>&#xe7c1;</Text>
-                    </View>
-
+                    {type === 'number' ?
+                        (<View className={`${indexStyles.list_item_left_iconnext}`}>
+                            <Text className={`${globalStyle.global_iconfont}`}>&#xe7c0;</Text>
+                        </View>)
+                        :
+                        (<View className={`${indexStyles.list_item_left_iconnext}`}>
+                            <Text className={`${globalStyle.global_iconfont}`}>&#xe7c1;</Text>
+                        </View>)
+                    }
 
                     <View className={indexStyles.list_item_name}>{type === 'number' ? '数字字段' : '文本字段'}</View>
-
 
                     <Input
                         className={indexStyles.list_item_detail}
@@ -103,9 +107,9 @@ export default class textField extends Component {
                     ></Input>
 
 
-                    <View className={`${indexStyles.list_item_iconnext}`}>
+                    {/* <View className={`${indexStyles.list_item_iconnext}`}>
                         <Text className={`${globalStyle.global_iconfont}`}>&#xe7fc;</Text>
-                    </View>
+                    </View> */}
 
                 </View>
 

@@ -1,7 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Picker, } from '@tarojs/components'
-import indexStyles from './index.scss'
-import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
 import { AtList, AtListItem } from 'taro-ui'
 import { timestampToTime, } from '../../utils/basicFunction'
@@ -13,7 +11,7 @@ import { timestampToTime, } from '../../utils/basicFunction'
 }))
 export default class dateField extends Component {
     config = {
-        navigationBarTitleText: '文本字段'
+        navigationBarTitleText: '日期字段'
     }
 
     constructor() {
@@ -97,7 +95,7 @@ export default class dateField extends Component {
         const { dateSel } = this.state
 
         return (
-            <View className={indexStyles.viewStyle}>
+            <View >
 
                 <Picker
                     mode='date'

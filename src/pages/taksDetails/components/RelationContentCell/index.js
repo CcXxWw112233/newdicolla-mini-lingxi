@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
-import indexStyles from './../SonTasksCell/index.scss'
+import indexStyles from '../SonTasksCell/index.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux';
 

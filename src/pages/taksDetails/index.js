@@ -19,7 +19,6 @@ import MultipleSelectionField from './components/MultipleSelectionField/index'
 import { timestampToTimeZH } from '../../utils/basicFunction'
 
 
-
 @connect(({ tasks: { tasksDetailDatas = {}, properties_list = [], }, calendar: { isOtherPageBack = {} } }) => ({
     tasksDetailDatas, isOtherPageBack, properties_list,
 }))
@@ -102,11 +101,10 @@ export default class taksDetails extends Component {
         })
 
         const { content_Id, board_id } = this.state
-        debugger
+
         if (content_Id != '' && content_Id != '') {
 
             this.loadTasksDetail(content_Id, board_id)
-            debugger
         }
     }
 
@@ -213,7 +211,8 @@ export default class taksDetails extends Component {
     }
 
     render() {
-        const { tasksDetailDatas, properties_list, } = this.props
+
+        const { tasksDetailDatas = {}, properties_list = [], } = this.props
         const card_id = tasksDetailDatas['card_id'] || ''
         const card_name = tasksDetailDatas['card_name'] || ''
         const due_time = tasksDetailDatas['due_time'] || ''

@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { getTaskGroupList, addTask, getTasksDetail, getCardCommentListAll, boardAppRelaMiletones, addComment, checkContentLink, getTaskExecutorsList, getTaskMilestoneList, setTasksRealize, updataTasks, putCardBaseInfo, getLabelList, postCardLabel, deleteCardLabel, getCardList, deleteCardExecutor, addCardExecutor, deleteAppRelaMiletones, deleteCard, deleteCardAttachment, deleteCardProperty, getBoardFieldGroupList, putBoardFieldRelation, deleteBoardFieldRelation, postBoardFieldRelation, postV2Card, getCardProperties, } from '../../services/tasks/index'
+import { getTaskGroupList, addTask, getTasksDetail, getCardCommentListAll, boardAppRelaMiletones, addComment, checkContentLink, getTaskExecutorsList, getTaskMilestoneList, setTasksRealize, updataTasks, putCardBaseInfo, getLabelList, postCardLabel, deleteCardLabel, getCardList, deleteCardExecutor, addCardExecutor, deleteAppRelaMiletones, deleteCard, deleteCardAttachment, deleteCardProperty, getBoardFieldGroupList, putBoardFieldRelation, deleteBoardFieldRelation, postBoardFieldRelation, postV2Card, getCardProperties, postCardProperty, } from '../../services/tasks/index'
 import { isApiResponseOk } from "../../utils/request";
 import { setBoardIdStorage } from '../../utils/basicFunction'
 
@@ -447,7 +447,6 @@ export default {
       if (isApiResponseOk(res)) {
         if (typeof callBack == 'function') callBack()
       } else {
-
         Taro.showToast({
           title: res.message,
           icon: 'none',
@@ -530,6 +529,20 @@ export default {
       }
     },
 
+    //添加任务属性
+    * postCardProperty({ payload }, { select, call, put }) {
+      const { callBack } = payload
+      const res = yield call(postCardProperty, payload)
+      if (isApiResponseOk(res)) {
+        if (typeof callBack == 'function') callBack()
+      } else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    },
 
 
   },

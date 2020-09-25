@@ -1,10 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, } from '@tarojs/components'
-import indexStyles from './index.scss'
-import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
 import { AtRadio } from 'taro-ui'
-import Item from 'antd-mobile-rn/lib/list/ListItem.native'
 
 @connect(({ tasks: { group_list = [], tasksDetailDatas = {}, }, }) => ({
     group_list, tasksDetailDatas,

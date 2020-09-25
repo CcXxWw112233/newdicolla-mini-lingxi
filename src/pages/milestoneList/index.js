@@ -57,7 +57,7 @@ export default class milestoneList extends Component {
         else {  //添加关联里程碑
 
             if (current_select_milestone_id != '') {
-                debugger
+
                 //先删除, 再关联
                 Promise.resolve(
                     dispatch({
@@ -73,7 +73,7 @@ export default class milestoneList extends Component {
                         current_select_milestone_id: value,
                         current_select_milestone_name: name,
                     })
-                    debugger
+
                     dispatch({
                         type: 'tasks/boardAppRelaMiletones',
                         payload: {
@@ -130,7 +130,7 @@ export default class milestoneList extends Component {
         const { dispatch, tasksDetailDatas, } = this.props
         const { properties = [] } = tasksDetailDatas
         const { current_select_milestone_id, current_select_milestone_name, } = this.state
-        debugger
+
         properties.forEach(item => {
             if (item['code'] === 'MILESTONE') {
                 item.data = {
