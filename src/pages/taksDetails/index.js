@@ -20,8 +20,8 @@ import { timestampToTimeZH } from '../../utils/basicFunction'
 
 
 
-@connect(({ tasks: { tasksDetailDatas = {}, }, calendar: { isOtherPageBack = {} } }) => ({
-    tasksDetailDatas, isOtherPageBack
+@connect(({ tasks: { tasksDetailDatas = {}, properties_list = [], }, calendar: { isOtherPageBack = {} } }) => ({
+    tasksDetailDatas, isOtherPageBack, properties_list,
 }))
 export default class taksDetails extends Component {
     config = {
@@ -63,12 +63,6 @@ export default class taksDetails extends Component {
         this.getCardProperties()
     }
 
-    componentDidShow() {
-
-        const { content_Id, board_id } = this.state
-        this.loadTasksDetail(content_Id, board_id)
-    }
-
     loadTasksDetail(content_id, board_id) {
         let contentId
         let boardId
@@ -106,6 +100,14 @@ export default class taksDetails extends Component {
                 isOtherPageBack: true
             }
         })
+
+        const { content_Id, board_id } = this.state
+        debugger
+        if (content_Id != '' && content_Id != '') {
+
+            this.loadTasksDetail(content_Id, board_id)
+            debugger
+        }
     }
 
     componentWillUnmount() {
@@ -211,7 +213,7 @@ export default class taksDetails extends Component {
     }
 
     render() {
-        const { tasksDetailDatas } = this.props
+        const { tasksDetailDatas, properties_list, } = this.props
         const card_id = tasksDetailDatas['card_id'] || ''
         const card_name = tasksDetailDatas['card_name'] || ''
         const due_time = tasksDetailDatas['due_time'] || ''
@@ -344,111 +346,116 @@ export default class taksDetails extends Component {
 
                         {/* <RelationContentCell /> */}
 
-                        <AddFunctionCell isFunction={is_Function} />
+                    </View>
+
+                    {
+                        properties_list.length > 0 ? <AddFunctionCell properties_list={properties_list} properties={properties} /> : <View></View>
+
+                    }
 
 
-                        {/* <NewBuilders />
+                    {/* <NewBuilders />
                 <CommentCell />
                 <CommentBox content={content_Id} /> */}
 
-                        <ProjectNameCell
-                            title='字段'
-                            data={{ name: '更多' }}
-                            boardId={board_id}
-                            // propertyId={id}
-                            cardId={card_id}
-                            type='5'
-                        />
+                    <ProjectNameCell
+                        title='字段'
+                        data={{ name: '更多' }}
+                        boardId={board_id}
+                        // propertyId={id}
+                        cardId={card_id}
+                        type='5'
+                    />
 
-                        {
-                            fields && fields.map((item, key) => {
+                    {
+                        fields && fields.map((item, key) => {
 
-                                const { relation_id, field_id, field_content = {}, field_value } = item
-                                const { name, items, field_status, field_type } = field_content
+                            const { relation_id, field_id, field_content = {}, field_value } = item
+                            const { name, items, field_status, field_type } = field_content
 
-                                return (
-                                    <View key={key}>
-                                        <View className={indexStyles.custom_field_interval}></View>
-                                        {
-                                            field_type == '1' ?
-                                                <ProjectNameCell
-                                                    title={name}
-                                                    data={this.getCustomFieldSingleChoiceValue(field_value, items)}
-                                                    boardId={board_id}
-                                                    items={items}
-                                                    field_value={field_value}
-                                                    field_item_id={item.id}
-                                                    // propertyId={id}
-                                                    // cardId={card_id}
-                                                    type='6'
-                                                    item_id={item.id}
-                                                /> : ''
-                                        }
-                                        {
-                                            field_type == '2' ?
-                                                <MultipleSelectionField
-                                                    title={name}
-                                                    data={items}
-                                                    fieldValue={field_value}
-                                                    type='7'
-                                                    item_id={item.id}
-                                                /> : ''
-                                        }
-                                        {
-                                            field_type == '3' ?
-                                                <ProjectNameCell
-                                                    title={name}
-                                                    data={{ name: timestampToTimeZH(field_value) }}
-                                                    boardId={board_id}
-                                                    // propertyId={id}
-                                                    // cardId={card_id}
-                                                    items={items}
-                                                    field_value={field_value}
-                                                    type='8'
-                                                    item_id={item.id}
-                                                /> : ''
-                                        }
-                                        {
-                                            field_type == '4' ?
-                                                <ProjectNameCell
-                                                    title={name}
-                                                    data={{ name: field_value }}
-                                                    boardId={board_id}
-                                                    items={items}
-                                                    field_value={field_value}
-                                                    // propertyId={id}
-                                                    // cardId={card_id}
-                                                    type='9'
-                                                    item_id={item.id}
-                                                /> : ''
-                                        }
-                                        {
-                                            field_type == '5' ?
-                                                <ProjectNameCell
-                                                    title={name}
-                                                    data={{ name: field_value }}
-                                                    boardId={board_id}
-                                                    items={items}
-                                                    field_value={field_value}
-                                                    // propertyId={id}
-                                                    // cardId={card_id}
-                                                    type='10'
-                                                    item_id={item.id}
-                                                /> : ''
-                                        }
-                                    </View>
+                            return (
+                                <View key={key}>
+                                    <View className={indexStyles.custom_field_interval}></View>
+                                    {
+                                        field_type == '1' ?
+                                            <ProjectNameCell
+                                                title={name}
+                                                data={this.getCustomFieldSingleChoiceValue(field_value, items)}
+                                                boardId={board_id}
+                                                items={items}
+                                                field_value={field_value}
+                                                field_item_id={item.id}
+                                                // propertyId={id}
+                                                // cardId={card_id}
+                                                type='6'
+                                                item_id={item.id}
+                                            /> : ''
+                                    }
+                                    {
+                                        field_type == '2' ?
+                                            <MultipleSelectionField
+                                                title={name}
+                                                data={items}
+                                                fieldValue={field_value}
+                                                type='7'
+                                                item_id={item.id}
+                                            /> : ''
+                                    }
+                                    {
+                                        field_type == '3' ?
+                                            <ProjectNameCell
+                                                title={name}
+                                                data={{ name: timestampToTimeZH(field_value) }}
+                                                boardId={board_id}
+                                                // propertyId={id}
+                                                // cardId={card_id}
+                                                items={items}
+                                                field_value={field_value}
+                                                type='8'
+                                                item_id={item.id}
+                                            /> : ''
+                                    }
+                                    {
+                                        field_type == '4' ?
+                                            <ProjectNameCell
+                                                title={name}
+                                                data={{ name: field_value }}
+                                                boardId={board_id}
+                                                items={items}
+                                                field_value={field_value}
+                                                // propertyId={id}
+                                                // cardId={card_id}
+                                                type='9'
+                                                item_id={item.id}
+                                            /> : ''
+                                    }
+                                    {
+                                        field_type == '5' ?
+                                            <ProjectNameCell
+                                                title={name}
+                                                data={{ name: field_value }}
+                                                boardId={board_id}
+                                                items={items}
+                                                field_value={field_value}
+                                                // propertyId={id}
+                                                // cardId={card_id}
+                                                type='10'
+                                                item_id={item.id}
+                                            /> : ''
+                                    }
+                                </View>
 
-                                )
-                            })
-                        }
-                    </View>
-                </View >
+                            )
+                        })
+                    }
+                </View>
+            </View >
         )
     }
 }
 
 taksDetails.defaultProps = {
-                    board_id: '', //项目 Id
+    board_id: '', //项目 Id
     content_id: '', //任务Id
     back_icon: '',//显示返回箭头图标还是小房子图标
     flag: '',  //对象类型(任务, 日程...)

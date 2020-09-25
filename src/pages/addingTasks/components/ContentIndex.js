@@ -133,9 +133,9 @@ export default class ContentIndex extends Component {
                             <ProjectNameCell title='描述' executors='' name={describeInfo} />
                         </View>
                         <View className={indexStyles.add_function_style}>
-                            {
+                            {/* {
                                 executors && milestone_data_name && describeInfo ? '' : <AddFunctionCell is_Function={is_Function} />
-                            }
+                            } */}
                         </View>
                     </View> : ''
                 }

@@ -33,6 +33,7 @@ export default class index extends Component {
 
 
     deleteBoardFieldRelation = (item_id) => {
+
         const { dispatch, tasksDetailDatas } = this.props
         const { fields = [], } = tasksDetailDatas
 

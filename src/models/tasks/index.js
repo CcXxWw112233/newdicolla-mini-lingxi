@@ -503,16 +503,24 @@ export default {
       }
     },
 
-    //获取子任务属性
+    //获取任务属性
     * getCardProperties({ payload }, { select, call, put }) {
-      const res = yield call(getCardProperties, payload)
+
+      // const { callBack } = payload
+
+      const res = yield call(getCardProperties, {})
+
       if (isApiResponseOk(res)) {
+
         yield put({
           type: 'updateDatas',
           payload: {
             properties_list: res.data
           }
         })
+
+        // if (typeof callBack == 'function') callBack()
+
       } else {
         Taro.showToast({
           title: res.message,

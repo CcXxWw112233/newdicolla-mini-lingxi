@@ -1,50 +1,86 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { View, } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../../gloalSet/styles/globalStyles.scss'
 import { AtTag } from 'taro-ui'
+// eslint-disable-next-line import/first
 import { connect } from '@tarojs/redux'
+// import { isApiResponseOk } from "../../../utils/request";
 
 @connect(({ tasks: { tasksDetailDatas = {}, properties_list = [], }, }) => ({
     tasksDetailDatas, properties_list
 }))
 export default class AddFunctionCell extends Component {
 
+    state = {
+        dataArray: [],
+    }
+
     selectFunction = (code) => {
+
+        const { dispatch, tasksDetailDatas, properties_list, } = this.props
+        const { properties = [], } = tasksDetailDatas
+        const { propertiesList } = this.state
+
+        properties_list.forEach(element => {
+
+            if (element.code == code) {
+
+                properties.push(element)
+            }
+
+            // if (element.code != code) {
+            //     properties_list.push(element)
+            // }
+
+        });
+
+
+        dispatch({
+            type: 'tasks/updateDatas',
+            payload: {
+                tasksDetailDatas: {
+                    ...tasksDetailDatas,
+                    ...properties,
+                    ...propertiesList,
+                }
+            }
+        })
 
     }
 
     componentDidMount() {
 
-        const { tasksDetailDatas = {}, properties_list = [], } = this.props
-        const { properties = [], } = tasksDetailDatas
-        console.log(tasksDetailDatas, 'tasksDetailDatas======', properties_list);
+        const { properties_list = [], properties = [], } = this.props
+
         let new_array = [];
 
-        properties_list.forEach(element => {
-            console.log(element, 'element=========');
-            for (let index = 0; index < properties.length; index++) {
-
-                if (properties[index]['id'] !== element.forEach) {
-
-                    new_array.push(element);
+        new_array = properties_list.filter(item => {
+            const gold_code = (properties.find(n => {
+                if (n.code == item.code) {
+                    return n
                 }
+            }) || {}).code
+            // console.log(gold_code);
+            if (item.code != gold_code) {
+                return item
             }
-        });
+        })
 
-
-        console.log(new_array, 'new_array=======', properties);
+        this.setState({
+            dataArray: new_array,
+        })
     }
 
     render() {
 
-        const { properties_list } = this.props
+        const { dataArray = [] } = this.state
 
         return (
 
             <View className={indexStyles.list_item}>
                 {
-                    properties_list.map((tag, key) => {
+                    dataArray.map((tag, key) => {
 
                         const { id, code, name, } = tag
 
