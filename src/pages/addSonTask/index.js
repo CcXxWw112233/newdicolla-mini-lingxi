@@ -22,7 +22,8 @@ export default class addSonTask extends Component {
             due_time: '', //结束时间
             start_time_str: '开始时间',
             due_time_str: '结束时间',
-            due_start_range: '1970-01-01',
+            due_start_range: '',
+            start_start_range: '',
             property_id: '',
             board_id: '',
             list_id: '',
@@ -188,6 +189,7 @@ export default class addSonTask extends Component {
             this.setState({
                 due_time_str: strTime,
                 due_time: time,
+                start_start_range: value,
             })
         }
     }
@@ -201,7 +203,7 @@ export default class addSonTask extends Component {
 
     render() {
 
-        const { start_time_str, due_time_str, due_start_range, selectExecutorsList = [], } = this.state
+        const { start_time_str, due_time_str, due_start_range, selectExecutorsList = [], start_start_range, } = this.state
 
         return (
             <View >
@@ -239,6 +241,7 @@ export default class addSonTask extends Component {
                         <Picker mode='date'
                             onChange={this.onStartTimeDateChange}
                             className={indexStyles.startTime}
+                            end={start_start_range}
                         >
                             {start_time_str}
                         </Picker>
@@ -248,7 +251,7 @@ export default class addSonTask extends Component {
                             onChange={this.onDueTimeDateChange}
                             className={indexStyles.startTime}
                             start={due_start_range}
-                            value={due_start_range}
+                        // value={due_start_range}
                         >
                             {due_time_str}
                         </Picker>
