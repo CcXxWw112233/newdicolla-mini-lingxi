@@ -214,6 +214,7 @@ export default class index extends Component {
             type: 'tasks/updateDatas',
             payload: {
                 song_task_id: cardId,
+                tasks_upload_file_type: 'describeTasks',
             }
         })
     }
@@ -318,6 +319,7 @@ export default class index extends Component {
             type: 'tasks/updateDatas',
             payload: {
                 song_task_id: cardId,
+                tasks_upload_file_type: 'describeTasks',
             }
         })
 
@@ -348,6 +350,9 @@ export default class index extends Component {
                 }
             }
         })
+
+        typeof this.props.onLoadTasksDetail == 'function' && this.props.onLoadTasksDetail();
+
     }
 
     render() {

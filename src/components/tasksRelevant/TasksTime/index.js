@@ -117,7 +117,7 @@ export default class TasksTime extends Component {
                     payload: {
                         tasksDetailDatas: {
                             ...tasksDetailDatas,
-                            ...{ start_time: time }
+                            ...{ due_time: time }
                         }
                     }
                 })
@@ -175,10 +175,12 @@ export default class TasksTime extends Component {
                     ></Input>
                 </View>
                 <View className={indexStyles.selectionTime}>
+
                     <Picker mode='date' onChange={this.onDateChangeStart} className={indexStyles.startTime} onClick={this.ejectTimePicks}>
                         {/* <ChoiceTimes onClick={this.ejectTimePicks} time={sTime} /> */}
                         {sTime ? timestampToTimeZH(sTime) : '开始时间'}
                     </Picker>
+
                     {/* <Picker mode='time' onChange={this.onTimeChange}>
                     </Picker> */}
                     <Picker mode='date' onChange={this.onDateChangeDue} className={indexStyles.endTime} onClick={this.ejectTimePicks}>

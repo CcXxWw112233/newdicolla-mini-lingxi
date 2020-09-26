@@ -1,20 +1,30 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\Administrator\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add @tarojs/async-await --silent --no-progress
+  /usr/local/Cellar/node/14.5.0/bin/node /usr/local/bin/yarn add @/components/DateTimePicker --silent --no-progress
 
 PATH: 
-  C:\Program Files\nodejs\node_modules\npm\node_modules\npm-lifecycle\node-gyp-bin;C:\Users\Administrator\Desktop\projectDoc\workspace\newdicolla-mini-lingxi\node_modules\.bin;C:\Program Files\nodejs\node_modules\npm\node_modules\npm-lifecycle\node-gyp-bin;C:\Users\Administrator\Desktop\projectDoc\workspace\newdicolla-mini-lingxi\node_modules\.bin;C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\windows\System32\WindowsPowerShell\v1.0\;C:\windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\TortoiseGit\bin;C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps;C:\Users\Administrator\AppData\Roaming\npm;C:\Users\Administrator\AppData\Local\Programs\Microsoft VS Code\bin;
+  /usr/local/lib/node_modules/npm/node_modules/npm-lifecycle/node-gyp-bin:/Users/mac/Documents/newdicolla-mini-lingxi/node_modules/.bin:/var/folders/7n/jbbqrr1x14lg0kw9xkrgd35m0000gn/T/yarn--1601109513182-0.4692729401552467:/Users/mac/Documents/newdicolla-mini-lingxi/node_modules/.bin:/Users/mac/.config/yarn/link/node_modules/.bin:/usr/local/Cellar/node/14.5.0/libexec/lib/node_modules/npm/bin/node-gyp-bin:/usr/local/Cellar/node/14.5.0/lib/node_modules/npm/bin/node-gyp-bin:/usr/local/Cellar/node/14.5.0/bin/node_modules/npm/bin/node-gyp-bin:/Users/mac/flutter/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Users/mac/flutter/bin
 
 Yarn version: 
-  1.22.0
+  1.22.4
 
 Node version: 
-  10.15.3
+  14.5.0
 
 Platform: 
-  win32 x64
+  darwin x64
 
 Trace: 
-  Error: EPERM: operation not permitted, unlink 'C:\Users\Administrator\Desktop\projectDoc\workspace\newdicolla-mini-lingxi\node_modules\_@babel_code-frame@7.0.0-beta.44@@babel\code-frame'
+  Error: https://registry.npm.taobao.org/@%2fcomponents/DateTimePicker: Not found
+      at Request.params.callback [as _callback] (/usr/local/lib/node_modules/yarn/lib/cli.js:66987:18)
+      at Request.self.callback (/usr/local/lib/node_modules/yarn/lib/cli.js:140748:22)
+      at Request.emit (events.js:314:20)
+      at Request.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:141720:10)
+      at Request.emit (events.js:314:20)
+      at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:141642:12)
+      at Object.onceWrapper (events.js:420:28)
+      at IncomingMessage.emit (events.js:326:22)
+      at endReadableNT (_stream_readable.js:1226:12)
+      at processTicksAndRejections (internal/process/task_queues.js:80:21)
 
 npm manifest: 
   {

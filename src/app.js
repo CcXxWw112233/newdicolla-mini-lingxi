@@ -78,6 +78,7 @@ class App extends Component {
       'pages/boardChat/index',
       'pages/templateDetails/index',
       // 'pages/native/native',
+      'pages/test/index',
     ],
     permission: {
       'scope.userLocation': {

@@ -96,7 +96,6 @@ export default class AddFunctionCell extends Component {
                 return item
             }
         })
-
         this.setState({
             dataArray: new_array,
         })

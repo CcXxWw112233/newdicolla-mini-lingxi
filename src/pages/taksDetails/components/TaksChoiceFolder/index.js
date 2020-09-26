@@ -20,6 +20,7 @@ import { BASE_URL, API_BOARD } from "../../../../gloalSet/js/constant";
     tasks: {
         choice_image_temp_file_paths,
         song_task_id,
+        tasks_upload_file_type,
     }
 }) => ({
     isShowChoiceFolder,
@@ -30,6 +31,7 @@ import { BASE_URL, API_BOARD } from "../../../../gloalSet/js/constant";
     current_selection_board_id,
     choice_image_temp_file_paths,
     song_task_id,
+    tasks_upload_file_type,
 }))
 export default class index extends Component {
 
@@ -71,12 +73,21 @@ export default class index extends Component {
     }
 
     handleConfirm = () => {
-        this.fileUpload()
+
+        const { tasks_upload_file_type, } = this.props
+
+        if (tasks_upload_file_type === 'describeTasks') {
+            this.describeTasksUploadFile()
+        } else if (tasks_upload_file_type === 'sonTask') {
+            this.fileUpload()
+        }
+
+
         this.hideChoiceFolder()
         this.resetCurrentSelection()
     }
 
-    //上传到后端
+    //上传子任务文件
     fileUpload = () => {
 
         const { choice_image_temp_file_paths, board_id, choice_board_folder_id, song_task_id, } = this.props
@@ -161,6 +172,92 @@ export default class index extends Component {
             })
         })
     }
+
+    //上传描述任务附件
+    describeTasksUploadFile = () => {
+        const { choice_image_temp_file_paths, board_id, choice_board_folder_id, song_task_id, } = this.props
+        //上传
+        let that = this;
+        const authorization = Taro.getStorageSync('access_token')
+        const data = {
+            board_id: board_id,
+            folder_id: choice_board_folder_id,
+            type: 1,
+            upload_type: 1,
+        }
+        const base_info = setRequestHeaderBaseInfo({ data, headers: authorization })
+        // let num = 1;
+        Taro.showToast({ icon: "loading", title: `正在上传...` });
+        // 统一上传
+        let promise = [];
+        //开发者服务器访问接口，微信服务器通过这个接口上传文件到开发者服务器
+        for (var i = 0; i < choice_image_temp_file_paths.length; i++) {
+            promise.push(this.describeTasksAddSendPromise(choice_image_temp_file_paths[i], data, authorization, base_info, board_id, choice_board_folder_id, song_task_id,))
+        }
+
+        Promise.all(promise).then(res => {
+            //重新掉列表接口, 刷新列表
+            Taro.showToast({
+                icon: "success",
+                title: "上传完成"
+            })
+
+            typeof this.props.onLoadTasksDetail == 'function' && this.props.onLoadTasksDetail();
+
+        }).catch(err => {
+            console.log(err)
+            Taro.showModal({ title: '提示', content: "上传失败,请重试", showCancel: false });
+        })
+    }
+
+    describeTasksAddSendPromise = (filePath, data, authorization, base_info, board_id, choice_board_folder_id, song_task_id,) => {
+        return new Promise((resolve, reject) => {
+            //Request URL: http://test.lingxi.new-di.com/api/projects/card/desc/attachment/upload?board_id=1248250769312976896&card_id=1305760586717597696&folder_id=1248250769321365508
+
+            Taro.uploadFile({
+                url: BASE_URL + API_BOARD + '/card/desc/attachment/upload?'
+                    + 'board_id=' + `${board_id}`
+                    + '&card_id=' + `${song_task_id}`
+                    + '&folder_id=' + `${choice_board_folder_id}`, //后端接口
+                board_id: board_id,
+                card_id: song_task_id,
+                folder_id: choice_board_folder_id,
+                filePath: filePath,
+                name: 'file',
+                header: {
+                    "Content-Type": "multipart/form-data; charset=utf-8",
+                    "Accept-Language": "zh-CN,zh;q=0.9",
+                    "Accept-Encoding": "gzip, deflate",
+                    "Accept": "*/*",
+                    Authorization: authorization,
+                    ...base_info,
+                },
+                formData: data, //上传POST参数信息
+                success(res) {
+                    // console.log(res)
+                    if (res.statusCode === 200) {
+                        let d = JSON.parse(res.data);
+                        if (d.code == 0)
+                            resolve(res);
+                        else {
+                            reject(res)
+                        }
+                    } else {
+                        // Taro.showModal({ title: '提示', content: `${'第' + i + '张' + '上传失败'}`, showCancel: false });
+                        reject(res)
+                    }
+                },
+                fail(error) {
+                    reject(error)
+                    // Taro.showModal({ title: '提示', content: `${'第' + i + '张' + '上传失败'}`, showCancel: false });
+                },
+                complete() {
+                    // Taro.hideToast();
+                }
+            })
+        })
+    }
+
 
     hideChoiceFolder = () => {
         const { dispatch } = this.props

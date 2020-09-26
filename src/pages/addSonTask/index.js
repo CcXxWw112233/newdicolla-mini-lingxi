@@ -5,6 +5,7 @@ import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
 import { AtList, AtListItem } from 'taro-ui'
 import Avatar from '../../components/avatar';
+import DateTimePicker from '../../pages/taksDetails/components/DateTimePicker';
 
 @connect(({ tasks: { executors_list = [], tasksDetailDatas = {}, }, }) => ({
     executors_list, tasksDetailDatas,
@@ -242,6 +243,8 @@ export default class addSonTask extends Component {
                         >
                             {start_time_str}
                         </Picker>
+
+
                     </View>
                     <View>
                         <Picker mode='date'
@@ -276,6 +279,8 @@ export default class addSonTask extends Component {
                     <Button className={`${indexStyles.login_btn_normal} ${indexStyles.login_btn}`} type='primary' onClick={this.confirm}>确定</Button>
                 </View>
 
+
+                {/* <DateTimePicker onOk={this.onOK} initValue="2016/01/01 17:22:37" /> */}
 
             </View>
         )

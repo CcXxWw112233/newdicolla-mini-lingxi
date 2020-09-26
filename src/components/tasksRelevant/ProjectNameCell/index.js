@@ -208,7 +208,6 @@ export default class ProjectNameCell extends Component {
                 new_array.push(element)
             }
         });
-
         dispatch({
             type: 'tasks/updateDatas',
             payload: {
@@ -218,6 +217,8 @@ export default class ProjectNameCell extends Component {
                 }
             }
         })
+
+        typeof this.props.onLoadTasksDetail == 'function' && this.props.onLoadTasksDetail();
 
         dispatch({
             type: 'tasks/updateDatas',
@@ -251,6 +252,7 @@ export default class ProjectNameCell extends Component {
     }
 
     render() {
+
         const title = this.props.title || ''
         const data = this.props.data || ''
         const type = this.props.type || ''

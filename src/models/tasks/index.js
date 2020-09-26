@@ -17,7 +17,9 @@ export default {
     field_selection_list: [], //字段选择list
     properties_list: [], //任务属性列表
     choice_image_temp_file_paths: '', //选择文件上传保存在本地的路径
-    song_task_id: '', //子任务id
+    song_task_id: '', //子任务id/属性id
+    tasks_upload_file_type: '', //上传类型,(子任务, 任务描述)
+
   },
   effects: {
     //获取任务列表
