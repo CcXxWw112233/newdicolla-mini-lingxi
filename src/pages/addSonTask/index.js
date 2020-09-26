@@ -4,6 +4,7 @@ import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
 import { AtList, AtListItem } from 'taro-ui'
+import Avatar from '../../components/avatar';
 
 @connect(({ tasks: { executors_list = [], tasksDetailDatas = {}, }, }) => ({
     executors_list, tasksDetailDatas,
@@ -26,6 +27,7 @@ export default class addSonTask extends Component {
             board_id: '',
             list_id: '',
             card_id: '',
+            selectExecutorsList: [], //选择的任务执行人
         }
     }
 
@@ -41,18 +43,40 @@ export default class addSonTask extends Component {
         })
     }
 
-    onClickSelectTime = () => {
+    componentDidShow() {
+        var users = Taro.getStorageSync('son_tasks_executors')
+        var userData = []
+        if (users && users != '[]') {
+            userData = JSON.parse(users)
+        }
 
+        let new_array = []
+        const { executors_list = [], } = this.props
+        new_array = executors_list.filter(item => {
+            const gold_code = (userData.find(n => {
+                if (item.id == n) {
+                    return n
+                }
+            }) || {})
+            if (item.id == gold_code) {
+                return item
+            }
+        })
+
+        this.setState({
+            selectExecutorsList: new_array,
+        })
     }
 
-    onCancel = () => {
+    componentWillUnmount() {
 
+        Taro.removeStorageSync('son_tasks_executors')
     }
 
     addExecutors = () => {
 
         const { dispatch } = this.props
-        const { board_id, card_id } = this.state
+        const { board_id, card_id, selectExecutorsList = [], } = this.state
 
         Promise.resolve(
             dispatch({
@@ -63,7 +87,7 @@ export default class addSonTask extends Component {
             })
         ).then(res => {
             Taro.navigateTo({
-                url: `../../pages/sonTaskExecutors/index?contentId=${card_id}`
+                url: `../../pages/sonTaskExecutors/index?contentId=${card_id}&executors=${JSON.stringify(selectExecutorsList)}`
             })
         })
     }
@@ -103,10 +127,16 @@ export default class addSonTask extends Component {
 
 
         var users = Taro.getStorageSync('son_tasks_executors')
-        var userData = JSON.parse(users)
+        var userData = []
+        if (users && users != '[]') {
+            userData = JSON.parse(users)
+        }
+
         var userStr;
         if (userData.length > 0) {
             userStr = userData.join(",");
+        } else {
+            userStr;
         }
 
         dispatch({
@@ -120,10 +150,15 @@ export default class addSonTask extends Component {
                 start_time: start_time,
                 users: userStr,
             }
-        }).then(() => {
-
-            Taro.removeStorageSync('son_tasks_executors')
-            Taro.navigateBack()
+        }).then((res) => {
+            const { code } = res
+            if (code == 0 || code == '0') {
+                Taro.removeStorageSync('son_tasks_executors')
+                Taro.navigateBack()
+                // setTimeout(function () {
+                //     Taro.navigateBack()
+                // }, 2000);
+            }
         })
     }
 
@@ -166,7 +201,7 @@ export default class addSonTask extends Component {
 
     render() {
 
-        const { start_time_str, due_time_str, due_start_range } = this.state
+        const { start_time_str, due_time_str, due_start_range, selectExecutorsList = [], } = this.state
 
         return (
             <View >
@@ -200,7 +235,7 @@ export default class addSonTask extends Component {
 
 
                 <View className={indexStyles.info_style}>
-                    <View onClick={this.onClickSelectTime}>
+                    <View >
                         <Picker mode='date'
                             onChange={this.onStartTimeDateChange}
                             className={indexStyles.startTime}
@@ -218,7 +253,22 @@ export default class addSonTask extends Component {
                             {due_time_str}
                         </Picker>
                     </View>
-                    <View onClick={this.addExecutors}>添加执行人</View>
+
+
+                    {
+                        selectExecutorsList && selectExecutorsList.length > 0 ?
+                            (
+                                <View className={indexStyles.executors_list_item_detail} onClick={this.addExecutors}>
+                                    <View className={`${indexStyles.avata_area}`}>
+                                        <Avatar avartarTotal={'multiple'} userList={selectExecutorsList} />
+                                    </View>
+                                </View>
+                            ) : (
+                                <View onClick={this.addExecutors}>添加执行人</View>
+                            )
+                    }
+
+
                 </View>
 
 

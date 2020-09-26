@@ -418,7 +418,7 @@ export default class ChoiceFolder extends Component {
 
     render() {
 
-        const { folder_tree, org_list, upload_folder_name, choice_board_folder_id, choice_board_id, current_selection_board_id, current_board_open, } = this.props
+        const { folder_tree = {}, org_list, upload_folder_name, choice_board_folder_id, choice_board_id, current_selection_board_id, current_board_open, } = this.props
         const { child_data = [], } = folder_tree
         const { is_show_board_list, thumb_image_info = [], addressName } = this.state
 

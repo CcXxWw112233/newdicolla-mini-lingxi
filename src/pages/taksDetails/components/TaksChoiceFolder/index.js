@@ -228,7 +228,7 @@ export default class index extends Component {
 
     render() {
 
-        const { folder_tree, upload_folder_name, choice_board_folder_id, choice_board_id, board_id, org_id, } = this.props
+        const { folder_tree = {}, upload_folder_name, choice_board_folder_id, choice_board_id, board_id, org_id, } = this.props
         const { child_data = [], } = folder_tree
 
         const SystemInfo = Taro.getSystemInfoSync()

@@ -25,13 +25,13 @@ export default class sonTaskExecutors extends Component {
 
         const { contentId, executors = [], } = this.$router.params
 
-        // let executorsData;
-        // let new_arr
-        // if (executors.length > 0) {
-        //     executorsData = JSON.parse(executors);
-        //     //取出已经是执行人的id, 组成新数组(已选中)
-        //     new_arr = executorsData.map(obj => { return obj.user_id });
-        // }
+        let executorsData;
+        let new_arr
+        if (executors.length > 0) {
+            executorsData = JSON.parse(executors);
+            //取出已经是执行人的id, 组成新数组(已选中)
+            new_arr = executorsData.map(obj => { return obj.user_id });
+        }
 
         this.setState({
             card_id: contentId,
@@ -47,7 +47,7 @@ export default class sonTaskExecutors extends Component {
 
         this.setState({
             checkboxOption: executors_list,
-            // checkedList: new_arr,
+            checkedList: new_arr,
         })
     }
 

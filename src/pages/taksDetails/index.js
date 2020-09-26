@@ -137,22 +137,34 @@ export default class taksDetails extends Component {
 
     tasksDetailsRealizeStatus = (timeInfo, type) => {
 
+        const { dispatch } = this.props
+
         let isRealize
         if (timeInfo.isRealize === '1') {
             this.modifyRealize({ is_realize: '0' }, type, timeInfo.cardId)
             isRealize = 0
-
-        } else {
+        }
+        else if (timeInfo.isRealize === '0') {
             this.modifyRealize({ is_realize: '1' }, type, timeInfo.cardId)
             isRealize = 1
         }
 
-        const { dispatch } = this.props
-        dispatch({
-            type: 'tasks/setTasksRealize',
-            payload: {
-                card_id: timeInfo.cardId,
-                is_realize: isRealize,
+
+        Promise.resolve(
+            dispatch({
+                type: 'tasks/setTasksRealize',
+                payload: {
+                    card_id: timeInfo.cardId,
+                    is_realize: isRealize,
+                }
+            })
+        ).then(res => {
+
+            if (type === 'SonTasks') {
+
+                let contentId = Taro.getStorageSync('tasks_detail_contentId')
+                let boardId = Taro.getStorageSync('tasks_detail_boardId')
+                this.loadTasksDetail(contentId, boardId)
             }
         })
     }
@@ -173,12 +185,14 @@ export default class taksDetails extends Component {
                 payload: {
                     tasksDetailDatas: {
                         ...tasksDetailDatas,
-                        ...new_data
+                        ...new_data,
                     }
                 }
             })
 
         } else if (type === 'SonTasks') {
+
+            return;
 
             const { properties = [] } = tasksDetailDatas
 
@@ -196,13 +210,12 @@ export default class taksDetails extends Component {
                 }
             })
 
-
             dispatch({
                 type: 'tasks/updateDatas',
                 payload: {
                     tasksDetailDatas: {
                         ...tasksDetailDatas,
-                        ...properties
+                        ...properties,
                     }
                 }
             })

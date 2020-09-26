@@ -6,8 +6,8 @@ import index from '../../../pages/taksDetails/components/CommentBox';
 import Avatar from '../../avatar';
 import { connect } from '@tarojs/redux';
 
-@connect(({ tasks: { tasksDetailDatas = {}, properties_list = [], }, }) => ({
-    tasksDetailDatas, properties_list,
+@connect(({ tasks: { tasksDetailDatas = {}, properties_list = [], milestone_list = [], group_list = [], }, }) => ({
+    tasksDetailDatas, properties_list, milestone_list, group_list,
 }))
 export default class ProjectNameCell extends Component {
 
@@ -29,7 +29,8 @@ export default class ProjectNameCell extends Component {
                     },
                 })
             ).then(res => {
-                if (res.data.length > 0) {
+                const { group_list = [] } = this.props
+                if (group_list.length > 0) {
 
                     Taro.navigateTo({
                         url: `../../pages/tasksGroup/index?contentId=${contentId}&listId=${list_id}`
@@ -61,9 +62,9 @@ export default class ProjectNameCell extends Component {
                     },
                 })
             ).then(res => {
-                console.log(res, '888888888', res.data);
 
-                if (res.data.length > 0) {
+                const { milestone_list = [], } = this.props
+                if (milestone_list.length > 0) {
 
                     Taro.navigateTo({
                         url: `../../pages/milestoneList/index?contentId=${contentId}&milestoneId=${data.id}`

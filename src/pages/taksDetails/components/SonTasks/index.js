@@ -30,7 +30,7 @@ export default class index extends Component {
         const { list_id, card_id } = tasksDetailDatas
 
         Taro.navigateTo({
-            url: `../../pages/addSonTask/index?propertyId=${card_id}&boardId=${boardId}&listId=${list_id}&cardId=${card_id}`
+            url: `../../pages/addSonTask/index?propertyId=${card_id}&boardId=${boardId}&listId=${card_id}&cardId=${card_id}`
         })
     }
 
@@ -468,7 +468,9 @@ export default class index extends Component {
     }
 
     render() {
-        const { child_data } = this.props
+
+        const { child_data = [], } = this.props
+
         return (
             <View className={indexStyles.list_item}>
 
@@ -486,6 +488,7 @@ export default class index extends Component {
                     {
                         child_data && child_data.map((value, key) => {
                             const { card_name, deliverables = [], card_id, is_realize } = value
+
                             return (
                                 <View key={key} className={indexStyles.content}>
                                     <View className={indexStyles.song_row_instyle}>

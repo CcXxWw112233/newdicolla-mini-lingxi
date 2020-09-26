@@ -493,8 +493,13 @@ export default {
     * postV2Card({ payload }, { select, call, put }) {
       const res = yield call(postV2Card, payload)
       if (isApiResponseOk(res)) {
-        // if (typeof callBack == 'function') callBack()
-        // yield call(getTasksDetail, { id: relation_id })
+        if (res.code != 0) {
+          Taro.showToast({
+            title: res.message,
+            icon: 'none',
+            duration: 2000
+          })
+        }
       } else {
         Taro.showToast({
           title: res.message,
@@ -502,6 +507,8 @@ export default {
           duration: 2000
         })
       }
+
+      return res || {}
     },
 
     //获取任务属性
