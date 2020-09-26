@@ -70,7 +70,6 @@ class App extends Component {
       // 'pages/addingTasks/index',
       // 'pages/choiceProject/index',
       // 'pages/fillDescribe/index',
-      // 'pages/DateTimePicker/index',
       'pages/sceneEntrance/index',
       'pages/errorPage/index',
       'pages/file/index',
@@ -78,7 +77,6 @@ class App extends Component {
       'pages/boardChat/index',
       'pages/templateDetails/index',
       // 'pages/native/native',
-      'pages/test/index',
     ],
     permission: {
       'scope.userLocation': {

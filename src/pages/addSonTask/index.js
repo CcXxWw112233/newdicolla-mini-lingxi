@@ -19,12 +19,24 @@ export default class addSonTask extends Component {
         super(...arguments)
         this.state = {
             inputText: '', //输入的子任务名称
+            start_date: '', //开始日期
             start_time: '', //开始时间
-            due_time: '', //结束时间
+            due_date: '', //结束日期
+            due_time: '',   //结束时间
+            is_start_time_show: false,
+            is_due_time_show: false,
+
+            start_date_str: '开始日期',
+            due_date_str: '结束日期',
             start_time_str: '开始时间',
             due_time_str: '结束时间',
+
+            start_timestamp: '',
+            due_timestamp: '',
+
             due_start_range: '',
             start_start_range: '',
+
             property_id: '',
             board_id: '',
             list_id: '',
@@ -105,7 +117,7 @@ export default class addSonTask extends Component {
 
         const { dispatch } = this.props
 
-        const { start_time, due_time, inputText, list_id, property_id, board_id, } = this.state
+        const { start_timestamp, due_timestamp, inputText, list_id, property_id, board_id, } = this.state
 
         if (inputText === '') {
             Taro.showToast({
@@ -117,7 +129,7 @@ export default class addSonTask extends Component {
             return
         }
 
-        if ((due_time - start_time) < 0) {
+        if (due_timestamp != '' && start_timestamp != '' && (due_timestamp - start_timestamp) < 0) {
             Taro.showToast({
                 title: '截止时间大于开始时间',
                 icon: 'none',
@@ -145,11 +157,11 @@ export default class addSonTask extends Component {
             type: 'tasks/postV2Card',
             payload: {
                 board_id: board_id,
-                due_time: due_time,
+                due_time: due_timestamp,
                 list_id: list_id,
                 name: inputText,
                 parent_id: property_id,
-                start_time: start_time,
+                start_time: start_timestamp,
                 users: userStr,
             }
         }).then((res) => {
@@ -161,9 +173,35 @@ export default class addSonTask extends Component {
         })
     }
 
-    onDueTimeDateChange = e => {
+    onDueDateChange = e => {
 
-        this.timeConversion(e['detail']['value'], 'due')
+        var value = e['detail']['value']
+
+        var strTime = value + ' ' + '00:00:00'
+        var date = new Date(strTime);
+        var time = date.getTime()
+        this.setState({
+            due_date: value,
+            is_due_time_show: true,
+            due_date_str: value,
+            due_timestamp: time,
+        })
+    }
+
+    onDueTimeChange = e => {
+
+        var value = e['detail']['value']
+
+        const { due_date } = this.state
+        var strTime = due_date + ' ' + value
+        var date = new Date(strTime);
+        var time = date.getTime()
+
+        this.setState({
+            due_time: e['detail']['value'],
+            due_time_str: e['detail']['value'],
+            due_timestamp: time,
+        })
     }
 
     timeConversion = (value, type) => {
@@ -193,15 +231,43 @@ export default class addSonTask extends Component {
     }
 
 
-    onStartTimeDateChange = e => {
+    onStartDateChange = e => {
 
-        this.timeConversion(e['detail']['value'], 'start')
+        var value = e['detail']['value']
+
+        var strTime = value + ' ' + '00:00:00'
+        var date = new Date(strTime);
+        var time = date.getTime()
+
+        this.setState({
+            start_date: value,
+            is_start_time_show: true,
+            start_date_str: value,
+            start_timestamp: time,
+        })
+    }
+
+    onStartTimeChange = e => {
+
+        var value = e['detail']['value']
+
+        const { start_date } = this.state
+
+        var strTime = start_date + ' ' + value
+        var date = new Date(strTime);
+        var time = date.getTime()
+
+        this.setState({
+            start_time: value,
+            start_time_str: value,
+            start_timestamp: time,
+        })
     }
 
 
     render() {
 
-        const { start_time_str, due_time_str, due_start_range, selectExecutorsList = [], start_start_range, } = this.state
+        const { start_date_str, due_date_str, start_time_str, due_time_str, due_start_range, selectExecutorsList = [], start_start_range, is_start_time_show, is_due_time_show } = this.state
 
         return (
             <View >
@@ -231,30 +297,67 @@ export default class addSonTask extends Component {
                         onBlur={this.updataInput.bind(this)}
                     >
                     </Input>
+
                 </View>
 
 
                 <View className={indexStyles.info_style}>
-                    <View >
-                        <Picker mode='date'
-                            onChange={this.onStartTimeDateChange}
-                            className={indexStyles.startTime}
-                            end={start_start_range}
-                        >
-                            {start_time_str}
-                        </Picker>
 
+                    <View className={indexStyles.left_time_style}>
+
+                        <View className={indexStyles.left_date_style}>
+                            <Picker mode='date'
+                                onChange={this.onStartDateChange}
+                                className={indexStyles.startTime}
+                                end={start_start_range}
+                            >
+                                {start_date_str}
+                            </Picker>
+                        </View>
+
+                        <View className={indexStyles.left_time_style}>
+
+                            {is_start_time_show ? (<Picker mode='time'
+                                onChange={this.onStartTimeChange}
+                                className={indexStyles.startTime}
+                                end={start_date_str}
+                            >
+                                {start_time_str}
+                            </Picker>) : ''
+
+                            }
+
+                        </View>
 
                     </View>
-                    <View>
-                        <Picker mode='date'
-                            onChange={this.onDueTimeDateChange}
-                            className={indexStyles.startTime}
-                            start={due_start_range}
-                        // value={due_start_range}
-                        >
-                            {due_time_str}
-                        </Picker>
+
+
+                    <View className={indexStyles.rigth_time_style}>
+                        <View className={indexStyles.right_date_style}>
+
+                            <Picker mode='date'
+                                onChange={this.onDueDateChange}
+                                className={indexStyles.startTime}
+                                start={due_start_range}
+                            >
+                                {due_date_str}
+                            </Picker>
+                        </View>
+
+                        <View className={indexStyles.right_time_style}>
+
+                            {
+                                is_due_time_show ? (<Picker mode='time'
+                                    onChange={this.onDueTimeChange}
+                                    className={indexStyles.startTime}
+                                    start={due_start_range}
+                                >
+                                    {due_time_str}
+                                </Picker>) : ''
+                            }
+
+                        </View>
+
                     </View>
 
 

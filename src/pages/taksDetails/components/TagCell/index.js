@@ -10,26 +10,46 @@ import { connect } from '@tarojs/redux'
 }))
 export default class index extends Component {
 
+  state = {
+
+    isTagCellClick: true,
+
+  }
+
   clickTagCell = () => {
 
     const { dispatch, label_data, } = this.props
+    const { isTagCellClick, } = this.state
 
-    let boardId = Taro.getStorageSync('tasks_detail_boardId')
-    let contentId = Taro.getStorageSync('tasks_detail_contentId')
-
-    Promise.resolve(
-      dispatch({
-        type: 'tasks/getLabelList',
-        payload: {
-          board_id: boardId,
-        },
+    if (isTagCellClick) {
+      this.setState({
+        isTagCellClick: false,
       })
-    ).then(res => {
 
-      Taro.navigateTo({
-        url: `../../pages/labelSelection/index?contentId=${contentId}&data=${JSON.stringify(label_data)}`
+      let boardId = Taro.getStorageSync('tasks_detail_boardId')
+      let contentId = Taro.getStorageSync('tasks_detail_contentId')
+
+      Promise.resolve(
+        dispatch({
+          type: 'tasks/getLabelList',
+          payload: {
+            board_id: boardId,
+          },
+        })
+      ).then(res => {
+
+        Taro.navigateTo({
+          url: `../../pages/labelSelection/index?contentId=${contentId}&data=${JSON.stringify(label_data)}`
+        })
       })
-    })
+
+      const that = this
+      setTimeout(function () {
+        that.setState({
+          isTagCellClick: true
+        })
+      }, 1500);
+    }
   }
 
   deleteCardProperty = () => {

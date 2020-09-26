@@ -49,6 +49,38 @@
     flex           : 1;
     align-items    : center;
     justify-content: space-evenly;
+
+    .left_time_style {
+        display       : flex;
+        flex-direction: row;
+        align-items   : center;
+        margin-right  : pxTrans(5);
+
+        .left_date_style {
+            margin: pxTrans(5);
+        }
+
+        .left_time_style {
+            margin: pxTrans(5);
+        }
+
+    }
+
+    .rigth_time_style {
+        display       : flex;
+        flex-direction: row;
+        height        : 100%;
+        align-items   : center;
+        margin-left   : pxTrans(5);
+
+        .right_date_style {
+            margin: pxTrans(5);
+        }
+
+        .right_time_style {
+            margin: pxTrans(5);
+        }
+    }
 }
 
 .login_footer {

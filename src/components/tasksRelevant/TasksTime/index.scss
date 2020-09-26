@@ -34,22 +34,40 @@
         justify-content: space-between;
 
 
-        .startTime {
+        .start_content {
             flex           : 1;
             border-right   : pxTrans(0.5) solid rgba(0, 0, 0, 0.09);
             justify-content: center;
             align-items    : center;
             text-align     : center;
             display        : flex;
+            flex-direction : row;
+
+            .start_date_style {
+                margin: pxTrans(5);
+            }
+
+            .start_time_style {
+                margin: pxTrans(5);
+            }
         }
 
-        .endTime {
+        .due_content {
             flex           : 1;
             border-left    : pxTrans(0.5) solid rgba(0, 0, 0, 0.09);
             justify-content: center;
             align-items    : center;
             text-align     : center;
             display        : flex;
+            flex-direction : row;
+
+            .due_date_style {
+                margin: pxTrans(5);
+            }
+
+            .due_time_style {
+                margin: pxTrans(5);
+            }
         }
     }
 }
