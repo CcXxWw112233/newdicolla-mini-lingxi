@@ -33,7 +33,7 @@ export default class TasksTime extends Component {
 
     //更新任务名称
     updataCardName = (cardId, value) => {
-        console.log('更新任务名称================', cardId, value);
+
         const { dispatch } = this.props
         dispatch({
             type: 'tasks/putCardBaseInfo',
@@ -66,21 +66,26 @@ export default class TasksTime extends Component {
                 card_id: cardId,
                 start_time: time,
             }
+        }).then((res) => {
+            const { code } = res
+            if (code == 0 || code == '0') {
+                dispatch({
+                    type: 'tasks/updateDatas',
+                    payload: {
+                        tasksDetailDatas: {
+                            ...tasksDetailDatas,
+                            ...{ start_time: time }
+                        }
+                    }
+                })
+            }
         })
 
         this.setState({
             is_show_time_picks: true,
         })
 
-        dispatch({
-            type: 'tasks/updateDatas',
-            payload: {
-                tasksDetailDatas: {
-                    ...tasksDetailDatas,
-                    ...{ start_time: time }
-                }
-            }
-        })
+
     }
 
     onDateChangeDue = e => {
@@ -104,20 +109,23 @@ export default class TasksTime extends Component {
                 card_id: cardId,
                 due_time: time,
             }
+        }).then((res) => {
+            const { code } = res
+            if (code == 0 || code == '0') {
+                dispatch({
+                    type: 'tasks/updateDatas',
+                    payload: {
+                        tasksDetailDatas: {
+                            ...tasksDetailDatas,
+                            ...{ start_time: time }
+                        }
+                    }
+                })
+            }
         })
 
         this.setState({
             is_show_time_picks: true,
-        })
-
-        dispatch({
-            type: 'tasks/updateDatas',
-            payload: {
-                tasksDetailDatas: {
-                    ...tasksDetailDatas,
-                    ...{ due_time: time }
-                }
-            }
         })
     }
 
@@ -171,6 +179,8 @@ export default class TasksTime extends Component {
                         {/* <ChoiceTimes onClick={this.ejectTimePicks} time={sTime} /> */}
                         {sTime ? timestampToTimeZH(sTime) : '开始时间'}
                     </Picker>
+                    {/* <Picker mode='time' onChange={this.onTimeChange}>
+                    </Picker> */}
                     <Picker mode='date' onChange={this.onDateChangeDue} className={indexStyles.endTime} onClick={this.ejectTimePicks}>
                         {/* <ChoiceTimes onClick={this.ejectTimePicks} time={eTime} /> */}
                         {eTime ? timestampToTimeZH(eTime) : '结束时间'}

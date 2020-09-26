@@ -22,9 +22,20 @@ export default class tasksGroup extends Component {
 
     handleChange(value,) {
 
+
+        const currtne_value = this.state.value
+
+        console.log(currtne_value, 'currtne_value=========', value);
+
         this.setState({
             value,
         })
+
+        let listId = '0';
+        if (currtne_value !== value) {
+            listId = value
+        }
+
 
         //更新任务分组
         const { dispatch, tasksDetailDatas, } = this.props
@@ -34,8 +45,8 @@ export default class tasksGroup extends Component {
             type: 'tasks/putCardBaseInfo',
             payload: {
                 card_id: card_id,
-                list_id: value,
-                calback: this.putCardBaseInfo(value),
+                list_id: listId,
+                calback: this.putCardBaseInfo(value, currtne_value),
             }
 
         }).then(res => {
@@ -44,15 +55,22 @@ export default class tasksGroup extends Component {
         })
     }
 
-    putCardBaseInfo = (value) => {
+    putCardBaseInfo = (value, currtne_value,) => {
         const { groupList = [], } = this.state
 
         let listName = ''
-        groupList.forEach(obj => {
-            if (obj['list_id'] === value) {
-                listName = obj.list_name;
-            }
-        })
+        if (value !== currtne_value) {
+            groupList.forEach(obj => {
+                if (obj['list_id'] === value) {
+                    listName = obj.list_name;
+                }
+            })
+        }
+        else {
+            this.setState({
+                value: '',
+            })
+        }
 
         const { dispatch, tasksDetailDatas, } = this.props
         dispatch({

@@ -156,9 +156,6 @@ export default class addSonTask extends Component {
             if (code == 0 || code == '0') {
                 Taro.removeStorageSync('son_tasks_executors')
                 Taro.navigateBack()
-                // setTimeout(function () {
-                //     Taro.navigateBack()
-                // }, 2000);
             }
         })
     }

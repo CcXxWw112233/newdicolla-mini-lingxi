@@ -41,7 +41,7 @@ export default class milestoneList extends Component {
         console.log(current_select_milestone_id, 'value=======', value);
 
         if (current_select_milestone_id == value) { //删除关联里程碑
-            debugger
+            console.log('直接删除里程碑...');
             this.setState({
                 current_select_milestone_id: '',
                 current_select_milestone_name: '',
@@ -58,8 +58,8 @@ export default class milestoneList extends Component {
         }
         else {  //添加关联里程碑
 
-            if (current_select_milestone_id == '' || current_select_milestone_id == 'undefined' || current_select_milestone_id) {
-                debugger
+            if (current_select_milestone_id == '' || current_select_milestone_id == 'undefined') {
+                console.log('直接添加里程碑...');
                 dispatch({
                     type: 'tasks/boardAppRelaMiletones',
                     payload: {
@@ -70,7 +70,7 @@ export default class milestoneList extends Component {
                     },
                 })
             } else {
-                debugger
+                console.log('先删除, 再关联里程碑...');
                 //先删除, 再关联
                 Promise.resolve(
                     dispatch({
@@ -126,6 +126,8 @@ export default class milestoneList extends Component {
                 }
             }
         })
+
+        Taro.navigateBack({})
     }
 
     boardAppRelaMiletones = (name) => {
@@ -151,6 +153,8 @@ export default class milestoneList extends Component {
                 }
             }
         })
+
+        Taro.navigateBack({})
     }
 
     render() {

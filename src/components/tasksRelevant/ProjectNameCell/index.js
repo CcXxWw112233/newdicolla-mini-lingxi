@@ -11,80 +11,138 @@ import { connect } from '@tarojs/redux';
 }))
 export default class ProjectNameCell extends Component {
 
+    state = {
+        isFieldSelectionClick: true,
+        isTasksGroupClick: true,
+        isExecutorsListClick: true,
+        isMilestoneListClick: true,
+    }
+
     gotoChangeChoiceInfoPage = (value) => {
 
         const { type, items, field_value, field_item_id, item_id, } = value
         const { dispatch, tasksDetailDatas = {}, data, cardId, } = this.props
         const { list_id, org_id, fields, } = tasksDetailDatas
+        const { isFieldSelectionClick, isTasksGroupClick, isExecutorsListClick, isMilestoneListClick, } = this.state
 
         let board_id = Taro.getStorageSync('tasks_detail_boardId')
         let contentId = Taro.getStorageSync('tasks_detail_contentId')
 
+
         if (type === '2') {  //任务分组 
-            Promise.resolve(
-                dispatch({
-                    type: 'tasks/getCardList',
-                    payload: {
-                        board_id: board_id,
-                    },
+            if (isTasksGroupClick) {
+                this.setState({
+                    isTasksGroupClick: false,
                 })
-            ).then(res => {
-                const { group_list = [] } = this.props
-                if (group_list.length > 0) {
-
-                    Taro.navigateTo({
-                        url: `../../pages/tasksGroup/index?contentId=${contentId}&listId=${list_id}`
+                Promise.resolve(
+                    dispatch({
+                        type: 'tasks/getCardList',
+                        payload: {
+                            board_id: board_id,
+                        },
                     })
-                }
-            })
+                ).then(res => {
+                    const { group_list = [] } = this.props
+                    if (group_list.length > 0) {
 
+                        Taro.navigateTo({
+                            url: `../../pages/tasksGroup/index?contentId=${contentId}&listId=${list_id}`
+                        })
+                    }
+                })
+
+                const that = this
+                setTimeout(function () {
+                    that.setState({
+                        isTasksGroupClick: true
+                    })
+                }, 1500);
+            }
         } else if (type === '3') {  //执行人
-            Promise.resolve(
-                dispatch({
-                    type: 'tasks/getTaskExecutorsList',
-                    payload: {
-                        board_id: board_id,
-                    },
+            if (isExecutorsListClick) {
+                this.setState({
+                    isExecutorsListClick: false,
                 })
-            ).then(res => {
-                Taro.navigateTo({
-                    url: `../../pages/executorsList/index?contentId=${contentId}&executors=${JSON.stringify(data)}`
+                Promise.resolve(
+                    dispatch({
+                        type: 'tasks/getTaskExecutorsList',
+                        payload: {
+                            board_id: board_id,
+                        },
+                    })
+                ).then(res => {
+                    Taro.navigateTo({
+                        url: `../../pages/executorsList/index?contentId=${contentId}&executors=${JSON.stringify(data)}`
+                    })
                 })
-            })
+
+                const that = this
+                setTimeout(function () {
+                    that.setState({
+                        isExecutorsListClick: true
+                    })
+                }, 1500);
+            }
         }
         else if (type === '4') { //里程碑
-
-            Promise.resolve(
-                dispatch({
-                    type: 'tasks/getTaskMilestoneList',
-                    payload: {
-                        board_id: board_id,
-                    },
+            if (isMilestoneListClick) {
+                this.setState({
+                    isMilestoneListClick: false,
                 })
-            ).then(res => {
-
-                const { milestone_list = [], } = this.props
-                if (milestone_list.length > 0) {
-
-                    Taro.navigateTo({
-                        url: `../../pages/milestoneList/index?contentId=${contentId}&milestoneId=${data.id}`
+                Promise.resolve(
+                    dispatch({
+                        type: 'tasks/getTaskMilestoneList',
+                        payload: {
+                            board_id: board_id,
+                        },
                     })
-                }
-            })
+                ).then(res => {
+
+                    const { milestone_list = [], } = this.props
+                    if (milestone_list.length > 0) {
+
+                        Taro.navigateTo({
+                            url: `../../pages/milestoneList/index?contentId=${contentId}&milestoneId=${data.id}`
+                        })
+                    }
+                })
+
+                const that = this
+                setTimeout(function () {
+                    that.setState({
+                        isMilestoneListClick: true
+                    })
+                }, 1500);
+            }
         }
         else if (type === '5') {  //字段
-            Promise.resolve(
-                dispatch({
-                    type: 'tasks/getBoardFieldGroupList',
-                    payload: {
-                        org_id: org_id,
-                    },
+
+            if (isFieldSelectionClick) {
+                this.setState({
+                    isFieldSelectionClick: false,
                 })
-            ).then(res => {
-                Taro.navigateTo({
-                    url: `../../pages/fieldSelection/index?items=${items}&fields=${JSON.stringify(fields)}&card_id=${cardId}`
+
+                Promise.resolve(
+                    dispatch({
+                        type: 'tasks/getBoardFieldGroupList',
+                        payload: {
+                            org_id: org_id,
+                        },
+                    })
+                ).then(res => {
+                    Taro.navigateTo({
+                        url: `../../pages/fieldSelection/index?items=${items}&fields=${JSON.stringify(fields)}&card_id=${cardId}`
+                    })
                 })
-            })
+
+                const that = this
+                setTimeout(function () {
+                    that.setState({
+                        isFieldSelectionClick: true
+                    })
+                }, 1500);
+            }
+
         }
         else if (type === '6') {  //单选
             Taro.navigateTo({
