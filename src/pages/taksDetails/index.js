@@ -66,7 +66,7 @@ export default class taksDetails extends Component {
         this.getBoardFileList(boardId)
     }
 
-    loadTasksDetail(content_id, board_id) {
+    loadTasksDetail = (content_id, board_id) => {
 
         let contentId
         let boardId
@@ -478,7 +478,10 @@ export default class taksDetails extends Component {
                 </View>
 
                 {(folder_tree && folder_tree.child_data && folder_tree.child_data.length > 0) && isShowChoiceFolder == true ? <TaksChoiceFolder folder_tree={folder_tree} org_id={org_id}
-                    board_id={board_id} card_id={card_id} onLoadTasksDetail={(board_id, card_id) => this.loadTasksDetail(board_id, card_id)} /> : <View></View>}
+                    board_id={board_id}
+                    card_id={card_id}
+                    onLoadTasksDetail={this.loadTasksDetail.bind(board_id, card_id)}
+                /> : <View></View>}
 
             </View >
         )

@@ -74,6 +74,7 @@ export default class index extends Component {
     }
 
     uploadFile = () => {
+        this.setSongTaskIsOpen()
         this.getAuthSetting()
     }
 

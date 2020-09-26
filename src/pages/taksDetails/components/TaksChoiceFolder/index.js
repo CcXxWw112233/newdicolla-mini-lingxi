@@ -33,14 +33,6 @@ import { BASE_URL, API_BOARD } from "../../../../gloalSet/js/constant";
 }))
 export default class index extends Component {
 
-    state = {
-
-    }
-
-    componentDidMount() {
-
-    }
-
     //选择当前项目的根目录
     selectionBoardRootDirectory = (value, org_id) => {
         const { board_id, board_name } = value
@@ -87,7 +79,7 @@ export default class index extends Component {
     //上传到后端
     fileUpload = () => {
 
-        const { choice_image_temp_file_paths, org_id, board_id, choice_board_folder_id, song_task_id, card_id, } = this.props
+        const { choice_image_temp_file_paths, board_id, choice_board_folder_id, song_task_id, } = this.props
         //上传
         let that = this;
         const authorization = Taro.getStorageSync('access_token')
@@ -114,7 +106,7 @@ export default class index extends Component {
                 title: "上传完成"
             })
 
-            // that.props.onLoadTasksDetail();
+            typeof this.props.onLoadTasksDetail == 'function' && this.props.onLoadTasksDetail();
 
         }).catch(err => {
             console.log(err)
@@ -179,9 +171,6 @@ export default class index extends Component {
             },
         })
 
-        this.hideBoardList()
-
-
         // 清除缓存文件
         Taro.getSavedFileList({
             success(res) {
@@ -215,15 +204,6 @@ export default class index extends Component {
     choiceFolder = () => {
 
         this.loadBoardList()
-    }
-
-    backHideBoardList = () => {
-
-        this.hideBoardList()
-    }
-
-    hideBoardList = () => {
-
     }
 
     render() {

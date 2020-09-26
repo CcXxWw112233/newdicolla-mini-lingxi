@@ -93,10 +93,13 @@
         }
 
         .song_tasks_file_name {
-            margin-right: pxTrans(20);
-            font-size   : pxTrans(16);
-            font-weight : 400;
-            color       : rgba(0, 0, 0, 0.65);
+            margin-right : pxTrans(30);
+            font-size    : pxTrans(16);
+            font-weight  : 400;
+            color        : rgba(0, 0, 0, 0.65);
+            overflow     : hidden;
+            text-overflow: ellipsis;
+            white-space  : nowrap;
         }
     }
 }

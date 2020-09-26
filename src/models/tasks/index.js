@@ -374,7 +374,7 @@ export default {
     //删除子任务交付物
     * deleteCardAttachment({ payload }, { select, call, put }) {
       const { card_id, attachment_id, calback } = payload
-      const res = yield call(deleteCardAttachment, { attachment_id: attachment_id })
+      const res = yield call(deleteCardAttachment, payload)
       if (isApiResponseOk(res)) {
         if (typeof calback == 'function') calback()
       } else {

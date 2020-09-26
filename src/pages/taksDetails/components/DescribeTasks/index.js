@@ -16,6 +16,7 @@ export default class index extends Component {
         song_task_id: '',
         file_option_isOpen: false,
         file_id: '',
+        file_item_id: '',
 
         file_resource_id: '',
         board_id: '',
@@ -23,28 +24,29 @@ export default class index extends Component {
     }
 
     handleCancel = () => {
-        this.setSongTaskIsOpen()
+        this.setDescribeTasksIsOpen()
     }
 
     handleClose = () => {
-        this.setSongTaskIsOpen()
+        this.setDescribeTasksIsOpen()
     }
 
-    setSongTaskIsOpen = () => {
-
+    setDescribeTasksIsOpen = () => {
         this.setState({
             song_task_isOpen: false,
         })
     }
 
     tasksOption = (cardId) => {
+
         this.setState({
             song_task_isOpen: true,
             song_task_id: cardId,
         })
     }
 
-    uploadFile = () => {
+    uploadDescribeTasksFile = () => {
+        this.setDescribeTasksIsOpen()
         this.getAuthSetting()
     }
 
@@ -54,79 +56,35 @@ export default class index extends Component {
         this.getLocationAuth().then(msg => {
             Taro.getSetting({
                 success(res) {
-                    if (imageSourceType === 'camera') {
-                        if (!res.authSetting['scope.camera']) { //获取摄像头权限
-                            Taro.authorize({
-                                scope: 'scope.camera',
-                                success() {
-                                    // console.log('授权成功')
-                                    that.fileUploadAlbumCamera(imageSourceType)
-                                }, fail() {
-                                    Taro.showModal({
-                                        title: '提示',
-                                        content: '尚未进行授权，部分功能将无法使用',
-                                        showCancel: false,
-                                        success(res) {
-                                            if (res.confirm) {
-                                                console.log('用户点击确定')
-                                                Taro.openSetting({
-                                                    success: (res) => {
-                                                        if (!res.authSetting['scope.camera']) {
-                                                            Taro.authorize({
-                                                                scope: 'scope.camera',
-                                                                success() {
-                                                                    console.log('授权成功')
-                                                                }, fail() {
-                                                                    console.log('用户点击取消')
-                                                                }
-                                                            })
-                                                        }
-                                                    },
-                                                    fail: function () {
-                                                        console.log("授权设置拍照失败");
-                                                    }
-                                                })
-                                            } else if (res.cancel) {
-                                                console.log('用户点击取消')
-                                            }
+                    if (!res.authSetting['scope.writePhotosAlbum']) { //获取相册权限
+                        Taro.authorize({
+                            scope: 'scope.writePhotosAlbum',
+                            success() {
+                                // console.log('授权成功')
+                                that.fileUploadAlbumCamera(imageSourceType)
+                            }, fail() {
+                                Taro.showModal({
+                                    title: '提示',
+                                    content: '尚未进行授权，部分功能将无法使用',
+                                    showCancel: false,
+                                    success(res) {
+                                        if (res.confirm) {
+                                            Taro.openSetting({
+                                                success: (res) => {
+                                                },
+                                                fail: function () {
+                                                    console.log("授权设置相册失败");
+                                                }
+                                            })
+                                        } else if (res.cancel) {
+                                            console.log('用户点击取消')
                                         }
-                                    })
-                                }
-                            })
-                        } else {
-                            that.fileUploadAlbumCamera(imageSourceType)
-                        }
-                    } else if (imageSourceType === 'album') {
-                        if (!res.authSetting['scope.writePhotosAlbum']) { //获取相册权限
-                            Taro.authorize({
-                                scope: 'scope.writePhotosAlbum',
-                                success() {
-                                    // console.log('授权成功')
-                                    that.fileUploadAlbumCamera(imageSourceType)
-                                }, fail() {
-                                    Taro.showModal({
-                                        title: '提示',
-                                        content: '尚未进行授权，部分功能将无法使用',
-                                        showCancel: false,
-                                        success(res) {
-                                            if (res.confirm) {
-                                                Taro.openSetting({
-                                                    success: (res) => {
-                                                    },
-                                                    fail: function () {
-                                                        console.log("授权设置相册失败");
-                                                    }
-                                                })
-                                            } else if (res.cancel) {
-                                                console.log('用户点击取消')
-                                            }
-                                        }
-                                    })
-                                }
-                            })
-                        } else {
-                            that.fileUploadAlbumCamera(imageSourceType)
-                        }
+                                    }
+                                })
+                            }
+                        })
+                    } else {
+                        that.fileUploadAlbumCamera(imageSourceType)
                     }
                 },
                 fail(res) {
@@ -163,18 +121,30 @@ export default class index extends Component {
         let that = this;
         Taro.chooseImage({
             // count: 9 - that.state.choice_image_temp_file_paths.length,
-            count: 9,
+            count: 1,
             sizeType: ['original'],
             sourceType: [imageSourceType],
             success(res) {
                 console.log(res)
                 let tempFilePaths = res.tempFilePaths;
+                that.setFileOptionIsOpen()
                 that.uploadChoiceFolder();
-                that.setState({
-                    makePho: imageSourceType,
-                    choice_image_temp_file_paths: tempFilePaths,
-                })
+                // that.setState({
+                //     makePho: imageSourceType,
+                //     choice_image_temp_file_paths: tempFilePaths,
+                // })
+                that.saveChoiceImageTempFilePaths(tempFilePaths)
             }
+        })
+    }
+
+    saveChoiceImageTempFilePaths = (tempFilePaths) => {
+        const { dispatch } = this.props
+        dispatch({
+            type: 'tasks/updateDatas',
+            payload: {
+                choice_image_temp_file_paths: tempFilePaths,
+            },
         })
     }
 
@@ -211,22 +181,23 @@ export default class index extends Component {
         })
     }
 
-    deleteSongTasks = () => {
-        const { dispatch, tasksDetailDatas = {} } = this.props
-        const { card_id } = tasksDetailDatas
-        const { song_task_id } = this.state
+    deleteDescribeTasks = () => {
+
+        const { dispatch, propertyId, cardId } = this.props
+
         dispatch({
-            type: 'tasks/deleteCard',
+            type: 'tasks/deleteCardProperty',
             payload: {
-                id: song_task_id,
-                card_id: card_id,
-            }
+                property_id: propertyId,
+                card_id: cardId,
+                callBack: this.deleteTasksFieldRelation(propertyId),
+            },
         })
 
-        this.setSongTaskIsOpen()
+        this.setDescribeTasksIsOpen()
     }
 
-    fileOption = (id, file_resource_id, board_id, fileName) => {
+    fileOption = (id, file_resource_id, board_id, fileName, file_id) => {
 
         this.setState({
             file_option_isOpen: true,
@@ -235,9 +206,10 @@ export default class index extends Component {
             file_resource_id: file_resource_id,
             board_id: board_id,
             fileName: fileName,
+            file_item_id: file_id,
         })
 
-        const { cardId, dispatch, } = this.this.props
+        const { cardId, dispatch, } = this.props
         dispatch({
             type: 'tasks/updateDatas',
             payload: {
@@ -288,18 +260,40 @@ export default class index extends Component {
 
     deleteFile = () => {
 
-        const { dispatch, tasksDetailDatas = {} } = this.props
-        const { card_id } = tasksDetailDatas
-        const { file_id } = this.state
+        const { dispatch, cardId } = this.props
+        const { file_id, file_item_id, } = this.state
         dispatch({
             type: 'tasks/deleteCardAttachment',
             payload: {
                 attachment_id: file_id,
-                card_id: card_id,
+                card_id: cardId,
+                code: "REMARK",
+                calback: this.deleteCardAttachment(cardId, file_item_id,),
             }
         })
 
         this.setFileOptionIsOpen()
+    }
+
+    deleteCardAttachment = (cardId, file_item_id) => {
+
+        const { dispatch, tasksDetailDatas, } = this.props
+        const { dec_files = [] } = tasksDetailDatas
+        let array = [];
+        dec_files.forEach(item => {
+            if (item['file_id'] !== file_item_id) {
+                array.push(item)
+            }
+        })
+        dispatch({
+            type: 'tasks/updateDatas',
+            payload: {
+                tasksDetailDatas: {
+                    ...tasksDetailDatas,
+                    ...{ dec_files: array },
+                }
+            }
+        })
     }
 
     fileHandleCancel = () => {
@@ -319,16 +313,17 @@ export default class index extends Component {
 
     deleteCardProperty = () => {
 
-        // const { dispatch, propertyId, cardId } = this.props
+        const { dispatch, cardId } = this.props
+        dispatch({
+            type: 'tasks/updateDatas',
+            payload: {
+                song_task_id: cardId,
+            }
+        })
 
-        // dispatch({
-        //     type: 'tasks/deleteCardProperty',
-        //     payload: {
-        //         property_id: propertyId,
-        //         card_id: cardId,
-        //         callBack: this.deleteTasksFieldRelation(propertyId),
-        //     },
-        // })
+        this.setState({
+            song_task_isOpen: true,
+        })
     }
 
     deleteTasksFieldRelation = (propertyId) => {
@@ -364,7 +359,8 @@ export default class index extends Component {
 
             <View className={indexStyles.wapper}>
 
-                <View className={indexStyles.list_item} onClick={this.gotoChangeChoiceInfoPage.bind(this,)}>
+                {/* <View className={indexStyles.list_item} onClick={this.gotoChangeChoiceInfoPage.bind(this,)}> */}
+                <View className={indexStyles.list_item}>
                     <View className={`${indexStyles.list_item_left_iconnext}`}>
                         <Text className={`${globalStyle.global_iconfont}`}>&#xe7f5;</Text>
                     </View>
@@ -389,13 +385,13 @@ export default class index extends Component {
 
                 {
                     dec_files && dec_files.map((item, key) => {
-                        const { id, file_resource_id, board_id } = item
+                        const { id, file_resource_id, board_id, file_id, } = item
                         return (
                             <View key={key} className={indexStyles.song_tasks_file}>
                                 <View className={`${indexStyles.list_item_file_iconnext}`}>
                                     <Text className={`${globalStyle.global_iconfont}`}>&#xe669;</Text>
                                 </View>
-                                <View className={indexStyles.song_tasks_file_name} onClick={() => this.fileOption(id, file_resource_id, board_id, name,)}>{item.name}</View>
+                                <View className={indexStyles.song_tasks_file_name} onClick={() => this.fileOption(id, file_resource_id, board_id, name, file_id)}>{item.name}</View>
                             </View>
                         )
                     })
@@ -403,20 +399,20 @@ export default class index extends Component {
 
 
                 <AtActionSheet isOpened={this.state.song_task_isOpen} cancelText='取消' onCancel={this.handleCancel} onClose={this.handleClose}>
-                    <AtActionSheetItem onClick={this.uploadFile}>
-                        上传交付物
+                    <AtActionSheetItem onClick={this.uploadDescribeTasksFile}>
+                        上传说明文件
                     </AtActionSheetItem>
-                    <AtActionSheetItem onClick={this.deleteSongTasks}>
-                        删除子任务
+                    <AtActionSheetItem onClick={this.deleteDescribeTasks}>
+                        删除描述
                     </AtActionSheetItem>
                 </AtActionSheet>
 
                 <AtActionSheet isOpened={this.state.file_option_isOpen} cancelText='取消' onCancel={this.fileHandleCancel} onClose={this.fileHandleClose}>
                     <AtActionSheetItem onClick={this.previewFile}>
-                        预览交付物
+                        预览说明文件
                     </AtActionSheetItem>
                     <AtActionSheetItem onClick={this.deleteFile}>
-                        删除交付物
+                        删除说明文件
                     </AtActionSheetItem>
                 </AtActionSheet>
 
