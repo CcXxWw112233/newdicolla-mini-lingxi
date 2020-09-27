@@ -92,6 +92,11 @@ export default class TasksTime extends Component {
         this.putTasksStartTime(time)
     }
 
+    cleanStartDateTime = () => {
+
+        this.putTasksStartTime('')
+    }
+
     putTasksStartTime = (time) => {
 
         //更新任务开始时间
@@ -185,6 +190,11 @@ export default class TasksTime extends Component {
         })
     }
 
+    cleanDueDateTime = () => {
+
+        this.putTasksDueTime('')
+    }
+
     render() {
 
         const { is_show_start_time, is_show_due_time, start_date_str, start_time_str, due_date_str, due_time_str, } = this.state
@@ -200,8 +210,6 @@ export default class TasksTime extends Component {
         //当前时间
         var now = Date.parse(new Date());
         var unix = now / 1000
-
-        console.log(sTime, eTime, 'ssssssssss888888');
 
         return (
             <View className={indexStyles.view_Style}>
@@ -253,6 +261,12 @@ export default class TasksTime extends Component {
                             </View>) : ''
                         }
 
+
+                        {/* <View className={`${indexStyles.list_item_left_iconnext}`} onClick={this.cleanStartDateTime}>
+                            <Text className={`${globalStyles.global_iconfont}`}>&#xe77d;</Text>
+                        </View> */}
+
+
                     </View>
 
                     <View className={indexStyles.due_content}>
@@ -270,6 +284,10 @@ export default class TasksTime extends Component {
                             </Picker>
                         </View>) : ''
                         }
+
+                        {/* <View className={`${indexStyles.list_item_right_iconnext}`} onClick={this.cleanDueDateTime}>
+                            <Text className={`${globalStyles.global_iconfont}`}>&#xe77d;</Text>
+                        </View> */}
 
                     </View>
 

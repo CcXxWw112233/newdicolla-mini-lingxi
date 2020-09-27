@@ -26,11 +26,15 @@ export default class CardItem extends Component {
 
   gotoListItemDetails = (itemValue) => {
     console.log('itemValue===', itemValue);
-    const { flag, content_id, board_id } = itemValue
+    const { flag, content_id, board_id, parent_id, } = itemValue
     if (itemValue && (['0', '1',].indexOf(flag)) !== -1) {
+
+      let tasks_id = parent_id ? parent_id : content_id
+
       Taro.navigateTo({
-        url: `../../pages/taksDetails/index?flag=${flag}&contentId=${content_id}&boardId=${board_id}&back_icon=arrow_icon`
+        url: `../../pages/taksDetails/index?flag=${flag}&contentId=${tasks_id}&boardId=${board_id}&back_icon=arrow_icon`
       })
+
     } else if ((itemValue && (['2',].indexOf(flag)) !== -1)) {
       Taro.navigateTo({
         url: `../../pages/templateDetails/index?flag=${flag}&contentId=${content_id}&boardId=${board_id}&back_icon=arrow_icon`

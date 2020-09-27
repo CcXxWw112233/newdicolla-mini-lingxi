@@ -203,11 +203,12 @@ export default class ProjectNameCell extends Component {
 
         let new_array = []
         properties.forEach(element => {
-
+            console.log(element.id, propertyId, 'ssssssssss');
             if (element.id !== propertyId) {
                 new_array.push(element)
             }
         });
+
         dispatch({
             type: 'tasks/updateDatas',
             payload: {
@@ -217,15 +218,15 @@ export default class ProjectNameCell extends Component {
                 }
             }
         })
+        console.log(new_array, 'new_array========', properties);
+        // typeof this.props.onLoadTasksDetail == 'function' && this.props.onLoadTasksDetail();
 
-        typeof this.props.onLoadTasksDetail == 'function' && this.props.onLoadTasksDetail();
-
-        dispatch({
-            type: 'tasks/updateDatas',
-            payload: {
-                ...properties_list,
-            }
-        })
+        // dispatch({
+        //     type: 'tasks/updateDatas',
+        //     payload: {
+        //         ...properties_list,
+        //     }
+        // })
     }
 
     deleteBoardFieldRelation = (item_id) => {

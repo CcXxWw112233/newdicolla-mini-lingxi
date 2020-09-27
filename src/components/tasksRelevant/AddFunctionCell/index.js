@@ -44,34 +44,20 @@ export default class AddFunctionCell extends Component {
             }
         });
 
-
-        for (var i = 0; i < properties_list.length; i++) {
-
-            if (properties_list[i].code == code) {
-
-                properties_list.splice(i, 1);
-            }
-        }
-
-        dispatch({
-            type: 'tasks/updateDatas',
-            payload: {
-                tasksDetailDatas: {
-                    ...tasksDetailDatas,
-                    ...properties,
-                }
-            }
-        })
-
+        const that = this
         Promise.resolve(
             dispatch({
                 type: 'tasks/updateDatas',
                 payload: {
-                    ...properties_list,
+                    tasksDetailDatas: {
+                        ...tasksDetailDatas,
+                        ...properties,
+                    }
                 }
             })
         ).then(res => {
-            this.overwriteData()
+
+            that.overwriteData()
         })
     }
 
@@ -82,9 +68,9 @@ export default class AddFunctionCell extends Component {
 
     overwriteData = () => {
 
-        const { properties_list = [], properties = [], } = this.props
+        const { properties_list = [], tasksDetailDatas, } = this.props
+        const { properties = [], } = tasksDetailDatas
         let new_array = [];
-
         new_array = properties_list.filter(item => {
             const gold_code = (properties.find(n => {
                 if (n.code == item.code) {
@@ -107,13 +93,14 @@ export default class AddFunctionCell extends Component {
     }
 
     render() {
+
         const { dataArray = [] } = this.state
 
         return (
 
             <View className={indexStyles.list_item}>
                 {
-                    dataArray.map((tag, key) => {
+                    dataArray.length > 0 && dataArray.map((tag, key) => {
 
                         const { id, code, name, } = tag
 
@@ -127,8 +114,7 @@ export default class AddFunctionCell extends Component {
                                         color: `rgba(0, 0, 0,1)`,
                                         backgroundColor: `rgba(211, 211, 211,.2)`,
                                         border: `1px solid rgba(169, 169, 169,1)`,
-                                    }
-                                    }>
+                                    }}>
                                     {name}
                                 </AtTag>
                             </View>

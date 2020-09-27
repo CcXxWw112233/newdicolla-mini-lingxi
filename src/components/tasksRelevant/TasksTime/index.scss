@@ -50,6 +50,13 @@
             .start_time_style {
                 margin: pxTrans(5);
             }
+
+            .list_item_left_iconnext {
+                color       : rgb(0, 0, 0, 0.25);
+                font-size   : pxTrans(20);
+                margin-left : pxTrans(5);
+                margin-right: pxTrans(5);
+            }
         }
 
         .due_content {
@@ -67,6 +74,14 @@
 
             .due_time_style {
                 margin: pxTrans(5);
+            }
+
+
+            .list_item_right_iconnext {
+                color       : rgb(0, 0, 0, 0.25);
+                font-size   : pxTrans(20);
+                margin-left : pxTrans(5);
+                margin-right: pxTrans(5);
             }
         }
     }
