@@ -94,7 +94,12 @@ export default class TasksTime extends Component {
 
     cleanStartDateTime = () => {
 
-        this.putTasksStartTime('')
+        this.setState({
+            start_date_str: '开始日期',
+            is_show_start_time: false,
+        })
+
+        this.putTasksStartTime('0')
     }
 
     putTasksStartTime = (time) => {
@@ -192,7 +197,12 @@ export default class TasksTime extends Component {
 
     cleanDueDateTime = () => {
 
-        this.putTasksDueTime('')
+        this.setState({
+            due_date_str: '结束日期',
+            is_show_due_time: false,
+        })
+
+        this.putTasksDueTime('0')
     }
 
     render() {
@@ -206,7 +216,7 @@ export default class TasksTime extends Component {
         const eTime = cellInfo.eTime
         const card_id = cellInfo.cardId
         const is_Realize = cellInfo.isRealize
-
+        console.log(sTime, 'aaaa', eTime);
         //当前时间
         var now = Date.parse(new Date());
         var unix = now / 1000
@@ -249,7 +259,7 @@ export default class TasksTime extends Component {
                         <View className={indexStyles.start_date_style}>
 
                             <Picker mode='date' onChange={this.onDateChangeStart} className={indexStyles.startTime} onClick={this.ejectTimePicks}>
-                                {sTime ? (is_show_start_time ? timestampToDateZH(sTime) : timestampToTimeZH(sTime)) : start_date_str}
+                                {sTime && sTime != '0' ? (is_show_start_time ? timestampToDateZH(sTime) : timestampToTimeZH(sTime)) : start_date_str}
                             </Picker>
                         </View>
 
@@ -262,10 +272,11 @@ export default class TasksTime extends Component {
                         }
 
 
-                        {/* <View className={`${indexStyles.list_item_left_iconnext}`} onClick={this.cleanStartDateTime}>
-                            <Text className={`${globalStyles.global_iconfont}`}>&#xe77d;</Text>
-                        </View> */}
-
+                        {
+                            sTime && sTime != '0' ? (<View className={`${indexStyles.list_item_left_iconnext}`} onClick={this.cleanStartDateTime}>
+                                <Text className={`${globalStyles.global_iconfont}`}>&#xe77d;</Text>
+                            </View>) : <View></View>
+                        }
 
                     </View>
 
@@ -273,7 +284,7 @@ export default class TasksTime extends Component {
 
                         <View className={indexStyles.due_date_style}>
                             <Picker mode='date' onChange={this.onDateChangeDue} className={indexStyles.endTime} onClick={this.ejectTimePicks}>
-                                {eTime ? (is_show_due_time ? timestampToDateZH(eTime) : timestampToTimeZH(eTime)) : due_date_str}
+                                {eTime && eTime != '0' ? (is_show_due_time ? timestampToDateZH(eTime) : timestampToTimeZH(eTime)) : due_date_str}
                             </Picker>
                         </View>
 
@@ -285,9 +296,14 @@ export default class TasksTime extends Component {
                         </View>) : ''
                         }
 
-                        {/* <View className={`${indexStyles.list_item_right_iconnext}`} onClick={this.cleanDueDateTime}>
-                            <Text className={`${globalStyles.global_iconfont}`}>&#xe77d;</Text>
-                        </View> */}
+
+                        {
+                            eTime && eTime != '0' ? (<View className={`${indexStyles.list_item_right_iconnext}`} onClick={this.cleanDueDateTime}>
+                                <Text className={`${globalStyles.global_iconfont}`}>&#xe77d;</Text>
+                            </View>
+                            ) : <View></View>
+                        }
+
 
                     </View>
 

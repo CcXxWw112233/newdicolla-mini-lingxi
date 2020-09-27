@@ -202,31 +202,31 @@ export default class taksDetails extends Component {
 
             return;
 
-            const { properties = [] } = tasksDetailDatas
+            // const { properties = [] } = tasksDetailDatas
 
-            properties.forEach(item => {
+            // properties.forEach(item => {
 
-                if (item['code'] === 'SUBTASK') {
+            //     if (item['code'] === 'SUBTASK') {
 
-                    item['data'] && item['data'].forEach(obj => {
+            //         item['data'] && item['data'].forEach(obj => {
 
-                        if (obj.card_id === card_id) {
+            //             if (obj.card_id === card_id) {
 
-                            obj.is_realize = new_data.is_realize
-                        }
-                    })
-                }
-            })
+            //                 obj.is_realize = new_data.is_realize
+            //             }
+            //         })
+            //     }
+            // })
 
-            dispatch({
-                type: 'tasks/updateDatas',
-                payload: {
-                    tasksDetailDatas: {
-                        ...tasksDetailDatas,
-                        ...properties,
-                    }
-                }
-            })
+            // dispatch({
+            //     type: 'tasks/updateDatas',
+            //     payload: {
+            //         tasksDetailDatas: {
+            //             ...tasksDetailDatas,
+            //             ...properties,
+            //         }
+            //     }
+            // })
         }
 
     }
@@ -285,7 +285,7 @@ export default class taksDetails extends Component {
         const { properties = [], fields = [], org_id } = tasksDetailDatas
 
         let board_id = Taro.getStorageSync('tasks_detail_boardId')
-        console.log(properties, 'kkkkkkkkkkk', properties_list,);
+
         return (
             <View >
                 <CustomNavigation backIcon={backIcon} />
