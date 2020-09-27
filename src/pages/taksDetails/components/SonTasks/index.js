@@ -467,8 +467,6 @@ export default class index extends Component {
                 }
             }
         })
-
-        typeof this.props.onLoadTasksDetail == 'function' && this.props.onLoadTasksDetail();
     }
 
     render() {

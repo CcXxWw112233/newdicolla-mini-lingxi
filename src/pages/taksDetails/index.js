@@ -329,7 +329,6 @@ export default class taksDetails extends Component {
                                                         propertyId={id}
                                                         cardId={card_id}
                                                         type='3'
-                                                    // onLoadTasksDetail={this.loadTasksDetail.bind(board_id, card_id)}
                                                     /> : ''
                                             }
                                         </View>
@@ -343,7 +342,6 @@ export default class taksDetails extends Component {
                                                         propertyId={id}
                                                         cardId={card_id}
                                                         type='4'
-                                                    // onLoadTasksDetail={this.loadTasksDetail.bind(board_id, card_id)}
                                                     /> : ''
                                             }
                                         </View>
@@ -355,7 +353,6 @@ export default class taksDetails extends Component {
                                                     propertyId={id}
                                                     cardId={card_id}
                                                     onTasksDetailsRealizeStatus={(timeInfo, type) => this.tasksDetailsRealizeStatus(timeInfo, 'SonTasks')}
-                                                // onLoadTasksDetail={this.loadTasksDetail.bind(board_id, card_id)}
                                                 /> : ''
                                         }
                                         {
@@ -364,7 +361,6 @@ export default class taksDetails extends Component {
                                                     label_data={data}
                                                     propertyId={id}
                                                     cardId={card_id}
-                                                // onLoadTasksDetail={this.loadTasksDetail.bind(board_id, card_id)}
                                                 /> : ''
                                         }
 
@@ -375,7 +371,6 @@ export default class taksDetails extends Component {
                                                     boardId={board_id}
                                                     propertyId={id}
                                                     cardId={card_id}
-                                                // onLoadTasksDetail={this.loadTasksDetail.bind(board_id, card_id)}
                                                 /> : ''
                                         }
                                     </View>
@@ -389,13 +384,14 @@ export default class taksDetails extends Component {
                     </View>
 
                     {
-                        properties && properties_list.length > 0 ? <AddFunctionCell properties_list={properties_list} /> : <View>123456</View>
+                        properties && properties_list.length > 0 && properties.length !== properties_list.length ? <AddFunctionCell properties_list={properties_list} /> : <View></View>
                     }
-
 
                     {/* <NewBuilders />
                 <CommentCell />
                 <CommentBox content={content_Id} /> */}
+
+                    <View className={indexStyles.custom_field_interval}></View>
 
                     <ProjectNameCell
                         title='字段'

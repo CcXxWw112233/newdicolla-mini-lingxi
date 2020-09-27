@@ -6,16 +6,16 @@
     width         : 100%;
     display       : flex;
     flex-direction: column;
+    border-bottom : pxTrans(1) solid rgba(0, 0, 0, 0.09);
 
     .list_item {
-        min-height   : pxTrans(56);
-        font-size    : pxTrans(16);
-        display      : flex;
-        align-items  : baseline;
-        margin-left  : pxTrans(0);
-        margin-right : pxTrans(0);
-        border-bottom: pxTrans(1) solid rgba(0, 0, 0, 0.09);
-        background   : rgb(255, 255, 255);
+        min-height  : pxTrans(56);
+        font-size   : pxTrans(16);
+        display     : flex;
+        align-items : baseline;
+        margin-left : pxTrans(0);
+        margin-right: pxTrans(0);
+        background  : rgb(255, 255, 255);
 
         .list_item_left_iconnext {
             color       : rgb(0, 0, 0, 0.25);
@@ -83,7 +83,6 @@
         width         : 100%;
         background    : rgb(255, 255, 255);
 
-        // border-bottom : pxTrans(1) solid rgba(0, 0, 0, 0.09);
 
         .list_item_file_iconnext {
             color       : rgb(0, 0, 0, 0.25);
