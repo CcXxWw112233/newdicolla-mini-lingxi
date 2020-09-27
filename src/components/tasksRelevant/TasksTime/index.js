@@ -216,7 +216,7 @@ export default class TasksTime extends Component {
         const eTime = cellInfo.eTime
         const card_id = cellInfo.cardId
         const is_Realize = cellInfo.isRealize
-        console.log(sTime, 'aaaa', eTime);
+
         //当前时间
         var now = Date.parse(new Date());
         var unix = now / 1000

@@ -107,11 +107,16 @@ export default class addSonTask extends Component {
     }
 
     updataInput = (value) => {
-
         this.setState({
             inputText: value['detail']["value"],
         })
     }
+
+    // onChange = (value) => {
+    //     this.setState({
+    //         inputText: value['detail']["value"],
+    //     })
+    // }
 
     confirm = () => {
 
@@ -295,6 +300,7 @@ export default class addSonTask extends Component {
                         // value={}
                         confirmType='完成'
                         onBlur={this.updataInput.bind(this)}
+                    // onChange={this.onChange.bind(this)}
                     >
                     </Input>
 
@@ -374,16 +380,12 @@ export default class addSonTask extends Component {
                             )
                     }
 
-
                 </View>
 
 
                 <View className={`${indexStyles.login_footer}`}>
                     <Button className={`${indexStyles.login_btn_normal} ${indexStyles.login_btn}`} type='primary' onClick={this.confirm}>确定</Button>
                 </View>
-
-
-                {/* <DateTimePicker onOk={this.onOK} initValue="2016/01/01 17:22:37" /> */}
 
             </View>
         )

@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { View, Text, Input, } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { AtActionSheet, AtActionSheetItem } from "taro-ui"
@@ -469,6 +469,61 @@ export default class index extends Component {
         })
     }
 
+    updataInput = (cardId, value) => {
+
+        var inputValue = value['detail']["value"]
+
+        console.log(value, 'ssss11111', cardId,);
+
+        const { dispatch, } = this.props
+
+        dispatch({
+            type: 'tasks/putCardBaseInfo',
+            payload: {
+                card_id: cardId,
+                name: inputValue,
+                calback: this.putCardBaseInfo(value, cardId),
+            }
+
+        }).then(res => {
+            // if () {
+            // }
+        })
+
+    }
+
+    putCardBaseInfo = (value, cardId) => {
+
+        const { dispatch, tasksDetailDatas, child_data = [], } = this.props
+        const { properties = [], } = tasksDetailDatas
+
+        properties.forEach(element => {
+
+            if (element.code === 'SUBTASK') {
+
+                child_data && child_data.forEach(item => {
+
+                    if (item.id === cardId) {
+
+                        item.name = value
+                    }
+                })
+            }
+
+        });
+
+        dispatch({
+            type: 'tasks/updateDatas',
+            payload: {
+                tasksDetailDatas: {
+                    ...tasksDetailDatas,
+                    ...properties,
+                }
+            }
+        })
+
+    }
+
     render() {
 
         const { child_data = [], } = this.props
@@ -501,7 +556,17 @@ export default class index extends Component {
                                                 <Text className={`${globalStyle.global_iconfont}`}>&#xe844;</Text>
                                             </View>)
                                         }
-                                        <View className={indexStyles.song_task_name}>{card_name}</View>
+
+                                        {/* <View className={indexStyles.song_task_name}>{card_name}</View> */}
+
+                                        <Input
+                                            className={indexStyles.song_task_name}
+                                            value={card_name}
+                                            confirmType='完成'
+                                            onBlur={this.updataInput.bind(this, card_id)}
+                                        >
+                                        </Input>
+
                                         <View className={`${indexStyles.list_item_rigth_iconnext}`} onClick={() => this.tasksOption(card_id)}>
                                             <Text className={`${globalStyle.global_iconfont}`}>&#xe63f;</Text>
                                         </View>
