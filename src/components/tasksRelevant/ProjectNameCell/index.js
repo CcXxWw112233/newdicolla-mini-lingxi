@@ -150,7 +150,6 @@ export default class ProjectNameCell extends Component {
             })
         }
         else if (type === '8') {  //日期
-
             Taro.navigateTo({
                 url: `../../pages/dateField/index?field_value=${field_value}&item_id=${item_id}`
             })

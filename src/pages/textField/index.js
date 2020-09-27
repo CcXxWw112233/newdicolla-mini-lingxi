@@ -95,7 +95,7 @@ export default class textField extends Component {
                         </View>)
                     }
 
-                    <View className={indexStyles.list_item_name}>{type === 'number' ? '数字字段' : '文本字段'}</View>
+                    <View className={indexStyles.list_item_name}>{type === 'number' ? '填写字段' : '文本字段'}</View>
 
                     <Input
                         className={indexStyles.list_item_detail}

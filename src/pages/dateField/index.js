@@ -18,7 +18,9 @@ export default class dateField extends Component {
         super(...arguments)
         this.state = {
             dateSel: '',
+            timeSel: '',
             current_id: '', //当前字段id
+            is_show_time_picker: false,
         }
     }
 
@@ -71,28 +73,47 @@ export default class dateField extends Component {
             }
         })
 
-        Taro.navigateBack({})
+        // Taro.navigateBack({})
     }
 
     onDateChange = e => {
+
+        var value = e.detail.value
         this.setState({
-            dateSel: e.detail.value
+            dateSel: value,
+            is_show_time_picker: true,
         })
 
         let myDate = new Date();
         let str = myDate.toTimeString(); //"10:55:24 GMT+0800 (中国标准时间)"
         let timeStr = str.substring(0, 8); //  '10:55:24'
 
-        var strTime = e.detail.value + ' ' + timeStr
+        var strTime = value + ' ' + timeStr
         var date = new Date(strTime);
         var time = date.getTime()
 
         this.updataContent(time)
     }
 
+    onTimeChange = e => {
+
+        let value = e.detail.value;
+
+        this.setState({
+            timeSel: value,
+        })
+
+        const { dateSel, } = this.state
+
+        var strTime = dateSel + ' ' + value
+        var date = new Date(strTime);
+        var time = date.getTime()
+        this.updataContent(time)
+    }
+
     render() {
 
-        const { dateSel } = this.state
+        const { dateSel, timeSel, is_show_time_picker, } = this.state
 
         return (
             <View >
@@ -101,17 +122,27 @@ export default class dateField extends Component {
                     mode='date'
                     onChange={this.onDateChange}
                     value={dateSel}>
-
                     <AtList>
-
                         <AtListItem
                             title='请选择日期'
                             extraText={dateSel}
                         />
-
                     </AtList>
-
                 </Picker>
+
+                {
+                    is_show_time_picker ? (<Picker
+                        mode='time'
+                        onChange={this.onTimeChange}
+                        value={timeSel}>
+                        <AtList>
+                            <AtListItem
+                                title='选择时间'
+                                extraText={timeSel}
+                            />
+                        </AtList>
+                    </Picker>) : <View></View>
+                }
 
             </View>
         )

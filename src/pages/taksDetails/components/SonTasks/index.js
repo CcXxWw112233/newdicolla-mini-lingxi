@@ -473,8 +473,6 @@ export default class index extends Component {
 
         var inputValue = value['detail']["value"]
 
-        console.log(value, 'ssss11111', cardId,);
-
         const { dispatch, } = this.props
 
         dispatch({
