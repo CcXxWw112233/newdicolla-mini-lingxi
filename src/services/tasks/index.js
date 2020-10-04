@@ -340,3 +340,14 @@ export const getCardProperties = (data, notShowLoading) => {
     url: `${API_BOARD}/card/properties`,
   }, notShowLoading)
 }
+
+//自定义字段删除文件字段的文件
+export const deleteFileFieldsFileRemove = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'DELETE',
+    url: `${API_BOARD}/file/remove`,
+  }, notShowLoading, true)
+}

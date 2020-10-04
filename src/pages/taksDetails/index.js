@@ -17,6 +17,7 @@ import SonTasks from './components/SonTasks/index'
 import DescribeTasks from './components/DescribeTasks/index'
 import TaksChoiceFolder from './components/TaksChoiceFolder/index'
 import MultipleSelectionField from './components/MultipleSelectionField/index'
+import FileFields from './components/FileFields/index'
 import { timestampToTimeZH } from '../../utils/basicFunction'
 
 
@@ -478,8 +479,20 @@ export default class taksDetails extends Component {
                                                 item_id={item.id}
                                             /> : ''
                                     }
+                                           {
+                                        field_type == '6' ?
+                                            <FileFields
+                                                title={name}
+                                                data={{ name: field_value }}
+                                                boardId={board_id}
+                                                items={items}
+                                                field_value={field_value}
+                                                type='11'
+                                                item_id={item.id}
+                                                onLoadTasksDetail={this.loadTasksDetail.bind(board_id, card_id)}
+                                            /> : ''
+                                    }
                                 </View>
-
                             )
                         })
                     }
