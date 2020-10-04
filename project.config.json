@@ -1,91 +1,104 @@
 {
-	"miniprogramRoot": "dist/",
-	"projectname": "newdicolla-mini-lingxi",
-	"description": "lingxi miniprograme",
-	"appid": "wx6535e025f795dca9",
-	"setting": {
-		"urlCheck": false,
-		"es6": false,
-		"postcss": false,
-		"minified": false,
-		"newFeature": true,
-		"coverView": true,
-		"autoAudits": false,
-		"uglifyFileName": true,
-		"checkInvalidKey": true,
-		"checkSiteMap": true,
-		"uploadWithSourceMap": true,
-		"babelSetting": {
-			"ignore": [],
-			"disablePlugins": [],
-			"outputPath": ""
-		}
-	},
-	"compileType": "miniprogram",
-	"simulatorType": "wechat",
-	"simulatorPluginLibVersion": {},
-	"condition": {
-		"search": {
-			"current": -1,
-			"list": []
-		},
-		"conversation": {
-			"current": -1,
-			"list": []
-		},
-		"plugin": {
-			"current": -1,
-			"list": []
-		},
-		"game": {
-			"list": []
-		},
-		"miniprogram": {
-			"current": 1,
-			"list": [
-				{
-					"id": 0,
-					"name": "pages/acceptInvitation/index",
-					"pathName": "pages/acceptInvitation/index",
-					"query": "id=1156175314305552384",
-					"scene": 1011
-				},
-				{
-					"id": 1,
-					"name": "pages/acceptInvitation/index",
-					"pathName": "pages/acceptInvitation/index",
-					"query": "id=1161224388561997824",
-					"scene": 1008
-				},
-				{
-					"id": -1,
-					"name": "pages/chat/index",
-					"pathName": "pages/chat/index",
-					"query": "id=1156175314305552384",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/auccessJoin/index",
-					"pathName": "pages/auccessJoin/index",
-					"query": "id=1156175314305552384",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/calendar/index",
-					"pathName": "pages/calendar/index",
-					"query": "id=1156175314305552384",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/calendar/index",
-					"pathName": "pages/calendar/index",
-					"query": "",
-					"scene": 1008
-				}
-			]
-		}
-	}
+  "miniprogramRoot": "dist/",
+  "projectname": "newdicolla-mini-lingxi",
+  "description": "lingxi miniprograme",
+  "appid": "wx6535e025f795dca9",
+  "setting": {
+    "urlCheck": false,
+    "es6": false,
+    "enhance": false,
+    "postcss": false,
+    "preloadBackgroundData": false,
+    "minified": false,
+    "newFeature": true,
+    "coverView": true,
+    "nodeModules": false,
+    "autoAudits": false,
+    "showShadowRootInWxmlPanel": true,
+    "scopeDataCheck": false,
+    "uglifyFileName": true,
+    "checkInvalidKey": true,
+    "checkSiteMap": true,
+    "uploadWithSourceMap": true,
+    "compileHotReLoad": false,
+    "useMultiFrameRuntime": false,
+    "useApiHook": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "useIsolateContext": true,
+    "useCompilerModule": true,
+    "userConfirmedUseCompilerModuleSwitch": false,
+    "packNpmManually": false,
+    "packNpmRelationList": []
+  },
+  "compileType": "miniprogram",
+  "simulatorType": "wechat",
+  "simulatorPluginLibVersion": {},
+  "condition": {
+    "search": {
+      "current": -1,
+      "list": []
+    },
+    "conversation": {
+      "current": -1,
+      "list": []
+    },
+    "plugin": {
+      "current": -1,
+      "list": []
+    },
+    "game": {
+      "list": []
+    },
+    "miniprogram": {
+      "current": 1,
+      "list": [
+        {
+          "id": 0,
+          "name": "pages/acceptInvitation/index",
+          "pathName": "pages/acceptInvitation/index",
+          "query": "id=1156175314305552384",
+          "scene": 1011
+        },
+        {
+          "id": 1,
+          "name": "pages/acceptInvitation/index",
+          "pathName": "pages/acceptInvitation/index",
+          "query": "id=1161224388561997824",
+          "scene": 1008
+        },
+        {
+          "id": -1,
+          "name": "pages/chat/index",
+          "pathName": "pages/chat/index",
+          "query": "id=1156175314305552384",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/auccessJoin/index",
+          "pathName": "pages/auccessJoin/index",
+          "query": "id=1156175314305552384",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/calendar/index",
+          "pathName": "pages/calendar/index",
+          "query": "id=1156175314305552384",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/calendar/index",
+          "pathName": "pages/calendar/index",
+          "query": "",
+          "scene": 1008
+        }
+      ]
+    }
+  }
 }
