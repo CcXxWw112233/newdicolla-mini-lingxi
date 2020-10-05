@@ -419,6 +419,15 @@ export default class taksDetails extends Component {
               } = item;
               const { name, items, field_status, field_type } = field_content;
 
+// 1 单选字段
+// 2 多选字段
+// 3 日期字段
+// 4 数字字段
+// 5 文本字段
+// 6 文件字段
+// 8 成员-单人
+// 8 成员-多人
+
               return (
                 <View key={key}>
                   <View className={indexStyles.custom_field_interval}></View>
