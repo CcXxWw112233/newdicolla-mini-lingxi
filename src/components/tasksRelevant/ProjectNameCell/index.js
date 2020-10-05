@@ -201,8 +201,16 @@ export default class ProjectNameCell extends Component {
             },
           })
         ).then((res) => {
+          //单人
+          // Taro.navigateTo({
+          //   url: `../../pages/fieldPersonSingle/index?contentId=${contentId}&executors=${JSON.stringify(
+          //     data
+          //   )}&item_id=${item_id}`,
+          // });
+
+          //多人
           Taro.navigateTo({
-            url: `../../pages/fieldPersonSingle/index?contentId=${contentId}&executors=${JSON.stringify(
+            url: `../../pages/fieldPersonMultiple/index?contentId=${contentId}&executors=${JSON.stringify(
               data
             )}&item_id=${item_id}`,
           });

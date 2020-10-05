@@ -77,6 +77,7 @@ class App extends Component {
       "pages/boardChat/index",
       "pages/templateDetails/index",
       "pages/fieldPersonSingle/index",
+      "pages/fieldPersonMultiple/index",
       // 'pages/native/native',
     ],
     permission: {
