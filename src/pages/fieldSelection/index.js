@@ -22,7 +22,7 @@ export default class fieldSelection extends Component {
 
     componentDidMount() {
 
-        const { contentId, fields, card_id, } = this.$router.params
+        const { fields, card_id, } = this.$router.params
         const fieldsData = JSON.parse(fields);
 
         const { field_selection_list = [], } = this.props

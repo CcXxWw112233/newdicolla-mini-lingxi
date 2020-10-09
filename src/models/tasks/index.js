@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { getTaskGroupList, addTask, getTasksDetail, getCardCommentListAll, boardAppRelaMiletones, addComment, checkContentLink, getTaskExecutorsList, getTaskMilestoneList, setTasksRealize, updataTasks, putCardBaseInfo, getLabelList, postCardLabel, deleteCardLabel, getCardList, deleteCardExecutor, addCardExecutor, deleteAppRelaMiletones, deleteCard, deleteCardAttachment, deleteCardProperty, getBoardFieldGroupList, putBoardFieldRelation, deleteBoardFieldRelation, postBoardFieldRelation, postV2Card, getCardProperties, postCardProperty, deleteFileFieldsFileRemove,} from '../../services/tasks/index'
+import { getTaskGroupList, addTask, getTasksDetail, getCardCommentListAll, boardAppRelaMiletones, addComment, checkContentLink, getTaskExecutorsList, getTaskMilestoneList, setTasksRealize, updataTasks, putCardBaseInfo, getLabelList, postCardLabel, deleteCardLabel, getCardList, deleteCardExecutor, addCardExecutor, deleteAppRelaMiletones, deleteCard, deleteCardAttachment, deleteCardProperty, getBoardFieldGroupList, putBoardFieldRelation, deleteBoardFieldRelation, postBoardFieldRelation, postV2Card, getCardProperties, postCardProperty, deleteFileFieldsFileRemove, } from '../../services/tasks/index'
 import { isApiResponseOk } from "../../utils/request";
 import { setBoardIdStorage } from '../../utils/basicFunction'
 
@@ -197,6 +197,7 @@ export default {
           duration: 2000
         })
       }
+      return res || {}
     },
 
     //删除执行人
@@ -555,20 +556,20 @@ export default {
       }
     },
 
-        //自定义字段删除文件字段的文件
-        * deleteFileFieldsFileRemove({ payload }, { select, call, put }) {
-          const { callBack } = payload
-          const res = yield call(deleteFileFieldsFileRemove, payload)
-          if (isApiResponseOk(res)) {
-            if (typeof callBack == 'function') callBack()
-          } else {
-            Taro.showToast({
-              title: res.message,
-              icon: 'none',
-              duration: 2000
-            })
-          }
-        },
+    //自定义字段删除文件字段的文件
+    * deleteFileFieldsFileRemove({ payload }, { select, call, put }) {
+      const { callBack } = payload
+      const res = yield call(deleteFileFieldsFileRemove, payload)
+      if (isApiResponseOk(res)) {
+        if (typeof callBack == 'function') callBack()
+      } else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    },
 
 
   },

@@ -44,7 +44,7 @@ export default class fieldPersonMultiple extends Component {
     const executors_list = JSON.parse(executorsList);
     executors_list.forEach((item) => {
       item["label"] = item.name;
-      item["value"] = item.id;
+      item["value"] = item.user_id;
     });
 
     this.setState({

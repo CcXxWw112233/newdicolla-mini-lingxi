@@ -2,9 +2,9 @@ import Taro, { Component } from "@tarojs/taro";
 import { View, Text, RichText } from "@tarojs/components";
 import indexStyles from "./index.scss";
 import globalStyle from "../../../gloalSet/styles/globalStyles.scss";
-import index from "../../../pages/taksDetails/components/CommentBox";
 import Avatar from "../../avatar";
 import { connect } from "@tarojs/redux";
+import { isApiResponseOk } from "../../../utils/request";
 
 @connect(
     ({
@@ -13,7 +13,6 @@ import { connect } from "@tarojs/redux";
             properties_list = [],
             milestone_list = [],
             group_list = [],
-            executors_list = [],
         },
         board: {
             board_detail = {},
@@ -23,7 +22,6 @@ import { connect } from "@tarojs/redux";
         properties_list,
         milestone_list,
         group_list,
-        executors_list,
         board_detail,
     })
 )
@@ -38,7 +36,7 @@ export default class ProjectNameCell extends Component {
 
     gotoChangeChoiceInfoPage = (value) => {
         const { type, items, field_value, field_item_id, item_id, field_set, } = value;
-        const { dispatch, tasksDetailDatas = {}, data, cardId, executors_list = [], board_detail = {}, } = this.props;
+        const { dispatch, tasksDetailDatas = {}, data, cardId, } = this.props;
         const { list_id, org_id, fields } = tasksDetailDatas;
         const {
             isFieldSelectionClick,
@@ -204,11 +202,9 @@ export default class ProjectNameCell extends Component {
             if (member_selected_type === '1' || member_selected_type === 1) {  //单人
                 if (isFieldPersonSingle) {
                     if (member_selected_range === '2' || member_selected_range === 2) { //项目内成员
-
                         this.setState({
                             isFieldPersonSingle: false,
                         });
-
                         Promise.resolve(
                             dispatch({
                                 type: 'board/getBoardDetail',
@@ -217,12 +213,13 @@ export default class ProjectNameCell extends Component {
                                 }
                             })
                         ).then((res) => {
-
-                            Taro.navigateTo({
-                                url: `../../pages/fieldPersonSingle/index?contentId=${contentId}&executors=${JSON.stringify(
-                                    data
-                                )}&item_id=${item_id}&executorsList=${JSON.stringify(board_detail.data)}`,
-                            });
+                            if (isApiResponseOk(res)) {
+                                Taro.navigateTo({
+                                    url: `../../pages/fieldPersonSingle/index?contentId=${contentId}&executors=${JSON.stringify(
+                                        data
+                                    )}&item_id=${item_id}&executorsList=${JSON.stringify(res.data.data)}`,
+                                });
+                            }
                         });
 
                         const that = this;
@@ -232,6 +229,7 @@ export default class ProjectNameCell extends Component {
                             });
                         }, 1500);
                     } else if (member_selected_range === '1' || member_selected_range === 1) { //组织内成员
+
                         this.setState({
                             isFieldPersonSingle: false,
                         });
@@ -243,11 +241,13 @@ export default class ProjectNameCell extends Component {
                                 },
                             })
                         ).then((res) => {
-                            Taro.navigateTo({
-                                url: `../../pages/fieldPersonSingle/index?contentId=${contentId}&executors=${JSON.stringify(
-                                    data
-                                )}&item_id=${item_id}&executorsList=${JSON.stringify(executors_list)}`,
-                            });
+                            if (isApiResponseOk(res)) {
+                                Taro.navigateTo({
+                                    url: `../../pages/fieldPersonSingle/index?contentId=${contentId}&executors=${JSON.stringify(
+                                        data
+                                    )}&item_id=${item_id}&executorsList=${JSON.stringify(res.data)}`,
+                                });
+                            }
                         });
 
                         const that = this;
@@ -275,11 +275,13 @@ export default class ProjectNameCell extends Component {
                                 },
                             })
                         ).then((res) => {
-                            Taro.navigateTo({
-                                url: `../../pages/fieldPersonMultiple/index?contentId=${contentId}&executors=${JSON.stringify(
-                                    data
-                                )}&item_id=${item_id}&executorsList=${JSON.stringify(board_detail.data)}`,
-                            });
+                            if (isApiResponseOk(res)) {
+                                Taro.navigateTo({
+                                    url: `../../pages/fieldPersonMultiple/index?contentId=${contentId}&executors=${JSON.stringify(
+                                        data
+                                    )}&item_id=${item_id}&executorsList=${JSON.stringify(res.data.data)}`,
+                                });
+                            }
                         });
 
                         const that = this;
@@ -304,12 +306,13 @@ export default class ProjectNameCell extends Component {
                                 },
                             })
                         ).then((res) => {
-
-                            Taro.navigateTo({
-                                url: `../../pages/fieldPersonMultiple/index?contentId=${contentId}&executors=${JSON.stringify(
-                                    data
-                                )}&item_id=${item_id}&executorsList=${JSON.stringify(executors_list)}`,
-                            });
+                            if (isApiResponseOk(res)) {
+                                Taro.navigateTo({
+                                    url: `../../pages/fieldPersonMultiple/index?contentId=${contentId}&executors=${JSON.stringify(
+                                        data
+                                    )}&item_id=${item_id}&executorsList=${JSON.stringify(res.data)}`,
+                                });
+                            }
                         });
 
                         const that = this;

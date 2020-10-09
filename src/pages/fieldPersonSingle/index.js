@@ -5,10 +5,8 @@ import { AtRadio } from "taro-ui";
 
 @connect(({ tasks: {
   tasksDetailDatas = {},
-  // executors_list = [],
 } }) => ({
   tasksDetailDatas,
-  // executors_list,
 }))
 export default class index extends Component {
   config = {
@@ -74,26 +72,25 @@ export default class index extends Component {
   };
 
   componentDidMount() {
+
     const { executors, item_id, executorsList, } = this.$router.params;
     const itemsData = executors && JSON.parse(executors);
     const itemsDataIdValue = itemsData && itemsData[0] && itemsData[0]["id"]
 
-    this.setState({
-      value: itemsDataIdValue, //当前选中人员id
-      itemId: item_id,
-    });
-
     const executors_list = JSON.parse(executorsList);
     executors_list && executors_list.forEach((item) => {
       item["label"] = item.name;
-      item["value"] = item.id;
+      item["value"] = item.user_id;
     });
     this.setState({
       singleList: executors_list,
+      value: itemsDataIdValue, //当前选中人员id
+      itemId: item_id,
     });
   }
 
   render() {
+
     const { singleList = [] } = this.state;
 
     return (
