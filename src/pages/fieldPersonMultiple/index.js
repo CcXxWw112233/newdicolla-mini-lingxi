@@ -3,10 +3,12 @@ import { View } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 import { AtCheckbox } from "taro-ui";
 
-@connect(({ tasks: { executors_list = [], tasksDetailDatas = {} } }) => ({
-  executors_list,
-  tasksDetailDatas,
-}))
+@connect(({ tasks: {
+  // executors_list = [], 
+  tasksDetailDatas = {} } }) => ({
+    // executors_list,
+    tasksDetailDatas,
+  }))
 export default class fieldPersonMultiple extends Component {
   config = {
     navigationBarTitleText: "多选人员",
@@ -22,14 +24,14 @@ export default class fieldPersonMultiple extends Component {
   }
 
   componentDidMount() {
-    const { contentId, executors = [], item_id } = this.$router.params;
+    const { contentId, executors = [], item_id, executorsList, } = this.$router.params;
 
     let executorsData;
     let new_arr;
     if (executors.length > 0) {
       executorsData = JSON.parse(executors);
       //取出已经是执行人的id, 组成新数组(已选中)
-      new_arr = executorsData.map((obj) => {
+      new_arr = executorsData && executorsData.map((obj) => {
         return obj.user_id;
       });
     }
@@ -39,8 +41,7 @@ export default class fieldPersonMultiple extends Component {
       itemId: item_id,
     });
 
-    const { executors_list = [] } = this.props;
-
+    const executors_list = JSON.parse(executorsList);
     executors_list.forEach((item) => {
       item["label"] = item.name;
       item["value"] = item.id;
@@ -53,7 +54,6 @@ export default class fieldPersonMultiple extends Component {
   }
 
   handleChange(value) {
-    console.log("value=====", value);
 
     this.setState({
       checkedList: value,
@@ -69,7 +69,6 @@ export default class fieldPersonMultiple extends Component {
       payload: {
         id: itemId,
         field_value: valueText,
-        // calback: this.putBoardFieldRelation(valueText),
       },
     });
   }

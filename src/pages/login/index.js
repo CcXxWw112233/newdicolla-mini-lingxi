@@ -6,7 +6,6 @@ import { validateTel, validateEmail } from '../../utils/verify';
 import { sendVerifyCode, normalLogin, getVerifycodeImg, getAccountInfo } from "../../services/login";
 import Authorize from '../../components/authorize/index'
 import sha256 from 'js-sha256'
-import { AtModal, AtModalHeader, AtModalContent, AtModalAction, AtSwitch, AtRadio, AtList, AtListItem, AtButton } from "taro-ui"
 import { connect } from '@tarojs/redux'
 import { isApiResponseOk } from '../../utils/request';
 

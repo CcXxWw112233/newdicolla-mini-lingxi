@@ -3,9 +3,12 @@ import { View } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 import { AtRadio } from "taro-ui";
 
-@connect(({ tasks: { tasksDetailDatas = {}, executors_list = [] } }) => ({
+@connect(({ tasks: {
+  tasksDetailDatas = {},
+  // executors_list = [],
+} }) => ({
   tasksDetailDatas,
-  executors_list,
+  // executors_list,
 }))
 export default class index extends Component {
   config = {
@@ -71,17 +74,17 @@ export default class index extends Component {
   };
 
   componentDidMount() {
-    const { executors, item_id } = this.$router.params;
-    const itemsData = JSON.parse(executors);
-    console.log(itemsData[0]["id"], "sssss");
+    const { executors, item_id, executorsList, } = this.$router.params;
+    const itemsData = executors && JSON.parse(executors);
+    const itemsDataIdValue = itemsData && itemsData[0] && itemsData[0]["id"]
 
     this.setState({
-      value: itemsData[0]["id"], //当前选中人员id
+      value: itemsDataIdValue, //当前选中人员id
       itemId: item_id,
     });
 
-    const { executors_list = [] } = this.props;
-    executors_list.forEach((item) => {
+    const executors_list = JSON.parse(executorsList);
+    executors_list && executors_list.forEach((item) => {
       item["label"] = item.name;
       item["value"] = item.id;
     });

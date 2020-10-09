@@ -5,7 +5,6 @@ import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import { AtCheckbox, } from 'taro-ui'
 
-
 @connect(({ tasks: { label_list = [], tasksDetailDatas = {}, }, }) => ({
     label_list, tasksDetailDatas,
 }))

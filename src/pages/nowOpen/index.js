@@ -12,14 +12,6 @@ export default class nowOpen extends Component {
   config = {
     navigationBarTitleText: '聆悉'
   }
-  componentWillReceiveProps() {
-  }
-  componentWillUnmount() {
-  }
-  componentDidShow() {
-  }
-  componentDidHide() {
-  }
   gotoLoginPage = () => {
     Taro.navigateTo({
       url: '../../pages/login/index?redirect=Invitation'

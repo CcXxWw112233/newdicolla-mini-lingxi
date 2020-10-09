@@ -17,12 +17,6 @@ export default class phoneNumberLogin extends Component {
     sourcePage: '',
   }
 
-  componentWillReceiveProps(nextProps) { }
-
-  componentWillUnmount() { }
-
-  componentDidShow() { }
-
   componentWillMount() {
     const { user_key, sourcePage } = this.$router.params
     this.setState({
@@ -30,8 +24,6 @@ export default class phoneNumberLogin extends Component {
       sourcePage: sourcePage
     })
   }
-
-  componentDidHide() { }
 
   onGetPhoneNumberLogin = (userInfo) => {
     if (userInfo.detail.encryptedData) {   //同意

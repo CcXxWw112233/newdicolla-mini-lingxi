@@ -39,18 +39,12 @@ class App extends Component {
       "pages/im/index",
       "pages/groupMember/index",
       "pages/noSchedulesCard/index",
-      // 'pages/boardDetail/index',
-      // 'pages/board/index',
       "pages/subBoardChat/index",
       "pages/subChatDetail/index",
-      // 'pages/my/index',
       "pages/chat/index",
       "pages/chatDetail/index",
       "pages/filesChat/index",
-      // 'pages/login/index',
-      // 'pages/selectOrg/index',
       "pages/phoneNumberLogin/index",
-      // 'pages/testPage/index',
       "pages/acceptInvitation/index",
       "pages/nowOpen/index",
       "pages/auccessJoin/index",
@@ -67,18 +61,13 @@ class App extends Component {
       "pages/multipleSelectionField/index",
       "pages/addSonTask/index",
       "pages/sonTaskExecutors/index",
-      // 'pages/addingTasks/index',
-      // 'pages/choiceProject/index',
-      // 'pages/fillDescribe/index',
       "pages/sceneEntrance/index",
       "pages/errorPage/index",
       "pages/file/index",
-      // 'pages/webView/index',
       "pages/boardChat/index",
       "pages/templateDetails/index",
       "pages/fieldPersonSingle/index",
       "pages/fieldPersonMultiple/index",
-      // 'pages/native/native',
     ],
     permission: {
       "scope.userLocation": {
@@ -103,12 +92,6 @@ class App extends Component {
           iconPath: "./asset/tabBar/calendar.png",
           selectedIconPath: "./asset/tabBar/calendar_selected.png",
         },
-        // {
-        //   "pagePath": "pages/board/index",
-        //   "text": "boardChat",
-        //   "iconPath": './asset/tabBar/board.png',
-        //   "selectedIconPath": './asset/tabBar/board_selected.png',
-        // },
         {
           pagePath: "pages/boardChat/index",
           text: "项目圈",
@@ -208,9 +191,9 @@ class App extends Component {
     }
   }
 
-  componentDidHide() {}
+  componentDidHide() { }
 
-  componentDidCatchError() {}
+  componentDidCatchError() { }
 
   // 在 App 类中的 render() 函数没有实际作用
   // 请勿修改此函数

@@ -9,14 +9,6 @@ export default class qrCodeInvalid extends Component {
   config = {
     navigationStyle: 'custom',
   }
-  componentWillReceiveProps() {
-  }
-  componentWillUnmount() {
-  }
-  componentDidShow() {
-  }
-  componentDidHide() {
-  }
 
   render() {
     return (

@@ -20,10 +20,6 @@ export default class Calendar extends Component {
     search_mask_show: '0'
   }
 
-  componentWillReceiveProps(nextProps) {
-
-  }
-
   componentWillMount() {
     const { title } = this.$router.params
     Taro.setNavigationBarTitle({
@@ -52,8 +48,6 @@ export default class Calendar extends Component {
       payload: {}
     })
   }
-
-  componentDidHide() { }
 
   onSelectType = ({ show_type }) => {
     this.setState({
