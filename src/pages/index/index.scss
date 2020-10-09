@@ -1,84 +1,98 @@
-.index{
-  width: 100%;
-  height: 100%;
-  display: flex;
+.index {
+  width          : 100%;
+  height         : 100%;
+  display        : flex;
   justify-content: center;
-  align-items: center;
-  .container{
-    width: 100%;
+  align-items    : center;
+
+  .container {
+    width : 100%;
     height: 90%;
   }
-  .indexHeader{
-    font-size: 40px;
-    color: #000;
+
+  .indexHeader {
+    font-size : 40px;
+    color     : #000;
     text-align: center;
   }
-  .subTitle{
+
+  .subTitle {
     font-size: 24px;
   }
-  .banner{
-    width: 100%;
+
+  .banner {
+    width        : 100%;
     margin-bottom: 50px;
-    margin-top: 50px;
+    margin-top   : 50px;
   }
-  .bannerImage{
-    width: 100%;
+
+  .bannerImage {
+    width : 100%;
     height: 80%;
   }
-  .bannerTitle{
-    font-weight: bold;
-    color: #000;
+
+  .bannerTitle {
+    font-weight  : bold;
+    color        : #000;
     margin-bottom: 20px;
-    font-size: 36px;
-    text-align: center;
+    font-size    : 36px;
+    text-align   : center;
   }
-  .bannerSubTitle{
-    color: rgba(0,0,0,.65);
-    font-size: 24px;
+
+  .bannerSubTitle {
+    color     : rgba(0, 0, 0, .65);
+    font-size : 24px;
     text-align: center;
   }
 }
-.swipers{
+
+.swipers {
   height: 75%;
 }
-.startBtn{
-  width: 50%;
-  border-radius: .176056rem;
-  color: #fff;
+
+.startBtn {
+  width           : 50%;
+  border-radius   : .176056rem;
+  color           : #fff;
   background-color: #1890FF;
-  font-size: 32px;
-  margin-top: 40px;
+  font-size       : 32px;
+  margin-top      : 40px;
 }
-.startBtn_wx{
-  width: 50%;
-  border-radius: .176056rem;
-  color: #fff;
+
+.startBtn_wx {
+  width           : 50%;
+  border-radius   : .176056rem;
+  color           : #fff;
   background-color: #73D13D;
-  font-size: 32px;
-  margin-top: 40px;
+  font-size       : 32px;
+  margin-top      : 40px;
 }
-.startTips{
-  color: rgba(0,0,0,.25);
-  font-size: 24px;
+
+.startTips {
+  color         : rgba(0, 0, 0, .25);
+  font-size     : 24px;
   // font-weight: bold;
-  text-align: center;
-  margin-top: 20px;
+  text-align    : center;
+  margin-top    : 20px;
 }
-.loadingModal{
-  position: fixed;
-  display: flex;
-  left: 0;
-  top: 0;
-  z-index: 100;
-  width: 100%;
-  height: 100%;
+
+.loadingModal {
+  position        : fixed;
+  display         : flex;
+  left            : 0;
+  top             : 0;
+  z-index         : 100;
+  width           : 100%;
+  height          : 100%;
   background-color: #fff;
-  color:rgba(0,0,0,.55); ;
-  text-align: center;
+  color           : rgba(0, 0, 0, .55);
+  ;
+  text-align     : center;
   justify-content: center;
-  align-content: center;
-  align-items: center;
+  align-content  : center;
+  align-items    : center;
 }
-page{
+
+page {
   height: 100%;
 }

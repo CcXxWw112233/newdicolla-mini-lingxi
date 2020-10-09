@@ -11,15 +11,6 @@ import { connect } from '@tarojs/redux'
 }))
 export default class CardItem extends Component {
 
-  componentWillReceiveProps(nextProps) {
-  }
-
-  componentWillUnmount() { }
-
-  componentDidShow() { }
-
-  componentDidHide() { }
-
   renderAA = () => {
     return (<Text className={`${globalStyles.global_iconfont} ${indexStyles.iconfont_size}`}>&#xe633;</Text>)
   }

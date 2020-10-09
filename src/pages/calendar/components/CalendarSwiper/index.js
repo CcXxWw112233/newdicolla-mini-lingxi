@@ -21,11 +21,6 @@ export default class CalendarSwiper extends Component {
     show_whole_calendar: '0', // 0 /1 /2 初始/展开/关闭
     todayMaginTop: 0, //收起日历时日历的位置
   }
-  componentWillReceiveProps(nextProps) {
-
-  }
-
-  componentWillUnmount() { }
 
   componentDidMount() {
     // 1.1 从服务消息[每日代办]进入, 打开选中当时的日期

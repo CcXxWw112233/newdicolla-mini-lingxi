@@ -241,10 +241,6 @@ export default class BoardChat extends Component {
         this.getChatBoardList();
     }
 
-    componentWillMount() { }
-
-    componentWillUnmount() { }
-
     componentDidShow() {
         //解决, 当在chat页面的时候, 来了新未读消息TabBarBadge不能及时更新, 从chat页面pop回来强制刷新数据
         const isRefreshNews = Taro.getStorageSync('isRefreshFetchAllIMTeamList')
@@ -253,8 +249,6 @@ export default class BoardChat extends Component {
             Taro.removeStorageSync('isRefreshFetchAllIMTeamList')
         }
     }
-
-    componentDidHide() { }
 
     // 获取组织列表
     getOrgList = () => {

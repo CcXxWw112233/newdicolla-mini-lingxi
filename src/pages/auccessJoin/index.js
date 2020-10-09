@@ -97,15 +97,7 @@ export default class auccessJoin extends Component {
       board_id: boardId,
     })
 
-    // this.getOrgList()
   }
-  componentWillReceiveProps() { }
-
-  componentWillUnmount() { }
-
-  componentDidShow() { }
-
-  componentDidHide() { }
 
   // 获取组织列表
   getOrgList = () => {
@@ -159,7 +151,7 @@ export default class auccessJoin extends Component {
       .catch(e => console.log('error in boardDetail: ' + e));
   }
 
-  validGroupChat = ({ im_id }, ) => {
+  validGroupChat = ({ im_id },) => {
     const {
       setCurrentChatTo,
       setCurrentGroup,

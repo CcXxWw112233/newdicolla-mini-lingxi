@@ -1,5 +1,5 @@
 import { getBar } from '../../services/testPage'
-import {isApiResponseOk} from "../../utils/request";
+import { isApiResponseOk } from "../../utils/request";
 import { select_number } from '../selects'
 
 export default {
@@ -10,18 +10,17 @@ export default {
   effects: {
     * effectsDemo({ payload }, { select, call, put }) {
       const number = yield select(select_number)
-      // console.log({number})
       const res = yield call(getBar, payload)
-      if(isApiResponseOk(res)) {
+      if (isApiResponseOk(res)) {
         yield put({
           type: 'updateDatas',
-          payload:{
+          payload: {
             catogery: res.data
           }
         })
         yield put({
           type: 'board/updateDatas',
-          payload:{
+          payload: {
             board_id: '888888'
           }
         })

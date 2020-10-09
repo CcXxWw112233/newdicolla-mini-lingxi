@@ -76,11 +76,6 @@ export default class Login extends Component {
       })
     }
   }
-
-  componentDidMount() { }
-  componentWillUnmount() { }
-  componentDidShow() { }
-  componentDidHide() { }
   //切换登陆方式
   ChangeLoginType = (e) => {
     this.setState({

@@ -40,7 +40,6 @@ class Index extends Component {
   }
 
   componentDidShow() {
-    // console.log('indexShow')
     getAccountInfo().then(res => {
       if (isApiResponseOk(res)) {
         // 注册im
@@ -51,9 +50,6 @@ class Index extends Component {
         })
       }
     }).catch(err => {
-      // Taro.redirectTo({
-      //   url:"../../pages/login/index"
-      // })
     })
   }
 
@@ -107,9 +103,6 @@ class Index extends Component {
         })
       }
     }).catch(err => {
-      // Taro.redirectTo({
-      //   url:"../../pages/login/index"
-      // })
     })
   }
 
@@ -125,12 +118,10 @@ class Index extends Component {
           const parmas = {
             encryptedData: res2.encryptedData, iv: res2.iv, code: code
           }
-          // const { sourcePage } = this.state
           dispatch({
             type: 'login/weChatAuthLogin',
             payload: {
               parmas,
-              // sourcePage: sourcePage.redirect,
             }
           })
         })
@@ -150,13 +141,6 @@ class Index extends Component {
           </View>
         )}
         <View className={styles.container}>
-          {/* <View className={styles.indexHeader}>
-            <View>
-              管项目 用聆悉
-            </View>
-            <View className={styles.subTitle}># 城市规划、地产投资行业的远程办公新方式 #</View>
-          </View> */}
-          {/* <View className={styles.banner}> */}
           <Swiper indicatorDots={true} className={styles.swipers}
             indicatorActiveColor="#1890FF"
             indicatorColor="rgba(0,0,0,0.09)"

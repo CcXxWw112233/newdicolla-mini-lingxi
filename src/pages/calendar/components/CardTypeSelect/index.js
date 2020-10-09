@@ -1,8 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Button, Text } from '@tarojs/components'
+import { View, Text } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyles from '../../../../gloalSet/styles/globalStyles.scss'
-
 import { connect } from '@tarojs/redux'
 
 @connect(({ calendar: { board_list, selected_board } }) => ({
@@ -10,18 +9,8 @@ import { connect } from '@tarojs/redux'
 }))
 export default class CardTypeSelect extends Component {
 
-  componentWillReceiveProps (nextProps) {
-
-  }
-
-  componentWillUnmount () { }
-
-  componentDidShow () { }
-
-  componentDidHide () { }
-
   quitCoperate = () => {
-    this.props.onSelectType && this.props.onSelectType({show_type: '2'})
+    this.props.onSelectType && this.props.onSelectType({ show_type: '2' })
   }
 
   updateSelectedBoard = (board_str) => {
@@ -41,7 +30,7 @@ export default class CardTypeSelect extends Component {
       title: board_name
     })
     this.quitCoperate()
-    if('1' == schedule) {
+    if ('1' == schedule) {
       dispatch({
         type: 'calendar/getScheCardList',
         payload: {
@@ -63,7 +52,7 @@ export default class CardTypeSelect extends Component {
 
   }
 
-  render () {
+  render() {
     const { show_card_type_select, board_list = [], selected_board } = this.props
 
     return (
@@ -82,7 +71,7 @@ export default class CardTypeSelect extends Component {
           </View>
           {board_list.map((value, key) => {
             const { board_name, board_id } = value
-            return(
+            return (
               <View className={`${indexStyles.select_item} ${indexStyles.selected}`} key={board_id} onClick={this.updateSelectedBoard.bind(this, `${board_id}__/s/s__${board_name}`)}>
                 <View className={`${indexStyles.select_item_left}`}>
                   {board_name}

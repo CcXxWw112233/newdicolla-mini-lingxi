@@ -1,8 +1,6 @@
-import { getBar } from '../../services/testPage'
 import { isApiResponseOk } from "../../utils/request";
 import { getAccountInfo, changeOut } from "../../services/login";
 import Taro from '@tarojs/taro'
-import { message } from 'taro-ui';
 
 export default {
   namespace: 'accountInfo',

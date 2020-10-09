@@ -33,18 +33,9 @@ export default class Board extends Component {
     }, 300)
   }
 
-  componentWillReceiveProps(nextProps) {
-  }
-
-  componentWillUnmount() { }
-
-  componentDidMount() { }
-
   componentDidShow() {
     this.getBoardList()
   }
-
-  componentDidHide() { }
 
   onSelectType = ({ show_type }) => {
     this.setState({

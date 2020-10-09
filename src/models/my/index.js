@@ -1,4 +1,3 @@
-import { getBar } from '../../services/testPage'
 import { isApiResponseOk } from "../../utils/request";
 import { changeOrg, getOrgList } from "../../services/login";
 import Taro from '@tarojs/taro'

@@ -1,8 +1,6 @@
 import { connect } from '@tarojs/redux'
 import Taro, { Component, } from '@tarojs/taro'
 import { View, } from '@tarojs/components'
-import indexStyles from './index.scss'
-import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import { AtCheckbox, } from 'taro-ui'
 
 @connect(({ tasks: { label_list = [], tasksDetailDatas = {}, }, }) => ({
@@ -109,7 +107,7 @@ export default class LabelSelection extends Component {
         const { checkboxOption = [] } = this.state
 
         return (
-            <View className={indexStyles.index}>
+            <View>
                 <AtCheckbox
                     options={checkboxOption}
                     selectedList={this.state.checkedList}

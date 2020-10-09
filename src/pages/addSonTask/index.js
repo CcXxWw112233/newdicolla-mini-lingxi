@@ -3,9 +3,7 @@ import { View, Text, Input, Button, Picker, } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
-import { AtList, AtListItem } from 'taro-ui'
 import Avatar from '../../components/avatar';
-import DateTimePicker from '../../pages/taksDetails/components/DateTimePicker';
 
 @connect(({ tasks: { executors_list = [], tasksDetailDatas = {}, }, }) => ({
     executors_list, tasksDetailDatas,
@@ -111,12 +109,6 @@ export default class addSonTask extends Component {
             inputText: value['detail']["value"],
         })
     }
-
-    // onChange = (value) => {
-    //     this.setState({
-    //         inputText: value['detail']["value"],
-    //     })
-    // }
 
     confirm = () => {
 
@@ -285,11 +277,6 @@ export default class addSonTask extends Component {
 
                     <View className={indexStyles.list_item_name}>子任务</View>
 
-
-                    {/* <View className={`${indexStyles.list_item_iconnext}`}>
-                        <Text className={`${globalStyle.global_iconfont}`}>&#xe7fc;</Text>
-                    </View> */}
-
                 </View>
 
 
@@ -300,7 +287,6 @@ export default class addSonTask extends Component {
                         // value={}
                         confirmType='完成'
                         onBlur={this.updataInput.bind(this)}
-                    // onChange={this.onChange.bind(this)}
                     >
                     </Input>
 

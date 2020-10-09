@@ -11,15 +11,6 @@ import CardTypeSelect from "./CardTypeSelect";
 }))
 export default class CardList extends Component {
 
-  componentWillReceiveProps(nextProps) {
-  }
-
-  componentWillUnmount() { }
-
-  componentDidShow() { }
-
-  componentDidHide() { }
-
   render() {
     const { schedule, sche_card_list = [], no_sche_card_list = [] } = this.props
     const card_list = schedule == '1' ? sche_card_list : no_sche_card_list //未排其和已排期的情况分别取不同数据

@@ -1,7 +1,6 @@
 import Taro, { Component } from '@tarojs/taro';
-import { View, Image, AtBadge } from '@tarojs/components';
+import { View, Image, } from '@tarojs/components';
 import styles from './Avatar.scss';
-import { AtIcon } from 'taro-ui';
 
 class Avatar extends Component {
     isValidImgUrl = url => {

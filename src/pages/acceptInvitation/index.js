@@ -29,19 +29,11 @@ export default class acceptInvitation extends Component {
       // 此处应写pages,官方文档写的是page是错误的.
     }
   }
-  componentDidMount() {
-  }
-  componentWillReceiveProps() {
-  }
-  componentWillUnmount() {
-  }
   componentDidShow(e) {
     const options = this.$router.params
     this.scanQRCodeJoin(options)
     this.isLoginStatus()
   }
-
-  componentDidHide() { }
 
   scanQRCodeJoin(options) {
 
