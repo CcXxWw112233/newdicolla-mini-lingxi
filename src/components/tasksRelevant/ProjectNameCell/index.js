@@ -68,6 +68,12 @@ export default class ProjectNameCell extends Component {
                         Taro.navigateTo({
                             url: `../../pages/tasksGroup/index?contentId=${contentId}&listId=${list_id}`,
                         });
+                    } else {
+                        Taro.showToast({
+                            title: '无分组',
+                            icon: 'none',
+                            duration: 2000
+                        })
                     }
                 });
 

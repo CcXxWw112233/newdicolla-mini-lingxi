@@ -72,8 +72,6 @@ export default class dateField extends Component {
                 }
             }
         })
-
-        // Taro.navigateBack({})
     }
 
     onDateChange = e => {

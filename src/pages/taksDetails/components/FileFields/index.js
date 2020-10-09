@@ -76,7 +76,7 @@ export default class index extends Component {
                     success(res) {
                       if (res.confirm) {
                         Taro.openSetting({
-                          success: (res) => {},
+                          success: (res) => { },
                           fail: function () {
                             console.log("授权设置相册失败");
                           },
@@ -92,7 +92,7 @@ export default class index extends Component {
               that.fileUploadAlbumCamera(imageSourceType);
             }
           },
-          fail(res) {},
+          fail(res) { },
         });
       })
       .catch((err) => {
@@ -103,7 +103,7 @@ export default class index extends Component {
           success(res) {
             if (res.confirm) {
               Taro.openSetting({
-                success: (res) => {},
+                success: (res) => { },
                 fail: function () {
                   console.log("授权设置相册失败");
                 },
