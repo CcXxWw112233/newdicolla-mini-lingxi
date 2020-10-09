@@ -289,14 +289,18 @@ export default class taksDetails extends Component {
                     }}
                 >
                     <View className={indexStyles.tasks_time_style}>
-                        <TasksTime
-                            cellInfo={timeInfo}
-                            tasksDetailsRealizeStatus={(timeInfo, type) =>
-                                this.tasksDetailsRealizeStatus(timeInfo, "TasksTime")
-                            }
-                            flag={type_flag}
-                            ejectTimePicks={() => this.ejectTimePicks()}
-                        />
+
+                        {
+                            card_id ? (<TasksTime
+                                cellInfo={timeInfo}
+                                tasksDetailsRealizeStatus={(timeInfo, type) =>
+                                    this.tasksDetailsRealizeStatus(timeInfo, "TasksTime")
+                                }
+                                flag={type_flag}
+                                ejectTimePicks={() => this.ejectTimePicks()}
+                            />) : <View></View>
+                        }
+
                     </View>
                     <ProjectNameCell
                         title="项目"

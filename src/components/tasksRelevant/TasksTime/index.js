@@ -2,9 +2,8 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Picker, } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyles from '../../../gloalSet/styles/globalStyles.scss'
-import { timestampToTimeZH, timestampToDateZH, timestampToHoursMinZH, } from '../../../utils/basicFunction'
+import { timestampToDateZH, timestampToHoursMinZH, timestampToTime, timestampToHM, } from '../../../utils/basicFunction'
 import { connect } from '@tarojs/redux'
-import { AtList, AtListItem } from 'taro-ui'
 
 
 @connect(({ tasks: { isPermission, tasksDetailDatas = {}, }, }) => ({
@@ -17,11 +16,7 @@ export default class TasksTime extends Component {
         task_start_date: '',
         task_start_time: '',
         task_due_date: '',
-        task_due_date: '',
-
-        is_show_start_time: false,
-        is_show_due_time: false,
-        task_due_date: '',
+        task_due_time: '',
 
         start_date_str: '开始日期',
         start_time_str: '开始时间',
@@ -29,12 +24,20 @@ export default class TasksTime extends Component {
         due_time_str: '结束时间',
     }
 
-    ejectTimePicks = () => {
-        this.props.ejectTimePicks();
+    componentDidMount() {
+
+        const { cellInfo = {}, } = this.props
+        const { sTime, eTime, } = cellInfo
+        this.setState({
+            task_start_date: timestampToTime(sTime),
+            task_due_date: timestampToTime(eTime),
+            task_start_time: timestampToHM(sTime),
+            task_due_time: timestampToHM(eTime),
+        })
     }
 
-    modifyInput = () => {
-
+    ejectTimePicks = () => {
+        this.props.ejectTimePicks();
     }
 
     tasksRealizeStatus = () => {
@@ -64,10 +67,11 @@ export default class TasksTime extends Component {
         this.setState({
             task_start_date: value,
             start_date_str: value,
-            is_show_start_time: true,
         })
 
-        var strTime = value + ' ' + '00:00:00'
+        const { task_start_time, } = this.state
+
+        var strTime = value + ' ' + task_start_time
         var date = new Date(strTime);
         var time = date.getTime()
 
@@ -95,7 +99,6 @@ export default class TasksTime extends Component {
 
         this.setState({
             start_date_str: '开始日期',
-            is_show_start_time: false,
         })
 
         this.putTasksStartTime('0')
@@ -137,10 +140,11 @@ export default class TasksTime extends Component {
         this.setState({
             task_due_date: value,
             due_date_str: value,
-            is_show_due_time: true,
         })
 
-        var strTime = value + ' ' + '00:00:00'
+        const { task_due_time, } = this.state
+
+        var strTime = value + ' ' + task_due_time
         var date = new Date(strTime);
         var time = date.getTime()
 
@@ -151,11 +155,10 @@ export default class TasksTime extends Component {
     onTimeChangeDue = e => {
 
         let value = e['detail']['value']
-
+        debugger
         this.setState({
             task_due_time: value,
             due_time_str: value,
-            is_show_due_time: true,
         })
 
         const { task_due_date, } = this.state
@@ -198,7 +201,6 @@ export default class TasksTime extends Component {
 
         this.setState({
             due_date_str: '结束日期',
-            is_show_due_time: false,
         })
 
         this.putTasksDueTime('0')
@@ -206,11 +208,10 @@ export default class TasksTime extends Component {
 
     render() {
 
-        const { is_show_start_time, is_show_due_time, start_date_str, start_time_str, due_date_str, due_time_str, } = this.state
+        const { start_date_str, start_time_str, due_date_str, due_time_str, } = this.state
 
         const { cellInfo = {}, isPermission, flag, } = this.props
         const card_name = cellInfo.cardDefinition
-        // const input_disabled = !card_name ? false : true
         const sTime = cellInfo.sTime
         const eTime = cellInfo.eTime
         const card_id = cellInfo.cardId
@@ -258,18 +259,15 @@ export default class TasksTime extends Component {
                         <View className={indexStyles.start_date_style}>
 
                             <Picker mode='date' onChange={this.onDateChangeStart} className={indexStyles.startTime} onClick={this.ejectTimePicks}>
-                                {sTime && sTime != '0' ? (is_show_start_time ? timestampToDateZH(sTime) : timestampToTimeZH(sTime)) : start_date_str}
+                                {sTime && sTime != '0' ? timestampToDateZH(sTime) : start_date_str}
                             </Picker>
                         </View>
 
-                        {
-                            is_show_start_time ? (<View className={indexStyles.start_time_style}>
-                                <Picker mode='time' onChange={this.onTimeChangeStart} className={indexStyles.startTime} onClick={this.ejectTimePicks}>
-                                    {sTime ? timestampToHoursMinZH(sTime) : start_time_str}
-                                </Picker>
-                            </View>) : ''
-                        }
-
+                        <View className={indexStyles.start_time_style}>
+                            <Picker mode='time' onChange={this.onTimeChangeStart} className={indexStyles.startTime} onClick={this.ejectTimePicks}>
+                                {sTime ? timestampToHoursMinZH(sTime) : start_time_str}
+                            </Picker>
+                        </View>
 
                         {
                             sTime && sTime != '0' ? (<View className={`${indexStyles.list_item_left_iconnext}`} onClick={this.cleanStartDateTime}>
@@ -283,17 +281,15 @@ export default class TasksTime extends Component {
 
                         <View className={indexStyles.due_date_style}>
                             <Picker mode='date' onChange={this.onDateChangeDue} className={indexStyles.endTime} onClick={this.ejectTimePicks}>
-                                {eTime && eTime != '0' ? (is_show_due_time ? timestampToDateZH(eTime) : timestampToTimeZH(eTime)) : due_date_str}
+                                {eTime && eTime != '0' ? timestampToDateZH(eTime) : due_date_str}
                             </Picker>
                         </View>
 
-
-                        {is_show_due_time ? (<View className={indexStyles.due_time_style}>
+                        <View className={indexStyles.due_time_style}>
                             <Picker mode='time' onChange={this.onTimeChangeDue} className={indexStyles.endTime} onClick={this.ejectTimePicks}>
                                 {eTime ? timestampToHoursMinZH(eTime) : due_time_str}
                             </Picker>
-                        </View>) : ''
-                        }
+                        </View>
 
 
                         {
