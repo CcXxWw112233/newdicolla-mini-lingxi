@@ -15,6 +15,7 @@ export default {
     label_list: [], // 标签列表
     group_list: [], //任务分组
     field_selection_list: [], //字段选择list
+    field_selection_group_list: [], //字段分组选择list
     properties_list: [], //任务属性列表
     choice_image_temp_file_paths: '', //选择文件上传保存在本地的路径
     song_task_id: '', //子任务id/属性id
@@ -433,7 +434,8 @@ export default {
         yield put({
           type: 'updateDatas',
           payload: {
-            field_selection_list: res.data.fields
+            field_selection_list: res.data.fields,
+            field_selection_group_list: res.data.groups,
           }
         })
       } else {

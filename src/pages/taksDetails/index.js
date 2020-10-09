@@ -425,6 +425,7 @@ export default class taksDetails extends Component {
                             // 4 数字字段
                             // 5 文本字段
                             // 6 文件字段
+                            // 7 评分字段
                             // 8 成员-单人
                             // 8 成员-多人
 
