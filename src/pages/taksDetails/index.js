@@ -18,7 +18,7 @@ import DescribeTasks from "./components/DescribeTasks/index";
 import TaksChoiceFolder from "./components/TaksChoiceFolder/index";
 import MultipleSelectionField from "./components/MultipleSelectionField/index";
 import FileFields from "./components/FileFields/index";
-import { timestampToTimeZH } from "../../utils/basicFunction";
+import { timestampToTimeZH, timestampToDateTime, } from "../../utils/basicFunction";
 
 @connect(
     ({
@@ -416,12 +416,12 @@ export default class taksDetails extends Component {
                     {fields &&
                         fields.map((item, key) => {
                             const {
-                                relation_id,
-                                field_id,
                                 field_content = {},
                                 field_value,
                             } = item;
-                            const { name, items, field_status, field_type, field_set, } = field_content;
+                            const { name, items, field_type, field_set = {}, } = field_content;
+
+                            const { date_field_code, } = field_set
 
                             // 1 单选字段
                             // 2 多选字段
@@ -471,7 +471,7 @@ export default class taksDetails extends Component {
                                     {field_type == "3" ? (
                                         <ProjectNameCell
                                             title={name}
-                                            data={{ name: timestampToTimeZH(field_value) }}
+                                            data={{ name: timestampToDateTime(field_value, date_field_code,) }}
                                             boardId={board_id}
                                             // propertyId={id}
                                             // cardId={card_id}

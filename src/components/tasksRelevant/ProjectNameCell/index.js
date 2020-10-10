@@ -186,11 +186,9 @@ export default class ProjectNameCell extends Component {
                 )}&field_value=${field_value}&field_item_id=${field_item_id}`,
             });
         } else if (type === "8") {
-
-            const { date_field_code, } = field_set
             //日期
             Taro.navigateTo({
-                url: `../../pages/dateField/index?field_value=${field_value}&item_id=${item_id}&dateFieldCode=${date_field_code}`,
+                url: `../../pages/dateField/index?field_value=${field_value}&item_id=${item_id}`,
             });
 
         } else if (type === "9") {
