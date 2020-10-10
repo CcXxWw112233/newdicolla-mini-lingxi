@@ -51,7 +51,7 @@ export default class index extends Component {
     }
 
     // 获取授权
-    getAuthSetting = (imageSourceType) => {
+    getAuthSetting = () => {
         let that = this;
         this.getLocationAuth().then(msg => {
             Taro.getSetting({
@@ -61,7 +61,7 @@ export default class index extends Component {
                             scope: 'scope.writePhotosAlbum',
                             success() {
                                 // console.log('授权成功')
-                                that.fileUploadAlbumCamera(imageSourceType)
+                                that.fileUploadAlbumCamera()
                             }, fail() {
                                 Taro.showModal({
                                     title: '提示',
@@ -84,7 +84,7 @@ export default class index extends Component {
                             }
                         })
                     } else {
-                        that.fileUploadAlbumCamera(imageSourceType)
+                        that.fileUploadAlbumCamera()
                     }
                 },
                 fail(res) {
@@ -115,24 +115,19 @@ export default class index extends Component {
     }
 
     //拍照/选择图片上传
-    fileUploadAlbumCamera = (imageSourceType) => {
+    fileUploadAlbumCamera = () => {
         Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
 
         let that = this;
         Taro.chooseImage({
-            // count: 9 - that.state.choice_image_temp_file_paths.length,
             count: 1,
             sizeType: ['original'],
-            sourceType: [imageSourceType],
+            sourceType: ['album'],
             success(res) {
                 console.log(res)
                 let tempFilePaths = res.tempFilePaths;
                 that.setFileOptionIsOpen()
                 that.uploadChoiceFolder();
-                // that.setState({
-                //     makePho: imageSourceType,
-                //     choice_image_temp_file_paths: tempFilePaths,
-                // })
                 that.saveChoiceImageTempFilePaths(tempFilePaths)
             }
         })

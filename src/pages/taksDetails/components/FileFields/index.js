@@ -54,7 +54,7 @@ export default class index extends Component {
   };
 
   // 获取授权
-  getAuthSetting = (imageSourceType) => {
+  getAuthSetting = () => {
     let that = this;
     this.getLocationAuth()
       .then((msg) => {
@@ -66,7 +66,7 @@ export default class index extends Component {
                 scope: "scope.writePhotosAlbum",
                 success() {
                   // console.log('授权成功')
-                  that.fileUploadAlbumCamera(imageSourceType);
+                  that.fileUploadAlbumCamera();
                 },
                 fail() {
                   Taro.showModal({
@@ -89,7 +89,7 @@ export default class index extends Component {
                 },
               });
             } else {
-              that.fileUploadAlbumCamera(imageSourceType);
+              that.fileUploadAlbumCamera();
             }
           },
           fail(res) { },
@@ -117,24 +117,18 @@ export default class index extends Component {
   };
 
   //拍照/选择图片上传
-  fileUploadAlbumCamera = (imageSourceType) => {
+  fileUploadAlbumCamera = () => {
     Taro.setStorageSync("isReloadFileList", "is_reload_file_list");
 
     let that = this;
     Taro.chooseImage({
-      // count: 9 - that.state.choice_image_temp_file_paths.length,
       count: 1,
-      sizeType: ["original"],
-      sourceType: [imageSourceType],
+      sizeType: ['original'],
+      sourceType: ['album'],
       success(res) {
         console.log(res);
         let tempFilePaths = res.tempFilePaths;
         that.setFileOptionIsOpen();
-        // that.setState({
-        //     makePho: imageSourceType,
-        //     choice_image_temp_file_paths: tempFilePaths,
-        // })
-
         that.fileUpload(tempFilePaths);
       },
     });
@@ -166,11 +160,10 @@ export default class index extends Component {
   }
 
   //文件字段文件
-  fileUpload = (tempFilePaths) => {
+  fileUpload = (tempFilePaths,) => {
     const { boardId } = this.props;
 
     //上传
-    let that = this;
     const authorization = Taro.getStorageSync("access_token");
     const data = {
       board_id: boardId,
@@ -205,7 +198,6 @@ export default class index extends Component {
           icon: "success",
           title: "上传完成",
         });
-
         const resData = JSON.parse(res[0].data);
         var dict = resData.data;
 
@@ -213,8 +205,16 @@ export default class index extends Component {
         const { fields = [] } = tasksDetailDatas;
 
         fields.forEach((item) => {
-          if (item["id"] == item_id) {
-            item["field_value"].push(dict);
+          const { id, field_value = [], } = item
+          if (id == item_id) {
+            if (field_value && field_value.length > 0) {
+              field_value.push(dict);
+            } else {
+              debugger
+              let array = []
+              array.push(dict)
+              item['field_value'] = array
+            }
           }
         });
 
@@ -245,13 +245,13 @@ export default class index extends Component {
 
     let array = [];
     fields.forEach((item) => {
-      if (item["id"] == item_id) {
-        item["field_value"].map((x) => {
+      const { id, field_value = [], } = item
+      if (id == item_id) {
+        field_value.map((x) => {
           array.push(x.id);
         }); // 生成数组
       }
     });
-
     let valueText = array.join(",");
 
     dispatch({
@@ -295,13 +295,11 @@ export default class index extends Component {
               reject(res);
             }
           } else {
-            // Taro.showModal({ title: '提示', content: `${'第' + i + '张' + '上传失败'}`, showCancel: false });
             reject(res);
           }
         },
         fail(error) {
           reject(error);
-          // Taro.showModal({ title: '提示', content: `${'第' + i + '张' + '上传失败'}`, showCancel: false });
         },
         complete() {
           // Taro.hideToast();
@@ -524,7 +522,7 @@ export default class index extends Component {
   render() {
     const { field_value = [] } = this.props;
     const title = this.props.title || "";
-    // console.log('field_value=====', field_value)
+
     return (
       <View className={indexStyles.wapper}>
         {/* <View className={indexStyles.list_item} onClick={this.gotoChangeChoiceInfoPage.bind(this,)}> */}

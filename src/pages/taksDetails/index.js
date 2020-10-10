@@ -507,11 +507,11 @@ export default class taksDetails extends Component {
                                     ) : (
                                             ""
                                         )}
-                                    {field_type == "6" ? (
+                                    {field_type == "6" && tasksDetailDatas.board_id ? (
                                         <FileFields
                                             title={name}
                                             data={{ name: field_value }}
-                                            boardId={board_id}
+                                            boardId={tasksDetailDatas.board_id}
                                             items={items}
                                             field_value={field_value}
                                             type="11"
