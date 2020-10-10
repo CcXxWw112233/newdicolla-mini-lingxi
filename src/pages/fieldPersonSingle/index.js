@@ -27,9 +27,9 @@ export default class index extends Component {
 
     const { dispatch } = this.props
     const { itemId, current_select_user_id, } = this.state
-    console.log(current_select_user_id, 'sssssss', value);
+
     if (current_select_user_id === value) {
-      debugger
+
       this.setState({
         value: '',
         current_select_user_id: '',
@@ -45,7 +45,7 @@ export default class index extends Component {
       });
     }
     else {
-      debugger
+
       this.setState({
         value,
       });
