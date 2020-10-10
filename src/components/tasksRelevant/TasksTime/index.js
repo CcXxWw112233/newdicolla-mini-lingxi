@@ -69,9 +69,6 @@ export default class TasksTime extends Component {
             start_date_str: value,
         })
 
-        // const { task_start_time, } = this.state
-
-        // var strTime = value + ' ' + task_start_time
         var strTime = value + ' ' + '00:00:00'
         var date = new Date(strTime);
         var time = date.getTime()
@@ -143,9 +140,6 @@ export default class TasksTime extends Component {
             due_date_str: value,
         })
 
-        // const { task_due_time, } = this.state
-
-        // var strTime = value + ' ' + task_due_time
         var strTime = value + ' ' + '23:59:59'
         var date = new Date(strTime);
         var time = date.getTime()

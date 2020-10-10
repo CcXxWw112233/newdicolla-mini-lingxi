@@ -10,16 +10,9 @@ import { connect } from '@tarojs/redux'
 }))
 export default class RuningBoard extends Component {
 
-  componentWillReceiveProps(nextProps) {
-  }
-
-  componentWillUnmount() { }
-
   componentDidShow() {
     this.getBoardList()
   }
-
-  componentDidHide() { }
 
   getBoardList = () => {
     const { dispatch } = this.props

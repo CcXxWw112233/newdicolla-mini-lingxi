@@ -1,11 +1,8 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, } from '@tarojs/components'
 import indexStyles from './index.scss'
-import globalStyle from '../../../gloalSet/styles/globalStyles.scss'
 import { AtTag } from 'taro-ui'
-// eslint-disable-next-line import/first
 import { connect } from '@tarojs/redux'
-// import { isApiResponseOk } from "../../../utils/request";
 
 @connect(({ tasks: { tasksDetailDatas = {}, properties_list = [], }, }) => ({
     tasksDetailDatas, properties_list

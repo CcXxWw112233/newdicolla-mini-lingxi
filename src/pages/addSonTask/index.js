@@ -104,12 +104,6 @@ export default class addSonTask extends Component {
         })
     }
 
-    // updataInput = (value) => {
-    //     this.setState({
-    //         inputText: value['detail']["value"],
-    //     })
-    // }
-
     //实时输入保存
     handleInput = (value) => {
         this.setState({
@@ -293,7 +287,6 @@ export default class addSonTask extends Component {
                         placeholder='添加子任务'
                         // value={}
                         confirmType='完成'
-                        // onBlur={this.updataInput.bind(this)}
                         onInput={this.handleInput.bind(this)}
                     >
                     </Input>

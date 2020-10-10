@@ -4,7 +4,6 @@ import indexStyles from "./index.scss";
 import globalStyle from "../../gloalSet/styles/globalStyles.scss";
 import TasksTime from "../../components/tasksRelevant/TasksTime/index";
 import ProjectNameCell from "../../components/tasksRelevant/ProjectNameCell/index";
-import SonTasksCell from "./components/SonTasksCell/index";
 import RelationContentCell from "./components/RelationContentCell/index";
 import TagCell from "./components/TagCell/index";
 import AddFunctionCell from "../../components/tasksRelevant/AddFunctionCell/index";
@@ -18,7 +17,7 @@ import DescribeTasks from "./components/DescribeTasks/index";
 import TaksChoiceFolder from "./components/TaksChoiceFolder/index";
 import MultipleSelectionField from "./components/MultipleSelectionField/index";
 import FileFields from "./components/FileFields/index";
-import { timestampToTimeZH, timestampToDateTime, } from "../../utils/basicFunction";
+import { timestampToDateTime, } from "../../utils/basicFunction";
 
 @connect(
     ({
@@ -473,8 +472,6 @@ export default class taksDetails extends Component {
                                             title={name}
                                             data={{ name: timestampToDateTime(field_value, date_field_code,) }}
                                             boardId={board_id}
-                                            // propertyId={id}
-                                            // cardId={card_id}
                                             items={items}
                                             field_value={field_value}
                                             type="8"
@@ -491,8 +488,6 @@ export default class taksDetails extends Component {
                                             boardId={board_id}
                                             items={items}
                                             field_value={field_value}
-                                            // propertyId={id}
-                                            // cardId={card_id}
                                             type="9"
                                             item_id={item.id}
                                         />
@@ -506,8 +501,6 @@ export default class taksDetails extends Component {
                                             boardId={board_id}
                                             items={items}
                                             field_value={field_value}
-                                            // propertyId={id}
-                                            // cardId={card_id}
                                             type="10"
                                             item_id={item.id}
                                         />
@@ -539,8 +532,6 @@ export default class taksDetails extends Component {
                                             boardId={board_id}
                                             items={items}
                                             field_value={field_value}
-                                            // propertyId={id}
-                                            // cardId={card_id}
                                             type="12"
                                             item_id={item.id}
                                             fieldSet={field_set}

@@ -13,13 +13,6 @@ import { connect } from '@tarojs/redux';
   sessionlist
 }))
 class RuningBoardItem extends Component {
-  componentWillReceiveProps(nextProps) { }
-
-  componentWillUnmount() { }
-
-  componentDidShow() { }
-
-  componentDidHide() { }
 
   gotoBoardDetail = board_id => {
     Taro.navigateTo({
@@ -29,11 +22,6 @@ class RuningBoardItem extends Component {
 
   //显示红点
   isBoardShouldShowNewMsgDot = (board_id = '') => {
-    //需要拿到 model - im 中的:
-    //allBoardList
-    //sessionlist
-
-    //const {allBoardList, sessionlist} = this.props
 
     //1. 拿到当前项目的 im info object
     let currentBoardImInfo = allBoardList.find(i => i.board_id === board_id);
@@ -85,8 +73,7 @@ class RuningBoardItem extends Component {
     return (
       <View>
         <View
-          className={`${globalStyles.global_card_out} ${
-            indexStyles.card_content
+          className={`${globalStyles.global_card_out} ${indexStyles.card_content
             }`}
           onClick={this.gotoBoardDetail.bind(this, board_id)}
         >
@@ -100,8 +87,7 @@ class RuningBoardItem extends Component {
                 return (
                   <Text
                     key={key}
-                    className={`${globalStyles.global_iconfont} ${
-                      indexStyles.star
+                    className={`${globalStyles.global_iconfont} ${indexStyles.star
                       }`}
                   >
                     &#xe64b;

@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, } from '@tarojs/components'
+import { View, Text, } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
@@ -38,10 +38,8 @@ export default class milestoneList extends Component {
         const { dispatch } = this.props
         const { current_select_milestone_id, card_id } = this.state
 
-        console.log(current_select_milestone_id, 'value=======', value);
-
         if (current_select_milestone_id == value) { //删除关联里程碑
-            console.log('直接删除里程碑...');
+
             this.setState({
                 current_select_milestone_id: '',
                 current_select_milestone_name: '',
@@ -59,7 +57,7 @@ export default class milestoneList extends Component {
         else {  //添加关联里程碑
 
             if (current_select_milestone_id == '' || current_select_milestone_id == 'undefined') {
-                console.log('直接添加里程碑...');
+
                 dispatch({
                     type: 'tasks/boardAppRelaMiletones',
                     payload: {
@@ -70,7 +68,7 @@ export default class milestoneList extends Component {
                     },
                 })
             } else {
-                console.log('先删除, 再关联里程碑...');
+
                 //先删除, 再关联
                 Promise.resolve(
                     dispatch({

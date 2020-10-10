@@ -1,7 +1,6 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View, Image } from '@tarojs/components';
 import indexStyles from './customNavigation.scss';
-import icon_home_normal from '../../../asset/Invitation/icon_home_normal.png';
 import globalStyle from '../../../gloalSet/styles/globalStyles.scss'
 
 class CustomNavigation extends Component {

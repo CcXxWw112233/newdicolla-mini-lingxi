@@ -71,18 +71,7 @@ export default class fieldSelection extends Component {
         })
 
         if (this.state.checkedList.length > value.length) {  //删减
-            // // 差集
-            // let minus = this.state.checkedList.filter(x => !sb.has(x));
-            // let executor_id = minus[0];
 
-            // dispatch({
-            //     type: 'tasks/postBoardFieldRelation',
-            //     payload: {
-            //         fields: [executor_id],
-            //         relation_id: card_id,
-            //         source_type: '2',
-            //     },
-            // })
         }
         else if (this.state.checkedList.length < value.length) {  //增加
 

@@ -24,11 +24,6 @@ export default {
         })
         Taro.setStorageSync('account_info', JSON.stringify(res.data))
       } else {
-        // Taro.showToast({
-        //   title: res.message,
-        //   icon: 'none',
-        //   duration: 2000
-        // })
       }
     },
 

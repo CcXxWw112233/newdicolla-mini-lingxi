@@ -5,12 +5,6 @@ import globalStyles from '../../../gloalSet/styles/globalStyles.scss'
 
 export default class SearchAndMenu extends Component {
 
-  componentWillUnmount() { }
-
-  componentDidShow() { }
-
-  componentDidHide() { }
-
   handleChange = (inputValue) => {
     this.props.onSearch(inputValue.detail.value)
   }
