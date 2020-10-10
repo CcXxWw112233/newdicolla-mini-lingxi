@@ -1,6 +1,6 @@
 
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text, Input, ScrollView, } from '@tarojs/components'
+import { View, Text, Input, ScrollView, Image, } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyles from '../../../../../../gloalSet/styles/globalStyles.scss'
 import { validateTwoDecimal, } from '../../../../../../utils/verify';
@@ -90,7 +90,7 @@ export default class index extends Component {
         let new_arr = score_items.map(obj => { return { 'field_id': obj.id, 'field_value': obj.value } })
 
         const { commentValue, isSocreInpit, } = this.state
-        console.log(isSocreInpit, 'isSocreInpit=====');
+
         if (!isSocreInpit) {
             const { globalData: { store: { dispatch } } } = Taro.getApp();
             const { flow_instance_id, flow_node_instance_id, } = this.props
@@ -158,16 +158,24 @@ export default class index extends Component {
                         {assignees && assignees.map((value, key) => {
                             const { id, avatar, name, processed, score_items, comment } = value
                             return (
-                                <View key={id} className={indexStyles.average}>
-                                    {
-                                        avatar ? (
-                                            <Image className={indexStyles.avatar_image_style} src={avatar}></Image>
-                                        ) : (
-                                                <Text className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}>&#xe647;</Text>)
-                                    }
-                                    <View className={indexStyles.rater_name}>{name}</View>
-                                    <View className={indexStyles.average_number}>{this.loadProcessedState(processed, score_items && score_items[score_items.length - 1]['value'])}</View>
+
+                                <View key={id} className={indexStyles.score_cell_style}>
+
+                                    <View className={indexStyles.average}>
+                                        {
+                                            avatar ? (
+                                                <Image className={indexStyles.avatar_image_style} src={avatar}></Image>
+                                            ) : (
+                                                    <Text className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}>&#xe647;</Text>)
+                                        }
+                                        <View className={indexStyles.rater_name}>{name}</View>
+                                        <View className={indexStyles.average_number}>{this.loadProcessedState(processed, score_items && score_items[score_items.length - 1]['value'])}</View>
+                                    </View>
+
+                                    <View className={indexStyles.score_comment}>{comment}</View>
+
                                 </View>
+
                             )
                         })}
                     </View>

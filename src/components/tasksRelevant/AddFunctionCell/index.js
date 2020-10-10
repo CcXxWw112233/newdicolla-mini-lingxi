@@ -17,7 +17,7 @@ export default class AddFunctionCell extends Component {
 
         const { dispatch, tasksDetailDatas, } = this.props
         const { card_id } = tasksDetailDatas
-        console.log(code, id, 'sssssssss');
+
         dispatch({
             type: 'tasks/postCardProperty',
             payload: {
@@ -41,8 +41,6 @@ export default class AddFunctionCell extends Component {
                 properties.push(element)
             }
         });
-
-        console.log(properties_list, 'sssssssss', properties,);
 
         const that = this
         Promise.resolve(

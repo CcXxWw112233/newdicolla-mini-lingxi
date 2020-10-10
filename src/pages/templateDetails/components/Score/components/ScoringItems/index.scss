@@ -115,39 +115,54 @@
         .assignees {
             width: 100%;
 
-            .average {
-                width         : 100%;
-                height        : pxTrans(40);
+            .score_cell_style {
                 display       : flex;
-                flex-direction: row;
-                align-items   : center;
+                flex-direction: column;
 
-                .avatar_image_style {
-                    width             : pxTrans(24);
-                    height            : pxTrans(24);
-                    border-radius     : pxTrans(12);
-                    // margin-left    : pxTrans(16);
-                    margin-right      : pxTrans(8);
-                    display           : flex;
-                    align-items       : center;
-                    justify-content   : center;
+                .average {
+                    width         : 100%;
+                    height        : pxTrans(40);
+                    display       : flex;
+                    flex-direction: row;
+                    align-items   : center;
+
+                    .avatar_image_style {
+                        width          : pxTrans(24);
+                        height         : pxTrans(24);
+                        border-radius  : pxTrans(12);
+                        margin-right   : pxTrans(8);
+                        display        : flex;
+                        align-items    : center;
+                        justify-content: center;
+                    }
+
+                    .rater_name {
+                        font-size   : pxTrans(16);
+                        font-weight : 400;
+                        color       : rgba(0, 0, 0, 0.65);
+                        line-height : pxTrans(24);
+                        margin-right: pxTrans(16);
+                    }
+
+                    .average_number {
+                        font-weight: 600;
+                        font-size  : pxTrans(16);
+                        line-height: pxTrans(24);
+                        color      : rgba(24, 144, 255, 1);
+                    }
                 }
 
-                .rater_name {
+                .score_comment {
+                    margin-left : pxTrans(48);
                     font-size   : pxTrans(16);
                     font-weight : 400;
                     color       : rgba(0, 0, 0, 0.65);
                     line-height : pxTrans(24);
-                    margin-right: pxTrans(16);
-                }
-
-                .average_number {
-                    font-weight: 600;
-                    font-size  : pxTrans(16);
-                    line-height: pxTrans(24);
-                    color      : rgba(24, 144, 255, 1);
+                    margin-right: pxTrans(24);
                 }
             }
+
+
 
         }
 

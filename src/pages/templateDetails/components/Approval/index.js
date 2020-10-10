@@ -16,7 +16,8 @@ export default class index extends Component {
     }
 
     render() {
-        const { recipients, assignees, last_complete_time, description, approve_type, flow_instance_id, flow_node_instance_id, status, deadline_time_type, deadline_value, deadline_type } = this.props
+        const { recipients, assignees, last_complete_time, description, approve_type, flow_instance_id, flow_node_instance_id, status, deadline_time_type, deadline_value, deadline_type, his_comments = [], } = this.props
+
         return (
             <View className={indexStyles.viewStyle}>
 
@@ -29,7 +30,7 @@ export default class index extends Component {
                 </View>) : (<View></View>)}
 
                 <View className={indexStyles.other_cell}>
-                    <ApprovalMethod assignees={assignees} approve_type={approve_type} />
+                    <ApprovalMethod assignees={assignees} approve_type={approve_type} his_comments={his_comments} />
                 </View>
 
                 {
