@@ -75,7 +75,7 @@ export default class fieldPersonMultiple extends Component {
 
   //更改本地数据
   deleteCardExecutor = (value) => {
-    const { dispatch, tasksDetailDatas, executors_list = [] } = this.props;
+    const { dispatch, tasksDetailDatas, executors_list = [], } = this.props;
     const { properties = [] } = tasksDetailDatas;
 
     let array = [];

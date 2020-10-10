@@ -19,26 +19,51 @@ export default class index extends Component {
       value: "", //当选选中id
       singleList: [], //数据列表
       itemId: "",
+      current_select_user_id: '', //当前选中人员的id
     };
   }
 
   handleChange(value) {
-    this.setState({
-      value,
-    });
 
-    //更新任务分组
-    const { dispatch } = this.props;
-    const { itemId } = this.state;
+    const { dispatch } = this.props
+    const { itemId, current_select_user_id, } = this.state
+    console.log(current_select_user_id, 'sssssss', value);
+    if (current_select_user_id === value) {
+      debugger
+      this.setState({
+        value: '',
+        current_select_user_id: '',
+      });
 
-    dispatch({
-      type: "tasks/putBoardFieldRelation",
-      payload: {
-        id: itemId,
-        field_value: value,
-        calback: this.putBoardFieldRelation(value),
-      },
-    });
+      dispatch({
+        type: "tasks/putBoardFieldRelation",
+        payload: {
+          id: itemId,
+          field_value: '',
+          calback: this.putBoardFieldRelation(value),
+        },
+      });
+    }
+    else {
+      debugger
+      this.setState({
+        value,
+      });
+
+      this.setState({
+        current_select_user_id: value,
+      });
+
+      dispatch({
+        type: "tasks/putBoardFieldRelation",
+        payload: {
+          id: itemId,
+          field_value: value,
+          calback: this.putBoardFieldRelation(value),
+        },
+      });
+    }
+
   }
 
   putBoardFieldRelation = (value) => {
@@ -86,6 +111,7 @@ export default class index extends Component {
       singleList: executors_list,
       value: itemsDataIdValue, //当前选中人员id
       itemId: item_id,
+      current_select_user_id: itemsDataIdValue,
     });
   }
 

@@ -10,6 +10,7 @@ import {
   setRequestHeaderBaseInfo,
 } from "../../../../utils/basicFunction";
 import { BASE_URL, API_BOARD } from "../../../../gloalSet/js/constant";
+import { isApiResponseOk, } from "../../../../utils/request";
 
 @connect(({ tasks: { tasksDetailDatas = {} } }) => ({
   tasksDetailDatas,
@@ -232,7 +233,7 @@ export default class index extends Component {
               },
             });
           })
-          .catch(e => console.log('error in boardDetail: ' + e));
+          .catch(e => console.log('error:' + e));
       })
       .catch((err) => {
         console.log(err);
@@ -420,24 +421,34 @@ export default class index extends Component {
         },
       })
     ).then((res) => {
-      const { field_value = [] } = this.props;
-      let array = [];
-      field_value.map((x) => {
-        if (x.id !== file_id) {
-          array.push(x.id);
-          return array;
-        }
-      }); // 生成数组
 
-      let valueText = array.join(",");
-      dispatch({
-        type: "tasks/putBoardFieldRelation",
-        payload: {
-          id: item_id,
-          field_value: valueText,
-          calback: this.deleteFileFieldsFileRemove(),
-        },
-      });
+      if (isApiResponseOk(res)) {
+        const { field_value = [] } = this.props;
+        let array = [];
+        field_value.map((x) => {
+          if (x.id !== file_id) {
+            array.push(x.id);
+            return array;
+          }
+        }); // 生成数组
+
+        let valueText = array.join(",");
+        dispatch({
+          type: "tasks/putBoardFieldRelation",
+          payload: {
+            id: item_id,
+            field_value: valueText,
+            calback: this.deleteFileFieldsFileRemove(),
+          },
+        });
+      }
+      else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
+      }
     });
 
     this.setFileOptionIsOpen();
