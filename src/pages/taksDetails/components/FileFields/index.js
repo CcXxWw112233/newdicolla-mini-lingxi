@@ -204,31 +204,35 @@ export default class index extends Component {
         const { dispatch, tasksDetailDatas, item_id } = this.props;
         const { fields = [] } = tasksDetailDatas;
 
-        fields.forEach((item) => {
-          const { id, field_value = [], } = item
-          if (id == item_id) {
-            if (field_value && field_value.length > 0) {
-              field_value.push(dict);
-            } else {
-              debugger
-              let array = []
-              array.push(dict)
-              item['field_value'] = array
-            }
-          }
-        });
 
-        Promise.resolve(this.putBoardFieldRelation(fields)).then((res) => {
-          dispatch({
-            type: "tasks/updateDatas",
-            payload: {
-              tasksDetailDatas: {
-                ...tasksDetailDatas,
-                ...{ fields: fields },
+        Promise.resolve(
+          fields.forEach((item) => {
+            const { id, field_value = [], } = item
+            if (id == item_id) {
+              if (field_value && field_value.length > 0) {
+                field_value.push(dict);
+              } else {
+                let array = []
+                array.push(dict)
+                item['field_value'] = array
+              }
+            }
+          })
+        )
+          .then(() => {
+            this.putBoardFieldRelation(fields)
+          }).then(() => {
+            dispatch({
+              type: "tasks/updateDatas",
+              payload: {
+                tasksDetailDatas: {
+                  ...tasksDetailDatas,
+                  ...{ fields: fields },
+                },
               },
-            },
-          });
-        });
+            });
+          })
+          .catch(e => console.log('error in boardDetail: ' + e));
       })
       .catch((err) => {
         console.log(err);
