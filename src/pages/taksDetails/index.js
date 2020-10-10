@@ -479,6 +479,7 @@ export default class taksDetails extends Component {
                                             field_value={field_value}
                                             type="8"
                                             item_id={item.id}
+                                            fieldSet={field_set}
                                         />
                                     ) : (
                                             ""

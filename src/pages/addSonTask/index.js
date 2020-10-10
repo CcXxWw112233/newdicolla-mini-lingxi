@@ -104,7 +104,14 @@ export default class addSonTask extends Component {
         })
     }
 
-    updataInput = (value) => {
+    // updataInput = (value) => {
+    //     this.setState({
+    //         inputText: value['detail']["value"],
+    //     })
+    // }
+
+    //实时输入保存
+    handleInput = (value) => {
         this.setState({
             inputText: value['detail']["value"],
         })
@@ -174,7 +181,7 @@ export default class addSonTask extends Component {
 
         var value = e['detail']['value']
 
-        var strTime = value + ' ' + '00:00:00'
+        var strTime = value + ' ' + '23:59:59'
         var date = new Date(strTime);
         var time = date.getTime()
         this.setState({
@@ -286,7 +293,8 @@ export default class addSonTask extends Component {
                         placeholder='添加子任务'
                         // value={}
                         confirmType='完成'
-                        onBlur={this.updataInput.bind(this)}
+                        // onBlur={this.updataInput.bind(this)}
+                        onInput={this.handleInput.bind(this)}
                     >
                     </Input>
 

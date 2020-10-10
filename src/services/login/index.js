@@ -27,7 +27,7 @@ export const normalLogin = (data, notShowLoading) => {
     },
     method: 'POST',
     url: `${API_UPMS}/user/signin`,
-  }, notShowLoading,false,false)
+  }, notShowLoading, false, false)
 }
 
 
@@ -55,14 +55,14 @@ export const weChatPhoneLogin = (data, notShowLoading) => {
 
 //微信暂未绑定，需要手机号绑定登录
 //获取当前用户信息
-export const getAccountInfo = (data, notShowLoading,redirectPage) => {
+export const getAccountInfo = (data, notShowLoading, redirectPage) => {
   return request({
     data: {
       ...data
     },
     method: 'GET',
     url: `${API_UPMS}/v2/user`,
-  }, notShowLoading,false,redirectPage)
+  }, notShowLoading, false, redirectPage)
 }
 
 //新用户如果没有组织 => 默认初始化一个组织
@@ -86,6 +86,7 @@ export const getOrgList = (data, notShowLoading) => {
     url: `${API_UPMS}/organization`,
   }, notShowLoading)
 }
+
 //切换组织
 export const changeOrg = (data, notShowLoading) => {
   return request({
@@ -96,6 +97,18 @@ export const changeOrg = (data, notShowLoading) => {
     url: `${API_UPMS}/v2/user/changecurrentorg/${data['_organization_id']}`,
   }, notShowLoading)
 }
+
+//组织内全部成员
+export const getMemberAllList = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'GET',
+    url: `${API_UPMS}/member/all/list`,
+  }, notShowLoading)
+}
+
 
 //用户切换账号->退出登录
 export const changeOut = (data, notShowLoading) => {

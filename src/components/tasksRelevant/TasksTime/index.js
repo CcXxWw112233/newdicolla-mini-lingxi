@@ -146,7 +146,7 @@ export default class TasksTime extends Component {
         // const { task_due_time, } = this.state
 
         // var strTime = value + ' ' + task_due_time
-        var strTime = value + ' ' + '00:00:00'
+        var strTime = value + ' ' + '23:59:59'
         var date = new Date(strTime);
         var time = date.getTime()
 

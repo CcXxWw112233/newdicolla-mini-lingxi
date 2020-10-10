@@ -21,17 +21,19 @@ export default class dateField extends Component {
             timeSel: '',
             current_id: '', //当前字段id
             is_show_time_picker: false,
+            date_field_code: '', //时间格式
         }
     }
 
     componentDidMount() {
-        const { item_id, field_value, } = this.$router.params
+        const { item_id, field_value, dateFieldCode, } = this.$router.params
 
         const date_value = timestampToTime(field_value)
 
         this.setState({
             current_id: item_id,
             dateSel: date_value,
+            date_field_code: dateFieldCode,
         })
     }
 
@@ -111,7 +113,21 @@ export default class dateField extends Component {
 
     render() {
 
-        const { dateSel, timeSel, is_show_time_picker, } = this.state
+        const { dateSel, timeSel, is_show_time_picker, date_field_code, } = this.state
+
+        let titleString = ''
+        if (date_field_code === 'YM') { //年月
+            titleString = '年月'
+        } else if (date_field_code === 'YMD') { //年月日
+            titleString = '年月日'
+        } else if (date_field_code === 'YMDH') { //年月日 时
+            titleString = '年月日 时'
+        } else if (date_field_code === 'YMDHM') { //年月日 时分
+            titleString = '年月日 时分'
+        } else if (date_field_code === 'YMDHMS') { //年月日 时分秒
+            titleString = '年月日 时分秒'
+        }
+
 
         return (
             <View >
@@ -122,7 +138,7 @@ export default class dateField extends Component {
                     value={dateSel}>
                     <AtList>
                         <AtListItem
-                            title='请选择日期'
+                            title={'请选择' + titleString}
                             extraText={dateSel}
                         />
                     </AtList>
@@ -135,7 +151,7 @@ export default class dateField extends Component {
                         value={timeSel}>
                         <AtList>
                             <AtListItem
-                                title='选择时间'
+                                title='选择时分'
                                 extraText={timeSel}
                             />
                         </AtList>

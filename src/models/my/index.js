@@ -1,11 +1,12 @@
 import { isApiResponseOk } from "../../utils/request";
-import { changeOrg, getOrgList } from "../../services/login";
+import { changeOrg, getOrgList, getMemberAllList, } from "../../services/login";
 import Taro from '@tarojs/taro'
 
 export default {
   namespace: 'my',
   state: {
-    org_list: [],
+    org_list: [],  //组织列表
+    member_all_list: [], //某个组织内全部成员的列表
   },
   effects: {
     //获取组织列表
@@ -19,7 +20,11 @@ export default {
           }
         })
       } else {
-
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
       }
     },
 
@@ -36,8 +41,35 @@ export default {
         if (isTodo === 'todoList') return res || {}
         Taro.navigateBack()
       } else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
       }
     },
+
+    //获取组织内全部成员
+    * getMemberAllList({ payload }, { select, call, put }) { //切换组织
+      const { _organization_id } = payload
+      const res = yield call(getMemberAllList, { _organization_id: _organization_id })
+      if (isApiResponseOk(res)) {
+        yield put({
+          type: 'updateDatas',
+          payload: {
+            member_all_list: res.data
+          }
+        })
+      } else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+      return res || {}
+    },
+
   },
 
   reducers: {

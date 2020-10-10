@@ -1,5 +1,5 @@
 import { request, packagePromise, } from "../../utils/request";
-import { API_BOARD } from "../../gloalSet/js/constant";
+import { API_BOARD, } from "../../gloalSet/js/constant";
 import { createHeaderContentDataByCardId } from '../constant'
 
 

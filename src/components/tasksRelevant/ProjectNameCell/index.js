@@ -4,7 +4,8 @@ import indexStyles from "./index.scss";
 import globalStyle from "../../../gloalSet/styles/globalStyles.scss";
 import Avatar from "../../avatar";
 import { connect } from "@tarojs/redux";
-import { isApiResponseOk } from "../../../utils/request";
+import { isApiResponseOk, } from "../../../utils/request";
+import { getOrgIdByBoardId, } from '../../../utils/basicFunction'
 
 @connect(
     ({
@@ -131,6 +132,12 @@ export default class ProjectNameCell extends Component {
                         Taro.navigateTo({
                             url: `../../pages/milestoneList/index?contentId=${contentId}&milestoneId=${data.id}`,
                         });
+                    } else {
+                        Taro.showToast({
+                            title: '没有里程碑可设置',
+                            icon: 'none',
+                            duration: 2000
+                        })
                     }
                 });
 
@@ -179,10 +186,13 @@ export default class ProjectNameCell extends Component {
                 )}&field_value=${field_value}&field_item_id=${field_item_id}`,
             });
         } else if (type === "8") {
+
+            const { date_field_code, } = field_set
             //日期
             Taro.navigateTo({
-                url: `../../pages/dateField/index?field_value=${field_value}&item_id=${item_id}`,
+                url: `../../pages/dateField/index?field_value=${field_value}&item_id=${item_id}&dateFieldCode=${date_field_code}`,
             });
+
         } else if (type === "9") {
             //数字
 
@@ -241,9 +251,9 @@ export default class ProjectNameCell extends Component {
                         });
                         Promise.resolve(
                             dispatch({
-                                type: "tasks/getTaskExecutorsList",
+                                type: "my/getMemberAllList",
                                 payload: {
-                                    board_id: board_id,
+                                    _organization_id: getOrgIdByBoardId(board_id),
                                 },
                             })
                         ).then((res) => {
@@ -298,7 +308,6 @@ export default class ProjectNameCell extends Component {
                         }, 1500);
                     }
                 } else if (member_selected_range === '1' || member_selected_range === 1) {  //组织内成员
-
                     if (isFieldPersonSingle) {
                         this.setState({
                             isFieldPersonSingle: false,
@@ -306,9 +315,9 @@ export default class ProjectNameCell extends Component {
 
                         Promise.resolve(
                             dispatch({
-                                type: "tasks/getTaskExecutorsList",
+                                type: "my/getMemberAllList",
                                 payload: {
-                                    board_id: board_id,
+                                    _organization_id: getOrgIdByBoardId(board_id),
                                 },
                             })
                         ).then((res) => {
