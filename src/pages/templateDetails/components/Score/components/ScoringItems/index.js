@@ -91,24 +91,36 @@ export default class index extends Component {
 
         const { commentValue, isSocreInpit, } = this.state
 
-        if (!isSocreInpit) {
-            const { globalData: { store: { dispatch } } } = Taro.getApp();
-            const { flow_instance_id, flow_node_instance_id, } = this.props
-            dispatch({
-                type: 'workflow/putApprovalComplete',
-                payload: {
-                    flow_instance_id: flow_instance_id,
-                    flow_node_instance_id: flow_node_instance_id,
-                    message: commentValue,
-                    content_values: new_arr,
-                },
-            })
-        }
+        // if (!isSocreInpit) {
+        const { globalData: { store: { dispatch } } } = Taro.getApp();
+        const { flow_instance_id, flow_node_instance_id, } = this.props
+        dispatch({
+            type: 'workflow/putApprovalComplete',
+            payload: {
+                flow_instance_id: flow_instance_id,
+                flow_node_instance_id: flow_node_instance_id,
+                message: commentValue,
+                content_values: new_arr,
+            },
+        })
+        // }
+    }
+
+    getNewScoreItems = (score_items) => {
+        let new_array = []
+        score_items.forEach(element => {
+            if (element['is_total'] == '0') {
+                new_array.push(element)
+            }
+        });
+
+        return new_array;
     }
 
     render() {
         const { assignees, score_items, status, } = this.props
         const { isSocreInpit, inputWarning, selectInputId } = this.state
+
         return (
             <View className={indexStyles.viewStyle}>
 
@@ -121,7 +133,8 @@ export default class index extends Component {
 
                     <ScrollView scrollX >
                         <View className={indexStyles.scoring_input}>
-                            {score_items && score_items.map((item, key) => {
+                            {score_items && this.getNewScoreItems(score_items).map((item, key) => {
+
                                 const { id, max_score, title, value } = item
                                 return (
                                     <View key={id} className={indexStyles.scoring_items}>
@@ -133,7 +146,8 @@ export default class index extends Component {
                                                     className={indexStyles.score_view_input}
                                                     type='digit'
                                                     maxLength='5'
-                                                    placeholder={item.value}
+                                                    // placeholder={item.value}
+                                                    value={item.value}
                                                     onInput={(e) => this.inputSocreInpit(e, max_score)}
                                                     onblur={(e) => this.bindblur(e, item)}
                                                 // disabled={true}
