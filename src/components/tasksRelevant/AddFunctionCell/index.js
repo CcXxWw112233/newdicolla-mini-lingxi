@@ -17,7 +17,7 @@ export default class AddFunctionCell extends Component {
 
         const { dispatch, tasksDetailDatas, } = this.props
         const { card_id } = tasksDetailDatas
-
+        console.log(code, id, 'sssssssss');
         dispatch({
             type: 'tasks/postCardProperty',
             payload: {
@@ -32,14 +32,17 @@ export default class AddFunctionCell extends Component {
 
         const { dispatch, tasksDetailDatas, properties_list, } = this.props
         const { properties = [], } = tasksDetailDatas
-
         properties_list.forEach(element => {
 
             if (element.code == code) {
+                var timestamp = Date.parse(new Date());
+                element['timestamp'] = timestamp
 
                 properties.push(element)
             }
         });
+
+        console.log(properties_list, 'sssssssss', properties,);
 
         const that = this
         Promise.resolve(
@@ -48,7 +51,7 @@ export default class AddFunctionCell extends Component {
                 payload: {
                     tasksDetailDatas: {
                         ...tasksDetailDatas,
-                        ...properties,
+                        properties: [...properties],
                     }
                 }
             })

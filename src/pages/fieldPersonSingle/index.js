@@ -24,7 +24,6 @@ export default class index extends Component {
   }
 
   handleChange(value) {
-
     const { dispatch } = this.props
     const { itemId, current_select_user_id, } = this.state
 
@@ -101,11 +100,10 @@ export default class index extends Component {
     const { executors, item_id, executorsList, } = this.$router.params;
     const itemsData = executors && JSON.parse(executors);
     const itemsDataIdValue = itemsData && itemsData[0] && itemsData[0]["id"]
-
     const executors_list = JSON.parse(executorsList);
     executors_list && executors_list.forEach((item) => {
       item["label"] = item.name;
-      item["value"] = item.user_id;
+      item["value"] = item.id ? item.id : item.user_id;
     });
     this.setState({
       singleList: executors_list,
@@ -113,6 +111,7 @@ export default class index extends Component {
       itemId: item_id,
       current_select_user_id: itemsDataIdValue,
     });
+
   }
 
   render() {

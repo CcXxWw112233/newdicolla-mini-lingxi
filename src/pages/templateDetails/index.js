@@ -74,31 +74,6 @@ export default class templateDetails extends Component {
         })
     }
 
-    componentWillReceiveProps() { }
-
-    // componentDidShow() {
-    //     const { dispatch } = this.props
-    //     dispatch({
-    //         type: 'calendar/updateDatas',
-    //         payload: {
-    //             isOtherPageBack: true
-    //         }
-    //     })
-    // }
-
-    componentDidHide() { }
-
-    // componentWillUnmount() {
-    //     const { sourcePage } = this.state
-    //     if (sourcePage === 'auccessJoin' || sourcePage === 'sceneEntrance') {
-    //         const switchTabCurrentPage = 'currentPage_BoardDetail_or_Login'
-    //         Taro.setStorageSync('switchTabCurrentPage', switchTabCurrentPage);
-    //         Taro.switchTab({
-    //             url: `../../pages/calendar/index`
-    //         })
-    //     }
-    // }
-
     //展开流程步骤
     onChangeOpen(isTrue) {
         const { isOpenStep, currentStepId } = isTrue
@@ -113,10 +88,9 @@ export default class templateDetails extends Component {
         const statusBar_Height = SystemInfo.statusBarHeight
         const navBar_Height = SystemInfo.platform == 'ios' ? 44 : 48
 
-        const { backIcon, is_change_open, current_step_id } = this.state
+        const { backIcon, is_change_open } = this.state
 
         const { workflowDatas, } = this.props
-        console.log('workflowDatas====', workflowDatas);
 
         const { name, create_time, nodes = [], board_id, } = workflowDatas
 
@@ -129,14 +103,13 @@ export default class templateDetails extends Component {
 
 
                     {nodes && nodes.map((value, key) => {
-                        const { id, node_type, sort, runtime_type, recipients, assignees, last_complete_time, forms, description, approve_type, status, score_items, deadline_time_type, deadline_value, deadline_type, } = value
+                        const { id, node_type, sort, runtime_type, recipients, assignees, last_complete_time, forms, description, approve_type, status, score_items, deadline_time_type, deadline_value, deadline_type, his_comments, } = value
 
                         return (
                             <View key={id}>
                                 <View className={indexStyles.interval}></View>
                                 <StepRow sort={sort} name={value.name} runtime_type={runtime_type} step_id={value.id} onClicked={this.onChangeOpen.bind(this)} />
                                 {
-                                    // current_step_id == id && 
                                     is_change_open ? (
                                         <View>
                                             {node_type === '1' && (
@@ -166,6 +139,7 @@ export default class templateDetails extends Component {
                                                     deadline_time_type={deadline_time_type}
                                                     deadline_value={deadline_value}
                                                     deadline_type={deadline_type}
+                                                    his_comments={his_comments}
                                                 />
                                             )}
                                             {node_type === '3' && (

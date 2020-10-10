@@ -36,13 +36,10 @@ export default class TasksTime extends Component {
         })
     }
 
-    ejectTimePicks = () => {
-        this.props.ejectTimePicks();
-    }
-
     tasksRealizeStatus = () => {
         const { cellInfo = {}, flag } = this.props
         if (flag != '0') return
+        // typeof this.props.tasksDetailsRealizeStatus == 'function' && this.props.tasksDetailsRealizeStatus(cellInfo)
         this.props.tasksDetailsRealizeStatus(cellInfo)
     }
 
@@ -254,13 +251,13 @@ export default class TasksTime extends Component {
 
                         <View className={indexStyles.start_date_style}>
 
-                            <Picker mode='date' onChange={this.onDateChangeStart} className={indexStyles.startTime} onClick={this.ejectTimePicks}>
+                            <Picker mode='date' onChange={this.onDateChangeStart} className={indexStyles.startTime} >
                                 {sTime && sTime != '0' ? timestampToDateZH(sTime) : start_date_str}
                             </Picker>
                         </View>
 
                         <View className={indexStyles.start_time_style}>
-                            <Picker mode='time' onChange={this.onTimeChangeStart} className={indexStyles.startTime} onClick={this.ejectTimePicks}>
+                            <Picker mode='time' onChange={this.onTimeChangeStart} className={indexStyles.startTime}>
                                 {sTime ? timestampToHoursMinZH(sTime) : start_time_str}
                             </Picker>
                         </View>
@@ -276,13 +273,13 @@ export default class TasksTime extends Component {
                     <View className={indexStyles.due_content}>
 
                         <View className={indexStyles.due_date_style}>
-                            <Picker mode='date' onChange={this.onDateChangeDue} className={indexStyles.endTime} onClick={this.ejectTimePicks}>
+                            <Picker mode='date' onChange={this.onDateChangeDue} className={indexStyles.endTime}>
                                 {eTime && eTime != '0' ? timestampToDateZH(eTime) : due_date_str}
                             </Picker>
                         </View>
 
                         <View className={indexStyles.due_time_style}>
-                            <Picker mode='time' onChange={this.onTimeChangeDue} className={indexStyles.endTime} onClick={this.ejectTimePicks}>
+                            <Picker mode='time' onChange={this.onTimeChangeDue} className={indexStyles.endTime}>
                                 {eTime ? timestampToHoursMinZH(eTime) : due_time_str}
                             </Picker>
                         </View>

@@ -12,8 +12,6 @@ import { getOrgIdByBoardId, } from '../../../utils/basicFunction'
         tasks: {
             tasksDetailDatas = {},
             properties_list = [],
-            milestone_list = [],
-            group_list = [],
         },
         board: {
             board_detail = {},
@@ -21,8 +19,6 @@ import { getOrgIdByBoardId, } from '../../../utils/basicFunction'
     }) => ({
         tasksDetailDatas,
         properties_list,
-        milestone_list,
-        group_list,
         board_detail,
     })
 )
@@ -64,17 +60,18 @@ export default class ProjectNameCell extends Component {
                         },
                     })
                 ).then((res) => {
-                    const { group_list = [] } = this.props;
-                    if (group_list.length > 0) {
-                        Taro.navigateTo({
-                            url: `../../pages/tasksGroup/index?contentId=${contentId}&listId=${list_id}`,
-                        });
-                    } else {
-                        Taro.showToast({
-                            title: '无分组',
-                            icon: 'none',
-                            duration: 2000
-                        })
+                    if (isApiResponseOk(res)) {
+                        if (res.data && res.data.length > 0) {
+                            Taro.navigateTo({
+                                url: `../../pages/tasksGroup/index?contentId=${contentId}&listId=${list_id}`,
+                            });
+                        } else {
+                            Taro.showToast({
+                                title: '无分组',
+                                icon: 'none',
+                                duration: 2000
+                            })
+                        }
                     }
                 });
 
@@ -99,11 +96,19 @@ export default class ProjectNameCell extends Component {
                         },
                     })
                 ).then((res) => {
-                    Taro.navigateTo({
-                        url: `../../pages/executorsList/index?contentId=${contentId}&executors=${JSON.stringify(
-                            data
-                        )}`,
-                    });
+                    if (isApiResponseOk(res)) {
+                        Taro.navigateTo({
+                            url: `../../pages/executorsList/index?contentId=${contentId}&executors=${JSON.stringify(
+                                data
+                            )}`,
+                        });
+                    } else {
+                        Taro.showToast({
+                            title: '无执行人可选',
+                            icon: 'none',
+                            duration: 2000
+                        })
+                    }
                 });
 
                 const that = this;
@@ -127,17 +132,18 @@ export default class ProjectNameCell extends Component {
                         },
                     })
                 ).then((res) => {
-                    const { milestone_list = [] } = this.props;
-                    if (milestone_list.length > 0) {
-                        Taro.navigateTo({
-                            url: `../../pages/milestoneList/index?contentId=${contentId}&milestoneId=${data.id}`,
-                        });
-                    } else {
-                        Taro.showToast({
-                            title: '没有里程碑可设置',
-                            icon: 'none',
-                            duration: 2000
-                        })
+                    if (isApiResponseOk(res)) {
+                        if (res.data && res.data.length > 0) {
+                            Taro.navigateTo({
+                                url: `../../pages/milestoneList/index?contentId=${contentId}&milestoneId=${data.id}`,
+                            });
+                        } else {
+                            Taro.showToast({
+                                title: '没有里程碑可设置',
+                                icon: 'none',
+                                duration: 2000
+                            })
+                        }
                     }
                 });
 
@@ -164,11 +170,19 @@ export default class ProjectNameCell extends Component {
                         },
                     })
                 ).then((res) => {
-                    Taro.navigateTo({
-                        url: `../../pages/fieldSelection/index?items=${items}&fields=${JSON.stringify(
-                            fields
-                        )}&card_id=${cardId}`,
-                    });
+                    if (isApiResponseOk(res)) {
+                        Taro.navigateTo({
+                            url: `../../pages/fieldSelection/index?items=${items}&fields=${JSON.stringify(
+                                fields
+                            )}&card_id=${cardId}`,
+                        });
+                    } else {
+                        Taro.showToast({
+                            title: '没有字段可选',
+                            icon: 'none',
+                            duration: 2000
+                        })
+                    }
                 });
 
                 const that = this;
@@ -392,6 +406,7 @@ export default class ProjectNameCell extends Component {
                 },
             },
         });
+
     };
 
     deleteBoardFieldRelation = (item_id) => {

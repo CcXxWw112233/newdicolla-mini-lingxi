@@ -1,12 +1,11 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text, } from '@tarojs/components'
+import { View, } from '@tarojs/components'
 import indexStyles from './index.scss'
-import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import RelevantPersonnel from './../CommonComponents/RelevantPersonnel/index'
 import OtherCell from './../CommonComponents/OtherCell/index'
 import ApprovalMethod from './components/ApprovalMethod/index'
 import ApprovalOpinion from './components/ApprovalOpinion/index'
-import { loadFindAssignees, } from '../../../../utils/verify';
+import { loadFindAssignees, } from '../../../../utils/basicFunction';
 
 export default class index extends Component {
 

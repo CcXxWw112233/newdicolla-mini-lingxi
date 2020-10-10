@@ -249,6 +249,7 @@ export default {
           duration: 2000
         })
       }
+      return res || {}
     },
 
     //完成/未任务
@@ -409,6 +410,7 @@ export default {
           duration: 2000
         })
       }
+      return res || {}
     },
 
 
@@ -445,6 +447,8 @@ export default {
           duration: 2000
         })
       }
+
+      return res || {}
     },
 
     //自定义字段单选

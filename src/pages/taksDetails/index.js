@@ -171,10 +171,6 @@ export default class taksDetails extends Component {
         });
     };
 
-    ejectTimePicks = () => {
-        console.log("ejectTimePicks========");
-    };
-
     modifyRealize = (new_data = {}, type, card_id) => {
         const { tasksDetailDatas = {}, dispatch } = this.props;
 
@@ -296,7 +292,6 @@ export default class taksDetails extends Component {
                                     this.tasksDetailsRealizeStatus(timeInfo, "TasksTime")
                                 }
                                 flag={type_flag}
-                                ejectTimePicks={() => this.ejectTimePicks()}
                             />) : <View></View>
                         }
 
@@ -330,6 +325,7 @@ export default class taksDetails extends Component {
                                                     propertyId={id}
                                                     cardId={card_id}
                                                     type="3"
+                                                    onLoadTasksDetail={this.loadTasksDetail.bind(board_id, card_id)}
                                                 />
                                             ) : (
                                                     ""
@@ -389,7 +385,7 @@ export default class taksDetails extends Component {
                         {/* <RelationContentCell /> */}
                     </View>
 
-                    {properties &&
+                    {properties && properties.length > 0 && properties_list &&
                         properties_list.length > 0 &&
                         properties.length !== properties_list.length ? (
                             <AddFunctionCell properties_list={properties_list} />

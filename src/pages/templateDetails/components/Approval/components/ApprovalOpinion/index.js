@@ -2,7 +2,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Textarea } from '@tarojs/components'
 import indexStyles from './index.scss'
-import globalStyles from '../../../../../../gloalSet/styles/globalStyles.scss'
 
 export default class index extends Component {
 

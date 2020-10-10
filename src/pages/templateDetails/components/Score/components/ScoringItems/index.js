@@ -1,9 +1,10 @@
 
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text, Input, } from '@tarojs/components'
+import { View, Text, Input, ScrollView, } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyles from '../../../../../../gloalSet/styles/globalStyles.scss'
-import { validateTwoDecimal, loadFindAssignees, } from '../../../../../../utils/verify';
+import { validateTwoDecimal, } from '../../../../../../utils/verify';
+import { loadFindAssignees, } from '../../../../../../utils/basicFunction';
 
 export default class index extends Component {
 
@@ -89,6 +90,7 @@ export default class index extends Component {
         let new_arr = score_items.map(obj => { return { 'field_id': obj.id, 'field_value': obj.value } })
 
         const { commentValue, isSocreInpit, } = this.state
+        console.log(isSocreInpit, 'isSocreInpit=====');
         if (!isSocreInpit) {
             const { globalData: { store: { dispatch } } } = Taro.getApp();
             const { flow_instance_id, flow_node_instance_id, } = this.props

@@ -13,7 +13,14 @@ export default class index extends Component {
         }
     }
 
-    loadProcessedState = (processed) => {
+    loadProcessedState = (processed, pass,) => {
+
+        if (pass && pass == '0') {
+            return '被驳回'
+        } else if (pass && pass !== 0) {
+            return '通过'
+        }
+
         let processed_status
         if (processed == '0') {
             processed_status = '未开始'
@@ -22,6 +29,7 @@ export default class index extends Component {
         } else if (processed == '2') {
             processed_status = '通过'
         }
+
         return processed_status;
     }
 
@@ -38,7 +46,7 @@ export default class index extends Component {
     }
 
     render() {
-        const { assignees, approve_type, } = this.props
+        const { assignees, approve_type, his_comments, } = this.props
         return (
             <View className={indexStyles.viewStyle}>
 
@@ -54,10 +62,10 @@ export default class index extends Component {
                         </View>
                         <View className={indexStyles.view_cell}>
                             {assignees && assignees.map((item, key) => {
-                                const { id, avatar, name, processed, } = item
+                                const { id, avatar, name, processed, comment, pass, } = item
 
                                 return (
-                                    <View key={id}>
+                                    <View key={id} className={indexStyles.personnel_cell}>
 
                                         <View className={indexStyles.make_copy}>
                                             {
@@ -68,14 +76,55 @@ export default class index extends Component {
                                                     )
                                             }
                                             <View className={indexStyles.name}>{name}</View>
-                                            <View className={indexStyles.status}>{this.loadProcessedState(processed)}</View>
+                                            <View className={indexStyles.status}>{this.loadProcessedState(processed, pass)}</View>
                                         </View>
+                                        {
+                                            comment ? <View className={indexStyles.comment_style}>
+                                                {comment}
+                                            </View> : <View></View>
+                                        }
                                     </View>
                                 )
                             })}
                         </View>
                     </View>
                 </View>
+
+                <View className={indexStyles.content_cell}>
+                    <View className={indexStyles.content_padding}>
+                        <View className={indexStyles.fill_in}>
+                            <View className={indexStyles.title_content}>历史审批：{this.approveType(approve_type)}</View>
+                        </View>
+                        <View className={indexStyles.view_cell}>
+                            {his_comments && his_comments.map((item, key) => {
+                                const { id, avatar, name, processed, comment, pass, } = item
+
+                                return (
+                                    <View key={id} className={indexStyles.personnel_cell}>
+
+                                        <View className={indexStyles.make_copy}>
+                                            {
+                                                avatar ? (
+                                                    <Image className={indexStyles.avatar_image_style} src={avatar}></Image>
+                                                ) : (
+                                                        <Text className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}>&#xe647;</Text>
+                                                    )
+                                            }
+                                            <View className={indexStyles.name}>{name}</View>
+                                            <View className={indexStyles.status}>{this.loadProcessedState(processed, pass)}</View>
+                                        </View>
+                                        {
+                                            comment ? <View className={indexStyles.comment_style}>
+                                                {comment}
+                                            </View> : <View></View>
+                                        }
+                                    </View>
+                                )
+                            })}
+                        </View>
+                    </View>
+                </View>
+
             </View>
         )
     }
