@@ -35,9 +35,6 @@ export default class AddFunctionCell extends Component {
         properties_list.forEach(element => {
 
             if (element.code == code) {
-                var timestamp = Date.parse(new Date());
-                element['timestamp'] = timestamp
-
                 properties.push(element)
             }
         });
