@@ -156,12 +156,10 @@ export default class ProjectNameCell extends Component {
             }
         } else if (type === "5") {
             //字段
-
             if (isFieldSelectionClick) {
                 this.setState({
                     isFieldSelectionClick: false,
                 });
-
                 Promise.resolve(
                     dispatch({
                         type: "tasks/getBoardFieldGroupList",
