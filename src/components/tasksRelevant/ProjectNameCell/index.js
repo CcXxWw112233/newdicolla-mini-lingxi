@@ -169,17 +169,19 @@ export default class ProjectNameCell extends Component {
                     })
                 ).then((res) => {
                     if (isApiResponseOk(res)) {
-                        Taro.navigateTo({
-                            url: `../../pages/fieldSelection/index?items=${items}&fields=${JSON.stringify(
-                                fields
-                            )}&card_id=${cardId}`,
-                        });
-                    } else {
-                        Taro.showToast({
-                            title: '没有字段可选',
-                            icon: 'none',
-                            duration: 2000
-                        })
+                        if (res.data && ((res.data.groups && res.data.groups.length > 0) || (res.data.fields && res.data.fields.length > 0))) {
+                            Taro.navigateTo({
+                                url: `../../pages/fieldSelection/index?items=${items}&fields=${JSON.stringify(
+                                    fields
+                                )}&card_id=${cardId}`,
+                            });
+                        } else {
+                            Taro.showToast({
+                                title: '没有字段可选',
+                                icon: 'none',
+                                duration: 2000
+                            })
+                        }
                     }
                 });
 

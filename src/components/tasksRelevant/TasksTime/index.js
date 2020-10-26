@@ -67,7 +67,7 @@ export default class TasksTime extends Component {
         })
 
         var strTime = value + ' ' + '00:00:00'
-        var date = new Date(strTime);
+        var date = new Date(strTime.replace(/-/g, '/'));
         var time = date.getTime()
 
         this.putTasksStartTime(time)
@@ -75,7 +75,6 @@ export default class TasksTime extends Component {
 
     onTimeChangeStart = e => {
         var value = e['detail']['value']
-
         this.setState({
             task_time_date: value,
             start_time_str: value,
@@ -84,7 +83,7 @@ export default class TasksTime extends Component {
         const { task_start_date } = this.state
 
         var strTime = task_start_date + ' ' + value
-        var date = new Date(strTime);
+        var date = new Date(strTime.replace(/-/g, '/'));
         var time = date.getTime()
 
         this.putTasksStartTime(time)
@@ -138,7 +137,7 @@ export default class TasksTime extends Component {
         })
 
         var strTime = value + ' ' + '23:59:59'
-        var date = new Date(strTime);
+        var date = new Date(strTime.replace(/-/g, '/'));
         var time = date.getTime()
 
         this.putTasksDueTime(time)
@@ -157,7 +156,7 @@ export default class TasksTime extends Component {
         const { task_due_date, } = this.state
 
         var strTime = task_due_date + ' ' + value
-        var date = new Date(strTime);
+        var date = new Date(strTime.replace(/-/g, '/'));
         var time = date.getTime()
 
         this.putTasksDueTime(time)

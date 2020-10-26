@@ -38,10 +38,18 @@ export default class fieldSelection extends Component {
             }
         })
 
-        var combinationArray = new_group_array.reduce(function (a, b) { return a.concat(b) });
-        var finalArray = combinationArray.concat(field_selection_list)
+        var combinationArray = [];
+        if (new_group_array && new_group_array.length > 0) {
+            combinationArray = new_group_array && new_group_array.length > 0 && new_group_array.reduce(function (a, b) { return a.concat(b) });
+        }
+        var finalArray = [];
+        if (field_selection_list && field_selection_list.length > 0) {
+            finalArray = field_selection_list && field_selection_list.length > 0 && combinationArray.concat(field_selection_list)
+        } else {
+            finalArray = combinationArray;
+        }
 
-        finalArray.forEach(item => {
+        finalArray && finalArray.forEach(item => {
             item['label'] = item.name
             item['value'] = item.id
             item['desc'] = item.desc

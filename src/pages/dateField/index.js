@@ -78,7 +78,8 @@ export default class dateField extends Component {
 
     onDateChange = e => {
 
-        var value = e.detail.value
+        var value = e && e.detail && e.detail.value
+
         this.setState({
             dateSel: value,
             is_show_time_picker: true,
@@ -89,8 +90,8 @@ export default class dateField extends Component {
         let timeStr = str.substring(0, 8); //  '10:55:24'
 
         var strTime = value + ' ' + timeStr
-        var date = new Date(strTime);
-        var time = date.getTime()
+        var date = new Date(strTime.replace(/-/g, '/'));
+        var time = date.getTime();
 
         this.updataContent(time)
     }
@@ -106,7 +107,7 @@ export default class dateField extends Component {
         const { dateSel, } = this.state
 
         var strTime = dateSel + ' ' + value
-        var date = new Date(strTime);
+        var date = new Date(strTime.replace(/-/g, '/'));
         var time = date.getTime()
         this.updataContent(time)
     }

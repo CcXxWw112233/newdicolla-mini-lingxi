@@ -176,7 +176,7 @@ export default class addSonTask extends Component {
         var value = e['detail']['value']
 
         var strTime = value + ' ' + '23:59:59'
-        var date = new Date(strTime);
+        var date = new Date(strTime.replace(/-/g, '/'));
         var time = date.getTime()
         this.setState({
             due_date: value,
@@ -192,7 +192,7 @@ export default class addSonTask extends Component {
 
         const { due_date } = this.state
         var strTime = due_date + ' ' + value
-        var date = new Date(strTime);
+        var date = new Date(strTime.replace(/-/g, '/'));
         var time = date.getTime()
 
         this.setState({
@@ -209,7 +209,7 @@ export default class addSonTask extends Component {
         let timeStr = str.substring(0, 8); //  '10:55:24'
 
         var strTime = value + ' ' + timeStr
-        var date = new Date(strTime);
+        var date = new Date(strTime.replace(/-/g, '/'));
         var time = date.getTime()
 
         if (type === 'start') {
@@ -234,7 +234,7 @@ export default class addSonTask extends Component {
         var value = e['detail']['value']
 
         var strTime = value + ' ' + '00:00:00'
-        var date = new Date(strTime);
+        var date = new Date(strTime.replace(/-/g, '/'));
         var time = date.getTime()
 
         this.setState({
@@ -252,7 +252,7 @@ export default class addSonTask extends Component {
         const { start_date } = this.state
 
         var strTime = start_date + ' ' + value
-        var date = new Date(strTime);
+        var date = new Date(strTime.replace(/-/g, '/'));
         var time = date.getTime()
 
         this.setState({
