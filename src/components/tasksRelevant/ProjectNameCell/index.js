@@ -169,7 +169,15 @@ export default class ProjectNameCell extends Component {
                     })
                 ).then((res) => {
                     if (isApiResponseOk(res)) {
-                        if (res.data && ((res.data.groups && res.data.groups.length > 0) || (res.data.fields && res.data.fields.length > 0))) {
+
+                        let new_group_array = []
+                        let field_selection_group_list = res && res.data && res.data.groups;
+                        field_selection_group_list && field_selection_group_list.forEach(objData => {
+                            if (objData.fields) {
+                                new_group_array.push(objData.fields)
+                            }
+                        })
+                        if (res.data && ((new_group_array.length > 0) || (res.data.fields && res.data.fields.length > 0))) {
                             Taro.navigateTo({
                                 url: `../../pages/fieldSelection/index?items=${items}&fields=${JSON.stringify(
                                     fields
