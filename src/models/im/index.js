@@ -11,22 +11,43 @@ import {
 import {
   getAllIMTeamList,
   getIMAccount,
-  repairTeam
+  repairTeam,
+  setImHistoryRead,
+  getImAllHistoryUnread,
 } from './../../services/im/index';
 import { isApiResponseOk } from './../../utils/request';
 import { onMsg, onTeams } from './actions/index';
 
 function onSendMsgDone(error, msg) {
+  console.log('消息未发出_错误:', error, msg);
+
+  Taro.hideLoading()
+
   if (error) {
-    // 被拉黑
+    // 被拉黑
     if (error.code === 7101) {
-      msg.status = 'success';
+      msg.status = 'fail';
       alert(error.message);
     } else {
-      Taro.showToast({
-        title: `发送消息失败: ${String(error)}`,
-        icon: 'none'
-      });
+
+      msg.status = 'fail';
+      onMsg(msg);
+
+      /***
+       * 消息发送失败, 重新连接, 并提示用户再次发送
+       */
+      const { globalData: { store: { getState } } } = Taro.getApp()
+      const { im: { nim } } = getState()
+      if (nim) {
+        nim.disconnect({
+          done: () => {
+            console.log('断开连接成功');
+            setTimeout(() => {
+              nim.connect({})
+            }, 50)
+          }
+        })
+      }
     }
     return;
   }
@@ -34,13 +55,14 @@ function onSendMsgDone(error, msg) {
   onMsg(msg);
 }
 
+export { onSendMsgDone };
+
 export default {
   namespace: 'im',
   state: INITIAL_STATE,
   effects: {
-    *fetchIMAccount({}, { call }) {
+    *fetchIMAccount({ }, { call }) {
       const res = yield call(getIMAccount);
-
       if (isApiResponseOk(res)) {
         const { accid, token } = res.data;
         return {
@@ -49,7 +71,7 @@ export default {
         };
       }
     },
-    *fetchAllIMTeamList({}, { select, put, call }) {
+    *fetchAllIMTeamList({ }, { select, put, call }) {
       const res = yield call(getAllIMTeamList);
       const { currentBoardId, currentBoard } = yield selectFieldsFromIm(
         select,
@@ -61,15 +83,16 @@ export default {
         //但是目前还混有其他数据，所以这里过滤一下
         const filteredAllBoardList = (arr = []) =>
           arr.filter(i => i.type && i.type === '2');
+        // 过滤后的列表
+        let arr = filteredAllBoardList(data).filter(item => (item.users && item.users.length != 1) && (item.im_id && !(item.im_id.match(/^[ ]*$/))))
 
         yield put({
           type: 'updateStateFieldByCover',
           payload: {
-            allBoardList: filteredAllBoardList(data)
+            allBoardList: arr
           },
           desc: 'get all team list.'
         });
-
         //如果现在在群聊列表，或者群聊界面，那么需要动态更新当前的群聊列表
         if (currentBoardId && currentBoard) {
           const getCurrentBoard = (arr, id) => {
@@ -96,6 +119,30 @@ export default {
           });
         }
       }
+      return;
+    },
+    *mergeHistory({ payload }, { select, call, put }) {
+      let { data } = payload;
+      const { currentGroupSessionList } = yield selectFieldsFromIm(
+        select,
+        'currentGroupSessionList'
+      );
+      let obj = {};
+      let h = currentGroupSessionList.concat(data);
+      let history = [];
+      h.forEach(item => {
+        if (item && !obj[item.idServer]) {
+          history.push(item);
+          obj[item.idServer] = true;
+        }
+      })
+      console.log(history, 'history')
+      yield put({
+        type: "updateStateFieldByCover",
+        payload: {
+          currentGroupSessionList: history.sort((a, b) => a.time - b.time)
+        }
+      })
     },
     *repairTeamStatus({ payload }, { select, call, put }) {
       const { id, type, im_id } = payload;
@@ -127,7 +174,7 @@ export default {
 
       // 所以，问题的本质是同一份数据，放在了两个地方，而且要维护数据的同步，就会导致蛋疼的情况
       // 这是一种不好的实践。
-      
+
       const { boardId } = payload;
       const {
         globalData: {
@@ -139,8 +186,8 @@ export default {
         'nim',
         'allBoardList'
       ]);
-      
-      if(!nim) return
+
+      if (!nim) return
       //获取当前账号的群信息
       yield nim.getTeams({
         done: getTeamsDone
@@ -171,10 +218,10 @@ export default {
           .concat(
             findedBoardInfo.childs
               ? findedBoardInfo.childs.map(i => ({
-                  im_id: i.im_id,
-                  isMainGroup: false,
-                  boardId: i.im_group_id
-                }))
+                im_id: i.im_id,
+                isMainGroup: false,
+                boardId: i.im_group_id
+              }))
               : null
           )
           .filter(Boolean);
@@ -269,7 +316,7 @@ export default {
           scene,
           to,
           wxFilePath: tempFilePaths[i],
-          done: function(err, msg) {
+          done: function (err, msg) {
             onSendMsgDone(err, msg);
           }
         });
@@ -289,12 +336,13 @@ export default {
       });
     },
     *sendMsg({ payload }, { select }) {
-      const { scene, to, text } = payload;
+      const { scene, to, text, apns } = payload;
       const { nim } = yield selectFieldsFromIm(select, 'nim');
       nim.sendText({
         scene,
         to,
         text,
+        apns,
         // needMsgReceipt: obj.needMsgReceipt || false
         needMsgReceipt: false,
         done: (error, msg) => {
@@ -315,13 +363,84 @@ export default {
           onSendMsgDone(error, msg);
         }
       });
-    }
+    },
+    *sendTip({ payload }, { select }) {
+      const { scene, to, tip } = payload;
+      const { nim } = yield selectFieldsFromIm(select, 'nim');
+      nim.sendTipMsg({
+        scene,
+        to,
+        tip,
+        done: (error, msg) => {
+          onSendMsgDone(error, msg);
+        }
+      });
+    },
+    // 更新列表未读数
+    *updateBoardUnread({ payload }, { select, call, put }) {
+      let { unread, param, im_id, board_id } = payload;
+      const res = yield call(setImHistoryRead, param);
+
+      const { allBoardList } = yield selectFieldsFromIm(select, [
+        'nim',
+        'allBoardList'
+      ]);
+      if (isApiResponseOk(res)) {
+        let list = [...allBoardList];
+        list.map(item => {
+          if (item.im_id === im_id) {
+            item.unread = unread;
+          }
+          return item;
+        })
+        yield put({
+          type: "updateStateFieldByCover",
+          payload: {
+            allBoardList: JSON.parse(JSON.stringify(list))
+          }
+        })
+        return;
+      }
+    },
+
+    //项目圈消息 已读
+    * setImHistoryRead({ payload }, { select, call, put }) {
+      const res = yield call(setImHistoryRead, payload)
+      if (isApiResponseOk(res)) {
+
+      } else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    },
+
+    //项目圈未读总数
+    * getImAllHistoryUnread({ payload }, { select, call, put }) {
+      const res = yield call(getImAllHistoryUnread, payload)
+      if (isApiResponseOk(res)) {
+        yield put({
+          type: 'updateDatas',
+          payload: {
+            unread_all_number: res.data
+          }
+        })
+      } else {
+
+      }
+    },
+
   },
   reducers: {
     handleDependOnState,
     updateStateByReplace,
     updateStateFieldByCover,
-    updateStateFieldByExtension
+    updateStateFieldByExtension,
+    updateDatas(state, { payload }) {
+      return { ...state, ...payload };
+    },
   },
   subscriptions: {
     setup({ dispatch }) {

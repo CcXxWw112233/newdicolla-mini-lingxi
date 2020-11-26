@@ -17,9 +17,10 @@ export function handleDependOnState(state, { callback }) {
 
 //替换整个 state
 export function updateStateByReplace(state, { state: newState }) {
+
   //这个model 的 state 是一个 object,
   if (newState && isPlainObject(newState)) {
-    return newState;
+    return {...newState};
   }
   // 如果试图用其他类型的 state 替换，
   // 静默失败
@@ -35,7 +36,7 @@ export function updateStateFieldByCover(state, { payload, callback }) {
   if (payload && isPlainObject(payload)) {
     return { ...state, ...payload };
   }
-  return state;
+  return { ...state, ...payload };
 }
 
 // 扩展 state 的可扩展字段

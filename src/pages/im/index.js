@@ -31,7 +31,7 @@ class Im extends Component {
         type: 'im/fetchAllIMTeamList'
       });
     };
-    initImData().catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
+    initImData().catch(e => Taro.showToast({ title: String(e), icon: 'none', duration: 2000 }));
   }
   handleJumpToBoardDetail = () => {
     //2. 在项目列表页中, 点击项目 item 的时候跳转页面到项目详情页

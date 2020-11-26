@@ -84,6 +84,7 @@ const getRange = (config, action, data) => {
 
 //解析消息体
 const parseActivityNewsBody = data => {
+  
   const { action, creator, title } = data;
   const type = isGetType(action);
   if (!type && config[action]) {

@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { View, Button } from '@tarojs/components'
 import CardList from './components/CardList'
 import indexStyles from './index.scss'
 import globalStyles from '../../gloalSet/styles/globalStyles.scss'
@@ -8,22 +8,73 @@ import SearchAndMenu from '../board/components/SearchAndMenu'
 import CalendarSwiper from './components/CalendarSwiper'
 import MilestoneList from './components/MilestoneList'
 import { connect } from '@tarojs/redux'
+import CustomNavigation from '../acceptInvitation/components/CustomNavigation.js'
+import PersonalCenter from './components/PersonalCenter'
+import { onSysMsgUnread } from '../../models/im/actions'
 
-@connect(({ calendar: { no_sche_card_list, selected_board_name, page_number, isReachBottom } }) => ({
-  no_sche_card_list, selected_board_name, page_number, isReachBottom,
+@connect(({
+  calendar: {
+    no_sche_card_list,
+    selected_board_name,
+    page_number,
+    isReachBottom,
+    isOtherPageBack,
+  },
+  accountInfo,
+  im: {
+    sessionlist,
+    unread_all_number,
+  }
+}) => ({
+  no_sche_card_list,
+  selected_board_name,
+  page_number,
+  isReachBottom,
+  isOtherPageBack,
+  accountInfo,
+  sessionlist,
+  unread_all_number,
 }))
 export default class Calendar extends Component {
+  constructor(props) {
+    super(props)
+  }
+
+  state = {
+    show_card_type_select: '0',
+    search_mask_show: '0',
+  }
 
   config = {
+    navigationStyle: 'custom',
     navigationBarTitleText: '',
     "enablePullDownRefresh": true,
     "backgroundColor": '#696969',
-    "onReachBottomDistance": 50  //默认值50
+    "onReachBottomDistance": 50,  //默认值50
   }
 
+  onShareAppMessage() {
+    return {
+      title: '日历',
+      path: `/pages/Calendar/index`,
+    }
+  }
+
+  isGlobalPushNews
+
   onPullDownRefresh(res) {  //下拉刷新...
+
+    const { dispatch } = this.props
+    dispatch({
+      type: 'calendar/updateDatas',
+      payload: {
+        page_number: 1,
+        isReachBottom: true,
+      }
+    })
+
     this.getNoScheCardList()
-    this.getScheCardList({})
+    this.getScheCardList()
     this.getOrgBoardList()
     this.getSignList()
 
@@ -34,39 +85,39 @@ export default class Calendar extends Component {
     }, 300)
   }
 
-  onReachBottom () {    //上拉加载...
-    const isReachBottom = this.props.isReachBottom
+  onReachBottom() {    //上拉加载...
+    const { isReachBottom } = this.props
+
     if (isReachBottom === true) {
       this.pagingGet()
     }
   }
-
-  state= {
-    show_card_type_select: '0',
-    search_mask_show: '0'
-  }
-
-  componentWillReceiveProps (nextProps) {
-
-  }
-
-  componentWillUnmount () { }
-
-  componentWillMount () { }
-
   componentDidMount() {
-    const switchTabCurrentPage = 'currentPage_BoardDetail_or_Login'
-    const routeSource = Taro.getStorageSync('switchTabCurrentPage')
-    if (routeSource === switchTabCurrentPage) {
-      Taro.removeStorageSync('switchTabCurrentPage')
-    }
-    else { 
-      this.registerIm()
-    }
+
+    //显示未读总数
+    const { dispatch } = this.props
+    Promise.resolve(
+      dispatch({
+        type: 'im/getImAllHistoryUnread',
+        payload: {
+
+        }
+      })
+    ).then(res => {
+
+      const { unread_all_number, } = this.props
+
+      if (unread_all_number != 0) {
+        wx.setTabBarBadge({
+          index: 1,
+          text: unread_all_number > 99 ? '99+' : unread_all_number ? unread_all_number + "" : "0",
+        })
+      }
+    })
   }
 
-  componentDidShow () {
-    const { selected_board_name } = this.props
+  componentDidShow() {
+    const { selected_board_name, } = this.props
     Taro.setNavigationBarTitle({
       title: selected_board_name
     })
@@ -75,6 +126,60 @@ export default class Calendar extends Component {
     this.getNoScheCardList()
     this.getScheCardList({})
     this.getSignList()
+    this.getUserAllOrgsAllBoards()
+    this.getAccountInfo()
+
+    if (Taro.pageScrollTo) {
+      Taro.pageScrollTo({
+        scrollTop: 0,
+      })
+    } else {
+      console.log('当前微信版本不支持');
+    }
+  }
+
+  componentDidHide() {
+
+    const { dispatch } = this.props
+    dispatch({
+      type: 'calendar/updateDatas',
+      payload: {
+        isOtherPageBack: false
+      }
+    })
+
+    dispatch({
+      type: 'calendar/updateDatas',
+      payload: {
+        page_number: 1,
+        isReachBottom: true,
+      }
+    })
+
+    if (Taro.getStorageSync('isTodoList')) {
+      //清除从服务消息[每日代办]进来的标记
+      Taro.removeStorageSync('isTodoList')
+    }
+  }
+
+  getUserAllOrgsAllBoards = () => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'calendar/getUserAllOrgsAllBoards',
+      payload: {}
+    })
+  }
+
+  //获取用户信息
+  getAccountInfo() {
+    const { dispatch, accountInfo } = this.props
+    const { account_info = {} } = accountInfo
+    if (JSON.stringify(account_info) == '{}') {
+      dispatch({
+        type: 'accountInfo/getAccountInfo',
+        payload: {}
+      })
+    }
   }
 
   //获取项目列表
@@ -115,8 +220,8 @@ export default class Calendar extends Component {
         page_number: new_page_number
       }
     })
-    
-    this.getScheCardList({type: 1})
+
+    this.getScheCardList({ type: 1 })
   }
 
   // 获取组织列表
@@ -139,9 +244,13 @@ export default class Calendar extends Component {
     })
   }
 
-  componentDidHide () { }
+  gotoAddingTasks = () => {
+    Taro.navigateTo({
+      url: '../../pages/addingTasks/index',
+    })
+  }
 
-  onSelectType = ({show_type}) => {
+  onSelectType = ({ show_type }) => {
     this.setState({
       show_card_type_select: show_type,
       search_mask_show: show_type
@@ -155,42 +264,60 @@ export default class Calendar extends Component {
     })
   }
 
-  registerIm = () => {
-    const initImData = async () => {
-      const { dispatch } = this.props;
-      const { account, token } = await dispatch({
-        type: 'im/fetchIMAccount'
-      });
-      await dispatch({
-        type: 'im/initNimSDK',
-        payload: {
-          account,
-          token
-        }
-      });
-      return await dispatch({
-        type: 'im/fetchAllIMTeamList'
-      });
-    };
-    initImData().catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
+  newlyBuildThingProject = () => {
+    Taro.navigateTo({
+      url: '../../pages/addingTasks/index'
+    })
   }
 
-  render () {
-    const { show_card_type_select, search_mask_show } = this.state
+  showPersonalCenter = (value) => {
+    //子组件传值到父组件,去改变state里面值的时候, value不能用this.setState,is_mask_show_personalCenter
+    // this.setState({
+    //   is_mask_show_personalCenter: value
+    // })
+
+    const { dispatch } = this.props
+    dispatch({
+      type: 'accountInfo/updateDatas',
+      payload: {
+        is_mask_show_personalCenter: value
+      }
+    })
+  }
+
+  render() {
+    const { show_card_type_select, search_mask_show, } = this.state
     const { no_sche_card_list = [] } = this.props
+
+    const { account_info = {}, is_mask_show_personalCenter } = this.props.accountInfo
+    const { avatar } = account_info
+
+    const SystemInfo = Taro.getSystemInfoSync()
+    const statusBar_Height = SystemInfo.statusBarHeight
+    const navBar_Height = SystemInfo.platform == 'ios' ? 44 : 48
+
     return (
-      <View>
-        <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
-        <CalendarSwiper  />
-        <CardTypeSelect show_card_type_select={show_card_type_select} onSelectType={this.onSelectType} schedule={'1'}/>
-        <MilestoneList schedule={'1'}/>
-        {no_sche_card_list.length && (
-          <View className={`${globalStyles.global_card_out} ${indexStyles.no_scheduling}`} onClick={this.gotoNoSchedule}>暂未排期的工作（{no_sche_card_list.length}）</View>
-        )}
-        <CardList schedule={'1'}/>
+      <View className={indexStyles.view_style}>
+        <CustomNavigation home_personal_center='homePersonalCenter' personal_center_image={avatar} showPersonalCenter={() => this.showPersonalCenter(true)} title='日历' />
+
+        {is_mask_show_personalCenter && is_mask_show_personalCenter === true ? <PersonalCenter account_info={account_info} closePersonalCenter={() => this.showPersonalCenter(false)} />
+          : ''}
+        <View style={{ position: 'sticky', top: `${statusBar_Height + navBar_Height}` + 'px', zIndex: 15, left: 0 }}>
+          <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
+          <CalendarSwiper />
+        </View>
+        <CardTypeSelect show_card_type_select={show_card_type_select} onSelectType={this.onSelectType} schedule={'1'} />
+        {/* <MilestoneList schedule={'1'} /> */}
+        {/* {no_sche_card_list.length && ( */}
+        <View className={`${globalStyles.global_card_out} ${indexStyles.no_scheduling}`} onClick={this.gotoNoSchedule}>暂未排期的工作（{no_sche_card_list.length}）</View>
+        {/* )} */}
+        <CardList schedule={'1'} />
         <View style='height: 50px'></View>
+
+        {/* <View className={indexStyles.plusTasks} onClick={this.gotoAddingTasks}>
+          +
+        </View> */}
       </View>
     )
   }
 }
-

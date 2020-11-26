@@ -1,9 +1,11 @@
 import Taro from "@tarojs/taro";
 import { BASE_URL, INT_REQUEST_OK, REQUEST_RES_CODE_TOKEN_INVALID } from "../gloalSet/js/constant";
+import { setRequestHeaderBaseInfo } from "./basicFunction";
 
-export const request = (options, notShowLoading, isNewLogin) => {
+var isNavigatePushLogin = true;
+export const request = (options, notShowLoading, isNewLogin, redirectPage = true) => {
   const { url = "", data = {}, method = "GET", header = {} } = options;
-  let Headers = { ...header};
+  let Headers = { ...header };
   Headers['Authorization'] = Taro.getStorageSync('access_token')
 
   return new Promise((resolve, reject) => {
@@ -25,42 +27,58 @@ export const request = (options, notShowLoading, isNewLogin) => {
         ...data
       },
       method,
-      header: Headers,
-      success: function(res) {
-
+      header: {...Headers, ...setRequestHeaderBaseInfo({ data, headers: Headers }) },
+      success: function (res) {
         // if (!notShowLoading) {
         //   Taro.hideLoading();
         // }
 
-        if(REQUEST_RES_CODE_TOKEN_INVALID == res.data.code) {
-          // Taro.navigateTo({url: '../../pages/login/index'})
-          if (!isNewLogin) {
-            Taro.reLaunch({
-              url: '../../pages/login/index'
-            })
-          }
-          else {
-            Taro.navigateTo({
-              url: '../../pages/nowOpen/index'
-            })
-          }
+        //获取是哪个页面未登录=>跳转到登录
+        let pages = Taro.getCurrentPages();
+        let currPage = null;
+        if (pages.length) {
+          currPage = pages[pages.length - 1];
+        }
+        let route = currPage && currPage.route
+        let routePageName = route && route.slice(6, -6)
 
+        //防止执行两遍
+        if (isNavigatePushLogin) {
+          isNavigatePushLogin = false
+          if (REQUEST_RES_CODE_TOKEN_INVALID == res.data.code) {
+            if (!isNewLogin && redirectPage) {//正常的登录页面
+              if (route.indexOf('pages/index/index') == -1) {
+                Taro.navigateTo({
+                  url: `../../pages/index/index?redirect=${routePageName}`
+                })
+              }
+            }
+            else if(redirectPage){  //扫码登录的新的登录页面
+              Taro.navigateTo({
+                url: '../../pages/nowOpen/index'
+              })
+            }
+          }
+          setTimeout(() => {
+            isNavigatePushLogin = true
+          }, 1000)
         }
 
         resolve(res.data);
       },
-      fail: function(error) {
+      fail: function (error) {
         if (!notShowLoading) {
           Taro.hideLoading();
         }
         Taro.showToast({
           title: "系统繁忙，请稍后重试",
-          icon: "none"
+          icon: "none",
+          duration: 2000
         });
         reject({ error: "系统繁忙，请稍后重试" });
       },
-      comcomplete: function(res) {
-        // console.log(res);
+      comcomplete: function (res) {
+
       }
     });
   });

@@ -1,51 +1,60 @@
 @import "../../gloalSet/styles/constant";
+@import '../../gloalSet/styles/pxTrans';
 
-.effective_contain {
-  margin-top: pxTrans(0);
-  margin-left: pxTrans(120);
+
+.PageStyle{
+  // border: 1px red solid;
+  // margin-top: pxTrans(62);
+}
+.guide_share_wrapper{
+  height: pxTrans(93);
   position: relative;
-  // .forwardTipsText {
-  //   position: absolute;
-  //   width: pxTrans(60);
-  //   margin-left: pxTrans(-30);
-  //   left: 50%;
-  //   top: 0;
-  //   font-size: $fontsize_14;
-  //   color: #fff
-  // }
-  .effective_forwardTips {
-    width: pxTrans(200);
-    height: pxTrans(54);
+  .guide_share {
+    width   : pxTrans(245);
+    height  : pxTrans(93);
+    position: absolute;
+    top:  pxTrans(2);;
+    right   : pxTrans(5);
   }
 }
 
 .effective_contain1 {
-  margin-top: pxTrans(106);
+  margin-top: pxTrans(40);
   text-align: center;
-  .effective_logo {
-    width: pxTrans(96);
-    height: pxTrans(96);
+
+  .invitation_cover {
+    width : pxTrans(231);
+    height: pxTrans(172);
   }
 }
+
 .effective_tipsText {
-  font-size: $fontsize_18;
-  margin-top: pxTrans(16);
-  text-align: center;
-  color: #3f3d56;
+  font-size         : $fontsize_18;
+  margin-top        : pxTrans(20);
+  text-align        : center;
+  color             : rgba(0,0,0,0.85);
+  font-weight:500;
+  overflow          : hidden;
+  display           : -webkit-box;
+  
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
+
 .effective_login_btn_wx {
   background-color: #1890ff;
-  border: pxTrans(1) solid #1890ff;
+  border          : pxTrans(1) solid #1890ff;
 }
+
 .effective_acceptBtn {
-  margin-top: pxTrans(100);
-  border: 0 !important;
-  width: 100%;
-  height: pxTrans(40);
-  line-height: pxTrans(40);
-  text-align: center;
-  color: #fff;
+  margin-top   : pxTrans(122);
+  border       : 0 !important;
+  width        : 100%;
+  height       : pxTrans(40);
+  line-height  : pxTrans(40);
+  text-align   : center;
+  color:rgba(255,255,255,1);
   border-radius: pxTrans(4);
   margin-bottom: pxTrans(16);
-  box-shadow: none;
+  font-size    : $fontsize_16;
 }

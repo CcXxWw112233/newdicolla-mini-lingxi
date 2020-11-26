@@ -1,0 +1,68 @@
+@import "../../../../../../gloalSet/styles/constant";
+
+.viewStyle {
+    display         : flex;
+    flex-direction  : column;
+    align-items     : center;
+    background-color: #FFFFFF;
+
+    .line_cell {
+        display       : flex;
+        flex-direction: row;
+        width         : 100%;
+
+        .line_empty {
+            width: pxTrans(44);
+        }
+
+        .line {
+            flex      : 1;
+            height    : pxTrans(1);
+            background: rgba(0, 0, 0, 0.09);
+        }
+    }
+
+    .content_cell {
+        flex          : 1;
+        display       : flex;
+        flex-direction: row;
+        margin-right  : pxTrans(16);
+        width         : 100%;
+
+        .content_padding {
+            display       : flex;
+            flex-direction: row;
+            align-items   : center;
+            width         : 100%;
+
+            .title {
+                width       : pxTrans(48);
+                font-size   : pxTrans(16);
+                font-weight : 400;
+                color       : rgba(0, 0, 0, 0.25);
+                line-height : pxTrans(24);
+                margin-left : pxTrans(16);
+                margin-right: pxTrans(16);
+            }
+
+            .choice_view {
+                flex          : 1;
+                display       : flex;
+                flex-direction: column;
+
+                .choice_name {
+                    flex         : 1;
+                    font-size    : pxTrans(16);
+                    font-weight  : 400;
+                    color        : rgba(0, 0, 0, 0.65);
+                    line-height  : pxTrans(24);
+                    overflow     : hidden;
+                    text-overflow: ellipsis;
+                    white-space  : nowrap;
+                    margin-top   : pxTrans(4);
+                    margin-bottom: pxTrans(2);
+                }
+            }
+        }
+    }
+}

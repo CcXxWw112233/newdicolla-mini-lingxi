@@ -1,50 +1,65 @@
 @import "../../../gloalSet/styles/constant";
-.card_item_out{
+
+.card_item_out {
+  margin-top: pxTrans(100);
+}
+
+.card_item_out_01 {
   margin-top: pxTrans(10);
 }
 
 .card_content {
   margin-top: pxTrans(10);
-  display: flex;
+  display   : flex;
+
   .card_content_left {
     padding-top: pxTrans(4);
-    .iconfont_size{
-      font-size: pxTrans(16);
+
+    .iconfont_size {
+      font-size   : pxTrans(16);
       margin-right: pxTrans(6);
-      color: $color_2;
+      color       : $color_2;
     }
   }
-  .card_content_middle{
+
+  .card_content_middle {
     flex: 1;
-    .card_content_middle_top{
+
+    .card_content_middle_top {
       .card_title {
-        color: $color_1;
-        font-size: $fontsize_16;
+        color      : $color_1;
+        font-size  : $fontsize_16;
         line-height: pxTrans(26);
         font-weight: bold;
       }
+
       .card_title_2 {
-        color: $color_5;
-        font-size: $fontsize_14;
+        color      : $color_5;
+        font-size  : $fontsize_14;
         line-height: pxTrans(24);
       }
-      .organize, .organize_2 {
-        color: $color_3;
-        font-size: $fontsize_12;
-        margin-left: pxTrans(6);
+
+      .organize,
+      .organize_2 {
+        color       : $color_3;
+        font-size   : $fontsize_12;
+        margin-left : pxTrans(6);
         margin-right: pxTrans(6);
       }
-      .organize_2{
-        color: rgba(255,255,255,.6);
+
+      .organize_2 {
+        color: rgba(255, 255, 255, .6);
 
       }
     }
-    .card_content_middle_bott{
-      margin-top: pxTrans(10);
-      color: $color_3;
-      font-size: $fontsize_12;
+
+    .card_content_middle_bott {
+      margin-top   : pxTrans(10);
+      // color     : $color_3;
+      font-size    : $fontsize_12;
     }
   }
+
   .card_content_right {
     margin-left: pxTrans(6);
   }
@@ -52,15 +67,15 @@
 }
 
 
-.no_more_text{
+.no_more_text {
   margin-top: pxTrans(10);
-  color: $color_3;
-  font-size: pxTrans(14);
+  color     : $color_3;
+  font-size : pxTrans(14);
   text-align: center;
 }
 
-.no_scheduling{
-  color: $color_3;
-  font-size: pxTrans(14);
+.no_scheduling {
+  color     : $color_3;
+  font-size : pxTrans(14);
   text-align: center;
 }

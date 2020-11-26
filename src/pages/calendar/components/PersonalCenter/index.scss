@@ -1,0 +1,89 @@
+@import "../../../../gloalSet/styles/constant.scss";
+
+
+
+.mask {
+    margin-top: 0%;
+    height    : 100%;
+    width     : 100%;
+    position  : fixed;
+    z-index   : 9999;
+    top       : 0;
+    left      : 0;
+    background: rgba(0, 0, 0, .45);
+    overflow  : hidden;
+
+    .personal_center_style {
+        background   : white;
+        width        : pxTrans(280);
+        height       : pxTrans(312);
+        position     : absolute;
+        top          : 0;
+        right        : 0;
+        left         : 0;
+        bottom       : 0;
+        margin       : pxTrans(100) auto;
+        border-radius: pxTrans(6);
+    }
+
+    .close_button_style {
+        position : absolute;
+        top      : pxTrans(20);
+        right    : pxTrans(16);
+        font-size: pxTrans(20);
+    }
+
+    .personal_center_content {
+        position       : absolute;
+        width          : 100%;
+        top            : pxTrans(56);
+        bottom         : pxTrans(24);
+        justify-content: center;
+        display        : flex;
+        flex-direction : column;
+        align-items    : center;
+        text-align     : center;
+
+        .avatar_image_style {
+            position     : absolute;
+            width        : pxTrans(72);
+            height       : pxTrans(72);
+            border-radius: pxTrans(72);
+            top          : 0;
+            font-size    : pxTrans(55);
+            border       : 1px solid rgba(0, 0, 0, 0.15);
+        }
+
+        .nick_name_style {
+            width      : 100%;
+            font-size  : pxTrans(16);
+            font-weight: 500;
+            color      : rgba(0, 0, 0, 0.65);
+            line-height: pxTrans(24);
+        }
+
+        .account_style {
+            width      : 100%;
+            font-size  : pxTrans(12);
+            font-weight: 500;
+            color      : rgba(0, 0, 0, 0.45);
+            line-height: pxTrans(20);
+        }
+
+        .logout_button_style {
+            position     : absolute;
+            height       : pxTrans(40);
+            bottom       : 0;
+            left         : pxTrans(16);
+            right        : pxTrans(16);
+            text-align   : center;
+            background   : rgba(0, 0, 0, 0.04);
+            border-radius: pxTrans(4);
+            border       : 1px solid rgba(0, 0, 0, 0.15);
+            font-size    : pxTrans(16);
+            font-weight  : 400;
+            color        : rgba(245, 34, 45, 1);
+            line-height  : pxTrans(40);
+        }
+    }
+}

@@ -8,9 +8,39 @@ const getAvatarByFromNick = (fromImId, currentBoard = { users: [] }) => {
   if (fromImId === '10086') {
     return assistantAvatar;
   }
-  let ret = currentBoard && currentBoard.users.find(i => i.id === fromImId );
+  let ret = currentBoard && currentBoard.users.find(i => i.id === fromImId);
   return ret ? ret.avatar : '';
 };
+
+// const genNews = (msg, currentBoard) => {
+//   const {
+//     time,
+//     flow,
+//     from,
+//     fromNick,
+//     status,
+//     type,
+//     text = '',
+//     file = {},
+//     content,
+//     pushContent,
+//     groupNotification
+//   } = msg;
+
+//   return {
+//     flow,
+//     fromNick,
+//     avatar: getAvatarByFromNick(from, currentBoard),
+//     status,
+//     time,
+//     type,
+//     text,
+//     file,
+//     content: content ? JSON.parse(content) : '',
+//     pushContent,
+//     groupNotification
+//   };
+// };
 
 const genNews = (msg, currentBoard) => {
   const {
@@ -24,10 +54,33 @@ const genNews = (msg, currentBoard) => {
     file = {},
     content,
     pushContent,
-    groupNotification
+    groupNotification,
+
+    cc,
+    fromClientType,
+    fromDeviceId,
+    idClient,
+    idServer,
+    isHistoryable,
+    isLocal,
+    isOfflinable,
+    isPushable,
+    isReplyMsg,
+    isRoamingable,
+    isSyncable,
+    isUnreadable,
+    needMsgReceipt,
+    needPushNick,
+    resend,
+    scene,
+    sessionId,
+    target,
+    to,
+    userUpdateTime,
   } = msg;
 
   return {
+    from,
     flow,
     fromNick,
     avatar: getAvatarByFromNick(from, currentBoard),
@@ -38,9 +91,32 @@ const genNews = (msg, currentBoard) => {
     file,
     content: content ? JSON.parse(content) : '',
     pushContent,
-    groupNotification
+    groupNotification,
+
+    cc,
+    fromClientType,
+    fromDeviceId,
+    idClient,
+    idServer,
+    isHistoryable,
+    isLocal,
+    isOfflinable,
+    isPushable,
+    isReplyMsg,
+    isRoamingable,
+    isSyncable,
+    isUnreadable,
+    needMsgReceipt,
+    needPushNick,
+    resend,
+    scene,
+    sessionId,
+    target,
+    to,
+    userUpdateTime,
   };
 };
+
 
 const isValidMsg = msg => {
   const { scene, type, custom, content } = msg;
@@ -112,14 +188,23 @@ const isNotificationNews = msg => {
 
 //是否是创建新的群聊的系统通知消息
 const isCreatedNewGroupOrAddTeamMembersNews = session => {
-  const {
-    lastMsg: { fromClientType, type, attach: { type: attachType } = {} } = {}
-  } = session;
-  return (
-    fromClientType === 'Server' &&
-    type === 'notification' &&
-    attachType === 'addTeamMembers'
-  );
+  let { lastMsg: { type, content } } = session;
+  if (type === 'custom') {
+    let data = content ? JSON.parse(content) : {};
+    if (content && data.method === 'newPush') {
+      console.log(content)
+    }
+
+  }
+  return false;
+  // const {
+  //   lastMsg: { fromClientType, type, attach: { type: attachType } = {} } = {}
+  // } = session;
+  // return (
+  //   fromClientType === 'Server' &&
+  //   type === 'notification' &&
+  //   attachType === 'addTeamMembers'
+  // );
 };
 
 export {

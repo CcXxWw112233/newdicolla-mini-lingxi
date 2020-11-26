@@ -32,71 +32,121 @@
     "useCompilerModule": true,
     "userConfirmedUseCompilerModuleSwitch": false,
     "packNpmManually": false,
-    "packNpmRelationList": []
+    "packNpmRelationList": [],
+    "minifyWXSS": true
   },
   "compileType": "miniprogram",
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
+  "libVersion": "2.10.2",
   "condition": {
     "search": {
-      "current": -1,
       "list": []
     },
     "conversation": {
-      "current": -1,
       "list": []
     },
     "plugin": {
-      "current": -1,
       "list": []
     },
     "game": {
       "list": []
     },
+    "gamePlugin": {
+      "list": []
+    },
     "miniprogram": {
-      "current": 1,
       "list": [
         {
           "id": 0,
           "name": "pages/acceptInvitation/index",
           "pathName": "pages/acceptInvitation/index",
-          "query": "id=1156175314305552384",
+          "query": "id=1187329910579007488",
           "scene": 1011
         },
         {
           "id": 1,
           "name": "pages/acceptInvitation/index",
           "pathName": "pages/acceptInvitation/index",
-          "query": "id=1161224388561997824",
+          "query": "boardId=1205025167177289728",
           "scene": 1008
+        },
+        {
+          "id": 2,
+          "name": "pages/boardChat/index",
+          "pathName": "pages/boardChat/index",
+          "query": "id=1156175314305552384",
+          "scene": null
+        },
+        {
+          "id": 3,
+          "name": "pages/auccessJoin/index",
+          "pathName": "pages/auccessJoin/index",
+          "query": "id=1193866444404822016",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/calendar/index",
+          "pathName": "pages/calendar/index",
+          "query": "id=1156175314305552384",
+          "scene": null
+        },
+        {
+          "id": 5,
+          "name": "pages/taksDetails/index",
+          "pathName": "pages/taksDetails/index",
+          "query": "",
+          "scene": 1008
+        },
+        {
+          "id": 6,
+          "name": "消息跳转",
+          "pathName": "pages/sceneEntrance/index",
+          "query": "contentId=1218939078247059456&boardId=1218939078247059456&redirectType=1&orgId=1164926825101660160",
+          "scene": null
+        },
+        {
+          "id": 7,
+          "name": "pages/file/index",
+          "pathName": "pages/file/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/calendar/index",
+          "pathName": "pages/calendar/index",
+          "query": "contentId=1209439669922697216&boardId=1206886569806532608&redirectType=7&currentDate=1572437967000",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/sceneEntrance/index",
+          "pathName": "pages/sceneEntrance/index",
+          "query": "contentId=1209439669922697216&boardId=1206886569806532608&redirectType=7&orgId= 1107307923551424512",
+          "scene": null
         },
         {
           "id": -1,
           "name": "pages/chat/index",
           "pathName": "pages/chat/index",
-          "query": "id=1156175314305552384",
+          "query": "boardId=1173504770590248960&pageSource=boardChat&__key_=15831402416051",
+          "scene": null
+        },
+        {
+          "id": 11,
+          "name": "公众号跳转文件预览",
+          "pathName": "pages/sceneEntrance/index",
+          "query": "contentId=1249518026181709824&boardId=1206886569806532608&redirectType=5&orgId=1107307923551424512",
           "scene": null
         },
         {
           "id": -1,
-          "name": "pages/auccessJoin/index",
-          "pathName": "pages/auccessJoin/index",
-          "query": "id=1156175314305552384",
-          "scene": null
-        },
-        {
-          "id": -1,
-          "name": "pages/calendar/index",
-          "pathName": "pages/calendar/index",
-          "query": "id=1156175314305552384",
-          "scene": null
-        },
-        {
-          "id": -1,
-          "name": "pages/calendar/index",
-          "pathName": "pages/calendar/index",
+          "name": "pages/templateDetails/index",
+          "pathName": "pages/templateDetails/index",
           "query": "",
-          "scene": 1008
+          "scene": null
         }
       ]
     }

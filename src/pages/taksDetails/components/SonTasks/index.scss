@@ -1,0 +1,131 @@
+@import "../../../../gloalSet/styles/constant";
+
+.list_item {
+    min-height    : pxTrans(56);
+    font-size     : pxTrans(16);
+    display       : flex;
+    flex-direction: column;
+    align-items   : baseline;
+    margin-left   : pxTrans(0);
+    margin-right  : pxTrans(0);
+    border-bottom : pxTrans(1) solid rgba(0, 0, 0, 0.09);
+    background    : rgb(255, 255, 255);
+
+    .title_row {
+        height        : pxTrans(56);
+        display       : flex;
+        flex-direction: row;
+        align-items   : center;
+        width         : 100%;
+        border-bottom : pxTrans(1) solid rgba(0, 0, 0, 0.09);
+
+        .list_item_left_iconnext {
+            color       : rgb(0, 0, 0, 0.25);
+            font-size   : pxTrans(20);
+            margin-left : pxTrans(20);
+            margin-right: pxTrans(10);
+        }
+
+        .list_item_name {
+            color      : rgba(0, 0, 0, 0.25);
+            margin-left: pxTrans(4);
+            flex       : 1;
+        }
+
+        .list_item_rigth_iconnext {
+            color       : rgb(0, 0, 0, 0.25);
+            font-size   : pxTrans(20);
+            margin-right: pxTrans(10);
+        }
+    }
+
+    .add_task_row {
+        height        : pxTrans(56);
+        display       : flex;
+        flex-direction: row;
+        align-items   : center;
+        align-items   : center;
+        width         : 100%;
+
+        .list_item_left_iconnext {
+            color       : #608DE5;
+            font-size   : pxTrans(20);
+            margin-left : pxTrans(20);
+            margin-right: pxTrans(10);
+        }
+
+        .add_item_name {
+            flex       : 1;
+            font-size  : pxTrans(16);
+            font-weight: 400;
+            color      : #608DE5;
+        }
+    }
+
+    .content {
+        display       : flex;
+        flex-direction: column;
+        width         : 100%;
+        border-bottom : pxTrans(1) solid rgba(0, 0, 0, 0.09);
+    }
+
+    .song_task_centent {
+        width: 100%;
+
+        .song_row_instyle {
+            height           : pxTrans(56);
+            display          : flex;
+            flex-direction   : row;
+            align-items      : center;
+            width            : 100%;
+            // border-bottom : pxTrans(1) solid rgba(0, 0, 0, 0.09);
+
+            .list_item_select_iconnext {
+                color       : #79A1EB;
+                font-size   : pxTrans(20);
+                margin-left : pxTrans(20);
+                margin-right: pxTrans(10);
+            }
+
+            .song_task_name {
+                flex       : 1;
+                font-size  : pxTrans(16);
+                font-weight: 400;
+                color      : rgba(0, 0, 0, 0.65);
+            }
+
+            .list_item_rigth_iconnext {
+                color       : rgb(0, 0, 0, 0.25);
+                font-size   : pxTrans(20);
+                margin-right: pxTrans(10);
+                margin-left : pxTrans(10);
+            }
+        }
+    }
+
+    .song_tasks_file {
+        height           : pxTrans(56);
+        display          : flex;
+        flex-direction   : row;
+        align-items      : center;
+        width            : 100%;
+        // border-bottom : pxTrans(1) solid rgba(0, 0, 0, 0.09);
+
+        .list_item_file_iconnext {
+            color       : rgb(0, 0, 0, 0.25);
+            font-size   : pxTrans(20);
+            margin-left : pxTrans(20);
+            margin-right: pxTrans(10);
+        }
+
+        .song_tasks_file_name {
+            margin-right : pxTrans(30);
+            font-size    : pxTrans(16);
+            font-weight  : 400;
+            color        : rgba(0, 0, 0, 0.65);
+            overflow     : hidden;
+            text-overflow: ellipsis;
+            white-space  : nowrap;
+        }
+    }
+}

@@ -1,0 +1,227 @@
+@import "../../../../../../gloalSet/styles/constant";
+
+.viewStyle {
+    display         : flex;
+    flex-direction  : column;
+    align-items     : center;
+    background-color: #FFFFFF;
+
+    .line_cell {
+        display       : flex;
+        flex-direction: row;
+        width         : 100%;
+
+        .line_empty {
+            width: pxTrans(44);
+        }
+
+        .line {
+            flex      : 1;
+            height    : pxTrans(1);
+            background: rgba(0, 0, 0, 0.09);
+        }
+    }
+
+    .content_cell {
+        flex          : 1;
+        display       : flex;
+        flex-direction: column;
+        margin-left   : pxTrans(16);
+        width         : 100%;
+        overflow      : hidden; //scrollView 截掉滚动条
+
+        .scoring_items {
+            display       : flex;
+            flex-direction: column;
+            margin-right  : pxTrans(16);
+
+            .scoring_items_title {
+                height     : pxTrans(56);
+                font-size  : pxTrans(16);
+                font-weight: 400;
+                color      : rgba(0, 0, 0, 0.25);
+                line-height: pxTrans(24);
+                display    : flex;
+                align-items: center;
+            }
+
+
+            .score_view {
+                width          : pxTrans(120);
+                height         : pxTrans(64);
+                background     : rgba(0, 0, 0, 0.04);
+                border-radius  : pxTrans(2);
+                border         : pxTrans(1) solid rgba(0, 0, 0, 0.15);
+                display        : flex;
+                flex-direction : row;
+                justify-content: center;
+                align-items    : center;
+
+                .score_view_title {
+                    font-size    : pxTrans(16);
+                    font-weight  : 400;
+                    color        : rgba(0, 0, 0, 0.15);
+                    line-height  : pxTrans(40);
+                    overflow     : hidden;
+                    text-overflow: ellipsis;
+                    white-space  : nowrap;
+                }
+
+                .score_view_double {
+                    font-size  : pxTrans(40);
+                    font-weight: 400;
+                    color      : rgba(0, 0, 0, 0.15);
+                    line-height: pxTrans(40);
+                }
+            }
+
+            .score_view_input {
+                width          : pxTrans(120);
+                height         : pxTrans(64);
+                background     : rgba(0, 0, 0, 0.04);
+                border-radius  : pxTrans(2);
+                border         : pxTrans(1) solid rgba(0, 0, 0, 0.15);
+                display        : flex;
+                flex-direction : row;
+                justify-content: center;
+                align-items    : center;
+                text-align     : center;
+                vertical-align : middle;
+
+                font-size  : pxTrans(40);
+                font-weight: 400;
+                line-height: pxTrans(40);
+            }
+
+            .input_warning {
+                height     : pxTrans(25);
+                font-size  : pxTrans(16);
+                font-weight: 400;
+                color      : rgba(245, 34, 45, 1);
+                line-height: pxTrans(24);
+                display    : flex;
+                align-items: center;
+            }
+        }
+
+
+        .scoring_input {
+            display       : flex;
+            flex-direction: row;
+            white-space   : nowrap;
+        }
+
+        .assignees {
+            width: 100%;
+
+            .score_cell_style {
+                display       : flex;
+                flex-direction: column;
+
+                .average {
+                    width         : 100%;
+                    height        : pxTrans(40);
+                    display       : flex;
+                    flex-direction: row;
+                    align-items   : center;
+
+                    .avatar_image_style {
+                        width          : pxTrans(24);
+                        height         : pxTrans(24);
+                        border-radius  : pxTrans(12);
+                        margin-right   : pxTrans(8);
+                        display        : flex;
+                        align-items    : center;
+                        justify-content: center;
+                    }
+
+                    .rater_name {
+                        font-size   : pxTrans(16);
+                        font-weight : 400;
+                        color       : rgba(0, 0, 0, 0.65);
+                        line-height : pxTrans(24);
+                        margin-right: pxTrans(16);
+                    }
+
+                    .average_number {
+                        font-weight: 600;
+                        font-size  : pxTrans(16);
+                        line-height: pxTrans(24);
+                        color      : rgba(24, 144, 255, 1);
+                    }
+                }
+
+                .score_comment {
+                    margin-left : pxTrans(32);
+                    font-size   : pxTrans(16);
+                    font-weight : 400;
+                    color       : rgba(0, 0, 0, 0.65);
+                    line-height : pxTrans(24);
+                    margin-right: pxTrans(24);
+                }
+            }
+
+
+
+        }
+
+        .opinion_cell {
+            display       : flex;
+            flex-direction: row;
+            align-items   : center;
+            width         : 100%;
+            align-items   : start;
+
+            .opinion_title {
+                width       : pxTrans(32);
+                font-size   : pxTrans(16);
+                font-weight : 400;
+                color       : rgba(0, 0, 0, 0.25);
+                margin-right: pxTrans(16);
+            }
+
+            .opinion_content {
+                flex  : 1;
+                margin: pxTrans(4) pxTrans(16) 0 0;
+
+                .textarea {
+                    flex  : 1;
+                    width : 100%;
+                    height: pxTrans(80);
+                }
+            }
+        }
+
+        .complete {
+            width          : 100%;
+            height         : pxTrans(64);
+            display        : flex;
+            justify-content: center;
+            align-items    : center;
+
+            .button {
+                display        : flex;
+                justify-content: center;
+                align-items    : center;
+                font-weight    : 400;
+                line-height    : pxTrans(22);
+                width          : 100%;
+                height         : pxTrans(40);
+                border-radius  : pxTrans(4);
+                font-size      : pxTrans(14);
+                margin-right   : pxTrans(16);
+                border         : 1px solid rgba(0, 0, 0, 0.09);
+            }
+
+            .complete_button {
+                color     : rgba(0, 0, 0, 0.25);
+                background: rgba(0, 0, 0, 0.04);
+            }
+
+            .complete_button_disabled {
+                color     : rgba(255, 255, 255, 1);
+                background: rgba(24, 144, 255, 1);
+            }
+        }
+    }
+}

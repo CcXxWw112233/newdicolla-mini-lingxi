@@ -1,20 +1,47 @@
+@import '../../../gloalSet/styles/pxTrans.scss';
+
 .CustomNavigation_Scss {
   background-color: #1890ff;
+  position        : fixed;
+  width           : 100%;
+  top             : 0;
+  z-index         : 9999999;
+
   .navBar_Scss {
-    width: 100%;
-    align-items: center;
-    display: flex;
-    justify-content:space-between; 
-    .homeWapper {
-      display: inline-flex;
+    width          : 100%;
+    align-items    : center;
+    display        : flex;
+    justify-content: space-between;
+
+    .back_Wapper {
+      display    : inline-flex;
       align-items: center;
       margin-left: 20px;
     }
+
+    .left_back_icon {
+      color     : white;
+      top       : 4px;
+      width     : 40px;
+      text-align: center;
+    }
+
+    .home_Wapper {
+      display    : inline-flex;
+      align-items: center;
+      margin-left: pxTrans(7);
+      width      : pxTrans(32);
+      line-height: pxTrans(32);
+    }
+
     .left_home_icon {
-      position: relative;
-      top: 4px;
-      width: 40px;
-      height: 40px;
+      background   : rgba(0, 0, 0, 0.15);
+      color        : white;
+      top          : pxTrans(4);
+      width        : pxTrans(32);
+      height       : pxTrans(32);
+      border-radius: pxTrans(32);
+      text-align   : center;
     }
   }
 }

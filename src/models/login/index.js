@@ -1,14 +1,13 @@
 import Taro from '@tarojs/taro'
-import { getBar } from '../../services/testPage'
-import {isApiResponseOk} from "../../utils/request";
-import {weChatAuthLogin, weChatPhoneLogin, getAccountInfo} from "../../services/login/index";
+import { isApiResponseOk } from "../../utils/request";
+import { weChatAuthLogin, weChatPhoneLogin, getAccountInfo, initializeOrganization } from "../../services/login/index";
 
 let dispatches
 export default {
   namespace: 'login',
-  state:{},
+  state: {},
   subscriptions: {
-    setup({dispatch}) {
+    setup({ dispatch }) {
       dispatches = dispatch
     },
   },
@@ -16,8 +15,8 @@ export default {
     //微信授权登录）
     * weChatAuthLogin({ payload }, { select, call, put }) {
       const parmas = payload.parmas
-      const res = yield call(weChatAuthLogin, {...parmas})
-      if(isApiResponseOk(res)) {
+      const res = yield call(weChatAuthLogin, { ...parmas })
+      if (isApiResponseOk(res)) {
         yield put({
           type: 'handleToken',
           payload: {
@@ -25,10 +24,11 @@ export default {
             sourcePage: payload.sourcePage,
           }
         })
-      }else {
+
+      } else {
         const res_code = res.code
-        if('4013' == res_code) {
-          Taro.navigateTo({url: `../../pages/phoneNumberLogin/index?user_key=${res.data}`})
+        if ('4013' == res_code) {
+          Taro.navigateTo({ url: `../../pages/phoneNumberLogin/index?user_key=${res.data}&sourcePage=${payload.sourcePage}` })
         } else {
 
         }
@@ -36,30 +36,44 @@ export default {
     },
     // 微信未绑定系统，通过手机号绑定
     * weChatPhoneLogin({ payload }, { select, call, put }) {
-      const { parmas } = payload
+      const { parmas, sourcePage, phoneNumberBind, } = payload
       const res = yield call(weChatPhoneLogin, parmas)
-      if(isApiResponseOk(res)) {
+      if (isApiResponseOk(res)) {
         yield put({
           type: 'handleToken',
           payload: {
             token_string: res.data,
+            phoneNumberBind,
           }
         })
-      }else {
+
+        if (sourcePage === 'Invitation') {
+          const query_Id = Taro.getStorageSync('id')
+          const boardId = Taro.getStorageSync('board_Id')
+          yield put({
+            type: 'invitation/userScanCodeJoinOrganization',
+            payload: {
+              id: query_Id,
+              board_Id: boardId,
+            }
+          })
+        }
+      } else {
         // 微信已绑定系统，给出提示
         Taro.showToast({
           icon: 'none',
-          title: res.message
+          title: res.message,
+          duration: 2000
         })
       }
     },
     //处理token，做相应的页面跳转
     * handleToken({ payload }, { select, call, put }) {
 
-      const token_string  = payload.token_string;
+      const { token_string, phoneNumberBind } = payload;
       const tokenArr = token_string.split('__');
-      Taro.setStorageSync('access_token',tokenArr[0]);        //设置token
-      Taro.setStorageSync('refresh_token',tokenArr[1]);       //设置refreshToken
+      Taro.setStorageSync('access_token', tokenArr[0]);        //设置token
+      Taro.setStorageSync('refresh_token', tokenArr[1]);       //设置refreshToken
 
       yield put({
         type: 'registerIm'
@@ -69,31 +83,35 @@ export default {
         type: 'getAccountInfo',
         payload: {}
       })
-      
-      if (payload.sourcePage === 'Invitation') {
+      const boardId = Taro.getStorageSync('board_Id')
+      //日历页面是否需要注入im方法的标识
+      const switchTabCurrentPage = 'currentPage_BoardDetail_or_Login'
+      Taro.setStorageSync('switchTabCurrentPage', switchTabCurrentPage);
 
-        //邀请加入,未登录 --> 登录成功 --> 重新调用加入组织和项目请求
-       const query_Id =  Taro.getStorageSync('id')
-       const boardId =  Taro.getStorageSync('board_Id')
+      const pages = getCurrentPages()
+      Taro.switchTab({
+        url: `../../pages/calendar/index`
+      })
+      if (pages.length === 1) {
 
-        yield put({
-          type: 'invitation/userScanCodeJoinOrganization',
-          payload: {
-            id: query_Id,
-            board_Id: boardId,
-          }
-        })
-      }
-      else {
-        const switchTabCurrentPage = 'currentPage_BoardDetail_or_Login'
-        Taro.setStorageSync('switchTabCurrentPage', switchTabCurrentPage);  //解决wx.switchTab不能传值
-        Taro.switchTab({url: `../../pages/calendar/index`})
+      } else {
+        // if (phoneNumberBind) {
+        //   Taro.navigateBack({
+        //     delta: 2,
+        //   })
+        // } else {
+        //   Taro.navigateBack({
+        //     delta: 1,
+        //   })
+        // }
       }
     },
+
     //获取用户信息
     * getAccountInfo({ payload }, { select, call, put }) {
       const res = yield call(getAccountInfo)
-      if(isApiResponseOk(res)) {
+
+      if (isApiResponseOk(res)) {
         yield put({
           type: 'accountInfo/updateDatas',
           payload: {
@@ -101,29 +119,43 @@ export default {
           }
         })
         Taro.setStorageSync('account_info', JSON.stringify(res.data))
-      }else {
+        //如果没有组织 => 默认初始化一个组织
+        //has_org = 1 已有组织, 0 没有组织则初始化一个默认组织
+        if (res.data.has_org === '0') {
+          const result = yield call(initializeOrganization)
+          if (isApiResponseOk(result)) {
+
+          } else {
+            Taro.showToast({
+              title: res.message,
+              icon: 'none',
+              duration: 2000
+            })
+          }
+        }
+      } else {
 
       }
     },
     //注入im
     * registerIm({ payload }, { select, call, put }) {
-       const initImData = async () => {
-         const { account, token } = await dispatches({
-           type: 'im/fetchIMAccount'
-         });
-         await dispatches({
-           type: 'im/initNimSDK',
-           payload: {
-             account,
-             token
-           }
-         });
-         return await dispatches({
-           type: 'im/fetchAllIMTeamList'
-         });
-       };
-       initImData().catch(e => Taro.showToast({ title: String(e), icon: 'none' }));
-     }
+      const initImData = async () => {
+        const { account, token } = await dispatches({
+          type: 'im/fetchIMAccount'
+        });
+        await dispatches({
+          type: 'im/initNimSDK',
+          payload: {
+            account,
+            token
+          }
+        });
+        return await dispatches({
+          type: 'im/fetchAllIMTeamList'
+        });
+      };
+      initImData().catch(e => Taro.showToast({ title: String(e), icon: 'none', duration: 2000 }));
+    }
   },
 
   reducers: {

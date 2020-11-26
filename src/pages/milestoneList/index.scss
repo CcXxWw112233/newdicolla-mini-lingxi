@@ -1,0 +1,55 @@
+@import "../../gloalSet/styles/constant";
+
+.viewStyle {
+    height: 100%;
+    width : 100%;
+
+    .milestone_list_row {
+        display       : flex;
+        flex-direction: row;
+        width         : 100%;
+        border-bottom : pxTrans(1) solid rgba(0, 0, 0, 0.09);
+        margin-left   : pxTrans(20);
+
+        .milestone_list_style {
+            height     : pxTrans(40);
+            display    : flex;
+            align-items: center;
+            flex       : 1;
+        }
+
+        .cleck_milestone_styles {
+            width          : pxTrans(40);
+            display        : flex;
+            justify-content: center;
+            align-items    : center;
+            margin-right   : pxTrans(20);
+        }
+    }
+
+
+    .milestone_chird_row {
+        display       : flex;
+        flex-direction: row;
+        width         : 100%;
+        border-bottom : pxTrans(1) solid rgba(0, 0, 0, 0.09);
+        margin-left   : pxTrans(40);
+
+        .milestone_chird_style {
+            height     : pxTrans(40);
+            display    : flex;
+            align-items: center;
+            flex       : 1;
+        }
+
+        .cleck_milestone_chird_styles {
+            width          : pxTrans(40);
+            display        : flex;
+            justify-content: center;
+            align-items    : center;
+            margin-right   : pxTrans(40);
+        }
+    }
+
+
+}

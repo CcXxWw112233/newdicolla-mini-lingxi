@@ -1,0 +1,109 @@
+@import "../../../../../../gloalSet/styles/constant";
+
+.viewStyle {
+    display            : flex;
+    flex-direction     : column;
+    align-items        : center;
+    background-color   : #FFFFFF;
+    // height          : pxTrans(100);
+
+    .line_cell {
+        display       : flex;
+        flex-direction: row;
+        width         : 100%;
+
+        .line_empty {
+            width: pxTrans(44);
+        }
+
+        .line {
+            flex      : 1;
+            height    : pxTrans(1);
+            background: rgba(0, 0, 0, 0.09);
+        }
+    }
+
+    .content_cell {
+        flex          : 1;
+        display       : flex;
+        flex-direction: row;
+        margin-right  : pxTrans(16);
+        width         : 100%;
+
+        .content_padding {
+            width          : 100%;
+            display        : flex;
+            flex-direction : column;
+            align-items    : center;
+            justify-content: space-evenly;
+
+            .fill_in {
+                width: 100%;
+
+                .title_content {
+                    width       : 100%;
+                    font-size   : pxTrans(16);
+                    font-weight : 400;
+                    color       : rgba(0, 0, 0, 0.25);
+                    line-height : pxTrans(24);
+                    margin-left : pxTrans(16);
+                    margin-right: pxTrans(16);
+                }
+            }
+
+            .view_cell {
+                width: 100%;
+
+                .personnel_cell {
+                    display       : flex;
+                    flex-direction: column;
+
+                    .make_copy {
+                        width         : 100%;
+                        display       : flex;
+                        flex-direction: row;
+                        align-items   : center;
+                        height        : pxTrans(35);
+
+                        .avatar_image_style {
+                            width          : pxTrans(24);
+                            height         : pxTrans(24);
+                            border-radius  : pxTrans(12);
+                            margin-left    : pxTrans(16);
+                            margin-right   : pxTrans(8);
+                            display        : flex;
+                            align-items    : center;
+                            justify-content: center;
+                        }
+
+                        .name {
+                            font-size   : pxTrans(16);
+                            font-weight : 400;
+                            color       : rgba(0, 0, 0, 0.65);
+                            line-height : pxTrans(24);
+                            margin-right: pxTrans(24);
+                        }
+
+                        .status {
+                            font-size  : pxTrans(16);
+                            font-weight: 400;
+                            color      : rgba(0, 0, 0, 0.65);
+                            line-height: pxTrans(24);
+                        }
+                    }
+
+                    .comment_style {
+                        margin-left : pxTrans(48);
+                        font-size   : pxTrans(16);
+                        font-weight : 400;
+                        color       : rgba(0, 0, 0, 0.65);
+                        line-height : pxTrans(24);
+                        margin-right: pxTrans(24);
+                    }
+
+                }
+
+            }
+        }
+    }
+}

@@ -33,6 +33,8 @@ import {
   onBroadcastMsg,
   onBroadcastMsgs,
   onPushEvents,
+  onResendMsg,
+  onDeleteMsg,
 } from './actions/index';
 
 const { appkey, openPrivateConf } = ENVIRONMENT_CONFIG;
@@ -41,7 +43,7 @@ const { appkey, openPrivateConf } = ENVIRONMENT_CONFIG;
 // 重连 onWillConnect
 
 function* initNimSDK(loginInfo = {}) {
-  const {globalData: {store: {dispatch}}} = Taro.getApp()
+  const { globalData: { store: { dispatch } } } = Taro.getApp()
   const { account, token } = loginInfo;
 
   if (!account || !token)
@@ -67,7 +69,7 @@ function* initNimSDK(loginInfo = {}) {
     syncTeams: true, //是否同步群列表， 默认为 true, 但是没触发？？？
     onconnect: () => onConnect({ account, token }),
     onwillreconnect: onWillReconnect,
-    ondisconnect: (error) => onDisconnect(error,),
+    ondisconnect: (error) => onDisconnect(error),
     onerror: onError,
     // 私有化配置文件
     privateConf: openPrivateConf ? openPrivateConf : '',
@@ -87,9 +89,9 @@ function* initNimSDK(loginInfo = {}) {
    */
     onmyinfo: onMyInfo,
     onupdatemyinfo: onUpdateMyInfo,
-     /** 7
-   * 包含名片的好友信息（可能某些字段不全），[{account,avatar,birth,createTime,email,gender,nick,sign,updateTime}]
-   */
+    /** 7
+  * 包含名片的好友信息（可能某些字段不全），[{account,avatar,birth,createTime,email,gender,nick,sign,updateTime}]
+  */
     onusers: onUsers,
     onupdateuser: onUpdateUser,
     // 机器人列表的回调
@@ -126,6 +128,11 @@ function* initNimSDK(loginInfo = {}) {
     onbroadcastmsgs: onBroadcastMsgs,
     // 事件订阅
     onpushevents: onPushEvents,
+    //重发消息
+    onresendmsg: onResendMsg,
+    //撤回消息
+    ondeleteMsg: onDeleteMsg,
+
   });
 }
 

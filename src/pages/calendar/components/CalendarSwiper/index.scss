@@ -4,142 +4,180 @@
   from {
     height: pxTrans(70);
   }
+
   to {
     height: pxTrans(270);
   }
 }
+
 @keyframes swiper_show_part {
   from {
     height: pxTrans(270);
   }
+
   to {
     height: pxTrans(70);
   }
 }
+
 @keyframes calendar_back_all {
   from {
-    height: pxTrans(140);
+    // height   : pxTrans(140);
+    height      : pxTrans(0);
   }
+
   to {
-    height: pxTrans(340);
+    // height   : pxTrans(340);
+    height      : pxTrans(0);
   }
 }
+
 @keyframes calendar_back_part {
   from {
-    height: pxTrans(340);
+    // height   : pxTrans(340);
+    height      : pxTrans(0);
   }
+
   to {
-    height: pxTrans(140);
+    // height   : pxTrans(140);
+    height      : pxTrans(0);
   }
 }
+
 @keyframes set_calendar_icon_all {
   from {
     transform: rotate(180deg);
   }
+
   to {
     transform: rotate(0);
   }
 }
+
 @keyframes set_calendar_icon_part {
   from {
     transform: rotate(0);
   }
+
   to {
     transform: rotate(180deg);
   }
 }
+
 //日历组件
 .swiper_show_whole {
-  height: pxTrans(270);
-  animation:swiper_show_whole 0.5s ease;
+  height   : pxTrans(270);
+  animation: swiper_show_whole 0.5s ease;
 }
+
 .swiper_show_part {
-  height:pxTrans(70);
-  animation:swiper_show_part 0.5s ease;
+  height   : pxTrans(70);
+  animation: swiper_show_part 0.5s ease;
 }
+
 .swiper_show_nomal {
   height: pxTrans(270);
 }
+
 //日历组件底部背景
 .calendar_back_nomal {
-  height: pxTrans(340);
+  // height   : pxTrans(340);
+  height      : pxTrans(0);
 }
+
 .calendar_back_all {
-  height: pxTrans(340);
-  animation:calendar_back_all 0.5s ease;
+  // height      : pxTrans(340);
+  height         : pxTrans(0);
+  animation      : calendar_back_all 0.5s ease;
 }
+
 .calendar_back_part {
-  height: pxTrans(140);
-  animation:calendar_back_part 0.5s ease;
+  // height      : pxTrans(140);
+  height         : pxTrans(0);
+  animation      : calendar_back_part 0.5s ease;
 }
+
 //查看日历形态按钮
 .set_calendar_icon_nomal {
   //transform: rotate(0);
 }
+
 .set_calendar_icon_all {
   transform: rotate(0);
-  animation:set_calendar_icon_all 0.5s ease;
+  animation: set_calendar_icon_all 0.5s ease;
 }
+
 .set_calendar_icon_part {
   transform: rotate(180deg);
-  animation:set_calendar_icon_part 0.5s ease;
+  animation: set_calendar_icon_part 0.5s ease;
 }
 
 //基本组件样式
-.calendar_out{
-  height: auto;
-  background-color: $bg_color_1;
-  position: fixed;
-  z-index: 4;
-  top: pxTrans(44);
-  padding-bottom: pxTrans(6);
-  width: 100%;
-  box-shadow:0 pxTrans(1) pxTrans(2) rgba(0,0,0,0.15);
+.calendar_out {
+  // height             : auto;
+  background-color      : $bg_color_1;
+  // position           : fixed;
+  z-index               : 4;
+  top                   : pxTrans(44);
+  padding-bottom        : pxTrans(6);
+  width                 : 100%;
+  box-shadow            : 0 pxTrans(1) pxTrans(2) rgba(0, 0, 0, 0.15);
 
   .month_area_swiper {
     //height: pxTrans(270);
-    width: 100%;
+    width   : 100%;
   }
-  .set_calendar{
+
+  .set_calendar {
     text-align: center;
-    font-size: pxTrans(36);
-    color: $color_3;
+    font-size : pxTrans(36);
+    color     : $color_3;
   }
 }
+
 .calendar_back {
-  width: 100%;
+  width             : 100%;
   //background-color: red;
 }
 
 .month_area {
-  .week_head{
-    height: pxTrans(30);
-    display: flex;
-    justify-content: space-between;
+  .week_head {
+    // height         : pxTrans(30);
+    display           : flex;
+    justify-content   : space-between;
+    background        : rgb(243, 243, 243);
+    position          : fixed;
+    width             : 100%;
+    top               : 0;
+    z-index           : 1;
+
     .week_day {
       line-height: pxTrans(30);
-      flex: 1;
-      font-size: $fontsize_12;
-      color: $color_3;
-      text-align: center;
+      flex       : 1;
+      font-size  : $fontsize_12;
+      color      : $color_3;
+      text-align : center;
     }
   }
 }
-.date_area{
-  height: pxTrans(240);
-  display: flex;
-  flex-wrap: wrap ;
+
+.date_area {
+  height   : pxTrans(240);
+  display  : flex;
+  flex-wrap: wrap;
   font-size: $fontsize_16;
+
   .date_day {
-    height: pxTrans(40);
-    text-align: center;
+    height       : pxTrans(40);
+    text-align   : center;
     border-radius: pxTrans(100);
-    color: $color_2;
+    color        : $color_2;
+
     .date_day_inner {
-      position: relative;
-      width: pxTrans(40);
-      line-height: pxTrans(40);
-      margin: 0 auto;
+      position     : relative;
+      width        : pxTrans(40);
+      line-height  : pxTrans(40);
+      margin       : 0 auto;
       border-radius: pxTrans(40);
     }
   }
@@ -147,40 +185,48 @@
   .no_current_month_date {
     color: $color_4;
   }
-  .is_now_date{
+
+  .is_now_date {
     color: $color_theme;
   }
+
   .date_day_selected {
     background-color: $color_theme;
-    color: $color_5;
+    color           : $color_5;
   }
+
   .check_has_task {
-    position: absolute;
-    display: flex;
-    width: pxTrans(40);
+    position       : absolute;
+    display        : flex;
+    width          : pxTrans(40);
     justify-content: center;
-    bottom: pxTrans(4);
-    .has_task, .has_flow {
-      width: pxTrans(4);
-      height: pxTrans(4);
+    bottom         : pxTrans(4);
+
+    .has_task,
+    .has_flow {
+      width        : pxTrans(4);
+      height       : pxTrans(4);
       border-radius: pxTrans(4);
     }
+
     .has_task {
       background-color: $color_theme;
     }
+
     .has_flow {
       background-color: $color_7;
-      margin-left: pxTrans(4);
+      margin-left     : pxTrans(4);
     }
   }
+
   .check_has_task_no_current_moth {
     opacity: 0.6;
   }
 }
 
-.date_detail_dec{
-  font-size: $fontsize_16;
-  color: $color_2;
+.date_detail_dec {
+  font-size : $fontsize_16;
+  color     : $color_2;
   text-align: center;
   margin-top: pxTrans(4);
 

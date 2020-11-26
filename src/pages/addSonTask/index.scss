@@ -1,0 +1,105 @@
+@import "../../gloalSet/styles/constant";
+
+.add_son_tasks_row {
+    height          : pxTrans(56);
+    display         : flex;
+    flex-direction  : row;
+    background-color: white;
+    align-items     : center;
+    border-bottom   : pxTrans(1) solid rgba(0, 0, 0, 0.09);
+
+    .list_item_left_iconnext {
+        color       : rgb(0, 0, 0, 0.25);
+        font-size   : pxTrans(20);
+        margin-left : pxTrans(20);
+        margin-right: pxTrans(10);
+    }
+
+    .list_item_name {
+        color      : rgba(0, 0, 0, 0.25);
+        margin-left: pxTrans(4);
+        white-space: nowrap;
+        flex       : 1;
+    }
+
+    .list_item_iconnext {
+        color       : $color_3;
+        margin-left : pxTrans(12);
+        color       : rgba(65, 39, 39, 0.25);
+        font-size   : pxTrans(20);
+        margin-right: pxTrans(10);
+    }
+}
+
+.son_tasks_name {
+    width           : 100%;
+    background-color: white;
+    border-bottom   : pxTrans(1) solid rgba(0, 0, 0, 0.09);
+
+    .son_tasks_input {
+        height      : pxTrans(56);
+        margin-left : pxTrans(20);
+        margin-right: pxTrans(10);
+    }
+}
+
+.info_style {
+    height         : pxTrans(56);
+    display        : flex;
+    flex           : 1;
+    align-items    : center;
+    justify-content: space-evenly;
+
+    .left_time_style {
+        display       : flex;
+        flex-direction: row;
+        align-items   : center;
+        margin-right  : pxTrans(5);
+
+        .left_date_style {
+            margin: pxTrans(5);
+        }
+
+        .left_time_style {
+            margin: pxTrans(5);
+        }
+
+    }
+
+    .rigth_time_style {
+        display       : flex;
+        flex-direction: row;
+        height        : 100%;
+        align-items   : center;
+        margin-left   : pxTrans(5);
+
+        .right_date_style {
+            margin: pxTrans(5);
+        }
+
+        .right_time_style {
+            margin: pxTrans(5);
+        }
+    }
+}
+
+.login_footer {
+    padding: pxTrans(12) pxTrans(16) 0;
+
+    .login_btn {
+        border       : 0 !important;
+        width        : 100%;
+        height       : pxTrans(40);
+        line-height  : pxTrans(40);
+        text-align   : center;
+        color        : #fff;
+        border-radius: pxTrans(4);
+        margin-bottom: pxTrans(16);
+        box-shadow   : none;
+    }
+
+    .login_btn_normal {
+        background-color: #1890FF;
+        border          : pxTrans(1) solid #1890FF;
+    }
+}

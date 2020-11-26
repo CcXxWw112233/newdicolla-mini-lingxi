@@ -6,6 +6,7 @@ const INITIAL_STATE = {
   isRegister: false, // 是否正在注册
   userInfo: {}, // 登录用户信息
 
+  currentSubChat: {},// 当前真正聊天的子圈
   currentChatTo: '', // 正在聊天 sessionId
   currentGroup: {}, //当前的聊天群信息
   currentGroupSessionList: [],  //当前群的聊天信息
@@ -18,7 +19,7 @@ const INITIAL_STATE = {
   isTouchChatContentScrollView: false, //是否正在触摸聊天内容滚动列表
   currentGroupMembers: [],  //当前的群成员列表
 
-//目前没有用到的字段，p2p时可能会用
+  //目前没有用到的字段，p2p时可能会用
   friendCard: {}, //好友列表，含名片信息，额外添加在线信息
   onlineList: {}, // 在线好友列表
   // messageListToRender: {},
@@ -28,7 +29,7 @@ const INITIAL_STATE = {
   personList: {}, // 所有有信息的人的列表
   unreadInfo: {}, // 未读信息，包含已、未订阅的账户数
   notificationList: { system: [], custom: [] }, // 系统通知，分为自定义消息和系统消息
-  netcallEvent: {type: '', payload: null}, // 音视频事件载荷
+  netcallEvent: { type: '', payload: null }, // 音视频事件载荷
   netcallCallList: [], // 多人通话呼叫列表
   netcallGroupCallInfo: {}, // 群组音视频被叫时通知信息
 
@@ -38,9 +39,15 @@ const INITIAL_STATE = {
   // 当前会话ID（即当前聊天列表，只有单聊群聊采用，可用于判别）
   currSessionId: null,
   currSessionMsgs: [],
+  boardChatImAllLastHistoryList: {}, //当前项目圈的历史消息,
+  sessionListMap: {}, //切割聊天历史数据列表
+  history_newSession: [],// 更新版，新消息的记录，包括自己发送的和接受的
+  historySub_newSession: [],// 子圈的消息记录
+  currentBoardDetail: {},
+  unread_all_number: '',  //全部未读数
 }
 
-export {INITIAL_STATE}
+export { INITIAL_STATE }
 
 /**
  * 登录用户个人信息

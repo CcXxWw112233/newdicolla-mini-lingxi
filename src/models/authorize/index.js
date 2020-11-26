@@ -1,5 +1,4 @@
-import { getBar } from '../../services/testPage'
-import {isApiResponseOk} from "../../utils/request";
+import { isApiResponseOk } from "../../utils/request";
 
 export default {
   namespace: 'authorize',

@@ -75,6 +75,8 @@ export default class IMController {
       onbroadcastmsgs: this.onBroadcastMsgs,
       // 事件订阅
       onpushevents: this.onPushEvents,
+      // 重新发送
+      onresendmsg: this.onResengMsg,
     })
     // 发送消息开始登陆
     store.dispatch({
@@ -208,7 +210,7 @@ export default class IMController {
         type: 'UnreadInfo_update',
         payload: session
       })
-    } catch(error) {
+    } catch (error) {
     }
   }
   /**
@@ -216,7 +218,7 @@ export default class IMController {
    * {cc,flow:"in",from,fromClientType:"Web",fromDeviceId,fromNick,idClient,idServer:"9680840912",isHistoryable:true,isLocal,isMuted, isOfflinable,isPushable,isRoamingable,isSyncable,isUnreadable,needPushNick,resend,scene:"p2p",sessionId:"p2p-zys2",status:"success",target:"zys2",text:"[呕吐]",time,to:"wujie",type:"text",userUpdateTime}
    */
   onMsg(msg) {
-    console.log('onMsg: 收到消息', msg)
+    // console.log('onMsg: 收到消息', msg)
     try {
       store.dispatch({
         type: 'RawMessageList_Add_Msg',
@@ -290,23 +292,23 @@ export default class IMController {
                   }
                 } else if (currentPage.route.includes('videoCall')) { // p2p
                   try {
-                     // 兼容登录网关502错误离开房间
-                     if (app.globalData.netcall) {
-                       app.globalData.netcall.hangup()
-                         .then(() => {
-                           app.globalData.netcall.destroy()
-                           app.globalData.nim.destroy({
-                             done: function () {
-                               console.log('destroy nim done !!!')
-                               wx.clearStorage()
-                               wx.hideLoading()
-                             }
-                           })
-                           wx.reLaunch({
-                             url: '/pages/login/login',
-                           })
+                    // 兼容登录网关502错误离开房间
+                    if (app.globalData.netcall) {
+                      app.globalData.netcall.hangup()
+                        .then(() => {
+                          app.globalData.netcall.destroy()
+                          app.globalData.nim.destroy({
+                            done: function () {
+                              console.log('destroy nim done !!!')
+                              wx.clearStorage()
+                              wx.hideLoading()
+                            }
+                          })
+                          wx.reLaunch({
+                            url: '/pages/login/login',
+                          })
                         })
-                     }
+                    }
                   } catch (error) {
                     console.warn(error)
                   }
@@ -560,10 +562,19 @@ export default class IMController {
   /**
    * 断开重连
    */
-  onWillReconnect() {
-    console.log(' onWillReconnect')
+  onWillReconnect(reconnect) {
+    console.log(' onWillReconnect', reconnect)
     showToast('text', '重连中，请稍后！', { duration: 3000 })
     nim.disconnect({ done: () => { nim.connect(); } })
+  }
+
+  //重新发送
+  onResengMsg(someMsg) {
+    nim.resendMsg({
+      msg: someMsg,
+      done: sendMsgDone,
+    })
+    console.log('正在重发消息', someMsg)
   }
 }
 

@@ -5,8 +5,8 @@ import styles from './index.scss';
 import AvatarList from './components/AvatarList.js';
 import DetailItem from './components/DetailItem.js';
 
-@connect(({ im: { currentGroup } }) => ({
-  currentGroup
+@connect(({ im: { currentBoardDetail } }) => ({
+  currentBoardDetail
 }))
 class ChatDetail extends Component {
   handleShowAllGroupMember = () => {
@@ -16,20 +16,20 @@ class ChatDetail extends Component {
     console.log('should show history page.');
   };
   pageJump = url => {
-    if(!url) return
+    if (!url) return
     Taro.navigateTo({
       url,
     })
   }
   setNavigationBarTitle = () => {
-    const { currentGroup: { name = '未知群名' } = {} } = this.props;
+    const { currentBoardDetail: { name = '未知群名' } = {} } = this.props;
     Taro.setNavigationBarTitle({ title: name.substring(0, 15) });
   };
   componentWillMount() {
     this.setNavigationBarTitle();
   }
   render() {
-    const { currentGroup: { users = [], name = '未知群名' } = {} } = this.props;
+    const { currentBoardDetail: { users = [], name = '未知群名' } = {} } = this.props;
     const avatarList = users.map(i => ({
       id: i.id,
       name: i.name,
@@ -69,7 +69,7 @@ class ChatDetail extends Component {
 }
 
 ChatDetail.defaultProps = {
-  currentGroup: {} //当前的群信息
+  currentBoardDetail: {} //当前的群信息
 };
 
 export default ChatDetail;

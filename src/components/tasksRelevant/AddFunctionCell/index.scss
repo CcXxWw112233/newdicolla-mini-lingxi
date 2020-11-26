@@ -1,0 +1,17 @@
+@import "../../../gloalSet/styles/constant";
+
+.list_item {
+    background   : white;
+    overflow     : hidden;
+    text-overflow: ellipsis;
+    white-space  : nowrap;
+    flex-wrap    : wrap;
+    display      : flex;
+    align-items  : center;
+    margin       : pxTrans(10);
+    padding      : pxTrans(10);
+
+    .tagCell_list_item {
+        margin: pxTrans(5) pxTrans(5) pxTrans(5) pxTrans(5);
+    }
+}

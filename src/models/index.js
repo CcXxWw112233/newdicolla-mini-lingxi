@@ -1,4 +1,3 @@
-import testPage from './testPage/index';
 import board from './board/index'
 import authorize from './authorize/index'
 import im from './im/index'
@@ -8,9 +7,12 @@ import accountInfo from './accountInfo/index'
 import calendar from './calendar/index'
 import chat from './chat/index'
 import invitation from './invitation/index'
+import tasks from './tasks/index'
+import file from './file/index'
+import workflow from './workflow/index'
+import global from './global/index'
 
 const models = [
-  testPage,
   board,
   im,
   authorize,
@@ -20,5 +22,9 @@ const models = [
   calendar,
   chat,
   invitation,
+  tasks,
+  file,
+  workflow,
+  global,
 ]
 export default models

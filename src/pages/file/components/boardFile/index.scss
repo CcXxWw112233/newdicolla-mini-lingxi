@@ -1,0 +1,104 @@
+@import "../../../../gloalSet/styles/constant.scss";
+
+.choice_board_file_style {
+    width         : 100%;
+    height        : 100%;
+    position      : fixed;
+    top           : 0;
+    left          : 0;
+    z-index       : 100;
+    overflow      : auto;
+    background    : rgba(0, 0, 0, .8);
+    color         : rgba(255, 255, 255, 1);
+    padding-bottom: pxTrans(50);
+
+    .whole_file_style {
+        margin-top: pxTrans(20);
+        width     : 100%;
+        height    : pxTrans(50);
+        display   : flex;
+        z-index   : 101;
+        background: rgba(100, 100, 100, 0.9);
+
+        .whole_file_hear_style {
+            display    : flex;
+            align-items: center;
+            margin-left: pxTrans(18);
+
+            .folder_Path_icon {
+                font-size: pxTrans(20);
+            }
+        }
+    }
+
+    .board_item_style {
+        width     : 100%;
+        min-height: pxTrans(50);
+
+        .board_item_cell_style {
+            height        : 100%;
+            display       : flex;
+            // text-align : center;
+            align-items   : baseline;
+
+            .board_item_icon {
+                font-size      : pxTrans(20);
+                margin-left    : pxTrans(18);
+                // margin-left : pxTrans(40);
+                margin-right   : pxTrans(10);
+            }
+
+            .board_item_name {
+                // height     : pxTrans(26);
+                font-size  : pxTrans(18);
+                font-weight: 600;
+                line-height: pxTrans(26);
+                max-width  : pxTrans(500);
+                padding    : pxTrans(5) 0 pxTrans(5) 0;
+            }
+
+            .org_name_style {
+                margin-left: pxTrans(10);
+                font-size  : pxTrans(12);
+                color      : rgba(255, 255, 255, 1);
+                line-height: pxTrans(20);
+            }
+        }
+
+        .folder_tree_view {
+            margin-left: pxTrans(40);
+        }
+    }
+
+    .board_item_hover_style {
+        background: rgba(255, 255, 255, 0.5);
+    }
+
+    .close_view_style {
+        // width              : 100%;
+        width          : pxTrans(40);
+        display        : flex;
+        justify-content: center;
+        position       : fixed;
+        bottom         : pxTrans(24);
+        right          : 49%;
+        left           : 49%;
+
+        .close_button_style {
+            width          : pxTrans(40);
+            height         : pxTrans(40);
+            display        : flex;
+            justify-content: center;
+            align-items    : center;
+            background     : rgb(255, 255, 255);
+            border-radius  : pxTrans(20);
+
+            .close_button_icon_style {
+                font-size: pxTrans(24);
+                margin   : pxTrans(10) auto;
+                color    : rgba(0, 0, 0, .65);
+            }
+        }
+    }
+
+}

@@ -1,0 +1,16 @@
+@import "../../../../gloalSet/styles/constant";
+
+.viewStyle {
+    display         : flex;
+    flex-direction  : column;
+    align-items     : center;
+    background-color: #FFFFFF;
+
+    .view_cell {
+        width: 100%;
+    }
+
+    .other_cell {
+        width: 100%;
+    }
+}
