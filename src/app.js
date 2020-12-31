@@ -68,6 +68,7 @@ class App extends Component {
       "pages/templateDetails/index",
       "pages/fieldPersonSingle/index",
       "pages/fieldPersonMultiple/index",
+      "pages/jumpToMeeting/index"
     ],
     permission: {
       "scope.userLocation": {
@@ -103,6 +104,12 @@ class App extends Component {
           text: "文件",
           iconPath: "./asset/tabBar/personal.png",
           selectedIconPath: "./asset/tabBar/personal_selected.png",
+        },
+        {
+          pagePath: "pages/jumpToMeeting/index",
+          text: "会协宝",
+          iconPath: "./asset/tabBar/meeting.png",
+          selectedIconPath: "./asset/tabBar/meeting_selected.png",
         },
       ],
     },
