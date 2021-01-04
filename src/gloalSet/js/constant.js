@@ -57,3 +57,5 @@ export const RESPONSE_DATA_CODE_DATA = 'data'
 
 //腾讯位置服务SDK app_key
 export const QQMAPSDK_KEY = 'AECBZ-47EKW-RCCRD-RMJH5-T64O2-HEFTQ'
+
+export const MEETING_APPID = 'wxa68e2267756b3f16'
