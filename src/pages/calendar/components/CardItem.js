@@ -14,16 +14,6 @@ import { connect } from "@tarojs/redux";
   org_list
 }))
 export default class CardItem extends Component {
-  renderAA = () => {
-    return (
-      <Text
-        className={`${globalStyles.global_iconfont} ${indexStyles.iconfont_size}`}
-      >
-        &#xe633;
-      </Text>
-    );
-  };
-
   gotoListItemDetails = itemValue => {
     console.log("itemValue===", itemValue);
     const { flag, content_id, board_id, parent_id } = itemValue;
