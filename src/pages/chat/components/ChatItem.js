@@ -698,14 +698,14 @@ class ChatItem extends Component {
                                 {activityType == "meeting" && (
                                   <View>
                                     {activityContent[activityType][
-                                      "meeting_start_time"
+                                      "start_time"
                                     ] && (
                                       <Text
                                         style={{ color: "rgba(0,0,0,0.35)" }}
                                       >
                                         {timestampToTimeNormal(
                                           activityContent[activityType][
-                                            "meeting_start_time"
+                                            "start_time"
                                           ],
                                           "/",
                                           true
