@@ -1,37 +1,40 @@
-import Taro from '@tarojs/taro';
-import config from './activityConfig.js';
+import Taro from "@tarojs/taro";
+import config from "./activityConfig.js";
 
 const isFieldInArrIndex = (arr = [], field, index) => {
   const findIndex = arr.findIndex(i => i === field);
   return findIndex === index;
 };
-const splitStringBy = (str = '', symbol) => str.split(symbol);
-const splitStringByPeriod = str => splitStringBy(str, '.');
+const splitStringBy = (str = "", symbol) => str.split(symbol);
+const splitStringByPeriod = str => splitStringBy(str, ".");
 const isAccord = (action, field, index) =>
   isFieldInArrIndex(splitStringByPeriod(action), field, index);
 
 // 是否关联内容
-const isLinkContent = action => isAccord(action, 'link', 2);
+const isLinkContent = action => isAccord(action, "link", 2);
 
 // 是否任务类型
-const isCard = action => isAccord(action, 'card', 1);
+const isCard = action => isAccord(action, "card", 1);
+
+// 是否是会议类型
+const isMeeting = action => isAccord(action, "meeting", 1);
 
 // 是否文件类型
-const isFile = action => isAccord(action, 'file', 1);
+const isFile = action => isAccord(action, "file", 1);
 
 // 是否文件夹类型
-const isFolder = action => isAccord(action, 'folder', 1);
+const isFolder = action => isAccord(action, "folder", 1);
 
 // 是否流程
-const isFlow = action => isAccord(action, 'flow', 1);
+const isFlow = action => isAccord(action, "flow", 1);
 
 // 是否项目
 const isProject = action =>
-  isAccord(action, 'board', 0) &&
-  (isAccord(action, 'update', 1) ||
-    isAccord(action, 'content', 1) ||
-    isAccord(action, 'create', 1) ||
-    isAccord(action, 'delete', 1));
+  isAccord(action, "board", 0) &&
+  (isAccord(action, "update", 1) ||
+    isAccord(action, "content", 1) ||
+    isAccord(action, "create", 1) ||
+    isAccord(action, "delete", 1));
 
 const isInclude = (map = {}) => action => {
   return Object.values(map).some(i => i(action));
@@ -55,36 +58,36 @@ const typeMap = {
   file: isFile,
   folder: isFolder,
   flow: isFlow,
-  project: isProject
+  project: isProject,
+  meeting: isMeeting
 };
 const isShouldHandleType = isInclude(typeMap);
 const isGetType = findType(typeMap);
 
 const getAction = (config, action, title) => {
-  if (config[action] && config[action]['actionText']) {
-    return config[action]['actionText'];
+  if (config[action] && config[action]["actionText"]) {
+    return config[action]["actionText"];
   }
-  return title ? title : '';
+  return title ? title : "";
 };
 const getContent = (config, action, data) => {
   const { content } = data;
-  if (config[action] && config[action]['contentCallback']) {
-    return config[action]['contentCallback'](content);
+  if (config[action] && config[action]["contentCallback"]) {
+    return config[action]["contentCallback"](content);
   }
   return content;
 };
 
 const getRange = (config, action, data) => {
   const { content } = data;
-  if (config[action] && config[action]['rangeCallback']) {
-    return config[action]['rangeCallback'](content);
+  if (config[action] && config[action]["rangeCallback"]) {
+    return config[action]["rangeCallback"](content);
   }
   return {};
 };
 
 //解析消息体
 const parseActivityNewsBody = data => {
-  
   const { action, creator, title } = data;
   const type = isGetType(action);
   if (!type && config[action]) {
@@ -119,7 +122,7 @@ const parseNewsContent = msg => {
 };
 //处理全局推送消息
 const handleGlobalNewsPush = msg => {
-  const pushType = 'newPush';
+  const pushType = "newPush";
   const { method, data } = parseNewsContent(msg);
   if (!method) {
     return;
