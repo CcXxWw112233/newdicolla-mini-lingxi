@@ -94,7 +94,9 @@ export const getUserAllOrgsAllBoards = (data, notShowLoading) => {
 // 获取代办会议列表
 export async function getMeetingTodoList(params) {
   return request({
-    url: `${API_MORE}${REQUEST_INTERGFACE_VERSIONN}/meeting/list/by_self`,
+    url: `${API_MORE}${REQUEST_INTERGFACE_VERSIONN}/meeting/list/by_self?board_id=${
+      params.board_id
+    }&org_id=${params.org_id}&query_time=${params.query_time || ""}`,
     method: "GET",
     params
   });

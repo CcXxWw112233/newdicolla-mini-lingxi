@@ -190,7 +190,8 @@ export default {
       const selected_board = yield select(select_selected_board);
       const res = yield call(getMeetingTodoList, {
         org_id: current_org,
-        board_id: selected_board
+        board_id: selected_board,
+        query_time: String(payload.query_time)
       });
       if (isApiResponseOk(res)) {
         let data = res.data;

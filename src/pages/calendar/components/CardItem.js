@@ -1,21 +1,18 @@
+/* eslint-disable jsx-quotes */
 import Taro, { Component } from "@tarojs/taro";
+import { connect } from "@tarojs/redux";
 import { View, Button, Text } from "@tarojs/components";
 import indexStyles from "./index.scss";
 import globalStyles from "../../../gloalSet/styles/globalStyles.scss";
 import Avatar from "../../../components/avatar";
-import {
-  getOrgName,
-  timestampToTimeZH,
-  setBoardIdStorage
-} from "../../../utils/basicFunction";
-import { connect } from "@tarojs/redux";
+import { getOrgName, timestampToTimeZH } from "../../../utils/basicFunction";
 
 @connect(({ my: { org_list } }) => ({
   org_list
 }))
 export default class CardItem extends Component {
   gotoListItemDetails = itemValue => {
-    console.log("itemValue===", itemValue);
+    // console.log("itemValue===", itemValue);
     const { flag, content_id, board_id, parent_id } = itemValue;
     if (itemValue && ["0", "1"].indexOf(flag) !== -1) {
       let tasks_id = parent_id ? parent_id : content_id;
@@ -31,6 +28,45 @@ export default class CardItem extends Component {
     }
   };
 
+  // 点击复制链接
+  handleSetClipboardData = ({ start_url }) => {
+    wx.setClipboardData({
+      data: start_url,
+      success: function(res) {
+        wx.getClipboardData({
+          success: function(res) {
+            console.log(res.data); // data
+          }
+        });
+      }
+    });
+  };
+
+  // 渲染图标
+  // renderCardLogo = ({ type, is_realize }) => {
+  //   let title_icon;
+  //   switch (type) {
+  //     case "0":
+  //       title_icon = is_realize == "1" ? <>&#xe7a8;</> : <>&#xe63d;</>;
+  //       break;
+  //     case "1":
+  //       // title_icon = <>&#xe63e;</>;
+  //       break;
+  //     case "2":
+  //       title_icon = <>&#xe633;</>;
+  //       break;
+  //     case "meeting":
+  //       title_icon = <>&#xe63e;</>;
+  //       break;
+  //     case "3":
+  //       title_icon = <>&#xe636;</>;
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  //   return title_icon;
+  // };
+
   render() {
     const { itemValue = {}, schedule, org_list } = this.props;
     const {
@@ -42,7 +78,10 @@ export default class CardItem extends Component {
       board_name,
       start_time,
       due_time,
-      is_realize
+      is_realize,
+      topic,
+      end_time,
+      start_url
     } = itemValue;
     const users = itemValue["data"] || [];
     const card_logo_1 = (
@@ -80,7 +119,13 @@ export default class CardItem extends Component {
         &#xe7a8;
       </Text>
     );
-
+    const card_logo_meeting = (
+      <Text
+        className={`${globalStyles.global_iconfont} ${indexStyles.iconfont_size}`}
+      >
+        &#xe63e;
+      </Text>
+    );
     const dis_due_style = () => {
       let opacity = "1";
       if ("0" == flag) {
@@ -105,7 +150,9 @@ export default class CardItem extends Component {
     };
     var now = Date.parse(new Date());
     return (
-      <View onClick={() => flag != "1" && this.gotoListItemDetails(itemValue)}>
+      <View
+        onClick={() => flag != "meeting" && this.gotoListItemDetails(itemValue)}
+      >
         <View
           className={`${globalStyles.global_card_out} ${indexStyles.card_content} `}
           style={`opacity: ${dis_due_style()}`}
@@ -119,15 +166,17 @@ export default class CardItem extends Component {
               ? card_logo_2
               : "2" == flag
               ? card_logo_3
+              : "meeting" == flag
+              ? card_logo_meeting
               : card_logo_4}
           </View>
           <View className={`${indexStyles.card_content_middle}`}>
             <View className={`${indexStyles.card_content_middle_top}`}>
               <Text className={`${indexStyles.card_title}`}>
-                {content_name}
+                {content_name || topic}
               </Text>
               <Text className={`${indexStyles.organize}`}>
-                #{getOrgName({ org_id, org_list })}>{board_name}
+                #{getOrgName({ org_id, org_list })}&gt;{board_name}
               </Text>
             </View>
             <View
@@ -146,18 +195,26 @@ export default class CardItem extends Component {
                       ? timestampToTimeZH(start_time)
                       : "开始时间未设置"
                   } - ${
-                    due_time ? timestampToTimeZH(due_time) : "截止时间未设置"
+                    due_time || end_time
+                      ? timestampToTimeZH(due_time || end_time)
+                      : "截止时间未设置"
                   }`}
             </View>
-            {flag == "1" && (
+            {flag == "meeting" && (
               <View className={indexStyles.card_content_meeting_btn}>
-                <Button>复制链接参会</Button>
+                <Button
+                  onClick={() => {
+                    this.handleSetClipboardData({ start_url });
+                  }}
+                >
+                  复制链接参会
+                </Button>
               </View>
             )}
           </View>
 
           <View className={`${indexStyles.card_content_right}`}>
-            <Avatar avartarTotal={"multiple"} userList={users} />
+            <Avatar avartarTotal="multiple" userList={users} />
           </View>
         </View>
       </View>

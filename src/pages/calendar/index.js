@@ -1,4 +1,5 @@
 import Taro, { Component } from "@tarojs/taro";
+import { connect } from "@tarojs/redux";
 import { View, Button } from "@tarojs/components";
 import CardList from "./components/CardList";
 import indexStyles from "./index.scss";
@@ -7,7 +8,6 @@ import CardTypeSelect from "./components/CardTypeSelect/index";
 import SearchAndMenu from "../board/components/SearchAndMenu";
 import CalendarSwiper from "./components/CalendarSwiper";
 import MilestoneList from "./components/MilestoneList";
-import { connect } from "@tarojs/redux";
 import CustomNavigation from "../acceptInvitation/components/CustomNavigation.js";
 import PersonalCenter from "./components/PersonalCenter";
 import { onSysMsgUnread } from "../../models/im/actions";
@@ -19,7 +19,8 @@ import { onSysMsgUnread } from "../../models/im/actions";
       selected_board_name,
       page_number,
       isReachBottom,
-      isOtherPageBack
+      isOtherPageBack,
+      selected_timestamp
     },
     accountInfo,
     im: { sessionlist, unread_all_number }
@@ -30,6 +31,7 @@ import { onSysMsgUnread } from "../../models/im/actions";
     isReachBottom,
     isOtherPageBack,
     accountInfo,
+    selected_timestamp,
     sessionlist,
     unread_all_number
   })
@@ -64,7 +66,7 @@ export default class Calendar extends Component {
   onPullDownRefresh(res) {
     //下拉刷新...
 
-    const { dispatch } = this.props;
+    const { dispatch, selected_timestamp } = this.props;
     dispatch({
       type: "calendar/updateDatas",
       payload: {
@@ -72,11 +74,12 @@ export default class Calendar extends Component {
         isReachBottom: true
       }
     });
+    console.log(selected_timestamp);
     this.getNoScheCardList();
     this.getScheCardList();
     this.getOrgBoardList();
     this.getSignList();
-    this.getMeetingTodoList();
+    this.getMeetingTodoList({ query_time: selected_timestamp });
 
     Taro.showNavigationBarLoading();
     setTimeout(function() {
@@ -119,17 +122,17 @@ export default class Calendar extends Component {
   }
 
   componentDidShow() {
-    const { selected_board_name } = this.props;
+    const { selected_board_name, selected_timestamp } = this.props;
     Taro.setNavigationBarTitle({
       title: selected_board_name
     });
-    console.log("进来了");
+    console.log("进来了", selected_timestamp);
     this.getOrgList();
     this.getOrgBoardList();
     this.getNoScheCardList();
     this.getScheCardList({});
     this.getSignList();
-    this.getMeetingTodoList();
+    this.getMeetingTodoList({ query_time: selected_timestamp });
     this.getUserAllOrgsAllBoards();
     this.getAccountInfo();
 
@@ -214,11 +217,11 @@ export default class Calendar extends Component {
   };
 
   // 获取会议列表
-  getMeetingTodoList = () => {
+  getMeetingTodoList = ({ query_time }) => {
     const { dispatch } = this.props;
     dispatch({
       type: "calendar/getMeetingTodoList",
-      payload: {}
+      payload: { query_time }
     });
   };
 
