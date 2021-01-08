@@ -358,6 +358,10 @@ class ChatItem extends Component {
     wx.setClipboardData({
       data: start_url,
       success: function(res) {
+        wx.showToast({
+          title: "复制成功",
+          duration: 3000
+        });
         wx.getClipboardData({
           success: function(res) {
             console.log(res.data); // data
