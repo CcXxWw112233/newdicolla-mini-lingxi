@@ -7,7 +7,7 @@ import { connect } from '@tarojs/redux'
 import { getOrgIdByBoardId, getOrgName } from '../../../../utils/basicFunction'
 import TreeFile from './TreeFile'
 import EXIF from 'exif-js'  //第三方库获取图片exif信息
-import QQMapWX from '../../../../utils/qqmap-wx-jssdk1.2/qqmap-wx-jssdk.js'
+import QQMapWX from '../../../../utils/qqmap-wx-jssdk1.2/qqmap-wx-jssdk.min.js'
 import { QQMAPSDK_KEY } from "../../../../gloalSet/js/constant";
 
 @connect(({
