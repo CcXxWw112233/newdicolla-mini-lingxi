@@ -144,6 +144,8 @@
             .customNewsContent {
               // display  : flex;
               // flex-wrap: wrap;
+              width: 460px;
+              max-width: 460px;
               .creator {
                 display: inline-block;
                 word-break: break-all;
@@ -172,7 +174,7 @@
               }
             }
             .meeting_btn {
-              width: pxTrans(232);
+              width: pxTrans(180);
               height: pxTrans(32);
               border-radius: pxTrans(4);
               border: 1px solid #1890ff;
