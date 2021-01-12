@@ -25,7 +25,9 @@ export default class index extends Component {
     }
     if (isApiResponseOk(res)) {
       this.setState({
-        wsrc: `${chart_url}?chart_board_id=${chart_board_id}&token=${Taro.getStorageSync('access_token')}`
+        wsrc: `${chart_url}?board_id=${chart_board_id}&token=${Taro.getStorageSync(
+          "access_token"
+        )}`
       });
     } else {
       const redirectPath = `../seeBoardChart/index`;
