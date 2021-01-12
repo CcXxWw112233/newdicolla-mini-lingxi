@@ -2,30 +2,52 @@ import Taro, { Component } from "@tarojs/taro";
 import { View, WebView } from "@tarojs/components";
 import { isApiResponseOk } from "../../utils/request";
 import { getAccountInfo } from "../../services/login";
+import { BASE_URL } from "../../gloalSet/js/constant";
 // import indexStyles from "./index.scss";
 export default class index extends Component {
   constructor(props) {
     super(props);
-    // chart_url=http://test.lingxi.new-di.com&chart_board_id=asdasdasd
     this.state = {
       wsrc: ""
     };
   }
+  //检查二维码是否过期
+  qarCodeIsInvitation = async () => {
+    const { id } = this.$router.params || {};
+    const {
+      globalData: {
+        store: { dispatch }
+      }
+    } = Taro.getApp();
+    Taro.setStorageSync("qrCodeInValidText", "请重新扫码");
+    Taro.removeStorageSync("web_redirect_url");
+    Taro.removeStorageSync("board_id");
+
+    // const data = {
+    //   rela_content: "/mini_web/board_statistics.html",
+    //   rela_id: "1205025167177289728"
+    // };
+    dispatch({
+      type: "invitation/qrCodeIsInvitation",
+      payload: { id }
+    }).then(data => {
+      // debugger
+      if (data) {
+        const { rela_id, rela_content } = data;
+        Taro.setStorageSync("web_redirect_url", `${BASE_URL}${rela_content}`);
+        Taro.setStorageSync("board_id", rela_id);
+        Taro.removeStorageSync("qrCodeInValidText");
+        this.getAuth();
+      }
+    });
+  };
   getAuth = async () => {
-    console.log("params", this.$router.params);
     const res = await getAccountInfo();
-    let { chart_url, chart_board_id } = this.$router.params;
-    //参数从url中获取，如果没有，代表着不是从扫码进来，而是授权登录后进来，导致参数链条断了，所以从缓存中取
-    if (!chart_url && !chart_board_id) {
-      chart_url = Taro.getStorageSync("chart_url");
-      chart_board_id = Taro.getStorageSync("chart_board_id");
-    } else {
-      Taro.setStorageSync("chart_url", chart_url);
-      Taro.setStorageSync("chart_board_id", chart_board_id);
-    }
+    const web_redirect_url = Taro.getStorageSync("web_redirect_url");
+    const board_id = Taro.getStorageSync("board_id");
     if (isApiResponseOk(res)) {
       this.setState({
-        wsrc: `${chart_url}?board_id=${chart_board_id}&token=${Taro.getStorageSync(
+        wsrc: `${web_redirect_url}?board_id=${board_id}&token=${Taro.getStorageSync(
           "access_token"
         )}`
       });
@@ -38,7 +60,7 @@ export default class index extends Component {
     }
   };
   componentDidShow() {
-    this.getAuth();
+    this.qarCodeIsInvitation();
   }
   render() {
     return (
