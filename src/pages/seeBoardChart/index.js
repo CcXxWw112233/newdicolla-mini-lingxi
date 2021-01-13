@@ -13,22 +13,33 @@ export default class index extends Component {
   }
   //检查二维码是否过期
   qarCodeIsInvitation = async () => {
-    const { id } = this.$router.params || {};
+    // const { id } = this.$router.params || {};
+    const options = this.$router.params;
+    let queryId;
+    if (options.scene) {
+      //扫码场景进入
+      const sceneArr = options.scene.split("&")[0];
+      queryId = sceneArr.slice(5);
+    } else {
+      //其他场景进入
+      queryId = options.id;
+    }
+    console.log("options", options, queryId);
     const {
       globalData: {
         store: { dispatch }
       }
     } = Taro.getApp();
     Taro.setStorageSync("qrCodeInValidText", "请重新扫码");
-    if (id) {
-      Taro.setStorageSync("qr_code_check_id", id);
+    if (queryId) {
+      Taro.setStorageSync("qr_code_check_id", queryId);
     }
     Taro.removeStorageSync("web_redirect_url");
     Taro.removeStorageSync("board_id");
     dispatch({
       type: "invitation/qrCodeIsInvitation",
       payload: {
-        id: id || Taro.getStorageSync("qr_code_check_id")
+        id: queryId || Taro.getStorageSync("qr_code_check_id")
       }
     }).then(data => {
       // debugger
