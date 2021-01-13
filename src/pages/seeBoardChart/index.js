@@ -20,16 +20,16 @@ export default class index extends Component {
       }
     } = Taro.getApp();
     Taro.setStorageSync("qrCodeInValidText", "请重新扫码");
+    if (id) {
+      Taro.setStorageSync("qr_code_check_id", id);
+    }
     Taro.removeStorageSync("web_redirect_url");
     Taro.removeStorageSync("board_id");
-
-    // const data = {
-    //   rela_content: "/mini_web/board_statistics.html",
-    //   rela_id: "1205025167177289728"
-    // };
     dispatch({
       type: "invitation/qrCodeIsInvitation",
-      payload: { id }
+      payload: {
+        id: id || Taro.getStorageSync("qr_code_check_id")
+      }
     }).then(data => {
       // debugger
       if (data) {
