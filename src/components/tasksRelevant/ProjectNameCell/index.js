@@ -314,7 +314,6 @@ export default class ProjectNameCell extends Component {
                             //         fields
                             //     )}&card_id=${cardId}`,
                             // });
-                            console.log("=======")
                             this.setState({
                                 isFieldSelectionShow: true
                             })

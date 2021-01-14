@@ -88,7 +88,6 @@ export default class index extends Component {
                 dataArray.push(value)
             }
         })
-
         return dataArray;
     }
 
