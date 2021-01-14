@@ -18,6 +18,7 @@ export default {
             url: '../../pages/qrCodeInvalid/index'
           }
         )
+        return false
       }
       else {
         yield put({
@@ -26,6 +27,7 @@ export default {
             qrCodeInfo: res.data || {},
           },
         })
+        return res.data
       }
     },
 

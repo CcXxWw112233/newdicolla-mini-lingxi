@@ -83,12 +83,18 @@ export default {
         type: 'getAccountInfo',
         payload: {}
       })
-      const boardId = Taro.getStorageSync('board_Id')
+      const redirectPath = Taro.getStorageSync('redirectPath')
       //日历页面是否需要注入im方法的标识
       const switchTabCurrentPage = 'currentPage_BoardDetail_or_Login'
       Taro.setStorageSync('switchTabCurrentPage', switchTabCurrentPage);
 
       const pages = getCurrentPages()
+      if (redirectPath) {
+        Taro.navigateTo({
+          url:redirectPath
+        })
+        Taro.removeStorageSync('redirectPath', undefined)
+      }
       Taro.switchTab({
         url: `../../pages/calendar/index`
       })

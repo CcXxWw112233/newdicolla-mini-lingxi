@@ -9,6 +9,18 @@ export default class qrCodeInvalid extends Component {
   config = {
     navigationStyle: 'custom',
   }
+  state = {
+    qrCodeInValidText: '请联系邀请人重新获取邀请码'
+  }
+  componentDidMount() {
+    const qrCodeInValidText = Taro.getStorageSync('qrCodeInValidText')
+    if (qrCodeInValidText) {
+      this.setState({
+        qrCodeInValidText
+      })
+      Taro.removeStorageSync('qrCodeInValidText')
+    }
+  }
 
   render() {
     return (
@@ -19,7 +31,7 @@ export default class qrCodeInvalid extends Component {
             <Image src={Invalid_Image} className={indexStyles.qrCode_Invalid} />
           </View>
           <View className={indexStyles.text1}>二维码已失效</View>
-          <View className={indexStyles.text2}>请联系邀请人重新获取邀请码</View>
+          <View className={indexStyles.text2}>{this.state.qrCodeInValidText}</View>
         </View>
       </View>
     )

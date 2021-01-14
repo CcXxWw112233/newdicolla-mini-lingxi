@@ -11,7 +11,7 @@ import "./gloalSet/styles/taro_ui_index.global.scss"; //global模式下转化tar
 
 import dva from "./utils/dva";
 import models from "./models/index";
-import { options } from "nervjs";
+// import { options } from "nervjs";
 const dvaApp = dva.createApp({
   initialState: {},
   models: models,
@@ -34,6 +34,7 @@ class App extends Component {
   config = {
     pages: [
       "pages/index/index",
+      "pages/seeBoardChart/index",
       "pages/login/index",
       "pages/calendar/index",
       "pages/im/index",
