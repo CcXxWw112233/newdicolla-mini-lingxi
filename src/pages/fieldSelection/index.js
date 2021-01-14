@@ -64,14 +64,6 @@ export default class fieldSelection extends Component {
             checkedList: new_arr,
             card_id: card_id,
         })
-        console.log(finalArray)
-        console.log(fieldsData)
-
-
-        // console.log(finalArray
-        // .filter(x => fieldsData.indexOf(x) == -1)
-        // .concat(fieldsData.filter(x => finalArray.indexOf(x) == -1))
-        // )
         var newArr = [];
         for (var i = 0; i < finalArray.length; i++) {
             //我们将arr2中的元素依次放入函数中进行比较，然后接收函数的返回值

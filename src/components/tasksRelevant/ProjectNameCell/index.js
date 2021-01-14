@@ -70,10 +70,8 @@ export default class ProjectNameCell extends Component {
                 }
             }
         }
-        console.log(tasksDetailDatas);
     }
     //单选项目内成员列表
-
     fieldPersonSingle() {
         let board_id = Taro.getStorageSync("tasks_detail_boardId");
         const { dispatch, data } = this.props;
@@ -93,8 +91,6 @@ export default class ProjectNameCell extends Component {
                 // data
                 // )}&item_id=${item_id}&executorsList=${JSON.stringify(res.data.data)}`,
                 // });
-                console.log("1111111111")
-                console.log(res.data.data);
                 this.setState({
                     fieldPersonSignleList: res.data.data
                 })
@@ -147,7 +143,6 @@ export default class ProjectNameCell extends Component {
                     // Taro.navigateTo({
                     // url: `../../pages/tasksGroup/index?contentId=${contentId}&listId=${list_id}`,
                     // });
-                    console.log(res.data)
 
                     this.setState({
                         tasksGroupList: res.data,

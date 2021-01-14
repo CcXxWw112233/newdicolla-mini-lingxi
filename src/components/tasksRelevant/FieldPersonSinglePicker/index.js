@@ -123,9 +123,9 @@ export default class FieldPersonSinglePicker extends Component {
 
     render() {
 
-        const { singleList = [], current_select_name, executors1 } = this.state;
+        const { singleList = [], current_select_name, executors1 = [] } = this.state;
         const rangeKey = "name";
-        const { executors, item_id, executorsList, title } = this.props;
+        const { executors = [], item_id, executorsList, title } = this.props;
         var isShowAvator = false;
         if (executors.length) {
             isShowAvator = true
@@ -134,9 +134,6 @@ export default class FieldPersonSinglePicker extends Component {
         if (current_select_name != '未选择') {
             isShowAvator = true
         }
-
-        console.log("......")
-        console.log(executors)
         return (
             <View>
                 {/* <AtRadio
