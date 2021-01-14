@@ -158,7 +158,6 @@ export default class fieldSelection extends Component {
                             />
                         </ScrollView>) : (<View className={indexStyles.contentView}>暂时没有字段可选,如需更多请前往PC端修改</View>)
                     }
-
                     <View className={indexStyles.bootomBtnView}>
                         <View onClick={this.onClickAction} className={indexStyles.btnView}>确定</View>
                     </View>
