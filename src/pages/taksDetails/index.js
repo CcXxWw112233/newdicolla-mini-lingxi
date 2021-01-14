@@ -59,6 +59,18 @@ export default class taksDetails extends Component {
             Taro.setStorageSync("tasks_detail_boardId", boardId);
             Taro.setStorageSync("tasks_detail_contentId", contentId);
         }
+        var that = this;
+        Taro.getSystemInfo({
+            success(res) {
+                console.log(res);
+                if (res.system.split(" ")[0] == "iOS" && res.screenHeight > 736) {
+                    that.setState({
+                        screenHeight: res.screenHeight,
+                        isIphoneX: true,
+                    });
+                }
+            }
+        })
 
         this.setState({
             content_Id: contentId,
@@ -280,7 +292,7 @@ export default class taksDetails extends Component {
         const SystemInfo = Taro.getSystemInfoSync();
         const statusBar_Height = SystemInfo.statusBarHeight;
         const navBar_Height = SystemInfo.platform == "ios" ? 44 : 48;
-
+        const { isIphoneX } = this.state;
         const { type_flag } = this.props;
 
         const { properties = [], fields = [], org_id } = tasksDetailDatas;
@@ -575,6 +587,7 @@ export default class taksDetails extends Component {
                     ) : (
                         <View></View>
                     )}
+                {isIphoneX ? (<View className={indexStyles.isIphoneX}></View>) : (null)}
             </View>
         );
     }
