@@ -64,15 +64,13 @@ export default class index extends Component {
       });
     } else {
       const redirectPath = `../seeBoardChart/index`;
-      // Taro.setStorageSync("redirectPath", redirectPath);
+      Taro.setStorageSync("redirectPath", redirectPath);
       Taro.navigateTo({
         url: `../index/index?redirect=${redirectPath}`
       });
     }
   };
   componentDidShow() {
-    const redirectPath = `../seeBoardChart/index`;
-    Taro.setStorageSync("redirectPath", redirectPath);
     this.qarCodeIsInvitation();
   }
   render() {
