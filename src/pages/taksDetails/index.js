@@ -416,15 +416,7 @@ export default class taksDetails extends Component {
 
                     <View className={indexStyles.custom_field_interval}></View>
 
-                    <ProjectNameCell
-                        title="字段"
-                        data={{ name: "更多" }}
-                        boardId={board_id}
-                        // propertyId={id}
-                        cardId={card_id}
-                        type="5"
-                        onClickAction={this.onClickAction}
-                    />
+
 
                     {fields &&
                         fields.map((item, key) => {
@@ -558,6 +550,15 @@ export default class taksDetails extends Component {
                                 </View>
                             );
                         })}
+                    <ProjectNameCell
+                        title="字段"
+                        data={{ name: "更多" }}
+                        boardId={board_id}
+                        // propertyId={id}
+                        cardId={card_id}
+                        type="5"
+                        onClickAction={this.onClickAction}
+                    />
                 </View>
 
                 {folder_tree &&
