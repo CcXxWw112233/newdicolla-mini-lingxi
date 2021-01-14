@@ -66,7 +66,6 @@ export default class taksDetails extends Component {
             type_flag: flag,
             board_id: boardId,
         });
-
         this.loadTasksDetail(contentId, boardId);
         this.getBoardFileList(boardId);
     }
@@ -123,6 +122,22 @@ export default class taksDetails extends Component {
                 isOtherPageBack: true,
             },
         });
+        console.log("刷新界面")
+        const { content_Id, board_id } = this.state;
+
+        if (content_Id != "" && content_Id != "") {
+            this.loadTasksDetail(content_Id, board_id);
+        }
+    }
+    onClickAction() {
+
+        const { dispatch } = this.props;
+        dispatch({
+            type: "calendar/updateDatas",
+            payload: {
+                isOtherPageBack: true,
+            },
+        });
 
         const { content_Id, board_id } = this.state;
 
@@ -130,7 +145,6 @@ export default class taksDetails extends Component {
             this.loadTasksDetail(content_Id, board_id);
         }
     }
-
     componentWillUnmount() {
         const { sourcePage } = this.state;
         if (sourcePage === "auccessJoin" || sourcePage === "sceneEntrance") {
@@ -325,7 +339,9 @@ export default class taksDetails extends Component {
                                                     propertyId={id}
                                                     cardId={card_id}
                                                     type="3"
-                                                    onLoadTasksDetail={this.loadTasksDetail.bind(board_id, card_id)}
+                                                    onClickAction={this.onClickAction}
+
+                                                // onLoadTasksDetail={this.loadTasksDetail.bind(board_id, card_id)}
                                                 />
                                             ) : (
                                                     ""
@@ -351,6 +367,7 @@ export default class taksDetails extends Component {
                                                 boardId={board_id}
                                                 propertyId={id}
                                                 cardId={card_id}
+                                                onClickAction={this.onClickAction}
                                                 onTasksDetailsRealizeStatus={(timeInfo, type) =>
                                                     this.tasksDetailsRealizeStatus(timeInfo, "SonTasks")
                                                 }
@@ -406,6 +423,7 @@ export default class taksDetails extends Component {
                         // propertyId={id}
                         cardId={card_id}
                         type="5"
+                        onClickAction={this.onClickAction}
                     />
 
                     {fields &&
@@ -459,6 +477,7 @@ export default class taksDetails extends Component {
                                             fieldValue={field_value}
                                             type="7"
                                             item_id={item.id}
+                                            onClickAction={this.onClickAction}
                                         />
                                     ) : (
                                             ""
@@ -531,6 +550,7 @@ export default class taksDetails extends Component {
                                             type="12"
                                             item_id={item.id}
                                             fieldSet={field_set}
+                                            onClickAction={this.onClickAction}
                                         />
                                     ) : (
                                             ""

@@ -4,7 +4,7 @@ import indexStyles from './index.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { AtTag } from 'taro-ui'
 import { connect } from '@tarojs/redux'
-
+import { LabelSelection } from "../../../labelSelection"
 @connect(({ tasks: { tasksDetailDatas = {}, } }) => ({
   tasksDetailDatas,
 }))
@@ -13,7 +13,7 @@ export default class index extends Component {
   state = {
 
     isTagCellClick: true,
-
+    labelSelectionShow: false
   }
 
   clickTagCell = () => {
@@ -37,10 +37,12 @@ export default class index extends Component {
           },
         })
       ).then(res => {
-
-        Taro.navigateTo({
-          url: `../../pages/labelSelection/index?contentId=${contentId}&data=${JSON.stringify(label_data)}`
+        this.setState({
+          labelSelectionShow: true
         })
+        // Taro.navigateTo({
+        // url: `../../pages/labelSelection/index?contentId=${contentId}&data=${JSON.stringify(label_data)}`
+        // })
       })
 
       const that = this
@@ -52,6 +54,12 @@ export default class index extends Component {
     }
   }
 
+  onClickAction = () => {
+    console.log("2222222")
+    this.setState({
+      labelSelectionShow: false
+    })
+  }
   deleteCardProperty = () => {
 
     const { dispatch, propertyId, cardId } = this.props
@@ -91,7 +99,10 @@ export default class index extends Component {
   }
 
   render() {
+    let contentId = Taro.getStorageSync('tasks_detail_contentId')
+
     const { label_data = [] } = this.props
+    const { labelSelectionShow } = this.state;
     return (
       <View className={indexStyles.list_item} >
         <View className={indexStyles.list_left} onClick={this.clickTagCell}>
@@ -121,6 +132,11 @@ export default class index extends Component {
         <View className={`${indexStyles.list_item_iconnext}`} onClick={this.deleteCardProperty}>
           <Text className={`${globalStyle.global_iconfont}`}>&#xe7fc;</Text>
         </View>
+        {
+
+          labelSelectionShow ? (<LabelSelection onClickAction={this.onClickAction} labelSelectionShow={labelSelectionShow} data={label_data} contentId={contentId}></LabelSelection>) : (null)
+        }
+
       </View>
     )
   }

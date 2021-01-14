@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, } from '@tarojs/components'
+import { View, ScrollView } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
@@ -9,9 +9,9 @@ import { AtCheckbox } from 'taro-ui'
     executors_list, tasksDetailDatas,
 }))
 export default class sonTaskExecutors extends Component {
-    config = {
-        navigationBarTitleText: '选择执行人'
-    }
+    // config = {
+    //     navigationBarTitleText: '选择执行人'
+    // }
 
     constructor() {
         super(...arguments)
@@ -23,16 +23,17 @@ export default class sonTaskExecutors extends Component {
 
     componentDidMount() {
 
-        const { contentId, executors = [], } = this.$router.params
+        const { contentId, executors = [], } = this.props
 
         let executorsData;
         let new_arr
         if (executors.length > 0) {
-            executorsData = JSON.parse(executors);
+            executorsData = executors;
             //取出已经是执行人的id, 组成新数组(已选中)
             new_arr = executorsData.map(obj => { return obj.user_id });
         }
-
+        console.log("----=-=-=-=-=-=-")
+        console.log(new_arr)
         this.setState({
             card_id: contentId,
             // value: listId,
@@ -49,6 +50,7 @@ export default class sonTaskExecutors extends Component {
             checkboxOption: executors_list,
             checkedList: new_arr,
         })
+
     }
 
     componentWillUnmount() {
@@ -136,18 +138,33 @@ export default class sonTaskExecutors extends Component {
     //     })
     // }
 
-
+    onClickAction() {
+        const { checkedList } = this.state
+        var data = JSON.stringify(checkedList)
+        Taro.setStorageSync('son_tasks_executors', data);
+        typeof this.props.onClickAction == "function" &&
+            this.props.onClickAction();
+    }
     render() {
 
         const { checkboxOption = [] } = this.state
 
         return (
-            <View >
-                <AtCheckbox
-                    options={checkboxOption}
-                    selectedList={this.state.checkedList}
-                    onChange={this.handleChange.bind(this)}
-                />
+
+            <View className={indexStyles.labelSelectionView}>
+                <View className={indexStyles.index}>
+                    <View className={indexStyles.titleView}>请选择</View>
+                    <ScrollView className={indexStyles.scrollview} scrollY scrollWithAnimation>
+                        <AtCheckbox
+                            options={checkboxOption}
+                            selectedList={this.state.checkedList}
+                            onChange={this.handleChange.bind(this)}
+                        />
+                    </ScrollView>
+                    <View className={indexStyles.bootomBtnView}>
+                        <View onClick={this.onClickAction} className={indexStyles.btnView}>确定</View>
+                    </View>
+                </View>
             </View>
         )
     }

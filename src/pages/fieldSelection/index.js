@@ -1,15 +1,16 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, } from '@tarojs/components'
+import { View, ScrollView } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 import { AtCheckbox } from 'taro-ui'
+import indexStyles from './index.scss'
 
 @connect(({ tasks: { tasksDetailDatas = {}, field_selection_list = [], field_selection_group_list = [], }, }) => ({
     tasksDetailDatas, field_selection_list, field_selection_group_list,
 }))
 export default class fieldSelection extends Component {
-    config = {
-        navigationBarTitleText: '字段分组'
-    }
+    // config = {
+    //     navigationBarTitleText: '字段分组'
+    // }
 
     constructor() {
         super(...arguments)
@@ -22,8 +23,8 @@ export default class fieldSelection extends Component {
 
     componentDidMount() {
 
-        const { fields, card_id, } = this.$router.params
-        const fieldsData = JSON.parse(fields);
+        const { fields, card_id, } = this.props
+        const fieldsData = fields;
 
         const { field_selection_list = [], field_selection_group_list = [], } = this.props
 
@@ -63,7 +64,44 @@ export default class fieldSelection extends Component {
             checkedList: new_arr,
             card_id: card_id,
         })
+        console.log(finalArray)
+        console.log(fieldsData)
 
+
+        // console.log(finalArray
+        // .filter(x => fieldsData.indexOf(x) == -1)
+        // .concat(fieldsData.filter(x => finalArray.indexOf(x) == -1))
+        // )
+        var newArr = [];
+        for (var i = 0; i < finalArray.length; i++) {
+            //我们将arr2中的元素依次放入函数中进行比较，然后接收函数的返回值
+            if (this.noExist(finalArray[i]['id'], fieldsData)) { //如果返回的值是true，我们将元素放入新的数组中
+                newArr[newArr.length] = finalArray[i];
+            }
+        }
+        this.setState({
+            checkboxOption: newArr,
+            checkedList: []
+        })
+
+        // if (!newArr.length) {
+        //     Taro.showToast({
+        //         title: '没有字段可选',
+        //         icon: 'none',
+        //         duration: 2000
+        //     })
+        //     typeof this.props.onClickAction == "function" &&
+        //         this.props.onClickAction();
+        // }
+    }
+
+    noExist(num, arr1) {
+        for (var j = 0; j < arr1.length; j++) {
+            if (num === arr1[j]['field_id']) {
+                return false; //如果传过来的元素在arr1中能找到相匹配的元素，我们返回fasle
+            }
+        }
+        return true; //如果不能找到相匹配的元素，返回true
     }
 
     handleChange(value) {
@@ -97,19 +135,34 @@ export default class fieldSelection extends Component {
             })
         }
     }
-
+    onClickAction() {
+        typeof this.props.onClickAction == "function" &&
+            this.props.onClickAction();
+    }
 
     render() {
 
         const { checkboxOption = [] } = this.state
 
         return (
-            <View >
-                <AtCheckbox
-                    options={checkboxOption}
-                    selectedList={this.state.checkedList}
-                    onChange={this.handleChange.bind(this)}
-                />
+            <View className={indexStyles.fieldSelectionView}>
+
+                <View className={indexStyles.index}>
+                    <View className={indexStyles.titleView}>请选择</View>
+                    {
+                        checkboxOption && checkboxOption.length ? (<ScrollView className={indexStyles.scrollview} scrollY scrollWithAnimation>
+                            <AtCheckbox
+                                options={checkboxOption}
+                                selectedList={this.state.checkedList}
+                                onChange={this.handleChange.bind(this)}
+                            />
+                        </ScrollView>) : (<View className={indexStyles.contentView}>暂时没有字段可选,如需更多请前往PC端修改</View>)
+                    }
+
+                    <View className={indexStyles.bootomBtnView}>
+                        <View onClick={this.onClickAction} className={indexStyles.btnView}>确定</View>
+                    </View>
+                </View>
             </View>
         )
     }
