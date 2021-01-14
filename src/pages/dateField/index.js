@@ -3,6 +3,7 @@ import { View, Picker, } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 import { AtList, AtListItem } from 'taro-ui'
 import { timestampToTime, } from '../../utils/basicFunction'
+import styles from './index.scss';
 
 @connect(({
     tasks: { tasksDetailDatas, },
@@ -10,9 +11,9 @@ import { timestampToTime, } from '../../utils/basicFunction'
     tasksDetailDatas,
 }))
 export default class dateField extends Component {
-    config = {
-        navigationBarTitleText: '日期字段'
-    }
+    // config = {
+    // navigationBarTitleText: '日期字段'
+    // }
 
     constructor() {
         super(...arguments)
@@ -26,15 +27,28 @@ export default class dateField extends Component {
     }
 
     componentDidMount() {
-        const { item_id, field_value, dateFieldCode, } = this.$router.params
+        const { item_id, field_value, dateFieldCode, } = this.props
 
-        const date_value = timestampToTime(field_value)
-
+        // const date_value = timestampToTime(field_value)
+        // var arr = field_value?.split(" ")
+        console.log(field_value);
         this.setState({
             current_id: item_id,
-            dateSel: date_value,
+            dateSel: field_value,
             date_field_code: dateFieldCode,
         })
+        // if (arr) {
+        // if (arr.length == 1) {
+        // this.setState({
+        // dateStr: arr[0]
+        // })
+        // } else if (arr.length == 2) {
+        // this.setState({
+        // dateStr: arr[0]
+        // timeStr: arr[1]
+        // })
+        // }
+        // }
     }
 
     updataContent = (valueText) => {
@@ -116,7 +130,7 @@ export default class dateField extends Component {
 
         const { dateSel, timeSel, is_show_time_picker, date_field_code, } = this.state
 
-        let titleString = ''
+        let titleString = '设置时间'
         if (date_field_code === 'YM') { //年月
             titleString = '年月'
         } else if (date_field_code === 'YMD') { //年月日
@@ -129,20 +143,16 @@ export default class dateField extends Component {
             titleString = '年月日 时分秒'
         }
 
-
         return (
-            <View >
+            <View className={styles.dataField}>
 
                 <Picker
                     mode='date'
                     onChange={this.onDateChange}
                     value={dateSel}>
-                    <AtList>
-                        <AtListItem
-                            title={'请选择' + titleString}
-                            extraText={dateSel}
-                        />
-                    </AtList>
+                    <View className={styles.atListItem}>
+                        {dateSel ? dateSel : titleString}
+                    </View>
                 </Picker>
 
                 {
@@ -150,12 +160,11 @@ export default class dateField extends Component {
                         mode='time'
                         onChange={this.onTimeChange}
                         value={timeSel}>
-                        <AtList>
-                            <AtListItem
-                                title='选择时分'
-                                extraText={timeSel}
-                            />
-                        </AtList>
+
+                        <View className={`${styles.atListItem} ${styles.timeText}`}>
+                            {timeSel ? timeSel : '选择时分'}
+                        </View>
+
                     </Picker>) : <View></View>
                 }
 

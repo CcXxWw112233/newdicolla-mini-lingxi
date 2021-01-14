@@ -1,0 +1,19 @@
+@import "../../gloalSet/styles/constant";
+@import '../../gloalSet/styles/pxTrans';
+
+.dataField {
+    display       : flex;
+    flex-direction: row;
+}
+
+.atListItem {
+    text-align         : center;
+    font-size          : pxTrans(16);
+    // width           : pxTrans(140);
+    min-height         : pxTrans(56);
+    line-height        : pxTrans(56);
+}
+
+.timeText {
+    margin-left: pxTrans(20);
+}

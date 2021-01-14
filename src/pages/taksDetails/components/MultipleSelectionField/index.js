@@ -4,18 +4,25 @@ import indexStyles from './index.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { AtTag } from 'taro-ui'
 import { connect } from '@tarojs/redux';
+import { MultipleSelectionField } from '../../../multipleSelectionField'
 
 @connect(({ tasks: { tasksDetailDatas = {}, }, }) => ({
     tasksDetailDatas,
 }))
 export default class index extends Component {
+    state = {
+        isMultipleSelectionFieldShow: false
+    }
 
     clickTagCell = () => {
 
         const { data = [], fieldValue, item_id, } = this.props
 
-        Taro.navigateTo({
-            url: `../../pages/multipleSelectionField/index?data=${JSON.stringify(data)}&fieldValue=${fieldValue}&item_id=${item_id}`
+        // Taro.navigateTo({
+        // // url: `../../pages/multipleSelectionField/index?data=${JSON.stringify(data)}&fieldValue=${fieldValue}&item_id=${item_id}`
+        // })
+        this.setState({
+            isMultipleSelectionFieldShow: true
         })
     }
 
@@ -31,7 +38,13 @@ export default class index extends Component {
         })
     }
 
-
+    onClickAction() {
+        this.setState({
+            isMultipleSelectionFieldShow: false
+        })
+        typeof this.props.onClickAction == "function" &&
+            this.props.onClickAction();
+    }
     deleteBoardFieldRelation = (item_id) => {
 
         const { dispatch, tasksDetailDatas } = this.props
@@ -80,13 +93,17 @@ export default class index extends Component {
     }
 
     render() {
-        const { title, data = [], fieldValue } = this.props
-
+        const { title, data = [], fieldValue, item_id } = this.props
+        const { isMultipleSelectionFieldShow } = this.state
         const data_array = this.getArray(data, fieldValue);
 
         return (
             <View className={indexStyles.list_item} >
-
+                {/* // // url: `../../pages/multipleSelectionField/index?data=${JSON.stringify(data)}&fieldValue=$ */}
+                {/* {fieldValue}&item_id=${item_id}` */}
+                {
+                    isMultipleSelectionFieldShow ? (<MultipleSelectionField onClickAction={this.onClickAction} data={data} fieldValue={fieldValue} item_id={item_id}></MultipleSelectionField>) : (null)
+                }
                 <View className={indexStyles.list_left} onClick={this.clickTagCell}>
 
                     <View className={`${indexStyles.list_item_left_iconnext}`}>
@@ -120,6 +137,7 @@ export default class index extends Component {
                 <View className={`${indexStyles.list_item_iconnext}`} onClick={this.deleteCardProperty}>
                     <Text className={`${globalStyle.global_iconfont}`}>&#xe7fc;</Text>
                 </View>
+
             </View>
         )
     }

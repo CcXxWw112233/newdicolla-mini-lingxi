@@ -1,7 +1,6 @@
 @import "../../gloalSet/styles/constant";
 
-.labelSelectionView {
-    transform       : none;
+.fieldSelectionView {
     position        : fixed;
     bottom          : 0;
     left            : 0;
@@ -27,10 +26,6 @@
     display             : flex;
     flex-direction      : column;
 
-    .scrollview {
-        max-height: pxTrans(300);
-    }
-
     .titleView {
         height       : pxTrans(40);
         line-height  : pxTrans(40);
@@ -39,6 +34,10 @@
         font-size    : pxTrans(16);
         margin-top   : pxTrans(10);
         margin-bottom: pxTrans(10);
+    }
+
+    .scrollview {
+        max-height: pxTrans(300);
     }
 
     .rowIndex {

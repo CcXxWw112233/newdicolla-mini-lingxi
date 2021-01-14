@@ -4,6 +4,7 @@ import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
 import Avatar from '../../components/avatar';
+import { SonTaskExecutors } from '../sonTaskExecutors';
 
 @connect(({ tasks: { executors_list = [], tasksDetailDatas = {}, }, }) => ({
     executors_list, tasksDetailDatas,
@@ -24,10 +25,10 @@ export default class addSonTask extends Component {
             is_start_time_show: false,
             is_due_time_show: false,
 
-            start_date_str: '开始日期',
-            due_date_str: '结束日期',
-            start_time_str: '开始时间',
-            due_time_str: '结束时间',
+            start_date_str: '未选择开始日期',
+            due_date_str: '未选择结束日期',
+            start_time_str: '未选择开始时间',
+            due_time_str: '未选择结束时间',
 
             start_timestamp: '',
             due_timestamp: '',
@@ -40,12 +41,14 @@ export default class addSonTask extends Component {
             list_id: '',
             card_id: '',
             selectExecutorsList: [], //选择的任务执行人
+
+            isSonTaskExecutorsShow: false
         }
     }
 
     componentDidMount() {
 
-        const { propertyId, boardId, listId, cardId } = this.$router.params
+        const { propertyId, boardId, listId, cardId } = this.props
 
         this.setState({
             property_id: propertyId,
@@ -98,8 +101,11 @@ export default class addSonTask extends Component {
                 },
             })
         ).then(res => {
-            Taro.navigateTo({
-                url: `../../pages/sonTaskExecutors/index?contentId=${card_id}&executors=${JSON.stringify(selectExecutorsList)}`
+            // Taro.navigateTo({
+            //     url: `../../pages/sonTaskExecutors/index?contentId=${card_id}&executors=${JSON.stringify(selectExecutorsList)}`
+            // })
+            this.setState({
+                isSonTaskExecutorsShow: true,
             })
         })
     }
@@ -166,9 +172,12 @@ export default class addSonTask extends Component {
             const { code } = res
             if (code == 0 || code == '0') {
                 Taro.removeStorageSync('son_tasks_executors')
-                Taro.navigateBack()
+                // Taro.navigateBack()
+                typeof this.props.onClickAction == "function" &&
+                    this.props.onClickAction();
             }
         })
+
     }
 
     onDueDateChange = e => {
@@ -226,8 +235,41 @@ export default class addSonTask extends Component {
                 start_start_range: value,
             })
         }
-    }
 
+    }
+    cancel() {
+        typeof this.props.onClickAction == "function" &&
+            this.props.onClickAction();
+        console.log("=========")
+    }
+    onClickSonTaskExecutors() {
+        this.setState({
+            isSonTaskExecutorsShow: false
+        })
+        var users = Taro.getStorageSync('son_tasks_executors')
+        var userData = []
+        if (users && users != '[]') {
+            userData = JSON.parse(users)
+        }
+
+        let new_array = []
+        const { executors_list = [], } = this.props
+        new_array = executors_list.filter(item => {
+            const gold_code = (userData.find(n => {
+                if (item.id == n) {
+                    return n
+                }
+            }) || {})
+            if (item.id == gold_code) {
+                return item
+            }
+        })
+
+        this.setState({
+            selectExecutorsList: new_array,
+            isSonTaskExecutorsShow: false
+        })
+    }
 
     onStartDateChange = e => {
 
@@ -262,122 +304,132 @@ export default class addSonTask extends Component {
         })
     }
 
-
     render() {
 
-        const { start_date_str, due_date_str, start_time_str, due_time_str, due_start_range, selectExecutorsList = [], start_start_range, is_start_time_show, is_due_time_show } = this.state
+        const { start_date_str, due_date_str, start_time_str, due_time_str, due_start_range, selectExecutorsList = [], start_start_range, card_id, is_start_time_show, is_due_time_show, isSonTaskExecutorsShow } = this.state
 
         return (
-            <View >
+            <View className={indexStyles.fieldSelectionView}>
 
-                <View className={indexStyles.add_son_tasks_row}>
+                <View className={indexStyles.index} hidden={isSonTaskExecutorsShow}>
+                    <View className={indexStyles.titleView}>添加子任务</View>
 
-                    <View className={`${indexStyles.list_item_left_iconnext}`}>
-                        <Text className={`${globalStyle.global_iconfont}`}>&#xe7c1;</Text>
+                    <View className={indexStyles.add_son_tasks_row}>
+
+                        <View className={`${indexStyles.list_item_left_iconnext}`}>
+                            <Text className={`${globalStyle.global_iconfont}`}>&#xe7c1;</Text>
+                        </View>
+
+                        <View className={indexStyles.list_item_name}>子任务</View>
+
                     </View>
 
-                    <View className={indexStyles.list_item_name}>子任务</View>
 
-                </View>
+                    <View className={indexStyles.son_tasks_name} >
+                        <Input
+                            className={indexStyles.son_tasks_input}
+                            placeholder='添加子任务'
+                            // value={}
+                            confirmType='完成'
+                            onInput={this.handleInput.bind(this)}
+                        >
+                        </Input>
 
-
-                <View className={indexStyles.son_tasks_name} >
-                    <Input
-                        className={indexStyles.son_tasks_input}
-                        placeholder='添加子任务'
-                        // value={}
-                        confirmType='完成'
-                        onInput={this.handleInput.bind(this)}
-                    >
-                    </Input>
-
-                </View>
+                    </View>
 
 
-                <View className={indexStyles.info_style}>
-
-                    <View className={indexStyles.left_time_style}>
-
-                        <View className={indexStyles.left_date_style}>
-                            <Picker mode='date'
-                                onChange={this.onStartDateChange}
-                                className={indexStyles.startTime}
-                                end={start_start_range}
-                            >
-                                {start_date_str}
-                            </Picker>
-                        </View>
+                    <View className={indexStyles.info_style}>
 
                         <View className={indexStyles.left_time_style}>
 
-                            {is_start_time_show ? (<Picker mode='time'
-                                onChange={this.onStartTimeChange}
-                                className={indexStyles.startTime}
-                                end={start_date_str}
-                            >
-                                {start_time_str}
-                            </Picker>) : ''
+                            开始时间:
+                            <View className={indexStyles.left_date_style}>
 
-                            }
+                                <Picker mode='date'
+                                    onChange={this.onStartDateChange}
+                                    className={indexStyles.startTime}
+                                    end={start_start_range}
+                                >
+                                    {start_date_str}
+                                </Picker>
+                            </View>
+
+                            <View className={indexStyles.left_date_style}>
+
+                                {is_start_time_show ? (<Picker mode='time'
+                                    onChange={this.onStartTimeChange}
+                                    className={indexStyles.startTime}
+                                    end={start_date_str}
+                                >
+                                    {start_time_str}
+                                </Picker>) : ''
+
+                                }
+
+                            </View>
 
                         </View>
 
-                    </View>
 
+                        <View className={indexStyles.rigth_time_style}>
+                            结束时间:
+                            <View className={indexStyles.right_date_style}>
 
-                    <View className={indexStyles.rigth_time_style}>
-                        <View className={indexStyles.right_date_style}>
-
-                            <Picker mode='date'
-                                onChange={this.onDueDateChange}
-                                className={indexStyles.startTime}
-                                start={due_start_range}
-                            >
-                                {due_date_str}
-                            </Picker>
-                        </View>
-
-                        <View className={indexStyles.right_time_style}>
-
-                            {
-                                is_due_time_show ? (<Picker mode='time'
-                                    onChange={this.onDueTimeChange}
+                                <Picker mode='date'
+                                    onChange={this.onDueDateChange}
                                     className={indexStyles.startTime}
                                     start={due_start_range}
                                 >
-                                    {due_time_str}
-                                </Picker>) : ''
-                            }
+                                    {due_date_str}
+                                </Picker>
+                            </View>
+
+                            <View className={indexStyles.right_date_style}>
+
+                                {
+                                    is_due_time_show ? (<Picker mode='time'
+                                        onChange={this.onDueTimeChange}
+                                        className={indexStyles.startTime}
+                                        start={due_start_range}
+                                    >
+                                        {due_time_str}
+                                    </Picker>) : ''
+                                }
+
+                            </View>
 
                         </View>
+
+
+                        {
+                            selectExecutorsList && selectExecutorsList.length > 0 ?
+                                (
+                                    <View className={indexStyles.executors_list_item_detail} onClick={this.addExecutors}>
+
+                                        <View className={`${indexStyles.avata_area}`}>
+                                            执行人: <Avatar avartarTotal={'multiple'} userList={selectExecutorsList} />
+                                        </View>
+                                    </View>
+                                ) : (
+                                    <View className={indexStyles.executors_list_item_detail} onClick={this.addExecutors}>添加执行人</View>
+                                )
+                        }
 
                     </View>
 
 
-                    {
-                        selectExecutorsList && selectExecutorsList.length > 0 ?
-                            (
-                                <View className={indexStyles.executors_list_item_detail} onClick={this.addExecutors}>
-                                    <View className={`${indexStyles.avata_area}`}>
-                                        <Avatar avartarTotal={'multiple'} userList={selectExecutorsList} />
-                                    </View>
-                                </View>
-                            ) : (
-                                <View onClick={this.addExecutors}>添加执行人</View>
-                            )
-                    }
+                    <View className={`${indexStyles.login_footer}`}>
+                        <Button className={`${indexStyles.login_btn_normal} ${indexStyles.login_btn}`} onClick={this.cancel}>取消</Button>
+                        <Button className={`${indexStyles.login_btn_normal} ${indexStyles.login_btn}`} type='primary' onClick={this.confirm}>确定</Button>
 
+                    </View>
                 </View>
-
-
-                <View className={`${indexStyles.login_footer}`}>
-                    <Button className={`${indexStyles.login_btn_normal} ${indexStyles.login_btn}`} type='primary' onClick={this.confirm}>确定</Button>
-                </View>
-
+                {isSonTaskExecutorsShow ? (<SonTaskExecutors contentId={card_id} onClickAction={this.onClickSonTaskExecutors} executors={selectExecutorsList}></SonTaskExecutors>) : (null)}
             </View>
         )
     }
 }
+
 
 addSonTask.defaultProps = {
 

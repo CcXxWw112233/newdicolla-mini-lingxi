@@ -1,6 +1,6 @@
 import { connect } from '@tarojs/redux'
 import Taro, { Component, } from '@tarojs/taro'
-import { View, } from '@tarojs/components'
+import { View, CoverView, ScrollView } from '@tarojs/components'
 import indexStyles from './index.scss'
 import { AtCheckbox, } from 'taro-ui'
 
@@ -10,7 +10,7 @@ import { AtCheckbox, } from 'taro-ui'
 }))
 export default class LabelSelection extends Component {
     config = {
-        navigationBarTitleText: '标签选择',
+        navigationBarTitleText: '',
     }
 
     state = {
@@ -21,20 +21,23 @@ export default class LabelSelection extends Component {
 
     componentDidMount() {
 
-        const { contentId, data, } = this.$router.params
+        const { contentId, data, } = this.props
 
         this.setState({
             card_id: contentId,
         })
-
+        console.log("---------")
+        console.log(this.props);
         const { label_list = [], tasksDetailDatas = {}, } = this.props
-
+        console.log("=================")
+        console.log(label_list);
         label_list.forEach(item => {
             item['label'] = item.name
             item['value'] = item.id
         })
 
-        let new_arr = JSON.parse(data).map(obj => { return obj.label_id });
+        let new_arr = data.map(obj => { return obj.label_id });
+
 
         this.setState({
             checkboxOption: label_list,
@@ -84,6 +87,11 @@ export default class LabelSelection extends Component {
         }
     }
 
+    onClickAction() {
+        typeof this.props.onClickAction == "function" &&
+            this.props.onClickAction();
+    }
+
     putCardLabel = (value) => {
 
         const { dispatch, tasksDetailDatas, label_list = [], } = this.props
@@ -123,16 +131,23 @@ export default class LabelSelection extends Component {
 
 
     render() {
-
         const { checkboxOption = [] } = this.state
-
         return (
-            <View className={indexStyles.index}>
-                <AtCheckbox
-                    options={checkboxOption}
-                    selectedList={this.state.checkedList}
-                    onChange={this.handleChange.bind(this)}
-                />
+            <View className={indexStyles.labelSelectionView}>
+                <View className={indexStyles.index}>
+                    <View className={indexStyles.titleView}>请选择</View>
+                    <ScrollView className={indexStyles.scrollview} scrollY scrollWithAnimation>
+
+                        <AtCheckbox
+                            options={checkboxOption}
+                            selectedList={this.state.checkedList}
+                            onChange={this.handleChange.bind(this)}
+                        />
+                    </ScrollView>
+                    <View className={indexStyles.bootomBtnView}>
+                        <View onClick={this.onClickAction} className={indexStyles.btnView}>确定</View>
+                    </View>
+                </View>
             </View>
         )
     }

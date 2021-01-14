@@ -11,21 +11,21 @@ import index from '../taksDetails/components/CommentBox'
     tasksDetailDatas,
 }))
 export default class textField extends Component {
-    config = {
-        navigationBarTitleText: '填写字段信息'
-    }
+    // config = {
+    //     navigationBarTitleText: '填写字段信息'
+    // }
 
-    constructor() {
-        super(...arguments)
-        this.state = {
+    // constructor() {
+    //     super(...arguments)
+    //     this.state = {
 
-            current_id: '', //当前字段id
-            type: '', //输入类型 'text', 'number'
-        }
-    }
+    //         current_id: '', //当前字段id
+    //         type: '', //输入类型 'text', 'number'
+    //     }
+    // }
 
     componentDidMount() {
-        const { item_id, type, } = this.$router.params
+        const { item_id, type, } = this.props
 
         this.setState({
             current_id: item_id,
@@ -76,16 +76,15 @@ export default class textField extends Component {
 
     render() {
 
-        const { field_value } = this.props
-        const { type } = this.state
+        const { field_value, type } = this.props
 
         return (
-            <View className={indexStyles.viewStyle}>
+            // <View className={indexStyles.viewStyle}>
 
-                <View className={indexStyles.contentStyles}>
+            <View className={indexStyles.contentStyles}>
 
 
-                    {type === 'number' ?
+                {/* {type === 'number' ?
                         (<View className={`${indexStyles.list_item_left_iconnext}`}>
                             <Text className={`${globalStyle.global_iconfont}`}>&#xe7c0;</Text>
                         </View>)
@@ -93,27 +92,28 @@ export default class textField extends Component {
                         (<View className={`${indexStyles.list_item_left_iconnext}`}>
                             <Text className={`${globalStyle.global_iconfont}`}>&#xe7c1;</Text>
                         </View>)
-                    }
+                    } */}
 
-                    <View className={indexStyles.list_item_name}>{type === 'number' ? '填写字段' : '文本字段'}</View>
+                {/* <View className={indexStyles.list_item_name}>{type === 'number' ? '填写字段' : '文本字段'}</View> */}
 
-                    <Input
-                        className={indexStyles.list_item_detail}
-                        placeholder='填写自定义字段'
-                        value={field_value}
-                        confirmType='完成'
-                        onBlur={this.updataContent.bind(this,)}
-                        type={type}
-                    ></Input>
+                <Input
+                    className={indexStyles.list_item_detail}
+                    placeholder='填写自定义字段'
+                    value={field_value}
+                    type={type == '8' ? 'number' : 'text'}
+                    confirmType='完成'
+                    onBlur={this.updataContent.bind(this,)}
+                    type={type}
+                ></Input>
 
 
-                    {/* <View className={`${indexStyles.list_item_iconnext}`}>
+                {/* <View className={`${indexStyles.list_item_iconnext}`}>
                         <Text className={`${globalStyle.global_iconfont}`}>&#xe7fc;</Text>
                     </View> */}
 
-                </View>
-
             </View>
+
+            // </View>
         )
     }
 }
