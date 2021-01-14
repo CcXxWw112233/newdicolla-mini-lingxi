@@ -55,10 +55,11 @@ export default class index extends Component {
   }
 
   onClickAction = () => {
-    console.log("2222222")
     this.setState({
       labelSelectionShow: false
     })
+    typeof this.props.onClickAction == "function" &&
+      this.props.onClickAction();
   }
   deleteCardProperty = () => {
 

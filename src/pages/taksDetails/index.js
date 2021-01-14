@@ -392,6 +392,7 @@ export default class taksDetails extends Component {
                                                 label_data={data}
                                                 propertyId={id}
                                                 cardId={card_id}
+                                                onClickAction={this.onClickAction}
                                             />
                                         ) : (
                                                 ""
