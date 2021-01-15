@@ -120,7 +120,7 @@ export default class dateField extends Component {
 
         let value = e.detail.value;
         if (date_field_code === 'YMDHMS') {
-            let valeStr = '', value1 = value[1], value2 = value[1], value3 = value[2];
+            let valeStr = '', value1 = value[0], value2 = value[1], value3 = value[2];
 
             if (parseInt(value[0]) < 10) value1 = '0' + value[0];
             if (parseInt(value[1]) < 10) value2 = '0' + value[1];
