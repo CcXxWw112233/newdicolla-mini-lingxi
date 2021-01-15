@@ -119,13 +119,14 @@ export default class dateField extends Component {
         const { date_field_code } = this.state
 
         let value = e.detail.value;
-        let valeStr = '', value1 = '', value2 = '', value3 = '';
         if (date_field_code === 'YMDHMS') {
+            let valeStr = '', value1 = value[1], value2 = value[1], value3 = value[2];
+
             if (parseInt(value[0]) < 10) value1 = '0' + value[0];
             if (parseInt(value[1]) < 10) value2 = '0' + value[1];
             if (parseInt(value[2]) < 10) value3 = '0' + value[2];
 
-            valeStr = value1 + ":" + value2 + ":" + + value3;
+            valeStr = value1 + ":" + value2 + ":" + value3;
             value = valeStr;
         }
         console.log(value)
