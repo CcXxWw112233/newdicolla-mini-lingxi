@@ -90,11 +90,12 @@ export default {
 
       const pages = getCurrentPages()
       if (redirectPath) {
+        Taro.removeStorageSync('redirectPath')
         Taro.navigateTo({
           url:redirectPath
         })
-        Taro.removeStorageSync('redirectPath', undefined)
-      }
+        return
+      } 
       Taro.switchTab({
         url: `../../pages/calendar/index`
       })
