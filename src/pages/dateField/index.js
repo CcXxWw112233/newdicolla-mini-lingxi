@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Picker, } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 import { AtList, AtListItem } from 'taro-ui'
-import { timestampToTime, } from '../../utils/basicFunction'
+import { timestampToTimeZH, } from '../../utils/basicFunction'
 import styles from './index.scss';
 
 @connect(({
@@ -29,26 +29,28 @@ export default class dateField extends Component {
     componentDidMount() {
         const { item_id, field_value, dateFieldCode, } = this.props
 
-        // const date_value = timestampToTime(field_value)
-        // var arr = field_value?.split(" ")
-        console.log(field_value);
+        const date_value = timestampToTimeZH(field_value)
+        var arr = date_value.split(" ")
+        console.log(arr);
         this.setState({
             current_id: item_id,
             dateSel: field_value,
             date_field_code: dateFieldCode,
         })
-        // if (arr) {
-        // if (arr.length == 1) {
-        // this.setState({
-        // dateStr: arr[0]
-        // })
-        // } else if (arr.length == 2) {
-        // this.setState({
-        // dateStr: arr[0]
-        // timeStr: arr[1]
-        // })
-        // }
-        // }
+        if (arr) {
+            if (arr.length == 1) {
+                this.setState({
+                    dateSel: arr[0]
+                })
+            } else if (arr.length == 2) {
+                this.setState({
+                    dateSel: arr[0],
+                    timeSel: arr[1],
+                    is_show_time_picker: true
+                })
+                console.log(arr[1])
+            }
+        }
     }
 
     updataContent = (valueText) => {

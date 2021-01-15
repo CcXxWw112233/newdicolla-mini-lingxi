@@ -341,7 +341,7 @@ export default class ProjectNameCell extends Component {
             // Taro.navigateTo({
             // url: `../../pages/dateField/index?field_value=${field_value}&item_id=${item_id}`,
             // });
-
+            console.log(field_value);
         } else if (type === "9") {
             //数字
 
@@ -713,7 +713,7 @@ export default class ProjectNameCell extends Component {
 
                                             {
                                                 // field_value=${field_value}&item_id=${item_id}`,
-                                                type == 8 ? (<DateField field_value={data.name} item_id={item_id}></DateField>) : (null)
+                                                type == 8 ? (<DateField field_value={field_value} item_id={item_id}></DateField>) : (null)
                                             }
                                             {
                                                 type == 6 ? (
