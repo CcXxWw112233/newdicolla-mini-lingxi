@@ -29,9 +29,10 @@
     }
 
     .list_item_name {
-      color      : rgba(0, 0, 0, 0.85);
-      margin-left: pxTrans(4);
-      white-space: nowrap;
+      color       : rgba(0, 0, 0, 0.85);
+      margin-left : pxTrans(4);
+      white-space : nowrap;
+      margin-right: pxTrans(13);
     }
 
     .right_style {
