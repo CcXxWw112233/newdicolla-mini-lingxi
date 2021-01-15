@@ -284,7 +284,7 @@ export const timestampToDateTimeLine = (timestamp, dateType) => {
 
   let resultStr
   if (dateType === 'YM') { //年月
-    resultStr = `${year}-${month}月`
+    resultStr = `${year}-${month}`
   } else if (dateType === 'YMD') { //年月日
     resultStr = `${year}-${month}-${date_no}`
   } else if (dateType === 'YMDH') { //年月日 时
