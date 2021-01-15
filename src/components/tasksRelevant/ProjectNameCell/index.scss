@@ -29,10 +29,9 @@
     }
 
     .list_item_name {
-      color       : rgba(0, 0, 0, 0.85);
-      margin-left : pxTrans(4);
-      white-space : nowrap;
-      margin-right: pxTrans(10);
+      color      : rgba(0, 0, 0, 0.85);
+      margin-left: pxTrans(4);
+      white-space: nowrap;
     }
 
     .right_style {
@@ -65,11 +64,12 @@
   }
 
   .list_item_iconnext {
-    color          : $color_3;
-    // margin-left : pxTrans(5);
-    color          : rgb(0, 0, 0, 0.25);
-    font-size      : pxTrans(20);
-    margin-right   : pxTrans(10);
+    position: absolute;
+    color   : $color_3;
+
+    color    : rgb(0, 0, 0, 0.25);
+    font-size: pxTrans(20);
+    right    : pxTrans(10);
   }
 
 }

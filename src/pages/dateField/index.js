@@ -2,9 +2,9 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Picker, } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 import { AtList, AtListItem } from 'taro-ui'
-import { timestampToTimeZH, } from '../../utils/basicFunction'
+import { timestampToDateTimeLine, } from '../../utils/basicFunction'
 import styles from './index.scss';
-
+import { formatTimeN, formatDay, timePicker } from './timePicker'
 @connect(({
     tasks: { tasksDetailDatas, },
 }) => ({
@@ -29,14 +29,17 @@ export default class dateField extends Component {
     componentDidMount() {
         const { item_id, field_value, dateFieldCode, } = this.props
 
-        const date_value = timestampToTimeZH(field_value)
+        const date_value = timestampToDateTimeLine(field_value, dateFieldCode)
         var arr = date_value.split(" ")
+        console.log('---------' + dateFieldCode);
         console.log(arr);
         this.setState({
             current_id: item_id,
             dateSel: field_value,
             date_field_code: dateFieldCode,
+            startTimeArray: timePicker(formatTimeN(new Date())).timeArray
         })
+
         if (arr) {
             if (arr.length == 1) {
                 this.setState({
@@ -113,8 +116,19 @@ export default class dateField extends Component {
     }
 
     onTimeChange = e => {
+        const { date_field_code } = this.state
 
         let value = e.detail.value;
+        let valeStr = '', value1 = '', value2 = '', value3 = '';
+        if (date_field_code === 'YMDHMS') {
+            if (parseInt(value[0]) < 10) value1 = '0' + value[0];
+            if (parseInt(value[1]) < 10) value2 = '0' + value[1];
+            if (parseInt(value[2]) < 10) value3 = '0' + value[2];
+
+            valeStr = value1 + ":" + value2 + ":" + + value3;
+            value = valeStr;
+        }
+        console.log(value)
 
         this.setState({
             timeSel: value,
@@ -130,13 +144,16 @@ export default class dateField extends Component {
 
     render() {
 
-        const { dateSel, timeSel, is_show_time_picker, date_field_code, } = this.state
+        const { dateSel, timeSel, is_show_time_picker, date_field_code, startTimeArray } = this.state
 
         let titleString = '设置时间'
+        let isShowTime = true;
         if (date_field_code === 'YM') { //年月
-            titleString = '年月'
+            titleString = '年月',
+                isShowTime = false
         } else if (date_field_code === 'YMD') { //年月日
             titleString = '年月日'
+            isShowTime = false
         } else if (date_field_code === 'YMDH') { //年月日 时
             titleString = '年月日 时'
         } else if (date_field_code === 'YMDHM') { //年月日 时分
@@ -158,18 +175,37 @@ export default class dateField extends Component {
                 </Picker>
 
                 {
-                    is_show_time_picker ? (<Picker
-                        mode='time'
-                        onChange={this.onTimeChange}
-                        value={timeSel}>
+                    is_show_time_picker && date_field_code === 'YMDHMS' && isShowTime ? (
 
-                        <View className={`${styles.atListItem} ${styles.timeText}`}>
-                            {timeSel ? timeSel : '选择时分'}
-                        </View>
+                        <Picker
+                            mode='multiSelector'
+                            onChange={this.onTimeChange}
+                            value={timeSel}
+                            range={startTimeArray}
+                        >
 
-                    </Picker>) : <View></View>
+                            <View className={`${styles.atListItem} ${styles.timeText}`}>
+                                {timeSel ? timeSel : '选择时分秒'}
+                            </View>
+                        </Picker>
+
+                    ) : <View></View>
                 }
+                {
+                    is_show_time_picker && date_field_code != 'YMDHMS' && isShowTime ? (
 
+                        <Picker
+                            mode='time'
+                            onChange={this.onTimeChange}
+                            value={timeSel}
+                        >
+                            <View className={`${styles.atListItem} ${styles.timeText}`}>
+                                {timeSel ? timeSel : '选择时分'}
+                            </View>
+                        </Picker>
+
+                    ) : <View></View>
+                }
             </View>
         )
     }
