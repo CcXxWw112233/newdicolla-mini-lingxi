@@ -4,8 +4,6 @@ import indexStyles from './index.scss'
 import globalStyles from '../../../gloalSet/styles/globalStyles.scss'
 import { timestampToDateZH, timestampToHoursMinZH, timestampToTime, timestampToHM, } from '../../../utils/basicFunction'
 import { connect } from '@tarojs/redux'
-
-
 @connect(({ tasks: { isPermission, tasksDetailDatas = {}, }, }) => ({
     isPermission, tasksDetailDatas,
 }))

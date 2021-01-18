@@ -323,7 +323,7 @@ export default class taksDetails extends Component {
 
                     </View>
                     <ProjectNameCell
-                        title="项目"
+                        title="项目名称"
                         data={{ name: board_name }}
                         boardId={board_id}
                         type="1"

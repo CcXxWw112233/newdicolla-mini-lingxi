@@ -195,6 +195,8 @@ export default class ProjectNameCell extends Component {
         const { type, items, field_value, field_item_id, item_id, field_set, } = value;
         const { dispatch, tasksDetailDatas = {}, data, cardId, } = this.props;
         const { list_id, org_id, fields } = tasksDetailDatas;
+
+        console.log(value);
         const {
             isFieldSelectionClick,
             isTasksGroupClick,
@@ -341,7 +343,7 @@ export default class ProjectNameCell extends Component {
             // Taro.navigateTo({
             // url: `../../pages/dateField/index?field_value=${field_value}&item_id=${item_id}`,
             // });
-
+            console.log(field_value);
         } else if (type === "9") {
             //数字
 
@@ -356,7 +358,7 @@ export default class ProjectNameCell extends Component {
         } else if (type === "12") {
             //多选，单人/多人
 
-            const { member_selected_type, member_selected_range, } = field_set
+            const { member_selected_type, member_selected_range, date_field_code } = field_set
 
             /***
              * member_selected_range 1=项目人员, 2=组织人员
@@ -611,7 +613,7 @@ export default class ProjectNameCell extends Component {
         const propertyId = this.props.propertyId || "";
         const fieldSet = this.props.fieldSet || {};
         const cardId = this.props.cardId || {};
-        const { member_selected_type, member_selected_range, } = fieldSet;
+        const { member_selected_type, member_selected_range, date_field_code } = fieldSet;
         const { fields } = tasksDetailDatas;
         const { milestoneList, milestoneId, tasksGroupList, tasksGroupId, fieldPersonSignleList, isFieldSelectionShow, fieldPersonMultiplelist, isFieldPersonMultipleShow, isExecutorsListShow } = this.state;
         //左边icon
@@ -713,7 +715,7 @@ export default class ProjectNameCell extends Component {
 
                                             {
                                                 // field_value=${field_value}&item_id=${item_id}`,
-                                                type == 8 ? (<DateField field_value={data.name} item_id={item_id}></DateField>) : (null)
+                                                type == 8 ? (<DateField field_value={field_value} item_id={item_id} dateFieldCode={date_field_code}></DateField>) : (null)
                                             }
                                             {
                                                 type == 6 ? (

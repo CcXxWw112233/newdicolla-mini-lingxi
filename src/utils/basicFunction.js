@@ -261,6 +261,42 @@ export const timestampWeek = (format) => {
     return dateObj;
   }
 }
+export const timestampToDateTimeLine = (timestamp, dateType) => {
+  if (!timestamp) {
+    return ''
+  }
+  const length = timestamp.length
+  const newTimestampStr = length < 13 ? Number(timestamp) * 1000 : Number(timestamp)
+  const date = new Date(newTimestampStr)
+  const current_year = new Date().getFullYear()
+  let year = date.getFullYear()
+  let month = date.getMonth() + 1
+  let date_no = date.getDate()
+  let hours = date.getHours()
+  let min = date.getMinutes()
+  let sec = date.getSeconds()
+  // year = current_year != year?`${year}年`: ''
+  month = month < 10 ? `0${month}` : month
+  date_no = date_no < 10 ? `0${date_no}` : date_no
+  hours = hours < 10 ? `0${hours}` : hours
+  min = min < 10 ? `0${min}` : min
+  sec = sec < 10 ? `0${sec}` : sec
+
+  let resultStr
+  if (dateType === 'YM') { //年月
+    resultStr = `${year}-${month}`
+  } else if (dateType === 'YMD') { //年月日
+    resultStr = `${year}-${month}-${date_no}`
+  } else if (dateType === 'YMDH') { //年月日 时
+    resultStr = `${year}-${month}-${date_no} ${hours}`
+  } else if (dateType === 'YMDHM') { //年月日 时分
+    resultStr = `${year}-${month}-${date_no} ${hours}:${min}`
+  } else if (dateType === 'YMDHMS') { //年月日 时分秒
+    resultStr = `${year}-${month}-${date_no} ${hours}:${min}:${sec}`
+  }
+
+  return resultStr;
+}
 
 
 export const setBoardIdStorage = (value) => {

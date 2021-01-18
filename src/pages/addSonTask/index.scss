@@ -45,14 +45,14 @@
         border-bottom   : pxTrans(1) solid rgba(0, 0, 0, 0.09);
 
         .list_item_left_iconnext {
-            color       : rgb(0, 0, 0, 0.25);
+            color       : rgb(0, 0, 0, 0.85);
             font-size   : pxTrans(20);
             margin-left : pxTrans(20);
             margin-right: pxTrans(10);
         }
 
         .list_item_name {
-            color      : rgba(0, 0, 0, 0.25);
+            color      : rgba(0, 0, 0, 0.85);
             margin-left: pxTrans(4);
             white-space: nowrap;
             flex       : 1;
@@ -77,7 +77,10 @@
             margin-left : pxTrans(20);
             margin-right: pxTrans(10);
         }
+
     }
+
+
 
     .info_style {
         // height               : pxTrans(56);
@@ -96,7 +99,10 @@
             width         : 100%;
             display       : flex;
             flex-direction: row;
+            color         : rgb(0, 0, 0, 0.85);
         }
+
+
 
         .left_time_style {
             display             : flex;
@@ -105,6 +111,14 @@
             // margin-right     : pxTrans(5);
             border-bottom       : pxTrans(1) solid rgba(0, 0, 0, 0.09);
             margin              : pxTrans(5);
+            color               : rgb(0, 0, 0, 0.85);
+
+
+
+            .startTime1111 {
+                color: red;
+
+            }
 
             .left_date_style {
                 margin-left: pxTrans(10);
@@ -113,6 +127,12 @@
             .left_time_style {
                 // margin: pxTrans(5);
             }
+
+            .placestyle {
+                margin-left: pxTrans(10);
+                color      : rgb(0, 0, 0, 0.25) !important;
+            }
+
 
         }
 
@@ -124,9 +144,15 @@
             // margin-left      : pxTrans(5);
             border-bottom       : pxTrans(1) solid rgba(0, 0, 0, 0.09);
             margin              : pxTrans(5);
+            color               : rgb(0, 0, 0, 0.85);
 
             .right_date_style {
                 margin-left: pxTrans(10);
+            }
+
+            .placestyle {
+                margin-left: pxTrans(10);
+                color      : rgb(0, 0, 0, 0.25) !important;
             }
 
             .right_time_style {
@@ -151,6 +177,11 @@
             border-radius: pxTrans(4);
             margin-bottom: pxTrans(16);
             box-shadow   : none;
+        }
+
+        .cencel_btn {
+            background-color: rgb(0, 0, 0, 0.15) !important;
+            color           : rgb(0, 0, 0, 0.65) !important;
         }
 
         .login_btn_normal {
