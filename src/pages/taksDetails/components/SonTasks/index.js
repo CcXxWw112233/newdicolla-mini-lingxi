@@ -5,6 +5,7 @@ import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { AtActionSheet, AtActionSheetItem } from "taro-ui"
 import { connect } from '@tarojs/redux'
 import { getOrgIdByBoardId, setBoardIdStorage } from '../../../../utils/basicFunction'
+import { AddSonTask } from '../../../../pages/addSonTask'
 
 @connect(({ tasks: { tasksDetailDatas = {}, choice_image_temp_file_paths = '' }, }) => ({
     tasksDetailDatas, choice_image_temp_file_paths,
@@ -22,15 +23,25 @@ export default class index extends Component {
         fileName: '',
         cardId: '',
         fileId: '',
+        isAddSonTaskShow: false
     }
-
+    onClickAddSonTask() {
+        this.setState({
+            isAddSonTaskShow: false
+        })
+        typeof this.props.onClickAction == "function" &&
+            this.props.onClickAction();
+    }
     addSonTask = () => {
 
         const { boardId, tasksDetailDatas = {}, } = this.props
         const { list_id, card_id } = tasksDetailDatas
 
-        Taro.navigateTo({
-            url: `../../pages/addSonTask/index?propertyId=${card_id}&boardId=${boardId}&listId=${card_id}&cardId=${card_id}`
+        // Taro.navigateTo({
+        // // url: `../../pages/addSonTask/index?propertyId=${card_id}&boardId=${boardId}&listId=${card_id}&cardId=${card_id}`
+        // })
+        this.setState({
+            isAddSonTaskShow: true
         })
     }
 
@@ -519,9 +530,10 @@ export default class index extends Component {
     }
 
     render() {
+        const { child_data = [], boardId, tasksDetailDatas = {}, } = this.props
+        const { list_id, card_id } = tasksDetailDatas
 
-        const { child_data = [], } = this.props
-
+        const { isAddSonTaskShow } = this.state
         return (
             <View className={indexStyles.list_item}>
 
@@ -610,7 +622,9 @@ export default class index extends Component {
                         删除交付物
                     </AtActionSheetItem>
                 </AtActionSheet>
-
+                {
+                    isAddSonTaskShow ? (<AddSonTask propertyId={card_id} boardId={boardId} listId={card_id} cardId={card_id} onClickAction={this.onClickAddSonTask}></AddSonTask>) : (null)
+                }
             </View>
         )
     }

@@ -59,6 +59,18 @@ export default class taksDetails extends Component {
             Taro.setStorageSync("tasks_detail_boardId", boardId);
             Taro.setStorageSync("tasks_detail_contentId", contentId);
         }
+        var that = this;
+        Taro.getSystemInfo({
+            success(res) {
+                console.log(res);
+                if (res.system.split(" ")[0] == "iOS" && res.screenHeight > 736) {
+                    that.setState({
+                        screenHeight: res.screenHeight,
+                        isIphoneX: true,
+                    });
+                }
+            }
+        })
 
         this.setState({
             content_Id: contentId,
@@ -66,7 +78,6 @@ export default class taksDetails extends Component {
             type_flag: flag,
             board_id: boardId,
         });
-
         this.loadTasksDetail(contentId, boardId);
         this.getBoardFileList(boardId);
     }
@@ -123,6 +134,22 @@ export default class taksDetails extends Component {
                 isOtherPageBack: true,
             },
         });
+        console.log("刷新界面")
+        const { content_Id, board_id } = this.state;
+
+        if (content_Id != "" && content_Id != "") {
+            this.loadTasksDetail(content_Id, board_id);
+        }
+    }
+    onClickAction() {
+
+        const { dispatch } = this.props;
+        dispatch({
+            type: "calendar/updateDatas",
+            payload: {
+                isOtherPageBack: true,
+            },
+        });
 
         const { content_Id, board_id } = this.state;
 
@@ -130,7 +157,6 @@ export default class taksDetails extends Component {
             this.loadTasksDetail(content_Id, board_id);
         }
     }
-
     componentWillUnmount() {
         const { sourcePage } = this.state;
         if (sourcePage === "auccessJoin" || sourcePage === "sceneEntrance") {
@@ -266,7 +292,7 @@ export default class taksDetails extends Component {
         const SystemInfo = Taro.getSystemInfoSync();
         const statusBar_Height = SystemInfo.statusBarHeight;
         const navBar_Height = SystemInfo.platform == "ios" ? 44 : 48;
-
+        const { isIphoneX } = this.state;
         const { type_flag } = this.props;
 
         const { properties = [], fields = [], org_id } = tasksDetailDatas;
@@ -325,7 +351,9 @@ export default class taksDetails extends Component {
                                                     propertyId={id}
                                                     cardId={card_id}
                                                     type="3"
-                                                    onLoadTasksDetail={this.loadTasksDetail.bind(board_id, card_id)}
+                                                    onClickAction={this.onClickAction}
+
+                                                // onLoadTasksDetail={this.loadTasksDetail.bind(board_id, card_id)}
                                                 />
                                             ) : (
                                                     ""
@@ -351,6 +379,7 @@ export default class taksDetails extends Component {
                                                 boardId={board_id}
                                                 propertyId={id}
                                                 cardId={card_id}
+                                                onClickAction={this.onClickAction}
                                                 onTasksDetailsRealizeStatus={(timeInfo, type) =>
                                                     this.tasksDetailsRealizeStatus(timeInfo, "SonTasks")
                                                 }
@@ -363,6 +392,7 @@ export default class taksDetails extends Component {
                                                 label_data={data}
                                                 propertyId={id}
                                                 cardId={card_id}
+                                                onClickAction={this.onClickAction}
                                             />
                                         ) : (
                                                 ""
@@ -399,14 +429,7 @@ export default class taksDetails extends Component {
 
                     <View className={indexStyles.custom_field_interval}></View>
 
-                    <ProjectNameCell
-                        title="字段"
-                        data={{ name: "更多" }}
-                        boardId={board_id}
-                        // propertyId={id}
-                        cardId={card_id}
-                        type="5"
-                    />
+
 
                     {fields &&
                         fields.map((item, key) => {
@@ -459,6 +482,7 @@ export default class taksDetails extends Component {
                                             fieldValue={field_value}
                                             type="7"
                                             item_id={item.id}
+                                            onClickAction={this.onClickAction}
                                         />
                                     ) : (
                                             ""
@@ -531,6 +555,7 @@ export default class taksDetails extends Component {
                                             type="12"
                                             item_id={item.id}
                                             fieldSet={field_set}
+                                            onClickAction={this.onClickAction}
                                         />
                                     ) : (
                                             ""
@@ -538,6 +563,15 @@ export default class taksDetails extends Component {
                                 </View>
                             );
                         })}
+                    <ProjectNameCell
+                        title="字段"
+                        data={{ name: "更多" }}
+                        boardId={board_id}
+                        // propertyId={id}
+                        cardId={card_id}
+                        type="5"
+                        onClickAction={this.onClickAction}
+                    />
                 </View>
 
                 {folder_tree &&
@@ -554,6 +588,7 @@ export default class taksDetails extends Component {
                     ) : (
                         <View></View>
                     )}
+                {isIphoneX ? (<View className={indexStyles.isIphoneX}></View>) : (null)}
             </View>
         );
     }

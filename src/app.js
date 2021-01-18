@@ -11,7 +11,7 @@ import "./gloalSet/styles/taro_ui_index.global.scss"; //global模式下转化tar
 
 import dva from "./utils/dva";
 import models from "./models/index";
-import { options } from "nervjs";
+// import { options } from "nervjs";
 const dvaApp = dva.createApp({
   initialState: {},
   models: models,
@@ -34,6 +34,7 @@ class App extends Component {
   config = {
     pages: [
       "pages/index/index",
+      "pages/seeBoardChart/index",
       "pages/login/index",
       "pages/calendar/index",
       "pages/im/index",
@@ -52,22 +53,22 @@ class App extends Component {
       "pages/taksDetails/index",
       "pages/labelSelection/index",
       "pages/tasksGroup/index",
-      "pages/executorsList/index",
+      // "pages/executorsList/index",
       "pages/milestoneList/index",
-      "pages/fieldSelection/index",
+      // "pages/fieldSelection/index",
       "pages/singleChoice/index",
-      "pages/textField/index",
-      "pages/dateField/index",
-      "pages/multipleSelectionField/index",
-      "pages/addSonTask/index",
-      "pages/sonTaskExecutors/index",
+      // "pages/textField/index",
+      // "pages/dateField/index",
+      // "pages/multipleSelectionField/index",
+      // "pages/addSonTask/index",
+      // "pages/sonTaskExecutors/index",
       "pages/sceneEntrance/index",
       "pages/errorPage/index",
       "pages/file/index",
       "pages/boardChat/index",
       "pages/templateDetails/index",
       "pages/fieldPersonSingle/index",
-      "pages/fieldPersonMultiple/index",
+      // "pages/fieldPersonMultiple/index",
       "pages/jumpToMeeting/index"
     ],
     permission: {

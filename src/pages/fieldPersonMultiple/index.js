@@ -1,7 +1,8 @@
 import Taro, { Component } from "@tarojs/taro";
-import { View } from "@tarojs/components";
+import { View, ScrollView } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 import { AtCheckbox } from "taro-ui";
+import indexStyles from './index.scss'
 
 @connect(({ tasks: {
   // executors_list = [], 
@@ -24,12 +25,13 @@ export default class fieldPersonMultiple extends Component {
   }
 
   componentDidMount() {
-    const { contentId, executors = [], item_id, executorsList, } = this.$router.params;
-
+    const { contentId, executors = [], item_id, executorsList, } = this.props;
+    console.log("---****-------");
+    console.log(executorsList);
     let executorsData;
     let new_arr;
     if (executors.length > 0) {
-      executorsData = JSON.parse(executors);
+      executorsData = executors;
       //取出已经是执行人的id, 组成新数组(已选中)
       new_arr = executorsData && executorsData.map((obj) => {
         return obj.user_id;
@@ -41,7 +43,7 @@ export default class fieldPersonMultiple extends Component {
       itemId: item_id,
     });
 
-    const executors_list = JSON.parse(executorsList);
+    const executors_list = executorsList;
     executors_list.forEach((item) => {
       item["label"] = item.name;
       item["value"] = item.id ? item.id : item.user_id;
@@ -101,17 +103,29 @@ export default class fieldPersonMultiple extends Component {
       },
     });
   };
-
+  onClickAction() {
+    typeof this.props.onClickAction == "function" &&
+      this.props.onClickAction();
+  }
   render() {
     const { checkboxOption = [] } = this.state;
 
     return (
-      <View>
-        <AtCheckbox
-          options={checkboxOption}
-          selectedList={this.state.checkedList}
-          onChange={this.handleChange.bind(this)}
-        />
+      <View className={indexStyles.fieldSelectionView}>
+
+        <View className={indexStyles.index}>
+          <View className={indexStyles.titleView}>请选择</View>
+          <ScrollView className={indexStyles.scrollview} scrollY scrollWithAnimation>
+
+            <AtCheckbox
+              options={checkboxOption}
+              selectedList={this.state.checkedList}
+              onChange={this.handleChange.bind(this)} />
+          </ScrollView>
+          <View className={indexStyles.bootomBtnView}>
+            <View onClick={this.onClickAction} className={indexStyles.btnView}>确定</View>
+          </View>
+        </View>
       </View>
     );
   }

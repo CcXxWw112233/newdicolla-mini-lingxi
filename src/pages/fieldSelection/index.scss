@@ -1,7 +1,6 @@
 @import "../../gloalSet/styles/constant";
 
-.labelSelectionView {
-    transform       : none;
+.fieldSelectionView {
     position        : fixed;
     bottom          : 0;
     left            : 0;
@@ -39,6 +38,15 @@
         font-size    : pxTrans(16);
         margin-top   : pxTrans(10);
         margin-bottom: pxTrans(10);
+    }
+
+    .contentView {
+        line-height  : pxTrans(30);
+        text-align   : center;
+        font-size    : pxTrans(14);
+        margin-top   : pxTrans(10);
+        margin-bottom: pxTrans(10);
+        padding      : 0 pxTrans(20);
     }
 
     .rowIndex {
