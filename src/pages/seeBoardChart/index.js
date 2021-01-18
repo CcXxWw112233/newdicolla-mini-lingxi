@@ -22,7 +22,7 @@ export default class index extends Component {
       queryId = sceneArr.slice(5);
     } else {
       //其他场景进入
-      queryId = options.id;
+      queryId = options.id || Taro.getStorageSync("qr_code_check_id");
     }
     console.log("options", options, queryId);
     const {
@@ -30,12 +30,16 @@ export default class index extends Component {
         store: { dispatch }
       }
     } = Taro.getApp();
-    Taro.setStorageSync("qrCodeInValidText", "请重新扫码");
+    Taro.setStorageSync("qrCodeInValidText", "请扫描项目统计二维码");
     if (queryId) {
       Taro.setStorageSync("qr_code_check_id", queryId);
+    } else {
+      Taro.reLaunch({
+        url: "../../pages/qrCodeInvalid/index"
+      });
     }
     Taro.removeStorageSync("web_redirect_url");
-    Taro.removeStorageSync("board_id");
+    Taro.removeStorageSync("web_param_board_id");
     dispatch({
       type: "invitation/qrCodeIsInvitation",
       payload: {
@@ -46,7 +50,7 @@ export default class index extends Component {
       if (data) {
         const { rela_id, rela_content } = data;
         Taro.setStorageSync("web_redirect_url", `${BASE_URL}${rela_content}`);
-        Taro.setStorageSync("board_id", rela_id);
+        Taro.setStorageSync("web_param_board_id", rela_id);
         Taro.removeStorageSync("qrCodeInValidText");
         this.getAuth();
       }
@@ -55,10 +59,10 @@ export default class index extends Component {
   getAuth = async () => {
     const res = await getAccountInfo();
     const web_redirect_url = Taro.getStorageSync("web_redirect_url");
-    const board_id = Taro.getStorageSync("board_id");
+    const web_param_board_id = Taro.getStorageSync("web_param_board_id");
     if (isApiResponseOk(res)) {
       this.setState({
-        wsrc: `${web_redirect_url}?board_id=${board_id}&token=${Taro.getStorageSync(
+        wsrc: `${web_redirect_url}?board_id=${web_param_board_id}&token=${Taro.getStorageSync(
           "access_token"
         )}`
       });
