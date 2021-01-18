@@ -314,15 +314,15 @@ export default class addSonTask extends Component {
                 <View className={indexStyles.index} hidden={isSonTaskExecutorsShow}>
                     <View className={indexStyles.titleView}>添加子任务</View>
 
-                    <View className={indexStyles.add_son_tasks_row}>
+                    {/* <View className={indexStyles.add_son_tasks_row}> */}
 
-                        <View className={`${indexStyles.list_item_left_iconnext}`}>
-                            <Text className={`${globalStyle.global_iconfont}`}>&#xe7c1;</Text>
-                        </View>
+                    {/* <View className={`${indexStyles.list_item_left_iconnext}`}> */}
+                    {/* <Text className={`${globalStyle.global_iconfont}`}>&#xe7c1;</Text> */}
+                    {/* </View> */}
 
-                        <View className={indexStyles.list_item_name}>子任务</View>
+                    {/* <View className={indexStyles.list_item_name}>子任务</View> */}
 
-                    </View>
+                    {/* </View> */}
 
 
                     <View className={indexStyles.son_tasks_name} >
@@ -330,6 +330,7 @@ export default class addSonTask extends Component {
                             className={indexStyles.son_tasks_input}
                             placeholder='添加子任务'
                             // value={}
+                            placeholder-style="rgba(0, 0, 0, 0.25)"
                             confirmType='完成'
                             onInput={this.handleInput.bind(this)}
                         >
@@ -337,13 +338,17 @@ export default class addSonTask extends Component {
 
                     </View>
 
+                    {/* start_date_str: '未选择开始日期', */}
+                    {/* due_date_str: '未选择结束日期', */}
+                    {/* start_time_str: '未选择开始时间', */}
+                    {/* due_time_str: '未选择结束时间', */}
 
                     <View className={indexStyles.info_style}>
 
                         <View className={indexStyles.left_time_style}>
 
                             开始时间:
-                            <View className={indexStyles.left_date_style}>
+                            <View className={start_date_str == '未选择开始日期' ? indexStyles.placestyle : indexStyles.left_date_style}>
 
                                 <Picker mode='date'
                                     onChange={this.onStartDateChange}
@@ -354,7 +359,7 @@ export default class addSonTask extends Component {
                                 </Picker>
                             </View>
 
-                            <View className={indexStyles.left_date_style}>
+                            <View className={start_time_str == '未选择开始时间' ? indexStyles.placestyle : indexStyles.left_date_style}>
 
                                 {is_start_time_show ? (<Picker mode='time'
                                     onChange={this.onStartTimeChange}
@@ -373,18 +378,20 @@ export default class addSonTask extends Component {
 
                         <View className={indexStyles.rigth_time_style}>
                             结束时间:
-                            <View className={indexStyles.right_date_style}>
+                            <View className={due_date_str == '未选择结束日期' ? indexStyles.placestyle : indexStyles.right_date_style}>
 
                                 <Picker mode='date'
                                     onChange={this.onDueDateChange}
                                     className={indexStyles.startTime}
                                     start={due_start_range}
                                 >
-                                    {due_date_str}
+
+
+                                    <View>{due_date_str}</View>
                                 </Picker>
                             </View>
 
-                            <View className={indexStyles.right_date_style}>
+                            <View className={due_time_str == '未选择结束时间' ? indexStyles.placestyle : indexStyles.right_date_style}>
 
                                 {
                                     is_due_time_show ? (<Picker mode='time'
@@ -419,7 +426,7 @@ export default class addSonTask extends Component {
 
 
                     <View className={`${indexStyles.login_footer}`}>
-                        <Button className={`${indexStyles.login_btn_normal} ${indexStyles.login_btn}`} onClick={this.cancel}>取消</Button>
+                        <Button className={`${indexStyles.login_btn_normal} ${indexStyles.login_btn} ${indexStyles.cencel_btn}`} onClick={this.cancel}>取消</Button>
                         <Button className={`${indexStyles.login_btn_normal} ${indexStyles.login_btn}`} type='primary' onClick={this.confirm}>确定</Button>
 
                     </View>

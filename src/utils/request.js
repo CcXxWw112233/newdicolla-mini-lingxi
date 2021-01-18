@@ -27,7 +27,7 @@ export const request = (options, notShowLoading, isNewLogin, redirectPage = true
         ...data
       },
       method,
-      header: {...Headers, ...setRequestHeaderBaseInfo({ data, headers: Headers }) },
+      header: { ...Headers, ...setRequestHeaderBaseInfo({ data, headers: Headers }) },
       success: function (res) {
         // if (!notShowLoading) {
         //   Taro.hideLoading();
@@ -53,7 +53,7 @@ export const request = (options, notShowLoading, isNewLogin, redirectPage = true
                 })
               }
             }
-            else if(redirectPage){  //扫码登录的新的登录页面
+            else if (redirectPage) {  //扫码登录的新的登录页面
               Taro.navigateTo({
                 url: '../../pages/nowOpen/index'
               })
