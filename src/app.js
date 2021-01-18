@@ -33,6 +33,7 @@ const store = dvaApp.getStore();
 class App extends Component {
   config = {
     pages: [
+      "pages/settingTabbar/index",
       "pages/index/index",
       "pages/seeBoardChart/index",
       "pages/login/index",
@@ -111,6 +112,18 @@ class App extends Component {
           text: "会协宝",
           iconPath: "./asset/tabBar/meeting.png",
           selectedIconPath: "./asset/tabBar/meeting_selected.png",
+        },
+        // {
+        //   pagePath: "pages/seeBoardChart/index",
+        //   text: "统计",
+        //   iconPath: "./asset/tabBar/stastics.png",
+        //   selectedIconPath: "./asset/tabBar/stastics_selected.png",
+        // },
+        {
+          pagePath: "pages/settingTabbar/index",
+          text: "设置",
+          iconPath: "./asset/tabBar/setting.png",
+          selectedIconPath: "./asset/tabBar/setting_selected.png",
         },
       ],
     },
