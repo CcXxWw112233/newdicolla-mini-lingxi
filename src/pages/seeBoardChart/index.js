@@ -3,6 +3,8 @@ import { View, WebView } from "@tarojs/components";
 import { isApiResponseOk } from "../../utils/request";
 import { getAccountInfo } from "../../services/login";
 import { BASE_URL } from "../../gloalSet/js/constant";
+import CustomTabBar from "../../components/custormTabBar";
+
 // import indexStyles from "./index.scss";
 export default class index extends Component {
   constructor(props) {
@@ -77,10 +79,25 @@ export default class index extends Component {
   componentDidShow() {
     this.qarCodeIsInvitation();
   }
+  componentWillMount() {
+    const {
+      globalData: {
+        store: { dispatch }
+      }
+    } = Taro.getApp();
+    dispatch({
+      type: "accountInfo/updateDatas",
+      payload: {
+        tabbar_index: 4
+      }
+    });
+  }
   render() {
     return (
       <View>
         <WebView src={this.state.wsrc} />
+        <View style={{ height: "150rpx" }}></View>
+        <CustomTabBar />
       </View>
     );
   }

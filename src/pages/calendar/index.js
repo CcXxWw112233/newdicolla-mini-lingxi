@@ -11,7 +11,7 @@ import MilestoneList from "./components/MilestoneList";
 import CustomNavigation from "../acceptInvitation/components/CustomNavigation.js";
 import PersonalCenter from "./components/PersonalCenter";
 import { onSysMsgUnread } from "../../models/im/actions";
-
+import CustomTabBar from '../../components/custormTabBar'
 @connect(
   ({
     calendar: {
@@ -120,7 +120,14 @@ export default class Calendar extends Component {
       }
     });
   }
-
+  componentWillMount() {
+    this.props.dispatch({
+      type: "accountInfo/updateDatas",
+      payload: {
+        tabbar_index: 0
+      }
+    });
+  }
   componentDidShow() {
     const { selected_board_name, selected_timestamp } = this.props;
     Taro.setNavigationBarTitle({
@@ -365,6 +372,7 @@ export default class Calendar extends Component {
         {/* <View className={indexStyles.plusTasks} onClick={this.gotoAddingTasks}>
           +
         </View> */}
+        <CustomTabBar />
       </View>
     );
   }

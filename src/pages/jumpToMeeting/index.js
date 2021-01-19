@@ -2,6 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Image, Button, Text } from '@tarojs/components'
 import styles from './index.scss'
 import { MEETING_APPID } from '../../gloalSet/js/constant'
+import CustomTabBar from '../../components/custormTabBar'
 
 export default class JumpToMeeting extends Component {
   config = {
@@ -10,6 +11,14 @@ export default class JumpToMeeting extends Component {
   state = {}
   componentDidMount() {
     this.toMeeting()
+  }
+  componentWillMount() {
+    this.props.dispatch({
+      type: "accountInfo/updateDatas",
+      payload: {
+        tabbar_index: 3
+      }
+    });
   }
   toMeeting = () => {
     Taro.navigateToMiniProgram({
@@ -36,6 +45,7 @@ export default class JumpToMeeting extends Component {
             <Button onClick={this.toMeeting}>前往会协宝</Button>
           </View>
         </View>
+        <CustomTabBar />
       </View>
     )
   }

@@ -45,7 +45,7 @@ class Index extends Component {
         // 注册im
         this.registerIm();
 
-        Taro.switchTab({
+        Taro.redirectTo({
           url: '../../pages/calendar/index'
         })
       }
@@ -94,7 +94,7 @@ class Index extends Component {
         // 注册im
         this.registerIm();
 
-        Taro.switchTab({
+        Taro.redirectTo({
           url: '../../pages/calendar/index'
         })
       } else {

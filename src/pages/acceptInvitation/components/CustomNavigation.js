@@ -6,7 +6,7 @@ import globalStyle from '../../../gloalSet/styles/globalStyles.scss'
 class CustomNavigation extends Component {
 
     goToHomePages = () => {
-        Taro.switchTab({ url: `../../pages/calendar/index` })
+        Taro.redirectTo({ url: `../../pages/calendar/index` })
     }
 
     goToPersonalCenter = () => {

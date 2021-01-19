@@ -162,7 +162,7 @@ export default class taksDetails extends Component {
         if (sourcePage === "auccessJoin" || sourcePage === "sceneEntrance") {
             const switchTabCurrentPage = "currentPage_BoardDetail_or_Login";
             Taro.setStorageSync("switchTabCurrentPage", switchTabCurrentPage);
-            Taro.switchTab({
+            Taro.redirectTo({
                 url: `../../pages/calendar/index`,
             });
         }

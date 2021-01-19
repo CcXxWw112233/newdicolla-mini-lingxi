@@ -15,40 +15,38 @@ class customTabBar extends Component {
     selectedColor: "#1890FF",
     list: [
       {
-        pagePath: "../calendar/index",
+        pagePath: "../../pages/calendar/index",
         text: "日历",
-        iconPath: "../asset/tabBar/calendar.png",
-        selectedIconPath: "../asset/tabBar/calendar_selected.png"
+        iconPath: "../../asset/tabBar/calendar.png",
+        selectedIconPath: "../../asset/tabBar/calendar_selected.png"
       },
       {
-        pagePath: "../boardChat/index",
+        pagePath: "../../pages/boardChat/index",
         text: "项目圈",
-        iconPath: "../asset/tabBar/board.png",
-        selectedIconPath: "../asset/tabBar/board_selected.png"
+        iconPath: "../../asset/tabBar/board.png",
+        selectedIconPath: "../../asset/tabBar/board_selected.png"
       },
       {
-        pagePath: "../file/index",
+        pagePath: "../../pages/file/index",
         text: "文件",
-        iconPath: "../asset/tabBar/personal.png",
-        selectedIconPath: "../asset/tabBar/personal_selected.png"
+        iconPath: "../../asset/tabBar/personal.png",
+        selectedIconPath: "../../asset/tabBar/personal_selected.png"
       },
       {
-        pagePath: "../jumpToMeeting/index",
+        pagePath: "../../pages/jumpToMeeting/index",
         text: "会协宝",
-        iconPath: "../asset/tabBar/meeting.png",
-        selectedIconPath: "../asset/tabBar/meeting_selected.png"
+        iconPath: "../../asset/tabBar/meeting.png",
+        selectedIconPath: "../../asset/tabBar/meeting_selected.png"
       },
       {
-        pagePath: "../seeBoardChart/index",
+        pagePath: "../../pages/seeBoardChart/index",
         text: "统计",
-        iconPath: "../asset/tabBar/stastics.png",
-        selectedIconPath: "../asset/tabBar/stastics_selected.png"
+        iconPath: "../../asset/tabBar/stastics.png",
+        selectedIconPath: "../../asset/tabBar/stastics_selected.png"
       }
     ]
   };
-  componentWillMount() {
-    Taro.hideTabBar();
-  }
+  componentWillMount() {}
   switchTab = item => {
     console.log("tabbaritem", item);
     const { pagePath, text } = item;
@@ -61,7 +59,7 @@ class customTabBar extends Component {
         tabbar_index: index
       }
     });
-    Taro.switchTab({
+    Taro.redirectTo({
       url: pagePath
     });
   };

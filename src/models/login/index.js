@@ -96,7 +96,7 @@ export default {
         })
         return
       } 
-      Taro.switchTab({
+      Taro.redirectTo({
         url: `../../pages/calendar/index`
       })
       if (pages.length === 1) {

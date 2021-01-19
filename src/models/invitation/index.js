@@ -64,7 +64,7 @@ export default {
           // else if (["9", "10"].indexOf(relaType) != -1) {  //文件
           // }
           else {
-            Taro.switchTab({
+            Taro.redirectTo({
               url: `../../pages/calendar/index`
             })
           }

@@ -10,6 +10,7 @@ import BoardFile from './components/boardFile/index.js'
 import ChoiceFolder from './components/boardFile/ChoiceFolder.js'
 import { getOrgIdByBoardId, setBoardIdStorage, setRequestHeaderBaseInfo } from '../../utils/basicFunction'
 import { BASE_URL, API_BOARD } from "../../gloalSet/js/constant";
+import CustomTabBar from '../../components/custormTabBar'
 
 @connect(({
     file: {
@@ -150,7 +151,14 @@ export default class File extends Component {
 
         this.loadData(params);
     }
-
+    componentWillMount() {
+        this.props.dispatch({
+          type: "accountInfo/updateDatas",
+          payload: {
+            tabbar_index: 2
+          }
+        });
+    }
     componentDidMount() {
         const params = {
             org_id: '0',
@@ -868,6 +876,7 @@ export default class File extends Component {
                         </View>
                     </View>) : ''
                 }
+                <CustomTabBar />
             </View>
         )
     }

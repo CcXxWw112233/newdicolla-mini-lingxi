@@ -116,7 +116,7 @@ export default class sceneEntrance extends Component {
                 })
             ).then(res => {
                 if (isApiResponseOk(res)) {
-                    Taro.switchTab({ url: `../../pages/calendar/index` })
+                    Taro.redirectTo({ url: `../../pages/calendar/index` })
                 }
             })
         } else {
@@ -128,7 +128,7 @@ export default class sceneEntrance extends Component {
                 // 统计未读路径 ： pages/sceneEntrance/index?redirectType=7&boardId=
                 // 进不进具体圈子 看 boardId 是不是空
                 if (boardId.match(/^[ ]*$/)) {
-                    Taro.switchTab({ url: `../../pages/boardChat/index` })
+                    Taro.redirectTo({ url: `../../pages/boardChat/index` })
                     return
                 }
 
@@ -193,7 +193,7 @@ export default class sceneEntrance extends Component {
                         push: 'officialAccount',
                     })
                 ).then(() => {
-                    Taro.switchTab({ url: `../../pages/file/index` })
+                    Taro.redirectTo({ url: `../../pages/file/index` })
                     return
                 })
             }

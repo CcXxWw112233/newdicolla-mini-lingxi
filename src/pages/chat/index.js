@@ -236,7 +236,7 @@ class Chat extends Component {
     if (page_source === "auccessJoin" || page_source === "sceneEntrance") {
       const switchTabCurrentPage = "currentPage_BoardDetail_or_Login";
       Taro.setStorageSync("switchTabCurrentPage", switchTabCurrentPage); //解决wx.switchTab不能传值
-      Taro.switchTab({
+      Taro.redirectTo({
         url: `../../pages/boardChat/index`
       });
     }

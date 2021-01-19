@@ -84,50 +84,50 @@ class App extends Component {
       navigationBarTextStyle: "white",
       navigationStyle: "default",
     },
-    tabBar: {
-      // custom: true,
-      backgroundColor: "#ffffff",
-      color: "#8c8c8c",
-      selectedColor: "#1890FF",
-      list: [
-        {
-          pagePath: "pages/calendar/index",
-          text: "日历",
-          iconPath: "./asset/tabBar/calendar.png",
-          selectedIconPath: "./asset/tabBar/calendar_selected.png",
-        },
-        {
-          pagePath: "pages/boardChat/index",
-          text: "项目圈",
-          iconPath: "./asset/tabBar/board.png",
-          selectedIconPath: "./asset/tabBar/board_selected.png",
-        },
-        {
-          pagePath: "pages/file/index",
-          text: "文件",
-          iconPath: "./asset/tabBar/personal.png",
-          selectedIconPath: "./asset/tabBar/personal_selected.png",
-        },
-        {
-          pagePath: "pages/jumpToMeeting/index",
-          text: "会协宝",
-          iconPath: "./asset/tabBar/meeting.png",
-          selectedIconPath: "./asset/tabBar/meeting_selected.png",
-        },
-        {
-          pagePath: "pages/seeBoardChart/index",
-          text: "统计",
-          iconPath: "./asset/tabBar/stastics.png",
-          selectedIconPath: "./asset/tabBar/stastics_selected.png",
-        },
-        // {
-        //   pagePath: "pages/settingTabbar/index",
-        //   text: "设置",
-        //   iconPath: "./asset/tabBar/setting.png",
-        //   selectedIconPath: "./asset/tabBar/setting_selected.png",
-        // },
-      ],
-    },
+    // tabBar: {
+    //   // custom: true,
+    //   backgroundColor: "#ffffff",
+    //   color: "#8c8c8c",
+    //   selectedColor: "#1890FF",
+    //   list: [
+    //     {
+    //       pagePath: "pages/calendar/index",
+    //       text: "日历",
+    //       iconPath: "./asset/tabBar/calendar.png",
+    //       selectedIconPath: "./asset/tabBar/calendar_selected.png",
+    //     },
+    //     {
+    //       pagePath: "pages/boardChat/index",
+    //       text: "项目圈",
+    //       iconPath: "./asset/tabBar/board.png",
+    //       selectedIconPath: "./asset/tabBar/board_selected.png",
+    //     },
+    //     {
+    //       pagePath: "pages/file/index",
+    //       text: "文件",
+    //       iconPath: "./asset/tabBar/personal.png",
+    //       selectedIconPath: "./asset/tabBar/personal_selected.png",
+    //     },
+    //     {
+    //       pagePath: "pages/jumpToMeeting/index",
+    //       text: "会协宝",
+    //       iconPath: "./asset/tabBar/meeting.png",
+    //       selectedIconPath: "./asset/tabBar/meeting_selected.png",
+    //     },
+    //     {
+    //       pagePath: "pages/seeBoardChart/index",
+    //       text: "统计",
+    //       iconPath: "./asset/tabBar/stastics.png",
+    //       selectedIconPath: "./asset/tabBar/stastics_selected.png",
+    //     },
+    //     // {
+    //     //   pagePath: "pages/settingTabbar/index",
+    //     //   text: "设置",
+    //     //   iconPath: "./asset/tabBar/setting.png",
+    //     //   selectedIconPath: "./asset/tabBar/setting_selected.png",
+    //     // },
+    //   ],
+    // },
   };
 
   globalData = {
@@ -174,7 +174,7 @@ class App extends Component {
         // 注册im
         this.registerIm();
 
-        // Taro.switchTab({
+        // Taro.redirectTo({
         //   url: '../../pages/calendar/index'
         // })
       }

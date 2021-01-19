@@ -7,6 +7,7 @@ import SearchAndMenu from '../board/components/SearchAndMenu'
 import { isPlainObject, filterListAuth } from './../../utils/util';
 import { isApiResponseOk } from '../../utils/request';
 import { getImHistory, getAllIMTeamList } from '../../services/im'
+import CustomTabBar from '../../components/custormTabBar'
 
 @connect(({
     im: {
@@ -558,7 +559,14 @@ export default class BoardChat extends Component {
             }
         })
     }
-
+    componentWillMount() {
+        this.props.dispatch({
+          type: "accountInfo/updateDatas",
+          payload: {
+            tabbar_index: 1
+          }
+        });
+    }
     componentWillReceiveProps(nextProps) {
         // 列表去重
         let list = [...nextProps.allBoardList];
@@ -641,6 +649,8 @@ export default class BoardChat extends Component {
                         />
                     );
                 })}
+                <CustomTabBar />
+
             </View>
         )
     }

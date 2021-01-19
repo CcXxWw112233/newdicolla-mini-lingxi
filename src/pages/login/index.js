@@ -56,7 +56,7 @@ export default class Login extends Component {
           show_copywriting: false
         })
         if (isApiResponseOk(res)) {
-          Taro.switchTab({
+          Taro.redirectTo({
             url: '../../pages/calendar/index'
           })
         } else {

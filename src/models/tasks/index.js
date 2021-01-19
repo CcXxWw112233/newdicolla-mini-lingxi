@@ -84,7 +84,7 @@ export default {
             if (res.code === '4041') { //如果任务已删除/归档 就去任务列表(首页)
 
             } else {  //其他异常
-              Taro.switchTab({
+              Taro.redirectTo({
                 url: '../../pages/calendar/index',
               })
             }
