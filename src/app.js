@@ -33,8 +33,8 @@ const store = dvaApp.getStore();
 class App extends Component {
   config = {
     pages: [
-      "pages/settingTabbar/index",
       "pages/index/index",
+      // "pages/settingTabbar/index",
       "pages/seeBoardChart/index",
       "pages/login/index",
       "pages/calendar/index",
@@ -85,6 +85,7 @@ class App extends Component {
       navigationStyle: "default",
     },
     tabBar: {
+      // custom: true,
       backgroundColor: "#ffffff",
       color: "#8c8c8c",
       selectedColor: "#1890FF",
@@ -113,18 +114,18 @@ class App extends Component {
           iconPath: "./asset/tabBar/meeting.png",
           selectedIconPath: "./asset/tabBar/meeting_selected.png",
         },
-        // {
-        //   pagePath: "pages/seeBoardChart/index",
-        //   text: "统计",
-        //   iconPath: "./asset/tabBar/stastics.png",
-        //   selectedIconPath: "./asset/tabBar/stastics_selected.png",
-        // },
         {
-          pagePath: "pages/settingTabbar/index",
-          text: "设置",
-          iconPath: "./asset/tabBar/setting.png",
-          selectedIconPath: "./asset/tabBar/setting_selected.png",
+          pagePath: "pages/seeBoardChart/index",
+          text: "统计",
+          iconPath: "./asset/tabBar/stastics.png",
+          selectedIconPath: "./asset/tabBar/stastics_selected.png",
         },
+        // {
+        //   pagePath: "pages/settingTabbar/index",
+        //   text: "设置",
+        //   iconPath: "./asset/tabBar/setting.png",
+        //   selectedIconPath: "./asset/tabBar/setting_selected.png",
+        // },
       ],
     },
   };
