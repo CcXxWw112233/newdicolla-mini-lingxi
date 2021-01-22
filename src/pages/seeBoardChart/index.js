@@ -28,7 +28,7 @@ export default class index extends Component {
       //其他场景进入
       queryId = options.id || Taro.getStorageSync("qr_code_check_id");
     }
-    console.log("options", options, queryId);
+    console.log("ssssss", options, queryId);
     const {
       globalData: {
         store: { dispatch }
@@ -52,6 +52,10 @@ export default class index extends Component {
     const res = await qrCodeIsInvitation({
       id: queryId || Taro.getStorageSync("qr_code_check_id")
     });
+    this.setState({
+      loading: false
+    });
+    console.log("ssssss", res);
     if (isApiResponseOk(res)) {
       const { rela_id, rela_content } = res.data;
       Taro.setStorageSync("web_redirect_url", `${BASE_URL}${rela_content}`);
@@ -60,7 +64,6 @@ export default class index extends Component {
       this.getAuth();
     } else {
       this.setState({
-        loading: false,
         show_err: true
       });
     }
