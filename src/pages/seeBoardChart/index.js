@@ -1,14 +1,17 @@
 import Taro, { Component } from "@tarojs/taro";
-import { View, WebView } from "@tarojs/components";
+import { View, WebView, Image, Text } from "@tarojs/components";
 import { isApiResponseOk } from "../../utils/request";
 import { getAccountInfo } from "../../services/login";
 import { BASE_URL } from "../../gloalSet/js/constant";
-// import indexStyles from "./index.scss";
+import { qrCodeIsInvitation } from "../../services/invitation";
+import NoDataSvg from "../../asset/no_data.svg";
+import styles from "./index.scss";
 export default class index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      wsrc: ""
+      wsrc: "",
+      show_err: false
     };
   }
   //检查二维码是否过期
@@ -30,31 +33,49 @@ export default class index extends Component {
         store: { dispatch }
       }
     } = Taro.getApp();
-    Taro.setStorageSync("qrCodeInValidText", "请扫描项目统计二维码");
+    // Taro.setStorageSync("qrCodeInValidText", "请扫描项目统计二维码");
     if (queryId) {
       Taro.setStorageSync("qr_code_check_id", queryId);
     } else {
-      Taro.reLaunch({
-        url: "../../pages/qrCodeInvalid/index"
+      this.setState({
+        show_err: true
       });
+      return;
+      // Taro.reLaunch({
+      //   url: "../../pages/qrCodeInvalid/index"
+      // });
     }
     Taro.removeStorageSync("web_redirect_url");
     Taro.removeStorageSync("web_param_board_id");
-    dispatch({
-      type: "invitation/qrCodeIsInvitation",
-      payload: {
-        id: queryId || Taro.getStorageSync("qr_code_check_id")
-      }
-    }).then(data => {
-      // debugger
-      if (data) {
-        const { rela_id, rela_content } = data;
-        Taro.setStorageSync("web_redirect_url", `${BASE_URL}${rela_content}`);
-        Taro.setStorageSync("web_param_board_id", rela_id);
-        Taro.removeStorageSync("qrCodeInValidText");
-        this.getAuth();
-      }
+    const res = await qrCodeIsInvitation({
+      id: queryId || Taro.getStorageSync("qr_code_check_id")
     });
+    if (isApiResponseOk(res)) {
+      const { rela_id, rela_content } = res.data;
+      Taro.setStorageSync("web_redirect_url", `${BASE_URL}${rela_content}`);
+      Taro.setStorageSync("web_param_board_id", rela_id);
+      // Taro.removeStorageSync("qrCodeInValidText");
+      this.getAuth();
+    } else {
+      this.setState({
+        show_err: true
+      });
+    }
+    // dispatch({
+    //   type: "invitation/qrCodeIsInvitation",
+    //   payload: {
+    //     id: queryId || Taro.getStorageSync("qr_code_check_id")
+    //   }
+    // }).then(data => {
+    //   debugger
+    //   if (data) {
+    //     const { rela_id, rela_content } = data;
+    //     Taro.setStorageSync("web_redirect_url", `${BASE_URL}${rela_content}`);
+    //     Taro.setStorageSync("web_param_board_id", rela_id);
+    //     Taro.removeStorageSync("qrCodeInValidText");
+    //     this.getAuth();
+    //   }
+    // });
   };
   getAuth = async () => {
     const res = await getAccountInfo();
@@ -78,9 +99,19 @@ export default class index extends Component {
     this.qarCodeIsInvitation();
   }
   render() {
+    const { show_err } = this.state;
     return (
       <View>
-        <WebView src={this.state.wsrc} />
+        {show_err ? (
+          <View className={styles.err_area}>
+            <View className={styles.img_area}>
+              <Image src={NoDataSvg} />
+            </View>
+            <View className={styles.err_text}>请前往电脑端，扫描统计二维码</View>
+          </View>
+        ) : (
+          <WebView src={this.state.wsrc} />
+        )}
       </View>
     );
   }
