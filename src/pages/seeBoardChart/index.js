@@ -11,7 +11,8 @@ export default class index extends Component {
     super(props);
     this.state = {
       wsrc: "",
-      show_err: false
+      show_err: false,
+      loading: true
     };
   }
   //检查二维码是否过期
@@ -27,7 +28,7 @@ export default class index extends Component {
       //其他场景进入
       queryId = options.id || Taro.getStorageSync("qr_code_check_id");
     }
-    console.log("options", options, queryId);
+    console.log("ssssss", options, queryId);
     const {
       globalData: {
         store: { dispatch }
@@ -38,6 +39,7 @@ export default class index extends Component {
       Taro.setStorageSync("qr_code_check_id", queryId);
     } else {
       this.setState({
+        loading: false,
         show_err: true
       });
       return;
@@ -50,6 +52,10 @@ export default class index extends Component {
     const res = await qrCodeIsInvitation({
       id: queryId || Taro.getStorageSync("qr_code_check_id")
     });
+    this.setState({
+      loading: false
+    });
+    console.log("ssssss", res);
     if (isApiResponseOk(res)) {
       const { rela_id, rela_content } = res.data;
       Taro.setStorageSync("web_redirect_url", `${BASE_URL}${rela_content}`);
@@ -99,19 +105,22 @@ export default class index extends Component {
     this.qarCodeIsInvitation();
   }
   render() {
-    const { show_err } = this.state;
+    const { show_err, loading } = this.state;
     return (
       <View>
-        {show_err ? (
-          <View className={styles.err_area}>
-            <View className={styles.img_area}>
-              <Image src={NoDataSvg} />
+        {!loading &&
+          (show_err ? (
+            <View className={styles.err_area}>
+              <View className={styles.img_area}>
+                <Image src={NoDataSvg} />
+              </View>
+              <View className={styles.err_text}>
+                请前往电脑端，扫描统计二维码
+              </View>
             </View>
-            <View className={styles.err_text}>请前往电脑端，扫描统计二维码</View>
-          </View>
-        ) : (
-          <WebView src={this.state.wsrc} />
-        )}
+          ) : (
+            <WebView src={this.state.wsrc} />
+          ))}
       </View>
     );
   }
