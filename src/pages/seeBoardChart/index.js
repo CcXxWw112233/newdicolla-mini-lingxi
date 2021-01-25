@@ -102,8 +102,33 @@ export default class index extends Component {
     }
   };
   componentDidShow() {
-    this.qarCodeIsInvitation();
+    this.checkScenen();
   }
+  //检查进入的场景
+  checkScenen = () => {
+    const options = this.$router.params;
+    const { web_redirect_url } = options;
+    if (web_redirect_url) {
+      this.offcialMessageEntry();
+    } else {
+      //扫码场景和正常进入
+      this.qarCodeIsInvitation();
+    }
+  };
+
+  offcialMessageEntry = () => {
+    const { web_param_board_id, web_redirect_url } = this.$router.params;
+    Taro.setStorageSync("web_redirect_url", `${BASE_URL}${web_redirect_url}`);
+    Taro.setStorageSync("web_param_board_id", web_param_board_id);
+    this.setState({
+      show_err: false,
+      loading: false
+    }, () => {
+      this.getAuth();
+    });
+   
+  };
+
   render() {
     const { show_err, loading } = this.state;
     return (
