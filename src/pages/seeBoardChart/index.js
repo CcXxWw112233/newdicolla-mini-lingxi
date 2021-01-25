@@ -107,12 +107,37 @@ export default class index extends Component {
   //检查进入的场景
   checkScenen = () => {
     const options = this.$router.params;
-    const { web_redirect_url } = options;
+    const { web_redirect_url, scene } = options;
     if (web_redirect_url) {
+      console.log("ssssssss", 1);
       this.offcialMessageEntry();
-    } else {
-      //扫码场景和正常进入
+    } else if (scene) {
+      console.log("ssssssss", 2);
+      //扫码场景
       this.qarCodeIsInvitation();
+    } else {
+      console.log("ssssssss", 3);
+      // 正常进入
+      this.nomalTabBarEntry();
+    }
+  };
+
+  nomalTabBarEntry = () => {
+    const web_redirect_url = Taro.getStorageSync("web_redirect_url");
+    const web_param_board_id = Taro.getStorageSync("web_param_board_id");
+    if (web_redirect_url && web_param_board_id) {
+      this.setState({
+        loading: false,
+        show_err: false,
+        wsrc: `${web_redirect_url}?board_id=${web_param_board_id}&token=${Taro.getStorageSync(
+          "access_token"
+        )}`
+      });
+    } else {
+      this.setState({
+        loading: false,
+        show_err: true
+      });
     }
   };
 
@@ -120,13 +145,15 @@ export default class index extends Component {
     const { web_param_board_id, web_redirect_url } = this.$router.params;
     Taro.setStorageSync("web_redirect_url", `${BASE_URL}${web_redirect_url}`);
     Taro.setStorageSync("web_param_board_id", web_param_board_id);
-    this.setState({
-      show_err: false,
-      loading: false
-    }, () => {
-      this.getAuth();
-    });
-   
+    this.setState(
+      {
+        show_err: false,
+        loading: false
+      },
+      () => {
+        this.getAuth();
+      }
+    );
   };
 
   render() {
