@@ -92,7 +92,12 @@ export default {
       if (redirectPath) {
         Taro.removeStorageSync('redirectPath')
         Taro.navigateTo({
-          url:redirectPath
+          url: redirectPath,
+          fail: function () {
+            Taro.switchTab({
+              url: redirectPath
+            })
+          }
         })
         return
       } 

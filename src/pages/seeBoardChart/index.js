@@ -1,14 +1,18 @@
 import Taro, { Component } from "@tarojs/taro";
-import { View, WebView } from "@tarojs/components";
+import { View, WebView, Image, Text } from "@tarojs/components";
 import { isApiResponseOk } from "../../utils/request";
 import { getAccountInfo } from "../../services/login";
 import { BASE_URL } from "../../gloalSet/js/constant";
-// import indexStyles from "./index.scss";
+import { qrCodeIsInvitation } from "../../services/invitation";
+import NoDataSvg from "../../asset/no_data.svg";
+import styles from "./index.scss";
 export default class index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      wsrc: ""
+      wsrc: "",
+      show_err: false,
+      loading: true
     };
   }
   //检查二维码是否过期
@@ -22,43 +26,70 @@ export default class index extends Component {
       queryId = sceneArr.slice(5);
     } else {
       //其他场景进入
-      queryId = options.id;
+      queryId = options.id || Taro.getStorageSync("qr_code_check_id");
     }
-    console.log("options", options, queryId);
+    console.log("ssssss", options, queryId);
     const {
       globalData: {
         store: { dispatch }
       }
     } = Taro.getApp();
-    Taro.setStorageSync("qrCodeInValidText", "请重新扫码");
+    // Taro.setStorageSync("qrCodeInValidText", "请扫描项目统计二维码");
     if (queryId) {
       Taro.setStorageSync("qr_code_check_id", queryId);
+    } else {
+      this.setState({
+        loading: false,
+        show_err: true
+      });
+      return;
+      // Taro.reLaunch({
+      //   url: "../../pages/qrCodeInvalid/index"
+      // });
     }
     Taro.removeStorageSync("web_redirect_url");
-    Taro.removeStorageSync("board_id");
-    dispatch({
-      type: "invitation/qrCodeIsInvitation",
-      payload: {
-        id: queryId || Taro.getStorageSync("qr_code_check_id")
-      }
-    }).then(data => {
-      // debugger
-      if (data) {
-        const { rela_id, rela_content } = data;
-        Taro.setStorageSync("web_redirect_url", `${BASE_URL}${rela_content}`);
-        Taro.setStorageSync("board_id", rela_id);
-        Taro.removeStorageSync("qrCodeInValidText");
-        this.getAuth();
-      }
+    Taro.removeStorageSync("web_param_board_id");
+    const res = await qrCodeIsInvitation({
+      id: queryId || Taro.getStorageSync("qr_code_check_id")
     });
+    this.setState({
+      loading: false
+    });
+    console.log("ssssss", res);
+    if (isApiResponseOk(res)) {
+      const { rela_id, rela_content } = res.data;
+      Taro.setStorageSync("web_redirect_url", `${BASE_URL}${rela_content}`);
+      Taro.setStorageSync("web_param_board_id", rela_id);
+      // Taro.removeStorageSync("qrCodeInValidText");
+      this.getAuth();
+    } else {
+      this.setState({
+        show_err: true
+      });
+    }
+    // dispatch({
+    //   type: "invitation/qrCodeIsInvitation",
+    //   payload: {
+    //     id: queryId || Taro.getStorageSync("qr_code_check_id")
+    //   }
+    // }).then(data => {
+    //   debugger
+    //   if (data) {
+    //     const { rela_id, rela_content } = data;
+    //     Taro.setStorageSync("web_redirect_url", `${BASE_URL}${rela_content}`);
+    //     Taro.setStorageSync("web_param_board_id", rela_id);
+    //     Taro.removeStorageSync("qrCodeInValidText");
+    //     this.getAuth();
+    //   }
+    // });
   };
   getAuth = async () => {
     const res = await getAccountInfo();
     const web_redirect_url = Taro.getStorageSync("web_redirect_url");
-    const board_id = Taro.getStorageSync("board_id");
+    const web_param_board_id = Taro.getStorageSync("web_param_board_id");
     if (isApiResponseOk(res)) {
       this.setState({
-        wsrc: `${web_redirect_url}?board_id=${board_id}&token=${Taro.getStorageSync(
+        wsrc: `${web_redirect_url}?board_id=${web_param_board_id}&token=${Taro.getStorageSync(
           "access_token"
         )}`
       });
@@ -74,9 +105,22 @@ export default class index extends Component {
     this.qarCodeIsInvitation();
   }
   render() {
+    const { show_err, loading } = this.state;
     return (
       <View>
-        <WebView src={this.state.wsrc} />
+        {!loading &&
+          (show_err ? (
+            <View className={styles.err_area}>
+              <View className={styles.img_area}>
+                <Image src={NoDataSvg} />
+              </View>
+              <View className={styles.err_text}>
+                请前往电脑端，扫描统计二维码
+              </View>
+            </View>
+          ) : (
+            <WebView src={this.state.wsrc} />
+          ))}
       </View>
     );
   }
