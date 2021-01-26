@@ -1,5 +1,5 @@
 import { isApiResponseOk } from "../../utils/request";
-import { getAccountInfo, changeOut } from "../../services/login";
+import { getAccountInfo, changeOut, updateNickName } from "../../services/login";
 import Taro from '@tarojs/taro'
 
 export default {
@@ -37,6 +37,24 @@ export default {
         })
       } else {
 
+      }
+    },
+    //更新用户名
+    * updateNickName({ payload }, { select, call, put }) {
+      const res = yield call(updateNickName, payload)
+      if (isApiResponseOk(res)) {
+        var account_info = {};
+        account_info = JSON.parse(Taro.getStorageSync('account_info'));
+        account_info.name = payload.name;
+        yield put({
+          type: 'updateDatas',
+          payload: {
+            account_info: account_info,
+            current_org: account_info.user_set
+          }
+        })
+        Taro.setStorageSync('account_info', JSON.stringify(account_info))
+      } else {
       }
     },
   },

@@ -146,6 +146,7 @@ class App extends Component {
       const {
         globalData: {
           store: { dispatch },
+
         },
       } = Taro.getApp();
       const { account, token } = await dispatch({

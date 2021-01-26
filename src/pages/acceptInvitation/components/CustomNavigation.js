@@ -2,6 +2,7 @@ import Taro, { Component } from '@tarojs/taro';
 import { View, Image } from '@tarojs/components';
 import indexStyles from './customNavigation.scss';
 import globalStyle from '../../../gloalSet/styles/globalStyles.scss'
+import defaultPhoto from "../../../asset/chat/defaultPhoto.png";
 
 class CustomNavigation extends Component {
 
@@ -33,7 +34,8 @@ class CustomNavigation extends Component {
                                     <Image src={personal_center_image} className={indexStyles.left_home_icon}></Image>
                                 ) :
                                     (
-                                        <Text className={`${globalStyle.global_iconfont} ${indexStyles.left_home_icon}`}>&#xe647;</Text>
+                                        // <Text className={`${globalStyle.global_iconfont} ${indexStyles.left_home_icon}`}>&#xe647;</Text>
+                                        <Image src={defaultPhoto} className={`${globalStyle.global_iconfont} ${indexStyles.left_home_icon}`}></Image>
                                     )
                             }
                         </View>)

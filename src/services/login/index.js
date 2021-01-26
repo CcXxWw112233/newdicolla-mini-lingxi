@@ -120,3 +120,14 @@ export const changeOut = (data, notShowLoading) => {
     url: `${API_UPMS}/user/logout`
   }, notShowLoading)
 }
+
+//用户修改用户名
+export const updateNickName = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'PUT',
+    url: `${API_UPMS}/user`
+  }, notShowLoading)
+}

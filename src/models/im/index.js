@@ -335,6 +335,19 @@ export default {
         }
       });
     },
+    *sendFile({ payload }, { select }) {
+      const { scene, to, filePath, type } = payload;
+      const { nim } = yield selectFieldsFromIm(select, 'nim');
+      nim.sendFile({
+        scene,
+        to,
+        type,
+        filePath,
+        done: (err, msg) => {
+          onSendMsgDone(err, msg);
+        }
+      });
+    },
     *sendMsg({ payload }, { select }) {
       const { scene, to, text, apns } = payload;
       const { nim } = yield selectFieldsFromIm(select, 'nim');

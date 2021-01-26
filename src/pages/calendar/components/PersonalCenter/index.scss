@@ -31,6 +31,7 @@
         top      : pxTrans(20);
         right    : pxTrans(16);
         font-size: pxTrans(20);
+        color    : #9EA6C2;
     }
 
     .personal_center_content {
@@ -55,11 +56,31 @@
         }
 
         .nick_name_style {
-            width      : 100%;
-            font-size  : pxTrans(16);
-            font-weight: 500;
-            color      : rgba(0, 0, 0, 0.65);
-            line-height: pxTrans(24);
+            background-color: #F5F7FB;
+            margin-top      : pxTrans(10);
+            width           : 85%;
+            font-size       : pxTrans(16);
+            font-weight     : 500;
+            height          : pxTrans(40);
+            color           : rgba(0, 0, 0, 0.65);
+            line-height     : pxTrans(40);
+            border-radius   : pxTrans(4);
+            display         : flex;
+            flex-direction  : row;
+        }
+
+        .nick_name_input {
+            height      : pxTrans(40);
+            line-height : pxTrans(40);
+            flex        : auto;
+            padding-left: pxTrans(25);
+        }
+
+        .nick_name_edit {
+            margin-right: pxTrans(5);
+            margin-top  : pxTrans(7);
+            height      : pxTrans(25);
+            width       : pxTrans(25);
         }
 
         .account_style {
@@ -78,7 +99,7 @@
             right        : pxTrans(16);
             text-align   : center;
             background   : rgba(0, 0, 0, 0.04);
-            border-radius: pxTrans(4);
+            border-radius: pxTrans(20);
             border       : 1px solid rgba(0, 0, 0, 0.15);
             font-size    : pxTrans(16);
             font-weight  : 400;

@@ -1,9 +1,10 @@
 
 import Taro, { Component } from '@tarojs/taro'
-import { View, } from '@tarojs/components'
+import { View, Image } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyles from '../../../../../gloalSet/styles/globalStyles.scss'
 import { renderRestrictionsTime, } from '../../../../../utils/basicFunction'
+import defaultPhoto from "../../../../../asset/chat/defaultPhoto.png"
 
 export default class index extends Component {
 
@@ -75,7 +76,8 @@ export default class index extends Component {
                                                 avatar ? (
                                                     <Image className={indexStyles.avatar_image_style} src={avatar}></Image>
                                                 ) : (
-                                                        <Text className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}>&#xe647;</Text>
+                                                        // <Text className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}>&#xe647;</Text>
+                                                        <Image src={defaultPhoto} className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}></Image>
                                                     )
                                             }
                                         </View>
@@ -101,7 +103,8 @@ export default class index extends Component {
                                                 avatar ? (
                                                     <Image className={indexStyles.avatar_image_style} src={avatar}></Image>
                                                 ) : (
-                                                        <Text className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}>&#xe647;</Text>
+                                                        // <Text className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}>&#xe647;</Text>
+                                                        <Image src={defaultPhoto} className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}></Image>
                                                     )
                                             }
                                         </View>
