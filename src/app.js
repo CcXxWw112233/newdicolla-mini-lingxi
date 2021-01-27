@@ -164,8 +164,7 @@ class App extends Component {
       });
     };
     initImData().catch(
-      (e) => console.log(String(e))
-      // Taro.showToast({ title: String(e), icon: 'none', duration: 2000 })
+      (e) => console.log(String(e)),
     );
   };
   recordtoHome = () => {
@@ -174,6 +173,7 @@ class App extends Component {
       if (isApiResponseOk(res)) {
         // 注册im
         this.registerIm();
+
 
         // Taro.switchTab({
         //   url: '../../pages/calendar/index'

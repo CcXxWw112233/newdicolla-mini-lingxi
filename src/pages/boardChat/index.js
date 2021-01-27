@@ -536,6 +536,9 @@ export default class BoardChat extends Component {
             var sumUnRead = filter_list.reduce(function (a, b) {
                 return a + parseInt(b.unread);
             }, 0)
+
+
+            console.log("---------------------------")
             //消息未读数
             if (sumUnRead) {
                 /**

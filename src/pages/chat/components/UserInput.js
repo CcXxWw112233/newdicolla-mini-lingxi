@@ -441,6 +441,9 @@ class UserInput extends Component {
       success: function (res) {
         console.log(res.tempFiles);
         res.tempFiles.forEach(element => {
+          wx.showLoading({
+            title: '发送中...'
+          })
           Promise.resolve(sendfileMsg(element["path"], im_id, element["type"]))
             .then((res1) => {
               setInputMode("text");
