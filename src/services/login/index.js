@@ -61,7 +61,7 @@ export const getAccountInfo = (data, notShowLoading, redirectPage) => {
       ...data
     },
     method: 'GET',
-    url: `${API_UPMS}/v2/user`,
+    url: `${API_UPMS}/user/info`,
   }, notShowLoading, false, redirectPage)
 }
 
@@ -94,7 +94,7 @@ export const changeOrg = (data, notShowLoading) => {
       ...data
     },
     method: 'PUT',
-    url: `${API_UPMS}/v2/user/changecurrentorg/${data['_organization_id']}`,
+    url: `${API_UPMS}/user/info/org/change/${data['_organization_id']}`,
   }, notShowLoading)
 }
 
@@ -117,6 +117,6 @@ export const changeOut = (data, notShowLoading) => {
       ...data
     },
     method: 'GET',
-    url: `${API_UPMS}/user/logout`
+    url: `${API_UPMS}/public/user/signout`
   }, notShowLoading)
 }

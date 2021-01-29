@@ -33,7 +33,7 @@ export const userScanCodeJoinOrganization = (data, notShowLoading, isNewLogin) =
       ...data
     },
     method: 'POST',
-    url: `${API_UPMS}/organization/invite/QRCode/join`,
+    url: `${API_UPMS}/org/access/invite/qrcode`,
   }, notShowLoading, true)
 }
 
