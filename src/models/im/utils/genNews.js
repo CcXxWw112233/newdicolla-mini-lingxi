@@ -8,7 +8,9 @@ const getAvatarByFromNick = (fromImId, currentBoard = { users: [] }) => {
   if (fromImId === '10086') {
     return assistantAvatar;
   }
-  let ret = currentBoard && currentBoard.users.find(i => i.id === fromImId);
+  console.log("=========");
+  console.log(currentBoard.users)
+  let ret = currentBoard && currentBoard.users && currentBoard.users.find(i => i.id === fromImId);
   return ret ? ret.avatar : '';
 };
 

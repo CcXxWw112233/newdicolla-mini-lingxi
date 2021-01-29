@@ -1,5 +1,6 @@
 import { request, packagePromise, } from "../../utils/request";
 import { API_UPMS } from "../../gloalSet/js/constant";
+import Taro, { Component } from '@tarojs/taro'
 
 export const getVerifycodeImg = (notShowLoading) => {
   return request({
@@ -128,6 +129,6 @@ export const updateNickName = (data, notShowLoading) => {
       ...data
     },
     method: 'PUT',
-    url: `${API_UPMS}/user`
+    url: `${API_UPMS}/user`,
   }, notShowLoading)
 }

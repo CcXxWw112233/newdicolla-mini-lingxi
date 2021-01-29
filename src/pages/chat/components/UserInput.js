@@ -72,7 +72,7 @@ let store = app.store
           to,
           filePath
         },
-        desc: 'im send File'
+        desc: 'im send image'
       }),
     sendPinupEmoji: (to, catalog, chartlet) =>
       dispatch({
@@ -433,7 +433,7 @@ class UserInput extends Component {
     });
   };
   handleChooseFile = () => {
-    const { im_id, sendfileMsg } = this.props;
+    const { im_id, sendfileMsg, handleUserInputHeightChange } = this.props;
     const { setInputMode } = this;
     Taro.chooseMessageFile({
       count: 10,
@@ -441,12 +441,13 @@ class UserInput extends Component {
       success: function (res) {
         console.log(res.tempFiles);
         res.tempFiles.forEach(element => {
-          wx.showLoading({
+          Taro.showLoading({
             title: '发送中...'
           })
           Promise.resolve(sendfileMsg(element["path"], im_id, element["type"]))
             .then((res1) => {
               setInputMode("text");
+              handleUserInputHeightChange && handleUserInputHeightChange(0);
             })
             .catch(e => {
               Taro.showToast({

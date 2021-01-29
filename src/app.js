@@ -164,7 +164,10 @@ class App extends Component {
       });
     };
     initImData().catch(
-      (e) => console.log(String(e)),
+      (e) => {
+        console.log("============****=============");
+        console.log(String(e))
+      },
     );
   };
   recordtoHome = () => {
@@ -173,8 +176,6 @@ class App extends Component {
       if (isApiResponseOk(res)) {
         // 注册im
         this.registerIm();
-
-
         // Taro.switchTab({
         //   url: '../../pages/calendar/index'
         // })
@@ -183,6 +184,7 @@ class App extends Component {
   };
 
   componentDidShow() {
+    console.log("*************");
     // this.recordtoHome();
     /***
      * 备注: 小程序切换到后台后, im会重连会发送不了消息, 所以每次进入前台连接一次
@@ -202,11 +204,16 @@ class App extends Component {
       const {
         im: { nim },
       } = getState();
+      console.log("*****");
+      console.log(nim);
       if (nim) {
         nim.disconnect({
           done: () => {
             setTimeout(() => {
-              nim.connect({});
+              nim.connect({
+                done: () => {
+                }
+              });
             }, 50);
           },
         });
@@ -214,7 +221,8 @@ class App extends Component {
     }
   }
 
-  componentDidHide() { }
+  componentDidHide() {
+  }
 
   componentDidCatchError() { }
 

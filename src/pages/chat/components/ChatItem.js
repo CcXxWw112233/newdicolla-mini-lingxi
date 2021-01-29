@@ -379,6 +379,7 @@ class ChatItem extends Component {
     Taro.showLoading({
       title: '加载中',
     })
+    console.log(file.url);
     Taro.downloadFile({
       url: file.url,
       success: function (res) {
@@ -391,9 +392,10 @@ class ChatItem extends Component {
               filePath: res1.savedFilePath,
               fileType: file.ext,  //指定文件类型 file_type
               success: function (res2) {
-                //console.log("打开文档成功", res)
+                console.log("打开文档成功", res)
               },
               fail: function (res2) {
+                console.log(res2);
                 Taro.showToast({
                   title: '文件过大或不支持该格式',
                   icon: 'none',
@@ -414,7 +416,7 @@ class ChatItem extends Component {
               icon: 'none',
               duration: 2000
             })
-            //console.log("saveFile", res);
+            //console.log("saveFile", res.errMsg);
           },
           complete: function (res2) {
             // console.log("saveFile", res);
@@ -424,9 +426,9 @@ class ChatItem extends Component {
       fail: function (e) {
         Taro.hideLoading()
         Taro.showToast({
-          title: '文件过大或不支持该格式',
+          title: "文件过大或不支持该格式",
           icon: 'none',
-          duration: 2000
+          duration: 20000
         })
         // console.log('fail', res)
       },
@@ -512,6 +514,7 @@ class ChatItem extends Component {
         <Image src={lxzs} className={`${globalStyles.global_iconfont} ${styles.icon_default_avatar_style}`}></Image>
       );
       from_nick = fromNick ? fromNick : "聆悉助手";
+
     }
     const fileType = chatFile ? filterFileFormatType('.' + chatFile.ext) : '';
     return (
@@ -701,6 +704,7 @@ class ChatItem extends Component {
                                 activityContent,
                                 range
                               } = parseActivityNewsBody(data);
+                              console.log(activityContent);
                               return (
                                 <View
                                   key={data.creatorId}

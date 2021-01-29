@@ -16,23 +16,20 @@ import {
   getImAllHistoryUnread,
 } from './../../services/im/index';
 import { isApiResponseOk } from './../../utils/request';
-import { onMsg, onTeams } from './actions/index';
+import { onError, onMsg, onTeams } from './actions/index';
 
 function onSendMsgDone(error, msg) {
   console.log('消息未发出_错误:', error, msg);
 
   Taro.hideLoading()
-
   if (error) {
+
     // 被拉黑
     if (error.code === 7101) {
       msg.status = 'fail';
       alert(error.message);
     } else {
-
-      msg.status = 'fail';
       onMsg(msg);
-
       /***
        * 消息发送失败, 重新连接, 并提示用户再次发送
        */
@@ -42,13 +39,16 @@ function onSendMsgDone(error, msg) {
         nim.disconnect({
           done: () => {
             console.log('断开连接成功');
-            setTimeout(() => {
-              nim.connect({})
-            }, 50)
+            nim.connect({
+              done: () => {
+                console.log(nim.getState());
+              }
+            })
           }
         })
       }
     }
+    msg.status = 'fail';
     return;
   }
   msg.status = 'success';
@@ -282,14 +282,14 @@ export default {
       const { account, token } = payload;
 
       const { nim } = yield selectFieldsFromIm(select, 'nim');
-
+      console.log(nim);
       // 单例模式
       // 如果存在 nim 实例，那么先调用 disconnect 方法
-      if (nim) {
-        nim.disconnect();
-      }
-      const nimInstance = yield initNimSDK({ account, token });
+      // if (nim) {
+      // nim.disconnect();
+      // }
 
+      const nimInstance = yield initNimSDK({ account, token });
       yield put({
         type: 'updateStateFieldByCover',
         payload: {
