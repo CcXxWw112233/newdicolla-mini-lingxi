@@ -6,8 +6,12 @@ var isNavigatePushLogin = true;
 export const request = (options, notShowLoading, isNewLogin, redirectPage = true) => {
   const { url = "", data = {}, method = "GET", header = {} } = options;
   let Headers = { ...header };
-  Headers['Authorization'] = Taro.getStorageSync('access_token')
-
+  Headers['AccessToken'] = Taro.getStorageSync('access_token') || ''
+  
+  const url_filter = ['/public/sms/code/send']
+  if (url_filter.includes(url)) {
+    delete header.AccessToken
+  }
   return new Promise((resolve, reject) => {
 
     /***

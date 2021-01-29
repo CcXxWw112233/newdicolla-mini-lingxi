@@ -254,29 +254,54 @@ export default class Login extends Component {
       return false;
     }
     let _this = this;
-    let data = {
-      account: user
-    }
+    // let data = {
+    //   account: user
+    // }
+    // if (showCode) {
+    //   data.verifycode = pswd;
+    // } else {
+    //   if (verifyShow) {
+    //     data.captcha_key = captchaKey;
+    //     data.verifycode = verifycode;
+    //   }
+    //   data.password = sha256(pswd);
+    // }
+    let request_params = {}
     if (showCode) {
-      data.verifycode = pswd;
-    } else {
-      if (verifyShow) {
-        data.captcha_key = captchaKey;
-        data.verifycode = verifycode;
+      request_params = {
+        grant_type: 'sms_code',
+        sms_params: {
+          account: user,
+          verify_code: pswd
+        }
       }
-      data.password = sha256(pswd);
+    } else {
+      request_params = {
+        grant_type: 'enhance_password',
+        pwd_params: {
+          account: user,
+          password: sha256(pswd),
+        }
+      }
+      if (verifyShow) {
+        request_params.pwd_params.captcha_key = captchaKey;
+        request_params.pwd_params.verify_code = verifycode;
+      }
     }
-    normalLogin(data).then(res => {
+
+    normalLogin(request_params).then(res => {
       const { sourcePage } = this.state
-      if (res.code === '0') {
+      if (res.code == '0') {
+        const { access_token, refresh_token } = res.data
         dispatch({
           type: 'login/handleToken',
           payload: {
-            token_string: res.data,
+            access_token,
+            refresh_token,
             sourcePage: sourcePage.redirect,
           }
         })
-      } else if (res.code === '4005' || res.code === '4006' || res.code === '4007') {
+      } else if (res.code == '914003' || res.code == '914004' ) {
         Taro.showToast({
           title: res.message,
           icon: 'none',

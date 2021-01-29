@@ -1,10 +1,10 @@
 import { request, packagePromise, } from "../../utils/request";
-import { API_UPMS } from "../../gloalSet/js/constant";
+import { API_AUTH, API_UPMS } from "../../gloalSet/js/constant";
 
 export const getVerifycodeImg = (notShowLoading) => {
   return request({
     method: 'GET',
-    url: `${API_UPMS}/user/getLoginImageCaptcha`,
+    url: `${API_AUTH}/public/oauth/token/getLoginImageCaptcha`,
   }, notShowLoading);
 }
 
@@ -15,7 +15,7 @@ export const sendVerifyCode = (data, notShowLoading) => {
       ...data
     },
     method: 'POST',
-    url: `${API_UPMS}/sms/code/send`,
+    url: `${API_AUTH}/public/sms/code/send`,
   }, notShowLoading)
 }
 
@@ -26,7 +26,7 @@ export const normalLogin = (data, notShowLoading) => {
       ...data
     },
     method: 'POST',
-    url: `${API_UPMS}/user/signin`,
+    url: `/dian_lingxi_auth/signin`,
   }, notShowLoading, false, false)
 }
 
@@ -38,7 +38,7 @@ export const weChatAuthLogin = (data, notShowLoading) => {
       ...data
     },
     method: 'POST',
-    url: `${API_UPMS}/mini/auth/login`,
+    url: `/dian_lingxi_auth/signin`,
   }, notShowLoading)
 }
 
@@ -49,7 +49,7 @@ export const weChatPhoneLogin = (data, notShowLoading) => {
       ...data
     },
     method: 'POST',
-    url: `${API_UPMS}/mini/user/auth/bind/login`,
+    url: `${API_UPMS}/user/oauth/token/wechat_applet_account_bind`,
   }, notShowLoading)
 }
 

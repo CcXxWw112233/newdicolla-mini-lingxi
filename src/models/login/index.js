@@ -1,6 +1,7 @@
 import Taro from '@tarojs/taro'
 import { isApiResponseOk } from "../../utils/request";
 import { weChatAuthLogin, weChatPhoneLogin, getAccountInfo, initializeOrganization } from "../../services/login/index";
+import { APP_KEY_NAME } from '../../gloalSet/js/constant';
 
 let dispatches
 export default {
@@ -15,34 +16,49 @@ export default {
     //微信授权登录）
     * weChatAuthLogin({ payload }, { select, call, put }) {
       const parmas = payload.parmas
-      const res = yield call(weChatAuthLogin, { ...parmas })
-      if (isApiResponseOk(res)) {
-        yield put({
-          type: 'handleToken',
-          payload: {
-            token_string: res.data,
-            sourcePage: payload.sourcePage,
-          }
-        })
-
-      } else {
-        const res_code = res.code
-        if ('4013' == res_code) {
-          Taro.navigateTo({ url: `../../pages/phoneNumberLogin/index?user_key=${res.data}&sourcePage=${payload.sourcePage}` })
-        } else {
-
+      const request_params = {
+        grant_type: 'wechat_applet',
+        wechat_applet_auth_params: {
+          ...parmas,
+          app: APP_KEY_NAME
         }
       }
+      const res = yield call(weChatAuthLogin, { ...request_params })
+      if (isApiResponseOk(res)) {
+        const { access_token, refresh_token, is_bind, key } = res.data
+        if (is_bind == '0') { //未绑定微信跳转到绑定微信界面
+          Taro.navigateTo({ url: `../../pages/phoneNumberLogin/index?user_key=${key}&sourcePage=${payload.sourcePage}` })
+        } else {
+          yield put({
+            type: 'handleToken',
+            payload: {
+              access_token,
+              refresh_token,
+              sourcePage: payload.sourcePage,
+            }
+          })
+        }
+      }
+      // else {
+      //   const res_code = res.code
+      //   if ('4013' == res_code) {
+      //     Taro.navigateTo({ url: `../../pages/phoneNumberLogin/index?user_key=${res.data}&sourcePage=${payload.sourcePage}` })
+      //   } else {
+
+      //   }
+      // }
     },
     // 微信未绑定系统，通过手机号绑定
     * weChatPhoneLogin({ payload }, { select, call, put }) {
       const { parmas, sourcePage, phoneNumberBind, } = payload
       const res = yield call(weChatPhoneLogin, parmas)
       if (isApiResponseOk(res)) {
+        const { access_token, refresh_token } = res.data
         yield put({
           type: 'handleToken',
           payload: {
-            token_string: res.data,
+            access_token,
+            refresh_token,
             phoneNumberBind,
           }
         })
@@ -70,11 +86,9 @@ export default {
     //处理token，做相应的页面跳转
     * handleToken({ payload }, { select, call, put }) {
 
-      const { token_string, phoneNumberBind } = payload;
-      const tokenArr = token_string.split('__');
-      Taro.setStorageSync('access_token', tokenArr[0]);        //设置token
-      Taro.setStorageSync('refresh_token', tokenArr[1]);       //设置refreshToken
-
+      const { access_token, refresh_token, phoneNumberBind } = payload;
+      Taro.setStorageSync('access_token', access_token);        //设置token
+      Taro.setStorageSync('refresh_token', refresh_token);       //设置refreshToken
       yield put({
         type: 'registerIm'
       })

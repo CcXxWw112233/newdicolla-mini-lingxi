@@ -1,5 +1,5 @@
 //线上环境
-export const BASE_URL = "https://lingxi.di-an.com";
+export const BASE_URL = 'http://4sjx2n.natappfree.cc'//, //"https://lingxi.di-an.com";
 //测试环境
 // export const BASE_URL = "http://test.lingxi.new-di.com";
 //稳定版开发服务器
@@ -27,7 +27,7 @@ export const BASE_URL = "https://lingxi.di-an.com";
 //         BASE_URL = 'https://lingxi.di-an.com'
 //     }
 // }
-
+export const APP_KEY_NAME = 'lingxi'
 export const NODE_ENV = process.env.NODE_ENV;
 export const PAGE_SIZE = 20;
 export const QUERY_TYPE = 1;
@@ -40,6 +40,8 @@ export const API_FLOWS = `${REQUEST_PREFIX}/flows`; //接口域名
 export const API_WORKBENCHS = `${REQUEST_PREFIX}/workbenchs`;
 export const API_MORE = `${REQUEST_PREFIX}/more`;
 export const REQUEST_INTERGFACE_VERSIONN = "/v2"; //接口版本
+export const API_AUTH = `${REQUEST_PREFIX}/auth`; //认证中心接口域名
+
 
 export const WEBSOCKET_PATH = "192.168.0.30"; //WS链接地址
 export const WEBSOCKET_PORT = "9326"; //WS链接地址
