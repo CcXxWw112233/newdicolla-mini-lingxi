@@ -9,7 +9,7 @@ import FileChat from "./components/fileChat.js";
 import Contacts from "../Contacts";
 @connect(
   ({
-    chat: {},
+    chat: { },
     file: { isShowFileComment },
     im: {
       allBoardList,
@@ -55,6 +55,7 @@ import Contacts from "../Contacts";
           },
           desc: "im set current board."
         });
+
       },
 
       resetCurrentChatTo: () =>
@@ -301,15 +302,15 @@ class Chat extends Component {
     return (
       <View
         className={styles.wrapper}
-        // onClick={this.inputDown}
+      // onClick={this.inputDown}
       >
         {isShowFileComment === true &&
-        page_source &&
-        page_source === "isFileComment" ? (
-          <FileChat fileInfo={file_info} />
-        ) : (
-          ""
-        )}
+          page_source &&
+          page_source === "isFileComment" ? (
+            <FileChat fileInfo={file_info} />
+          ) : (
+            ""
+          )}
         <View className={styles.headerWraper}>
           <ChatHeader
             onTapBoardName={this.onTapName}

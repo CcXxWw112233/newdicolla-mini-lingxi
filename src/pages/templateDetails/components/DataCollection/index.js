@@ -35,31 +35,32 @@ export default class index extends Component {
 
                 <View className={indexStyles.view_cell}>
                     {forms && forms.map((item, key) => {
-                        const { id, value, field_type, files = [], options } = item
+                        console.log(item);
+                        const { id, value, field_type, files = [], options, title } = item
                         return (
                             <View key={id}>
                                 {field_type === '1' && (
                                     <View>
                                         <View className={indexStyles.other_cell}>
-                                            <OtherCell title='文本' description={value} />
+                                            <OtherCell title={title} description={value} />
                                         </View>
                                     </View>
                                 )}
                                 {field_type === '2' && (
                                     <View>
                                         <View className={indexStyles.other_cell}>
-                                            <Choice title='选择' options={options} />
+                                            <Choice title={title} options={options} />
                                         </View>
                                     </View>
                                 )}
                                 {field_type === '3' && (
                                     <View className={indexStyles.other_cell}>
-                                        <OtherCell title='日期' description={timestampToTimeZH(value)} />
+                                        <OtherCell title={title} description={timestampToTimeZH(value)} />
                                     </View>
                                 )}
                                 {field_type === '5' && (
                                     <View className={indexStyles.other_cell}>
-                                        <Enclosure title='附件' files={files} board_id={board_id} />
+                                        <Enclosure title={title} files={files} board_id={board_id} />
                                     </View>
                                 )}
                                 {field_type === '6' && (

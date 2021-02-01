@@ -229,10 +229,8 @@ export default class File extends Component {
                     console.log(e);
                 }
             }
-
             //获取未读文件list
             this.getUnreadFileList(dispatch);
-
         })
     }
 
@@ -666,7 +664,6 @@ export default class File extends Component {
 
         let that = this;
         Taro.chooseImage({
-            // count: 9 - that.state.choice_image_temp_file_paths.length,
             count: 9,
             sizeType: ['original'],
             sourceType: [imageSourceType],

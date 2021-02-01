@@ -1,5 +1,5 @@
 import { isApiResponseOk } from "../../utils/request";
-import { getAccountInfo, changeOut } from "../../services/login";
+import { getAccountInfo, changeOut, updateNickName } from "../../services/login";
 import Taro from '@tarojs/taro'
 
 export default {
@@ -37,6 +37,38 @@ export default {
         })
       } else {
 
+      }
+    },
+    //更新用户名
+    * updateNickName({ payload }, { select, call, put }) {
+      const res = yield call(updateNickName, payload)
+      console.log(res);
+      if (res.code == 9999) {
+        Taro.showToast({
+          title: "修改失败",
+          duration: 2000,
+        })
+        return;
+      }
+      if (isApiResponseOk(res)) {
+        if (res.code == '0') {
+          var account_info = {};
+          account_info = JSON.parse(Taro.getStorageSync('account_info'));
+          account_info.name = payload.name;
+          yield put({
+            type: 'updateDatas',
+            payload: {
+              account_info: account_info,
+              current_org: account_info.user_set
+            }
+          })
+          Taro.setStorageSync('account_info', JSON.stringify(account_info))
+        } else {
+          Taro.showToast({
+            icon: res.message,
+            duration: 2000
+          })
+        }
       }
     },
   },

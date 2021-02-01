@@ -5,6 +5,7 @@ import indexStyles from './index.scss'
 import globalStyles from '../../../../../../gloalSet/styles/globalStyles.scss'
 import { validateTwoDecimal, } from '../../../../../../utils/verify';
 import { loadFindAssignees, } from '../../../../../../utils/basicFunction';
+import defaultPhoto from "../../../../../../asset/chat/defaultPhoto.png"
 
 export default class index extends Component {
 
@@ -180,7 +181,10 @@ export default class index extends Component {
                                             avatar ? (
                                                 <Image className={indexStyles.avatar_image_style} src={avatar}></Image>
                                             ) : (
-                                                    <Text className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}>&#xe647;</Text>)
+                                                    // <Text className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}>&#xe647;</Text>
+                                                    <Image src={defaultPhoto} className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}></Image>
+
+                                                )
                                         }
                                         <View className={indexStyles.rater_name}>{name}</View>
                                         <View className={indexStyles.average_number}>{this.loadProcessedState(processed, score_items && score_items[score_items.length - 1]['value'])}</View>

@@ -82,7 +82,7 @@ export default class Calendar extends Component {
     this.getMeetingTodoList({ query_time: selected_timestamp });
 
     Taro.showNavigationBarLoading();
-    setTimeout(function() {
+    setTimeout(function () {
       Taro.stopPullDownRefresh();
       Taro.hideNavigationBarLoading();
     }, 300);
@@ -106,16 +106,15 @@ export default class Calendar extends Component {
       })
     ).then(res => {
       const { unread_all_number } = this.props;
-
-      if (unread_all_number != 0) {
+      if (unread_all_number != 0 && unread_all_number) {
         wx.setTabBarBadge({
           index: 1,
           text:
             unread_all_number > 99
               ? "99+"
               : unread_all_number
-              ? unread_all_number + ""
-              : "0"
+                ? unread_all_number + ""
+                : "0"
         });
       }
     });
@@ -329,8 +328,8 @@ export default class Calendar extends Component {
             closePersonalCenter={() => this.showPersonalCenter(false)}
           />
         ) : (
-          ""
-        )}
+            ""
+          )}
         <View
           style={{
             position: "sticky",

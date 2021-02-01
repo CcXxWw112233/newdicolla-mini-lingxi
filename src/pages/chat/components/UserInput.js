@@ -16,6 +16,8 @@ import emojiObj from './../../../models/im/config/emoji.js';
 import genEmojiList from './../../../models/im/utils/genEmojiList.js';
 import { init } from '../../../utils/canvasImage'
 import DrawCanvas from '../../drawCanvas/index.js'
+let app = getApp()
+let store = app.store
 
 @connect(
   ({
@@ -61,6 +63,17 @@ import DrawCanvas from '../../drawCanvas/index.js'
         },
         desc: 'im send image'
       }),
+    sendfileMsg: (filePath, to, type) =>
+      dispatch({
+        type: 'im/sendFile',
+        payload: {
+          type: type,
+          scene: 'team',
+          to,
+          filePath
+        },
+        desc: 'im send image'
+      }),
     sendPinupEmoji: (to, catalog, chartlet) =>
       dispatch({
         type: 'im/sendPinupEmoji',
@@ -96,7 +109,6 @@ import DrawCanvas from '../../drawCanvas/index.js'
         },
         desc: 'change userInput focus'
       })
-
   })
 )
 class UserInput extends Component {
@@ -104,7 +116,7 @@ class UserInput extends Component {
     super(props)
     this.TextInput = "";
     this.isRecording = false;
-    this.canvasImg = null ;
+    this.canvasImg = null;
   }
   state = {
     inputValue: '', // 文本类型输入框 value
@@ -117,9 +129,9 @@ class UserInput extends Component {
     inputBottomValue: 0,
     isRecording: false,
     atIds: [],
-    showCanvas:false,
-    canvasPic:null,
-    sourceType:null
+    showCanvas: false,
+    canvasPic: null,
+    sourceType: null
   };
   handleInputFocus = e => {
     const { handleUserInputFocus, handleUserInputHeightChange } = this.props;
@@ -135,7 +147,7 @@ class UserInput extends Component {
     // });
     if (e.detail.height > 0) {
       handleUserInputHeightChange && handleUserInputHeightChange(e.detail.height);
-    }else{
+    } else {
       // handleUserInputHeightChange(303)
     }
     //handleUserInputHeightChange(298);
@@ -214,7 +226,7 @@ class UserInput extends Component {
       this.setState({
         inputValue: ''
       });
-      return ;
+      return;
       // Taro.showToast({
       //   title: '未获取到群消息',
       //   icon: 'none',
@@ -243,6 +255,7 @@ class UserInput extends Component {
     }
     Promise.resolve(sendTeamTextMsg(inputValue, im_id, apns))
       .then(() => {
+
         this.setState({
           inputValue: '',
           atIds: []
@@ -322,13 +335,13 @@ class UserInput extends Component {
   };
   handleClickedItem = (e, type) => {
     if (e) e.stopPropagation();
-    const { handleUserInputFocus, handleUserInputHeightChange,hideVoice } = this.props;
-    if(hideVoice && type == 'voice'){
+    const { handleUserInputFocus, handleUserInputHeightChange, hideVoice } = this.props;
+    if (hideVoice && type == 'voice') {
       Taro.showToast({
-        title:"暂不支持发送语音",
-        icon:"none"
+        title: "暂不支持发送语音",
+        icon: "none"
       })
-      return ;
+      return;
     }
     handleUserInputFocus(false)
 
@@ -356,18 +369,21 @@ class UserInput extends Component {
     typeCond[type]();
   };
 
-  sendChooseImage = (res)=>{
-    const { im_id, sendImageMsg ,handleUserInputHeightChange} = this.props;
+  sendChooseImage = (tempFilePaths) => {
+    const { im_id, sendImageMsg, handleUserInputHeightChange } = this.props;
     const { setInputMode } = this;
     Taro.showLoading({
       title: '发送中...',
     });
-    Promise.resolve(sendImageMsg(res.tempFilePaths, im_id))
-      .then(() => {
+    Promise.resolve(sendImageMsg(tempFilePaths, im_id))
+      .then((res) => {
+        console.log(res);
+
         setInputMode('text');
         handleUserInputHeightChange && handleUserInputHeightChange(0);
       })
       .catch(e => {
+        console.log(e)
         Taro.showToast({
           title: String(e),
           icon: 'none',
@@ -375,6 +391,7 @@ class UserInput extends Component {
         });
       });
   }
+
   handleChooseImage = (...types) => {
     let _this = this;
     // this.setState({
@@ -385,7 +402,7 @@ class UserInput extends Component {
       sourceType: types,
       success: function (res) {
         // 发送图片
-        _this.sendChooseImage(res);
+        _this.sendChooseImage(res.tempFilePaths);
         // 获取屏幕大小-打开canvas
         // _this.setState({
         //   showCanvas:true
@@ -416,11 +433,33 @@ class UserInput extends Component {
     });
   };
   handleChooseFile = () => {
-    Taro.showToast({
-      title: '未完成功能',
-      icon: 'none',
-      duration: 2000
+    const { im_id, sendfileMsg, handleUserInputHeightChange } = this.props;
+    const { setInputMode } = this;
+    Taro.chooseMessageFile({
+      count: 10,
+      type: 'all',
+      success: function (res) {
+        console.log(res.tempFiles);
+        res.tempFiles.forEach(element => {
+          Taro.showLoading({
+            title: '发送中...'
+          })
+          Promise.resolve(sendfileMsg(element["path"], im_id, element["type"]))
+            .then((res1) => {
+              setInputMode("text");
+              handleUserInputHeightChange && handleUserInputHeightChange(0);
+            })
+            .catch(e => {
+              Taro.showToast({
+                title: String(e),
+                icon: 'none',
+                duration: 2000
+              });
+            });
+        });
+      }
     })
+
   }
   handleClickAdditionItem = type => {
     const cond = {
@@ -498,8 +537,8 @@ class UserInput extends Component {
       this.setState({
         recorderManager
       });
-      recorderManager.onStart( res => {
-        if(!this.isRecording){
+      recorderManager.onStart(res => {
+        if (!this.isRecording) {
           recorderManager.stop();
         }
       })
@@ -513,31 +552,31 @@ class UserInput extends Component {
             icon: 'error',
             duration: 2000
           });
-        } else if(res.duration >= 1000 && res.duration < (options.duration - 50) ){
+        } else if (res.duration >= 1000 && res.duration < (options.duration - 50)) {
           // console.log('发送中小于120',res.duration,options.duration)
           that.sendAudioMsg(res);
         }
 
 
         // 超出最大时长
-        if(res.duration >= (options.duration - 50)){
+        if (res.duration >= (options.duration - 50)) {
           let title = `时间超过${(options.duration / 1000)}s`
           Taro.showToast({
             title: title,
             icon: 'error',
             duration: 2000
           });
-          setTimeout(()=>{
+          setTimeout(() => {
             // console.log('发送中，大于最大的')
             that.sendAudioMsg(res);
-          },2000)
+          }, 2000)
         }
       });
     }
   };
   handleVoiceTouchStar = () => {
     const recorderManager =
-        this.state.recorderManager || Taro.getRecorderManager();
+      this.state.recorderManager || Taro.getRecorderManager();
     this.setState(
       {
         recordStart: true
@@ -591,44 +630,44 @@ class UserInput extends Component {
           fail: function () {
             recorderManager.stop();
             Taro.showToast({
-              title:"未开启麦克风",
-              icon:'error',
-              duration:2000
+              title: "未开启麦克风",
+              icon: 'error',
+              duration: 2000
             })
           },
-          complete:function (res){
+          complete: function (res) {
             let recordAuth = res.authSetting['scope.record'];
-            if(recordAuth === false){
+            if (recordAuth === false) {
               recorderManager.stop();
               Taro.showModal({
                 title: '提示',
                 content: '尚未进行授权，部分功能将无法使用',
                 showCancel: false,
                 success(res) {
-                    if (res.confirm) {
-                        console.log('用户点击确定')
-                        Taro.openSetting({
-                            success: (res) => {
-                                if (!res.authSetting['scope.record']) {
-                                    Taro.authorize({
-                                        scope: 'scope.record',
-                                        success() {
-                                            console.log('授权成功')
-                                        }, fail() {
-                                            console.log('用户点击取消')
-                                        }
-                                    })
-                                }
-                            },
-                            fail: function () {
-                                console.log("授权失败");
+                  if (res.confirm) {
+                    console.log('用户点击确定')
+                    Taro.openSetting({
+                      success: (res) => {
+                        if (!res.authSetting['scope.record']) {
+                          Taro.authorize({
+                            scope: 'scope.record',
+                            success() {
+                              console.log('授权成功')
+                            }, fail() {
+                              console.log('用户点击取消')
                             }
-                        })
-                    } else if (res.cancel) {
-                        console.log('用户点击取消')
-                    }
+                          })
+                        }
+                      },
+                      fail: function () {
+                        console.log("授权失败");
+                      }
+                    })
+                  } else if (res.cancel) {
+                    console.log('用户点击取消')
+                  }
                 }
-            })
+              })
             }
           }
         });
@@ -657,7 +696,7 @@ class UserInput extends Component {
   };
   handleSelectedEmojiItem = i => {
     const { type, name, key } = i;
-    const { im_id, sendPinupEmoji ,fromPage = 'chat' } = this.props;
+    const { im_id, sendPinupEmoji, fromPage = 'chat' } = this.props;
 
     // emoji 类型的表情会混合进 type = 'text' 的文本信息流
     // pinup 类型的表情会作为一种自定义的消息类型直接发送
@@ -671,12 +710,12 @@ class UserInput extends Component {
       });
     }
     if (type === 'pinup') {
-      if(fromPage == 'chat'){
+      if (fromPage == 'chat') {
         sendPinupEmoji(im_id, name, key);
-      }else{
+      } else {
         Taro.showToast({
-          title:'暂不支持此表情',
-          icon:"none"
+          title: '暂不支持此表情',
+          icon: "none"
         })
       }
     }
@@ -798,8 +837,7 @@ class UserInput extends Component {
           )}
           {inputMode === 'voice' && (
             <View
-              className={`${styles.voiceInput} ${
-                recordStart ? styles.voiceInputing : ''
+              className={`${styles.voiceInput} ${recordStart ? styles.voiceInputing : ''
                 }`}
               onTouchStart={this.handleVoiceTouchStar}
               onTouchEnd={this.handleVoiceTouchEnd}
@@ -810,8 +848,7 @@ class UserInput extends Component {
           <View>
             {inputMode === 'expression' ? (
               <View
-                className={`${globalStyles.global_iconfont} ${
-                  styles.expression
+                className={`${globalStyles.global_iconfont} ${styles.expression
                   }`}
                 onClick={e => this.handleClickedItem(e, 'text')}
               >
@@ -819,13 +856,12 @@ class UserInput extends Component {
               </View>
             ) : (
                 <View
-                  className={`${globalStyles.global_iconfont} ${
-                    styles.expression
+                  className={`${globalStyles.global_iconfont} ${styles.expression
                     }`}
                   onClick={e => this.handleClickedItem(e, 'expression')}
                 >
                   &#xe631;
-              </View>
+                </View>
               )}
           </View>
           {inputValue && inputValue.trim() ? (
@@ -833,18 +869,18 @@ class UserInput extends Component {
               发送
             </View>
           ) : (
-            !hideAddition ?
-              <View
-                className={`${globalStyles.global_iconfont} ${styles.addition}`}
-                onClick={e => this.handleClickedItem(e, 'addition')}
-              >
-                &#xe632;
+              !hideAddition ?
+                <View
+                  className={`${globalStyles.global_iconfont} ${styles.addition}`}
+                  onClick={e => this.handleClickedItem(e, 'addition')}
+                >
+                  &#xe632;
             </View>
-            :(
-              <View className={styles.sendTextBtn} onClick={this.onInputConfirm}>
-                发送
-              </View>
-            )
+                : (
+                  <View className={styles.sendTextBtn} onClick={this.onInputConfirm}>
+                    发送
+                  </View>
+                )
             )}
         </View>
 
@@ -886,8 +922,7 @@ class UserInput extends Component {
               <View className={styles.emojiPanelContentWrapper}>
                 {emojiAlbumList.map(i => (
                   <View
-                    className={`${styles.emojiPanelItemWrapper} ${
-                      emojiAlbum === i.name ? styles.emojiPanelItemActive : ''
+                    className={`${styles.emojiPanelItemWrapper} ${emojiAlbum === i.name ? styles.emojiPanelItemActive : ''
                       }`}
                     key={i.url}
                     onClick={() => this.handleSelectEmojiList(i)}
@@ -920,8 +955,7 @@ class UserInput extends Component {
                 <View className={styles.additionContentWrapper}>
                   <View className={styles.additionItemWrapper}>
                     <View
-                      className={`${globalStyles.global_iconfont} ${
-                        styles.additionItemBtnIcon
+                      className={`${globalStyles.global_iconfont} ${styles.additionItemBtnIcon
                         }`}
                       onClick={() => this.handleClickAdditionItem('file')}
                     >
@@ -931,8 +965,7 @@ class UserInput extends Component {
                   </View>
                   <View className={styles.additionItemWrapper}>
                     <View
-                      className={`${globalStyles.global_iconfont} ${
-                        styles.additionItemBtnIcon
+                      className={`${globalStyles.global_iconfont} ${styles.additionItemBtnIcon
                         }`}
                       onClick={() => this.handleClickAdditionItem('image')}
                     >
@@ -942,8 +975,7 @@ class UserInput extends Component {
                   </View>
                   <View className={styles.additionItemWrapper}>
                     <View
-                      className={`${globalStyles.global_iconfont} ${
-                        styles.additionItemBtnIcon
+                      className={`${globalStyles.global_iconfont} ${styles.additionItemBtnIcon
                         }`}
                       onClick={() => this.handleClickAdditionItem('photo')}
                     >
@@ -957,7 +989,7 @@ class UserInput extends Component {
           </View>
         )}
         {
-          showCanvas && <DrawCanvas sourceType={sourceType}/>
+          showCanvas && <DrawCanvas sourceType={sourceType} />
           // <View className={styles.canvasView}>
           //   <Canvas type='2d' id="canvasImg" disable-scroll='true' canvas-id='canvasImg'/>
           // </View>
