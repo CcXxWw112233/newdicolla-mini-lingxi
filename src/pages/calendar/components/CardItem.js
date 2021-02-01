@@ -12,15 +12,15 @@ import { getOrgName, timestampToTimeZH } from "../../../utils/basicFunction";
 }))
 export default class CardItem extends Component {
   gotoListItemDetails = itemValue => {
-    // console.log("itemValue===", itemValue);
+    console.log("itemValue===", itemValue);
     const { flag, content_id, board_id, parent_id } = itemValue;
     if (itemValue && ["0", "1"].indexOf(flag) !== -1) {
       let tasks_id = parent_id ? parent_id : content_id;
-
       Taro.navigateTo({
         url: `../../pages/taksDetails/index?flag=${flag}&contentId=${tasks_id}&boardId=${board_id}&back_icon=arrow_icon`
       });
     } else if (itemValue && ["2"].indexOf(flag) !== -1) {
+
       Taro.navigateTo({
         url: `../../pages/templateDetails/index?flag=${flag}&contentId=${content_id}&boardId=${board_id}&back_icon=arrow_icon`
       });
@@ -32,13 +32,13 @@ export default class CardItem extends Component {
   handleSetClipboardData = ({ start_url }) => {
     wx.setClipboardData({
       data: start_url,
-      success: function(res) {
+      success: function (res) {
         wx.showToast({
           title: "复制成功",
           duration: 3000
         });
         wx.getClipboardData({
-          success: function(res) {
+          success: function (res) {
             console.log(res.data); // data
           }
         });
@@ -167,12 +167,12 @@ export default class CardItem extends Component {
                 ? card_logo_1_relize
                 : card_logo_1
               : "1" == flag
-              ? card_logo_2
-              : "2" == flag
-              ? card_logo_3
-              : "meeting" == flag
-              ? card_logo_meeting
-              : card_logo_4}
+                ? card_logo_2
+                : "2" == flag
+                  ? card_logo_3
+                  : "meeting" == flag
+                    ? card_logo_meeting
+                    : card_logo_4}
           </View>
           <View className={`${indexStyles.card_content_middle}`}>
             <View className={`${indexStyles.card_content_middle_top}`}>
@@ -194,15 +194,13 @@ export default class CardItem extends Component {
             >
               {schedule == "0"
                 ? "未排期"
-                : `${
-                    start_time
-                      ? timestampToTimeZH(start_time)
-                      : "开始时间未设置"
-                  } - ${
-                    due_time || end_time
-                      ? timestampToTimeZH(due_time || end_time)
-                      : "截止时间未设置"
-                  }`}
+                : `${start_time
+                  ? timestampToTimeZH(start_time)
+                  : "开始时间未设置"
+                } - ${due_time || end_time
+                  ? timestampToTimeZH(due_time || end_time)
+                  : "截止时间未设置"
+                }`}
             </View>
             {flag == "meeting" && (
               <View className={indexStyles.card_content_meeting_btn}>

@@ -6,11 +6,12 @@ import { connect } from '@tarojs/redux'
 import defaultPhoto from "../../../../asset/chat/defaultPhoto.png";
 import cofirm from "../../../../asset/login/cofirm.png";
 import edit from "../../../../asset/login/edit.png";
-
+import { checkStrng } from "../../../../utils/verify";
 
 @connect(({ }) => ({}))
 export default class PersonalCenter extends Component {
     state = {
+        isfouce: false,
         disabled: true,
         newNickName: ""
     }
@@ -60,7 +61,8 @@ export default class PersonalCenter extends Component {
     // 开始更改昵称
     editNickName() {
         this.setState({
-            disabled: false
+            disabled: false,
+            isfouce: true
         })
     }
     // 开始输入
@@ -71,9 +73,11 @@ export default class PersonalCenter extends Component {
     }
     // 确定更改昵称
     confirmNickName() {
+
         const { account_info = {} } = this.props
         const { name, } = account_info
         var { newNickName } = this.state;
+
         if (name != newNickName) {
             if (newNickName.length == 0) {
                 Taro.showToast({
@@ -81,10 +85,21 @@ export default class PersonalCenter extends Component {
                     duration: 1000
                 })
             } else {
-                this.updateName(newNickName);
-                this.setState({
-                    disabled: true
-                })
+                if (checkStrng(newNickName)) {
+                    Taro.showToast({
+                        title: "带有特殊字符",
+                        icon: "none",
+                        duration: 2000,
+                    });
+                    this.setState({
+                        disabled: false,
+                    })
+                } else {
+                    this.updateName(newNickName);
+                    this.setState({
+                        disabled: true,
+                    })
+                }
             }
         } else {
             this.setState({
