@@ -93,6 +93,7 @@ export default class templateDetails extends Component {
         const { workflowDatas, } = this.props
 
         const { name, create_time, nodes = [], board_id, } = workflowDatas
+
         return (
             <View >
                 <CustomNavigation backIcon={backIcon} />
@@ -103,7 +104,6 @@ export default class templateDetails extends Component {
 
                     {nodes && nodes.map((value, key) => {
                         const { id, node_type, sort, runtime_type, recipients, assignees, last_complete_time, forms, description, approve_type, status, score_items, deadline_time_type, deadline_value, deadline_type, his_comments = [], } = value
-                        console.log("---------" + node_type);
 
                         return (
                             <View key={id}>

@@ -70,15 +70,11 @@ export default class index extends Component {
                                     <View key={id} className={indexStyles.personnel_cell}>
 
                                         <View className={indexStyles.make_copy}>
-                                            {
-                                                avatar ? (
-                                                    <Image className={indexStyles.avatar_image_style} src={avatar}></Image>
-                                                ) : (
-                                                        // <Text className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}>&#xe647;</Text>
-                                                        <Image src={defaultPhoto} className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}></Image>
-                                                    )
-                                            }
-                                            <View className={indexStyles.name}>{name}</View>
+                                            <View className={indexStyles.avatar_View}>           {avatar ? (<Image className={indexStyles.avatar_image_style} src={avatar}></Image>) : (
+                                                // <Text className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}>&#xe647;</Text>
+                                                <Image src={defaultPhoto} className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}></Image>)}
+                                                <View className={indexStyles.name}>{name}</View>
+                                            </View>
                                             <View className={indexStyles.status}>{this.loadProcessedState(processed, pass)}</View>
                                         </View>
                                         {

@@ -5,7 +5,7 @@
     flex-direction  : column;
     align-items     : center;
     background-color: #FFFFFF;
-    padding-bottom  : pxTrans(10);
+    padding         : pxTrans(10) 0;
     align-items     : flex-start;
     width           : 100%;
 
@@ -38,6 +38,16 @@
             flex-direction: column;
             width         : 100%;
 
+            .titleView {
+                display       : flex;
+                flex-direction: row;
+
+                .isrequired {
+                    color       : red;
+                    padding-left: pxTrans(10);
+                }
+            }
+
             .title {
                 font-size  : pxTrans(12);
                 font-weight: 400;
@@ -53,14 +63,14 @@
 
             .content {
                 flex         : 1;
-                font-size    : pxTrans(16);
+                font-size    : pxTrans(14);
                 font-weight  : 400;
                 color        : rgba(0, 0, 0, 0.65);
                 line-height  : pxTrans(20);
                 overflow     : hidden;
                 text-overflow: ellipsis;
                 white-space  : nowrap;
-                padding      : pxTrans(15);
+                padding      : pxTrans(5);
                 border       : #D1D5E4;
                 border       : solid #D1D5E4 pxTrans(1);
             }

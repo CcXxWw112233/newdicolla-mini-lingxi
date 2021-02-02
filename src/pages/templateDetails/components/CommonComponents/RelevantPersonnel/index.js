@@ -1,10 +1,8 @@
-
 import Taro, { Component } from '@tarojs/taro'
-import { View, Image } from '@tarojs/components'
+import { View, } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyles from '../../../../../gloalSet/styles/globalStyles.scss'
 import { renderRestrictionsTime, } from '../../../../../utils/basicFunction'
-import defaultPhoto from "../../../../../asset/chat/defaultPhoto.png"
 
 export default class index extends Component {
 
@@ -51,8 +49,9 @@ export default class index extends Component {
 
     render() {
 
-        const { recipients, assignees, last_complete_time, } = this.props
-
+        const { recipients = [], assignees, last_complete_time, } = this.props
+        console.log("------------");
+        console.log(recipients.length);
         return (
             <View className={indexStyles.viewStyle}>
 
@@ -67,23 +66,6 @@ export default class index extends Component {
 
                         <View className={indexStyles.fill_in}>
                             <View className={indexStyles.title}>填写人</View>
-                            <View className={indexStyles.assignees}>
-                                {assignees && assignees.map((value, key) => {
-                                    const { id, avatar, } = value
-                                    return (
-                                        <View key={id}>
-                                            {
-                                                avatar ? (
-                                                    <Image className={indexStyles.avatar_image_style} src={avatar}></Image>
-                                                ) : (
-                                                        // <Text className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}>&#xe647;</Text>
-                                                        <Image src={defaultPhoto} className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}></Image>
-                                                    )
-                                            }
-                                        </View>
-                                    )
-                                })}
-                            </View>
                             {
                                 <View className={indexStyles.content}>
                                     {/* {'完成时间' + ' ' + timestampToTimeEN(last_complete_time)} */}
@@ -91,30 +73,49 @@ export default class index extends Component {
                                 </View>
                             }
                         </View>
-
+                        <View className={indexStyles.assignees}>
+                            {assignees && assignees.map((value, key) => {
+                                const { id, avatar, } = value
+                                return (
+                                    <View key={id}>
+                                        {
+                                            avatar ? (
+                                                <Image className={indexStyles.
+                                                    avatar_image_style} src={avatar}></Image>
+                                            ) : (
+                                                    <Text className={`${globalStyles.
+                                                        global_iconfont} ${indexStyles.
+                                                            avatar_image_style}`}>&#xe647;</Text>
+                                                )
+                                        }
+                                    </View>
+                                )
+                            })}
+                        </View>
                         <View className={indexStyles.make_copy}>
-                            <View className={indexStyles.title}>抄送人</View>
-                            <View className={indexStyles.recipients}>
-                                {recipients && recipients.map((value, key) => {
+                            {recipients && recipients.length > 0 ? (<View className={indexStyles.recipients}>
+
+                                <View className={indexStyles.title}>抄送人</View>
+                                { recipients.map((value, key) => {
                                     const { id, avatar, } = value
                                     return (
                                         <View key={id}>
                                             {
                                                 avatar ? (
-                                                    <Image className={indexStyles.avatar_image_style} src={avatar}></Image>
+                                                    <Image className={indexStyles.avatar_image_style} src=
+                                                        {avatar}></Image>
                                                 ) : (
-                                                        // <Text className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}>&#xe647;</Text>
-                                                        <Image src={defaultPhoto} className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}></Image>
+                                                        <Text className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}>&#xe647;</Text>
                                                     )
                                             }
                                         </View>
                                     )
                                 })}
-                            </View>
+                            </View>) : (null)}
                         </View>
                     </View>
                 </View>
-            </View>
+            </View >
         )
     }
 }

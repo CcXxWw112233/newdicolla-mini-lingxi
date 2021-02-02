@@ -48,7 +48,7 @@ export const validateNegative = (value) => {
 }
 //精确到两位小数
 export const validateTwoDecimal = (value) => {
-  return (/^(\-|\d+)\.\d{3}$/).test(value)
+  return (/^(\-|\d+)\.\d{2}$/).test(value)
 }
 
 //是否是小数

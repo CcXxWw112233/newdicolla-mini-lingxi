@@ -5,7 +5,7 @@
     flex-direction  : column;
     align-items     : center;
     background-color: #FFFFFF;
-    margin          : pxTrans(10) pxTrans(20) 0 pxTrans(20);
+    padding         : pxTrans(10) pxTrans(20) 0 pxTrans(20);
 
     .line_cell {
         display       : flex;
@@ -47,8 +47,12 @@
                 flex-direction: column;
                 width         : 100%;
 
+                .choice_itemList {
+                    position: relative;
+                }
+
                 .choice_name {
-                    padding-left    : pxTrans(10);
+                    padding         : 0 pxTrans(10);
                     font-size       : pxTrans(14);
                     font-weight     : 400;
                     color           : #3F445D;
@@ -57,8 +61,11 @@
                     overflow        : hidden;
                     text-overflow   : ellipsis;
                     white-space     : nowrap;
-                    margin-top      : pxTrans(4);
+                    margin-top      : pxTrans(1);
                     margin-bottom   : pxTrans(2);
+                    display         : flex;
+                    flex-direction  : row;
+                    justify-content : space-between;
                 }
             }
         }

@@ -6,6 +6,7 @@
     align-items        : center;
     background-color   : #FFFFFF;
     // height          : pxTrans(100);
+    padding            : pxTrans(20) pxTrans(10) pxTrans(40) pxTrans(10);
 
     .line_cell {
         display       : flex;
@@ -42,9 +43,9 @@
 
                 .title_content {
                     width       : 100%;
-                    font-size   : pxTrans(16);
+                    font-size   : pxTrans(12);
                     font-weight : 400;
-                    color       : rgba(0, 0, 0, 0.25);
+                    color       : #575C75;
                     line-height : pxTrans(24);
                     margin-left : pxTrans(16);
                     margin-right: pxTrans(16);
@@ -59,11 +60,19 @@
                     flex-direction: column;
 
                     .make_copy {
-                        width         : 100%;
-                        display       : flex;
-                        flex-direction: row;
-                        align-items   : center;
-                        height        : pxTrans(35);
+                        width          : 100%;
+                        display        : flex;
+                        flex-direction : row;
+                        align-items    : center;
+                        height         : pxTrans(35);
+                        color          : #212434;
+                        font-size      : pxTrans(12);
+                        justify-content: space-between;
+
+                        .avatar_View {
+                            display       : flex;
+                            flex-direction: row;
+                        }
 
                         .avatar_image_style {
                             width          : pxTrans(24);
@@ -77,17 +86,10 @@
                         }
 
                         .name {
-                            font-size   : pxTrans(16);
-                            font-weight : 400;
-                            color       : rgba(0, 0, 0, 0.65);
-                            line-height : pxTrans(24);
-                            margin-right: pxTrans(24);
+                            line-height: pxTrans(24);
                         }
 
                         .status {
-                            font-size  : pxTrans(16);
-                            font-weight: 400;
-                            color      : rgba(0, 0, 0, 0.65);
                             line-height: pxTrans(24);
                         }
                     }
