@@ -228,7 +228,7 @@ export default class index extends Component {
                         {/* </View> */}
                         {/* ) : (<View className={indexStyles.content}>{description}</View>)} */}
 
-                        <Input className={indexStyles.content} placeholder={item.prompt_content} onBlur={this.verifyAction}></Input>
+                        <Input className={indexStyles.content} placeholder={item.prompt_content} onBlur={this.verifyAction} disabled='false' value={item.value}></Input>
                         {/* disabled={status == 1}  */}
                     </View>
                 </View>

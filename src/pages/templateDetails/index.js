@@ -38,7 +38,7 @@ export default class templateDetails extends Component {
     componentDidMount() {
 
         const { flag, boardId, contentId, back_icon } = this.$router.params
-
+        const { workflowDatas } = this.props;
         if (boardId || contentId) {
             Taro.setStorageSync('workflow_detail_boardId', boardId)
             Taro.setStorageSync('workflow_detail_contentId', contentId)
@@ -54,6 +54,7 @@ export default class templateDetails extends Component {
     }
 
     loadTemplateDetails(content_id, board_id) {
+        var that = this;
         let contentId
         let boardId
         if (content_id || board_id) {
@@ -65,13 +66,28 @@ export default class templateDetails extends Component {
             boardId = Taro.getStorageSync('workflow_detail_contentId')
         }
         const { dispatch } = this.props
-        dispatch({
-            type: 'workflow/getTemplateDetails',
-            payload: {
-                id: contentId,
-                boardId: boardId,
-            }
+        Promise.resolve(
+            dispatch({
+                type: 'workflow/getTemplateDetails',
+                payload: {
+                    id: contentId,
+                    boardId: boardId,
+                }
+            })
+        ).then((res) => {
+            var nodes = res.nodes;
+            nodes.map(item => {
+                console.log(item)
+                console.log(item.status)
+                if (item.status == '1') {
+                    that.setState({
+                        current_step_id: item.id,
+                        is_change_open: true
+                    })
+                }
+            })
         })
+
     }
 
     //展开流程步骤
@@ -81,6 +97,9 @@ export default class templateDetails extends Component {
             is_change_open: isOpenStep,
             current_step_id: currentStepId,
         })
+        console.log(currentStepId)
+        console.log(isOpenStep)
+
     }
 
     render() {
@@ -88,11 +107,12 @@ export default class templateDetails extends Component {
         const statusBar_Height = SystemInfo.statusBarHeight
         const navBar_Height = SystemInfo.platform == 'ios' ? 44 : 48
 
-        const { backIcon, is_change_open } = this.state
+        const { backIcon, is_change_open, current_step_id } = this.state
 
         const { workflowDatas, } = this.props
 
         const { name, create_time, nodes = [], board_id, } = workflowDatas
+
 
         return (
             <View >
@@ -108,9 +128,9 @@ export default class templateDetails extends Component {
                         return (
                             <View key={id}>
                                 <View className={indexStyles.interval}></View>
-                                <StepRow sort={sort} name={value.name} runtime_type={runtime_type} step_id={value.id} onClicked={this.onChangeOpen.bind(this)} />
+                                <StepRow sort={sort} name={value.name} runtime_type={runtime_type} step_id={value.id} current_step_id={current_step_id} onClicked={this.onChangeOpen.bind(this)} />
                                 {
-                                    is_change_open ? (
+                                    is_change_open && current_step_id == id ? (
                                         <View>
                                             {node_type === '1' && (
                                                 <DataCollection

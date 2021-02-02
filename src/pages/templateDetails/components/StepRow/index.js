@@ -31,7 +31,7 @@ export default class StepRow extends Component {
 
 
     render() {
-        const { sort, name, runtime_type, step_id, } = this.props
+        const { sort, name, runtime_type, step_id, current_step_id } = this.props
         return (
             <View className={indexStyles.viewStyle} >
                 <View className={indexStyles.select_step_number}>
@@ -39,7 +39,7 @@ export default class StepRow extends Component {
                 </View>
 
                 <View class={indexStyles.step_name}>
-                    {name ? name : ''}
+                    {name ? name : ''} {current_step_id}  {step_id}
                 </View>
 
                 <View className={indexStyles.runtime_type}>
@@ -47,7 +47,14 @@ export default class StepRow extends Component {
                 </View>
 
                 <View className={indexStyles.open_icon} onClick={() => this.clickOpen(step_id)} >
-                    <Text className={`${globalStyle.global_iconfont}`}>&#xe8ec;</Text>
+                    {
+                        current_step_id == step_id ? (
+                            <Text className={`${globalStyle.global_iconfont}`}>&#xe8ec;</Text>
+
+                        ) : (
+                                <Text className={`${globalStyle.global_iconfont}`}>&#xe675;</Text>
+                            )
+                    }
                 </View>
             </ View>
         )

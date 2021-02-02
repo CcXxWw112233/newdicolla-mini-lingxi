@@ -57,36 +57,34 @@ export default class index extends Component {
                             {/* ) */}
                             {/* })} */}
                             {/* </View>) : (null)} */}
-                            <View>
-                                {
-                                    status == 1 ? (<Picker mode='selector' range={options} rangeKey="label_name"
-                                        onChange={this.onChange}>
-                                        <View className={indexStyles.choice_name} >
-                                            <Text>{selectContent ? selectContent : prompt_content}</Text>
-                                            <Text className={`${globalStyle.global_iconfont}`}>&#xe8ec;
-                                 </Text>
-                                        </View>
-                                    </Picker>) : (<View className={indexStyles.choice_name} onClick={this.startSelect} >
-                                        <Text>{selectContent ? selectContent : prompt_content}
-                                        </Text>
-                                        <Text className={`${globalStyle.global_iconfont}`}>&#xe8ec;
-</Text>
-                                    </View>)
-                                }
 
+                            {/* 单选把下面注释的代码取消注释 */}
 
-
-
-
-
+                            {/* <View> */}
+                            {/* { */}
+                            {/* status == 1 ? (<Picker mode='selector' range={options} rangeKey="label_name" */}
+                            {/* onChange={this.onChange}> */}
+                            {/* <View className={indexStyles.choice_name} > */}
+                            {/* <Text>{selectContent ? selectContent : prompt_content}</Text> */}
+                            {/* <Text className={`${globalStyle.global_iconfont}`}>&#xe8ec; */}
+                            {/* </Text> */}
+                            {/* </View> */}
+                            {/* </Picker>) : (*/}
+                            <View className={indexStyles.choice_name} onClick={this.startSelect} >
+                                <Text>{selectContent ? selectContent : prompt_content}
+                                </Text>
+                                <Text className={`${globalStyle.global_iconfont}`}>&#xe8ec;</Text>
                             </View>
+                            {/* ) */}
+                            {/* } */}
+                            {/* </View> */}
                         </View>
 
                     </View>
 
                 </View>
 
-            </View>
+            </View >
         )
     }
 }
