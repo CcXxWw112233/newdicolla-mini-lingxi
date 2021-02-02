@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro'
-import { getFilePage, getFileDetails, getFolder, getDownloadUrl, uploadFile, sendFileComment, getFileUnreadList } from '../../services/file/index'
-import { isApiResponseOk } from "../../utils/request";
+import { getFilePage, getFileDetails, getFolder, getDownloadUrl, uploadFile, sendFileComment, getFileUnreadList, verifyAuthority } from '../../services/file/index'
+import { isApiResponseOk, } from "../../utils/request";
 
 export default {
     namespace: 'file',
@@ -221,6 +221,21 @@ export default {
                         unread_file_list: res.data
                     }
                 })
+            } else {
+                console.log('res:', res);
+            }
+        },
+
+        // 
+        * verifyAuthority({ payload }, { select, call, put }) {
+            const res = yield call(verifyAuthority, payload)
+            if (isApiResponseOk(res)) {
+                yield put({
+                    type: 'verifyAuthority',
+                    payload: {
+                    }
+                })
+                return res;
             } else {
                 console.log('res:', res);
             }

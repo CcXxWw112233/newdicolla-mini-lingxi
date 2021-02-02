@@ -5,7 +5,6 @@
     flex-direction  : column;
     align-items     : center;
     background-color: #FFFFFF;
-    margin          : pxTrans(10) pxTrans(20) 0 pxTrans(20);
 
     .line_cell {
         display       : flex;
@@ -27,38 +26,41 @@
         flex          : 1;
         display       : flex;
         flex-direction: row;
+        margin-right  : pxTrans(16);
         width         : 100%;
 
         .content_padding {
             display       : flex;
-            flex-direction: column;
-            align-items   : flex-start;
+            flex-direction: row;
+            align-items   : center;
             width         : 100%;
 
             .title {
-                font-size  : pxTrans(12);
-                font-weight: 400;
-                color      : #575C75;
-                line-height: pxTrans(24);
+                width       : pxTrans(48);
+                font-size   : pxTrans(16);
+                font-weight : 400;
+                color       : rgba(0, 0, 0, 0.25);
+                line-height : pxTrans(24);
+                margin-left : pxTrans(16);
+                margin-right: pxTrans(16);
             }
 
             .choice_view {
+                flex          : 1;
                 display       : flex;
                 flex-direction: column;
-                width         : 100%;
 
                 .choice_name {
-                    padding-left    : pxTrans(10);
-                    font-size       : pxTrans(14);
-                    font-weight     : 400;
-                    color           : #3F445D;
-                    line-height     : pxTrans(40);
-                    background-color: #F5F7FB;
-                    overflow        : hidden;
-                    text-overflow   : ellipsis;
-                    white-space     : nowrap;
-                    margin-top      : pxTrans(4);
-                    margin-bottom   : pxTrans(2);
+                    flex         : 1;
+                    font-size    : pxTrans(16);
+                    font-weight  : 400;
+                    color        : rgba(0, 0, 0, 0.65);
+                    line-height  : pxTrans(24);
+                    overflow     : hidden;
+                    text-overflow: ellipsis;
+                    white-space  : nowrap;
+                    margin-top   : pxTrans(4);
+                    margin-bottom: pxTrans(2);
                 }
             }
         }

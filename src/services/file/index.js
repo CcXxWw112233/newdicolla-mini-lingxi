@@ -138,3 +138,18 @@ export const getFileUnreadList = (data, header, notShowLoading) => {
     url: `${API_MORE}/im/history/point`
   }, notShowLoading)
 }
+
+// 校验权限
+export const verifyAuthority = (data, header,
+  notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    header: {
+      ...header
+    },
+    method: "GET",
+    url: `${API_BOARD}/permissions/board`
+  }, notShowLoading)
+}
