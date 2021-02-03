@@ -22,6 +22,19 @@ export default class index extends Component {
             })
         }
     }
+
+    componentDidMount() {
+        const { options, value } = this.props
+        if (value) {
+            options.map(item => {
+                if (value == item.id) {
+                    this.setState({
+                        selectContent: item.label_name
+                    })
+                }
+            })
+        }
+    }
     onChange(e) {
         const { options, status } = this.props;
         // console.log(item.label_name);
@@ -30,9 +43,10 @@ export default class index extends Component {
         })
     }
     render() {
-
-        const { title, options, prompt_content, status } = this.props
+        const { title, options, prompt_content, status, value } = this.props
         const { selectContent } = this.state;
+
+
         return (
             <View className={indexStyles.viewStyle}>
 
@@ -71,7 +85,7 @@ export default class index extends Component {
                             {/* </View> */}
                             {/* </Picker>) : (*/}
                             <View className={indexStyles.choice_name} onClick={this.startSelect} >
-                                <Text>{selectContent ? selectContent : prompt_content}
+                                <Text>{selectContent}
                                 </Text>
                                 <Text className={`${globalStyle.global_iconfont}`}>&#xe8ec;</Text>
                             </View>

@@ -37,7 +37,7 @@
             .fill_in,
             .make_copy {
                 display        : flex;
-                flex-direction : column;
+                flex-direction : row;
                 width          : 100%;
                 justify-content: space-between;
                 font-size      : pxTrans(12);

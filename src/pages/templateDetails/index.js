@@ -92,14 +92,12 @@ export default class templateDetails extends Component {
 
     //展开流程步骤
     onChangeOpen(isTrue) {
-        const { isOpenStep, currentStepId } = isTrue
+        const { isOpenStep, currentStepId } = isTrue;
+        const { current_step_id } = this.state;
         this.setState({
             is_change_open: isOpenStep,
             current_step_id: currentStepId,
         })
-        console.log(currentStepId)
-        console.log(isOpenStep)
-
     }
 
     render() {
@@ -115,7 +113,7 @@ export default class templateDetails extends Component {
 
 
         return (
-            <View >
+            <View className={indexStyles.index}>
                 <CustomNavigation backIcon={backIcon} />
                 <View style={{ marginTop: `${statusBar_Height + navBar_Height}` + 'px', left: 0 }}>
                     <View className={indexStyles.interval}></View>
@@ -126,9 +124,9 @@ export default class templateDetails extends Component {
                         const { id, node_type, sort, runtime_type, recipients, assignees, last_complete_time, forms, description, approve_type, status, score_items, deadline_time_type, deadline_value, deadline_type, his_comments = [], } = value
 
                         return (
-                            <View key={id}>
+                            <View key={id} >
                                 <View className={indexStyles.interval}></View>
-                                <StepRow sort={sort} name={value.name} runtime_type={runtime_type} step_id={value.id} current_step_id={current_step_id} onClicked={this.onChangeOpen.bind(this)} />
+                                <StepRow sort={sort} name={value.name} runtime_type={runtime_type} step_id={value.id} current_step_id={current_step_id} is_change_open={current_step_id == id ? is_change_open : false} status={status} onClicked={this.onChangeOpen.bind(this)} />
                                 {
                                     is_change_open && current_step_id == id ? (
                                         <View>

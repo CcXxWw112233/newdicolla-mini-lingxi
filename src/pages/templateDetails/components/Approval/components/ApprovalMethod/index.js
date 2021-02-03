@@ -10,14 +10,14 @@ export default class index extends Component {
     constructor() {
         super(...arguments)
         this.state = {
-
+            historyUnfold: false
         }
     }
 
     loadProcessedState = (processed, pass,) => {
 
         if (pass && pass == '0') {
-            return '被驳回'
+            return '驳回'
         } else if (pass && pass !== 0) {
             return '通过'
         }
@@ -45,10 +45,15 @@ export default class index extends Component {
         }
         return approveType;
     }
-
+    historyUnfold() {
+        const { historyUnfold } = this.state;
+        this.setState({
+            historyUnfold: !historyUnfold
+        })
+    }
     render() {
         const { assignees = [], approve_type, his_comments = [], } = this.props
-
+        const { historyUnfold } = this.state;
         return (
             <View className={indexStyles.viewStyle}>
 
@@ -79,7 +84,9 @@ export default class index extends Component {
                                         </View>
                                         {
                                             comment ? <View className={indexStyles.comment_style}>
-                                                {comment}
+
+                                                <View className={indexStyles.comment_title}>审批意见:</View>
+                                                <View className={indexStyles.comment_text}>{comment}</View>
                                             </View> : <View></View>
                                         }
                                     </View>
@@ -94,35 +101,39 @@ export default class index extends Component {
                         <View className={indexStyles.content_padding}>
                             <View className={indexStyles.fill_in}>
                                 <View className={indexStyles.title_content}>历史审批：{this.approveType(approve_type)}</View>
+                                <View className={indexStyles.historyUnfold} onClick={this.historyUnfold}>展开</View>
                             </View>
-                            <View className={indexStyles.view_cell}>
-                                {his_comments && his_comments.map((item, key) => {
-                                    const { id, avatar, name, processed, comment, pass, } = item
+                            {historyUnfold ? (
+                                <View className={indexStyles.view_cell}>
+                                    {his_comments && his_comments.map((item, key) => {
+                                        const { id, avatar, name, processed, comment, pass, } = item
 
-                                    return (
-                                        <View key={id} className={indexStyles.personnel_cell}>
+                                        return (
+                                            <View key={id} className={indexStyles.personnel_cell}>
 
-                                            <View className={indexStyles.make_copy}>
+                                                <View className={indexStyles.make_copy}>
+                                                    {
+                                                        avatar ? (
+                                                            <Image className={indexStyles.avatar_image_style} src={avatar}></Image>
+                                                        ) : (
+                                                                // <Text className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}>&#xe647;</Text>
+                                                                <Image src={defaultPhoto} className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}></Image>
+                                                            )
+                                                    }
+                                                    <View className={indexStyles.name}>{name}</View>
+                                                    <View className={indexStyles.status}>{this.loadProcessedState(processed, pass)}</View>
+                                                </View>
                                                 {
-                                                    avatar ? (
-                                                        <Image className={indexStyles.avatar_image_style} src={avatar}></Image>
-                                                    ) : (
-                                                            // <Text className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}>&#xe647;</Text>
-                                                            <Image src={defaultPhoto} className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}></Image>
-                                                        )
+                                                    comment ? <View className={indexStyles.comment_style}>
+                                                        <View className={indexStyles.comment_title}>审批意见:</View>
+                                                        <View className={indexStyles.comment_text}>{comment}</View>
+                                                    </View> : <View></View>
                                                 }
-                                                <View className={indexStyles.name}>{name}</View>
-                                                <View className={indexStyles.status}>{this.loadProcessedState(processed, pass)}</View>
                                             </View>
-                                            {
-                                                comment ? <View className={indexStyles.comment_style}>
-                                                    {comment}
-                                                </View> : <View></View>
-                                            }
-                                        </View>
-                                    )
-                                })}
-                            </View>
+                                        )
+                                    })}
+                                </View>) : (null)
+                            }
                         </View>
                     </View> : <View></View>
 

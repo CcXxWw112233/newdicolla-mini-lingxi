@@ -4,6 +4,7 @@ import indexStyles from './index.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import RelevantPersonnel from './../CommonComponents/RelevantPersonnel/index'
 import OtherCell from './../CommonComponents/OtherCell/index'
+import DateCell from './../CommonComponents/DateCell/index'
 import Choice from './components/Choice/index'
 import Enclosure from './components/Enclosure/index'
 import OnlineTable from './components/OnlineTable/index'
@@ -40,20 +41,20 @@ export default class index extends Component {
                                 {field_type === '1' && (
                                     <View>
                                         <View className={indexStyles.other_cell}>
-                                            <OtherCell title={title} description={value} item={item} status={status} />
+                                            <OtherCell title={title} description={value} item={item} status={status} field_type={field_type} />
                                         </View>
                                     </View>
                                 )}
                                 {field_type === '2' && (
                                     <View>
                                         <View className={indexStyles.other_cell}>
-                                            <Choice title={title} options={options} prompt_content={prompt_content} status={status} />
+                                            <Choice title={title} options={options} prompt_content={prompt_content} value={value} status={status} />
                                         </View>
                                     </View>
                                 )}
                                 {field_type === '3' && (
                                     <View className={indexStyles.other_cell}>
-                                        <OtherCell title={title} description={timestampToTimeZH(value)} item={item} status={status} />
+                                        <DateCell title={title} description={timestampToTimeZH(value)} item={item} status={status} field_type={field_type} />
                                     </View>
                                 )}
                                 {field_type === '5' && (
