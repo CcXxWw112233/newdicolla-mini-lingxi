@@ -164,7 +164,7 @@ export default class Calendar extends Component {
     render() {
         const { show_card_type_select, search_mask_show, screenHeight } = this.state;
         return (
-            <View className={indexStyles.index} style={{ height: screenHeight }
+            <View className={indexStyles.index} style={{ minHeight: screenHeight }
             }>
                 <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
                 <CardTypeSelect show_card_type_select={show_card_type_select} onSelectType={this.onSelectType} schedule={'0'} />
