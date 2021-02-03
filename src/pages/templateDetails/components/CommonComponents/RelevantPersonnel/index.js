@@ -50,8 +50,6 @@ export default class index extends Component {
     render() {
 
         const { recipients = [], assignees, last_complete_time, } = this.props
-        console.log("------------");
-        console.log(recipients.length);
         return (
             <View className={indexStyles.viewStyle}>
 
