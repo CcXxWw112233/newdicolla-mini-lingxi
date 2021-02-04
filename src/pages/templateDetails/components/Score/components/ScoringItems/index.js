@@ -175,6 +175,8 @@ export default class index extends Component {
                     <View className={indexStyles.assignees}>
                         {assignees && assignees.map((value, key) => {
                             const { id, avatar, name, processed, score_items, comment } = value
+                            const average_auto = score_items && score_items.length;
+
                             return (
 
                                 <View key={id} className={indexStyles.score_cell_style}>
@@ -189,8 +191,10 @@ export default class index extends Component {
 
                                                 )
                                         }
+
+
                                         <View className={indexStyles.rater_name}>{name}</View>
-                                        <View className={indexStyles.average_number}>{this.loadProcessedState(processed, score_items && score_items[score_items.length - 1]['value'])}</View>
+                                        <View className={`${indexStyles.average_number} ${average_auto ? '' : indexStyles.average_auto}`}>{this.loadProcessedState(processed, score_items && score_items[score_items.length - 1]['value'])}</View>
                                     </View>
 
                                     <View className={indexStyles.score_comment}>{comment}</View>

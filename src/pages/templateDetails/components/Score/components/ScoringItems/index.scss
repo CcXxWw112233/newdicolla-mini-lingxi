@@ -139,11 +139,19 @@
                     }
 
                     .average_number {
-                        font-weight: 600;
-                        font-size  : pxTrans(14);
-                        line-height: pxTrans(24);
-                        color      : rgba(24, 144, 255, 1);
+                        font-weight  : 600;
+                        font-size    : pxTrans(14);
+                        line-height  : pxTrans(24);
+                        color        : rgba(24, 144, 255, 1);
+                        padding      : pxTrans(3);
+                        border-radius: pxTrans(5);
                     }
+                }
+
+                .average_auto {
+                    color           : white !important;
+                    background-color: rgb(255, 169, 64) !important;
+                    padding         : 0 pxTrans(10) !important;
                 }
 
                 .score_comment {
