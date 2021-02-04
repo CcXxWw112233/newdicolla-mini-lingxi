@@ -266,7 +266,11 @@ export default class Login extends Component {
       }
       data.password = sha256(pswd);
     }
+    Taro.showLoading({
+      title:"登录中"
+    });
     normalLogin(data).then(res => {
+      Taro.showLoading();
       const { sourcePage } = this.state
       if (res.code === '0') {
         dispatch({
@@ -294,7 +298,7 @@ export default class Login extends Component {
           duration: 2000
         });
       }
-    }).catch(() => { })
+    }).catch(() => { Taro.hideLoading(); })
   }
 
   getVerifyCodeImg = () => {
