@@ -18,9 +18,10 @@ import { onResendMsg } from "./../../../models/im/actions/onResendMsg.js";
 import { onDeleteMsg } from "./../../../models/im/actions/onDeleteMsg.js";
 import { timestampToTimeNormal, filterFileFormatType } from "../../../utils/util";
 
-@connect(({ im: { currentGroupSessionList, history_newSession } }) => ({
+@connect(({ im: { currentGroupSessionList, history_newSession, currentBoard} }) => ({
   currentGroupSessionList,
-  history_newSession
+  history_newSession,
+  currentBoard
 }))
 class ChatItem extends Component {
   state = {
@@ -437,6 +438,20 @@ class ChatItem extends Component {
       }
     })
   }
+
+  // 获取用户昵称
+  getUserName = (fromId) => {
+    const { currentBoard } = this.props;
+    if (fromId && currentBoard.users) {
+      let user = currentBoard.users.find(item => item.user_id === fromId);
+      if (user) {
+        return user.name;
+      }
+      return "未知账号"
+    }
+    return fromId;
+  }
+
   render() {
     const {
       flow,
@@ -513,7 +528,7 @@ class ChatItem extends Component {
         // </Text>
         <Image src={lxzs} className={`${globalStyles.global_iconfont} ${styles.icon_default_avatar_style}`}></Image>
       );
-      from_nick = fromNick ? fromNick : "聆悉助手";
+      from_nick = this.getUserName(someMsg.from, someMsg.users);
 
     }
     const fileType = chatFile ? filterFileFormatType('.' + chatFile.ext) : '';
@@ -704,7 +719,7 @@ class ChatItem extends Component {
                                 activityContent,
                                 range
                               } = parseActivityNewsBody(data);
-                              console.log(activityContent);
+                              {/* console.log(activityContent); */}
                               return (
                                 <View
                                   key={data.creatorId}
@@ -799,7 +814,7 @@ class ChatItem extends Component {
                                   </Text>
                                   {activityType == "meeting" && (
                                     <View>
-                                      {activityContent[activityType][
+                                      {activityContent[activityType] && activityContent[activityType][
                                         "start_time"
                                       ] && (
                                           <Text
