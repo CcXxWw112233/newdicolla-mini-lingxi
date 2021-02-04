@@ -27,25 +27,29 @@
         flex          : 1;
         display       : flex;
         flex-direction: row;
+        margin-right  : pxTrans(16);
         width         : 100%;
 
         .content_padding {
             display       : flex;
-            flex-direction: column;
-            align-items   : flex-start;
+            flex-direction: row;
+            align-items   : center;
             width         : 100%;
 
             .title {
-                font-size  : pxTrans(12);
-                font-weight: 400;
-                color      : #575C75;
-                line-height: pxTrans(24);
+                width       : pxTrans(48);
+                font-size   : pxTrans(16);
+                font-weight : 400;
+                color       : rgba(0, 0, 0, 0.25);
+                line-height : pxTrans(24);
+                margin-left : pxTrans(16);
+                margin-right: pxTrans(16);
             }
 
             .choice_view {
+                flex          : 1;
                 display       : flex;
                 flex-direction: column;
-                width         : 100%;
 
                 .choice_itemList {
                     position: relative;
