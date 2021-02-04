@@ -33,6 +33,7 @@ export default {
 
         }
       }
+      return res;
     },
     // 微信未绑定系统，通过手机号绑定
     * weChatPhoneLogin({ payload }, { select, call, put }) {
@@ -100,7 +101,7 @@ export default {
           }
         })
         return
-      } 
+      }
       Taro.switchTab({
         url: `../../pages/calendar/index`
       })
