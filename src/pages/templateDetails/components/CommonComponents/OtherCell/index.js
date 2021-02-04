@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text, Input, } from '@tarojs/components'
+import { View, Text, Input, Textarea } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { validateFixedTel, validatePassword, validateEmail, validateTel, validateIdCard, validateChineseName, validatePostalCode, validateWebsite, validateQQ, validatePositiveInt, validateNegative, validateTwoDecimal, } from '../../../../../utils/verify'
@@ -234,7 +234,7 @@ export default class index extends Component {
                         {/* </View> */}
                         {/* ) : (<View className={indexStyles.content}>{description}</View>)} */}
 
-                        <Input className={indexStyles.content} placeholder={item.prompt_content} onBlur={this.verifyAction} disabled='false' value={item.value}></Input>
+                        <Textarea className={indexStyles.content} placeholder={item.prompt_content} onBlur={this.verifyAction} disabled='false' value={item.value} autoHeight='ture'></Textarea>
                         {/* disabled={status == 1}  */}
                     </View>
                 </View>

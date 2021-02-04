@@ -111,8 +111,8 @@ export default class index extends Component {
                             {/* </View> */}
                             {/* </Picker>) : (*/}
                             <View className={indexStyles.choice_name} onClick={this.startSelect} >
-                                <Text>{selectContent}
-                                </Text>
+                                <View className={indexStyles.choice_name_text}>{selectContent}
+                                </View>
                                 <Text className={`${globalStyle.global_iconfont}`}>&#xe8ec;</Text>
                             </View>
                             {/* ) */}

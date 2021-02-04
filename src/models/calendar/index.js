@@ -149,7 +149,6 @@ export default {
         page_number: page_number
       });
       if (isApiResponseOk(res)) {
-        console.log(res.data)
         let arr1 = current_no_sche_card_list; //1.1>从data获取当前datalist数组
         let arr2 = res.data; //1.2>从此次请求返回的数据中获取新数组
         if (page_number == 1) {

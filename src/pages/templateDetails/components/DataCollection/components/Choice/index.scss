@@ -56,14 +56,15 @@
                     color           : #3F445D;
                     line-height     : pxTrans(40);
                     background-color: #F5F7FB;
-                    overflow        : hidden;
-                    text-overflow   : ellipsis;
-                    white-space     : nowrap;
                     margin-top      : pxTrans(1);
                     margin-bottom   : pxTrans(2);
                     display         : flex;
                     flex-direction  : row;
                     justify-content : space-between;
+                }
+
+                .choice_name_text {
+                    width: 80%;
                 }
             }
         }

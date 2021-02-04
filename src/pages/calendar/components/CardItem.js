@@ -39,7 +39,6 @@ export default class CardItem extends Component {
         });
         wx.getClipboardData({
           success: function (res) {
-            console.log(res.data); // data
           }
         });
       }

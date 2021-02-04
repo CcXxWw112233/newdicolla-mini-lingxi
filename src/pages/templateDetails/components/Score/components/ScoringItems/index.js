@@ -52,7 +52,11 @@ export default class index extends Component {
         } else if (processed == '1') {
             processed_status = '评分中'
         } else if (processed == '2') {
-            processed_status = `${value + ' ' + '分'}`
+            if (value) {
+                processed_status = `${value + ' ' + '分'}`
+            } else {
+                processed_status = '超时自动通过'
+            }
         }
         return processed_status;
     }
@@ -121,7 +125,6 @@ export default class index extends Component {
     render() {
         const { assignees, score_items, status, } = this.props
         const { isSocreInpit, inputWarning, selectInputId } = this.state
-
         return (
             <View className={indexStyles.viewStyle}>
 
