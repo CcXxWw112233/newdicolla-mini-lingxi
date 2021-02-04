@@ -18,6 +18,17 @@ export default class index extends Component {
         }
     }
 
+    componentDidMount() {
+        const { status } = this.props;
+        if (status == '1') {
+            Taro.showToast({
+                title: '小程序暂不支持编辑,请前往PC端操作',
+                icon: 'none',
+                duration: 2000
+            })
+
+        }
+    }
     render() {
 
         const { recipients, assignees, last_complete_time, forms, description, board_id, status, deadline_time_type, deadline_value, deadline_type, cc_type } = this.props
