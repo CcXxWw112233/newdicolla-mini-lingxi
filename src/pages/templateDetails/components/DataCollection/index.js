@@ -59,7 +59,7 @@ export default class index extends Component {
                                 {field_type === '2' && (
                                     <View>
                                         <View className={indexStyles.other_cell}>
-                                            <Choice title={title} options={options} prompt_content={prompt_content} value={value} status={status} />
+                                            <Choice title={title} options={options} prompt_content={prompt_content} value={value} status={status} item={item} />
                                         </View>
                                     </View>
                                 )}

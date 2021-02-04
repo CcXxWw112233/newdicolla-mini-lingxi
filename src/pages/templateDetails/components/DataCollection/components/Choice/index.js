@@ -23,15 +23,33 @@ export default class index extends Component {
     }
 
     componentDidMount() {
-        const { options, value } = this.props
+        const { options, value, item } = this.props
+
         if (value) {
-            options.map(item => {
-                if (value == item.id) {
-                    this.setState({
-                        selectContent: item.label_name
+            if (item.is_multiple_choice == '1') {
+                var arr = value.split(",");
+                var selectContent = '';
+                console.log(arr)
+                arr.map(item1 => {
+                    options.map(item2 => {
+                        if (item1 == item2.id) {
+                            selectContent = selectContent + item2.label_name + ','
+                        }
                     })
-                }
-            })
+                })
+                this.setState({
+                    selectContent: selectContent
+                })
+
+            } else {
+                options.map(item1 => {
+                    if (value == item1.id) {
+                        this.setState({
+                            selectContent: item1.label_name
+                        })
+                    }
+                })
+            }
         }
     }
     onChange(e) {
@@ -53,10 +71,8 @@ export default class index extends Component {
         }
     }
     render() {
-        const { title, options, prompt_content, status, value } = this.props
+        const { title, options, prompt_content, status, value, item } = this.props
         const { selectContent } = this.state;
-
-
         return (
             <View className={indexStyles.viewStyle} onClick={this.onClickAction}>
 
