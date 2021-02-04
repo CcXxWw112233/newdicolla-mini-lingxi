@@ -14,6 +14,7 @@ import {
   select_search_text,
   select_page_number,
   select_sche_card_list,
+  no_sche_card_list,
   select_is_reach_bottom
 } from "./selects";
 import { getCurrentOrgByStorage } from "../../utils/basicFunction";
@@ -93,6 +94,9 @@ export default {
       const current_sche_card_list = yield select(select_sche_card_list);
 
       if (isApiResponseOk(res)) {
+
+        console.log(res);
+
         if (typeSource === 1) {
           //处理上拉加载
           let arr1 = current_sche_card_list; //1.1>从data获取当前datalist数组
@@ -135,18 +139,37 @@ export default {
       // const current_org = getCurrentOrgByStorage()
       const current_org = "0";
       const selected_board = yield select(select_selected_board);
+      const page_number = yield select(select_page_number);
+      const current_no_sche_card_list = yield select(no_sche_card_list);
 
       const res = yield call(getNoScheCardList, {
         _organization_id: current_org,
         board_id: selected_board,
         page_size: "200",
-        page_number: "1"
+        page_number: page_number
       });
       if (isApiResponseOk(res)) {
+        console.log(res.data)
+        let arr1 = current_no_sche_card_list; //1.1>从data获取当前datalist数组
+        let arr2 = res.data; //1.2>从此次请求返回的数据中获取新数组
+        if (page_number == 1) {
+          arr1 = arr2
+        } else {
+          arr1 = arr1.concat(arr2); //1.3>合并数组
+        }
+
+        if (res.data && res.data.length === 0) {
+          yield put({
+            type: "updateDatas",
+            payload: {
+              isReachBottom: false
+            }
+          });
+        }
         yield put({
           type: "updateDatas",
           payload: {
-            no_sche_card_list: res.data
+            no_sche_card_list: arr1
           }
         });
       } else {

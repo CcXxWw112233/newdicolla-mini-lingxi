@@ -4,6 +4,7 @@ import indexStyles from './index.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import RelevantPersonnel from './../CommonComponents/RelevantPersonnel/index'
 import OtherCell from './../CommonComponents/OtherCell/index'
+import DateCell from './../CommonComponents/DateCell/index'
 import Choice from './components/Choice/index'
 import Enclosure from './components/Enclosure/index'
 import OnlineTable from './components/OnlineTable/index'
@@ -17,10 +18,20 @@ export default class index extends Component {
         }
     }
 
+    componentDidMount() {
+        const { status } = this.props;
+        if (status == '1') {
+            Taro.showToast({
+                title: '小程序暂不支持编辑,请前往PC端操作',
+                icon: 'none',
+                duration: 2000
+            })
+
+        }
+    }
     render() {
 
-        const { recipients, assignees, last_complete_time, forms, description, board_id, status, deadline_time_type, deadline_value, deadline_type, } = this.props
-
+        const { recipients, assignees, last_complete_time, forms, description, board_id, status, deadline_time_type, deadline_value, deadline_type, cc_type } = this.props
         return (
             <View className={indexStyles.viewStyle}>
 
@@ -35,32 +46,31 @@ export default class index extends Component {
 
                 <View className={indexStyles.view_cell}>
                     {forms && forms.map((item, key) => {
-                        console.log(item);
-                        const { id, value, field_type, files = [], options, title } = item
+                        const { id, value, field_type, files = [], options, title, prompt_content } = item
                         return (
                             <View key={id}>
                                 {field_type === '1' && (
                                     <View>
                                         <View className={indexStyles.other_cell}>
-                                            <OtherCell title={title} description={value} />
+                                            <OtherCell title={title} description={value} item={item} status={status} field_type={field_type} />
                                         </View>
                                     </View>
                                 )}
                                 {field_type === '2' && (
                                     <View>
                                         <View className={indexStyles.other_cell}>
-                                            <Choice title={title} options={options} />
+                                            <Choice title={title} options={options} prompt_content={prompt_content} value={value} status={status} />
                                         </View>
                                     </View>
                                 )}
                                 {field_type === '3' && (
                                     <View className={indexStyles.other_cell}>
-                                        <OtherCell title={title} description={timestampToTimeZH(value)} />
+                                        <DateCell title={title} description={timestampToTimeZH(value)} item={item} status={status} field_type={field_type} />
                                     </View>
                                 )}
                                 {field_type === '5' && (
                                     <View className={indexStyles.other_cell}>
-                                        <Enclosure title={title} files={files} board_id={board_id} />
+                                        <Enclosure title={title} files={files} item={item} board_id={board_id} status={status} />
                                     </View>
                                 )}
                                 {field_type === '6' && (

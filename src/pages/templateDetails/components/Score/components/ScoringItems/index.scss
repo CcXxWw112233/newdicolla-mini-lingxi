@@ -5,20 +5,15 @@
     flex-direction  : column;
     align-items     : center;
     background-color: #FFFFFF;
+    margin          : 0 pxTrans(16);
 
     .line_cell {
         display       : flex;
         flex-direction: row;
-        width         : 100%;
+
 
         .line_empty {
             width: pxTrans(44);
-        }
-
-        .line {
-            flex      : 1;
-            height    : pxTrans(1);
-            background: rgba(0, 0, 0, 0.09);
         }
     }
 
@@ -37,7 +32,7 @@
 
             .scoring_items_title {
                 height     : pxTrans(56);
-                font-size  : pxTrans(16);
+                font-size  : pxTrans(14);
                 font-weight: 400;
                 color      : rgba(0, 0, 0, 0.25);
                 line-height: pxTrans(24);
@@ -47,18 +42,18 @@
 
 
             .score_view {
-                width          : pxTrans(120);
-                height         : pxTrans(64);
-                background     : rgba(0, 0, 0, 0.04);
-                border-radius  : pxTrans(2);
-                border         : pxTrans(1) solid rgba(0, 0, 0, 0.15);
-                display        : flex;
-                flex-direction : row;
-                justify-content: center;
-                align-items    : center;
+                width             : pxTrans(120);
+                height            : pxTrans(64);
+                background        : rgba(0, 0, 0, 0.04);
+                border-radius     : pxTrans(2);
+                // border         : pxTrans(1) solid rgba(0, 0, 0, 0.15);
+                display           : flex;
+                flex-direction    : row;
+                justify-content   : center;
+                align-items       : center;
 
                 .score_view_title {
-                    font-size    : pxTrans(16);
+                    font-size    : pxTrans(14);
                     font-weight  : 400;
                     color        : rgba(0, 0, 0, 0.15);
                     line-height  : pxTrans(40);
@@ -76,17 +71,17 @@
             }
 
             .score_view_input {
-                width          : pxTrans(120);
-                height         : pxTrans(64);
-                background     : rgba(0, 0, 0, 0.04);
-                border-radius  : pxTrans(2);
-                border         : pxTrans(1) solid rgba(0, 0, 0, 0.15);
-                display        : flex;
-                flex-direction : row;
-                justify-content: center;
-                align-items    : center;
-                text-align     : center;
-                vertical-align : middle;
+                width             : pxTrans(120);
+                height            : pxTrans(64);
+                background        : rgba(0, 0, 0, 0.04);
+                border-radius     : pxTrans(2);
+                // border         : pxTrans(1) solid rgba(0, 0, 0, 0.15);
+                display           : flex;
+                flex-direction    : row;
+                justify-content   : center;
+                align-items       : center;
+                text-align        : center;
+                vertical-align    : middle;
 
                 font-size  : pxTrans(40);
                 font-weight: 400;
@@ -95,7 +90,7 @@
 
             .input_warning {
                 height     : pxTrans(25);
-                font-size  : pxTrans(16);
+                font-size  : pxTrans(14);
                 font-weight: 400;
                 color      : rgba(245, 34, 45, 1);
                 line-height: pxTrans(24);
@@ -136,7 +131,7 @@
                     }
 
                     .rater_name {
-                        font-size   : pxTrans(16);
+                        font-size   : pxTrans(14);
                         font-weight : 400;
                         color       : rgba(0, 0, 0, 0.65);
                         line-height : pxTrans(24);
@@ -145,7 +140,7 @@
 
                     .average_number {
                         font-weight: 600;
-                        font-size  : pxTrans(16);
+                        font-size  : pxTrans(14);
                         line-height: pxTrans(24);
                         color      : rgba(24, 144, 255, 1);
                     }
@@ -153,7 +148,7 @@
 
                 .score_comment {
                     margin-left : pxTrans(32);
-                    font-size   : pxTrans(16);
+                    font-size   : pxTrans(14);
                     font-weight : 400;
                     color       : rgba(0, 0, 0, 0.65);
                     line-height : pxTrans(24);

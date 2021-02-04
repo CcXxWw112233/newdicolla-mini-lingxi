@@ -39,6 +39,11 @@
         font-weight    : 400;
     }
 
+    .currentStep {
+        color           : white;
+        background-color: #1890FF;
+    }
+
     .step_name {
         flex         : 1;
         font-size    : pxTrans(16);
