@@ -179,6 +179,7 @@ export default class File extends Component {
     loadData = (params) => {
         const { org_id, board_id, folder_id } = params
         this.getFilePage(org_id, board_id, folder_id)
+
     }
 
     getFilePage = (org_id, board_id, folder_id) => {
@@ -189,11 +190,13 @@ export default class File extends Component {
             board_id: board_id,
             folder_id: folder_id,
         }
+        const { dispatch, header_folder_name } = this.props;
+        var that = this;
+        console.log("*****************" + header_folder_name)
+
+
         Taro.setStorageSync('file_pull_down_refresh', JSON.stringify(params))
 
-        let that = this;
-        //加载数据
-        const { dispatch } = this.props
 
         Promise.resolve(
             dispatch({
@@ -207,6 +210,7 @@ export default class File extends Component {
                 },
             })
         ).then(() => {
+            this.verifyAuthority(board_id)
 
             ///从公众号消息推送过来查看文件详情
             const { officialAccountFileInfo = {} } = this.state
@@ -233,7 +237,38 @@ export default class File extends Component {
             this.getUnreadFileList(dispatch);
         })
     }
-
+    verifyAuthority = (board_id) => {
+        const { dispatch, header_folder_name } = this.props;
+        var that = this;
+        if (header_folder_name == '全部文件') {
+            return false;
+        } else {
+            console.log(header_folder_name);
+            Promise.resolve(
+                dispatch({
+                    type: 'file/verifyAuthority',
+                    payload: {
+                    },
+                })
+            ).then((res) => {
+                const dataList = res.data;
+                console.log(dataList)
+                console.log(board_id)
+                for (var key in dataList) {//遍历json对象的每个key/value对,p为key
+                    if (board_id == key) {
+                        dataList[key].map(item => {
+                            if (item == 'project:files:file:upload') {
+                                that.setState({
+                                    uplaodAuto: true
+                                })
+                            }
+                        })
+                    }
+                }
+                console.log(this.state.uplaodAuto)
+            })
+        }
+    }
     //获取未读文件list
     getUnreadFileList = (dispatch) => {
 
@@ -549,9 +584,21 @@ export default class File extends Component {
         })
     }
 
+
+
     // 获取授权
     getAuthSetting = (imageSourceType) => {
         let that = this;
+        const { header_folder_name } = this.props;
+
+        if (!this.state.uplaodAuto) {
+            Taro.showToast({
+                title: header_folder_name == '全部文件' ? '请选择相应的项目' : '您没有该项目的上传权限',
+                icon: 'none',
+                duration: 2000
+            });
+            return;
+        }
         this.getLocationAuth().then(msg => {
             Taro.getSetting({
                 success(res) {
@@ -732,7 +779,6 @@ export default class File extends Component {
 
     //上传到后端
     fileUpload = ({ longitude, latitude }) => {
-
         const { choice_image_temp_file_paths } = this.state
         const { selected_board_folder_info } = this.props
         const { org_id, board_id, folder_id, current_folder_name, } = selected_board_folder_info
