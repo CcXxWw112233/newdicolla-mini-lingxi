@@ -3,9 +3,8 @@
 .viewStyle {
     display         : flex;
     flex-direction  : column;
-    align-items     : center;
     background-color: #FFFFFF;
-    height          : pxTrans(56);
+    padding-bottom  : pxTrans(10);
 
     .line_cell {
         display       : flex;
@@ -16,33 +15,34 @@
             width: pxTrans(44);
         }
 
-        .line {
-            flex      : 1;
-            height    : pxTrans(1);
-            background: rgba(0, 0, 0, 0.09);
-        }
     }
 
     .content_cell {
         flex          : 1;
         display       : flex;
         flex-direction: row;
-        margin-right  : pxTrans(16);
-        width         : 100%;
+        margin        : 0 pxTrans(20);
 
         .content_padding {
             display       : flex;
-            flex-direction: row;
-            align-items   : center;
+            flex-direction: column;
+            width         : 80%;
+
+            .titleView {
+                display       : flex;
+                flex-direction: row;
+
+                .isrequired {
+                    color       : red;
+                    padding-left: pxTrans(10);
+                }
+            }
 
             .title {
-                width       : pxTrans(48);
-                font-size   : pxTrans(16);
-                font-weight : 400;
-                color       : rgba(0, 0, 0, 0.25);
-                line-height : pxTrans(24);
-                margin-left : pxTrans(16);
-                margin-right: pxTrans(16);
+                font-size  : pxTrans(14);
+                font-weight: 400;
+                color      : #575C75;
+                line-height: pxTrans(24);
             }
 
             .enclosure_view {
@@ -51,23 +51,25 @@
                 flex-direction: column;
 
                 .enclosure {
-                    flex          : 1;
-                    display       : flex;
-                    flex-direction: row;
-                    font-size     : pxTrans(16);
-                    font-weight   : 400;
-                    color         : rgba(0, 0, 0, 0.65);
-                    line-height   : pxTrans(24);
+                    flex           : 1;
+                    display        : flex;
+                    flex-direction : row;
+                    font-size      : pxTrans(14);
+                    font-weight    : 400;
+                    color          : rgba(0, 0, 0, 0.65);
+                    line-height    : pxTrans(24);
+                    justify-content: space-between;
+
 
                     .enclosure_icon {
-                        font-size   : pxTrans(15);
+                        font-size   : pxTrans(14);
                         color       : rgba(24, 144, 255, 1);
                         margin-right: pxTrans(8);
                     }
 
                     .enclosure_name {
                         flex         : 1;
-                        font-size    : pxTrans(16);
+                        font-size    : pxTrans(14);
                         font-weight  : 400;
                         color        : rgba(0, 0, 0, 0.65);
                         line-height  : pxTrans(24);

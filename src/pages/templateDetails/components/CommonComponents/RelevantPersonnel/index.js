@@ -49,7 +49,7 @@ export default class index extends Component {
 
     render() {
 
-        const { recipients = [], assignees, last_complete_time, } = this.props
+        const { recipients = [], assignees, last_complete_time, cc_type } = this.props
         return (
             <View className={indexStyles.viewStyle}>
 
@@ -91,7 +91,7 @@ export default class index extends Component {
                             })}
                         </View>
                         <View className={indexStyles.make_copy}>
-                            {recipients && recipients.length > 0 ? (<View className={indexStyles.recipients}>
+                            {cc_type == '1' ? (<View className={indexStyles.recipients}>
 
                                 <View className={indexStyles.title}>抄送人</View>
                                 { recipients.map((value, key) => {

@@ -48,7 +48,7 @@ export default class index extends Component {
 
     render() {
 
-        const { title, files, board_id, } = this.props
+        const { title, files, board_id, item } = this.props
 
         return (
             <View className={indexStyles.viewStyle}>
@@ -61,7 +61,11 @@ export default class index extends Component {
                 <View className={indexStyles.content_cell}>
                     <View className={indexStyles.content_padding}>
 
-                        <View className={indexStyles.title}>{title}</View>
+                        <View className={indexStyles.titleView}>
+                            <View className={indexStyles.title}>{title}</View>
+                            {item.is_required && item.is_required == '1' ? (<Text className={indexStyles.
+                                isrequired}>*</Text>) : (null)}
+                        </View>
 
                         <View className={indexStyles.enclosure_view}>
                             {files.map((item, key) => {

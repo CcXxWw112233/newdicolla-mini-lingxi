@@ -77,8 +77,6 @@ export default class templateDetails extends Component {
         ).then((res) => {
             var nodes = res.nodes;
             nodes.map(item => {
-                console.log(item)
-                console.log(item.status)
                 if (item.status == '1') {
                     that.setState({
                         current_step_id: item.id,
@@ -121,7 +119,7 @@ export default class templateDetails extends Component {
 
 
                     {nodes && nodes.map((value, key) => {
-                        const { id, node_type, sort, runtime_type, recipients, assignees, last_complete_time, forms, description, approve_type, status, score_items, deadline_time_type, deadline_value, deadline_type, his_comments = [], } = value
+                        const { id, node_type, sort, runtime_type, recipients, assignees, last_complete_time, forms, description, approve_type, status, score_items, deadline_time_type, deadline_value, deadline_type, his_comments = [], cc_type } = value
 
                         return (
                             <View key={id} >
@@ -142,6 +140,7 @@ export default class templateDetails extends Component {
                                                     deadline_time_type={deadline_time_type}
                                                     deadline_value={deadline_value}
                                                     deadline_type={deadline_type}
+                                                    cc_type={cc_type}
                                                 />
                                             )}
                                             {node_type === '2' && (

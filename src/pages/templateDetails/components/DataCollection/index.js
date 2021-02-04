@@ -20,7 +20,7 @@ export default class index extends Component {
 
     render() {
 
-        const { recipients, assignees, last_complete_time, forms, description, board_id, status, deadline_time_type, deadline_value, deadline_type, } = this.props
+        const { recipients, assignees, last_complete_time, forms, description, board_id, status, deadline_time_type, deadline_value, deadline_type, cc_type } = this.props
         return (
             <View className={indexStyles.viewStyle}>
 
@@ -59,7 +59,7 @@ export default class index extends Component {
                                 )}
                                 {field_type === '5' && (
                                     <View className={indexStyles.other_cell}>
-                                        <Enclosure title={title} files={files} board_id={board_id} status={status} />
+                                        <Enclosure title={title} files={files} item={item} board_id={board_id} status={status} />
                                     </View>
                                 )}
                                 {field_type === '6' && (

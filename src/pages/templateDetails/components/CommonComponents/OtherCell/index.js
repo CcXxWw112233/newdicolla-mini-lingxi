@@ -199,9 +199,6 @@ export default class index extends Component {
     render() {
 
         const { title, status, item } = this.props
-        console.log(item)
-
-        console.log(status);
         return (
             <View className={indexStyles.viewStyle}>
 

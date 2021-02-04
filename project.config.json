@@ -43,12 +43,6 @@
   "simulatorPluginLibVersion": {},
   "libVersion": "2.10.2",
   "condition": {
-    "search": {
-      "list": []
-    },
-    "conversation": {
-      "list": []
-    },
     "plugin": {
       "list": []
     },
@@ -103,10 +97,9 @@
           "scene": 1008
         },
         {
-          "id": 6,
-          "name": "消息跳转",
+          "name": "流程通知",
           "pathName": "pages/sceneEntrance/index",
-          "query": "contentId=1218939078247059456&boardId=1218939078247059456&redirectType=1&orgId=1164926825101660160",
+          "query": "contentId= 1356557991259803648&boardId= 1348579855968636928&redirectType=4&orgId= 1348579810632404992",
           "scene": null
         },
         {
@@ -138,10 +131,9 @@
           "scene": null
         },
         {
-          "id": 11,
-          "name": "公众号跳转文件预览",
+          "name": "pages/sceneEntrance/index",
           "pathName": "pages/sceneEntrance/index",
-          "query": "contentId=1249518026181709824&boardId=1206886569806532608&redirectType=5&orgId=1107307923551424512",
+          "query": "contentId=1249518026181709824&boardId=1206886569806532608&redirectType=4&orgId=1107307923551424512",
           "scene": null
         },
         {
@@ -150,6 +142,13 @@
           "pathName": "pages/templateDetails/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "pages/templateDetails/index",
+          "pathName": "pages/templateDetails/index",
+          "query": "contentId= 1356557991259803648&boardId= 1348579855968636928&redirectType=4&orgId= 1348579810632404992",
+          "scene": 1043,
+          "referrerInfo": {}
         }
       ]
     }
