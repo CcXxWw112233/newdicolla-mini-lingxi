@@ -75,9 +75,10 @@ export default class index extends Component {
                                     <View key={id} className={indexStyles.personnel_cell}>
 
                                         <View className={indexStyles.make_copy}>
-                                            <View className={indexStyles.avatar_View}>           {avatar ? (<Image className={indexStyles.avatar_image_style} src={avatar}></Image>) : (
-                                                // <Text className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}>&#xe647;</Text>
-                                                <Image src={defaultPhoto} className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}></Image>)}
+                                            <View className={indexStyles.avatar_View}>
+                                                {avatar ? (<Image className={indexStyles.avatar_image_style} src={avatar}></Image>) : (
+                                                    // <Text className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}>&#xe647;</Text>
+                                                    <Image src={defaultPhoto} className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}></Image>)}
                                                 <View className={indexStyles.name}>{name}</View>
                                             </View>
                                             <View className={indexStyles.status}>{this.loadProcessedState(processed, pass)}</View>
@@ -101,7 +102,11 @@ export default class index extends Component {
                         <View className={indexStyles.content_padding}>
                             <View className={indexStyles.fill_in}>
                                 <View className={indexStyles.title_content}>历史审批：{this.approveType(approve_type)}</View>
-                                <View className={indexStyles.historyUnfold} onClick={this.historyUnfold}>展开</View>
+                                <View className={indexStyles.historyUnfold} onClick={this.historyUnfold}>
+                                    {
+                                        historyUnfold ? '收起' : '展开'
+                                    }
+                                </View>
                             </View>
                             {historyUnfold ? (
                                 <View className={indexStyles.view_cell}>
@@ -109,18 +114,20 @@ export default class index extends Component {
                                         const { id, avatar, name, processed, comment, pass, } = item
 
                                         return (
-                                            <View key={id} className={indexStyles.personnel_cell}>
+
+                                            <View key={id} className={`${indexStyles.personnel_cell} ${indexStyles.historyBottom}`}>
 
                                                 <View className={indexStyles.make_copy}>
-                                                    {
-                                                        avatar ? (
-                                                            <Image className={indexStyles.avatar_image_style} src={avatar}></Image>
-                                                        ) : (
-                                                                // <Text className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}>&#xe647;</Text>
-                                                                <Image src={defaultPhoto} className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`}></Image>
-                                                            )
-                                                    }
-                                                    <View className={indexStyles.name}>{name}</View>
+                                                    <View className={indexStyles.avatar_View}>
+                                                        {
+                                                            avatar ? (
+                                                                <Image className={indexStyles.avatar_image_style} src={avatar}></Image>
+                                                            ) : (
+                                                                    <Image src={defaultPhoto} className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image_style}`} ></Image>
+                                                                )
+                                                        }
+                                                        <View className={indexStyles.name}>{name}</View>
+                                                    </View>
                                                     <View className={indexStyles.status}>{this.loadProcessedState(processed, pass)}</View>
                                                 </View>
                                                 {
