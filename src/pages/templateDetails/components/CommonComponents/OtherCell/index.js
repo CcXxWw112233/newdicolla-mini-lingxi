@@ -194,12 +194,22 @@ export default class index extends Component {
                 return valiResult;
         }
     }
+    onClickAction() {
+        const { status } = this.props;
+        if (status == '1') {
+            Taro.showToast({
+                title: '小程序暂不支持编辑,请前往PC端操作',
+                icon: 'none',
+                duration: 2000
+            })
+        }
+    }
 
     render() {
 
         const { title, status, item } = this.props
         return (
-            <View className={indexStyles.viewStyle}>
+            <View className={indexStyles.viewStyle} onClick={this.onClickAction}>
 
                 <View className={indexStyles.line_cell}>
                     <View className={indexStyles.line_empty}></View>
