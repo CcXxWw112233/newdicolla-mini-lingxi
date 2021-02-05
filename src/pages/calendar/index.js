@@ -121,10 +121,11 @@ export default class Calendar extends Component {
   }
 
   componentDidShow() {
-    const { selected_board_name, selected_timestamp } = this.props;
+    const { selected_board_name, selected_timestamp, dispatch } = this.props;
     Taro.setNavigationBarTitle({
       title: selected_board_name
     });
+
     console.log("进来了", selected_timestamp);
     this.getOrgList();
     this.getOrgBoardList();
@@ -134,7 +135,13 @@ export default class Calendar extends Component {
     this.getMeetingTodoList({ query_time: selected_timestamp });
     this.getUserAllOrgsAllBoards();
     this.getAccountInfo();
-
+    dispatch({
+      type: "calendar/updateDatas",
+      payload: {
+        page_number: 1,
+        isReachBottom: true
+      }
+    });
     if (Taro.pageScrollTo) {
       Taro.pageScrollTo({
         scrollTop: 0

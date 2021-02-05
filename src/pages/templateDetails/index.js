@@ -36,7 +36,6 @@ export default class templateDetails extends Component {
     }
 
     componentDidMount() {
-
         const { flag, boardId, contentId, back_icon } = this.$router.params
         const { workflowDatas } = this.props;
         if (boardId || contentId) {

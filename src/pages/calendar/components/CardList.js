@@ -97,14 +97,12 @@ export default class CardList extends Component {
     const { isReachBottom } = this.props;
     // console.log(this.props.meeting_list);
     const promptText =
-      sche_card_list.length > 0
+      card_list.length > 0
         ? `${isReachBottom === true ? "加载更多..." : "没有更多内容了"}`
         : "暂无数据";
-    // console.log(selected_timestamp, temp_);
     return (
       <View
-        className={`${indexstyles.card_item_out_01} ${globalStyles.global_horrizontal_padding}`}
-      >
+        className={`${indexstyles.card_item_out_01} ${globalStyles.global_horrizontal_padding}`} >
         {card_list.map((value, key) => {
           const { content_id, flag, id } = value;
           return (
