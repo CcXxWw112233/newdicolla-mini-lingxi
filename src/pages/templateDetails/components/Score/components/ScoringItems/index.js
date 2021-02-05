@@ -6,6 +6,8 @@ import globalStyles from '../../../../../../gloalSet/styles/globalStyles.scss'
 import { validateTwoDecimal, } from '../../../../../../utils/verify';
 import { loadFindAssignees, } from '../../../../../../utils/basicFunction';
 import defaultPhoto from "../../../../../../asset/chat/defaultPhoto.png"
+import RejectPopup from "../../../../components/Approval/components/RejectPopup"
+
 
 export default class index extends Component {
 
@@ -16,9 +18,40 @@ export default class index extends Component {
             inputWarning: false,  //输入错误警告
             selectInputId: '', //当前选中输入框的id
             commentValue: '', //审批意见内容
+            isRejectPopupShow: false
         }
     }
+    cancelAction = e => {
+        this.setState({
+            isRejectPopupShow: false
+        })
+    }
 
+    onClickAction = (e) => {
+        console.log(e)
+        const { score_items } = this.props
+        //    使用map()生成数组
+        let new_arr = score_items.map(obj => { return { 'field_id': obj.id, 'field_value': obj.value } })
+        const { commentValue, isSocreInpit, } = this.state
+        //    if (!isSocreInpit) {
+        const { globalData: { store: { dispatch } } } = Taro.getApp();
+        const { flow_instance_id, flow_node_instance_id, } = this.props
+
+        dispatch({
+            type: 'workflow/putApprovalComplete',
+            payload: {
+                flow_instance_id: flow_instance_id,
+                flow_node_instance_id: flow_node_instance_id,
+                message: e,
+                content_values: new_arr,
+            },
+        })
+        this.setState({
+            isRejectPopupShow: true
+
+        })
+        // }
+    }
 
     handleInput = e => {
         this.setState({
@@ -26,7 +59,7 @@ export default class index extends Component {
         });
     };
 
-    clickScoreView = (id, assignees = [], status) => {
+    clickScoreView = (id, assignees = [], status, item) => {
 
         //先查询状态是不是进行中, 在查看用户在不在审批人中
         if (((status && status === '1') && (loadFindAssignees(assignees)))) {
@@ -40,12 +73,14 @@ export default class index extends Component {
                 this.setState({
                     isSocreInpit: true,
                     selectInputId: id,
+                    obj: item
                 })
             }
         }
     }
 
     loadProcessedState = (processed, value) => {
+
         let processed_status
         if (processed == '0') {
             processed_status = '未评分'
@@ -58,14 +93,13 @@ export default class index extends Component {
                 processed_status = '超时自动通过'
             }
         }
+        console.log(processed_status)
         return processed_status;
     }
 
     //失去焦点
     bindblur = (e, obj) => {
         let value = e.target.value;
-        console.log("********************")
-        console.log(value)
         if (value && value.length > 0) {
             const { score_items } = this.props
             var currntItems = score_items.find(item => item.id == obj.id);
@@ -91,31 +125,37 @@ export default class index extends Component {
         } else {
             this.setState({
                 inputWarning: false,
+                scoreValue: e.target.value
             })
         }
     }
 
     //完成
     complete = () => {
-        const { score_items } = this.props
-        // 使用map()生成数组
-        let new_arr = score_items.map(obj => { return { 'field_id': obj.id, 'field_value': obj.value } })
+        const { status } = this.props;
+        console.log(status);
+        const { scoreValue, obj } = this.state;
 
-        const { commentValue, isSocreInpit, } = this.state
+        if (scoreValue && scoreValue.length > 0) {
+            const { score_items } = this.props
+            var currntItems = score_items.find(item => item.id == obj.id);
+            currntItems.value = scoreValue;
+            this.setState({
+                score_items: score_items,
+                isRejectPopupShow: true
+            })
+        } else {
+            Taro.showToast({
+                title: '请先评分',
+                icon: 'none',
+                duration: 1000
+            })
+            this.setState({
+                isSocreInpit: false,
+                selectInputId: ''
+            })
+        }
 
-        // if (!isSocreInpit) {
-        const { globalData: { store: { dispatch } } } = Taro.getApp();
-        const { flow_instance_id, flow_node_instance_id, } = this.props
-        dispatch({
-            type: 'workflow/putApprovalComplete',
-            payload: {
-                flow_instance_id: flow_instance_id,
-                flow_node_instance_id: flow_node_instance_id,
-                message: commentValue,
-                content_values: new_arr,
-            },
-        })
-        // }
     }
 
     getNewScoreItems = (score_items) => {
@@ -131,7 +171,7 @@ export default class index extends Component {
 
     render() {
         const { assignees, score_items, status, } = this.props
-        const { isSocreInpit, inputWarning, selectInputId } = this.state
+        const { isSocreInpit, inputWarning, selectInputId, isRejectPopupShow } = this.state
         return (
             <View className={indexStyles.viewStyle}>
 
@@ -147,6 +187,8 @@ export default class index extends Component {
                             {score_items && this.getNewScoreItems(score_items).map((item, key) => {
 
                                 const { id, max_score, title, value } = item
+                                console.log(((selectInputId == id) &&
+                                    isSocreInpit && status == '1') || item.value);
                                 return (
                                     <View key={id} className={indexStyles.scoring_items}>
                                         <View className={indexStyles.scoring_items_title}>{title}</View>
@@ -157,14 +199,15 @@ export default class index extends Component {
                                                     className={indexStyles.score_view_input}
                                                     type='digit'
                                                     maxLength='5'
+                                                    focus='ture'
                                                     // placeholder={item.value}
                                                     value={item.value}
                                                     onInput={(e) => this.inputSocreInpit(e, max_score)}
                                                     onblur={(e) => this.bindblur(e, item)}
-                                                // disabled={true}
+                                                    disabled={item.value && item.value.length}
                                                 ></Input>)
                                                 :
-                                                (<View className={indexStyles.score_view} onClick={() => this.clickScoreView(id, assignees, status)}>
+                                                (<View className={indexStyles.score_view} onClick={() => this.clickScoreView(id, assignees, status, item)}>
                                                     <View className={indexStyles.score_view_title}>最高</View>
                                                     <View className={indexStyles.score_view_double}>{max_score}</View>
                                                     <View className={indexStyles.score_view_title}>分</View>
@@ -181,12 +224,11 @@ export default class index extends Component {
 
                     <View className={indexStyles.assignees}>
                         {assignees && assignees.map((value, key) => {
-                            const { id, avatar, name, processed, score_items, comment } = value
+                            const { id, avatar, name, processed, comment, score_items } = value
                             const average_auto = score_items && score_items.length;
-
                             return (
 
-                                <View key={id} className={indexStyles.score_cell_style}>
+                                <View key={key} className={indexStyles.score_cell_style}>
 
                                     <View className={indexStyles.average}>
                                         {
@@ -198,7 +240,6 @@ export default class index extends Component {
 
                                                 )
                                         }
-
 
                                         <View className={indexStyles.rater_name}>{name}</View>
                                         <View className={`${indexStyles.average_number} ${average_auto ? '' : indexStyles.average_auto}`}>{this.loadProcessedState(processed, score_items && score_items[score_items.length - 1]['value'])}</View>
@@ -212,24 +253,29 @@ export default class index extends Component {
                         })}
                     </View>
 
-                    <View class={indexStyles.opinion_cell}>
-                        <View class={indexStyles.opinion_title}>意见</View>
-                        <View class={indexStyles.opinion_content}>
-                            <Textarea className={indexStyles.textarea}
-                                placeholder='填写意见'
-                                onInput={this.handleInput}
-                                value={commentValue}
-                                auto-height={false}
-                                show-confirm-bar={false}
-                                adjust-position={true}
-                                disabled={!isSocreInpit}
-                            />
-                        </View>
-                    </View>
+                    {/* <View class={indexStyles.opinion_cell}> */}
+                    {/* <View class={indexStyles.opinion_title}>意见</View> */}
+                    {/* <View class={indexStyles.opinion_content}> */}
+                    {/* <Textarea className={indexStyles.textarea} */}
+                    {/* // placeholder='填写意见' */}
+                    {/* // onInput={this.handleInput} */}
+                    {/* // value={commentValue} */}
+                    {/* // auto-height={false} */}
+                    {/* // show-confirm-bar={false} */}
+                    {/* // adjust-position={true} */}
+                    {/* // disabled={!isSocreInpit} */}
+                    {/* // /> */}
+                    {/* </View> */}
+                    {/* </View> */}
                     <View class={indexStyles.complete}>
                         <View class={`${indexStyles.button} ${isSocreInpit ? indexStyles.complete_button_disabled : indexStyles.complete_button}`} onClick={this.complete}>完成</View>
                     </View>
                 </View>
+                {
+                    isRejectPopupShow ? (<RejectPopup popupTitle='评分意见' cancelAction={() => this.cancelAction()} placeholder='请填写评分意见' onClickAction={(e) => this.onClickAction(e)}></RejectPopup>) : (null)
+
+                }
+
             </View>
         )
     }

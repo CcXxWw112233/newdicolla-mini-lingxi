@@ -32,6 +32,7 @@ export default class index extends Component {
                 var arr = item.value.split(",");
                 dateString = timestampToDateTimeLine(arr[0], datetype) + ' 至 ' + timestampToDateTimeLine(arr[1], datetype);
             } else {
+
                 dateString = timestampToDateTimeLine(item.value, datetype);
             }
         }
