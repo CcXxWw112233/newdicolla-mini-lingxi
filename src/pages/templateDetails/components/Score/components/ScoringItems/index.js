@@ -47,7 +47,7 @@ export default class index extends Component {
             },
         })
         this.setState({
-            isRejectPopupShow: true
+            isRejectPopupShow: false
 
         })
         // }
@@ -268,7 +268,10 @@ export default class index extends Component {
                     {/* </View> */}
                     {/* </View> */}
                     <View class={indexStyles.complete}>
-                        <View class={`${indexStyles.button} ${isSocreInpit ? indexStyles.complete_button_disabled : indexStyles.complete_button}`} onClick={this.complete}>完成</View>
+                        {
+                            status == '2' ? (<View class={`${indexStyles.button} ${indexStyles.complete_button}`} >已完成</View>) : (<View class={`${indexStyles.button} ${isSocreInpit ? indexStyles.complete_button_disabled : indexStyles.complete_button}`} onClick={this.complete} >完成</View>)
+                        }
+
                     </View>
                 </View>
                 {
