@@ -65,7 +65,7 @@ export default class index extends Component {
                                 )}
                                 {field_type === '3' && (
                                     <View className={indexStyles.other_cell}>
-                                        <DateCell title={title} description={timestampToTimeZH(value)} item={item} status={status} field_type={field_type} />
+                                        <DateCell title={title} description={timestampToTimeZH(value)} item={item} status={status} value={value} field_type={field_type} />
                                     </View>
                                 )}
                                 {field_type === '5' && (

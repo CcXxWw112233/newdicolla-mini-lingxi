@@ -34,7 +34,9 @@ export default class RejectPopup extends Component {
             this.props.onClickAction(rejectText);
     }
     render() {
-        const { popupTitle } = this.props;
+        const { popupTitle, placeholder } = this.props;
+        var placeholders = placeholder ? placeholder : '填写审批意见'
+
         return (
             <View className={indexStyles.fieldSelectionView}>
 
@@ -42,7 +44,7 @@ export default class RejectPopup extends Component {
                     <View className={indexStyles.titleView}>{popupTitle}</View>
 
                     <View >
-                        <Textarea className={indexStyles.textarea} placeholder='填写审批意见' onInput={this.handleInput} showConfirmBar='false' adjust-position='true' />
+                        <Textarea className={indexStyles.textarea} placeholder={placeholders} onInput={this.handleInput} showConfirmBar='false' adjust-position='true' />
                     </View>
                     <View className={`${indexStyles.login_footer}`}>
                         <Button className={`${indexStyles.login_btn_normal} ${indexStyles.login_btn} ${indexStyles.cencel_btn}`} onClick={this.cancel}>取消</Button>

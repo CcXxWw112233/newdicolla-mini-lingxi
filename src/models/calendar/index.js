@@ -87,6 +87,7 @@ export default {
         board_id: obj["selected_board"],
         queryDate: start_time,
         maxDate: due_time,
+        page_size: "200",
         page_number: typeSource === 1 ? page_number : 1,
         ...payload
       };
