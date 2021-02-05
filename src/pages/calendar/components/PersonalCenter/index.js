@@ -125,6 +125,11 @@ export default class PersonalCenter extends Component {
                 is_mask_show_personalCenter: true
             }
         })
+        Taro.showToast({
+            title: "更改成功",
+            icon: "none",
+            duration: 1000,
+        });
     }
 
     componentDidMount() {
