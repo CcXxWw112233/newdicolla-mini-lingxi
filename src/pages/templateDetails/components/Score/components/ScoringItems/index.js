@@ -210,7 +210,7 @@ export default class index extends Component {
 
     render() {
         const { assignees, score_items, status, isinput } = this.props
-        const { isSocreInpit, inputWarning, selectInputId, isRejectPopupShow, isScoreOver } = this.state
+        const { isSocreInpit, inputWarning, selectInputId, isRejectPopupShow, isScoreOver, scoreValue } = this.state
         const iscurrent = loadFindAssignees(assignees);
         return (
             <View className={indexStyles.viewStyle}>
@@ -237,7 +237,7 @@ export default class index extends Component {
                                         {
                                             ((selectInputId == id) &&
                                                 isSocreInpit && status == '1') || item.value ?
-                                                (<Input className={indexStyles.score_view_input} type='digit' maxLength='5' focus='ture' value={item.value} onInput={(e) => this.inputSocreInpit(e, max_score)} onblur={(e) => this.bindblur(e, item)} disabled={!iscurrent}></Input>)
+                                                (<Input className={indexStyles.score_view_input} type='digit' maxLength='5' focus='ture' value={item.value} onInput={(e) => this.inputSocreInpit(e, max_score)} onblur={(e) => this.bindblur(e, item)} disabled={!iscurrent || (!isinput && item.value)}></Input>)
                                                 :
                                                 (<View className={indexStyles.score_view} onClick={() => this.clickScoreView(id, assignees, status, item)}>
                                                     <View className={indexStyles.score_view_title}>最高</View>
@@ -301,7 +301,7 @@ export default class index extends Component {
                     {/* </View> */}
                     <View class={indexStyles.complete}>
                         {
-                            (status == '2' && !iscurrent) || (status == '1' && !iscurrent && this.getNewScoreItems(score_items)) ? (<View class={`${indexStyles.button} ${indexStyles.complete_button}`} >已完成</View>) : (<View class={`${indexStyles.button} ${(isSocreInpit || status != '0') ? indexStyles.complete_button_disabled : indexStyles.complete_button}`} onClick={this.complete} >完成{status}</View>)
+                            (status == '2' && !iscurrent) || (status == '1' && !iscurrent && this.getNewScoreItems(score_items)) ? (<View class={`${indexStyles.button} ${indexStyles.complete_button}`} >已完成</View>) : (<View class={`${indexStyles.button} ${(!isSocreInpit || status == '0' || !(status == '1' && scoreValue)) ? indexStyles.complete_button : indexStyles.complete_button_disabled}`} onClick={this.complete} >完成</View>)
                         }
 
                     </View>

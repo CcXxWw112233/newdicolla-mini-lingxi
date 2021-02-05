@@ -67,7 +67,7 @@ export default class index extends Component {
                             {
                                 <View className={indexStyles.content}>
                                     {/* {'完成时间' + ' ' + timestampToTimeEN(last_complete_time)} */}
-                                    {deadline_type == '1' ? '未排期' : this.getTime()}
+                                    {deadline_type == '1' ? '未限制时间' : this.getTime()}
                                 </View>
                             }
                         </View>
