@@ -7,11 +7,28 @@ import defaultPhoto from "../../../asset/chat/defaultPhoto.png";
 class CustomNavigation extends Component {
 
     goToHomePages = () => {
-        Taro.switchTab({ url: `../../pages/calendar/index` })
+        const { pop } = this.props;
+
+        if (pop == 'previous') {
+            Taro.navigateBack({
+                delta: 1
+            })
+        } else {
+            Taro.switchTab({ url: `../../pages/calendar/index` })
+        }
     }
 
     goToPersonalCenter = () => {
-        this.props.showPersonalCenter()
+        const { pop } = this.props;
+        if (pop == 'previous') {
+            Taro.navigateBack({
+                delta: 1
+            })
+
+        } else {
+            this.props.showPersonalCenter()
+
+        }
     }
 
     render() {

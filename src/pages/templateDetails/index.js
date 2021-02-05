@@ -111,7 +111,7 @@ export default class templateDetails extends Component {
 
         return (
             <View className={indexStyles.index}>
-                <CustomNavigation backIcon={backIcon} />
+                <CustomNavigation backIcon={backIcon} pop='previous' />
                 <View style={{ marginTop: `${statusBar_Height + navBar_Height}` + 'px', left: 0 }}>
                     <View className={indexStyles.interval}></View>
                     {name ? (<TitileRow name={name} create_time={create_time} />) : (<View></View>)}
