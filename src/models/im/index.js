@@ -23,7 +23,11 @@ function onSendMsgDone(error, msg) {
 
   Taro.hideLoading()
   if (error) {
-
+    Taro.showToast({
+      title: '发送失败',
+      icon: 'none',
+      duration: 2000
+    })
     // 被拉黑
     if (error.code === 7101) {
       msg.status = 'fail';

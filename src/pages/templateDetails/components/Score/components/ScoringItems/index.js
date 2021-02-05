@@ -52,7 +52,11 @@ export default class index extends Component {
         } else if (processed == '1') {
             processed_status = '评分中'
         } else if (processed == '2') {
-            processed_status = `${value + ' ' + '分'}`
+            if (value) {
+                processed_status = `${value + ' ' + '分'}`
+            } else {
+                processed_status = '超时自动通过'
+            }
         }
         return processed_status;
     }
@@ -60,14 +64,21 @@ export default class index extends Component {
     //失去焦点
     bindblur = (e, obj) => {
         let value = e.target.value;
-        const { score_items } = this.props
-
-        var currntItems = score_items.find(item => item.id == obj.id);
-        currntItems.value = value;
-
-        this.setState({
-            score_items: score_items,
-        })
+        console.log("********************")
+        console.log(value)
+        if (value && value.length > 0) {
+            const { score_items } = this.props
+            var currntItems = score_items.find(item => item.id == obj.id);
+            currntItems.value = value;
+            this.setState({
+                score_items: score_items,
+            })
+        } else {
+            this.setState({
+                isSocreInpit: false,
+                selectInputId: ''
+            })
+        }
     }
 
     //实时监测输入
@@ -121,7 +132,6 @@ export default class index extends Component {
     render() {
         const { assignees, score_items, status, } = this.props
         const { isSocreInpit, inputWarning, selectInputId } = this.state
-
         return (
             <View className={indexStyles.viewStyle}>
 
@@ -172,6 +182,8 @@ export default class index extends Component {
                     <View className={indexStyles.assignees}>
                         {assignees && assignees.map((value, key) => {
                             const { id, avatar, name, processed, score_items, comment } = value
+                            const average_auto = score_items && score_items.length;
+
                             return (
 
                                 <View key={id} className={indexStyles.score_cell_style}>
@@ -186,8 +198,10 @@ export default class index extends Component {
 
                                                 )
                                         }
+
+
                                         <View className={indexStyles.rater_name}>{name}</View>
-                                        <View className={indexStyles.average_number}>{this.loadProcessedState(processed, score_items && score_items[score_items.length - 1]['value'])}</View>
+                                        <View className={`${indexStyles.average_number} ${average_auto ? '' : indexStyles.average_auto}`}>{this.loadProcessedState(processed, score_items && score_items[score_items.length - 1]['value'])}</View>
                                     </View>
 
                                     <View className={indexStyles.score_comment}>{comment}</View>

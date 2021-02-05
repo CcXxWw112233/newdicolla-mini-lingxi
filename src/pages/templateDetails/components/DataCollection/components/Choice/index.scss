@@ -50,20 +50,21 @@
                 }
 
                 .choice_name {
-                    padding         : 0 pxTrans(10);
+                    padding         : pxTrans(5);
                     font-size       : pxTrans(14);
                     font-weight     : 400;
                     color           : #3F445D;
-                    line-height     : pxTrans(40);
+                    line-height     : pxTrans(30);
                     background-color: #F5F7FB;
-                    overflow        : hidden;
-                    text-overflow   : ellipsis;
-                    white-space     : nowrap;
                     margin-top      : pxTrans(1);
                     margin-bottom   : pxTrans(2);
                     display         : flex;
                     flex-direction  : row;
                     justify-content : space-between;
+                }
+
+                .choice_name_text {
+                    width: 80%;
                 }
             }
         }

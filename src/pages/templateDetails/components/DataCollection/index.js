@@ -24,7 +24,7 @@ export default class index extends Component {
             Taro.showToast({
                 title: '小程序暂不支持编辑,请前往PC端操作',
                 icon: 'none',
-                duration: 2000
+                duration: 1000
             })
 
         }
@@ -59,7 +59,7 @@ export default class index extends Component {
                                 {field_type === '2' && (
                                     <View>
                                         <View className={indexStyles.other_cell}>
-                                            <Choice title={title} options={options} prompt_content={prompt_content} value={value} status={status} />
+                                            <Choice title={title} options={options} prompt_content={prompt_content} value={value} status={status} item={item} />
                                         </View>
                                     </View>
                                 )}

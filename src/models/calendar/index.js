@@ -87,16 +87,13 @@ export default {
         board_id: obj["selected_board"],
         queryDate: start_time,
         maxDate: due_time,
-        page_number: page_number,
+        page_number: typeSource === 1 ? page_number : 1,
         ...payload
       };
       const res = yield call(getScheCardList, { ...params });
       const current_sche_card_list = yield select(select_sche_card_list);
 
       if (isApiResponseOk(res)) {
-
-        console.log(res);
-
         if (typeSource === 1) {
           //处理上拉加载
           let arr1 = current_sche_card_list; //1.1>从data获取当前datalist数组
@@ -105,7 +102,8 @@ export default {
           yield put({
             type: "updateDatas",
             payload: {
-              sche_card_list: arr1
+              sche_card_list: arr1,
+              isReachBottom: true
             }
           });
           if (res.data && res.data.length === 0) {
@@ -117,14 +115,21 @@ export default {
             });
           }
         } else {
+
           yield put({
             type: "updateDatas",
             payload: {
-              sche_card_list: res.data
+              sche_card_list: res.data,
+              isReachBottom: true
             }
           });
         }
       } else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
         yield put({
           type: "updateDatas",
           payload: {
@@ -149,7 +154,6 @@ export default {
         page_number: page_number
       });
       if (isApiResponseOk(res)) {
-        console.log(res.data)
         let arr1 = current_no_sche_card_list; //1.1>从data获取当前datalist数组
         let arr2 = res.data; //1.2>从此次请求返回的数据中获取新数组
         if (page_number == 1) {
@@ -173,6 +177,11 @@ export default {
           }
         });
       } else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
       }
     },
 

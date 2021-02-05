@@ -55,17 +55,17 @@
             }
 
             .content {
-                flex         : 1;
-                font-size    : pxTrans(14);
-                font-weight  : 400;
-                color        : rgba(0, 0, 0, 0.65);
-                line-height  : pxTrans(24);
-                overflow     : hidden;
-                text-overflow: ellipsis;
-                white-space  : nowrap;
-                padding      : pxTrans(5);
-                border       : #D1D5E4;
-                border       : solid #D1D5E4 pxTrans(1);
+                // flex       : 1;
+                font-size  : pxTrans(14);
+                width      : 95%;
+                font-weight: 400;
+                min-height : pxTrans(24);
+                color      : rgba(0, 0, 0, 0.65);
+                line-height: pxTrans(24);
+                word-wrap  : break-word;
+                padding    : pxTrans(5);
+                border     : #D1D5E4;
+                border     : solid #D1D5E4 pxTrans(1);
             }
         }
     }

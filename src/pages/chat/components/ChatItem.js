@@ -18,7 +18,7 @@ import { onResendMsg } from "./../../../models/im/actions/onResendMsg.js";
 import { onDeleteMsg } from "./../../../models/im/actions/onDeleteMsg.js";
 import { timestampToTimeNormal, filterFileFormatType } from "../../../utils/util";
 
-@connect(({ im: { currentGroupSessionList, history_newSession, currentBoard} }) => ({
+@connect(({ im: { currentGroupSessionList, history_newSession, currentBoard } }) => ({
   currentGroupSessionList,
   history_newSession,
   currentBoard
@@ -369,7 +369,6 @@ class ChatItem extends Component {
         });
         wx.getClipboardData({
           success: function (res) {
-            console.log(res.data); // data
           }
         });
       }
@@ -719,7 +718,7 @@ class ChatItem extends Component {
                                 activityContent,
                                 range
                               } = parseActivityNewsBody(data);
-                              {/* console.log(activityContent); */}
+                              {/* console.log(activityContent); */ }
                               return (
                                 <View
                                   key={data.creatorId}

@@ -139,11 +139,19 @@
                     }
 
                     .average_number {
-                        font-weight: 600;
-                        font-size  : pxTrans(14);
-                        line-height: pxTrans(24);
-                        color      : rgba(24, 144, 255, 1);
+                        font-weight  : 600;
+                        font-size    : pxTrans(14);
+                        line-height  : pxTrans(24);
+                        color        : rgba(24, 144, 255, 1);
+                        padding      : pxTrans(3);
+                        border-radius: pxTrans(5);
                     }
+                }
+
+                .average_auto {
+                    color           : white !important;
+                    background-color: rgb(255, 169, 64) !important;
+                    padding         : 0 pxTrans(10) !important;
                 }
 
                 .score_comment {
@@ -180,9 +188,12 @@
                 margin: pxTrans(4) pxTrans(16) 0 0;
 
                 .textarea {
-                    flex  : 1;
-                    width : 100%;
-                    height: pxTrans(80);
+                    flex       : 1;
+                    width      : 100%;
+                    height     : pxTrans(80);
+                    line-height: pxTrans(20);
+                    border     : solid linen pxTrans(1);
+                    padding    : pxTrans(5);
                 }
             }
         }

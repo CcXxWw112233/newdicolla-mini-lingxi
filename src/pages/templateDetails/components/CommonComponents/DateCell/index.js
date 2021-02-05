@@ -17,7 +17,7 @@ export default class index extends Component {
             Taro.showToast({
                 title: '小程序暂不支持编辑,请前往PC端操作',
                 icon: 'none',
-                duration: 2000
+                duration: 1000
             })
         }
     }
@@ -26,7 +26,15 @@ export default class index extends Component {
 
         const { title, status, item, value } = this.props
         const datetype = item ? (item.date_precision == '1' ? 'YMD' : 'YMDHM') : ""
-        const dateString = timestampToDateTimeLine(item.value, datetype)
+        var dateString = ''
+        if (value) {
+            if (item.date_range == '2') {
+                var arr = item.value.split(",");
+                dateString = timestampToDateTimeLine(arr[0], datetype) + ' 至 ' + timestampToDateTimeLine(arr[1], datetype);
+            } else {
+                dateString = timestampToDateTimeLine(item.value, datetype);
+            }
+        }
         return (
             <View className={indexStyles.viewStyle} onClick={this.onClickAction}>
 
