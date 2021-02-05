@@ -64,14 +64,21 @@ export default class index extends Component {
     //失去焦点
     bindblur = (e, obj) => {
         let value = e.target.value;
-        const { score_items } = this.props
-
-        var currntItems = score_items.find(item => item.id == obj.id);
-        currntItems.value = value;
-
-        this.setState({
-            score_items: score_items,
-        })
+        console.log("********************")
+        console.log(value)
+        if (value && value.length > 0) {
+            const { score_items } = this.props
+            var currntItems = score_items.find(item => item.id == obj.id);
+            currntItems.value = value;
+            this.setState({
+                score_items: score_items,
+            })
+        } else {
+            this.setState({
+                isSocreInpit: false,
+                selectInputId: ''
+            })
+        }
     }
 
     //实时监测输入

@@ -24,7 +24,7 @@ export default class index extends Component {
             Taro.showToast({
                 title: '小程序暂不支持编辑,请前往PC端操作',
                 icon: 'none',
-                duration: 2000
+                duration: 1000
             })
 
         }

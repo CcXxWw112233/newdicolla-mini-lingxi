@@ -188,9 +188,12 @@
                 margin: pxTrans(4) pxTrans(16) 0 0;
 
                 .textarea {
-                    flex  : 1;
-                    width : 100%;
-                    height: pxTrans(80);
+                    flex       : 1;
+                    width      : 100%;
+                    height     : pxTrans(80);
+                    line-height: pxTrans(20);
+                    border     : solid linen pxTrans(1);
+                    padding    : pxTrans(5);
                 }
             }
         }
