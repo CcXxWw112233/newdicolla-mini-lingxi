@@ -11,8 +11,17 @@ class CustomNavigation extends Component {
 
         if (pop == 'previous') {
             Taro.navigateBack({
-                delta: 1
+                delta: 1,
+
+                fail: function () {
+                    Taro.switchTab({ url: `../../pages/calendar/index` })
+
+                }
             })
+
+
+
+
         } else {
             Taro.switchTab({ url: `../../pages/calendar/index` })
         }
@@ -30,6 +39,7 @@ class CustomNavigation extends Component {
 
         }
     }
+
 
     render() {
 

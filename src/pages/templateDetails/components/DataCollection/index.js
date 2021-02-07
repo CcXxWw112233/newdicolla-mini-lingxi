@@ -76,7 +76,7 @@ export default class index extends Component {
                                 {field_type === '6' && (
                                     <View>
                                         <View className={indexStyles.other_cell}>
-                                            <OnlineTable />
+                                            <OnlineTable item={item} />
                                         </View>
                                     </View>
                                 )}
