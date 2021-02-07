@@ -18,7 +18,8 @@ export default class index extends Component {
             inputWarning: false,  //输入错误警告
             selectInputId: '', //当前选中输入框的id
             commentValue: '', //审批意见内容
-            isRejectPopupShow: false
+            isRejectPopupShow: false,
+            isinput: false
         }
     }
     cancelAction = e => {
@@ -47,8 +48,8 @@ export default class index extends Component {
             },
         })
         this.setState({
-            isRejectPopupShow: true
-
+            isRejectPopupShow: false,
+            isSocreInpit: true
         })
         // }
     }
@@ -99,14 +100,31 @@ export default class index extends Component {
 
     //失去焦点
     bindblur = (e, obj) => {
+
+        const { inputWarning } = this.state;
         let value = e.target.value;
         if (value && value.length > 0) {
-            const { score_items } = this.props
-            var currntItems = score_items.find(item => item.id == obj.id);
-            currntItems.value = value;
-            this.setState({
-                score_items: score_items,
-            })
+            if (inputWarning) {
+                Taro.showToast({
+                    title: '最高分为' + obj.max_score,
+                    icon: 'none',
+                    duration: 1000
+                })
+                const { score_items } = this.props
+                var currntItems = score_items.find(item => item.id == obj.id);
+                currntItems.value = "";
+                this.setState({
+                    score_items: score_items,
+                })
+                return;
+            } else {
+                const { score_items } = this.props
+                var currntItems = score_items.find(item => item.id == obj.id);
+                currntItems.value = value;
+                this.setState({
+                    score_items: score_items,
+                })
+            }
         } else {
             this.setState({
                 isSocreInpit: false,
@@ -118,9 +136,13 @@ export default class index extends Component {
     //实时监测输入
     inputSocreInpit = (e, max_score) => {
         let value = e.target.value;
+        this.setState({
+            isinput: true
+        })
         if (value > max_score || validateTwoDecimal(value)) {
             this.setState({
                 inputWarning: true,
+
             })
         } else {
             this.setState({
@@ -134,9 +156,23 @@ export default class index extends Component {
     complete = () => {
         const { status } = this.props;
         console.log(status);
-        const { scoreValue, obj } = this.state;
-
+        const { scoreValue, obj, inputWarning } = this.state;
+        if (status == '0') {
+            return;
+        }
         if (scoreValue && scoreValue.length > 0) {
+
+            if (inputWarning) {
+                Taro.showToast({
+                    title: '最高分为' + obj.max_score,
+                    icon: 'none',
+                    duration: 1000
+                })
+                return;
+            }
+            this.setState({
+                isinput: false
+            })
             const { score_items } = this.props
             var currntItems = score_items.find(item => item.id == obj.id);
             currntItems.value = scoreValue;
@@ -161,17 +197,21 @@ export default class index extends Component {
     getNewScoreItems = (score_items) => {
         let new_array = []
         score_items.forEach(element => {
+            console.log(element)
             if (element['is_total'] == '0') {
+
                 new_array.push(element)
             }
         });
-
+        console.log("***************")
+        console.log(new_array)
         return new_array;
     }
 
     render() {
-        const { assignees, score_items, status, } = this.props
-        const { isSocreInpit, inputWarning, selectInputId, isRejectPopupShow } = this.state
+        const { assignees, score_items, status, isinput } = this.props
+        const { isSocreInpit, inputWarning, selectInputId, isRejectPopupShow, isScoreOver, scoreValue } = this.state
+        const iscurrent = loadFindAssignees(assignees);
         return (
             <View className={indexStyles.viewStyle}>
 
@@ -187,6 +227,8 @@ export default class index extends Component {
                             {score_items && this.getNewScoreItems(score_items).map((item, key) => {
 
                                 const { id, max_score, title, value } = item
+                                console.log("***************")
+                                console.log(max_score)
                                 console.log(((selectInputId == id) &&
                                     isSocreInpit && status == '1') || item.value);
                                 return (
@@ -195,17 +237,7 @@ export default class index extends Component {
                                         {
                                             ((selectInputId == id) &&
                                                 isSocreInpit && status == '1') || item.value ?
-                                                (<Input
-                                                    className={indexStyles.score_view_input}
-                                                    type='digit'
-                                                    maxLength='5'
-                                                    focus='ture'
-                                                    // placeholder={item.value}
-                                                    value={item.value}
-                                                    onInput={(e) => this.inputSocreInpit(e, max_score)}
-                                                    onblur={(e) => this.bindblur(e, item)}
-                                                    disabled={item.value && item.value.length}
-                                                ></Input>)
+                                                (<Input className={indexStyles.score_view_input} type='digit' maxLength='5' focus='ture' value={item.value} onInput={(e) => this.inputSocreInpit(e, max_score)} onblur={(e) => this.bindblur(e, item)} disabled={!iscurrent || (!isinput && item.value)}></Input>)
                                                 :
                                                 (<View className={indexStyles.score_view} onClick={() => this.clickScoreView(id, assignees, status, item)}>
                                                     <View className={indexStyles.score_view_title}>最高</View>
@@ -268,7 +300,10 @@ export default class index extends Component {
                     {/* </View> */}
                     {/* </View> */}
                     <View class={indexStyles.complete}>
-                        <View class={`${indexStyles.button} ${isSocreInpit ? indexStyles.complete_button_disabled : indexStyles.complete_button}`} onClick={this.complete}>完成</View>
+                        {
+                            (status == '2' && !iscurrent) || (status == '1' && !iscurrent && this.getNewScoreItems(score_items)) ? (<View class={`${indexStyles.button} ${indexStyles.complete_button}`} >已完成</View>) : (<View class={`${indexStyles.button} ${(!isSocreInpit || status == '0' || !(status == '1' && scoreValue)) ? indexStyles.complete_button : indexStyles.complete_button_disabled}`} onClick={this.complete} >完成</View>)
+                        }
+
                     </View>
                 </View>
                 {

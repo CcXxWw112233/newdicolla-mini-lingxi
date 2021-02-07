@@ -49,7 +49,7 @@ export default class index extends Component {
 
     render() {
 
-        const { recipients = [], assignees, last_complete_time, cc_type } = this.props
+        const { recipients = [], assignees, last_complete_time, cc_type, deadline_type } = this.props
         return (
             <View className={indexStyles.viewStyle}>
 
@@ -67,7 +67,7 @@ export default class index extends Component {
                             {
                                 <View className={indexStyles.content}>
                                     {/* {'完成时间' + ' ' + timestampToTimeEN(last_complete_time)} */}
-                                    {this.getTime()}
+                                    {deadline_type == '1' ? '未限制时间' : this.getTime()}
                                 </View>
                             }
                         </View>

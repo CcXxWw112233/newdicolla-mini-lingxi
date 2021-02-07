@@ -481,10 +481,12 @@ class ChatItem extends Component {
     // console.log(someMsgContentDataDToJSON, "sssssss_someMsgContentData");
     let iconAvatar;
     let from_nick;
+    console.log(someMsgContentDataDAction)
     if (
       someMsgContentDataDAction &&
       someMsgContentDataDAction.indexOf("board.file") != -1
     ) {
+
       iconAvatar = (
         <Text
           className={`${globalStyles.global_iconfont} ${styles.icon_avatar_style}`}
@@ -494,6 +496,21 @@ class ChatItem extends Component {
       );
       from_nick = "文件助手";
     } else if (
+      someMsgContentDataDAction &&
+      someMsgContentDataDAction.indexOf("board.flow") != -1) {
+      iconAvatar = (
+        // <Text
+        // className={`${globalStyles.global_iconfont} ${styles.icon_avatar_style}`}
+        // >
+        // &#xe66a;
+        // </Text>
+        <Image src={lxzs} className={`${globalStyles.global_iconfont} ${styles.icon_default_avatar_style}`}></Image>
+      );
+      from_nick = "流程助手";
+    }
+
+
+    else if (
       someMsgContentDataDAction &&
       someMsgContentDataDAction.indexOf("board.card") != -1
     ) {
