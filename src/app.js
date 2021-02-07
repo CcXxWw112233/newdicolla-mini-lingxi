@@ -70,7 +70,8 @@ class App extends Component {
       "pages/templateDetails/index",
       "pages/fieldPersonSingle/index",
       // "pages/fieldPersonMultiple/index",
-      "pages/jumpToMeeting/index"
+      "pages/jumpToMeeting/index",
+      "pages/OnlineTableWebView/index"
     ],
     permission: {
       "scope.userLocation": {

@@ -198,7 +198,7 @@ export default class sceneEntrance extends Component {
                 })
             }
             if (pageObject) {
-                Taro.navigateTo({
+                Taro.redirectTo({
                     url: `../../pages/${pageObject}/index?contentId=${contentId}&boardId=${boardId}&push=sceneEntrance&flag=${redirectType}`
                 })
             }

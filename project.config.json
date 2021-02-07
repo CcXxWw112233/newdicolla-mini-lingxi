@@ -97,7 +97,7 @@
           "scene": 1008
         },
         {
-          "name": "流程通知",
+          "name": "pages/sceneEntrance/index",
           "pathName": "pages/sceneEntrance/index",
           "query": "contentId= 1356557991259803648&boardId= 1348579855968636928&redirectType=4&orgId= 1348579810632404992",
           "scene": null
