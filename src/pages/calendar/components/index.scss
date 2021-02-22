@@ -9,16 +9,17 @@
 }
 
 .card_content {
-  margin-top: pxTrans(10);
-  display: flex;
+  margin-top   : pxTrans(10);
+  display      : flex;
+  border-radius: pxTrans(15) !important;
 
   .card_content_left {
     padding-top: pxTrans(4);
 
     .iconfont_size {
-      font-size: pxTrans(16);
+      font-size   : pxTrans(16);
       margin-right: pxTrans(6);
-      color: $color_2;
+      color       : $color_2;
     }
   }
 
@@ -27,23 +28,23 @@
 
     .card_content_middle_top {
       .card_title {
-        color: $color_1;
-        font-size: $fontsize_16;
+        color      : $color_1;
+        font-size  : $fontsize_16;
         line-height: pxTrans(26);
         font-weight: bold;
       }
 
       .card_title_2 {
-        color: $color_5;
-        font-size: $fontsize_14;
+        color      : $color_5;
+        font-size  : $fontsize_14;
         line-height: pxTrans(24);
       }
 
       .organize,
       .organize_2 {
-        color: $color_3;
-        font-size: $fontsize_12;
-        margin-left: pxTrans(6);
+        color       : $color_3;
+        font-size   : $fontsize_12;
+        margin-left : pxTrans(6);
         margin-right: pxTrans(6);
       }
 
@@ -53,39 +54,42 @@
     }
 
     .card_content_middle_bott {
-      margin-top: pxTrans(10);
+      margin-top   : pxTrans(10);
       // color     : $color_3;
-      font-size: $fontsize_12;
+      font-size    : $fontsize_12;
     }
+
     .card_content_meeting_btn {
       margin-top: pxTrans(2);
+
       button {
-        width: pxTrans(180);
-        height: pxTrans(32);
-        border-radius: pxTrans(4);
-        border: 1px solid #1890ff;
-        line-height: pxTrans(32);
-        font-size: pxTrans(14);
-        color: #099cff;
+        width           : pxTrans(180);
+        height          : pxTrans(32);
+        border-radius   : pxTrans(4);
+        border          : 1px solid #1890ff;
+        line-height     : pxTrans(32);
+        font-size       : pxTrans(14);
+        color           : #099cff;
         background-color: #fff;
       }
     }
   }
 
   .card_content_right {
+    margin-top : pxTrans(15);
     margin-left: pxTrans(6);
   }
 }
 
 .no_more_text {
   margin-top: pxTrans(10);
-  color: $color_3;
-  font-size: pxTrans(14);
+  color     : $color_3;
+  font-size : pxTrans(14);
   text-align: center;
 }
 
 .no_scheduling {
-  color: $color_3;
-  font-size: pxTrans(14);
+  color     : $color_3;
+  font-size : pxTrans(14);
   text-align: center;
 }

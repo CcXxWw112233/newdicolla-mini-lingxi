@@ -17,11 +17,12 @@
   }
 
   .no_scheduling {
-    color     : $color_3;
-    font-size : pxTrans(14);
-    text-align: center;
-    margin    : 0 $paddingValue 0 $paddingValue;
-    margin-top: pxTrans(100);
+    color        : $color_3;
+    font-size    : pxTrans(14);
+    text-align   : center;
+    margin       : 0 $paddingValue 0 $paddingValue;
+    margin-top   : pxTrans(100);
+    border-radius: pxTrans(40);
   }
 
   .plusTasks {

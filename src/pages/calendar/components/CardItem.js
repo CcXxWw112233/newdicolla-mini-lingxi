@@ -160,27 +160,17 @@ export default class CardItem extends Component {
           className={`${globalStyles.global_card_out} ${indexStyles.card_content} `}
           style={`opacity: ${dis_due_style()}`}
         >
-          <View className={`${indexStyles.card_content_left}`}>
-            {"0" == flag
-              ? is_realize == "1"
-                ? card_logo_1_relize
-                : card_logo_1
-              : "1" == flag
-                ? card_logo_2
-                : "2" == flag
-                  ? card_logo_3
-                  : "meeting" == flag
-                    ? card_logo_meeting
-                    : card_logo_4}
-          </View>
+          {/* <View className={`${indexStyles.card_content_left}`}> */}
+          {/* {/* {/* {"0" == flag ? is_realize == "1" ? card_logo_1_relize : card_logo_1: "1" == flag ? card_logo_2 : "2" == flag ? card_logo_3 : "meeting" == flag ? card_logo_meeting: card_logo_4}</View> */}
+
           <View className={`${indexStyles.card_content_middle}`}>
             <View className={`${indexStyles.card_content_middle_top}`}>
               <Text className={`${indexStyles.card_title}`}>
                 {content_name || topic}
               </Text>
-              <Text className={`${indexStyles.organize}`}>
-                #{getOrgName({ org_id, org_list })}&gt;{board_name}
-              </Text>
+              {/* <Text className={`${indexStyles.organize}`}> */}
+              {/* #{getOrgName({ org_id, org_list })}&gt;{board_name} */}
+              {/* </Text> */}
             </View>
             <View
               className={`${indexStyles.card_content_middle_bott}`}

@@ -227,8 +227,6 @@ export default class index extends Component {
                             {score_items && this.getNewScoreItems(score_items).map((item, key) => {
 
                                 const { id, max_score, title, value } = item
-                                console.log("***************")
-                                console.log(max_score)
                                 console.log(((selectInputId == id) &&
                                     isSocreInpit && status == '1') || item.value);
                                 return (

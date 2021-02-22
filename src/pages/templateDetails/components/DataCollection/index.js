@@ -8,7 +8,7 @@ import DateCell from './../CommonComponents/DateCell/index'
 import Choice from './components/Choice/index'
 import Enclosure from './components/Enclosure/index'
 import OnlineTable from './components/OnlineTable/index'
-import { timestampToTimeZH } from '../../../../utils/basicFunction'
+import { timestampToTimeZH, loadFindAssignees } from '../../../../utils/basicFunction'
 
 export default class index extends Component {
 
@@ -19,8 +19,8 @@ export default class index extends Component {
     }
 
     componentDidMount() {
-        const { status } = this.props;
-        if (status == '1') {
+        const { status, assignees } = this.props;
+        if (status == '1' && loadFindAssignees(assignees)) {
             Taro.showToast({
                 title: '小程序暂不支持编辑,请前往PC端操作',
                 icon: 'none',
@@ -32,6 +32,8 @@ export default class index extends Component {
     render() {
 
         const { recipients, assignees, last_complete_time, forms, description, board_id, status, deadline_time_type, deadline_value, deadline_type, cc_type } = this.props
+        console.log("********")
+        console.log(assignees);
         return (
             <View className={indexStyles.viewStyle}>
 
@@ -52,25 +54,25 @@ export default class index extends Component {
                                 {field_type === '1' && (
                                     <View>
                                         <View className={indexStyles.other_cell}>
-                                            <OtherCell title={title} description={value} item={item} status={status} field_type={field_type} />
+                                            <OtherCell title={title} description={value} item={item} status={status} assignees={assignees} field_type={field_type} />
                                         </View>
                                     </View>
                                 )}
                                 {field_type === '2' && (
                                     <View>
                                         <View className={indexStyles.other_cell}>
-                                            <Choice title={title} options={options} prompt_content={prompt_content} value={value} status={status} item={item} />
+                                            <Choice title={title} options={options} prompt_content={prompt_content} assignees={assignees} value={value} status={status} item={item} />
                                         </View>
                                     </View>
                                 )}
                                 {field_type === '3' && (
                                     <View className={indexStyles.other_cell}>
-                                        <DateCell title={title} description={timestampToTimeZH(value)} item={item} status={status} value={value} field_type={field_type} />
+                                        <DateCell title={title} description={timestampToTimeZH(value)} item={item} assignees={assignees} status={status} value={value} field_type={field_type} />
                                     </View>
                                 )}
                                 {field_type === '5' && (
                                     <View className={indexStyles.other_cell}>
-                                        <Enclosure title={title} files={files} item={item} board_id={board_id} status={status} />
+                                        <Enclosure assignees={assignees} title={title} files={files} item={item} board_id={board_id} status={status} />
                                     </View>
                                 )}
                                 {field_type === '6' && (
