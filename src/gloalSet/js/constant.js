@@ -5,7 +5,7 @@ export const BASE_URL = "http://test.lingxi.new-di.com";
 //稳定版开发服务器
 // export const BASE_URL = 'http://dev.lingxi.new-di.com'
 //本地环境
-// export const BASE_URL = 'http://192.168.1.68'
+// export const BASE_URL = 'http://192.169.1.36'
 //预发布地址
 // export const BASE_URL = 'http://ygk5cq.natappfree.cc'
 

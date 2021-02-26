@@ -53,7 +53,7 @@ export default class StepRow extends Component {
         const { sort, name, runtime_type, status, step_id, current_step_id, is_change_open } = this.props;
         const { currentStepId } = this.state;
         return (
-            <View className={indexStyles.viewStyle} >
+            <View className={indexStyles.viewStyle} onClick={() => this.clickOpen(step_id)}>
                 <View className={`${indexStyles.select_step_number} ${status == '1' ? indexStyles.currentStep : ''}`}>
                     {sort ? sort : ''}
                 </View>
@@ -66,7 +66,7 @@ export default class StepRow extends Component {
                     {runtime_type == '1' ? '驳回' : ''}
                 </View>
 
-                <View className={indexStyles.open_icon} onClick={() => this.clickOpen(step_id)} >
+                <View className={indexStyles.open_icon}  >
                     {
                         is_change_open && currentStepId && currentStepId == current_step_id ? (
                             <Text className={`${globalStyle.global_iconfont}`}>&#xe675;</Text>

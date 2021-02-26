@@ -29,10 +29,12 @@ export default {
     search_text: "",
     sche_card_list: [], //项目的所有排期的卡片列表
     no_sche_card_list: [], //项目的所有排期的卡片列表
+    calendar_mark_list: [],
     sign_data: [], //日历列表打点数据
     page_number: 1, //默认第1页
     isReachBottom: true, //是否上拉加载分页
-    isOtherPageBack: false //当前日历页面是首页加载还是其他页面返回来的标识
+    isOtherPageBack: false, //当前日历页面是首页加载还是其他页面返回来的标识
+    titleText: ''
   },
   effects: {
     // 获取当前组织项目列表
@@ -116,10 +118,31 @@ export default {
             });
           }
         } else {
-
+          var sche_card_list = res.data;
+          var newArr = sche_card_list.map(function (item) {
+            // return item * item
+            var timeStamp = new Date().setHours(0, 0, 0, 0), duetimeStamp = new Date(parseInt(item.due_time)).setHours(0, 0, 0, 0);
+            if (parseInt(item.due_time) < timeStamp) {
+              return {
+                time: item.due_time,
+                type: 1,
+                value: '逾'
+              }
+            } else if (duetimeStamp - timeStamp < 86400000 * 4 || duetimeStamp - timeStamp == 86400000 * 3) {
+              return {
+                time: item.due_time,
+                type: 2,
+                value: '警'
+              }
+            }
+          })
+          newArr = newArr.filter(function (item) {
+            return item;
+          })
           yield put({
             type: "updateDatas",
             payload: {
+              calendar_mark_list: newArr,
               sche_card_list: res.data,
               isReachBottom: true
             }
@@ -148,12 +171,15 @@ export default {
       const page_number = yield select(select_page_number);
       const current_no_sche_card_list = yield select(no_sche_card_list);
 
-      const res = yield call(getNoScheCardList, {
-        _organization_id: current_org,
-        board_id: selected_board,
-        page_size: "200",
-        page_number: page_number
-      });
+      // console.log(payload)
+      const res = yield call(getNoScheCardList, payload)
+
+      // const res = yield call(getNoScheCardList, {
+      // _organization_id: current_org,
+      // board_id: selected_board,
+      // page_size: "200",
+      // page_number: page_number
+      // });
       if (isApiResponseOk(res)) {
         let arr1 = current_no_sche_card_list; //1.1>从data获取当前datalist数组
         let arr2 = res.data; //1.2>从此次请求返回的数据中获取新数组

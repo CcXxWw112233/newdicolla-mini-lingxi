@@ -1,0 +1,75 @@
+@import "../../../../gloalSet/styles/constant";
+
+.index {
+    background-color: white;
+    display         : flex;
+    flex-direction  : column;
+    position        : absolute;
+    top             : pxTrans(50);
+    width           : 100%;
+}
+
+.menuList {
+    display       : flex;
+    flex-direction: column;
+    padding       : 0 pxTrans(20);
+}
+
+.menuItem {
+    display       : flex;
+    flex-direction: column;
+    margin        : pxTrans(5) 0;
+}
+
+.menuItemType {
+    font-size  : pxTrans(14);
+    font-weight: 500;
+    color      : #3F445D;
+}
+
+.submenuList {
+    display       : flex;
+    flex-direction: row;
+    flex-wrap     : wrap
+}
+
+.submenuItem {
+    margin       : pxTrans(5);
+    height       : pxTrans(36);
+    text-align   : center;
+    line-height  : pxTrans(36);
+    background   : #F5F7FB;
+    border-radius: pxTrans(2);
+    font-size    : pxTrans(13);
+    font-weight  : 400;
+    color        : #575C75;
+}
+
+.submenuItemChecked {
+    background: #E2EDFF !important;
+    color     : #5A86F5;
+}
+
+.buttonView {
+    display        : flex;
+    flex-direction : row;
+    width          : 100%;
+    justify-content: space-around;
+    padding        : pxTrans(20) 0 pxTrans(40) 0;
+}
+
+.button {
+    border-radius: pxTrans(20);
+    height       : pxTrans(40);
+    width        : pxTrans(150);
+    line-height  : pxTrans(40);
+    color        : white;
+    text-align   : center;
+    font-size    : pxTrans(16);
+    background   : linear-gradient(270deg, #4FADFF 0%, #4790FF 100%);
+}
+
+.clear {
+    color     : #3F445D;
+    background: #F5F7FB;
+}

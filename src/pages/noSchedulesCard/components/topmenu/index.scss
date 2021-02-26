@@ -1,0 +1,63 @@
+@import "../../../../gloalSet/styles/constant";
+
+.menuList {
+    display         : flex;
+    flex-direction  : row;
+    background-color: white;
+    justify-content : space-around;
+    line-height     : pxTrans(50);
+}
+
+.menuItem {
+    display       : flex;
+    flex-direction: row;
+    color         : #575C75;
+}
+
+.selectmenuItem {
+    color: #5A86F5 !important;
+}
+
+
+.checkedMenuView {
+    display       : flex;
+    flex-direction: row;
+    padding       : 0 pxTrans(20);
+}
+
+.checkedMenu {
+    display       : flex;
+    flex-direction: row;
+    max-width     : 80%;
+}
+
+.checkedMenuList {
+    display       : flex;
+    flex-direction: row;
+    align-items   : baseline;
+}
+
+.checkedMenuItem {
+    background-color: white;
+    height          : pxTrans(28);
+    line-height     : pxTrans(28);
+    margin          : pxTrans(10);
+    border-radius   : pxTrans(14);
+    padding         : 0 pxTrans(10) 0 pxTrans(20);
+    writing-mode    : horizontal-tb;
+    white-space     : nowrap;
+    overflow        : hidden;
+    text-overflow   : ellipsis;
+}
+
+.delete_iconfont {
+    color       : #D1D5E4 !important;
+    margin-left : pxTrans(5);
+    margin-right: pxTrans(5);
+}
+
+.clearAllChecked {
+    margin-top : pxTrans(10);
+    height     : pxTrans(28);
+    line-height: pxTrans(28);
+}

@@ -39,12 +39,12 @@ import { onSysMsgUnread } from "../../models/im/actions";
 export default class Calendar extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      show_card_type_select: "0",
+      search_mask_show: "0",
+      titleText: ''
+    };
   }
-
-  state = {
-    show_card_type_select: "0",
-    search_mask_show: "0"
-  };
 
   config = {
     navigationStyle: "custom",
@@ -208,7 +208,14 @@ export default class Calendar extends Component {
     const { dispatch } = this.props;
     dispatch({
       type: "calendar/getNoScheCardList",
-      payload: {}
+      payload: {
+        org_id: '0',
+        board_ids: ['all'],
+        query_milestone: ['all'],
+        query_card: ['all'],
+        query_flow: ['all'],
+        query_meeting: ['all'],
+      }
     });
   };
   // 获取排期列表
@@ -306,10 +313,19 @@ export default class Calendar extends Component {
     });
   };
 
-  render() {
-    const { show_card_type_select, search_mask_show } = this.state;
-    const { no_sche_card_list = [] } = this.props;
+  settitleText = (titleText) => {
+    console.log(this.settitleText)
+    console.log("---**---" + titleText, this.state);
+    this.setState({
+      titleText,
+    }, () => {
+      // console.log("---*****---" + this.state.titleText)
+    });
+  }
 
+  render() {
+    const { show_card_type_select, search_mask_show, titleText } = this.state;
+    const { no_sche_card_list = [] } = this.props;
     const {
       account_info = {},
       is_mask_show_personalCenter
@@ -326,7 +342,7 @@ export default class Calendar extends Component {
           home_personal_center="homePersonalCenter"
           personal_center_image={avatar}
           showPersonalCenter={() => this.showPersonalCenter(true)}
-          title="日历"
+          title={titleText}
         />
 
         {is_mask_show_personalCenter && is_mask_show_personalCenter === true ? (
@@ -345,11 +361,8 @@ export default class Calendar extends Component {
             left: 0
           }}
         >
-          <SearchAndMenu
-            onSelectType={this.onSelectType}
-            search_mask_show={search_mask_show}
-          />
-          <CalendarSwiper />
+          {/* <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show}/> */}
+          <CalendarSwiper settitleText={(title) => this.settitleText(title)} ></CalendarSwiper>
         </View>
         <CardTypeSelect
           show_card_type_select={show_card_type_select}
@@ -360,9 +373,8 @@ export default class Calendar extends Component {
         {/* {no_sche_card_list.length && ( */}
         <View
           className={`${globalStyles.global_card_out} ${indexStyles.no_scheduling}`}
-          onClick={this.gotoNoSchedule}
-        >
-          暂未排期的工作（{no_sche_card_list.length}）
+          onClick={this.gotoNoSchedule} >
+          查看全部待办 ({no_sche_card_list.length}）
         </View>
         {/* )} */}
         <CardList schedule={"1"} />

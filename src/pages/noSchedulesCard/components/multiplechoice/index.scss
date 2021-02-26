@@ -1,0 +1,97 @@
+@import "../../../../gloalSet/styles/constant";
+
+.index {
+    background-color: white;
+    display         : flex;
+    flex-direction  : column;
+    position        : absolute;
+    top             : pxTrans(50);
+    width           : 100%;
+}
+
+.conditionList {
+    display       : flex;
+    flex-direction: column;
+    max-height    : pxTrans(500);
+
+}
+
+.conditionItem {
+    display        : flex;
+    flex-direction : row;
+    margin         : pxTrans(10) pxTrans(25);
+    color          : #3F445D;
+    justify-content: space-between;
+}
+
+.conditionItemInfo {
+    display       : flex;
+    flex-direction: column;
+    max-width     : 90%;
+    padding       : pxTrans(5) 0;
+}
+
+.conditionItem_title {
+    font-size: pxTrans(14);
+    color    : #3F445D;
+}
+
+.conditionItem_subtitle {
+    color    : #9EA6C2;
+    font-size: pxTrans(11);
+    height   : pxTrans(11);
+
+}
+
+.conditionRowList {
+    display       : flex;
+    flex-direction: row;
+    flex-wrap     : wrap
+}
+
+.conditionRowItem {
+    background-color: #F5F7FB;
+    color           : #3F445D;
+    font-size       : pxTrans(14);
+    height          : pxTrans(35);
+    padding         : 0 pxTrans(20);
+    margin          : pxTrans(10) pxTrans(15);
+    line-height     : pxTrans(35);
+    border-radius   : pxTrans(18);
+}
+
+.conditionRowCheckItem {
+    color     : #5A86F5;
+    background: #E2EDFF;
+    border    : 1px solid #6A9AFF;
+}
+
+.buttonView {
+    display        : flex;
+    flex-direction : row;
+    width          : 100%;
+    justify-content: space-around;
+    padding        : pxTrans(20) 0 pxTrans(40) 0;
+}
+
+.checkedIcon {
+    margin-top: pxTrans(10);
+    color     : #5A86F5;
+}
+
+.button {
+    border-radius: pxTrans(20);
+    height       : pxTrans(40);
+    width        : pxTrans(150);
+    line-height  : pxTrans(40);
+    color        : white;
+    text-align   : center;
+    font-size    : pxTrans(16);
+    background   : linear-gradient(270deg, #4FADFF 0%, #4790FF 100%);
+}
+
+.clear {
+
+    color     : #3F445D;
+    background: #F5F7FB;
+}

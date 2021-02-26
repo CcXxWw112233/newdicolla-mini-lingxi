@@ -5,6 +5,7 @@ import CardTypeSelect from '../calendar/components/CardTypeSelect/index';
 import SearchAndMenu from '../board/components/SearchAndMenu';
 import indexStyles from './index.scss';
 import { connect } from '@tarojs/redux';
+import Topmenu from './components/topmenu'
 
 
 @connect(
@@ -50,7 +51,7 @@ export default class Calendar extends Component {
     componentWillMount() {
         const { title } = this.$router.params;
         Taro.setNavigationBarTitle({
-            title
+            title: '全部待办'
         });
     }
 
@@ -162,11 +163,11 @@ export default class Calendar extends Component {
         });
     };
     render() {
-        const { show_card_type_select, search_mask_show, screenHeight } = this.state;
+        const { show_card_type_select, search_mask_show, screenHeight, filterData, filterDropdownValue } = this.state;
         return (
-            <View className={indexStyles.index} style={{ minHeight: screenHeight }
-            }>
-                <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} />
+            <View className={indexStyles.index} style={{ minHeight: screenHeight }}>
+                {/* <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} /> */}
+                <Topmenu></Topmenu>
                 <CardTypeSelect show_card_type_select={show_card_type_select} onSelectType={this.onSelectType} schedule={'0'} />
                 <CardList schedule={'0'} />
                 <View style='height: 50px'></View>

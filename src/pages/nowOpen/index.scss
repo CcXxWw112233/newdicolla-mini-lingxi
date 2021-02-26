@@ -1,45 +1,92 @@
-
 @import "../../gloalSet/styles/constant";
 
-.login_btn_wx{
-  background-color: #1890FF;
-  border: pxTrans(1) solid #1890FF;
+.index {
+  position        : absolute;
+  left            : 0;
+  top             : 0;
+  width           : 100%;
+  height          : 100%;
+  background-color: white;
 }
 
-.login_btn{
-  margin-top: pxTrans(40);
-  border: 0!important;
-  width: 100%;
-  height: pxTrans(40);
-  line-height: pxTrans(40);
-  text-align: center;
-  color: #fff;
+.login_btn_wx {
+  background-color: #1890FF;
+  border          : pxTrans(1) solid #1890FF;
+  color           : #fff;
+  justify-content : center;
+  display         : flex;
+  flex-direction  : row;
+  bottom          : pxTrans(170);
+}
+
+.wx_iconfont {
+  padding-right: pxTrans(10);
+}
+
+
+.login_btn {
+  position     : absolute;
+  margin-left  : 10%;
+  width        : 80%;
+  font-size    : pxTrans(16);
+  border       : 0 !important;
+  height       : pxTrans(48);
+  line-height  : pxTrans(48);
+  text-align   : center;
   border-radius: pxTrans(4);
   margin-bottom: pxTrans(16);
-  box-shadow: none;
+  box-shadow   : none;
+  border-radius: pxTrans(24);
+}
+
+
+
+.login_btn_Account {
+  margin-top: pxTrans(20);
+  background: #FFFFFF;
+  border    : pxTrans(1) solid #D1D5E4 !important;
+  color     : #575C75;
+  bottom    : pxTrans(90);
 }
 
 .contain1 {
   margin-top: pxTrans(127);
   text-align: center;
+
   .nowOpenImage {
-    width: pxTrans(299);
-    height: pxTrans(179);
+    width : pxTrans(100);
+    height: pxTrans(100);
   }
 }
+
 .textStyle {
-  font-size: $fontsize_18;
-  margin-top: pxTrans(16);
+  font-size : $fontsize_18;
+  margin-top: pxTrans(24);
   text-align: center;
-  color: #3F3D56;
+  color     : #3F3D56;
 }
 
 .change_login_type_out {
-  display: flex;
+  display        : flex;
   justify-content: center;
-  margin-top: pxTrans(14);
+  margin-top     : pxTrans(14);
+
   .change_login_type {
-    color: #1890FF;
+    color    : #1890FF;
     font-size: pxTrans(14);
   }
+}
+
+.loginMark {
+  position  : absolute;
+  bottom    : pxTrans(50);
+  left      : 0;
+  width     : 100%;
+  color     : #7C83A1;
+  text-align: center;
+  font-size : pxTrans(12);
+}
+
+.loginMarkText {
+  color: #6A9AFF !important;
 }
