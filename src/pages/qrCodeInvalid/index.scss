@@ -1,24 +1,48 @@
 @import "../../gloalSet/styles/constant";
 
-.contain1 {
-  margin-top: pxTrans(106);
-  text-align: center;
-
-  .qrCode_Invalid {
-    width : pxTrans(297);
-    height: pxTrans(186);
-    margin: 0 auto;
-  }
+.index {
+  position        : absolute;
+  left            : 0;
+  top             : 0;
+  height          : 100%;
+  width           : 100%;
+  background-color: white;
 }
 
-.text1 {
-  margin-top: pxTrans(32);
-  font-size : $fontsize_18;
-  text-align: center;
+.invalid_logoView {
+  margin-top    : pxTrans(200);
+  width         : 100%;
+  display       : flex;
+  flex-direction: column;
 }
 
-.text2 {
-  font-size : $fontsize_14;
-  text-align: center;
-  margin-top: pxTrans(8);
+.invalid_logo {
+  height       : pxTrans(100);
+  width        : pxTrans(100);
+  border-radius: pxTrans(50);
+  margin-left  : pxTrans(140);
+  line-height  : pxTrans(100);
+  text-align   : center;
+  color        : white;
+  font-size    : pxTrans(40);
+  background   : linear-gradient(270deg, #7DA8F4 0%, #A4C9FF 100%);
+}
+
+.invalid_Text {
+  width      : 100%;
+  margin-top : pxTrans(30);
+  color      : #3F445D;
+  font-size  : pxTrans(20);
+  font-weight: 500;
+  text-align : center;
+}
+
+.invalid_subText {
+  width      : 100%;
+  margin-top : pxTrans(5);
+  color      : #7C83A1;
+  font-size  : pxTrans(16);
+  font-weight: 400;
+  text-align : center;
+  font-family: PingFangSC-Regular, PingFang SC;
 }

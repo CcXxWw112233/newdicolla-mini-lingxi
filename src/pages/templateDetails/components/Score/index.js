@@ -16,7 +16,7 @@ export default class index extends Component {
 
     render() {
 
-        const { recipients, assignees, last_complete_time, description, score_items, status, flow_instance_id, flow_node_instance_id, deadline_time_type, deadline_value, deadline_type } = this.props
+        const { recipients, assignees, last_complete_time, description, score_items, status, flow_instance_id, flow_node_instance_id, deadline_time_type, deadline_value, deadline_type, his_comments } = this.props
 
         return (
             <View className={indexStyles.viewStyle}>
@@ -30,7 +30,7 @@ export default class index extends Component {
                 </View>) : (<View></View>)}
 
                 <View className={indexStyles.other_cell}>
-                    <ScoringItems assignees={assignees} score_items={score_items} status={status} flow_instance_id={flow_instance_id} flow_node_instance_id={flow_node_instance_id} />
+                    <ScoringItems assignees={assignees} score_items={score_items} status={status} flow_instance_id={flow_instance_id} flow_node_instance_id={flow_node_instance_id} his_comments={his_comments} />
                 </View>
 
             </View>

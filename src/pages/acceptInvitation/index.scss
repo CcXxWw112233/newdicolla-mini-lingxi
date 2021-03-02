@@ -1,21 +1,43 @@
 @import "../../gloalSet/styles/constant";
 @import '../../gloalSet/styles/pxTrans';
 
+.index {
+  position        : absolute;
+  left            : 0;
+  top             : 0;
+  width           : 100%;
+  height          : 100%;
+  background-color: white;
+}
 
-.PageStyle{
+.PageStyle {
   // border: 1px red solid;
   // margin-top: pxTrans(62);
 }
-.guide_share_wrapper{
-  height: pxTrans(93);
+
+.guide_share_wrapper {
+  height  : pxTrans(93);
   position: relative;
+
   .guide_share {
-    width   : pxTrans(245);
-    height  : pxTrans(93);
+    height  : pxTrans(50);
+    margin  : 0 pxTrans(20);
     position: absolute;
-    top:  pxTrans(2);;
+    top     : pxTrans(2);
     right   : pxTrans(5);
   }
+}
+
+.guide_shareText {
+  height     : pxTrans(50);
+  line-height: pxTrans(50);
+  position   : absolute;
+  top        : pxTrans(2);
+  z-index    : 999;
+  color      : white;
+  font-size  : pxTrans(16);
+  width      : 100%;
+  text-align : center;
 }
 
 .effective_contain1 {
@@ -23,38 +45,54 @@
   text-align: center;
 
   .invitation_cover {
-    width : pxTrans(231);
-    height: pxTrans(172);
+    width : pxTrans(278);
+    height: pxTrans(283);
   }
 }
 
 .effective_tipsText {
-  font-size         : $fontsize_18;
-  margin-top        : pxTrans(20);
-  text-align        : center;
-  color             : rgba(0,0,0,0.85);
-  font-weight:500;
-  overflow          : hidden;
-  display           : -webkit-box;
-  
+  font-size  : $fontsize_18;
+  margin-top : pxTrans(20);
+  text-align : center;
+  color      : #3F445D;
+  font-weight: 500;
+  overflow   : hidden;
+  display    : -webkit-box;
+
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
 
+.hasJoin_View {
+  display       : flex;
+  flex-direction: column;
+}
+
+.hasJoin_subView {
+  color      : #7C83A1;
+  font-size  : pxTrans(16);
+  font-weight: 400;
+
+}
+
+
+
+
 .effective_login_btn_wx {
-  background-color: #1890ff;
-  border          : pxTrans(1) solid #1890ff;
+  background: linear-gradient(270deg, #4FADFF 0%, #4790FF 100%);
 }
 
 .effective_acceptBtn {
-  margin-top   : pxTrans(122);
-  border       : 0 !important;
-  width        : 100%;
-  height       : pxTrans(40);
-  line-height  : pxTrans(40);
+  position: absolute;
+  bottom  : pxTrans(80);
+  left    : 10%;
+  width   : 80%;
+
+  height       : pxTrans(48);
+  line-height  : pxTrans(48);
   text-align   : center;
-  color:rgba(255,255,255,1);
-  border-radius: pxTrans(4);
+  color        : rgba(255, 255, 255, 1);
+  border-radius: pxTrans(24);
   margin-bottom: pxTrans(16);
   font-size    : $fontsize_16;
 }

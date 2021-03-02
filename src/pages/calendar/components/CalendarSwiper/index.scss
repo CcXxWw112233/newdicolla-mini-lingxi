@@ -23,24 +23,24 @@
 @keyframes calendar_back_all {
   from {
     // height   : pxTrans(140);
-    height      : pxTrans(0);
+    height: pxTrans(0);
   }
 
   to {
     // height   : pxTrans(340);
-    height      : pxTrans(0);
+    height: pxTrans(0);
   }
 }
 
 @keyframes calendar_back_part {
   from {
     // height   : pxTrans(340);
-    height      : pxTrans(0);
+    height: pxTrans(0);
   }
 
   to {
     // height   : pxTrans(140);
-    height      : pxTrans(0);
+    height: pxTrans(0);
   }
 }
 
@@ -64,6 +64,19 @@
   }
 }
 
+.showcalendar {
+  width           : pxTrans(60);
+  height          : pxTrans(4);
+  background-color: white;
+  border-radius   : pxTrans(2);
+  margin-left     : pxTrans(150);
+  margin-bottom   : pxTrans(10);
+}
+
+.hidecalendaricon {
+  color: white;
+}
+
 //日历组件
 .swiper_show_whole {
   height   : pxTrans(270);
@@ -82,33 +95,37 @@
 //日历组件底部背景
 .calendar_back_nomal {
   // height   : pxTrans(340);
-  height      : pxTrans(0);
+  height: pxTrans(0);
 }
 
 .calendar_back_all {
   // height      : pxTrans(340);
-  height         : pxTrans(0);
-  animation      : calendar_back_all 0.5s ease;
+  height   : pxTrans(0);
+  animation: calendar_back_all 0.5s ease;
 }
 
 .calendar_back_part {
   // height      : pxTrans(140);
-  height         : pxTrans(0);
-  animation      : calendar_back_part 0.5s ease;
+  height   : pxTrans(0);
+  animation: calendar_back_part 0.5s ease;
 }
 
 //查看日历形态按钮
 .set_calendar_icon_nomal {
   //transform: rotate(0);
+  color: white;
 }
 
 .set_calendar_icon_all {
   transform: rotate(0);
+  color    : white;
   animation: set_calendar_icon_all 0.5s ease;
 }
 
 .set_calendar_icon_part {
   transform: rotate(180deg);
+  color    : white;
+
   animation: set_calendar_icon_part 0.5s ease;
 }
 
@@ -123,9 +140,13 @@
   width                 : 100%;
   box-shadow            : 0 pxTrans(1) pxTrans(2) rgba(0, 0, 0, 0.15);
 
+  background   : linear-gradient(360deg, #55B7FF 0%, #428CFF 100%);
+  border-radius: 0px 0px 24px 24px;
+
+
   .month_area_swiper {
     //height: pxTrans(270);
-    width   : 100%;
+    width: 100%;
   }
 
   .set_calendar {
@@ -141,37 +162,43 @@
 }
 
 .month_area {
+  // background: #428CFF;
+
   .week_head {
     // height         : pxTrans(30);
     display           : flex;
     justify-content   : space-between;
-    background        : rgb(243, 243, 243);
+    // background     : rgb(243, 243, 243);
     position          : fixed;
     width             : 100%;
     top               : 0;
-    z-index           : 1;
+    z-index           : 3;
 
     .week_day {
       line-height: pxTrans(30);
       flex       : 1;
       font-size  : $fontsize_12;
-      color      : $color_3;
+      color      : $color_4;
       text-align : center;
     }
   }
 }
 
 .date_area {
-  height   : pxTrans(240);
-  display  : flex;
-  flex-wrap: wrap;
-  font-size: $fontsize_16;
+  height        : pxTrans(240);
+  display       : flex;
+  flex-wrap     : wrap;
+  font-size     : $fontsize_16;
+  z-index       : 1;
+  flex-direction: row;
 
   .date_day {
     height       : pxTrans(40);
     text-align   : center;
     border-radius: pxTrans(100);
-    color        : $color_2;
+    color        : #FFFFFF;
+
+
 
     .date_day_inner {
       position     : relative;
@@ -179,7 +206,25 @@
       line-height  : pxTrans(40);
       margin       : 0 auto;
       border-radius: pxTrans(40);
+
     }
+  }
+
+  .markCircel {
+    position        : relative;
+    left            : pxTrans(35);
+    bottom          : pxTrans(40);
+    height          : pxTrans(14);
+    width           : pxTrans(14);
+    background-color: #FF5050;
+    line-height     : pxTrans(12);
+    font-size       : pxTrans(10);
+    border-radius   : pxTrans(7);
+  }
+
+  .warnCircel {
+    background-color: #FFA543 !important;
+
   }
 
   .no_current_month_date {
@@ -187,12 +232,20 @@
   }
 
   .is_now_date {
-    color: $color_theme;
+    background: white !important;
+    color     : $color_theme !important;
   }
 
   .date_day_selected {
-    background-color: $color_theme;
-    color           : $color_5;
+    background         : white !important;
+    color              : $color_theme !important;
+    // background-color: $color_theme;
+    // color           : $color_5;
+  }
+
+  .is_now_sdate {
+    background-color: #55B7FF !important;
+    color           : white !important;
   }
 
   .check_has_task {

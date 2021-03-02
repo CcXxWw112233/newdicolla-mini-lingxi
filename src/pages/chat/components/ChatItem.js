@@ -481,7 +481,10 @@ class ChatItem extends Component {
     // console.log(someMsgContentDataDToJSON, "sssssss_someMsgContentData");
     let iconAvatar;
     let from_nick;
-    console.log(someMsgContentDataDAction)
+    // console.log(text)
+    console.log(flow)
+    console.log(type)
+    console.log(isPinupEmoji);
     if (
       someMsgContentDataDAction &&
       someMsgContentDataDAction.indexOf("board.file") != -1
@@ -735,7 +738,9 @@ class ChatItem extends Component {
                                 activityContent,
                                 range
                               } = parseActivityNewsBody(data);
-                              {/* console.log(activityContent); */ }
+                              console.log(activityContent);
+                              console.log("-----------");
+                              console.log(action);
                               return (
                                 <View
                                   key={data.creatorId}
@@ -756,6 +761,9 @@ class ChatItem extends Component {
                                   </Text>
                                   </Text>
                                   <Text className={styles.action}>
+
+                                  </Text>
+                                  <Text className={styles.action}>
                                     {/* {action ? `${action}` : ''} */}
                                     {action === "项目成员角色发生变更"
                                       ? `${"将" +
@@ -767,7 +775,8 @@ class ChatItem extends Component {
                                       "项目中的角色设置为" +
                                       (activityContent &&
                                         activityContent.rela_data)}`
-                                      : `${action}`}
+                                      : ` ${action} ${activityContent.flow_node_instance.name.length > 0 ?
+                                        activityContent.flow_node_instance.name : ''}  ${activityContent.flow_instance.name.length > 0 ? ' ' + activityContent.flow_instance.name : ''}`}
 
                                     <Text
                                       style={{

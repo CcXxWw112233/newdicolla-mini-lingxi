@@ -2,6 +2,7 @@ import Taro from '@tarojs/taro'
 import { isApiResponseOk } from "../../utils/request";
 import { weChatAuthLogin, weChatPhoneLogin, getAccountInfo, initializeOrganization } from "../../services/login/index";
 
+
 let dispatches
 export default {
   namespace: 'login',
@@ -102,9 +103,23 @@ export default {
         })
         return
       }
-      Taro.switchTab({
-        url: `../../pages/calendar/index`
-      })
+
+
+
+      var value = Taro.getStorageSync('qrCodeInfo')
+      if (value) {
+        // Do something with return value
+        Taro.reLaunch({
+          url: '/pages/acceptInvitation/index?accept=yes'
+        })
+
+      } else {
+        Taro.switchTab({
+          url: `../../pages/calendar/index`
+        })
+      }
+
+
       if (pages.length === 1) {
 
       } else {

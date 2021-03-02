@@ -84,7 +84,9 @@ export default class CardItem extends Component {
       is_realize,
       topic,
       end_time,
-      start_url
+      is_urge,
+      start_url,
+      content_url
     } = itemValue;
     const users = itemValue["data"] || [];
     const card_logo_1 = (
@@ -154,58 +156,52 @@ export default class CardItem extends Component {
     var now = Date.parse(new Date());
     return (
       <View
-        onClick={() => flag != "meeting" && this.gotoListItemDetails(itemValue)}
+        onClick={() => flag != "meeting" && flag != "1" && this.gotoListItemDetails(itemValue)}
       >
         <View
           className={`${globalStyles.global_card_out} ${indexStyles.card_content} `}
           style={`opacity: ${dis_due_style()}`}
         >
-          <View className={`${indexStyles.card_content_left}`}>
-            {"0" == flag
-              ? is_realize == "1"
-                ? card_logo_1_relize
-                : card_logo_1
-              : "1" == flag
-                ? card_logo_2
-                : "2" == flag
-                  ? card_logo_3
-                  : "meeting" == flag
-                    ? card_logo_meeting
-                    : card_logo_4}
-          </View>
+          {/* <View className={`${indexStyles.card_content_left}`}> */}
+          {/* {/* {/* {"0" == flag ? is_realize == "1" ? card_logo_1_relize : card_logo_1: "1" == flag ? card_logo_2 : "2" == flag ? card_logo_3 : "meeting" == flag ? card_logo_meeting: card_logo_4}</View> */}
+
           <View className={`${indexStyles.card_content_middle}`}>
             <View className={`${indexStyles.card_content_middle_top}`}>
               <Text className={`${indexStyles.card_title}`}>
                 {content_name || topic}
               </Text>
-              <Text className={`${indexStyles.organize}`}>
-                #{getOrgName({ org_id, org_list })}&gt;{board_name}
-              </Text>
+              <View className={`${indexStyles.organize}`}>
+                {/* #{getOrgName({ org_id, org_list })}&gt;{board_name} */}
+              @{board_name}
+              </View>
+              {
+                is_urge == '1' ? (<View className={indexStyles.urge}><Text className={`${globalStyles.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text> 催办</View>) : (null)
+              }
+
             </View>
             <View
               className={`${indexStyles.card_content_middle_bott}`}
               style={{
                 color:
                   now > due_time && flag != "1" && is_realize != "1"
-                    ? "#F5222D"
-                    : "#8c8c8c"
+                    ? "#F5222D" : "#8c8c8c"
               }}
             >
               {schedule == "0"
                 ? "未排期"
                 : `${start_time
-                  ? timestampToTimeZH(start_time)
+                  ? (timestampToTimeZH(start_time).substring(0, 4) == timestampToTimeZH(due_time || end_time).substring(0, 4) ? timestampToTimeZH(start_time).substring(5) : timestampToTimeZH(start_time))
                   : "开始时间未设置"
                 } - ${due_time || end_time
-                  ? timestampToTimeZH(due_time || end_time)
+                  ? (timestampToTimeZH(due_time || end_time).substring(0, 4) == timestampToTimeZH(start_time).substring(0, 4) ? timestampToTimeZH(due_time || end_time).substring(5) : timestampToTimeZH(due_time || end_time))
                   : "截止时间未设置"
                 }`}
             </View>
-            {flag == "meeting" && (
+            {(flag == "meeting" || flag == '1') && (
               <View className={indexStyles.card_content_meeting_btn}>
                 <Button
                   onClick={() => {
-                    this.handleSetClipboardData({ start_url });
+                    this.handleSetClipboardData({ content_url } || { start_url });
                   }}
                 >
                   复制链接参会
@@ -216,9 +212,10 @@ export default class CardItem extends Component {
 
           <View className={`${indexStyles.card_content_right}`}>
             <Avatar avartarTotal="multiple" userList={users} />
+
           </View>
         </View>
-      </View>
+      </View >
     );
   }
 }

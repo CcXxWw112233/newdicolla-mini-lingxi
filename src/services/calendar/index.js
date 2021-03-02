@@ -50,19 +50,30 @@ export const getScheCardList = (data, notShowLoading) => {
 };
 
 //获取未排期卡片列表
+// export const getNoScheCardList = (data, notShowLoading) => {
+//   return request(
+//     {
+//       data: {
+//         ...data
+//       },
+//       method: "GET",
+//       url: `${API_WORKBENCHS}/mini/calendar/un_period`
+//     },
+//     notShowLoading
+//   );
+// };
 export const getNoScheCardList = (data, notShowLoading) => {
   return request(
     {
       data: {
         ...data
       },
-      method: "GET",
-      url: `${API_WORKBENCHS}/mini/calendar/un_period`
+      method: "POST",
+      url: `${API_BOARD}/v2/comm/item`
     },
     notShowLoading
   );
 };
-
 //获取打点列表
 export const getSignList = (data, notShowLoading) => {
   return request(
@@ -94,9 +105,8 @@ export const getUserAllOrgsAllBoards = (data, notShowLoading) => {
 // 获取代办会议列表
 export async function getMeetingTodoList(params) {
   return request({
-    url: `${API_MORE}${REQUEST_INTERGFACE_VERSIONN}/meeting/list/by_self?board_id=${
-      params.board_id
-    }&org_id=${params.org_id}&query_time=${params.query_time || ""}`,
+    url: `${API_MORE}${REQUEST_INTERGFACE_VERSIONN}/meeting/list/by_self?board_id=${params.board_id
+      }&org_id=${params.org_id}&query_time=${params.query_time || ""}`,
     method: "GET",
     params
   });

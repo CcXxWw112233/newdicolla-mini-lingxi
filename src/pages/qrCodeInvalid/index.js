@@ -1,8 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Image, Text } from '@tarojs/components'
 import indexStyles from './index.scss'
-import Invalid_Image from '../../asset/Invitation/qrCode_Invalid.png'
-import globalStyles from '../../gloalSet/styles/globalStyles.scss'
+import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import CustomNavigation from '../acceptInvitation/components/CustomNavigation.js'
 
 export default class qrCodeInvalid extends Component {
@@ -10,7 +9,7 @@ export default class qrCodeInvalid extends Component {
     navigationStyle: 'custom',
   }
   state = {
-    qrCodeInValidText: '请联系邀请人重新获取邀请码'
+    qrCodeInValidText: '请联系邀请人重新获取加入'
   }
   componentDidMount() {
     const qrCodeInValidText = Taro.getStorageSync('qrCodeInValidText')
@@ -23,15 +22,17 @@ export default class qrCodeInvalid extends Component {
   }
 
   render() {
+    const { qrCodeInValidText } = this.state;
     return (
-      <View>
+      <View className={indexStyles.index}>
         <CustomNavigation />
-        <View className={`${globalStyles.global_horrizontal_padding}`}>
-          <View className={indexStyles.contain1}>
-            <Image src={Invalid_Image} className={indexStyles.qrCode_Invalid} />
+        <View className={indexStyles.invalid_logoView}>
+
+          <View className={indexStyles.invalid_logo}>
+            <Text className={`${globalStyle.global_iconfont}`}>&#xe842;</Text>
           </View>
-          <View className={indexStyles.text1}>二维码已失效</View>
-          <View className={indexStyles.text2}>{this.state.qrCodeInValidText}</View>
+          <View className={indexStyles.invalid_Text}>页面已失效</View>
+          <View className={indexStyles.invalid_subText}>{qrCodeInValidText}</View>
         </View>
       </View>
     )

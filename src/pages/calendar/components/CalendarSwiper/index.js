@@ -1,3 +1,4 @@
+/* eslint-disable taro/this-props-function */
 import Taro, { Component } from "@tarojs/taro";
 import { connect } from "@tarojs/redux";
 import { View, Button, Text, Swiper, SwiperItem } from "@tarojs/components";
@@ -5,8 +6,8 @@ import indexStyles from "./index.scss";
 import globalStyles from "../../../../gloalSet/styles/globalStyles.scss";
 import { getMonthDate, isToday, isSamDay } from "./getDate";
 
-@connect(({ calendar: { sign_data } }) => ({
-  sign_data
+@connect(({ calendar: { sign_data, calendar_mark_list } }) => ({
+  sign_data, calendar_mark_list
 }))
 export default class CalendarSwiper extends Component {
   constructor(props) {
@@ -47,7 +48,7 @@ export default class CalendarSwiper extends Component {
     });
   }
 
-  componentDidHide() {}
+  componentDidHide() { }
 
   //获取日历列表数据
   getDataArray = ({ year, month }) => {
@@ -62,13 +63,12 @@ export default class CalendarSwiper extends Component {
     const { select_year, select_month, select_date_no } = this.state;
     let select_year_new = select_year;
     let select_month_new = select_month;
-
+    // eslint-disable-next-line taro/this-props-function
     // 处理日期--->选择31号日期，滑动到下个月只有30号的时候，自动显示的下下个月的数据，再滑动会多跳动一个月
     /**
      * 1.向左滑动增加时，获取下个月共有多少天，
      * 2.当前选中日期与下月最大天数进行对比，进行选择新的选中日期，向右滑动减少亦然，获取上月最大天数
      */
-    // let select_date_no_new = select_date_no
     let select_date_no_new;
     // 向后一个月有多少天
     let afterDays = new Date(select_year, select_month + 1, 0).getDate();
@@ -108,6 +108,11 @@ export default class CalendarSwiper extends Component {
     const new_timestamp = new Date(
       `${select_year_new}/${select_month_new}/${select_date_no_new}`
     ).getTime();
+
+    typeof this.props.settitleText == "function" &&
+      this.props.settitleText(`${select_year_new}年${select_month_new}月`);
+
+
     this.updateSelecedTime(new_timestamp);
     this.getDataArray({ year: select_year_new, month: select_month_new });
     this.getSelectDateDetail(new_timestamp);
@@ -170,7 +175,7 @@ export default class CalendarSwiper extends Component {
   };
 
   //获取选择日期的详情
-  getSelectDateDetail(timestamp) {
+  getSelectDateDetail = (timestamp) => {
     const select_date = timestamp ? new Date(Number(timestamp)) : new Date();
     const select_year = select_date.getFullYear();
     const select_month = select_date.getMonth() + 1;
@@ -192,6 +197,9 @@ export default class CalendarSwiper extends Component {
       select_date_no,
       select_week_day_dec
     });
+
+    typeof this.props.settitleText == "function" &&
+      this.props.settitleText(`${select_year}年${select_month}月`);
   }
 
   setShowWholeCalendar() {
@@ -199,13 +207,13 @@ export default class CalendarSwiper extends Component {
     let show_flag = "0";
     if ("0" == show_whole_calendar) {
       show_flag = "2";
-      this.calculationTodayMaginTop("dynamic");
+      // this.calculationTodayMaginTop("dynamic");
     } else if ("1" == show_whole_calendar) {
       show_flag = "2";
-      this.calculationTodayMaginTop("dynamic");
+      // this.calculationTodayMaginTop("dynamic");
     } else if ("2" == show_whole_calendar) {
       show_flag = "1";
-      this.calculationTodayMaginTop("initial");
+      // this.calculationTodayMaginTop("initial");
     } else {
     }
     this.setState({
@@ -216,7 +224,7 @@ export default class CalendarSwiper extends Component {
   calculationTodayMaginTop = action => {
     if (action === "dynamic") {
       const { date_array } = this.props;
-      var newArr = date_array.filter(function(obj) {
+      var newArr = date_array.filter(function (obj) {
         return obj.is_today == true;
       });
       const index = this.getArrayIndex(date_array, newArr[0]);
@@ -231,13 +239,14 @@ export default class CalendarSwiper extends Component {
       if (FirstLineOfCalendarArray.indexOf(index) > -1) {
         today_magin_top = 0;
       } else if (SecondLineOfCalendarArray.indexOf(index) > -1) {
-        today_magin_top = -48;
+        today_magin_top = -51;
       } else if (ThirdLineOfCalendarArray.indexOf(index) > -1) {
-        today_magin_top = -48 * 2;
+        today_magin_top = -51 * 2;
       } else if (FourthLineOfCalendarArray.indexOf(index) > -1) {
-        today_magin_top = -48 * 3;
+        today_magin_top = -51 * 3;
       } else if (FifthLineOfCalendarArray.indexOf(index) > -1) {
-        today_magin_top = -48 * 4;
+
+        today_magin_top = -51 * 4;
       }
       this.setState({
         todayMaginTop: today_magin_top
@@ -330,14 +339,16 @@ export default class CalendarSwiper extends Component {
       show_whole_calendar,
       todayMaginTop
     } = this.state;
+    console.log(show_whole_calendar);
 
+    const { calendar_mark_list } = this.props;
     const week_array = ["日", "一", "二", "三", "四", "五", "六"];
     const renderDate = (
       <View className={indexStyles.month_area}>
         <View className={indexStyles.week_head} style={{ height: 30 + "px" }}>
-          {week_array.map((value, key) => {
+          {week_array.map((value, index) => {
             return (
-              <View className={indexStyles.week_day} key={key}>
+              <View className={indexStyles.week_day} key={index}>
                 {value}
               </View>
             );
@@ -357,6 +368,11 @@ export default class CalendarSwiper extends Component {
               no_in_select_month
             } = value;
             const is_selected = isSamDay(selected_timestamp, timestamp);
+
+            var minus = calendar_mark_list.filter(function (item) {
+              var is_mark = isSamDay(parseInt(item.time), parseInt(timestamp));;
+              return is_mark;
+            });
             return (
               <View
                 className={indexStyles.date_day}
@@ -369,23 +385,19 @@ export default class CalendarSwiper extends Component {
                     `${timestamp}__${no_in_select_month}`
                   )}
                   className={`${indexStyles.date_day_inner}  ${is_today &&
-                    indexStyles.is_now_date}  ${is_selected &&
-                    indexStyles.date_day_selected} ${no_in_select_month &&
+                    (is_selected ? indexStyles.is_now_date : indexStyles.is_now_sdate)}  ${is_selected &&
+                    indexStyles.date_day_selected}  ${no_in_select_month &&
                     indexStyles.no_current_month_date}`}
                 >
-                  <Text>{is_today ? "今" : date_no}</Text>
+                  <Text>{is_today ? '今' : date_no}</Text>
                   <View
-                    className={`${
-                      indexStyles.check_has_task
-                    } ${no_in_select_month &&
-                      indexStyles.check_has_task_no_current_moth}`}
-                  >
+                    className={`${indexStyles.check_has_task} ${no_in_select_month &&
+                      indexStyles.check_has_task_no_current_moth}`} >
                     {this.isHasNormalTask(timestamp) && (
                       <View
                         className={`${indexStyles.has_task}`}
-                        style={`background-color: ${
-                          is_selected ? "#ffffff" : "#1890FF"
-                        }`}
+                        style={`background-color: ${is_selected ? "#ffffff" : "#1890FF"
+                          }`}
                       ></View>
                     )}
                     {/* {this.isHasMiletone(timestamp) && (
@@ -393,9 +405,15 @@ export default class CalendarSwiper extends Component {
                     )} */}
                   </View>
                 </View>
+                {
+
+                  minus.length > 0 ? (<View className={`${indexStyles.markCircel} ${minus[0].type == 2 ? indexStyles.warnCircel : ''}`}>{minus[0].value}</View>) : (null)
+                }
+
               </View>
             );
           })}
+
         </View>
       </View>
     );
@@ -410,6 +428,7 @@ export default class CalendarSwiper extends Component {
             );
           })}
         </View>
+
         <View className={indexStyles.date_area}>
           {date_array.map((value, key) => {
             const {
@@ -427,9 +446,8 @@ export default class CalendarSwiper extends Component {
                 style={`width: ${windowWidth / 7}px`}
               >
                 <View
-                  className={`${
-                    indexStyles.date_day_inner
-                  } ${no_in_select_month && indexStyles.no_current_month_date}`}
+                  className={`${indexStyles.date_day_inner
+                    } ${no_in_select_month && indexStyles.no_current_month_date}`}
                 >
                   <Text>{date_no}</Text>
                 </View>
@@ -444,9 +462,8 @@ export default class CalendarSwiper extends Component {
       <View className={indexStyles.index}>
         <View className={indexStyles.calendar_out}>
           <Swiper
-            className={`${
-              indexStyles.month_area_swiper
-            } ${show_whole_calendar == "0" &&
+            className={`${indexStyles.month_area_swiper
+              } ${show_whole_calendar == "0" &&
               indexStyles.swiper_show_nomal} ${show_whole_calendar == "1" &&
               indexStyles.swiper_show_whole} ${show_whole_calendar == "2" &&
               indexStyles.swiper_show_part}`}
@@ -463,23 +480,25 @@ export default class CalendarSwiper extends Component {
               );
             })}
           </Swiper>
-          <View className={indexStyles.date_detail_dec}>
-            {select_year}年{select_month}月{select_date_no}日{" "}
-            {select_week_day_dec}
-          </View>
-          <View className={indexStyles.set_calendar}>
-            <View
-              className={`${
-                globalStyles.global_iconfont
-              } ${show_whole_calendar == "0" &&
+          {/* <View className={indexStyles.date_detail_dec}> */}
+          {/* {select_year}年{select_month}月{select_date_no}日{" "} */}
+          {/* {select_week_day_dec} */}
+          {/* </View> */}
+          <View className={indexStyles.set_calendar} onClick={this.setShowWholeCalendar}>
+            {/*<View
+              className={`${globalStyles.global_iconfont} ${show_whole_calendar == "0" &&
                 indexStyles.set_calendar_icon_nomal} ${show_whole_calendar ==
                 "1" &&
                 indexStyles.set_calendar_icon_all} ${show_whole_calendar ==
                 "2" && indexStyles.set_calendar_icon_part}`}
-              onClick={this.setShowWholeCalendar}
-            >
+              onClick={this.setShowWholeCalendar}>
               &#xe653;
-            </View>
+                </View>*/}
+
+            {
+              show_whole_calendar == '0' || show_whole_calendar == '1' ? (<View onClick={this.setShowWholeCalendar} className={indexStyles.showcalendar}></View>) : (<Text className={`${globalStyles.global_iconfont} ${indexStyles.hidecalendaricon}`}>&#xe653;</Text>)
+            }
+
           </View>
         </View>
         <View

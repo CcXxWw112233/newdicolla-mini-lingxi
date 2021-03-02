@@ -27,6 +27,34 @@ export default {
             qrCodeInfo: res.data || {},
           },
         })
+
+        console.log("*****************")
+        console.log(res.data)
+        const value = Taro.getStorageSync('qrCodeInfo');
+        const query_Id = Taro.getStorageSync('id');
+        const boardId = Taro.getStorageSync('board_Id');
+        if (res.data.has_join) {
+          Taro.removeStorageSync('qrCodeInfo')
+        } else if (value && !res.data.has_join) {
+          yield put({
+            type: 'userScanCodeJoinOrganization',
+            payload: {
+              id: query_Id,
+              relaId: value.rela_id,
+              relaType: value.rela_type,
+              pageRoute: 'acceptInvitation',
+            }
+          })
+          Taro.removeStorageSync('qrCodeInfo')
+          yield put({
+            type: 'calendar/updateDatas',
+            payload: {
+              is_mask_show_Updatename: true
+            }
+          })
+        }
+        Taro.setStorageSync('qrCodeInfo', res.data)
+
         return res.data
       }
     },

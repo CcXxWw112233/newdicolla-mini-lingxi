@@ -21,9 +21,37 @@
         flex          : 1;
         display       : flex;
         flex-direction: column;
-        margin-left   : pxTrans(16);
         width         : 100%;
         overflow      : hidden; //scrollView 截掉滚动条
+
+        .content_padding {
+            width          : 100%;
+            display        : flex;
+            flex-direction : column;
+            align-items    : center;
+            justify-content: space-evenly;
+
+            .fill_in {
+                width          : 100%;
+                display        : flex;
+                flex-direction : row;
+                justify-content: space-between;
+                font-size      : pxTrans(14);
+                font-weight    : 400;
+                line-height    : pxTrans(24);
+                margin         : 0 pxTrans(16);
+
+                .title_content {
+                    color       : #575C75;
+                    padding-left: pxTrans(16);
+                }
+
+                .historyUnfold {
+                    color    : royalblue;
+                    font-size: pxTrans(15);
+                }
+            }
+        }
 
         .scoring_items {
             display       : flex;
@@ -229,5 +257,73 @@
                 background: rgba(24, 144, 255, 1);
             }
         }
+    }
+
+    .view_cell {
+        width: 100%;
+
+        .historyBottom {
+            border-bottom: solid linen pxTrans(1);
+            padding-top  : pxTrans(10);
+        }
+
+        .personnel_cell {
+            display       : flex;
+            flex-direction: column;
+
+            .make_copy {
+                width          : 100%;
+                display        : flex;
+                flex-direction : row;
+                align-items    : center;
+                height         : pxTrans(35);
+                color          : #212434;
+                font-size      : pxTrans(14);
+                justify-content: space-between;
+
+                .avatar_View {
+                    display       : flex;
+                    flex-direction: row;
+                }
+
+                .avatar_image {
+                    width        : pxTrans(24);
+                    height       : pxTrans(24);
+                    border-radius: pxTrans(12);
+                    margin-left  : pxTrans(16);
+                    margin-right : pxTrans(8);
+                }
+
+                .name {
+                    line-height: pxTrans(24);
+                }
+
+                .status {
+                    line-height: pxTrans(24);
+                }
+
+                .his_score {
+                    margin-left: pxTrans(10);
+                    color      : rgba(24, 144, 255, 1);
+                }
+            }
+
+            .comment_style {
+                font-size     : pxTrans(14);
+                font-weight   : 400;
+                color         : rgba(0, 0, 0, 0.65);
+                line-height   : pxTrans(24);
+                margin        : 0 pxTrans(16);
+                display       : flex;
+                flex-direction: column;
+                word-wrap     : break-word;
+
+                .comment_title {
+                    color: red;
+                }
+            }
+
+        }
+
     }
 }

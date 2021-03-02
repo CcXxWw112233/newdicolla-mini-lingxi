@@ -3,6 +3,7 @@ import { View, Text, Input, Textarea } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { validateFixedTel, validatePassword, validateEmail, validateTel, validateIdCard, validateChineseName, validatePostalCode, validateWebsite, validateQQ, validatePositiveInt, validateNegative, validateTwoDecimal, } from '../../../../../utils/verify'
+import { loadFindAssignees } from '../../../../../utils/basicFunction'
 
 export default class index extends Component {
 
@@ -195,8 +196,8 @@ export default class index extends Component {
         }
     }
     onClickAction() {
-        const { status } = this.props;
-        if (status == '1') {
+        const { status, assignees } = this.props;
+        if (status == '1' && loadFindAssignees(assignees)) {
             Taro.showToast({
                 title: '小程序暂不支持编辑,请前往PC端操作',
                 icon: 'none',

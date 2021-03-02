@@ -19,7 +19,8 @@ export default class index extends Component {
             selectInputId: '', //当前选中输入框的id
             commentValue: '', //审批意见内容
             isRejectPopupShow: false,
-            isinput: false
+            isinput: false,
+            historyUnfold: false
         }
     }
     cancelAction = e => {
@@ -27,7 +28,12 @@ export default class index extends Component {
             isRejectPopupShow: false
         })
     }
-
+    historyUnfold() {
+        const { historyUnfold } = this.state;
+        this.setState({
+            historyUnfold: !historyUnfold
+        })
+    }
     onClickAction = (e) => {
         console.log(e)
         const { score_items } = this.props
@@ -203,14 +209,12 @@ export default class index extends Component {
                 new_array.push(element)
             }
         });
-        console.log("***************")
-        console.log(new_array)
         return new_array;
     }
 
     render() {
-        const { assignees, score_items, status, isinput } = this.props
-        const { isSocreInpit, inputWarning, selectInputId, isRejectPopupShow, isScoreOver, scoreValue } = this.state
+        const { assignees, score_items, status, isinput, his_comments } = this.props
+        const { isSocreInpit, inputWarning, selectInputId, isRejectPopupShow, isScoreOver, scoreValue, historyUnfold } = this.state
         const iscurrent = loadFindAssignees(assignees);
         return (
             <View className={indexStyles.viewStyle}>
@@ -227,8 +231,6 @@ export default class index extends Component {
                             {score_items && this.getNewScoreItems(score_items).map((item, key) => {
 
                                 const { id, max_score, title, value } = item
-                                console.log("***************")
-                                console.log(max_score)
                                 console.log(((selectInputId == id) &&
                                     isSocreInpit && status == '1') || item.value);
                                 return (
@@ -256,7 +258,7 @@ export default class index extends Component {
 
                     <View className={indexStyles.assignees}>
                         {assignees && assignees.map((value, key) => {
-                            const { id, avatar, name, processed, comment, score_items } = value
+                            const { id, avatar, name, processed, comment, } = value
                             const average_auto = score_items && score_items.length;
                             return (
 
@@ -299,6 +301,56 @@ export default class index extends Component {
                     {/* // /> */}
                     {/* </View> */}
                     {/* </View> */}
+
+
+                    {
+                        his_comments && his_comments.length > 0 ? <View className={indexStyles.content_cell}>
+                            <View className={indexStyles.content_padding}>
+                                <View className={indexStyles.fill_in}>
+                                    <View className={indexStyles.title_content}>历史审批：</View>
+                                    <View className={indexStyles.historyUnfold} onClick={this.historyUnfold}>
+                                        {
+                                            historyUnfold ? '收起' : '展开'
+                                        }
+                                    </View>
+                                </View>
+                                {historyUnfold ? (
+                                    <View className={indexStyles.view_cell}>
+                                        {his_comments && his_comments.map((item, key) => {
+                                            const { id, avatar, name, processed, comment, pass } = item
+                                            return (
+                                                <View key={id} className={`${indexStyles.personnel_cell} ${indexStyles.historyBottom}`}>
+                                                    <View className={indexStyles.make_copy}>
+                                                        <View className={indexStyles.avatar_View}>
+                                                            {
+                                                                avatar ? (
+                                                                    <Image className={indexStyles.avatar_image} src={avatar}></Image>
+                                                                ) : (
+                                                                        <Image src={defaultPhoto} className={`${globalStyles.global_iconfont} ${indexStyles.avatar_image}`} ></Image>
+                                                                    )
+                                                            }
+                                                            <View className={indexStyles.name}>
+                                                                {name}<Text className={indexStyles.his_score}>{item.score_items[1].value}</Text></View>
+                                                        </View>
+                                                        <View className={indexStyles.status}>
+                                                            {this.loadProcessedState(processed,
+                                                                pass)}</View>
+                                                    </View>
+                                                    {
+                                                        comment ? <View className={indexStyles.comment_style}>
+                                                            <View className={indexStyles.comment_title}>评分意见:</View>
+                                                            <View className={indexStyles.comment_text}>{comment}</View>
+                                                        </View> : <View></View>
+                                                    }
+                                                </View>
+                                            )
+                                        })}
+                                    </View>) : (null)
+                                }
+                            </View>
+                        </View> : <View></View>
+                    }
+
                     <View class={indexStyles.complete}>
                         {
                             (status == '2' && !iscurrent) || (status == '1' && !iscurrent && this.getNewScoreItems(score_items)) ? (<View class={`${indexStyles.button} ${indexStyles.complete_button}`} >已完成</View>) : (<View class={`${indexStyles.button} ${(!isSocreInpit || status == '0' || !(status == '1' && scoreValue)) ? indexStyles.complete_button : indexStyles.complete_button_disabled}`} onClick={this.complete} >完成</View>)
@@ -312,6 +364,9 @@ export default class index extends Component {
                 }
 
             </View>
+
+
+
         )
     }
 }

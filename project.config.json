@@ -137,10 +137,9 @@
           "scene": null
         },
         {
-          "id": -1,
           "name": "pages/templateDetails/index",
           "pathName": "pages/templateDetails/index",
-          "query": "",
+          "query": "contentId=1357225808191688704",
           "scene": null
         },
         {
@@ -149,6 +148,36 @@
           "query": "contentId= 1356557991259803648&boardId= 1348579855968636928&redirectType=4&orgId= 1348579810632404992",
           "scene": 1043,
           "referrerInfo": {}
+        },
+        {
+          "name": "pages/noSchedulesCard/index",
+          "pathName": "pages/noSchedulesCard/index",
+          "query": "contentId= 1356557991259803648&boardId= 1348579855968636928&redirectType=4&orgId= 1348579810632404992",
+          "scene": null
+        },
+        {
+          "name": "pages/nowOpen/index",
+          "pathName": "pages/nowOpen/index",
+          "query": "contentId=1209439669922697216&boardId=1206886569806532608&redirectType=7&currentDate=1572437967000",
+          "scene": null
+        },
+        {
+          "name": "pages/qrCodeInvalid/index",
+          "pathName": "pages/qrCodeInvalid/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/acceptInvitation/index",
+          "pathName": "pages/acceptInvitation/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/auccessJoin/index",
+          "pathName": "pages/auccessJoin/index",
+          "query": "",
+          "scene": null
         }
       ]
     }
