@@ -183,23 +183,25 @@ export default {
       // page_size: "200",
       // page_number: page_number
       // });
+      console.log(page_number)
       if (isApiResponseOk(res)) {
         let arr1 = current_no_sche_card_list; //1.1>从data获取当前datalist数组
         let arr2 = res.data; //1.2>从此次请求返回的数据中获取新数组
         if (page_number == 1) {
           arr1 = arr2
         } else {
-          arr1 = arr1.concat(arr2); //1.3>合并数组
-        }
-
-        if (res.data && res.data.length === 0) {
+          // arr2 = res.data;
+          // arr1 = arr1.concat(arr2); //1.3>合并数组
+          // if (res.data && res.data.length === 0) {
           yield put({
             type: "updateDatas",
             payload: {
               isReachBottom: false
             }
           });
+          // }
         }
+
         yield put({
           type: "updateDatas",
           payload: {
