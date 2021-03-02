@@ -2,7 +2,6 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Image, Text, Input, Button } from '@tarojs/components'
 import indexStyles from './index.scss'
 import auccess_Join_image from '../../asset/Invitation/auccess_Join.png'
-import pc_Website_image from '../../asset/Invitation/pcWebsite.png'
 import globalStyles from '../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
 
@@ -202,25 +201,6 @@ export default class auccessJoin extends Component {
           <Image src={auccess_Join_image} className={indexStyles.auccess_Join} />
         </View>
         <View className={indexStyles.text1}>已成功加入项目</View>
-        {/* <View className={indexStyles.text2}>
-          <Text>在PC上输入以下网址可访问聆悉网页版</Text>
-        </View>
-        <View className={indexStyles.cardTip}>
-          <Image src={pc_Website_image} className={indexStyles.pc_Website_image} />
-          <View className={indexStyles.pcWebsiteStyle}>
-            <View className={indexStyles.cardContentStyle}>
-              <View className={indexStyles.inputStyle}>
-                <Text className={`${globalStyles.global_iconfont} ${indexStyles.iconfont_size}`}>&#xe6bd;</Text>
-                <Text selectable={true}>{pcWebsite}</Text>
-              </View>
-              {copyText === '复制成功' ?
-                <View className={indexStyles.copySuccessStyle}>{copyText}</View>
-                :
-                <View className={indexStyles.copyButtonStyle} onClick={this.copyPCWebsite} >{copyText}</View>
-              }
-            </View>
-          </View>
-            </View>*/}
         <Button className={`${indexStyles.effective_login_btn_wx} ${indexStyles.effective_acceptBtn}`} onClick={this.enterUse}>进入小程序使用</Button>
       </View>
     )

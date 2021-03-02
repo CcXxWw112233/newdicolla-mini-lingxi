@@ -6,7 +6,7 @@ import SearchAndMenu from '../board/components/SearchAndMenu';
 import indexStyles from './index.scss';
 import { connect } from '@tarojs/redux';
 import Topmenu from './components/topmenu'
-import PlaceholderImage from '../../asset/calendar/placeholder.png'
+import NoDataSvg from "../../asset/nodata.svg";
 
 @connect(
     ({
@@ -176,7 +176,8 @@ export default class Calendar extends Component {
     render() {
         const { show_card_type_select, search_mask_show, TopmenuIndex, screenHeight, filterData, filterDropdownValue, isShowCheckMenu } = this.state;
         const { no_sche_card_list = [] } = this.props;
-
+        console.log("****------*****")
+        console.log(no_sche_card_list && no_sche_card_list.length > 0)
         return (
             <View className={indexStyles.index} style={{ minHeight: screenHeight }}>
                 {/* <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} /> */}
@@ -186,14 +187,16 @@ export default class Calendar extends Component {
 
                 <ScrollView scrollY className={`${indexStyles.no_sche_card_list} ${isShowCheckMenu ? indexStyles.isShowCheckMenu : ''}`}>
                     {
-                        no_sche_card_list && no_sche_card_list.length > 0 ? (<CardList className={indexStyles.cardList} schedule={'0'} />) : (
-                            <View className={indexStyles.noDataView}>
+                        no_sche_card_list && no_sche_card_list.length > 0 ? (
+                            <CardList className={indexStyles.cardList} schedule={'0'} />
 
-                                <Image className={indexStyles.noDataImage} src={PlaceholderImage}></Image>
-                                <View className={indexStyles.noDataText}>未找到符合条件的待办</View>
+                        ) : (
+                                <View className={indexStyles.noDataView}>
+                                    <Image className={indexStyles.noDataImage} src={NoDataSvg}></Image>
+                                    <View className={indexStyles.noDataText}>未找到符合条件的待办</View>
 
-                            </View>
-                        )
+                                </View>
+                            )
                     }
 
                     <View style='height: 50px'></View>

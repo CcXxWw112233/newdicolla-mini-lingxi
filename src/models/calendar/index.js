@@ -36,7 +36,7 @@ export default {
     isOtherPageBack: false, //当前日历页面是首页加载还是其他页面返回来的标识
     titleText: '',
     is_mask_show_Updatename: false,
-    navTitle:''
+    navTitle: ''
   },
   effects: {
     // 获取当前组织项目列表
@@ -115,6 +115,7 @@ export default {
             yield put({
               type: "updateDatas",
               payload: {
+                sche_card_list: arr1,
                 isReachBottom: false
               }
             });

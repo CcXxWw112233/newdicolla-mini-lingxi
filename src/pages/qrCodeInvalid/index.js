@@ -1,7 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Image, Text } from '@tarojs/components'
 import indexStyles from './index.scss'
-import Invalid_Image from '../../asset/Invitation/qrCode_Invalid.png'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import CustomNavigation from '../acceptInvitation/components/CustomNavigation.js'
 

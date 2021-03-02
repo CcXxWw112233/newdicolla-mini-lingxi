@@ -28,8 +28,7 @@
 }
 
 .noDataView {
-    position      : absolute;
-    top           : pxTrans(150);
+    margin-top    : pxTrans(150);
     align-content : center;
     display       : flex;
     flex-direction: column;

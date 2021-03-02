@@ -4,7 +4,7 @@ import indexStyles from './index.scss'
 import globalStyles from '../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
 import CustomNavigation from './components/CustomNavigation.js'
-import invitation_cover_img from '../../asset/Invitation/invitation_cover.png'
+import invitation_cover_img from '../../asset/Invitation/invitation_cover.jpg'
 import guide_share_img from '../../asset/Invitation/guide_share.png'
 
 @connect(({

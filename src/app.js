@@ -38,9 +38,9 @@ class App extends Component {
       "pages/seeBoardChart/index",
       "pages/login/index",
       "pages/calendar/index",
-      "pages/im/index",
+      // "pages/im/index",
       "pages/groupMember/index",
-      "pages/noSchedulesCard/index",
+      // "pages/noSchedulesCard/index",
       "pages/subBoardChat/index",
       "pages/subChatDetail/index",
       "pages/chat/index",
@@ -67,11 +67,32 @@ class App extends Component {
       "pages/errorPage/index",
       "pages/file/index",
       "pages/boardChat/index",
-      "pages/templateDetails/index",
+      // "pages/templateDetails/index",
       "pages/fieldPersonSingle/index",
       // "pages/fieldPersonMultiple/index",
       "pages/jumpToMeeting/index",
-      "pages/OnlineTableWebView/index"
+      "pages/OnlineTableWebView/index",
+
+    ],
+    "subpackages": [
+      {
+        "root": "pages/noSchedulesCard",
+        "pages": [
+          "index"
+        ]
+      },
+      {
+        "root": "pages/im",
+        "pages": [
+          "index"
+        ]
+      },
+      {
+        "root": "pages/templateDetails",
+        "pages": [
+          "index"
+        ]
+      },
     ],
     permission: {
       "scope.userLocation": {

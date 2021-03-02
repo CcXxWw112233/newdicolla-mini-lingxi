@@ -346,9 +346,9 @@ export default class CalendarSwiper extends Component {
     const renderDate = (
       <View className={indexStyles.month_area}>
         <View className={indexStyles.week_head} style={{ height: 30 + "px" }}>
-          {week_array.map((value, key) => {
+          {week_array.map((value, index) => {
             return (
-              <View className={indexStyles.week_day} key={key}>
+              <View className={indexStyles.week_day} key={index}>
                 {value}
               </View>
             );

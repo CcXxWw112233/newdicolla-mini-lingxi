@@ -52,7 +52,7 @@ export default class Calendar extends Component {
         const { dispatch } = this.props;
 
         if (secletIndex == 0) {
-            const { secletIndex, moldArr, boardidList, boardidListArr } = this.state;
+            const { selectedMenuValueList } = this.state;
 
             var arr = newArr.filter(function (item) {
                 return item.isSelect
@@ -312,7 +312,7 @@ export default class Calendar extends Component {
                                 </View>) : (
                                         boardlist.map((value, index) => {
                                             return (
-                                                <View >
+                                                <View key={index}>
                                                     {
                                                         value.isSelect ? (
                                                             <View className={indexStyles.checkedMenuItem} id={index} onClick={this.deleteSelectedBorad}>
@@ -335,7 +335,7 @@ export default class Calendar extends Component {
 
                                             item && item.length > 0 ? (
                                                 isAll ? (
-                                                    <View className={indexStyles.checkedMenuItem} id={index} onClick={this.deleteAllSelectedMenu}>
+                                                    <View className={indexStyles.checkedMenuItem} id={index} onClick={this.deleteAllSelectedMenu} key={index}>
                                                         {item[0]}
                                                         <Text className={`${globalStyle.global_iconfont} ${indexStyles.delete_iconfont}`}> &#xe639;</Text>
                                                     </View>
@@ -344,7 +344,7 @@ export default class Calendar extends Component {
                                                         item.map((value, index1) => {
 
                                                             return (
-                                                                <View className={indexStyles.checkedMenuItem} id={index + '_' + index1} onClick={this.deleteSelectedMenu}>
+                                                                <View className={indexStyles.checkedMenuItem} id={index + '_' + index1} onClick={this.deleteSelectedMenu} key={index1}>
                                                                     {value}
                                                                     <Text className={`${globalStyle.global_iconfont} ${indexStyles.
                                                                         delete_iconfont}`}> &#xe639;</Text>

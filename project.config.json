@@ -137,10 +137,9 @@
           "scene": null
         },
         {
-          "id": -1,
           "name": "pages/templateDetails/index",
           "pathName": "pages/templateDetails/index",
-          "query": "",
+          "query": "contentId=1366624398630588416",
           "scene": null
         },
         {
@@ -177,6 +176,7 @@
         {
           "name": "pages/auccessJoin/index",
           "pathName": "pages/auccessJoin/index",
+          "query": "",
           "scene": null
         }
       ]

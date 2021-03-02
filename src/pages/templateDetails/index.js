@@ -118,7 +118,7 @@ export default class templateDetails extends Component {
 
 
                     {nodes && nodes.map((value, key) => {
-                        const { id, node_type, sort, runtime_type, recipients, assignees, last_complete_time, forms, description, approve_type, status, score_items, deadline_time_type, deadline_value, deadline_type, his_comments = [], cc_type } = value
+                        const { id, node_type, sort, runtime_type, recipients, assignees, last_complete_time, forms, description, approve_type, status, score_items, deadline_time_type, deadline_value, deadline_type, his_comments = [], cc_type, } = value
 
                         return (
                             <View key={id} >
@@ -170,6 +170,7 @@ export default class templateDetails extends Component {
                                                     deadline_time_type={deadline_time_type}
                                                     deadline_value={deadline_value}
                                                     deadline_type={deadline_type}
+                                                    his_comments={his_comments}
                                                 />
                                             )}
                                         </View>
