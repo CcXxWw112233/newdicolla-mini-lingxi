@@ -1,3 +1,55 @@
+@import "../../gloalSet/styles/constant";
+
+.index {
+    position        : absolute;
+    left            : 0;
+    top             : 0;
+    height          : 100%;
+    width           : 100%;
+    background-color: #F2F4F8;
+}
+
+.topMenu {
+    position: fixed;
+    top     : 0;
+    left    : 0;
+    width   : 100%;
+    z-index : 99;
+}
+
+.no_sche_card_list {
+    position: absolute;
+    top     : pxTrans(50);
+}
+
+.isShowCheckMenu {
+    top: pxTrans(90) !important;
+
+}
+
+.noDataView {
+    position      : absolute;
+    top           : pxTrans(150);
+    align-content : center;
+    display       : flex;
+    flex-direction: column;
+    width         : 100%;
+}
+
+.noDataImage {
+    margin-left: pxTrans(85);
+    height     : pxTrans(200);
+    width      : pxTrans(200);
+}
+
+.noDataText {
+    width     : 100%;
+    text-align: center;
+    margin-top: pxTrans(20);
+    color     : #9EA6C2;
+    font-size : pxTrans(16);
+}
+
 .datajson {
     z-index                : 2;
     position               : fixed;

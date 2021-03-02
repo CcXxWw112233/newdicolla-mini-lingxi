@@ -33,7 +33,7 @@ export default class CardList extends Component {
     if (!array || !!!array.length) return [];
     let newArray = JSON.parse(JSON.stringify(array || []));
     newArray = newArray.map(item => {
-      if (item.flag == "0" || item.flag == "meeting") {
+      if (item.flag == "0" || item.flag == "meeting" || item.flag == '2' || item.flag == '1' || item.flag == '3') {
         let new_item = { ...item };
         let compare_time = item.due_time
           ? item.due_time

@@ -45,12 +45,15 @@ export default class Calendar extends Component {
         this.setState({
             secletIndex: e.currentTarget.id == secletIndex ? null : e.currentTarget.id
         })
+
     }
     finishAction(newArr, selectedMenuValueList) {
         const { secletIndex, moldArr, boardidList, boardidListArr } = this.state;
         const { dispatch } = this.props;
 
         if (secletIndex == 0) {
+            const { secletIndex, moldArr, boardidList, boardidListArr } = this.state;
+
             var arr = newArr.filter(function (item) {
                 return item.isSelect
             })
@@ -62,30 +65,28 @@ export default class Calendar extends Component {
                     value: item.value,
                 }
             })
-            console.log(boardidList1);
             this.setState({
                 boardlist: newArr,
                 boardidListArr: boardidList1,
                 boardidList: boardidList1.toString()
             })
-            console.log(boardidList1)
-            console.log(boardValueList)
 
             dispatch({
                 type: "calendar/getNoScheCardList",
                 payload: {
                     org_id: '0',
-                    board_ids: boardidList1 && boardidList1.length > 0 ? (boardidList1[0] == '0' ? ['all'] : boardidList1) : ['all'],
+                    board_ids: boardidList1 && boardidList1.length > 0 ? (boardidList1[0] == '0' ? [] : boardidList1) : [],
                     query_milestone: moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) :
-                        ['all'],
-                    query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : ['all']
+                        [],
+                    query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : []
                     ,
-                    query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : ['all']
+                    query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : []
                     ,
                     query_meeting: moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) :
-                        ['all'],
+                        [],
                 }
             });
+            this.isShowCheckMenu(boardidList1.toString(), selectedMenuValueList)
 
         } else if (secletIndex == 1) {
             this.setState({
@@ -96,23 +97,25 @@ export default class Calendar extends Component {
                 type: "calendar/getNoScheCardList",
                 payload: {
                     org_id: '0',
-                    board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? ['all'] : boardidListArr) : ['all'],
-                    query_milestone: newArr[0].length > 0 ? (newArr[0][0] == 'all' ? ['all'] : newArr[0]) : ['all'],
-                    query_card: newArr[1].length > 0 ? (newArr[1][0] == 'all' ? ['all'] : newArr[1]) : ['all'],
-                    query_flow: newArr[2].length > 0 ? (newArr[2][0] == 'all' ? ['all'] : newArr[2]) : ['all'],
-                    query_meeting: newArr[3].length > 0 ? (newArr[3][0] == 'all' ? ['all'] : newArr[3]) : ['all'],
+                    board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] : boardidListArr) : [],
+                    query_milestone: newArr[0].length > 0 ? (newArr[0][0] == 'all' ? ['all'] : newArr[0]) : [],
+                    query_card: newArr[1].length > 0 ? (newArr[1][0] == 'all' ? ['all'] : newArr[1]) : [],
+                    query_flow: newArr[2].length > 0 ? (newArr[2][0] == 'all' ? ['all'] : newArr[2]) : [],
+                    query_meeting: newArr[3].length > 0 ? (newArr[3][0] == 'all' ? ['all'] : newArr[3]) : [],
                 }
             });
+            this.isShowCheckMenu(boardidListArr.toString(), newArr)
 
         }
         this.setState({
             secletIndex: null
         })
+
     }
     // 删除所选择的项目过滤条件
     deleteSelectedBorad(e) {
         const { dispatch } = this.props;
-        const { boardlist = [], boardidListArr = [], moldArr = [] } = this.state;
+        const { boardlist = [], boardidListArr = [], moldArr = [], selectedMenuValueList } = this.state;
         const index = e.currentTarget.id;
         boardlist[index].isSelect = false;
         boardidListArr.splice(boardidListArr.indexOf(boardlist[index].id), 1);
@@ -125,22 +128,24 @@ export default class Calendar extends Component {
             type: "calendar/getNoScheCardList",
             payload: {
                 org_id: '0',
-                board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? ['all'] : boardidListArr) : ['all'],
+                board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] : boardidListArr) : [],
                 query_milestone: moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) :
-                    ['all'],
-                query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : ['all']
+                    [],
+                query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : []
                 ,
-                query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : ['all']
+                query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : []
                 ,
                 query_meeting: moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) :
-                    ['all'],
+                    [],
             }
         });
+        this.isShowCheckMenu(boardidListArr.toString(), selectedMenuValueList)
+
     }
 
     deleteAllSelectedBorad(msg) {
         const { dispatch } = this.props;
-        const { boardlist = [], boardidListArr = [] } = this.state;
+        const { boardlist = [], boardidListArr = [], selectedMenuValueList } = this.state;
         var newArr = boardlist.map(function (item) {
             return {
                 value: item.value,
@@ -161,13 +166,15 @@ export default class Calendar extends Component {
             type: "calendar/getNoScheCardList",
             payload: {
                 org_id: '0',
-                board_ids: ['all'],
-                query_milestone: newArr[0].length > 0 ? (newArr[0][0] == 'all' ? ['all'] : newArr[0]) : ['all'],
-                query_card: newArr[1].length > 0 ? (newArr[1][0] == 'all' ? ['all'] : newArr[1]) : ['all'],
-                query_flow: newArr[2].length > 0 ? (newArr[2][0] == 'all' ? ['all'] : newArr[2]) : ['all'],
-                query_meeting: newArr[3].length > 0 ? (newArr[3][0] == 'all' ? ['all'] : newArr[3]) : ['all'],
+                board_ids: [],
+                query_milestone: newArr[0].length > 0 ? (newArr[0][0] == 'all' ? ['all'] : newArr[0]) : [],
+                query_card: newArr[1].length > 0 ? (newArr[1][0] == 'all' ? ['all'] : newArr[1]) : [],
+                query_flow: newArr[2].length > 0 ? (newArr[2][0] == 'all' ? ['all'] : newArr[2]) : [],
+                query_meeting: newArr[3].length > 0 ? (newArr[3][0] == 'all' ? ['all'] : newArr[3]) : [],
             }
         });
+        this.isShowCheckMenu('', selectedMenuValueList)
+
     }
 
     // 删除选择的类型
@@ -191,17 +198,19 @@ export default class Calendar extends Component {
             type: "calendar/getNoScheCardList",
             payload: {
                 org_id: '0',
-                board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? ['all'] : boardidListArr) : ['all'],
+                board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] : boardidListArr) : [],
                 query_milestone: moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) :
-                    ['all'],
-                query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : ['all']
+                    [],
+                query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : []
                 ,
-                query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : ['all']
+                query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : []
                 ,
                 query_meeting: moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) :
-                    ['all'],
+                    [],
             }
         });
+        this.isShowCheckMenu(boardidList, selectedMenuValueList)
+
     }
     deleteAllSelectedMenu(e) {
         const index = e.currentTarget.id;
@@ -217,19 +226,34 @@ export default class Calendar extends Component {
             type: "calendar/getNoScheCardList",
             payload: {
                 org_id: '0',
-                board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? ['all'] :
-                    boardidListArr) : ['all'],
+                board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] :
+                    boardidListArr) : [],
                 query_milestone: moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) :
-                    ['all'],
-                query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : ['all']
+                    [],
+                query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : []
                 ,
-                query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : ['all']
+                query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : []
                 ,
                 query_meeting: moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) :
-                    ['all'],
+                    [],
             }
         });
+
+        this.isShowCheckMenu(boardidList, selectedMenuValueList);
+
     }
+
+    // 是否显示选择项(传回父节点)
+    isShowCheckMenu(boardidList, selectedMenuValueList) {
+        var newArr = selectedMenuValueList.filter(function (item, index) {
+            return item.length > 0;
+        })
+        var isCheckedBorard = boardidList && boardidList.length > 0;
+        const isShowClear = isCheckedBorard || newArr.length > 0;
+        typeof this.props.isShowCheckMenu == "function" &&
+            this.props.isShowCheckMenu(isShowClear);
+    }
+
     // 清除所有的过滤选项
     clearAllChecked() {
         const { dispatch } = this.props;
@@ -243,13 +267,16 @@ export default class Calendar extends Component {
             type: "calendar/getNoScheCardList",
             payload: {
                 org_id: '0',
-                board_ids: ['all'],
+                board_ids: [],
                 query_milestone: ['all'],
                 query_card: ['all'],
                 query_flow: ['all'],
                 query_meeting: ['all'],
             }
         });
+        typeof this.props.isShowCheckMenu == "function" &&
+            this.props.isShowCheckMenu(false);
+
     }
 
     render() {
@@ -335,7 +362,7 @@ export default class Calendar extends Component {
 
                     {
                         isShowClear ? (<View className={indexStyles.clearAllChecked} onClick={this.clearAllChecked}>
-                            <Text className={`${globalStyle.global_iconfont} ${indexStyles.delete_iconfont}`}> &#xe639;</Text>
+                            <Text className={`${globalStyle.global_iconfont} ${indexStyles.delete_iconfont}`}>&#xe845;</Text>
             清除
                         </View>) : (null)
                     }
@@ -343,10 +370,10 @@ export default class Calendar extends Component {
 
                 </View>
                 {
-                    secletIndex == 0 ? (<Multiplechoice type='0' conditionArr={boardlist} checkedBoardId={checkedBoardId} finishAction={(newArr) => this.finishAction(newArr)}></Multiplechoice>) : (null)
+                    secletIndex == 0 ? (<Multiplechoice type='0' conditionArr={boardlist} checkedBoardId={checkedBoardId} finishAction={(newArr1) => this.finishAction(newArr1)}></Multiplechoice>) : (null)
                 }
                 {
-                    secletIndex == 1 ? (<Moldchioce type='1' selectedMenuValueList={selectedMenuValueList} moldArr={moldArr} finishAction={(newArr, selectedMenuValueList) => this.finishAction(newArr, selectedMenuValueList)}></Moldchioce>) : (null)
+                    secletIndex == 1 ? (<Moldchioce type='1' selectedMenuValueList={selectedMenuValueList} moldArr={moldArr} finishAction={(newArr1, selectedMenuValueList1) => this.finishAction(newArr1, selectedMenuValueList1)}></Moldchioce>) : (null)
                 }
 
             </View >

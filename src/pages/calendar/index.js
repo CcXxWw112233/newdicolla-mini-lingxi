@@ -10,6 +10,7 @@ import CalendarSwiper from "./components/CalendarSwiper";
 import MilestoneList from "./components/MilestoneList";
 import CustomNavigation from "../acceptInvitation/components/CustomNavigation.js";
 import PersonalCenter from "./components/PersonalCenter";
+import UpdateUsername from "./components/UpdateUsername"
 import { onSysMsgUnread } from "../../models/im/actions";
 
 @connect(
@@ -20,7 +21,9 @@ import { onSysMsgUnread } from "../../models/im/actions";
       page_number,
       isReachBottom,
       isOtherPageBack,
-      selected_timestamp
+      selected_timestamp,
+      is_mask_show_Updatename,
+      navTitle,
     },
     accountInfo,
     im: { sessionlist, unread_all_number }
@@ -33,7 +36,9 @@ import { onSysMsgUnread } from "../../models/im/actions";
     accountInfo,
     selected_timestamp,
     sessionlist,
-    unread_all_number
+    unread_all_number,
+    is_mask_show_Updatename,
+    navTitle,
   })
 )
 export default class Calendar extends Component {
@@ -42,7 +47,7 @@ export default class Calendar extends Component {
     this.state = {
       show_card_type_select: "0",
       search_mask_show: "0",
-      titleText: ''
+      titleText: '',
     };
   }
 
@@ -210,7 +215,7 @@ export default class Calendar extends Component {
       type: "calendar/getNoScheCardList",
       payload: {
         org_id: '0',
-        board_ids: ['all'],
+        board_ids: [],
         query_milestone: ['all'],
         query_card: ['all'],
         query_flow: ['all'],
@@ -314,21 +319,30 @@ export default class Calendar extends Component {
   };
 
   settitleText = (titleText) => {
-    console.log(this.settitleText)
-    console.log("---**---" + titleText, this.state);
-    this.setState({
-      titleText,
-    }, () => {
-      // console.log("---*****---" + this.state.titleText)
+    const { dispatch } = this.props;
+    dispatch({
+      type: "calendar/updateDatas",
+      payload: {
+        navTitle: titleText
+      }
     });
   }
-
+  // 关闭修改昵称
+  closeUpateUseername() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: "calendar/updateDatas",
+      payload: {
+        is_mask_show_Updatename: false
+      }
+    });
+  }
   render() {
-    const { show_card_type_select, search_mask_show, titleText } = this.state;
-    const { no_sche_card_list = [] } = this.props;
+    const { show_card_type_select, search_mask_show } = this.state;
+    const { no_sche_card_list = [], is_mask_show_Updatename, navTitle } = this.props;
     const {
       account_info = {},
-      is_mask_show_personalCenter
+      is_mask_show_personalCenter,
     } = this.props.accountInfo;
     const { avatar } = account_info;
 
@@ -342,7 +356,7 @@ export default class Calendar extends Component {
           home_personal_center="homePersonalCenter"
           personal_center_image={avatar}
           showPersonalCenter={() => this.showPersonalCenter(true)}
-          title={titleText}
+          title={navTitle}
         />
 
         {is_mask_show_personalCenter && is_mask_show_personalCenter === true ? (
@@ -374,7 +388,7 @@ export default class Calendar extends Component {
         <View
           className={`${globalStyles.global_card_out} ${indexStyles.no_scheduling}`}
           onClick={this.gotoNoSchedule} >
-          查看全部待办 ({no_sche_card_list.length}）
+          查看全部事项 ({no_sche_card_list.length}）
         </View>
         {/* )} */}
         <CardList schedule={"1"} />
@@ -383,6 +397,10 @@ export default class Calendar extends Component {
         {/* <View className={indexStyles.plusTasks} onClick={this.gotoAddingTasks}>
           +
         </View> */}
+        {
+          is_mask_show_Updatename ? (<UpdateUsername account_info={account_info} closeUpateUseername={() => this.closeUpateUseername()}></UpdateUsername>
+          ) : (null)
+        }
       </View>
     );
   }

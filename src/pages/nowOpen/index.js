@@ -1,10 +1,9 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Image, Button, Text } from '@tarojs/components'
 import indexStyles from './index.scss'
-import now_Open_Image from '../../asset/Invitation/now_Open_Image.png'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
-import invitation_cover_img from '../../asset/Invitation/invitation_cover.png'
+import logoImage from '../../asset/Invitation/logo.png'
 
 @connect(({ nowOpen }) => ({
   nowOpen
@@ -45,7 +44,7 @@ export default class nowOpen extends Component {
     return (
       <View className={`${indexStyles.index}`}>
         <View className={indexStyles.contain1}>
-          <Image src={invitation_cover_img} className={indexStyles.nowOpenImage} />
+          <Image src={logoImage} className={indexStyles.nowOpenImage} />
         </View>
         <View className={indexStyles.textStyle}>欢迎来到聆悉协作</View>
         <Button className={`${indexStyles.login_btn_wx} ${indexStyles.login_btn}`} open_type={'getUserInfo'} onGetUserInfo={this.getUserInfo}>

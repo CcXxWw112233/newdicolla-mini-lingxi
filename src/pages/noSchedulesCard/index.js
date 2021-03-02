@@ -1,12 +1,12 @@
 import Taro, { Component } from '@tarojs/taro';
-import { View } from '@tarojs/components';
+import { View, Image, ScrollView } from '@tarojs/components';
 import CardList from '../calendar/components/CardList';
 import CardTypeSelect from '../calendar/components/CardTypeSelect/index';
 import SearchAndMenu from '../board/components/SearchAndMenu';
 import indexStyles from './index.scss';
 import { connect } from '@tarojs/redux';
 import Topmenu from './components/topmenu'
-
+import PlaceholderImage from '../../asset/calendar/placeholder.png'
 
 @connect(
     ({
@@ -51,7 +51,7 @@ export default class Calendar extends Component {
     componentWillMount() {
         const { title } = this.$router.params;
         Taro.setNavigationBarTitle({
-            title: '全部待办'
+            title: '全部事项'
         });
     }
 
@@ -162,15 +162,42 @@ export default class Calendar extends Component {
             }
         });
     };
+    onclickTopMenu(index) {
+        this.setState({
+            TopmenuIndex: index
+        })
+    }
+
+    isShowCheckMenu(isShow) {
+        this.setState({
+            isShowCheckMenu: isShow
+        })
+    }
     render() {
-        const { show_card_type_select, search_mask_show, screenHeight, filterData, filterDropdownValue } = this.state;
+        const { show_card_type_select, search_mask_show, TopmenuIndex, screenHeight, filterData, filterDropdownValue, isShowCheckMenu } = this.state;
+        const { no_sche_card_list = [] } = this.props;
+
         return (
             <View className={indexStyles.index} style={{ minHeight: screenHeight }}>
                 {/* <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} /> */}
-                <Topmenu></Topmenu>
-                <CardTypeSelect show_card_type_select={show_card_type_select} onSelectType={this.onSelectType} schedule={'0'} />
-                <CardList schedule={'0'} />
-                <View style='height: 50px'></View>
+                <Topmenu onclickTopMenu={(index) => this.onclickTopMenu(index)} className={indexStyles.topMenu} isShowCheckMenu={(isShow) => this.isShowCheckMenu(isShow)}></Topmenu>
+                {/* <CardTypeSelect show_card_type_select={show_card_type_select} onSelectType={this.onSelectType} schedule={'0'} /> */}
+                {/* isShowCheckMenu */}
+
+                <ScrollView scrollY className={`${indexStyles.no_sche_card_list} ${isShowCheckMenu ? indexStyles.isShowCheckMenu : ''}`}>
+                    {
+                        no_sche_card_list && no_sche_card_list.length > 0 ? (<CardList className={indexStyles.cardList} schedule={'0'} />) : (
+                            <View className={indexStyles.noDataView}>
+
+                                <Image className={indexStyles.noDataImage} src={PlaceholderImage}></Image>
+                                <View className={indexStyles.noDataText}>未找到符合条件的待办</View>
+
+                            </View>
+                        )
+                    }
+
+                    <View style='height: 50px'></View>
+                </ScrollView>
             </View >
         );
     }

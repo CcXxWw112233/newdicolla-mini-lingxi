@@ -1,26 +1,30 @@
 //.s{border-radius: }
 @import "../../gloalSet/styles/constant";
+
 .user_name {
   background-color: $bg_color_2;
-  border-radius: pxTrans(100);
+  border-radius   : pxTrans(100);
 }
+
 .list_user_out {
   display: flex;
-  .list_user{
+
+  .list_user {
     display: flex;
-    .list_avatar{
-    }
+
+    .list_avatar {}
   }
-  .list_more{
-    background:rgba(230,247,255,1);
-    padding: 0 pxTrans(8);
-    font-size: $fontsize_12;
-    color: $color_theme;
-    text-align: center;
+
+  .list_more {
+    background   : #5FA6FF;
+    // padding   : 0 pxTrans(8);
+    font-size    : $fontsize_12;
+    text-align   : center;
+    color        : white;
   }
 }
 
 
-.avatar{
+.avatar {
   border: pxTrans(1) solid #ffffff;
 }

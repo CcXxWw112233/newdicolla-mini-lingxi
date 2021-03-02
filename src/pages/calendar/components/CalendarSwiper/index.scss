@@ -64,6 +64,19 @@
   }
 }
 
+.showcalendar {
+  width           : pxTrans(60);
+  height          : pxTrans(4);
+  background-color: white;
+  border-radius   : pxTrans(2);
+  margin-left     : pxTrans(150);
+  margin-bottom   : pxTrans(10);
+}
+
+.hidecalendaricon {
+  color: white;
+}
+
 //日历组件
 .swiper_show_whole {
   height   : pxTrans(270);

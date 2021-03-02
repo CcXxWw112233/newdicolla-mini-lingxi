@@ -46,6 +46,12 @@ export default {
             }
           })
           Taro.removeStorageSync('qrCodeInfo')
+          yield put({
+            type: 'calendar/updateDatas',
+            payload: {
+              is_mask_show_Updatename: true
+            }
+          })
         }
         Taro.setStorageSync('qrCodeInfo', res.data)
 
@@ -68,8 +74,6 @@ export default {
           icon: 'none',
           duration: 2000
         })
-        console.log("************~~~~~~~~~")
-        console.log(relaType)
         setTimeout(function () {
           if (["1", "2", "12"].indexOf(relaType) != -1) {  //项目
             Taro.navigateTo({

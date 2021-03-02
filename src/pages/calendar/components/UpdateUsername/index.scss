@@ -1,0 +1,103 @@
+@import "../../../../gloalSet/styles/constant.scss";
+
+
+
+.mask {
+    margin-top: 0%;
+    height    : 100%;
+    width     : 100%;
+    position  : fixed;
+    z-index   : 9999;
+    top       : 0;
+    left      : 0;
+    background: rgba(0, 0, 0, .45);
+    overflow  : hidden;
+
+    .personal_center_style {
+        background   : white;
+        width        : pxTrans(280);
+        height       : pxTrans(312);
+        position     : absolute;
+        top          : 0;
+        right        : 0;
+        left         : 0;
+        bottom       : 0;
+        margin       : pxTrans(100) auto;
+        border-radius: pxTrans(6);
+    }
+
+    .personal_center_Title {
+        width      : 100%;
+        text-align : center;
+        margin-top : pxTrans(20);
+        font-size  : pxTrans(16);
+        font-weight: 500;
+        color      : #3F445D;
+    }
+
+    .close_button_style {
+        position : absolute;
+        top      : pxTrans(20);
+        right    : pxTrans(16);
+        font-size: pxTrans(20);
+        color    : #9EA6C2;
+    }
+
+    .personal_center_content {
+        margin-top     : pxTrans(50);
+        width          : 100%;
+        bottom         : pxTrans(24);
+        justify-content: center;
+        display        : flex;
+        flex-direction : column;
+        align-items    : center;
+
+
+        .nick_name_style {
+            background-color: #F5F7FB;
+            width           : 85%;
+            font-size       : pxTrans(16);
+            font-weight     : 500;
+            color           : rgba(0, 0, 0, 0.65);
+            line-height     : pxTrans(40);
+            border-radius   : pxTrans(4);
+            display         : flex;
+            flex-direction  : column;
+        }
+
+        .nickNameTitle {
+            background-color: white;
+            color           : #575C75;
+            font-size       : pxTrans(14);
+        }
+
+        .nick_name_input {
+            height          : pxTrans(40);
+            line-height     : pxTrans(40);
+            flex            : auto;
+            padding-left    : pxTrans(25);
+            background-color: white;
+            border          : 1px solid #D1D5E4;
+            border-radius   : pxTrans(4);
+        }
+
+
+
+        .confirm_button_style {
+            margin-top   : pxTrans(40);
+            width        : pxTrans(240);
+            height       : pxTrans(40);
+            bottom       : 0;
+            left         : pxTrans(16);
+            right        : pxTrans(16);
+            text-align   : center;
+            background   : linear-gradient(270deg, #4FADFF 0%, #4790FF 100%);
+            border-radius: pxTrans(20);
+            border       : 1px solid rgba(0, 0, 0, 0.15);
+            font-size    : pxTrans(16);
+            font-weight  : 400;
+            color        : white;
+            line-height  : pxTrans(40);
+        }
+    }
+}

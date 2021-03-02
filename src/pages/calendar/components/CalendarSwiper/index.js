@@ -207,13 +207,13 @@ export default class CalendarSwiper extends Component {
     let show_flag = "0";
     if ("0" == show_whole_calendar) {
       show_flag = "2";
-      this.calculationTodayMaginTop("dynamic");
+      // this.calculationTodayMaginTop("dynamic");
     } else if ("1" == show_whole_calendar) {
       show_flag = "2";
-      this.calculationTodayMaginTop("dynamic");
+      // this.calculationTodayMaginTop("dynamic");
     } else if ("2" == show_whole_calendar) {
       show_flag = "1";
-      this.calculationTodayMaginTop("initial");
+      // this.calculationTodayMaginTop("initial");
     } else {
     }
     this.setState({
@@ -339,6 +339,8 @@ export default class CalendarSwiper extends Component {
       show_whole_calendar,
       todayMaginTop
     } = this.state;
+    console.log(show_whole_calendar);
+
     const { calendar_mark_list } = this.props;
     const week_array = ["日", "一", "二", "三", "四", "五", "六"];
     const renderDate = (
@@ -482,18 +484,21 @@ export default class CalendarSwiper extends Component {
           {/* {select_year}年{select_month}月{select_date_no}日{" "} */}
           {/* {select_week_day_dec} */}
           {/* </View> */}
-          <View className={indexStyles.set_calendar}>
-            <View
-              className={`${globalStyles.global_iconfont
-                } ${show_whole_calendar == "0" &&
+          <View className={indexStyles.set_calendar} onClick={this.setShowWholeCalendar}>
+            {/*<View
+              className={`${globalStyles.global_iconfont} ${show_whole_calendar == "0" &&
                 indexStyles.set_calendar_icon_nomal} ${show_whole_calendar ==
                 "1" &&
                 indexStyles.set_calendar_icon_all} ${show_whole_calendar ==
                 "2" && indexStyles.set_calendar_icon_part}`}
-              onClick={this.setShowWholeCalendar}
-            >
+              onClick={this.setShowWholeCalendar}>
               &#xe653;
-            </View>
+                </View>*/}
+
+            {
+              show_whole_calendar == '0' || show_whole_calendar == '1' ? (<View onClick={this.setShowWholeCalendar} className={indexStyles.showcalendar}></View>) : (<Text className={`${globalStyles.global_iconfont} ${indexStyles.hidecalendaricon}`}>&#xe653;</Text>)
+            }
+
           </View>
         </View>
         <View
