@@ -125,6 +125,9 @@ export default {
           var newArr = sche_card_list.map(function (item) {
             // return item * item
             var timeStamp = new Date().setHours(0, 0, 0, 0), duetimeStamp = new Date(parseInt(item.due_time)).setHours(0, 0, 0, 0);
+            if (item.flag == '3') {
+              return;
+            }
             if (parseInt(item.due_time) < timeStamp) {
               return {
                 time: item.due_time,

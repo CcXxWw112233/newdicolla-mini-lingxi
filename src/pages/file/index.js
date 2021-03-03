@@ -192,12 +192,10 @@ export default class File extends Component {
         }
         const { dispatch, header_folder_name } = this.props;
         var that = this;
+
         console.log("*****************" + header_folder_name)
 
-
         Taro.setStorageSync('file_pull_down_refresh', JSON.stringify(params))
-
-
         Promise.resolve(
             dispatch({
                 type: 'file/getFilePage',
@@ -873,6 +871,7 @@ export default class File extends Component {
                             const fileType = filterFileFormatType(value.file_name)
                             return (
                                 <View className={indexStyles.lattice_style} onClick={this.goFileDetails.bind(this, value, value.file_name)} onLongPress={this.longPress.bind(this, value)} key={key}>
+                                    {/* <View className={indexStyles.redcircle}></View> */}
                                     {
                                         msg_ids != null ? <View className={indexStyles.unread_red}>
                                         </View> : (<View></View>)

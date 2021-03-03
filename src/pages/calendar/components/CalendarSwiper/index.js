@@ -245,7 +245,6 @@ export default class CalendarSwiper extends Component {
       } else if (FourthLineOfCalendarArray.indexOf(index) > -1) {
         today_magin_top = -51 * 3;
       } else if (FifthLineOfCalendarArray.indexOf(index) > -1) {
-
         today_magin_top = -51 * 4;
       }
       this.setState({
@@ -339,8 +338,6 @@ export default class CalendarSwiper extends Component {
       show_whole_calendar,
       todayMaginTop
     } = this.state;
-    console.log(show_whole_calendar);
-
     const { calendar_mark_list } = this.props;
     const week_array = ["日", "一", "二", "三", "四", "五", "六"];
     const renderDate = (
