@@ -154,6 +154,7 @@ export default class CardItem extends Component {
       return opacity;
     };
     var now = Date.parse(new Date());
+    var isToday = new Date(parseInt(start_time)).toDateString() === new Date().toDateString()
     return (
       <View
         onClick={() => flag != "meeting" && flag != "1" && this.gotoListItemDetails(itemValue)}
@@ -172,7 +173,7 @@ export default class CardItem extends Component {
               </Text>
               <View className={`${indexStyles.organize}`}>
                 {/* #{getOrgName({ org_id, org_list })}&gt;{board_name} */}
-              @{board_name}
+              #{board_name}
               </View>
               {
                 is_urge == '1' ? (<View className={indexStyles.urge}><Text className={`${globalStyles.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text> 催办</View>) : (null)
@@ -197,7 +198,7 @@ export default class CardItem extends Component {
                   : "截止时间未设置"
                 }`}
             </View>
-            {(flag == "meeting" || flag == '1') && (
+            {(flag == "meeting" || flag == '1') && isToday && (
               <View className={indexStyles.card_content_meeting_btn}>
                 <Button
                   onClick={() => {

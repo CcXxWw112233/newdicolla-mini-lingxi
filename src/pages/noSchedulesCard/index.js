@@ -45,7 +45,9 @@ export default class Calendar extends Component {
 
     state = {
         show_card_type_select: '0',
-        search_mask_show: '0'
+        search_mask_show: '0',
+        boardidList: '',
+        moldArr: []
     };
 
     componentWillMount() {
@@ -69,7 +71,7 @@ export default class Calendar extends Component {
 
     componentDidShow() {
         this.getOrgBoardList();
-        this.getNoScheCardList();
+        // this.getNoScheCardList();
     }
     componentDidHide() {
         const { dispatch } = this.props;
@@ -97,13 +99,13 @@ export default class Calendar extends Component {
         });
     };
 
-    getNoScheCardList = () => {
-        const { dispatch } = this.props;
-        dispatch({
-            type: 'calendar/getNoScheCardList',
-            payload: {}
-        });
-    };
+    // getNoScheCardList = () => {
+    // const { dispatch } = this.props;
+    // dispatch({
+    // type: 'calendar/getNoScheCardList',
+    // payload: {}
+    // });
+    // };
 
     onSelectType = ({ show_type }) => {
         this.setState({
@@ -115,13 +117,13 @@ export default class Calendar extends Component {
     onPullDownRefresh(res) {
         const { isReachBottom } = this.props;
         const { dispatch, selected_timestamp } = this.props;
-        dispatch({
-            type: "calendar/updateDatas",
-            payload: {
-                page_number: 1,
-                isReachBottom: true
-            }
-        });
+        // dispatch({
+        // type: "calendar/updateDatas",
+        // payload: {
+        // page_number: 1,
+        // isReachBottom: true
+        // }
+        // });
         console.log(selected_timestamp);
         this.getNoScheCardList();
         this.getOrgBoardList();
@@ -132,13 +134,39 @@ export default class Calendar extends Component {
         }, 300);
     }
 
+    getNoScheCardList() {
+        const { dispatch, } = this.props;
+        const { boardidList, moldArr } = this.state;
+        var boardidListArr = boardidList.length > 0 ? boardidList.split(",") : []
+        dispatch({
+            type: "calendar/getNoScheCardList",
+            payload: {
+                org_id: '0',
+                board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] :
+                    boardidListArr) : [],
+                query_milestone: moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) : [],
+                query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : []
+                ,
+                query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : []
+                ,
+                query_meeting: moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) : [],
+            }
+        });
+    }
 
     onReachBottom() {
         //上拉加载...
-        const { isReachBottom } = this.props;
-        if (isReachBottom === true) {
-            this.pagingGet();
-        }
+        // const { isReachBottom } = this.props;
+        // if (isReachBottom === true) {
+        // this.pagingGet();
+        // }
+        const { dispatch } = this.props;
+        dispatch({
+            type: "calendar/updateDatas",
+            payload: {
+                isReachBottom: false
+            }
+        });
     }
     pagingGet = () => {
         const { page_number, dispatch } = this.props;
@@ -150,7 +178,7 @@ export default class Calendar extends Component {
                 page_number: new_page_number
             }
         });
-        this.getNoScheCardList({ type: 1 });
+        // this.getNoScheCardList({ type: 1 });
     };
     // 获取排期列表
     getScheCardList = (payload = {}) => {
@@ -168,20 +196,20 @@ export default class Calendar extends Component {
         })
     }
 
-    isShowCheckMenu(isShow) {
+    isShowCheckMenu(isShow, boardidList, moldArr) {
         this.setState({
-            isShowCheckMenu: isShow
+            isShowCheckMenu: isShow,
+            boardidList: boardidList,
+            moldArr: moldArr
         })
     }
     render() {
         const { show_card_type_select, search_mask_show, TopmenuIndex, screenHeight, filterData, filterDropdownValue, isShowCheckMenu } = this.state;
         const { no_sche_card_list = [] } = this.props;
-        console.log("****------*****")
-        console.log(no_sche_card_list && no_sche_card_list.length > 0)
         return (
             <View className={indexStyles.index} style={{ minHeight: screenHeight }}>
                 {/* <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} /> */}
-                <Topmenu onclickTopMenu={(index) => this.onclickTopMenu(index)} className={indexStyles.topMenu} isShowCheckMenu={(isShow) => this.isShowCheckMenu(isShow)}></Topmenu>
+                <Topmenu onclickTopMenu={(index) => this.onclickTopMenu(index)} className={indexStyles.topMenu} isShowCheckMenu={(isShow, boardidList, moldArr) => this.isShowCheckMenu(isShow, boardidList, moldArr)}></Topmenu>
                 {/* <CardTypeSelect show_card_type_select={show_card_type_select} onSelectType={this.onSelectType} schedule={'0'} /> */}
                 {/* isShowCheckMenu */}
 
@@ -194,7 +222,6 @@ export default class Calendar extends Component {
                                 <View className={indexStyles.noDataView}>
                                     <Image className={indexStyles.noDataImage} src={NoDataSvg}></Image>
                                     <View className={indexStyles.noDataText}>未找到符合条件的待办</View>
-
                                 </View>
                             )
                     }

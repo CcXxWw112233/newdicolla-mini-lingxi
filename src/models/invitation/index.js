@@ -27,9 +27,6 @@ export default {
             qrCodeInfo: res.data || {},
           },
         })
-
-        console.log("*****************")
-        console.log(res.data)
         const value = Taro.getStorageSync('qrCodeInfo');
         const query_Id = Taro.getStorageSync('id');
         const boardId = Taro.getStorageSync('board_Id');

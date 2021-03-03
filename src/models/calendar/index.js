@@ -125,6 +125,9 @@ export default {
           var newArr = sche_card_list.map(function (item) {
             // return item * item
             var timeStamp = new Date().setHours(0, 0, 0, 0), duetimeStamp = new Date(parseInt(item.due_time)).setHours(0, 0, 0, 0);
+            if (item.flag == '3') {
+              return;
+            }
             if (parseInt(item.due_time) < timeStamp) {
               return {
                 time: item.due_time,
@@ -188,7 +191,15 @@ export default {
         let arr1 = current_no_sche_card_list; //1.1>从data获取当前datalist数组
         let arr2 = res.data; //1.2>从此次请求返回的数据中获取新数组
         if (page_number == 1) {
-          arr1 = arr2
+          arr1 = arr2;
+          if (res.data && res.data.length === 0) {
+            yield put({
+              type: "updateDatas",
+              payload: {
+                isReachBottom: false
+              }
+            });
+          }
         } else {
           // arr2 = res.data;
           // arr1 = arr1.concat(arr2); //1.3>合并数组

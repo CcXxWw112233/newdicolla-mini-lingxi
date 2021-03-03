@@ -86,7 +86,7 @@ export default class Calendar extends Component {
                         ['all'],
                 }
             });
-            this.isShowCheckMenu(boardidList1.toString(), selectedMenuValueList)
+            this.isShowCheckMenu(boardidList1.toString(), moldArr)
 
         } else if (secletIndex == 1) {
             this.setState({
@@ -139,13 +139,13 @@ export default class Calendar extends Component {
                     ['all'],
             }
         });
-        this.isShowCheckMenu(boardidListArr.toString(), selectedMenuValueList)
+        this.isShowCheckMenu(boardidListArr.toString(), moldArr)
 
     }
 
     deleteAllSelectedBorad(msg) {
         const { dispatch } = this.props;
-        const { boardlist = [], boardidListArr = [], selectedMenuValueList } = this.state;
+        const { boardlist = [], boardidListArr = [], selectedMenuValueList, moldArr } = this.state;
         var newArr = boardlist.map(function (item) {
             return {
                 value: item.value,
@@ -167,13 +167,13 @@ export default class Calendar extends Component {
             payload: {
                 org_id: '0',
                 board_ids: [],
-                query_milestone: newArr[0].length > 0 ? (newArr[0][0] == 'all' ? ['all'] : newArr[0]) : ['all'],
-                query_card: newArr[1].length > 0 ? (newArr[1][0] == 'all' ? ['all'] : newArr[1]) : ['all'],
-                query_flow: newArr[2].length > 0 ? (newArr[2][0] == 'all' ? ['all'] : newArr[2]) : ['all'],
-                query_meeting: newArr[3].length > 0 ? (newArr[3][0] == 'all' ? ['all'] : newArr[3]) : ['all'],
+                query_milestone: moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) : ['all'],
+                query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : ['all'],
+                query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : ['all'],
+                query_meeting: moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) : ['all'],
             }
         });
-        this.isShowCheckMenu('', selectedMenuValueList)
+        this.isShowCheckMenu('', moldArr)
 
     }
 
@@ -209,7 +209,7 @@ export default class Calendar extends Component {
                     ['all'],
             }
         });
-        this.isShowCheckMenu(boardidList, selectedMenuValueList)
+        this.isShowCheckMenu(boardidList, moldArr)
 
     }
     deleteAllSelectedMenu(e) {
@@ -239,25 +239,30 @@ export default class Calendar extends Component {
             }
         });
 
-        this.isShowCheckMenu(boardidList, selectedMenuValueList);
+        this.isShowCheckMenu(boardidList, moldArr);
 
     }
 
     // 是否显示选择项(传回父节点)
-    isShowCheckMenu(boardidList, selectedMenuValueList) {
-        var newArr = selectedMenuValueList.filter(function (item, index) {
+    isShowCheckMenu(boardidList, moldArr) {
+        var newArr = moldArr.filter(function (item, index) {
             return item.length > 0;
         })
+        console.log('...................');
+        console.log(moldArr)
         var isCheckedBorard = boardidList && boardidList.length > 0;
         const isShowClear = isCheckedBorard || newArr.length > 0;
         typeof this.props.isShowCheckMenu == "function" &&
-            this.props.isShowCheckMenu(isShowClear);
+            this.props.isShowCheckMenu(isShowClear, boardidList, moldArr);
+
     }
 
     // 清除所有的过滤选项
     clearAllChecked() {
         const { dispatch } = this.props;
 
+        var boardidList = [];
+        var moldArr = [[], [], [], []];
         this.deleteAllSelectedBorad('clearAll')
         this.setState({
             moldArr: [[], [], [], []],
@@ -275,7 +280,7 @@ export default class Calendar extends Component {
             }
         });
         typeof this.props.isShowCheckMenu == "function" &&
-            this.props.isShowCheckMenu(false);
+            this.props.isShowCheckMenu(false, boardidList, moldArr);
 
     }
 
