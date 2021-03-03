@@ -47,7 +47,7 @@
     background-color: white;
     height          : pxTrans(28);
     line-height     : pxTrans(28);
-    margin          : pxTrans(10);
+    margin          : pxTrans(10) pxTrans(5) pxTrans(10) pxTrans(5);
     border-radius   : pxTrans(14);
     padding         : 0 pxTrans(10) 0 pxTrans(20);
     writing-mode    : horizontal-tb;
@@ -57,7 +57,7 @@
 }
 
 .delete_iconfont {
-    color       : #D1D5E4 !important;
+    color       : lightslategray !important;
     margin-left : pxTrans(5);
     margin-right: pxTrans(5);
 }

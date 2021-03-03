@@ -191,7 +191,15 @@ export default {
         let arr1 = current_no_sche_card_list; //1.1>从data获取当前datalist数组
         let arr2 = res.data; //1.2>从此次请求返回的数据中获取新数组
         if (page_number == 1) {
-          arr1 = arr2
+          arr1 = arr2;
+          if (res.data && res.data.length === 0) {
+            yield put({
+              type: "updateDatas",
+              payload: {
+                isReachBottom: false
+              }
+            });
+          }
         } else {
           // arr2 = res.data;
           // arr1 = arr1.concat(arr2); //1.3>合并数组
