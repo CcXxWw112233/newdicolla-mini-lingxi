@@ -210,9 +210,14 @@
     }
   }
 
+  .markView {
+    display       : flex;
+    flex-direction: row;
+  }
+
   .markCircel {
     position        : relative;
-    left            : pxTrans(35);
+    left            : pxTrans(30);
     bottom          : pxTrans(40);
     height          : pxTrans(14);
     width           : pxTrans(14);
@@ -220,6 +225,11 @@
     line-height     : pxTrans(12);
     font-size       : pxTrans(10);
     border-radius   : pxTrans(7);
+  }
+
+  .overdue {
+    left: pxTrans(27) !important;
+
   }
 
   .warnCircel {

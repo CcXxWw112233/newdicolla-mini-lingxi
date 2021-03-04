@@ -136,7 +136,8 @@ export default {
                 type: 1,
                 value: '逾'
               }
-            } else if (duetimeStamp - timeStamp < 86400000 * (parseInt(item.time_warning) + 1) || duetimeStamp - timeStamp == 86400000 * parseInt(item.time_warning)) {
+            }
+            if (duetimeStamp - timeStamp < 86400000 * (parseInt(item.time_warning) + 1) || duetimeStamp - timeStamp == 86400000 * parseInt(item.time_warning)) {
               return {
                 time: item.due_time,
                 type: 2,
