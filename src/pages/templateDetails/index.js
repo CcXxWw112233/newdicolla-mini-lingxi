@@ -106,7 +106,7 @@ export default class templateDetails extends Component {
 
         const { workflowDatas, } = this.props
 
-        const { name, create_time, nodes = [], board_id, } = workflowDatas
+        const { name, create_time, nodes = [], board_id, is_urge } = workflowDatas
 
 
         return (
@@ -123,7 +123,7 @@ export default class templateDetails extends Component {
                         return (
                             <View key={id} >
                                 <View className={indexStyles.interval}></View>
-                                <StepRow sort={sort} name={value.name} runtime_type={runtime_type} step_id={value.id} current_step_id={current_step_id} is_change_open={current_step_id == id ? true : false} status={status} onClicked={this.onChangeOpen.bind(this)} />
+                                <StepRow sort={sort} name={value.name} runtime_type={runtime_type} step_id={value.id} current_step_id={current_step_id} is_change_open={current_step_id == id ? true : false} status={status} is_urge={is_urge} onClicked={this.onChangeOpen.bind(this)} />
                                 {
                                     current_step_id == value.id ? (
                                         <View>

@@ -50,7 +50,7 @@ export default class StepRow extends Component {
     }
 
     render() {
-        const { sort, name, runtime_type, status, step_id, current_step_id, is_change_open } = this.props;
+        const { sort, name, runtime_type, status, step_id, current_step_id, is_change_open, is_urge } = this.props;
         const { currentStepId } = this.state;
         return (
             <View className={indexStyles.viewStyle} onClick={() => this.clickOpen(step_id)}>
@@ -60,6 +60,10 @@ export default class StepRow extends Component {
 
                 <View class={indexStyles.step_name}>
                     {name ? name : ''}
+                    {is_change_open && currentStepId && currentStepId == current_step_id && is_urge == '1' ? (
+                        <View className={indexStyles.urge}><Text className={`${globalStyle.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text> 催办</View>
+                    ) :
+                        (null)}
                 </View>
 
                 <View className={indexStyles.runtime_type}>

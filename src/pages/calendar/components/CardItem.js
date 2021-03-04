@@ -172,10 +172,11 @@ export default class CardItem extends Component {
                 {content_name || topic}
               </Text>
               {
-                is_urge == '1' ? (<View className={indexStyles.urge}><Text className={`${globalStyles.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text> 催办</View>) : (null)
+                is_urge == '1' ? (
+                  <View className={indexStyles.urge}><Text className={`${globalStyles.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text> 催办</View>) : (null)
               }
               {
-                now > due_time ? (<View className={indexStyles.urge}><Text className={`${globalStyles.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text>
+                due_time && now > due_time ? (<View className={indexStyles.urge}><Text className={`${globalStyles.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text>
 逾期</View>) : (null)
               }
             </View>
@@ -191,7 +192,7 @@ export default class CardItem extends Component {
                     ? "#F5222D" : "#8c8c8c"
               }}
             >
-              {schedule == "0"
+              {!due_time
                 ? "未排期"
                 : `${start_time
                   ? (timestampToTimeZH(start_time).substring(0, 4) == timestampToTimeZH(due_time || end_time).substring(0, 4) ? timestampToTimeZH(start_time).substring(5) : timestampToTimeZH(start_time))
