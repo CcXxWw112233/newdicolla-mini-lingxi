@@ -130,13 +130,14 @@ export default {
             if (item.flag == '3') {
               return;
             }
+            var time_warning = item.time_warning && item.time_warning.length > 0 ? parseInt(item.time_warning) : 0
             if (parseInt(item.due_time) < timeStamp) {
               return {
                 time: item.due_time,
                 type: 1,
                 value: '逾'
               }
-            } else if (duetimeStamp - timeStamp < 86400000 * parseInt(item.time_warning) || duetimeStamp - timeStamp == 86400000 * (item.time_warning)) {
+            } else if (duetimeStamp - timeStamp < 86400000 * time_warning + 1 || duetimeStamp - timeStamp == 86400000 * time_warning) {
               return {
                 time: item.due_time,
                 type: 2,

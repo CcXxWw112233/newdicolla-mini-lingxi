@@ -51,11 +51,6 @@ export default class acceptInvitation extends Component {
         var value = Taro.getStorageSync('qrCodeInfo');
         queryId = Taro.getStorageSync('id');
         var rela_id1 = Taro.getStorageSync('board_Id');
-        console.log("*********---88886668888")
-        console.log(value)
-        console.log(queryId)
-        console.log(rela_id1)
-
       }
     }
 
