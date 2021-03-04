@@ -73,7 +73,7 @@ const getAction = (config, action, title) => {
 const getContent = (config, action, data) => {
   const { content } = data;
   if (config[action] && config[action]["contentCallback"]) {
-    return config[action]["contentCallback"](content);
+    return config[action]["contentCallback"](content, data);
   }
   return content;
 };
