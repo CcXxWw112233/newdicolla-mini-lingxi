@@ -267,7 +267,7 @@ export default class Login extends Component {
       data.password = sha256(pswd);
     }
     Taro.showLoading({
-      title:"登录中"
+      title: "登录中"
     });
     normalLogin(data).then(res => {
       Taro.showLoading();
