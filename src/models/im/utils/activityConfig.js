@@ -58,7 +58,14 @@ const activityConfig = {
   "board.meeting.create": {
     actionText: "发起了一条会议"
   }, // 发起会议
-  "board.update.user.add": {}, // 添加用户
+  "board.update.user.add": {
+    contentCallback: (content, data) => {
+      const { creator } = data || {}
+      const { rela_users = [], board = {} } = content
+      const text = `${creator.name} 邀请了 ${rela_users.join(',')} 加入了 ${board.name} 项目`
+      return genContentObj(text, data)
+    }
+  }, // 添加用户
   "board.update.archived": {}, // 归档
   "board.update.user.quit": {}, // 用户退出项目
   "board.update.user.remove": {}, // 用户被移出项目
