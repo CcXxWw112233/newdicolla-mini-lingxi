@@ -15,7 +15,8 @@ import {
   select_page_number,
   select_sche_card_list,
   no_sche_card_list,
-  select_is_reach_bottom
+  select_is_reach_bottom,
+  calendar_mark_list
 } from "./selects";
 import { getCurrentOrgByStorage } from "../../utils/basicFunction";
 
@@ -67,6 +68,7 @@ export default {
       const selected_timestamp = yield select(select_selected_timestamp);
       const selected_board = yield select(select_selected_board);
       // const current_org = getCurrentOrgByStorage()
+      const mark_list = yield select(calendar_mark_list);
       const current_org = "0";
       const page_number = yield select(select_page_number);
       let typeSource = payload["type"];
@@ -134,7 +136,7 @@ export default {
                 type: 1,
                 value: '逾'
               }
-            } else if (duetimeStamp - timeStamp < 86400000 * 4 || duetimeStamp - timeStamp == 86400000 * 3) {
+            } else if (duetimeStamp - timeStamp < 86400000 * parseInt(item.time_warning) || duetimeStamp - timeStamp == 86400000 * (item.time_warning)) {
               return {
                 time: item.due_time,
                 type: 2,
@@ -144,11 +146,15 @@ export default {
           })
           newArr = newArr.filter(function (item) {
             return item;
-          })
+          });
+          var list = mark_list.concat(newArr);
+          list = list.filter(function (item, index) {
+            return list.indexOf(item, 0) === index;
+          });
           yield put({
             type: "updateDatas",
             payload: {
-              calendar_mark_list: newArr,
+              calendar_mark_list: list,
               sche_card_list: res.data,
               isReachBottom: true
             }

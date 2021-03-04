@@ -144,12 +144,12 @@ export default class Calendar extends Component {
                 org_id: '0',
                 board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] :
                     boardidListArr) : [],
-                query_milestone: moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) : [],
-                query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : []
+                query_milestone: moldArr[0] && moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) : [],
+                query_card: moldArr[1] && moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : []
                 ,
-                query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : []
+                query_flow: moldArr[2] && moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : []
                 ,
-                query_meeting: moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) : [],
+                query_meeting: moldArr[3] && moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) : [],
             }
         });
     }

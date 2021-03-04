@@ -365,9 +365,9 @@ export default class CalendarSwiper extends Component {
               no_in_select_month
             } = value;
             const is_selected = isSamDay(selected_timestamp, timestamp);
-
             var minus = calendar_mark_list.filter(function (item) {
-              var is_mark = isSamDay(parseInt(item.time), parseInt(timestamp));;
+              // console.log(new Date(parseInt(item.time)).toDateString() + '------' + new Date(parseInt(timestamp)).toDateString())
+              var is_mark = isSamDay(parseInt(item.time), parseInt(timestamp));
               return is_mark;
             });
             return (

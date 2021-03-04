@@ -171,14 +171,17 @@ export default class CardItem extends Component {
               <Text className={`${indexStyles.card_title}`}>
                 {content_name || topic}
               </Text>
-              <View className={`${indexStyles.organize}`}>
-                {/* #{getOrgName({ org_id, org_list })}&gt;{board_name} */}
-              #{board_name}
-              </View>
               {
                 is_urge == '1' ? (<View className={indexStyles.urge}><Text className={`${globalStyles.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text> 催办</View>) : (null)
               }
-
+              {
+                now > due_time ? (<View className={indexStyles.urge}><Text className={`${globalStyles.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text>
+逾期</View>) : (null)
+              }
+            </View>
+            <View className={`${indexStyles.organize}`}>
+              {/* #{getOrgName({ org_id, org_list })}&gt;{board_name} */}
+              #{board_name}
             </View>
             <View
               className={`${indexStyles.card_content_middle_bott}`}

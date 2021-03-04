@@ -81,15 +81,47 @@ export default class sceneEntrance extends Component {
         navigationStyle: 'custom',
     }
     componentDidMount() {
-        const options = this.$router.params
-        this.sceneEntrancePages(options)
+        var options = this.$router.params
+        const access_token = Taro.getStorageSync('access_token')
+        if ((access_token && access_token.length > 0) || options.route == 'login') {
+            if (options.route == 'login') {
+                options = JSON.parse(options.sceneEntrance);
+            }
+
+            this.setState({
+                params_options: options,
+                route: 'login'
+            })
+            this.sceneEntrancePages(options)
+        } else {
+            Taro.setStorage({
+                key: 'sceneEntrance',
+                data: JSON.stringify(options)
+            })
+            Taro.redirectTo({
+                url: "../../pages/index/index"
+            })
+        }
         this.setState({
             params_options: options,
         })
     }
 
     componentDidShow() {
-        this.sceneEntrancePages(this.state.params_options)
+        const access_token = Taro.getStorageSync('access_token')
+        if ((access_token && access_token.length > 0) || this.state.route == 'login') {
+            var options = Taro.getStorageSync('sceneEntrance');
+            var params_options = this.state.params_options ? this.state.params_options : options;
+            this.sceneEntrancePages(params_options)
+        } else {
+            Taro.setStorage({
+                key: 'sceneEntrance',
+                data: JSON.stringify(this.state.params_options),
+            })
+            Taro.redirectTo({
+                url: "../../pages/index/index"
+            })
+        }
     }
 
     sceneEntrancePages(options) {
@@ -127,6 +159,7 @@ export default class sceneEntrance extends Component {
                 // @通知路径 ： pages/sceneEntrance/index?redirectType=7&boardId=1111111
                 // 统计未读路径 ： pages/sceneEntrance/index?redirectType=7&boardId=
                 // 进不进具体圈子 看 boardId 是不是空
+
                 if (boardId.match(/^[ ]*$/)) {
                     Taro.switchTab({ url: `../../pages/boardChat/index` })
                     return
@@ -242,6 +275,7 @@ export default class sceneEntrance extends Component {
             .then(() => updateCurrentChatUnreadNewsState(id))
             .then(() => {
                 const { board_id } = currentBoard
+                Taro.removeStorageSync('sceneEntrance')
                 Taro.navigateTo({
                     url: `../../pages/${pageObject}/index?contentId=${contentId}&boardId=${board_id}&pageSource=sceneEntrance`
                 })

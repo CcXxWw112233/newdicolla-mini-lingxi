@@ -113,7 +113,7 @@ class Index extends Component {
     if (!!encryptedData) {
       const { dispatch } = this.props
       Taro.showLoading({
-        title:"登录中"
+        title: "登录中"
       });
       Taro.login().then(res => {
         const code = res.code
@@ -128,7 +128,7 @@ class Index extends Component {
             }
           })
           Taro.hideLoading();
-        }).catch (() => {
+        }).catch(() => {
           Taro.hideLoading();
         })
       }).catch(() => {

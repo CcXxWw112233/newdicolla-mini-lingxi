@@ -5,3 +5,4 @@ export const select_page_number = state => state[(`calendar`)].page_number
 export const select_sche_card_list = state => state[(`calendar`)].sche_card_list
 export const select_is_reach_bottom = state => state[(`calendar`)].isReachBottom
 export const no_sche_card_list = state => state[(`calendar`)].no_sche_card_list
+export const calendar_mark_list = state => state[(`calendar`)].calendar_mark_list
