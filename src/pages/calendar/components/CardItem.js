@@ -167,6 +167,7 @@ export default class CardItem extends Component {
     };
 
     var now = Date.parse(new Date());
+    console.log(now);
     var isToday = new Date(parseInt(start_time)).toDateString() === new Date().toDateString()
     return (
       <View
@@ -202,8 +203,9 @@ export default class CardItem extends Component {
               }
             </View>
             <View className={`${indexStyles.organize}`}>
-              {/* #{getOrgName({ org_id, org_list })}&gt;{board_name} */}
-              #{board_name}
+              {/* #{getOrgName({ org_id, org_list })}&gt;{board_name} */}{
+                board_name && board_name.length > 0 ? ('#' + board_name) : (null)
+              }
             </View>
             <View
               className={`${indexStyles.card_content_middle_bott}`}
@@ -224,7 +226,7 @@ export default class CardItem extends Component {
                 }`}
             </View>
 
-            {(flag == "meeting" || flag == '1') && is_realize == '0' && isToday && (
+            {(flag == "meeting" || flag == '1') && isToday && (
               <View className={indexStyles.card_content_meeting_btn} onClick={() => this.handleSetClipboardData({ meetingUrl })}>
                 复制链接参会
               </View>
