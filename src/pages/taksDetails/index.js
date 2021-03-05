@@ -79,7 +79,6 @@ export default class taksDetails extends Component {
             board_id: boardId,
         });
         this.loadTasksDetail(contentId, boardId);
-        this.getBoardFileList(boardId);
     }
 
     loadTasksDetail = (content_id, board_id) => {
@@ -104,16 +103,21 @@ export default class taksDetails extends Component {
                 },
             })
         ).then((res) => {
+            console.log("***************")
             that.getCardProperties();
         });
     };
 
     getCardProperties = () => {
         const { dispatch } = this.props;
+        const { tasksDetailDatas } = this.props;
+
         dispatch({
             type: "tasks/getCardProperties",
             payload: {},
         });
+        this.getBoardFileList(tasksDetailDatas.board_id);
+
     };
 
     getBoardFileList = (boardId) => {
@@ -356,8 +360,8 @@ export default class taksDetails extends Component {
                                                 // onLoadTasksDetail={this.loadTasksDetail.bind(board_id, card_id)}
                                                 />
                                             ) : (
-                                                    ""
-                                                )}
+                                                ""
+                                            )}
                                         </View>
                                         <View>
                                             {code == "MILESTONE" ? (
@@ -370,8 +374,8 @@ export default class taksDetails extends Component {
                                                     type="4"
                                                 />
                                             ) : (
-                                                    ""
-                                                )}
+                                                ""
+                                            )}
                                         </View>
                                         {code == "SUBTASK" ? (
                                             <SonTasks
@@ -385,8 +389,8 @@ export default class taksDetails extends Component {
                                                 }
                                             />
                                         ) : (
-                                                ""
-                                            )}
+                                            ""
+                                        )}
                                         {code == "LABEL" ? (
                                             <TagCell
                                                 label_data={data}
@@ -395,8 +399,8 @@ export default class taksDetails extends Component {
                                                 onClickAction={this.onClickAction}
                                             />
                                         ) : (
-                                                ""
-                                            )}
+                                            ""
+                                        )}
 
                                         {code == "REMARK" ? (
                                             <DescribeTasks
@@ -406,8 +410,8 @@ export default class taksDetails extends Component {
                                                 cardId={card_id}
                                             />
                                         ) : (
-                                                ""
-                                            )}
+                                            ""
+                                        )}
                                     </View>
                                 );
                             })}
@@ -418,10 +422,10 @@ export default class taksDetails extends Component {
                     {properties && properties.length > 0 && properties_list &&
                         properties_list.length > 0 &&
                         properties.length !== properties_list.length ? (
-                            <AddFunctionCell properties_list={properties_list} />
-                        ) : (
-                            <View></View>
-                        )}
+                        <AddFunctionCell properties_list={properties_list} />
+                    ) : (
+                        <View></View>
+                    )}
 
                     {/* <NewBuilders />
                 <CommentCell />
@@ -473,8 +477,8 @@ export default class taksDetails extends Component {
                                             item_id={item.id}
                                         />
                                     ) : (
-                                            ""
-                                        )}
+                                        ""
+                                    )}
                                     {field_type == "2" ? (
                                         <MultipleSelectionField
                                             title={name}
@@ -485,8 +489,8 @@ export default class taksDetails extends Component {
                                             onClickAction={this.onClickAction}
                                         />
                                     ) : (
-                                            ""
-                                        )}
+                                        ""
+                                    )}
                                     {field_type == "3" ? (
                                         <ProjectNameCell
                                             title={name}
@@ -499,8 +503,8 @@ export default class taksDetails extends Component {
                                             fieldSet={field_set}
                                         />
                                     ) : (
-                                            ""
-                                        )}
+                                        ""
+                                    )}
                                     {field_type == "4" ? (
                                         <ProjectNameCell
                                             title={name}
@@ -512,8 +516,8 @@ export default class taksDetails extends Component {
                                             item_id={item.id}
                                         />
                                     ) : (
-                                            ""
-                                        )}
+                                        ""
+                                    )}
                                     {field_type == "5" ? (
                                         <ProjectNameCell
                                             title={name}
@@ -525,8 +529,8 @@ export default class taksDetails extends Component {
                                             item_id={item.id}
                                         />
                                     ) : (
-                                            ""
-                                        )}
+                                        ""
+                                    )}
                                     {field_type == "6" && tasksDetailDatas.board_id ? (
                                         <FileFields
                                             title={name}
@@ -542,8 +546,8 @@ export default class taksDetails extends Component {
                                             )}
                                         />
                                     ) : (
-                                            ""
-                                        )}
+                                        ""
+                                    )}
 
                                     {field_type == "8" ? (
                                         <ProjectNameCell
@@ -558,8 +562,8 @@ export default class taksDetails extends Component {
                                             onClickAction={this.onClickAction}
                                         />
                                     ) : (
-                                            ""
-                                        )}
+                                        ""
+                                    )}
                                 </View>
                             );
                         })}
@@ -578,16 +582,16 @@ export default class taksDetails extends Component {
                     folder_tree.child_data &&
                     folder_tree.child_data.length > 0 &&
                     isShowChoiceFolder == true ? (
-                        <TaksChoiceFolder
-                            folder_tree={folder_tree}
-                            org_id={org_id}
-                            board_id={board_id}
-                            card_id={card_id}
-                            onLoadTasksDetail={this.loadTasksDetail.bind(board_id, card_id)}
-                        />
-                    ) : (
-                        <View></View>
-                    )}
+                    <TaksChoiceFolder
+                        folder_tree={folder_tree}
+                        org_id={org_id}
+                        board_id={board_id}
+                        card_id={card_id}
+                        onLoadTasksDetail={this.loadTasksDetail.bind(board_id, card_id)}
+                    />
+                ) : (
+                    <View></View>
+                )}
                 {isIphoneX ? (<View className={indexStyles.isIphoneX}></View>) : (null)}
             </View>
         );
