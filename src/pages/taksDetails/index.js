@@ -299,10 +299,11 @@ export default class taksDetails extends Component {
         const { isIphoneX } = this.state;
         const { type_flag } = this.props;
 
-        const { properties = [], fields = [], org_id } = tasksDetailDatas;
+        var { properties = [], fields = [], org_id, board_id } = tasksDetailDatas;
 
-        let board_id = Taro.getStorageSync("tasks_detail_boardId");
+        board_id = Taro.getStorageSync("tasks_detail_boardId") || board_id;
 
+        console.log('======' + board_id);
         return (
             <View>
                 <CustomNavigation backIcon={backIcon} />

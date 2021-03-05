@@ -52,9 +52,6 @@ export default class ProjectNameCell extends Component {
         const fieldSet = this.props.fieldSet || {};
         const { member_selected_type, member_selected_range, } = fieldSet;
 
-        if (type == 4) {
-            this.getTaskMilestoneList()
-        }
         if (type == 2) {
             this.getTasksGroupList()
         }
@@ -69,6 +66,9 @@ export default class ProjectNameCell extends Component {
                     this.getMemberAllList();
                 }
             }
+        }
+        if (type == 4) {
+            this.getTaskMilestoneList()
         }
     }
     //单选项目内成员列表
@@ -160,14 +160,14 @@ export default class ProjectNameCell extends Component {
 
     // 获取里程碑列表
     getTaskMilestoneList = () => {
-        let board_id = Taro.getStorageSync("tasks_detail_boardId");
-        const { dispatch, data } = this.props;
 
+        const { dispatch, data, boardId, tasksDetailDatas = {} } = this.props;
+        let board_id = Taro.getStorageSync("tasks_detail_boardId") || boardId;
         Promise.resolve(
             dispatch({
                 type: "tasks/getTaskMilestoneList",
                 payload: {
-                    board_id: board_id,
+                    board_id: tasksDetailDatas.board_id,
                 },
             })
         ).then((res) => {
@@ -601,7 +601,7 @@ export default class ProjectNameCell extends Component {
     };
     render() {
         let contentId = Taro.getStorageSync("tasks_detail_contentId");
-        const { tasksDetailDatas = {}, } = this.props;
+        const { tasksDetailDatas = {}, boardId } = this.props;
         const { list_id } = tasksDetailDatas;
         const title = this.props.title || "";
         const data = this.props.data || "";
@@ -695,42 +695,42 @@ export default class ProjectNameCell extends Component {
                                         </View>
                                     </View>
                                 ) : (
-                                        <View className={indexStyles.list_item_detail} v-if>
-                                            {
-                                                type == 4 ? (
-                                                    milestoneList.length ? (<MilestoneCellPicer tag={type} title={data.name} dataArray={milestoneList} contentId={contentId} clickHandle={this.
-                                                        clickSelectPicker} milestoneId={milestoneId} tasksDetailDatas={tasksDetailDatas}></ MilestoneCellPicer>) : (<View>暂无里程碑可选</View>)
+                                    <View className={indexStyles.list_item_detail} v-if>
+                                        {
+                                            type == 4 ? (
+                                                milestoneList.length ? (<MilestoneCellPicer tag={type} title={data.name} dataArray={milestoneList} contentId={contentId} clickHandle={this.
+                                                    clickSelectPicker} milestoneId={milestoneId} tasksDetailDatas={tasksDetailDatas}></ MilestoneCellPicer>) : (<View>暂无里程碑可选</View>)
 
-                                                ) : (null)
-                                            }
-                                            {
-                                                type == 2 ? (
-                                                    tasksGroupList.length ? (<TaskGroupPicker contentId={contentId} tag={type} title={data.name} tasksGroupList={tasksGroupList}> listId={list_id} tasksDetailDatas={tasksDetailDatas}</TaskGroupPicker>) : (<View>暂无分组可选</View>)
+                                            ) : (null)
+                                        }
+                                        {
+                                            type == 2 ? (
+                                                tasksGroupList.length ? (<TaskGroupPicker contentId={contentId} tag={type} title={data.name} tasksGroupList={tasksGroupList}> listId={list_id} tasksDetailDatas={tasksDetailDatas}</TaskGroupPicker>) : (<View>暂无分组可选</View>)
 
-                                                ) : (null)
-                                            }
-                                            {
-                                                type == 9 || type == 10 ? (<textField item_id={item_id} field_value={data.name} type={type}></textField>) : (null)
-                                            }
+                                            ) : (null)
+                                        }
+                                        {
+                                            type == 9 || type == 10 ? (<textField item_id={item_id} field_value={data.name} type={type}></textField>) : (null)
+                                        }
 
-                                            {
-                                                // field_value=${field_value}&item_id=${item_id}`,
-                                                type == 8 ? (<DateField field_value={field_value} item_id={item_id} dateFieldCode={date_field_code}></DateField>) : (null)
-                                            }
-                                            {
-                                                type == 6 ? (
-                                                    items.length ? (<SingleChoicePicker items={items} field_value={field_value} field_item_id={field_item_id}></SingleChoicePicker>) : (<View>暂无选项可选</View>)
-                                                ) : (null)
-                                            }
-                                            {
-                                                type == '12' && member_selected_type == 1 ? (
-                                                    fieldPersonSignleList.length ? (<FieldPersonSinglePicker contentId={contentId} executors={data} item_id={item_id} executorsList={fieldPersonSignleList} title={data.name}></FieldPersonSinglePicker>) : (<View>暂无选项可选</View>)
-                                                ) : (null)
-                                            }
+                                        {
+                                            // field_value=${field_value}&item_id=${item_id}`,
+                                            type == 8 ? (<DateField field_value={field_value} item_id={item_id} dateFieldCode={date_field_code}></DateField>) : (null)
+                                        }
+                                        {
+                                            type == 6 ? (
+                                                items.length ? (<SingleChoicePicker items={items} field_value={field_value} field_item_id={field_item_id}></SingleChoicePicker>) : (<View>暂无选项可选</View>)
+                                            ) : (null)
+                                        }
+                                        {
+                                            type == '12' && member_selected_type == 1 ? (
+                                                fieldPersonSignleList.length ? (<FieldPersonSinglePicker contentId={contentId} executors={data} item_id={item_id} executorsList={fieldPersonSignleList} title={data.name}></FieldPersonSinglePicker>) : (<View>暂无选项可选</View>)
+                                            ) : (null)
+                                        }
 
-                                            { type != 2 && type != 4 && type != 9 && type != 10 && type != 8 && type != 6 && (type != 12 && member_selected_type != 1) ? (<View>{data.name}</View>) : (null)}
-                                        </View>
-                                    )}
+                                        { type != 2 && type != 4 && type != 9 && type != 10 && type != 8 && type != 6 && (type != 12 && member_selected_type != 1) ? (<View>{data.name}</View>) : (null)}
+                                    </View>
+                                )}
                             </View>
                         </View>
                     </View>
