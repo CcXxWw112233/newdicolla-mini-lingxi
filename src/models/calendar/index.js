@@ -205,7 +205,7 @@ export default {
           // duetimeStamp = duetimeStamp && duetimeStamp.length < 13 ? duetimeStamp * 1000 : duetimeStamp;
 
 
-          if (parseInt(item.time_warning) > 0 && item.flag == '0') {
+          if (parseInt(item.time_warning) > 0 && item.flag == '0' && item.is_realize == '0') {
             var item1 = {
               time: due_time - 86400000 * parseInt(item.time_warning),
               type: 2,
@@ -214,7 +214,7 @@ export default {
             newArr.push(item1)
           }
           // 只有流程和任务有逾期
-          if (duetimeStamp < timeStamp && (item.flag == '0' || item.flag == '2')) {
+          if (duetimeStamp < timeStamp && (item.flag == '0' || item.flag == '2') && item.is_realize == '0') {
             var item2 = {
               time: duetimeStamp,
               type: 1,

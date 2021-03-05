@@ -20,12 +20,11 @@
   position: relative;
 
   .guide_share {
-    height          : pxTrans(50);
-    margin          : 0 pxTrans(20);
-    background-color: rebeccapurple;
-    position        : absolute;
-    top             : pxTrans(2);
-    right           : pxTrans(5);
+    height  : pxTrans(50);
+    margin  : 0 pxTrans(20);
+    position: absolute;
+    top     : pxTrans(2);
+    right   : pxTrans(5);
   }
 }
 
