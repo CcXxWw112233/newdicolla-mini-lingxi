@@ -205,7 +205,7 @@ export default {
           // duetimeStamp = duetimeStamp && duetimeStamp.length < 13 ? duetimeStamp * 1000 : duetimeStamp;
 
 
-          if (parseInt(item.time_warning) > 0 && item.flag == '0' && item.is_realize == '0') {
+          if (parseInt(item.time_warning) > 0 && item.flag == '0' && item.is_realize == '0' && !(duetimeStamp < timeStamp)) {
             var item1 = {
               time: due_time - 86400000 * parseInt(item.time_warning),
               type: 2,
@@ -223,6 +223,7 @@ export default {
             newArr.push(item2)
           }
         });
+
         newArr = newArr.filter(function (item) {
           return item;
         });

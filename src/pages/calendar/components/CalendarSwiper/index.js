@@ -517,7 +517,7 @@ export default class CalendarSwiper extends Component {
                 </View>*/}
 
             {
-              show_whole_calendar == '0' || show_whole_calendar == '1' ? (<View onClick={this.setShowWholeCalendar} className={indexStyles.showcalendar}></View>) : (<Text className={`${globalStyles.global_iconfont} ${indexStyles.hidecalendaricon}`}>&#xe653;</Text>)
+              show_whole_calendar == '0' || show_whole_calendar == '1' ? (<View onClick={this.setShowWholeCalendar} className={indexStyles.showcalendar}></View>) : (<Text className={`${globalStyles.global_iconfont} ${indexStyles.hidecalendaricon}`}>&#xe642;</Text>)
             }
 
           </View>
