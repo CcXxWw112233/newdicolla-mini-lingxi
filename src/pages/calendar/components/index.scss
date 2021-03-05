@@ -90,18 +90,17 @@
     }
 
     .card_content_meeting_btn {
-      margin-top: pxTrans(15);
-
-      button {
-        width        : pxTrans(180);
-        height       : pxTrans(40);
-        border-radius: pxTrans(4);
-        line-height  : pxTrans(40);
-        font-size    : pxTrans(14);
-        color        : white;
-        background   : linear-gradient(270deg, #4FADFF 0%, #4790FF 100%);
-        border-radius: pxTrans(20);
-      }
+      margin-top   : pxTrans(15);
+      margin-left  : pxTrans(60);
+      width        : pxTrans(180);
+      height       : pxTrans(40);
+      border-radius: pxTrans(4);
+      line-height  : pxTrans(40);
+      font-size    : pxTrans(14);
+      color        : white;
+      background   : linear-gradient(270deg, #4FADFF 0%, #4790FF 100%);
+      border-radius: pxTrans(20);
+      text-align   : center;
     }
   }
 

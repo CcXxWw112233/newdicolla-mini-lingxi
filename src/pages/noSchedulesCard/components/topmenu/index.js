@@ -70,27 +70,6 @@ export default class Calendar extends Component {
                 boardidListArr: boardidList1,
                 boardidList: boardidList1.toString()
             })
-            // var arr = moldArr;
-            // var newArr = arr.filter(function (item, index) {
-            // return item.length > 0;
-            // })
-            // var isall = newArr.length > 0 ? [] : ['all'];
-            // dispatch({
-            // type: "calendar/getNoScheCardList",
-            // payload: {
-            // org_id: '0',
-            // // board_ids: boardidList1 && boardidList1.length > 0 ? (boardidList1[0] == '0' ? [] : boardidList1) : [],
-            // // query_milestone: moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) :
-            // isall,
-            // // query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : isall
-            // ,
-            // // query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : isall
-            // ,
-            // query_meeting: moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) :
-            // isall,
-            // }
-            // });
-            // this.isShowCheckMenu(boardidList1.toString(), moldArr)
             this.getAllCard(moldArr, boardidList1)
 
         } else if (secletIndex == 1) {
@@ -99,23 +78,6 @@ export default class Calendar extends Component {
                 selectedMenuValueList: selectedMenuValueList
             })
             this.getAllCard(newArr, boardidListArr)
-            // var arr = newArr;
-            // var newArr = arr.filter(function (item, index) {
-            // return item.length > 0;
-            // })
-            // var isall = newArr.length > 0 ? [] : ['all'];
-            // dispatch({
-            // type: "calendar/getNoScheCardList",
-            // payload: {
-            // org_id: '0',
-            // // board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] : boardidListArr) : [],
-            // // query_milestone: newArr[0] && newArr[0].length > 0 ? (newArr[0][0] == 'all' ? ['all'] : newArr[0]) : isall,
-            // // query_card: newArr[1] && newArr[1].length > 0 ? (newArr[1][0] == 'all' ? ['all'] : newArr[1]) : isall,
-            // // query_flow: newArr[2] && newArr[2].length > 0 ? (newArr[2][0] == 'all' ? ['all'] : newArr[2]) : isall,
-            // // query_meeting: newArr[3] && newArr[3].length > 0 ? (newArr[3][0] == 'all' ? ['all'] : newArr[3]) : isall,
-            // }
-            // });
-            // this.isShowCheckMenu(boardidListArr.toString(), newArr)
         }
         this.setState({
             secletIndex: null
@@ -161,27 +123,6 @@ export default class Calendar extends Component {
             boardlist: boardlist
         })
         this.getAllCard(moldArr, boardidListArr);
-        // var arr = moldArr;
-        // var newArr = arr.filter(function (item, index) {
-        // return item.length > 0;
-        // })
-        // var isall = newArr.length > 0 ? [] : ['all'];
-        // dispatch({
-        // type: "calendar/getNoScheCardList",
-        // payload: {
-        // org_id: '0',
-        // // board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] : boardidListArr) : [],
-        // query_milestone: moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) :
-        // isall,
-        // query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : isall
-        // ,
-        // query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : isall
-        // ,
-        // query_meeting: moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) :
-        // isall,
-        // }
-        // });
-        // this.isShowCheckMenu(boardidListArr.toString(), moldArr)
 
     }
 
@@ -206,19 +147,6 @@ export default class Calendar extends Component {
         }
         this.getAllCard(moldArr, []);
 
-        // dispatch({
-        //     type: "calendar/getNoScheCardList",
-        //     payload: {
-        //         org_id: '0',
-        //         board_ids: [],
-        //         query_milestone: moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) : ['all'],
-        //         query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : ['all'],
-        //         query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : ['all'],
-        //         query_meeting: moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) : ['all'],
-        //     }
-        // });
-        // this.isShowCheckMenu('', moldArr)
-
     }
 
     // 删除选择的类型
@@ -228,39 +156,12 @@ export default class Calendar extends Component {
         var arr = e.currentTarget.id.split('_');
         var { selectedMenuValueList, moldArr, boardidList, boardidListArr } = this.state;
         selectedMenuValueList[arr[0]].splice(arr[1], 1);
-        var arr2 = selectedMenuValueList[arr[0]];
-        var arr1 = moldArr[arr[0]];
-        moldArr[arr[0]] = arr1.splice(arr[1], 1);
-        selectedMenuValueList[arr[0]] = arr2.splice(arr[1], 1);
-        moldArr[arr[0]] = arr1.splice(arr[1], 1)
-        console.log(selectedMenuValueList, moldArr)
+        moldArr[arr[0]].splice(arr[1], 1);
         this.setState({
             selectedMenuValueList: selectedMenuValueList,
             moldArr: moldArr
         })
         this.getAllCard(moldArr, boardidListArr);
-
-        // var arr = moldArr;
-        // var newArr = arr.filter(function (item, index) {
-        // return item.length > 0;
-        // })
-        // var isall = newArr.length > 0 ? [] : ['all'];
-        // dispatch({
-        // type: "calendar/getNoScheCardList",
-        // payload: {
-        // org_id: '0',
-        // // board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] : boardidListArr) : [],
-        // query_milestone: moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) :
-        // isall,
-        // query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : isall
-        // ,
-        // query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : isall
-        // ,
-        // query_meeting: moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) :
-        // isall,
-        // }
-        // });
-        // this.isShowCheckMenu(boardidList, moldArr)
 
     }
     deleteAllSelectedMenu(e) {
@@ -274,31 +175,6 @@ export default class Calendar extends Component {
             moldArr: moldArr
         })
         this.getAllCard(moldArr, boardidListArr);
-
-        // var arr = moldArr;
-        // var newArr = arr.filter(function (item, index) {
-        // return item.length > 0;
-        // })
-        // var isall = newArr.length > 0 ? [] : ['all'];
-        // dispatch({
-        // type: "calendar/getNoScheCardList",
-        // payload: {
-        // org_id: '0',
-        // board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] :
-        // boardidListArr) : [],
-        // query_milestone: moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) :
-        // isall,
-        // query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : isall
-        // ,
-        // query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : isall
-        // ,
-        // query_meeting: moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) :
-        // isall,
-        // }
-        // });
-
-        // this.isShowCheckMenu(boardidList, moldArr);
-
     }
 
     // 是否显示选择项(传回父节点)

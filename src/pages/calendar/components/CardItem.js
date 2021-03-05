@@ -30,15 +30,16 @@ export default class CardItem extends Component {
   };
 
   // 点击复制链接
-  handleSetClipboardData = ({ start_url }) => {
-    wx.setClipboardData({
-      data: start_url,
+  handleSetClipboardData = (start_url) => {
+    console.log(start_url)
+    Taro.setClipboardData({
+      data: start_url.meetingUrl,
       success: function (res) {
-        wx.showToast({
+        Taro.showToast({
           title: "复制成功",
           duration: 3000
         });
-        wx.getClipboardData({
+        Taro.getClipboardData({
           success: function (res) {
           }
         });
@@ -87,9 +88,14 @@ export default class CardItem extends Component {
       end_time,
       is_urge,
       start_url,
+      rela_url,
+      join_url,
       content_url,
       time_warning
     } = itemValue;
+
+    var meetingUrl = flag == 1 && content_url || rela_url || start_url || join_url;
+
     const users = itemValue["data"] || [];
     var timeStamp = new Date(parseInt(selected_timestamp)).setHours(0, 0, 0, 0), duetimeStamp = new Date(parseInt(due_time)).setHours(0, 0, 0, 0);
     // var is_warning = (((duetimeStamp - 86400000 * 3 > timeStamp) && (timeStamp > duetimeStamp - 86400000 * 4)) || (duetimeStamp - 86400000 * 3 == timeStamp)) ? true : false;
@@ -159,7 +165,9 @@ export default class CardItem extends Component {
       }
       return opacity;
     };
+
     var now = Date.parse(new Date());
+    console.log(now);
     var isToday = new Date(parseInt(start_time)).toDateString() === new Date().toDateString()
     return (
       <View
@@ -179,7 +187,7 @@ export default class CardItem extends Component {
               </Text>
 
               {
-                is_warning && flag == '0' && is_realize == '0' ? (
+                is_warning && flag == '0' && is_realize == '0' && !(due_time && now > duetime) ? (
                   <View className={indexStyles.urge}><Text className={`${globalStyles.
                     global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text> 预警</View>)
                   : (null)
@@ -195,8 +203,9 @@ export default class CardItem extends Component {
               }
             </View>
             <View className={`${indexStyles.organize}`}>
-              {/* #{getOrgName({ org_id, org_list })}&gt;{board_name} */}
-              #{board_name}
+              {/* #{getOrgName({ org_id, org_list })}&gt;{board_name} */}{
+                board_name && board_name.length > 0 ? ('#' + board_name) : (null)
+              }
             </View>
             <View
               className={`${indexStyles.card_content_middle_bott}`}
@@ -216,15 +225,10 @@ export default class CardItem extends Component {
                   : "截止时间未设置"
                 }`}
             </View>
-            {(flag == "meeting" || flag == '1') && is_realize == '0' && isToday && (
-              <View className={indexStyles.card_content_meeting_btn}>
-                <Button
-                  onClick={() => {
-                    this.handleSetClipboardData({ content_url } || { start_url });
-                  }}
-                >
-                  复制链接参会
-                </Button>
+
+            {(flag == "meeting" || flag == '1') && isToday && (
+              <View className={indexStyles.card_content_meeting_btn} onClick={() => this.handleSetClipboardData({ meetingUrl })}>
+                复制链接参会
               </View>
             )}
           </View>

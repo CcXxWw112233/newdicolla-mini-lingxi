@@ -50,6 +50,8 @@ export default class Calendar extends Component {
                 arr2 = [];
             }
         } else {
+            console.log('ssss_3', arr1)
+            console.log('ssss_4', arr2)
             if (arr1.length == menuList[arr[0]].submenu.length) {
                 arr1.splice(0, 1);
                 arr2.splice(0, 1);
@@ -57,9 +59,16 @@ export default class Calendar extends Component {
             var index = arr1.indexOf(arr[1]);
             if (arr1 && arr1.length > 0) {
                 if (index > -1) {
+                    console.log(index)
+                    console.log(arr1)
+                    console.log(arr2)
+
                     arr1.splice(index, 1);
-                    arr2.splice(arr2.indexOf(menuList[arr[0]].submenu[arr[2]].value), 1);
+                    arr2.splice(arr2.indexOf(type + '/' + menuList[arr[0]].submenu[arr[2]].value), 1);
                 } else {
+                    console.log(index)
+                    console.log(arr1)
+                    console.log(arr2)
                     arr1.push(arr[1])
                     arr2.push(type + '/' + menuList[arr[0]].submenu[arr[2]].value)
                 }
@@ -78,6 +87,7 @@ export default class Calendar extends Component {
     // 完成
     finishAction() {
         const { selectedMenuList, selectedMenuValueList } = this.state;
+
         typeof this.props.finishAction == "function" &&
             this.props.finishAction(selectedMenuList, selectedMenuValueList);
     }
