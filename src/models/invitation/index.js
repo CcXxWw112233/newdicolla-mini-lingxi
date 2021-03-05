@@ -64,6 +64,7 @@ export default {
         role_id: role_id,
       }
       const res = yield call(commInviteQRCodejoin, joinData)
+      Taro.removeStorageSync('qrCodeInfo')
 
       if (isApiResponseOk(res)) {
         Taro.showToast({
@@ -79,7 +80,7 @@ export default {
           }
           else if (["3", "4", "5"].indexOf(relaType) != -1) {  //任务
             Taro.navigateTo({
-              url: `../../pages/taksDetails/index?flag=${'0'}&contentId=${relaId}&back_icon=arrow_icon&boardId=${relaId}`
+              url: `../../pages/taksDetails/index?flag=${'0'}&contentId=${relaId}&back_icon=arrow_icon`
             })
           }
           // else if (["11",].indexOf(relaType) != -1) {  //组织
