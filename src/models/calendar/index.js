@@ -193,14 +193,17 @@ export default {
         }
         var newArr = [];
         arr1.forEach((item, index, array) => {
-          var timeStamp = new Date().setHours(0, 0, 0, 0), duetimeStamp = new Date(parseInt(item.due_time)).
+          var due_time = item.due_time && item.due_time.length < 13 ? item.due_time * 1000 : item.due_time
+
+          var timeStamp = new Date().setHours(0, 0, 0, 0), duetimeStamp = new Date(parseInt(due_time)).
             setHours(0, 0, 0, 0);
           // if (item.flag == '3') {
           // return;
           // }
           // 只有任务有预警
           // item.flag == '0'
-          var due_time = item.due_time && item.due_time.length < 13 ? item.due_time * 1000 : item.due_time
+          // duetimeStamp = duetimeStamp && duetimeStamp.length < 13 ? duetimeStamp * 1000 : duetimeStamp;
+
 
           if (parseInt(item.time_warning) > 0 && item.flag == '0') {
             var item1 = {
@@ -211,9 +214,9 @@ export default {
             newArr.push(item1)
           }
           // 只有流程和任务有逾期
-          if (parseInt(item.due_time) < timeStamp && (item.flag == '0' || item.flag == '2')) {
+          if (duetimeStamp < timeStamp && (item.flag == '0' || item.flag == '2')) {
             var item2 = {
-              time: due_time,
+              time: duetimeStamp,
               type: 1,
               value: '逾'
             }

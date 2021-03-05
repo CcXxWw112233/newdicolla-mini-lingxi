@@ -16,15 +16,16 @@
 }
 
 .guide_share_wrapper {
-  height  : pxTrans(93);
+  height  : pxTrans(70);
   position: relative;
 
   .guide_share {
-    height  : pxTrans(50);
-    margin  : 0 pxTrans(20);
-    position: absolute;
-    top     : pxTrans(2);
-    right   : pxTrans(5);
+    height          : pxTrans(50);
+    margin          : 0 pxTrans(20);
+    background-color: rebeccapurple;
+    position        : absolute;
+    top             : pxTrans(2);
+    right           : pxTrans(5);
   }
 }
 
@@ -46,7 +47,7 @@
 
   .invitation_cover {
     width : pxTrans(278);
-    height: pxTrans(283);
+    height: pxTrans(250);
   }
 }
 
@@ -84,7 +85,7 @@
 
 .effective_acceptBtn {
   position: absolute;
-  bottom  : pxTrans(80);
+  bottom  : pxTrans(65);
   left    : 10%;
   width   : 80%;
 
