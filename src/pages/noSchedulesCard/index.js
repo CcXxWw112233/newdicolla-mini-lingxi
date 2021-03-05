@@ -137,19 +137,24 @@ export default class Calendar extends Component {
     getNoScheCardList() {
         const { dispatch, } = this.props;
         const { boardidList, moldArr } = this.state;
-        var boardidListArr = boardidList.length > 0 ? boardidList.split(",") : []
+        var boardidListArr = boardidList.length > 0 ? boardidList.split(",") : [];
+        var arr = moldArr;
+        var newArr = arr.filter(function (item, index) {
+            return item.length > 0;
+        })
+        var isall = newArr.length > 0 ? [] : ['all'];
         dispatch({
             type: "calendar/getNoScheCardList",
             payload: {
                 org_id: '0',
                 board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] :
                     boardidListArr) : [],
-                query_milestone: moldArr[0] && moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) : [],
-                query_card: moldArr[1] && moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : []
+                query_milestone: moldArr[0] && moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) : isall,
+                query_card: moldArr[1] && moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : isall
                 ,
-                query_flow: moldArr[2] && moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : []
+                query_flow: moldArr[2] && moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : isall
                 ,
-                query_meeting: moldArr[3] && moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) : [],
+                query_meeting: moldArr[3] && moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) : isall,
             }
         });
     }
@@ -219,11 +224,11 @@ export default class Calendar extends Component {
                             <CardList className={indexStyles.cardList} schedule={'0'} />
 
                         ) : (
-                                <View className={indexStyles.noDataView}>
-                                    <Image className={indexStyles.noDataImage} src={NoDataSvg}></Image>
-                                    <View className={indexStyles.noDataText}>未找到符合条件的待办</View>
-                                </View>
-                            )
+                            <View className={indexStyles.noDataView}>
+                                <Image className={indexStyles.noDataImage} src={NoDataSvg}></Image>
+                                <View className={indexStyles.noDataText}>未找到符合条件的待办</View>
+                            </View>
+                        )
                     }
 
                     <View style='height: 50px'></View>

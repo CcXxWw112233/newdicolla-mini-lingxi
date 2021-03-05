@@ -106,7 +106,7 @@ export default class templateDetails extends Component {
 
         const { workflowDatas, } = this.props
 
-        const { name, create_time, nodes = [], board_id, is_urge } = workflowDatas
+        const { name, create_time, nodes = [], board_id, } = workflowDatas
 
 
         return (
@@ -118,7 +118,7 @@ export default class templateDetails extends Component {
 
 
                     {nodes && nodes.map((value, key) => {
-                        const { id, node_type, sort, runtime_type, recipients, assignees, last_complete_time, forms, description, approve_type, status, score_items, deadline_time_type, deadline_value, deadline_type, his_comments = [], cc_type, } = value
+                        const { id, node_type, sort, runtime_type, recipients, assignees, last_complete_time, forms, description, approve_type, status, score_items, deadline_time_type, deadline_value, deadline_type, his_comments = [], cc_type, is_urge } = value
 
                         return (
                             <View key={id} >

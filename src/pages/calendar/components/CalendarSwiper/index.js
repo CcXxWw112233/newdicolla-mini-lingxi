@@ -364,12 +364,14 @@ export default class CalendarSwiper extends Component {
               is_has_flow,
               no_in_select_month
             } = value;
+
             const is_selected = isSamDay(selected_timestamp, timestamp);
             var minus = calendar_mark_list.filter(function (item) {
-              // console.log(new Date(parseInt(item.time)).toDateString() + '------' + new Date(parseInt(timestamp)).toDateString())
+
               var is_mark = isSamDay(parseInt(item.time), parseInt(timestamp));
               return is_mark;
             });
+
             // minus = minus.filter(function (item, index) {
             // return minus.indexOf(item, 0) === index;
             // });
@@ -380,7 +382,6 @@ export default class CalendarSwiper extends Component {
                   j--;        // 每删除一个数j的值就减1
                   len--;      // j值减小时len也要相应减1（减少循环次数，节省性能）   
                   // console.log(j,len)
-
                 }
               }
             }
@@ -408,8 +409,7 @@ export default class CalendarSwiper extends Component {
                       <View
                         className={`${indexStyles.has_task}`}
                         style={`background-color: ${is_selected ? "#ffffff" : "#1890FF"
-                          }`}
-                      ></View>
+                          }`}></View>
                     )}
                     {/* {this.isHasMiletone(timestamp) && (
                       <View className={`${indexStyles.has_flow}`}></View>
@@ -424,8 +424,7 @@ export default class CalendarSwiper extends Component {
                         indexStyles.warnCircel : ''}`}>{minus[0].value}</View>
                       {
                         minus.length == 2 ? (<View className={`${indexStyles.overdue} ${minus[1].type == 2 ?
-                          indexStyles.warnCircel : ''} ${indexStyles.markCircel}`}>{minus[1]
-                            .value}</View>) : (null)
+                          indexStyles.warnCircel : ''} ${indexStyles.markCircel}`}>{minus[1].value}</View>) : (null)
                       }
 
                     </View>
