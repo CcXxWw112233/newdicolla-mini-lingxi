@@ -106,11 +106,11 @@ export default class CardList extends Component {
         {card_list.map((value, key) => {
           const { content_id, flag, id } = value;
           return (
-            flag != "3" && (
-              <View key={content_id || id}>
-                <CardItem itemValue={value} schedule={schedule} />
-              </View>
-            )
+
+            <View key={content_id || id}>
+              <CardItem itemValue={value} schedule={schedule} />
+            </View>
+
           );
         })}
         <View className={indexstyles.no_more_text}>{promptText}</View>

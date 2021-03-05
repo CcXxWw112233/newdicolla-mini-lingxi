@@ -65,6 +65,8 @@ export default class acceptInvitation extends Component {
       type: 'invitation/qrCodeIsInvitation',
       payload: params
     })
+
+
     const { qrCodeInfo = {}, } = this.props
   }
 
@@ -181,8 +183,8 @@ export default class acceptInvitation extends Component {
             {
               has_join ? (<Button className={`${indexStyles.effective_login_btn_wx} ${indexStyles.effective_acceptBtn}`} onClick={this.enterapplet}>进入小程序</Button>
               ) : (
-                  <Button className={`${indexStyles.effective_login_btn_wx} ${indexStyles.effective_acceptBtn}`} onClick={this.acceptTheInvitation}>接受邀请</Button>
-                )
+                <Button className={`${indexStyles.effective_login_btn_wx} ${indexStyles.effective_acceptBtn}`} onClick={this.acceptTheInvitation}>接受邀请</Button>
+              )
             }
           </View>
         </View>

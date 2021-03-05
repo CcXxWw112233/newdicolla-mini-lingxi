@@ -70,7 +70,7 @@
   background-color: white;
   border-radius   : pxTrans(2);
   margin-left     : pxTrans(150);
-  margin-bottom   : pxTrans(10);
+
 }
 
 .hidecalendaricon {
@@ -153,6 +153,7 @@
     text-align: center;
     font-size : pxTrans(36);
     color     : $color_3;
+    min-height: pxTrans(15);
   }
 }
 
@@ -210,9 +211,14 @@
     }
   }
 
+  .markView {
+    display       : flex;
+    flex-direction: row;
+  }
+
   .markCircel {
     position        : relative;
-    left            : pxTrans(35);
+    left            : pxTrans(30);
     bottom          : pxTrans(40);
     height          : pxTrans(14);
     width           : pxTrans(14);
@@ -220,6 +226,11 @@
     line-height     : pxTrans(12);
     font-size       : pxTrans(10);
     border-radius   : pxTrans(7);
+  }
+
+  .overdue {
+    left: pxTrans(27) !important;
+
   }
 
   .warnCircel {

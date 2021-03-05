@@ -118,12 +118,12 @@ export default class templateDetails extends Component {
 
 
                     {nodes && nodes.map((value, key) => {
-                        const { id, node_type, sort, runtime_type, recipients, assignees, last_complete_time, forms, description, approve_type, status, score_items, deadline_time_type, deadline_value, deadline_type, his_comments = [], cc_type, } = value
+                        const { id, node_type, sort, runtime_type, recipients, assignees, last_complete_time, forms, description, approve_type, status, score_items, deadline_time_type, deadline_value, deadline_type, his_comments = [], cc_type, is_urge } = value
 
                         return (
                             <View key={id} >
                                 <View className={indexStyles.interval}></View>
-                                <StepRow sort={sort} name={value.name} runtime_type={runtime_type} step_id={value.id} current_step_id={current_step_id} is_change_open={current_step_id == id ? true : false} status={status} onClicked={this.onChangeOpen.bind(this)} />
+                                <StepRow sort={sort} name={value.name} runtime_type={runtime_type} step_id={value.id} current_step_id={current_step_id} is_change_open={current_step_id == id ? true : false} status={status} is_urge={is_urge} onClicked={this.onChangeOpen.bind(this)} />
                                 {
                                     current_step_id == value.id ? (
                                         <View>

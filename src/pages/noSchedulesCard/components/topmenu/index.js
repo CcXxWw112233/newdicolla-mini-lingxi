@@ -70,48 +70,84 @@ export default class Calendar extends Component {
                 boardidListArr: boardidList1,
                 boardidList: boardidList1.toString()
             })
-
-            dispatch({
-                type: "calendar/getNoScheCardList",
-                payload: {
-                    org_id: '0',
-                    board_ids: boardidList1 && boardidList1.length > 0 ? (boardidList1[0] == '0' ? [] : boardidList1) : [],
-                    query_milestone: moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) :
-                        ['all'],
-                    query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : ['all']
-                    ,
-                    query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : ['all']
-                    ,
-                    query_meeting: moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) :
-                        ['all'],
-                }
-            });
-            this.isShowCheckMenu(boardidList1.toString(), moldArr)
+            // var arr = moldArr;
+            // var newArr = arr.filter(function (item, index) {
+            // return item.length > 0;
+            // })
+            // var isall = newArr.length > 0 ? [] : ['all'];
+            // dispatch({
+            // type: "calendar/getNoScheCardList",
+            // payload: {
+            // org_id: '0',
+            // // board_ids: boardidList1 && boardidList1.length > 0 ? (boardidList1[0] == '0' ? [] : boardidList1) : [],
+            // // query_milestone: moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) :
+            // isall,
+            // // query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : isall
+            // ,
+            // // query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : isall
+            // ,
+            // query_meeting: moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) :
+            // isall,
+            // }
+            // });
+            // this.isShowCheckMenu(boardidList1.toString(), moldArr)
+            this.getAllCard(moldArr, boardidList1)
 
         } else if (secletIndex == 1) {
             this.setState({
                 moldArr: newArr,
                 selectedMenuValueList: selectedMenuValueList
             })
-            dispatch({
-                type: "calendar/getNoScheCardList",
-                payload: {
-                    org_id: '0',
-                    board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] : boardidListArr) : [],
-                    query_milestone: newArr[0].length > 0 ? (newArr[0][0] == 'all' ? ['all'] : newArr[0]) : [],
-                    query_card: newArr[1].length > 0 ? (newArr[1][0] == 'all' ? ['all'] : newArr[1]) : [],
-                    query_flow: newArr[2].length > 0 ? (newArr[2][0] == 'all' ? ['all'] : newArr[2]) : [],
-                    query_meeting: newArr[3].length > 0 ? (newArr[3][0] == 'all' ? ['all'] : newArr[3]) : [],
-                }
-            });
-            this.isShowCheckMenu(boardidListArr.toString(), newArr)
-
+            this.getAllCard(newArr, boardidListArr)
+            // var arr = newArr;
+            // var newArr = arr.filter(function (item, index) {
+            // return item.length > 0;
+            // })
+            // var isall = newArr.length > 0 ? [] : ['all'];
+            // dispatch({
+            // type: "calendar/getNoScheCardList",
+            // payload: {
+            // org_id: '0',
+            // // board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] : boardidListArr) : [],
+            // // query_milestone: newArr[0] && newArr[0].length > 0 ? (newArr[0][0] == 'all' ? ['all'] : newArr[0]) : isall,
+            // // query_card: newArr[1] && newArr[1].length > 0 ? (newArr[1][0] == 'all' ? ['all'] : newArr[1]) : isall,
+            // // query_flow: newArr[2] && newArr[2].length > 0 ? (newArr[2][0] == 'all' ? ['all'] : newArr[2]) : isall,
+            // // query_meeting: newArr[3] && newArr[3].length > 0 ? (newArr[3][0] == 'all' ? ['all'] : newArr[3]) : isall,
+            // }
+            // });
+            // this.isShowCheckMenu(boardidListArr.toString(), newArr)
         }
         this.setState({
             secletIndex: null
         })
 
     }
+
+
+    getAllCard(newArr, boardidListArr) {
+        const { dispatch } = this.props;
+        var arr = newArr;
+        var newArr1 = arr.filter(function (item, index) {
+            return item.length > 0;
+        })
+        var isall = newArr1.length > 0 ? [] : ['all'];
+        dispatch({
+            type: "calendar/getNoScheCardList",
+            payload: {
+                org_id: '0',
+                board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] : boardidListArr) : [],
+                query_milestone: newArr[0] && newArr[0].length > 0 ? (newArr[0][0] == 'all' ? ['all'] : newArr[0]) : isall,
+                query_card: newArr[1] && newArr[1].length > 0 ? (newArr[1][0] == 'all' ? ['all'] : newArr[1]) : isall,
+                query_flow: newArr[2] && newArr[2].length > 0 ? (newArr[2][0] == 'all' ? ['all'] : newArr[2]) : isall,
+                query_meeting: newArr[3] && newArr[3].length > 0 ? (newArr[3][0] == 'all' ? ['all'] : newArr[3]) : isall,
+            }
+        });
+        this.isShowCheckMenu(boardidListArr.toString(), newArr)
+
+    }
+
+
+
     // 删除所选择的项目过滤条件
     deleteSelectedBorad(e) {
         const { dispatch } = this.props;
@@ -124,29 +160,35 @@ export default class Calendar extends Component {
             boardidList: boardidListArr.toString(),
             boardlist: boardlist
         })
-        dispatch({
-            type: "calendar/getNoScheCardList",
-            payload: {
-                org_id: '0',
-                board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] : boardidListArr) : [],
-                query_milestone: moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) :
-                    ['all'],
-                query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : ['all']
-                ,
-                query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : ['all']
-                ,
-                query_meeting: moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) :
-                    ['all'],
-            }
-        });
-        this.isShowCheckMenu(boardidListArr.toString(), moldArr)
+        this.getAllCard(moldArr, boardidListArr);
+        // var arr = moldArr;
+        // var newArr = arr.filter(function (item, index) {
+        // return item.length > 0;
+        // })
+        // var isall = newArr.length > 0 ? [] : ['all'];
+        // dispatch({
+        // type: "calendar/getNoScheCardList",
+        // payload: {
+        // org_id: '0',
+        // // board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] : boardidListArr) : [],
+        // query_milestone: moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) :
+        // isall,
+        // query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : isall
+        // ,
+        // query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : isall
+        // ,
+        // query_meeting: moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) :
+        // isall,
+        // }
+        // });
+        // this.isShowCheckMenu(boardidListArr.toString(), moldArr)
 
     }
 
     deleteAllSelectedBorad(msg) {
         const { dispatch } = this.props;
         const { boardlist = [], boardidListArr = [], selectedMenuValueList, moldArr } = this.state;
-        var newArr = boardlist.map(function (item) {
+        var newArr = boardlist && boardlist.map(function (item) {
             return {
                 value: item.value,
                 id: item.id,
@@ -162,18 +204,20 @@ export default class Calendar extends Component {
         if (msg == 'clearAll') {
             return;
         }
-        dispatch({
-            type: "calendar/getNoScheCardList",
-            payload: {
-                org_id: '0',
-                board_ids: [],
-                query_milestone: moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) : ['all'],
-                query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : ['all'],
-                query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : ['all'],
-                query_meeting: moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) : ['all'],
-            }
-        });
-        this.isShowCheckMenu('', moldArr)
+        this.getAllCard(moldArr, []);
+
+        // dispatch({
+        //     type: "calendar/getNoScheCardList",
+        //     payload: {
+        //         org_id: '0',
+        //         board_ids: [],
+        //         query_milestone: moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) : ['all'],
+        //         query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : ['all'],
+        //         query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : ['all'],
+        //         query_meeting: moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) : ['all'],
+        //     }
+        // });
+        // this.isShowCheckMenu('', moldArr)
 
     }
 
@@ -194,22 +238,29 @@ export default class Calendar extends Component {
             selectedMenuValueList: selectedMenuValueList,
             moldArr: moldArr
         })
-        dispatch({
-            type: "calendar/getNoScheCardList",
-            payload: {
-                org_id: '0',
-                board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] : boardidListArr) : [],
-                query_milestone: moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) :
-                    ['all'],
-                query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : ['all']
-                ,
-                query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : ['all']
-                ,
-                query_meeting: moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) :
-                    ['all'],
-            }
-        });
-        this.isShowCheckMenu(boardidList, moldArr)
+        this.getAllCard(moldArr, boardidListArr);
+
+        // var arr = moldArr;
+        // var newArr = arr.filter(function (item, index) {
+        // return item.length > 0;
+        // })
+        // var isall = newArr.length > 0 ? [] : ['all'];
+        // dispatch({
+        // type: "calendar/getNoScheCardList",
+        // payload: {
+        // org_id: '0',
+        // // board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] : boardidListArr) : [],
+        // query_milestone: moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) :
+        // isall,
+        // query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : isall
+        // ,
+        // query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : isall
+        // ,
+        // query_meeting: moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) :
+        // isall,
+        // }
+        // });
+        // this.isShowCheckMenu(boardidList, moldArr)
 
     }
     deleteAllSelectedMenu(e) {
@@ -222,24 +273,31 @@ export default class Calendar extends Component {
             selectedMenuValueList: selectedMenuValueList,
             moldArr: moldArr
         })
-        dispatch({
-            type: "calendar/getNoScheCardList",
-            payload: {
-                org_id: '0',
-                board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] :
-                    boardidListArr) : [],
-                query_milestone: moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) :
-                    ['all'],
-                query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : ['all']
-                ,
-                query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : ['all']
-                ,
-                query_meeting: moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) :
-                    ['all'],
-            }
-        });
+        this.getAllCard(moldArr, boardidListArr);
 
-        this.isShowCheckMenu(boardidList, moldArr);
+        // var arr = moldArr;
+        // var newArr = arr.filter(function (item, index) {
+        // return item.length > 0;
+        // })
+        // var isall = newArr.length > 0 ? [] : ['all'];
+        // dispatch({
+        // type: "calendar/getNoScheCardList",
+        // payload: {
+        // org_id: '0',
+        // board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] :
+        // boardidListArr) : [],
+        // query_milestone: moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) :
+        // isall,
+        // query_card: moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : isall
+        // ,
+        // query_flow: moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : isall
+        // ,
+        // query_meeting: moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) :
+        // isall,
+        // }
+        // });
+
+        // this.isShowCheckMenu(boardidList, moldArr);
 
     }
 
@@ -315,22 +373,22 @@ export default class Calendar extends Component {
                                     项目/全部
                                     <Text className={`${globalStyle.global_iconfont} ${indexStyles.delete_iconfont}`}>&#xe639;</Text>
                                 </View>) : (
-                                        boardlist.map((value, index) => {
-                                            return (
-                                                <View key={index}>
-                                                    {
-                                                        value.isSelect ? (
-                                                            <View className={indexStyles.checkedMenuItem} id={index} onClick={this.deleteSelectedBorad}>
-                                                                {value.value}
-                                                                <Text className={`${globalStyle.global_iconfont} ${indexStyles.
-                                                                    delete_iconfont}`}>&#xe639;</Text>
-                                                            </View>
-                                                        ) : (null)
-                                                    }
-                                                </View>
-                                            )
-                                        })
-                                    )
+                                    boardlist && boardlist.map((value, index) => {
+                                        return (
+                                            <View key={'1'}>
+                                                {
+                                                    value.isSelect ? (
+                                                        <View className={indexStyles.checkedMenuItem} id={index} onClick={this.deleteSelectedBorad}>
+                                                            {value.value}
+                                                            <Text className={`${globalStyle.global_iconfont} ${indexStyles.
+                                                                delete_iconfont}`}>&#xe639;</Text>
+                                                        </View>
+                                                    ) : (null)
+                                                }
+                                            </View>
+                                        )
+                                    })
+                                )
                             }
                             {selectedMenuValueList.map((item, index) => {
                                 const isAll = moldArr[index][0] == 'all';
@@ -340,23 +398,23 @@ export default class Calendar extends Component {
 
                                             item && item.length > 0 ? (
                                                 isAll ? (
-                                                    <View className={indexStyles.checkedMenuItem} id={index} onClick={this.deleteAllSelectedMenu} key={index}>
+                                                    <View className={indexStyles.checkedMenuItem} id={index} onClick={this.deleteAllSelectedMenu} key={'1'}>
                                                         {item[0]}
                                                         <Text className={`${globalStyle.global_iconfont} ${indexStyles.delete_iconfont}`}> &#xe639;</Text>
                                                     </View>
 
                                                 ) : (
-                                                        item.map((value, index1) => {
+                                                    item.map((value, index1) => {
 
-                                                            return (
-                                                                <View className={indexStyles.checkedMenuItem} id={index + '_' + index1} onClick={this.deleteSelectedMenu} key={index1}>
-                                                                    {value}
-                                                                    <Text className={`${globalStyle.global_iconfont} ${indexStyles.
-                                                                        delete_iconfont}`}> &#xe639;</Text>
-                                                                </View>
-                                                            )
-                                                        })
-                                                    )
+                                                        return (
+                                                            <View className={indexStyles.checkedMenuItem} id={index + '_' + index1} onClick={this.deleteSelectedMenu} key={index1}>
+                                                                {value}
+                                                                <Text className={`${globalStyle.global_iconfont} ${indexStyles.
+                                                                    delete_iconfont}`}> &#xe639;</Text>
+                                                            </View>
+                                                        )
+                                                    })
+                                                )
                                             ) : (null)
                                         }
                                     </View>

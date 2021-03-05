@@ -1,4 +1,5 @@
 import Taro from "@tarojs/taro";
+import { getMonthDate, isToday, isSamDay } from "./getDate";
 import { isApiResponseOk } from "../../utils/request";
 import {
   getOrgBoardList,
@@ -68,7 +69,6 @@ export default {
       const selected_timestamp = yield select(select_selected_timestamp);
       const selected_board = yield select(select_selected_board);
       // const current_org = getCurrentOrgByStorage()
-      const mark_list = yield select(calendar_mark_list);
       const current_org = "0";
       const page_number = yield select(select_page_number);
       let typeSource = payload["type"];
@@ -110,7 +110,7 @@ export default {
             type: "updateDatas",
             payload: {
               sche_card_list: arr1,
-              isReachBottom: true
+              isReachBottom: false
             }
           });
           if (res.data && res.data.length === 0) {
@@ -123,41 +123,11 @@ export default {
             });
           }
         } else {
-          var sche_card_list = res.data;
-          var newArr = sche_card_list.map(function (item) {
-            // return item * item
-            var timeStamp = new Date().setHours(0, 0, 0, 0), duetimeStamp = new Date(parseInt(item.due_time)).setHours(0, 0, 0, 0);
-            if (item.flag == '3') {
-              return;
-            }
-            var time_warning = item.time_warning && item.time_warning.length > 0 ? parseInt(item.time_warning) : 0
-            if (parseInt(item.due_time) < timeStamp) {
-              return {
-                time: item.due_time,
-                type: 1,
-                value: '逾'
-              }
-            } else if (duetimeStamp - timeStamp < 86400000 * time_warning + 1 || duetimeStamp - timeStamp == 86400000 * time_warning) {
-              return {
-                time: item.due_time,
-                type: 2,
-                value: '警'
-              }
-            }
-          })
-          newArr = newArr.filter(function (item) {
-            return item;
-          });
-          var list = mark_list.concat(newArr);
-          list = list.filter(function (item, index) {
-            return list.indexOf(item, 0) === index;
-          });
           yield put({
             type: "updateDatas",
             payload: {
-              calendar_mark_list: list,
               sche_card_list: res.data,
-              isReachBottom: true
+              isReachBottom: false
             }
           });
         }
@@ -183,6 +153,7 @@ export default {
       const selected_board = yield select(select_selected_board);
       const page_number = yield select(select_page_number);
       const current_no_sche_card_list = yield select(no_sche_card_list);
+      const mark_list = yield select(calendar_mark_list);
 
       // console.log(payload)
       const res = yield call(getNoScheCardList, payload)
@@ -207,6 +178,7 @@ export default {
               }
             });
           }
+
         } else {
           // arr2 = res.data;
           // arr1 = arr1.concat(arr2); //1.3>合并数组
@@ -219,11 +191,47 @@ export default {
           });
           // }
         }
+        var newArr = [];
+        arr1.forEach((item, index, array) => {
+          var timeStamp = new Date().setHours(0, 0, 0, 0), duetimeStamp = new Date(parseInt(item.due_time)).
+            setHours(0, 0, 0, 0);
+          // if (item.flag == '3') {
+          // return;
+          // }
+          // 只有任务有预警
+          // item.flag == '0'
+          var due_time = item.due_time && item.due_time.length < 13 ? item.due_time * 1000 : item.due_time
 
+          if (parseInt(item.time_warning) > 0 && item.flag == '0') {
+            var item1 = {
+              time: due_time - 86400000 * parseInt(item.time_warning),
+              type: 2,
+              value: '警'
+            }
+            newArr.push(item1)
+          }
+          // 只有流程和任务有逾期
+          if (parseInt(item.due_time) < timeStamp && (item.flag == '0' || item.flag == '2')) {
+            var item2 = {
+              time: due_time,
+              type: 1,
+              value: '逾'
+            }
+            newArr.push(item2)
+          }
+        });
+        newArr = newArr.filter(function (item) {
+          return item;
+        });
+        var list = mark_list.concat(newArr);
+        list = list.filter(function (item, index) {
+          return list.indexOf(item, 0) === index;
+        });
         yield put({
           type: "updateDatas",
           payload: {
-            no_sche_card_list: arr1
+            no_sche_card_list: arr1,
+            calendar_mark_list: list
           }
         });
       } else {

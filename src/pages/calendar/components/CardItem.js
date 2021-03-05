@@ -7,8 +7,9 @@ import globalStyles from "../../../gloalSet/styles/globalStyles.scss";
 import Avatar from "../../../components/avatar";
 import { getOrgName, timestampToTimeZH } from "../../../utils/basicFunction";
 
-@connect(({ my: { org_list } }) => ({
-  org_list
+@connect(({ my: { org_list }, calendar: { selected_timestamp } }) => ({
+  org_list,
+  selected_timestamp
 }))
 export default class CardItem extends Component {
   gotoListItemDetails = itemValue => {
@@ -71,7 +72,7 @@ export default class CardItem extends Component {
   // };
 
   render() {
-    const { itemValue = {}, schedule, org_list } = this.props;
+    const { itemValue = {}, schedule, org_list, selected_timestamp } = this.props;
     const {
       board_id,
       content_id,
@@ -86,9 +87,15 @@ export default class CardItem extends Component {
       end_time,
       is_urge,
       start_url,
-      content_url
+      content_url,
+      time_warning
     } = itemValue;
     const users = itemValue["data"] || [];
+    console.log(itemValue)
+    var timeStamp = new Date(parseInt(selected_timestamp)).setHours(0, 0, 0, 0), duetimeStamp = new Date(parseInt(due_time)).setHours(0, 0, 0, 0);
+    // var is_warning = (((duetimeStamp - 86400000 * 3 > timeStamp) && (timeStamp > duetimeStamp - 86400000 * 4)) || (duetimeStamp - 86400000 * 3 == timeStamp)) ? true : false;
+    var is_warning = time_warning && (timeStamp > (duetimeStamp - 86400000 * time_warning) || timeStamp == (duetimeStamp - 86400000 * time_warning)) ? true : false
+    var duetime = due_time && due_time.length < 11 ? due_time * 1000 : due_time;
     const card_logo_1 = (
       <Text
         className={`${globalStyles.global_iconfont} ${indexStyles.iconfont_size}`}
@@ -157,7 +164,7 @@ export default class CardItem extends Component {
     var isToday = new Date(parseInt(start_time)).toDateString() === new Date().toDateString()
     return (
       <View
-        onClick={() => flag != "meeting" && flag != "1" && this.gotoListItemDetails(itemValue)}
+        onClick={() => flag != "meeting" && flag != "1" && flag != '3' && this.gotoListItemDetails(itemValue)}
       >
         <View
           className={`${globalStyles.global_card_out} ${indexStyles.card_content} `}
@@ -171,11 +178,20 @@ export default class CardItem extends Component {
               <Text className={`${indexStyles.card_title}`}>
                 {content_name || topic}
               </Text>
+
               {
-                is_urge == '1' ? (<View className={indexStyles.urge}><Text className={`${globalStyles.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text> 催办</View>) : (null)
+                is_warning && flag == '0' && is_realize == '0' ? (
+                  <View className={indexStyles.urge}><Text className={`${globalStyles.
+                    global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text> 预警</View>)
+                  : (null)
+              }
+
+              {
+                is_urge == '1' && flag == '2' ? (
+                  <View className={indexStyles.urge}><Text className={`${globalStyles.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text> 催办</View>) : (null)
               }
               {
-                now > due_time ? (<View className={indexStyles.urge}><Text className={`${globalStyles.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text>
+                due_time && now > duetime && (flag == '0' || flag == '2') && is_realize == '0' ? (<View className={indexStyles.urge}><Text className={`${globalStyles.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text>
 逾期</View>) : (null)
               }
             </View>
@@ -187,11 +203,11 @@ export default class CardItem extends Component {
               className={`${indexStyles.card_content_middle_bott}`}
               style={{
                 color:
-                  now > due_time && flag != "1" && is_realize != "1"
+                  now > duetime && flag != "1" && is_realize != "1"
                     ? "#F5222D" : "#8c8c8c"
               }}
             >
-              {schedule == "0"
+              {!due_time
                 ? "未排期"
                 : `${start_time
                   ? (timestampToTimeZH(start_time).substring(0, 4) == timestampToTimeZH(due_time || end_time).substring(0, 4) ? timestampToTimeZH(start_time).substring(5) : timestampToTimeZH(start_time))
@@ -201,7 +217,7 @@ export default class CardItem extends Component {
                   : "截止时间未设置"
                 }`}
             </View>
-            {(flag == "meeting" || flag == '1') && isToday && (
+            {(flag == "meeting" || flag == '1') && is_realize == '0' && isToday && (
               <View className={indexStyles.card_content_meeting_btn}>
                 <Button
                   onClick={() => {
