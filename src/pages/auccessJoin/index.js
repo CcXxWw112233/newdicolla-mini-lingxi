@@ -156,8 +156,9 @@ export default class auccessJoin extends Component {
       setCurrentGroup,
       updateCurrentChatUnreadNewsState,
       currentBoard,
-    } = this.props
 
+    } = this.props
+    debugger
     if (!im_id) {
       Taro.showToast({
         title: '当前群未注册',

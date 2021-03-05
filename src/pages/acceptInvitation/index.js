@@ -110,6 +110,7 @@ export default class acceptInvitation extends Component {
     }
     else if (["3", "4", "5"].indexOf(joinRelaType) != -1) {
       relaTypeName = '任务';
+
     }
     else if (["6", "7", "8"].indexOf(joinRelaType) != -1) {
       relaTypeName = '流程';
@@ -123,9 +124,33 @@ export default class acceptInvitation extends Component {
     return relaTypeName;
   }
   enterapplet() {
-    Taro.switchTab({
-      url: '/pages/calendar/index'
-    })
+    // Taro.switchTab({
+    // url: '/pages/calendar/index'
+    // })
+    const { dispatch, qrCodeInfo = {} } = this.props
+    console.log(qrCodeInfo)
+    if (["1", "2", "12"].indexOf(qrCodeInfo.rela_type) != -1) {  //项目
+      Taro.redirectTo({
+        url: `../../pages/auccessJoin/index?boardId=${qrCodeInfo.rela_id}`
+      })
+    }
+    else if (["3", "4", "5"].indexOf(qrCodeInfo.rela_type) != -1) {  //任务
+      Taro.redirectTo({
+        url: `../../pages/taksDetails/index?flag=${'0'}&contentId=${qrCodeInfo.rela_id}&back_icon=arrow_icon&boardId=${qrCodeInfo.rela_id}`
+      })
+    }
+    // else if (["11",].indexOf(relaType) != -1) {  //组织
+    // }
+    // else if (["6", "7", "8"].indexOf(relaType) != -1) {  //流程
+    // }
+    // else if (["9", "10"].indexOf(relaType) != -1) {  //文件
+    // }
+    else {
+      Taro.switchTab({
+        url: `../../pages/calendar/index`
+      })
+    }
+
 
   }
   render() {
