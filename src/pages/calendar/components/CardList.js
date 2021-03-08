@@ -103,11 +103,11 @@ export default class CardList extends Component {
     return (
       <View
         className={`${indexstyles.card_item_out_01} ${globalStyles.global_horrizontal_padding}`} >
-        {card_list.map((value, key) => {
+        {card_list && card_list.map((value, key) => {
           const { content_id, flag, id } = value;
           return (
 
-            <View key={content_id || id}>
+            <View key={key}>
               <CardItem itemValue={value} schedule={schedule} />
             </View>
 
