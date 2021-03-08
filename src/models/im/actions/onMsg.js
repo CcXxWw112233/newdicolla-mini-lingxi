@@ -13,8 +13,8 @@ import { handleGlobalNewsPush } from './../utils/activityHandle.js';
 
 //收到的消息
 function onMsg(msg) {
-  // console.log("OnMsg", onMsg);
-  // console.log('收到消息', msg.scene, msg.type, msg);
+  console.log("OnMsg", onMsg);
+  console.log('收到消息', msg.scene, msg.type, msg);
 
   const {
     globalData: {
@@ -67,7 +67,7 @@ function onMsg(msg) {
   if (isMsgBelongsToCurrentChatGroup || isSubChatOpenMsg) {
     //如果是一条属于当前打开的群聊的需要整合的消息，
     //那么就整合数据
-    if(isMsgBelongsToCurrentChatGroup ){
+    if (isMsgBelongsToCurrentChatGroup) {
       const mergeNews = () => {
         if (isValidMsg(msg, tempState.currentChatTo) || isPinupEmojiNews(msg) || isNotificationNews(msg)) {
 
@@ -87,7 +87,7 @@ function onMsg(msg) {
         mergeNews();
       }
     }
-    if(isSubChatOpenMsg){
+    if (isSubChatOpenMsg) {
       let { currentSubChat } = tempState
       tempState.historySub_newSession = [
         ...tempState['historySub_newSession'],
@@ -257,22 +257,22 @@ function onMsg(msg) {
       payload: {}
     })
 
- dispatch({
+    dispatch({
       type: 'calendar/getNoScheCardList',
       payload: {}
     })
 
- dispatch({
+    dispatch({
       type: 'calendar/getNoScheCardList',
       payload: {}
     })
 
-   dispatch({
+    dispatch({
       type: 'calendar/getScheCardList',
       payload: {}
     })
 
-  dispatch({
+    dispatch({
       type: 'calendar/getSignList',
       payload: {}
     })

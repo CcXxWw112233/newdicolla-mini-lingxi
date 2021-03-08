@@ -25,24 +25,19 @@
     .content_cell {
         flex          : 1;
         display       : flex;
-        flex-direction: row;
-        margin-right  : pxTrans(16);
+        flex-direction: column;
         width         : 100%;
 
         .content_padding {
             display       : flex;
-            flex-direction: row;
-            align-items   : center;
-            width         : 100%;
+            flex-direction: column;
+            margin        : 0 pxTrans(16);
 
             .title {
-                width       : pxTrans(48);
-                font-size   : pxTrans(16);
-                font-weight : 400;
-                color       : rgba(0, 0, 0, 0.25);
-                line-height : pxTrans(24);
-                margin-left : pxTrans(16);
-                margin-right: pxTrans(16);
+                font-size  : pxTrans(14);
+                font-weight: 400;
+                color      : #575C75;
+                line-height: pxTrans(24);
             }
 
             .choice_view {
@@ -50,17 +45,26 @@
                 display       : flex;
                 flex-direction: column;
 
+                .choice_itemList {
+                    position: relative;
+                }
+
                 .choice_name {
-                    flex         : 1;
-                    font-size    : pxTrans(16);
-                    font-weight  : 400;
-                    color        : rgba(0, 0, 0, 0.65);
-                    line-height  : pxTrans(24);
-                    overflow     : hidden;
-                    text-overflow: ellipsis;
-                    white-space  : nowrap;
-                    margin-top   : pxTrans(4);
-                    margin-bottom: pxTrans(2);
+                    padding         : pxTrans(5);
+                    font-size       : pxTrans(14);
+                    font-weight     : 400;
+                    color           : #3F445D;
+                    line-height     : pxTrans(30);
+                    background-color: #F5F7FB;
+                    margin-top      : pxTrans(1);
+                    margin-bottom   : pxTrans(2);
+                    display         : flex;
+                    flex-direction  : row;
+                    justify-content : space-between;
+                }
+
+                .choice_name_text {
+                    width: 80%;
                 }
             }
         }

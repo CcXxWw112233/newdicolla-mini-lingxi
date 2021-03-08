@@ -7,20 +7,21 @@ import globalStyles from "../../../gloalSet/styles/globalStyles.scss";
 import Avatar from "../../../components/avatar";
 import { getOrgName, timestampToTimeZH } from "../../../utils/basicFunction";
 
-@connect(({ my: { org_list } }) => ({
-  org_list
+@connect(({ my: { org_list }, calendar: { selected_timestamp } }) => ({
+  org_list,
+  selected_timestamp
 }))
 export default class CardItem extends Component {
   gotoListItemDetails = itemValue => {
-    // console.log("itemValue===", itemValue);
+    console.log("itemValue===", itemValue);
     const { flag, content_id, board_id, parent_id } = itemValue;
     if (itemValue && ["0", "1"].indexOf(flag) !== -1) {
       let tasks_id = parent_id ? parent_id : content_id;
-
       Taro.navigateTo({
         url: `../../pages/taksDetails/index?flag=${flag}&contentId=${tasks_id}&boardId=${board_id}&back_icon=arrow_icon`
       });
     } else if (itemValue && ["2"].indexOf(flag) !== -1) {
+
       Taro.navigateTo({
         url: `../../pages/templateDetails/index?flag=${flag}&contentId=${content_id}&boardId=${board_id}&back_icon=arrow_icon`
       });
@@ -29,17 +30,17 @@ export default class CardItem extends Component {
   };
 
   // 点击复制链接
-  handleSetClipboardData = ({ start_url }) => {
-    wx.setClipboardData({
-      data: start_url,
-      success: function(res) {
-        wx.showToast({
+  handleSetClipboardData = (start_url) => {
+    console.log(start_url)
+    Taro.setClipboardData({
+      data: start_url.meetingUrl,
+      success: function (res) {
+        Taro.showToast({
           title: "复制成功",
           duration: 3000
         });
-        wx.getClipboardData({
-          success: function(res) {
-            console.log(res.data); // data
+        Taro.getClipboardData({
+          success: function (res) {
           }
         });
       }
@@ -72,7 +73,7 @@ export default class CardItem extends Component {
   // };
 
   render() {
-    const { itemValue = {}, schedule, org_list } = this.props;
+    const { itemValue = {}, schedule, org_list, selected_timestamp } = this.props;
     const {
       board_id,
       content_id,
@@ -85,9 +86,21 @@ export default class CardItem extends Component {
       is_realize,
       topic,
       end_time,
-      start_url
+      is_urge,
+      start_url,
+      rela_url,
+      join_url,
+      content_url,
+      time_warning
     } = itemValue;
+
+    var meetingUrl = flag == 1 && content_url || rela_url || start_url || join_url;
+
     const users = itemValue["data"] || [];
+    var timeStamp = new Date(parseInt(selected_timestamp)).setHours(0, 0, 0, 0), duetimeStamp = new Date(parseInt(due_time)).setHours(0, 0, 0, 0);
+    // var is_warning = (((duetimeStamp - 86400000 * 3 > timeStamp) && (timeStamp > duetimeStamp - 86400000 * 4)) || (duetimeStamp - 86400000 * 3 == timeStamp)) ? true : false;
+    var is_warning = time_warning && (timeStamp > (duetimeStamp - 86400000 * time_warning) || timeStamp == (duetimeStamp - 86400000 * time_warning)) ? true : false
+    var duetime = due_time && due_time.length < 11 ? due_time * 1000 : due_time;
     const card_logo_1 = (
       <Text
         className={`${globalStyles.global_iconfont} ${indexStyles.iconfont_size}`}
@@ -152,76 +165,80 @@ export default class CardItem extends Component {
       }
       return opacity;
     };
+
     var now = Date.parse(new Date());
+    console.log(now);
+    var isToday = new Date(parseInt(start_time)).toDateString() === new Date().toDateString()
     return (
       <View
-        onClick={() => flag != "meeting" && this.gotoListItemDetails(itemValue)}
+        onClick={() => flag != "meeting" && flag != "1" && flag != '3' && this.gotoListItemDetails(itemValue)}
       >
         <View
           className={`${globalStyles.global_card_out} ${indexStyles.card_content} `}
           style={`opacity: ${dis_due_style()}`}
         >
-          <View className={`${indexStyles.card_content_left}`}>
-            {"0" == flag
-              ? is_realize == "1"
-                ? card_logo_1_relize
-                : card_logo_1
-              : "1" == flag
-              ? card_logo_2
-              : "2" == flag
-              ? card_logo_3
-              : "meeting" == flag
-              ? card_logo_meeting
-              : card_logo_4}
-          </View>
+          {/* <View className={`${indexStyles.card_content_left}`}> */}
+          {/* {/* {/* {"0" == flag ? is_realize == "1" ? card_logo_1_relize : card_logo_1: "1" == flag ? card_logo_2 : "2" == flag ? card_logo_3 : "meeting" == flag ? card_logo_meeting: card_logo_4}</View> */}
+
           <View className={`${indexStyles.card_content_middle}`}>
             <View className={`${indexStyles.card_content_middle_top}`}>
               <Text className={`${indexStyles.card_title}`}>
                 {content_name || topic}
               </Text>
-              <Text className={`${indexStyles.organize}`}>
-                #{getOrgName({ org_id, org_list })}&gt;{board_name}
-              </Text>
+
+              {
+                is_warning && flag == '0' && is_realize == '0' && !(due_time && now > duetime) ? (
+                  <View className={indexStyles.urge}><Text className={`${globalStyles.
+                    global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text> 预警</View>)
+                  : (null)
+              }
+
+              {
+                is_urge == '1' && flag == '2' ? (
+                  <View className={indexStyles.urge}><Text className={`${globalStyles.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text> 催办</View>) : (null)
+              }
+              {
+                due_time && now > duetime && (flag == '0' || flag == '2') && is_realize == '0' ? (<View className={indexStyles.urge}><Text className={`${globalStyles.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text>
+逾期</View>) : (null)
+              }
+            </View>
+            <View className={`${indexStyles.organize}`}>
+              {/* #{getOrgName({ org_id, org_list })}&gt;{board_name} */}{
+                board_name && board_name.length > 0 ? ('#' + board_name) : (null)
+              }
             </View>
             <View
               className={`${indexStyles.card_content_middle_bott}`}
               style={{
                 color:
-                  now > due_time && flag != "1" && is_realize != "1"
-                    ? "#F5222D"
-                    : "#8c8c8c"
+                  now > duetime && flag != "1" && is_realize != "1"
+                    ? "#F5222D" : "#8c8c8c"
               }}
             >
-              {schedule == "0"
+              {!due_time
                 ? "未排期"
-                : `${
-                    start_time
-                      ? timestampToTimeZH(start_time)
-                      : "开始时间未设置"
-                  } - ${
-                    due_time || end_time
-                      ? timestampToTimeZH(due_time || end_time)
-                      : "截止时间未设置"
-                  }`}
+                : `${start_time
+                  ? (timestampToTimeZH(start_time).substring(0, 4) == timestampToTimeZH(due_time || end_time).substring(0, 4) ? timestampToTimeZH(start_time).substring(5) : timestampToTimeZH(start_time))
+                  : "开始时间未设置"
+                } - ${due_time || end_time
+                  ? (timestampToTimeZH(due_time || end_time).substring(0, 4) == timestampToTimeZH(start_time).substring(0, 4) ? timestampToTimeZH(due_time || end_time).substring(5) : timestampToTimeZH(due_time || end_time))
+                  : "截止时间未设置"
+                }`}
             </View>
-            {flag == "meeting" && (
-              <View className={indexStyles.card_content_meeting_btn}>
-                <Button
-                  onClick={() => {
-                    this.handleSetClipboardData({ start_url });
-                  }}
-                >
-                  复制链接参会
-                </Button>
+
+            {(flag == "meeting" || flag == '1') && isToday && (
+              <View className={indexStyles.card_content_meeting_btn} onClick={() => this.handleSetClipboardData({ meetingUrl })}>
+                复制链接参会
               </View>
             )}
           </View>
 
           <View className={`${indexStyles.card_content_right}`}>
             <Avatar avartarTotal="multiple" userList={users} />
+
           </View>
         </View>
-      </View>
+      </View >
     );
   }
 }

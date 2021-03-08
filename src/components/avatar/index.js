@@ -26,7 +26,7 @@ export default class Avatar extends Component {
         <View className={indexStyle.list_user}>
           {userList.map((value, key) => {
             const { avatar = '', name = 'U' } = value || {}
-            return key < 3 && (
+            return key < 1 && (
               <View className={indexStyle.avatar} style={`${key != 0 ? ListAvaTarItemStyle : ''}${AvatarStyle}line-height:${size}px;`} key={key}>
                 {!!avatar ? (
                   <Image src={avatar} style={AvatarStyle} />
@@ -38,8 +38,8 @@ export default class Avatar extends Component {
             )
           })}
         </View>
-        {userList.length > 3 && (
-          <View className={`${indexStyle.avatar} ${indexStyle.list_more}`} style={`${ListAvaTarItemStyle}${AvatarStyle}width: auto;`}>+{(userList.length - 3)}</View>
+        {userList.length > 1 && (
+          <View className={`${indexStyle.avatar} ${indexStyle.list_more}`} style={`${ListAvaTarItemStyle}${AvatarStyle}`}>{(userList.length - 1)}</View>
         )}
       </View>
     )

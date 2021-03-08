@@ -72,11 +72,13 @@ export default class CardTypeSelect extends Component {
           {board_list.map((value, key) => {
             const { board_name, board_id } = value
             return (
-              <View className={`${indexStyles.select_item} ${indexStyles.selected}`} key={board_id} onClick={this.updateSelectedBoard.bind(this, `${board_id}__/s/s__${board_name}`)}>
+
+              < View className={`${indexStyles.select_item} ${indexStyles.selected}`
+              } key={board_id} onClick={this.updateSelectedBoard.bind(this, `${board_id}__/s/s__${board_name}`)} >
                 <View className={`${indexStyles.select_item_left}`}>
                   {board_name}
                 </View>
-                {board_id == selected_board && (
+                { board_id == selected_board && (
                   <View className={`${indexStyles.select_item_right}`}>
                     <Text className={`${globalStyles.global_iconfont} ${indexStyles.select_item_itemcheck}`}>&#xe641;</Text>
                   </View>
@@ -85,7 +87,7 @@ export default class CardTypeSelect extends Component {
             )
           })}
         </View>
-      </View>
+      </View >
     )
   }
 }

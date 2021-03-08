@@ -1,13 +1,143 @@
-.calendar_card_out{
-  display: flex;
-  background-color: red;
-  flex-direction: column;
-  .calendar{
-    height: auto;
-  }
-  .card {
-    flex: 1;
-    overflow: hidden;
-    //height: 100px;
-  }
+@import "../../gloalSet/styles/constant";
+
+.index {
+    position        : absolute;
+    left            : 0;
+    top             : 0;
+    height          : 100%;
+    width           : 100%;
+    background-color: #F2F4F8;
+}
+
+.topMenu {
+    position: fixed;
+    top     : 0;
+    left    : 0;
+    width   : 100%;
+    z-index : 99;
+}
+
+.no_sche_card_list {
+    position: absolute;
+    top     : pxTrans(50);
+}
+
+.isShowCheckMenu {
+    top: pxTrans(90) !important;
+
+}
+
+.noDataView {
+    margin-top    : pxTrans(150);
+    align-content : center;
+    display       : flex;
+    flex-direction: column;
+    width         : 100%;
+}
+
+.noDataImage {
+    margin-left: pxTrans(85);
+    height     : pxTrans(200);
+    width      : pxTrans(200);
+}
+
+.noDataText {
+    width     : 100%;
+    text-align: center;
+    margin-top: pxTrans(20);
+    color     : #9EA6C2;
+    font-size : pxTrans(16);
+}
+
+.datajson {
+    z-index                : 2;
+    position               : fixed;
+    left                   : 0;
+    right                  : 0;
+    bottom                 : 0;
+    height                 : 250px;
+    padding                : 0 10px;
+    background-color       : rgba(255, 255, 255, .8);
+    backdrop-filter        : blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    font-size              : 12px;
+
+    .text {
+        margin-top: 10px;
+    }
+
+    .item {
+        width: 15px;
+    }
+}
+
+.place {
+    background-color: #ffffff;
+    height          : 44px;
+}
+
+.goods-list {
+    padding-top: 10px;
+
+    .loading-text {
+        width          : 100%;
+        display        : flex;
+        justify-content: center;
+        align-items    : center;
+        height         : 30px;
+        color          : #979797;
+        font-size      : 12px;
+    }
+
+    .product-list {
+        width          : 92%;
+        padding        : 0 4% 3vw 4%;
+        display        : flex;
+        justify-content: space-between;
+        flex-wrap      : wrap;
+
+        .product {
+            width           : 48%;
+            border-radius   : 10px;
+            background-color: #fff;
+            margin          : 0 0 7px 0;
+            box-shadow      : 0 3px 12px rgba(0, 0, 0, 0.1);
+
+            image {
+                width        : 100%;
+                border-radius: 10px 10px 0 0;
+            }
+
+            .name {
+                width             : 92%;
+                padding           : 5px 4%;
+                display           : -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+                text-align        : justify;
+                overflow          : hidden;
+                font-size         : 15px;
+            }
+
+            .info {
+                display        : flex;
+                justify-content: space-between;
+                align-items    : flex-end;
+                width          : 92%;
+                padding        : 5px 4% 5px 4%;
+
+                .price {
+                    color      : #e65339;
+                    font-size  : 15px;
+                    font-weight: 600;
+                }
+
+                .slogan {
+                    color    : #807c87;
+                    font-size: 12px;
+                }
+            }
+        }
+
+    }
 }

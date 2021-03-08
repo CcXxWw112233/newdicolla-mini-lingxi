@@ -36,9 +36,8 @@ export default class templateDetails extends Component {
     }
 
     componentDidMount() {
-
         const { flag, boardId, contentId, back_icon } = this.$router.params
-
+        const { workflowDatas } = this.props;
         if (boardId || contentId) {
             Taro.setStorageSync('workflow_detail_boardId', boardId)
             Taro.setStorageSync('workflow_detail_contentId', contentId)
@@ -54,6 +53,7 @@ export default class templateDetails extends Component {
     }
 
     loadTemplateDetails(content_id, board_id) {
+        var that = this;
         let contentId
         let boardId
         if (content_id || board_id) {
@@ -65,18 +65,32 @@ export default class templateDetails extends Component {
             boardId = Taro.getStorageSync('workflow_detail_contentId')
         }
         const { dispatch } = this.props
-        dispatch({
-            type: 'workflow/getTemplateDetails',
-            payload: {
-                id: contentId,
-                boardId: boardId,
-            }
+        Promise.resolve(
+            dispatch({
+                type: 'workflow/getTemplateDetails',
+                payload: {
+                    id: contentId,
+                    boardId: boardId,
+                }
+            })
+        ).then((res) => {
+            var nodes = res.nodes;
+            nodes.map(item => {
+                if (item.status == '1') {
+                    that.setState({
+                        current_step_id: item.id,
+                        is_change_open: true
+                    })
+                }
+            })
         })
+
     }
 
     //展开流程步骤
     onChangeOpen(isTrue) {
-        const { isOpenStep, currentStepId } = isTrue
+        const { isOpenStep, currentStepId } = isTrue;
+        const { current_step_id } = this.state;
         this.setState({
             is_change_open: isOpenStep,
             current_step_id: currentStepId,
@@ -88,29 +102,30 @@ export default class templateDetails extends Component {
         const statusBar_Height = SystemInfo.statusBarHeight
         const navBar_Height = SystemInfo.platform == 'ios' ? 44 : 48
 
-        const { backIcon, is_change_open } = this.state
+        const { backIcon, is_change_open, current_step_id } = this.state
 
         const { workflowDatas, } = this.props
 
         const { name, create_time, nodes = [], board_id, } = workflowDatas
 
+
         return (
-            <View >
-                <CustomNavigation backIcon={backIcon} />
+            <View className={indexStyles.index}>
+                <CustomNavigation backIcon={backIcon} pop='previous' />
                 <View style={{ marginTop: `${statusBar_Height + navBar_Height}` + 'px', left: 0 }}>
                     <View className={indexStyles.interval}></View>
                     {name ? (<TitileRow name={name} create_time={create_time} />) : (<View></View>)}
 
 
                     {nodes && nodes.map((value, key) => {
-                        const { id, node_type, sort, runtime_type, recipients, assignees, last_complete_time, forms, description, approve_type, status, score_items, deadline_time_type, deadline_value, deadline_type, his_comments = [], } = value
+                        const { id, node_type, sort, runtime_type, recipients, assignees, last_complete_time, forms, description, approve_type, status, score_items, deadline_time_type, deadline_value, deadline_type, his_comments = [], cc_type, is_urge } = value
 
                         return (
-                            <View key={id}>
+                            <View key={id} >
                                 <View className={indexStyles.interval}></View>
-                                <StepRow sort={sort} name={value.name} runtime_type={runtime_type} step_id={value.id} onClicked={this.onChangeOpen.bind(this)} />
+                                <StepRow sort={sort} name={value.name} runtime_type={runtime_type} step_id={value.id} current_step_id={current_step_id} is_change_open={current_step_id == id ? true : false} status={status} is_urge={is_urge} onClicked={this.onChangeOpen.bind(this)} />
                                 {
-                                    is_change_open ? (
+                                    current_step_id == value.id ? (
                                         <View>
                                             {node_type === '1' && (
                                                 <DataCollection
@@ -124,6 +139,7 @@ export default class templateDetails extends Component {
                                                     deadline_time_type={deadline_time_type}
                                                     deadline_value={deadline_value}
                                                     deadline_type={deadline_type}
+                                                    cc_type={cc_type}
                                                 />
                                             )}
                                             {node_type === '2' && (
@@ -154,6 +170,7 @@ export default class templateDetails extends Component {
                                                     deadline_time_type={deadline_time_type}
                                                     deadline_value={deadline_value}
                                                     deadline_type={deadline_type}
+                                                    his_comments={his_comments}
                                                 />
                                             )}
                                         </View>

@@ -4,7 +4,7 @@ import indexStyles from './index.scss'
 import globalStyles from '../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
 import CustomNavigation from './components/CustomNavigation.js'
-import invitation_cover_img from '../../asset/Invitation/invitation_cover.png'
+import invitation_cover_img from '../../asset/Invitation/invitation_cover.jpg'
 import guide_share_img from '../../asset/Invitation/guide_share.png'
 
 @connect(({
@@ -41,13 +41,17 @@ export default class acceptInvitation extends Component {
     if (options.scene) {  //扫码场景进入
       const sceneArr = options.scene.split('&')[0]
       queryId = sceneArr.slice(5)
-
       this.setState({
         is_mask_show: true,
       })
 
     } else {  //其他场景进入
       queryId = options.id
+      if (options.accept == 'yes') {
+        var value = Taro.getStorageSync('qrCodeInfo');
+        queryId = Taro.getStorageSync('id');
+        var rela_id1 = Taro.getStorageSync('board_Id');
+      }
     }
 
     this.setState({
@@ -61,6 +65,9 @@ export default class acceptInvitation extends Component {
       type: 'invitation/qrCodeIsInvitation',
       payload: params
     })
+
+
+    const { qrCodeInfo = {}, } = this.props
   }
 
   isLoginStatus() {
@@ -103,6 +110,7 @@ export default class acceptInvitation extends Component {
     }
     else if (["3", "4", "5"].indexOf(joinRelaType) != -1) {
       relaTypeName = '任务';
+
     }
     else if (["6", "7", "8"].indexOf(joinRelaType) != -1) {
       relaTypeName = '流程';
@@ -115,12 +123,41 @@ export default class acceptInvitation extends Component {
     }
     return relaTypeName;
   }
+  enterapplet() {
+    // Taro.switchTab({
+    // url: '/pages/calendar/index'
+    // })
+    const { dispatch, qrCodeInfo = {} } = this.props
+    console.log(qrCodeInfo)
+    if (["1", "2", "12"].indexOf(qrCodeInfo.rela_type) != -1) {  //项目
+      Taro.redirectTo({
+        url: `../../pages/auccessJoin/index?boardId=${qrCodeInfo.rela_id}`
+      })
+    }
+    else if (["3", "4", "5"].indexOf(qrCodeInfo.rela_type) != -1) {  //任务
+      Taro.redirectTo({
+        url: `../../pages/taksDetails/index?flag=${'0'}&contentId=${qrCodeInfo.rela_id}&back_icon=arrow_icon`
+      })
+    }
+    // else if (["11",].indexOf(relaType) != -1) {  //组织
+    // }
+    // else if (["6", "7", "8"].indexOf(relaType) != -1) {  //流程
+    // }
+    // else if (["9", "10"].indexOf(relaType) != -1) {  //文件
+    // }
+    else {
+      Taro.switchTab({
+        url: `../../pages/calendar/index`
+      })
+    }
 
+
+  }
   render() {
     const { qrCodeInfo = {}, } = this.props
     const { user_name, rela_name, rela_type, has_join } = qrCodeInfo
     const relaType = this.getJoinRelaType(rela_type)
-
+    console.log(qrCodeInfo);
     /**
      * 引导页面遮罩高度 = 屏幕高度 - 导航栏高度
      */
@@ -130,19 +167,30 @@ export default class acceptInvitation extends Component {
     const navBar_Height = SystemInfo.platform == 'ios' ? 44 : 48;
     // console.log("我们",wx.getMenuButtonBoundingClientRect());
     return (
-      <View>
+      <View className={indexStyles.index}>
         <CustomNavigation />
 
         <View className={`${indexStyles.PageStyle}`} style={{ marginTop: statusBar_Height + navBar_Height + 'px' }}>
-          <View className={indexStyles.guide_share_wrapper}>
-            <Image src={guide_share_img} className={indexStyles.guide_share} />
-          </View>
+          {
+            has_join ? (<View className={indexStyles.guide_share_wrapper}>
+              <Image src={guide_share_img} className={indexStyles.guide_share} />
+              <View className={indexStyles.guide_shareText} > 点击上方更多“发送给朋友”邀请好友加入</View>
+            </View>) : (null)
+          }
+
+
+
+
           <View className={`${globalStyles.global_horrizontal_padding} `}>
             <View className={indexStyles.effective_contain1}>
               <Image src={invitation_cover_img} className={indexStyles.invitation_cover} />
             </View>
             <View className={indexStyles.effective_tipsText}>
-              {has_join ? (<Text> 转发给团队成员\n马上开启协作 </Text>) :
+              {has_join ? (<View className={indexStyles.hasJoin_View}>
+                <Text> 你已是{rela_name}的项目成员 </Text>
+                <Text className={indexStyles.hasJoin_subView}>转发好友，邀请加入聆悉一起协作吧！</Text>
+
+              </View>) :
                 <Text>
                   你的好友
 <Text style={{ display: 'inline-block', width: '6px' }}>  &nbsp; </Text>
@@ -158,7 +206,10 @@ export default class acceptInvitation extends Component {
 
             </View>
             {
-              has_join ? ('') : (<Button className={`${indexStyles.effective_login_btn_wx} ${indexStyles.effective_acceptBtn}`} onClick={this.acceptTheInvitation}>接受邀请</Button>)
+              has_join ? (<Button className={`${indexStyles.effective_login_btn_wx} ${indexStyles.effective_acceptBtn}`} onClick={this.enterapplet}>进入小程序</Button>
+              ) : (
+                <Button className={`${indexStyles.effective_login_btn_wx} ${indexStyles.effective_acceptBtn}`} onClick={this.acceptTheInvitation}>接受邀请</Button>
+              )
             }
           </View>
         </View>

@@ -38,9 +38,9 @@ class App extends Component {
       "pages/seeBoardChart/index",
       "pages/login/index",
       "pages/calendar/index",
-      "pages/im/index",
+      // "pages/im/index",
       "pages/groupMember/index",
-      "pages/noSchedulesCard/index",
+      // "pages/noSchedulesCard/index",
       "pages/subBoardChat/index",
       "pages/subChatDetail/index",
       "pages/chat/index",
@@ -67,10 +67,32 @@ class App extends Component {
       "pages/errorPage/index",
       "pages/file/index",
       "pages/boardChat/index",
-      "pages/templateDetails/index",
+      // "pages/templateDetails/index",
       "pages/fieldPersonSingle/index",
       // "pages/fieldPersonMultiple/index",
-      "pages/jumpToMeeting/index"
+      "pages/jumpToMeeting/index",
+      "pages/OnlineTableWebView/index",
+
+    ],
+    "subpackages": [
+      {
+        "root": "pages/noSchedulesCard",
+        "pages": [
+          "index"
+        ]
+      },
+      {
+        "root": "pages/im",
+        "pages": [
+          "index"
+        ]
+      },
+      {
+        "root": "pages/templateDetails",
+        "pages": [
+          "index"
+        ]
+      },
     ],
     permission: {
       "scope.userLocation": {
@@ -146,6 +168,7 @@ class App extends Component {
       const {
         globalData: {
           store: { dispatch },
+
         },
       } = Taro.getApp();
       const { account, token } = await dispatch({
@@ -163,8 +186,10 @@ class App extends Component {
       });
     };
     initImData().catch(
-      (e) => console.log(String(e))
-      // Taro.showToast({ title: String(e), icon: 'none', duration: 2000 })
+      (e) => {
+        console.log("============****=============");
+        console.log(String(e))
+      },
     );
   };
   recordtoHome = () => {
@@ -173,7 +198,6 @@ class App extends Component {
       if (isApiResponseOk(res)) {
         // 注册im
         this.registerIm();
-
         // Taro.switchTab({
         //   url: '../../pages/calendar/index'
         // })
@@ -182,6 +206,7 @@ class App extends Component {
   };
 
   componentDidShow() {
+    console.log("*************");
     // this.recordtoHome();
     /***
      * 备注: 小程序切换到后台后, im会重连会发送不了消息, 所以每次进入前台连接一次
@@ -201,11 +226,16 @@ class App extends Component {
       const {
         im: { nim },
       } = getState();
+      console.log("*****");
+      console.log(nim);
       if (nim) {
         nim.disconnect({
           done: () => {
             setTimeout(() => {
-              nim.connect({});
+              nim.connect({
+                done: () => {
+                }
+              });
             }, 50);
           },
         });
@@ -213,7 +243,8 @@ class App extends Component {
     }
   }
 
-  componentDidHide() { }
+  componentDidHide() {
+  }
 
   componentDidCatchError() { }
 

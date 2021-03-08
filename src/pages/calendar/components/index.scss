@@ -9,42 +9,71 @@
 }
 
 .card_content {
-  margin-top: pxTrans(10);
-  display: flex;
+  margin-top   : pxTrans(10);
+  display      : flex;
+  border-radius: pxTrans(15) !important;
 
   .card_content_left {
     padding-top: pxTrans(4);
 
     .iconfont_size {
-      font-size: pxTrans(16);
+      font-size   : pxTrans(16);
       margin-right: pxTrans(6);
-      color: $color_2;
+      color       : $color_2;
     }
   }
 
   .card_content_middle {
-    flex: 1;
+    flex          : 1;
+    display       : flex;
+    flex-direction: column;
+
+    .organize {
+      line-height: pxTrans(26);
+      color      : $color_3;
+      font-size  : pxTrans(12);
+    }
 
     .card_content_middle_top {
+      display: flex;
+      flex-direction:
+        row;
+      white-space  : nowrap;
+      overflow     : hidden;
+      text-overflow: ellipsis;
+
       .card_title {
-        color: $color_1;
-        font-size: $fontsize_16;
+        color      : $color_1;
+        font-size  : $fontsize_16;
         line-height: pxTrans(26);
         font-weight: bold;
       }
 
+      .urge {
+        color      : #FF5050;
+        font-size  : pxTrans(12);
+        margin-left: pxTrans(5);
+        line-height: pxTrans(26);
+      }
+
+      .overdue {
+        margin-left: 0 !important;
+      }
+
+      .urgeicon {
+        margin-right: pxTrans(5);
+      }
+
       .card_title_2 {
-        color: $color_5;
-        font-size: $fontsize_14;
+        color      : $color_5;
+        font-size  : $fontsize_14;
         line-height: pxTrans(24);
       }
 
-      .organize,
       .organize_2 {
-        color: $color_3;
-        font-size: $fontsize_12;
-        margin-left: pxTrans(6);
-        margin-right: pxTrans(6);
+        line-height: pxTrans(26);
+        color      : $color_3;
+        font-size  : pxTrans(12);
       }
 
       .organize_2 {
@@ -53,39 +82,43 @@
     }
 
     .card_content_middle_bott {
-      margin-top: pxTrans(10);
+      margin-top   : pxTrans(10);
       // color     : $color_3;
-      font-size: $fontsize_12;
+      font-size    : $fontsize_12;
+      white-space  : nowrap;
+      text-overflow: ellipsis;
     }
+
     .card_content_meeting_btn {
-      margin-top: pxTrans(2);
-      button {
-        width: pxTrans(180);
-        height: pxTrans(32);
-        border-radius: pxTrans(4);
-        border: 1px solid #1890ff;
-        line-height: pxTrans(32);
-        font-size: pxTrans(14);
-        color: #099cff;
-        background-color: #fff;
-      }
+      margin-top   : pxTrans(15);
+      margin-left  : pxTrans(60);
+      width        : pxTrans(180);
+      height       : pxTrans(40);
+      border-radius: pxTrans(4);
+      line-height  : pxTrans(40);
+      font-size    : pxTrans(14);
+      color        : white;
+      background   : linear-gradient(270deg, #4FADFF 0%, #4790FF 100%);
+      border-radius: pxTrans(20);
+      text-align   : center;
     }
   }
 
   .card_content_right {
+    margin-top : pxTrans(15);
     margin-left: pxTrans(6);
   }
 }
 
 .no_more_text {
   margin-top: pxTrans(10);
-  color: $color_3;
-  font-size: pxTrans(14);
+  color     : $color_3;
+  font-size : pxTrans(14);
   text-align: center;
 }
 
 .no_scheduling {
-  color: $color_3;
-  font-size: pxTrans(14);
+  color     : $color_3;
+  font-size : pxTrans(14);
   text-align: center;
 }

@@ -288,8 +288,11 @@ export default class Login extends Component {
         request_params.pwd_params.verify_code = verifycode;
       }
     }
-
+    Taro.showLoading({
+      title: "登录中"
+    });
     normalLogin(request_params).then(res => {
+      Taro.showLoading();
       const { sourcePage } = this.state
       if (res.code == '0') {
         const { access_token, refresh_token } = res.data
@@ -319,7 +322,7 @@ export default class Login extends Component {
           duration: 2000
         });
       }
-    }).catch(() => { })
+    }).catch(() => { Taro.hideLoading(); })
   }
 
   getVerifyCodeImg = () => {

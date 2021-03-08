@@ -112,19 +112,27 @@ class Index extends Component {
     const { encryptedData, iv } = detail
     if (!!encryptedData) {
       const { dispatch } = this.props
+      Taro.showLoading({
+        title: "登录中"
+      });
       Taro.login().then(res => {
         const code = res.code
-        Taro.getUserInfo().then(res2 => {
+        Taro.getUserInfo().then(async res2 => {
           const parmas = {
             encryptedData: res2.encryptedData, iv: res2.iv, code: code
           }
-          dispatch({
+          await dispatch({
             type: 'login/weChatAuthLogin',
             payload: {
               parmas,
             }
           })
+          Taro.hideLoading();
+        }).catch(() => {
+          Taro.hideLoading();
         })
+      }).catch(() => {
+        Taro.hideLoading();
       })
     }
   }

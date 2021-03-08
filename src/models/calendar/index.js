@@ -1,4 +1,5 @@
 import Taro from "@tarojs/taro";
+import { getMonthDate, isToday, isSamDay } from "./getDate";
 import { isApiResponseOk } from "../../utils/request";
 import {
   getOrgBoardList,
@@ -14,7 +15,9 @@ import {
   select_search_text,
   select_page_number,
   select_sche_card_list,
-  select_is_reach_bottom
+  no_sche_card_list,
+  select_is_reach_bottom,
+  calendar_mark_list
 } from "./selects";
 import { getCurrentOrgByStorage } from "../../utils/basicFunction";
 
@@ -28,10 +31,14 @@ export default {
     search_text: "",
     sche_card_list: [], //项目的所有排期的卡片列表
     no_sche_card_list: [], //项目的所有排期的卡片列表
+    calendar_mark_list: [],
     sign_data: [], //日历列表打点数据
     page_number: 1, //默认第1页
     isReachBottom: true, //是否上拉加载分页
-    isOtherPageBack: false //当前日历页面是首页加载还是其他页面返回来的标识
+    isOtherPageBack: false, //当前日历页面是首页加载还是其他页面返回来的标识
+    titleText: '',
+    is_mask_show_Updatename: false,
+    navTitle: ''
   },
   effects: {
     // 获取当前组织项目列表
@@ -86,7 +93,8 @@ export default {
         board_id: obj["selected_board"],
         queryDate: start_time,
         maxDate: due_time,
-        page_number: page_number,
+        page_size: "200",
+        page_number: typeSource === 1 ? page_number : 1,
         ...payload
       };
       const res = yield call(getScheCardList, { ...params });
@@ -101,13 +109,15 @@ export default {
           yield put({
             type: "updateDatas",
             payload: {
-              sche_card_list: arr1
+              sche_card_list: arr1,
+              isReachBottom: false
             }
           });
           if (res.data && res.data.length === 0) {
             yield put({
               type: "updateDatas",
               payload: {
+                sche_card_list: arr1,
                 isReachBottom: false
               }
             });
@@ -116,11 +126,17 @@ export default {
           yield put({
             type: "updateDatas",
             payload: {
-              sche_card_list: res.data
+              sche_card_list: res.data,
+              isReachBottom: false
             }
           });
         }
       } else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
         yield put({
           type: "updateDatas",
           payload: {
@@ -135,21 +151,98 @@ export default {
       // const current_org = getCurrentOrgByStorage()
       const current_org = "0";
       const selected_board = yield select(select_selected_board);
+      const page_number = yield select(select_page_number);
+      const current_no_sche_card_list = yield select(no_sche_card_list);
+      const mark_list = yield select(calendar_mark_list);
 
-      const res = yield call(getNoScheCardList, {
-        _organization_id: current_org,
-        board_id: selected_board,
-        page_size: "200",
-        page_number: "1"
-      });
+      // console.log(payload)
+      const res = yield call(getNoScheCardList, payload)
+
+      // const res = yield call(getNoScheCardList, {
+      // _organization_id: current_org,
+      // board_id: selected_board,
+      // page_size: "200",
+      // page_number: page_number
+      // });
+      console.log(page_number)
       if (isApiResponseOk(res)) {
+        let arr1 = current_no_sche_card_list; //1.1>从data获取当前datalist数组
+        let arr2 = res.data; //1.2>从此次请求返回的数据中获取新数组
+        if (page_number == 1) {
+          arr1 = arr2;
+          if (res.data && res.data.length === 0) {
+            yield put({
+              type: "updateDatas",
+              payload: {
+                isReachBottom: false
+              }
+            });
+          }
+
+        } else {
+          // arr2 = res.data;
+          // arr1 = arr1.concat(arr2); //1.3>合并数组
+          // if (res.data && res.data.length === 0) {
+          yield put({
+            type: "updateDatas",
+            payload: {
+              isReachBottom: false
+            }
+          });
+          // }
+        }
+        var newArr = [];
+        arr1.forEach((item, index, array) => {
+          var due_time = item.due_time && item.due_time.length < 13 ? item.due_time * 1000 : item.due_time
+
+          var timeStamp = new Date().setHours(0, 0, 0, 0), duetimeStamp = new Date(parseInt(due_time)).
+            setHours(0, 0, 0, 0);
+          // if (item.flag == '3') {
+          // return;
+          // }
+          // 只有任务有预警
+          // item.flag == '0'
+          // duetimeStamp = duetimeStamp && duetimeStamp.length < 13 ? duetimeStamp * 1000 : duetimeStamp;
+
+          if (parseFloat(item.time_warning) > 0 && item.flag == '0' && item.is_realize == '0' && !(duetimeStamp < timeStamp)) {
+            var item1 = {
+              time: due_time - 86400000 * parseInt(item.time_warning),
+              type: 2,
+              value: '警'
+            }
+            newArr.push(item1)
+          }
+          // 只有流程和任务有逾期
+          if (duetimeStamp < timeStamp && (item.flag == '0' || item.flag == '2') && item.is_realize == '0') {
+            var item2 = {
+              time: duetimeStamp,
+              type: 1,
+              value: '逾'
+            }
+            newArr.push(item2)
+          }
+        });
+
+        newArr = newArr.filter(function (item) {
+          return item;
+        });
+        var list = mark_list.concat(newArr);
+        list = list.filter(function (item, index) {
+          return list.indexOf(item, 0) === index;
+        });
         yield put({
           type: "updateDatas",
           payload: {
-            no_sche_card_list: res.data
+            no_sche_card_list: arr1,
+            calendar_mark_list: list
           }
         });
       } else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
       }
     },
 

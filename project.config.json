@@ -21,13 +21,15 @@
     "checkSiteMap": true,
     "uploadWithSourceMap": true,
     "compileHotReLoad": false,
-    "useMultiFrameRuntime": false,
+    "useMultiFrameRuntime": true,
     "useApiHook": true,
+    "useApiHostProcess": false,
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],
       "outputPath": ""
     },
+    "enableEngineNative": false,
     "bundle": false,
     "useIsolateContext": true,
     "useCompilerModule": true,
@@ -42,12 +44,6 @@
   "simulatorPluginLibVersion": {},
   "libVersion": "2.10.2",
   "condition": {
-    "search": {
-      "list": []
-    },
-    "conversation": {
-      "list": []
-    },
     "plugin": {
       "list": []
     },
@@ -102,10 +98,9 @@
           "scene": 1008
         },
         {
-          "id": 6,
-          "name": "消息跳转",
+          "name": "pages/sceneEntrance/index",
           "pathName": "pages/sceneEntrance/index",
-          "query": "contentId=1218939078247059456&boardId=1218939078247059456&redirectType=1&orgId=1164926825101660160",
+          "query": "contentId= 1356557991259803648&boardId= 1348579855968636928&redirectType=4&orgId= 1348579810632404992",
           "scene": null
         },
         {
@@ -137,16 +132,51 @@
           "scene": null
         },
         {
-          "id": 11,
-          "name": "公众号跳转文件预览",
+          "name": "pages/sceneEntrance/index",
           "pathName": "pages/sceneEntrance/index",
-          "query": "contentId=1249518026181709824&boardId=1206886569806532608&redirectType=5&orgId=1107307923551424512",
+          "query": "contentId=1249518026181709824&boardId=1206886569806532608&redirectType=4&orgId=1107307923551424512",
           "scene": null
         },
         {
-          "id": -1,
           "name": "pages/templateDetails/index",
           "pathName": "pages/templateDetails/index",
+          "query": "contentId=1357225808191688704",
+          "scene": null
+        },
+        {
+          "name": "pages/templateDetails/index",
+          "pathName": "pages/templateDetails/index",
+          "query": "contentId= 1356557991259803648&boardId= 1348579855968636928&redirectType=4&orgId= 1348579810632404992",
+          "scene": 1043,
+          "referrerInfo": {}
+        },
+        {
+          "name": "pages/noSchedulesCard/index",
+          "pathName": "pages/noSchedulesCard/index",
+          "query": "contentId= 1356557991259803648&boardId= 1348579855968636928&redirectType=4&orgId= 1348579810632404992",
+          "scene": null
+        },
+        {
+          "name": "pages/nowOpen/index",
+          "pathName": "pages/nowOpen/index",
+          "query": "contentId=1209439669922697216&boardId=1206886569806532608&redirectType=7&currentDate=1572437967000",
+          "scene": null
+        },
+        {
+          "name": "pages/qrCodeInvalid/index",
+          "pathName": "pages/qrCodeInvalid/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/acceptInvitation/index",
+          "pathName": "pages/acceptInvitation/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/auccessJoin/index",
+          "pathName": "pages/auccessJoin/index",
           "query": "",
           "scene": null
         }

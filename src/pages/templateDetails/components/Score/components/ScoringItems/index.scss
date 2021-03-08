@@ -5,20 +5,15 @@
     flex-direction  : column;
     align-items     : center;
     background-color: #FFFFFF;
+    margin          : 0 pxTrans(16);
 
     .line_cell {
         display       : flex;
         flex-direction: row;
-        width         : 100%;
+
 
         .line_empty {
             width: pxTrans(44);
-        }
-
-        .line {
-            flex      : 1;
-            height    : pxTrans(1);
-            background: rgba(0, 0, 0, 0.09);
         }
     }
 
@@ -26,9 +21,37 @@
         flex          : 1;
         display       : flex;
         flex-direction: column;
-        margin-left   : pxTrans(16);
         width         : 100%;
         overflow      : hidden; //scrollView 截掉滚动条
+
+        .content_padding {
+            width          : 100%;
+            display        : flex;
+            flex-direction : column;
+            align-items    : center;
+            justify-content: space-evenly;
+
+            .fill_in {
+                width          : 100%;
+                display        : flex;
+                flex-direction : row;
+                justify-content: space-between;
+                font-size      : pxTrans(14);
+                font-weight    : 400;
+                line-height    : pxTrans(24);
+                margin         : 0 pxTrans(16);
+
+                .title_content {
+                    color       : #575C75;
+                    padding-left: pxTrans(16);
+                }
+
+                .historyUnfold {
+                    color    : royalblue;
+                    font-size: pxTrans(15);
+                }
+            }
+        }
 
         .scoring_items {
             display       : flex;
@@ -37,7 +60,7 @@
 
             .scoring_items_title {
                 height     : pxTrans(56);
-                font-size  : pxTrans(16);
+                font-size  : pxTrans(14);
                 font-weight: 400;
                 color      : rgba(0, 0, 0, 0.25);
                 line-height: pxTrans(24);
@@ -47,18 +70,18 @@
 
 
             .score_view {
-                width          : pxTrans(120);
-                height         : pxTrans(64);
-                background     : rgba(0, 0, 0, 0.04);
-                border-radius  : pxTrans(2);
-                border         : pxTrans(1) solid rgba(0, 0, 0, 0.15);
-                display        : flex;
-                flex-direction : row;
-                justify-content: center;
-                align-items    : center;
+                width             : pxTrans(120);
+                height            : pxTrans(64);
+                background        : rgba(0, 0, 0, 0.04);
+                border-radius     : pxTrans(2);
+                // border         : pxTrans(1) solid rgba(0, 0, 0, 0.15);
+                display           : flex;
+                flex-direction    : row;
+                justify-content   : center;
+                align-items       : center;
 
                 .score_view_title {
-                    font-size    : pxTrans(16);
+                    font-size    : pxTrans(14);
                     font-weight  : 400;
                     color        : rgba(0, 0, 0, 0.15);
                     line-height  : pxTrans(40);
@@ -76,17 +99,17 @@
             }
 
             .score_view_input {
-                width          : pxTrans(120);
-                height         : pxTrans(64);
-                background     : rgba(0, 0, 0, 0.04);
-                border-radius  : pxTrans(2);
-                border         : pxTrans(1) solid rgba(0, 0, 0, 0.15);
-                display        : flex;
-                flex-direction : row;
-                justify-content: center;
-                align-items    : center;
-                text-align     : center;
-                vertical-align : middle;
+                width             : pxTrans(120);
+                height            : pxTrans(64);
+                background        : rgba(0, 0, 0, 0.04);
+                border-radius     : pxTrans(2);
+                // border         : pxTrans(1) solid rgba(0, 0, 0, 0.15);
+                display           : flex;
+                flex-direction    : row;
+                justify-content   : center;
+                align-items       : center;
+                text-align        : center;
+                vertical-align    : middle;
 
                 font-size  : pxTrans(40);
                 font-weight: 400;
@@ -95,7 +118,7 @@
 
             .input_warning {
                 height     : pxTrans(25);
-                font-size  : pxTrans(16);
+                font-size  : pxTrans(14);
                 font-weight: 400;
                 color      : rgba(245, 34, 45, 1);
                 line-height: pxTrans(24);
@@ -136,7 +159,7 @@
                     }
 
                     .rater_name {
-                        font-size   : pxTrans(16);
+                        font-size   : pxTrans(14);
                         font-weight : 400;
                         color       : rgba(0, 0, 0, 0.65);
                         line-height : pxTrans(24);
@@ -144,16 +167,24 @@
                     }
 
                     .average_number {
-                        font-weight: 600;
-                        font-size  : pxTrans(16);
-                        line-height: pxTrans(24);
-                        color      : rgba(24, 144, 255, 1);
+                        font-weight  : 600;
+                        font-size    : pxTrans(14);
+                        line-height  : pxTrans(24);
+                        color        : rgba(24, 144, 255, 1);
+                        padding      : pxTrans(3);
+                        border-radius: pxTrans(5);
                     }
+                }
+
+                .average_auto {
+                    color           : white !important;
+                    background-color: rgb(255, 169, 64) !important;
+                    padding         : 0 pxTrans(10) !important;
                 }
 
                 .score_comment {
                     margin-left : pxTrans(32);
-                    font-size   : pxTrans(16);
+                    font-size   : pxTrans(14);
                     font-weight : 400;
                     color       : rgba(0, 0, 0, 0.65);
                     line-height : pxTrans(24);
@@ -185,9 +216,12 @@
                 margin: pxTrans(4) pxTrans(16) 0 0;
 
                 .textarea {
-                    flex  : 1;
-                    width : 100%;
-                    height: pxTrans(80);
+                    flex       : 1;
+                    width      : 100%;
+                    height     : pxTrans(80);
+                    line-height: pxTrans(20);
+                    border     : solid linen pxTrans(1);
+                    padding    : pxTrans(5);
                 }
             }
         }
@@ -223,5 +257,73 @@
                 background: rgba(24, 144, 255, 1);
             }
         }
+    }
+
+    .view_cell {
+        width: 100%;
+
+        .historyBottom {
+            border-bottom: solid linen pxTrans(1);
+            padding-top  : pxTrans(10);
+        }
+
+        .personnel_cell {
+            display       : flex;
+            flex-direction: column;
+
+            .make_copy {
+                width          : 100%;
+                display        : flex;
+                flex-direction : row;
+                align-items    : center;
+                height         : pxTrans(35);
+                color          : #212434;
+                font-size      : pxTrans(14);
+                justify-content: space-between;
+
+                .avatar_View {
+                    display       : flex;
+                    flex-direction: row;
+                }
+
+                .avatar_image {
+                    width        : pxTrans(24);
+                    height       : pxTrans(24);
+                    border-radius: pxTrans(12);
+                    margin-left  : pxTrans(16);
+                    margin-right : pxTrans(8);
+                }
+
+                .name {
+                    line-height: pxTrans(24);
+                }
+
+                .status {
+                    line-height: pxTrans(24);
+                }
+
+                .his_score {
+                    margin-left: pxTrans(10);
+                    color      : rgba(24, 144, 255, 1);
+                }
+            }
+
+            .comment_style {
+                font-size     : pxTrans(14);
+                font-weight   : 400;
+                color         : rgba(0, 0, 0, 0.65);
+                line-height   : pxTrans(24);
+                margin        : 0 pxTrans(16);
+                display       : flex;
+                flex-direction: column;
+                word-wrap     : break-word;
+
+                .comment_title {
+                    color: red;
+                }
+            }
+
+        }
+
     }
 }

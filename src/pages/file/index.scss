@@ -102,6 +102,16 @@
                 overflow: hidden;
             }
 
+            .redcircle {
+                width           : pxTrans(10);
+                height          : pxTrans(10);
+                border-radius   : pxTrans(5);
+                background-color: red;
+                margin-left     : pxTrans(105);
+                margin-top      : pxTrans(10);
+                position        : absolute;
+            }
+
             .other_icon_style {
                 width          : 100%;
                 height         : 100%;
@@ -130,6 +140,7 @@
                     -webkit-box-orient: vertical;
                     -webkit-line-clamp: 2;
                 }
+
             }
 
             .unread_red {
@@ -150,6 +161,10 @@
             width : pxTrans(167);
             height: pxTrans(122);
         }
+
+
+
+
     }
 
 

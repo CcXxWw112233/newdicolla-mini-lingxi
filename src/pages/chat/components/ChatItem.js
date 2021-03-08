@@ -1,6 +1,6 @@
 import { connect } from "@tarojs/redux";
 import Taro, { Component } from "@tarojs/taro";
-import { View, Image, Text, Button } from "@tarojs/components";
+import { View, Image, Text, Button, RichText, Video } from "@tarojs/components";
 import styles from "./ChatItem.scss";
 import globalStyles from "./../../../gloalSet/styles/globalStyles.scss";
 import { parseActivityNewsBody } from "./../../../models/im/utils/activityHandle.js";
@@ -11,18 +11,28 @@ import {
   parseEmoji,
   parsePinup
 } from "./../../../models/im/utils/parseEmoji.js";
+import lxzs from "./../../../asset/chat/lxzs.png";
+import rwzs from "./../../../asset/chat/rwzs.png";
+
 import { onResendMsg } from "./../../../models/im/actions/onResendMsg.js";
 import { onDeleteMsg } from "./../../../models/im/actions/onDeleteMsg.js";
-import { timestampToTimeNormal } from "../../../utils/util";
+import {
+  timestampToTimeNormal,
+  filterFileFormatType
+} from "../../../utils/util";
 
-@connect(({ im: { currentGroupSessionList, history_newSession } }) => ({
-  currentGroupSessionList,
-  history_newSession
-}))
+@connect(
+  ({ im: { currentGroupSessionList, history_newSession, currentBoard } }) => ({
+    currentGroupSessionList,
+    history_newSession,
+    currentBoard
+  })
+)
 class ChatItem extends Component {
   state = {
     isAudioPlaying: false, // 是否正在播放音频消息
     createInnerAudioContext: null, // 一个音频实例
+    // eslint-disable-next-line react/no-unused-state
     _index: ""
   };
   isValidImgUrl = url => {
@@ -275,7 +285,10 @@ class ChatItem extends Component {
     }, 500);
   };
 
-  getSubStr(str) {
+  getSubStr(str, obj = {}) {
+    if (obj.action && obj.action === 'board.update.user.add') {
+      return str
+    }
     str = str && str.replace(/<\/?.+?>/g, "");
     if (!str.match(/^[ ]*$/) && str.length > 20) {
       var subStr1 = str.substr(0, 8);
@@ -363,12 +376,86 @@ class ChatItem extends Component {
           duration: 3000
         });
         wx.getClipboardData({
-          success: function(res) {
-            console.log(res.data); // data
-          }
+          success: function(res) {}
         });
       }
     });
+  };
+
+  hanldeFile(file) {
+    Taro.showLoading({
+      title: "加载中"
+    });
+    console.log(file.url);
+    Taro.downloadFile({
+      url: file.url,
+      success: function(res) {
+        var filePath = res.tempFilePath;
+        //console.log('filePath', filePath)
+        Taro.saveFile({
+          tempFilePath: filePath,
+          success: function(res1) {
+            Taro.openDocument({
+              filePath: res1.savedFilePath,
+              fileType: file.ext, //指定文件类型 file_type
+              success: function(res2) {
+                console.log("打开文档成功", res);
+              },
+              fail: function(res2) {
+                console.log(res2);
+                Taro.showToast({
+                  title: "文件过大或不支持该格式",
+                  icon: "none",
+                  duration: 2000
+                });
+                // console.log("fail", res);
+              },
+              complete: function(res2) {
+                Taro.hideLoading();
+                //console.log("complete", res);
+              }
+            });
+          },
+          fail: function(res1) {
+            Taro.hideLoading();
+            Taro.showToast({
+              title: "文件过大或不支持该格式",
+              icon: "none",
+              duration: 2000
+            });
+            //console.log("saveFile", res.errMsg);
+          },
+          complete: function(res2) {
+            // console.log("saveFile", res);
+          }
+        });
+      },
+      fail: function(e) {
+        Taro.hideLoading();
+        Taro.showToast({
+          title: "文件过大或不支持该格式",
+          icon: "none",
+          duration: 20000
+        });
+        // console.log('fail', res)
+      },
+      complete: function(res) {
+        // console.log('complete', res)
+      }
+    });
+  }
+
+  // 获取用户昵称
+  getUserName = fromId => {
+    const { currentBoard } = this.props;
+    if (fromId && currentBoard.users) {
+      let user = currentBoard.users.find(item => item.user_id === fromId);
+      if (user) {
+        return user.name;
+      }
+      return "未知账号";
+    }
+    return fromId;
   };
 
   render() {
@@ -397,9 +484,14 @@ class ChatItem extends Component {
       someMsgContentDataD && JSON.parse(someMsgContentDataD);
     const someMsgContentDataDAction =
       someMsgContentDataDToJSON && someMsgContentDataDToJSON.action;
+    const chatFile = typeof file == "string" ? JSON.parse(file) : file;
     // console.log(someMsgContentDataDToJSON, "sssssss_someMsgContentData");
     let iconAvatar;
     let from_nick;
+    // console.log(text)
+    // console.log(flow);
+    // console.log(type);
+    // console.log(isPinupEmoji);
     if (
       someMsgContentDataDAction &&
       someMsgContentDataDAction.indexOf("board.file") != -1
@@ -414,14 +506,34 @@ class ChatItem extends Component {
       from_nick = "文件助手";
     } else if (
       someMsgContentDataDAction &&
+      someMsgContentDataDAction.indexOf("board.flow") != -1
+    ) {
+      iconAvatar = (
+        // <Text
+        // className={`${globalStyles.global_iconfont} ${styles.icon_avatar_style}`}
+        // >
+        // &#xe66a;
+        // </Text>
+        <Image
+          src={lxzs}
+          className={`${globalStyles.global_iconfont} ${styles.icon_default_avatar_style}`}
+        ></Image>
+      );
+      from_nick = "流程助手";
+    } else if (
+      someMsgContentDataDAction &&
       someMsgContentDataDAction.indexOf("board.card") != -1
     ) {
       iconAvatar = (
-        <Text
-          className={`${globalStyles.global_iconfont} ${styles.icon_avatar_style}`}
-        >
-          &#xe66a;
-        </Text>
+        // <Text
+        // className={`${globalStyles.global_iconfont} ${styles.icon_avatar_style}`}
+        // >
+        // &#xe66a;
+        // </Text>
+        <Image
+          src={rwzs}
+          className={`${globalStyles.global_iconfont} ${styles.icon_default_avatar_style}`}
+        ></Image>
       );
       from_nick = "任务助手";
     } else if (
@@ -438,20 +550,26 @@ class ChatItem extends Component {
       from_nick = "项目助手";
     } else {
       iconAvatar = (
-        <Text
+        // <Text
+        // className={`${globalStyles.global_iconfont} ${styles.icon_default_avatar_style}`}
+        // >
+        // &#xe647;
+        // </Text>
+        <Image
+          src={lxzs}
           className={`${globalStyles.global_iconfont} ${styles.icon_default_avatar_style}`}
-        >
-          &#xe647;
-        </Text>
+        ></Image>
       );
-      from_nick = fromNick ? fromNick : "聆悉助手";
+      from_nick = this.getUserName(someMsg.from, someMsg.users);
     }
+    const fileType = chatFile ? filterFileFormatType("." + chatFile.ext) : "";
     return (
       <View className={styles.wrapper}>
         {(type === "text" ||
           type === "audio" ||
           type === "custom" ||
           type === "image" ||
+          type === "file" ||
           type === "video") && (
           <View
             className={`${styles.contentWrapper} ${
@@ -550,6 +668,38 @@ class ChatItem extends Component {
                       mode="aspectFill"
                     />
                   )}
+                  {type === "file" && (
+                    <View
+                      onClick={() => this.hanldeFile(chatFile)}
+                      style={{
+                        alignItems: "center",
+                        display: "flex",
+                        flexDirection: "column",
+                        "justify-content": "space-around",
+                        width: "80px",
+                        height: "90px"
+                      }}
+                    >
+                      <View
+                        style={{
+                          width: "60px",
+                          height: "60px",
+                          textAlign: "center"
+                        }}
+                      >
+                        {/* <Text className={`${globalStyles.global_iconfont} ${styles.icon_file_style}`} style={{ fontSize: '50px', color: 'lightgray' }}> */}
+
+                        {/* </Text> */}
+
+                        <RichText
+                          className={`${globalStyles.global_iconfont} ${styles.icon_file_style}`}
+                          style={{ fontSize: "50px", color: "lightgray" }}
+                          nodes={fileType}
+                        />
+                      </View>
+                      {chatFile.ext}文件
+                    </View>
+                  )}
                   {type === "video" && (
                     <Video
                       poster-for-crawler={file.url + "&vframe"}
@@ -603,7 +753,6 @@ class ChatItem extends Component {
                               activityContent,
                               range
                             } = parseActivityNewsBody(data);
-
                             return (
                               <View
                                 key={data.creatorId}
@@ -623,6 +772,7 @@ class ChatItem extends Component {
                                     &nbsp;
                                   </Text>
                                 </Text>
+                                <Text className={styles.action}></Text>
                                 <Text className={styles.action}>
                                   {/* {action ? `${action}` : ''} */}
                                   {action === "项目成员角色发生变更"
@@ -635,7 +785,19 @@ class ChatItem extends Component {
                                         "项目中的角色设置为" +
                                         (activityContent &&
                                           activityContent.rela_data)}`
-                                    : `${action}`}
+                                    : ` ${action} ${
+                                        activityContent.flow_node_instance.name
+                                          .length > 0
+                                          ? activityContent.flow_node_instance
+                                              .name
+                                          : ""
+                                      }  ${
+                                        activityContent.flow_instance.name
+                                          .length > 0
+                                          ? " " +
+                                            activityContent.flow_instance.name
+                                          : ""
+                                      }`}
 
                                   <Text
                                     style={{
@@ -697,26 +859,27 @@ class ChatItem extends Component {
                                               ]
                                         }”`
                                       : ""
-                                  )}
+                                    , activityContent.contentObj || {})}
                                 </Text>
                                 {activityType == "meeting" && (
                                   <View>
-                                    {activityContent[activityType][
-                                      "start_time"
-                                    ] && (
-                                      <Text
-                                        style={{ color: "rgba(0,0,0,0.35)" }}
-                                      >
-                                        {timestampToTimeNormal(
-                                          activityContent[activityType][
-                                            "start_time"
-                                          ],
-                                          "/",
-                                          true
-                                        )}
-                                        开始
-                                      </Text>
-                                    )}
+                                    {activityContent[activityType] &&
+                                      activityContent[activityType][
+                                        "start_time"
+                                      ] && (
+                                        <Text
+                                          style={{ color: "rgba(0,0,0,0.35)" }}
+                                        >
+                                          {timestampToTimeNormal(
+                                            activityContent[activityType][
+                                              "start_time"
+                                            ],
+                                            "/",
+                                            true
+                                          )}
+                                          开始
+                                        </Text>
+                                      )}
                                     <View
                                       onClick={() => {
                                         this.handleSetClipboardData({

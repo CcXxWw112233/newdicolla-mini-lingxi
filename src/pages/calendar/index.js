@@ -10,6 +10,7 @@ import CalendarSwiper from "./components/CalendarSwiper";
 import MilestoneList from "./components/MilestoneList";
 import CustomNavigation from "../acceptInvitation/components/CustomNavigation.js";
 import PersonalCenter from "./components/PersonalCenter";
+import UpdateUsername from "./components/UpdateUsername"
 import { onSysMsgUnread } from "../../models/im/actions";
 
 @connect(
@@ -20,7 +21,9 @@ import { onSysMsgUnread } from "../../models/im/actions";
       page_number,
       isReachBottom,
       isOtherPageBack,
-      selected_timestamp
+      selected_timestamp,
+      is_mask_show_Updatename,
+      navTitle,
     },
     accountInfo,
     im: { sessionlist, unread_all_number }
@@ -33,18 +36,20 @@ import { onSysMsgUnread } from "../../models/im/actions";
     accountInfo,
     selected_timestamp,
     sessionlist,
-    unread_all_number
+    unread_all_number,
+    is_mask_show_Updatename,
+    navTitle,
   })
 )
 export default class Calendar extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      show_card_type_select: "0",
+      search_mask_show: "0",
+      titleText: '',
+    };
   }
-
-  state = {
-    show_card_type_select: "0",
-    search_mask_show: "0"
-  };
 
   config = {
     navigationStyle: "custom",
@@ -82,7 +87,7 @@ export default class Calendar extends Component {
     this.getMeetingTodoList({ query_time: selected_timestamp });
 
     Taro.showNavigationBarLoading();
-    setTimeout(function() {
+    setTimeout(function () {
       Taro.stopPullDownRefresh();
       Taro.hideNavigationBarLoading();
     }, 300);
@@ -106,26 +111,26 @@ export default class Calendar extends Component {
       })
     ).then(res => {
       const { unread_all_number } = this.props;
-
-      if (unread_all_number != 0) {
+      if (unread_all_number != 0 && unread_all_number) {
         wx.setTabBarBadge({
           index: 1,
           text:
             unread_all_number > 99
               ? "99+"
               : unread_all_number
-              ? unread_all_number + ""
-              : "0"
+                ? unread_all_number + ""
+                : "0"
         });
       }
     });
   }
 
   componentDidShow() {
-    const { selected_board_name, selected_timestamp } = this.props;
+    const { selected_board_name, selected_timestamp, dispatch } = this.props;
     Taro.setNavigationBarTitle({
       title: selected_board_name
     });
+
     console.log("进来了", selected_timestamp);
     this.getOrgList();
     this.getOrgBoardList();
@@ -135,7 +140,13 @@ export default class Calendar extends Component {
     this.getMeetingTodoList({ query_time: selected_timestamp });
     this.getUserAllOrgsAllBoards();
     this.getAccountInfo();
-
+    dispatch({
+      type: "calendar/updateDatas",
+      payload: {
+        page_number: 1,
+        isReachBottom: true
+      }
+    });
     if (Taro.pageScrollTo) {
       Taro.pageScrollTo({
         scrollTop: 0
@@ -202,7 +213,14 @@ export default class Calendar extends Component {
     const { dispatch } = this.props;
     dispatch({
       type: "calendar/getNoScheCardList",
-      payload: {}
+      payload: {
+        org_id: '0',
+        board_ids: [],
+        query_milestone: ['all'],
+        query_card: ['all'],
+        query_flow: ['all'],
+        query_meeting: ['all'],
+      }
     });
   };
   // 获取排期列表
@@ -300,13 +318,31 @@ export default class Calendar extends Component {
     });
   };
 
+  settitleText = (titleText) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: "calendar/updateDatas",
+      payload: {
+        navTitle: titleText
+      }
+    });
+  }
+  // 关闭修改昵称
+  closeUpateUseername() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: "calendar/updateDatas",
+      payload: {
+        is_mask_show_Updatename: false
+      }
+    });
+  }
   render() {
     const { show_card_type_select, search_mask_show } = this.state;
-    const { no_sche_card_list = [] } = this.props;
-
+    const { no_sche_card_list = [], is_mask_show_Updatename, navTitle } = this.props;
     const {
       account_info = {},
-      is_mask_show_personalCenter
+      is_mask_show_personalCenter,
     } = this.props.accountInfo;
     const { avatar } = account_info;
 
@@ -320,7 +356,7 @@ export default class Calendar extends Component {
           home_personal_center="homePersonalCenter"
           personal_center_image={avatar}
           showPersonalCenter={() => this.showPersonalCenter(true)}
-          title="日历"
+          title={navTitle}
         />
 
         {is_mask_show_personalCenter && is_mask_show_personalCenter === true ? (
@@ -329,8 +365,8 @@ export default class Calendar extends Component {
             closePersonalCenter={() => this.showPersonalCenter(false)}
           />
         ) : (
-          ""
-        )}
+            ""
+          )}
         <View
           style={{
             position: "sticky",
@@ -339,11 +375,8 @@ export default class Calendar extends Component {
             left: 0
           }}
         >
-          <SearchAndMenu
-            onSelectType={this.onSelectType}
-            search_mask_show={search_mask_show}
-          />
-          <CalendarSwiper />
+          {/* <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show}/> */}
+          <CalendarSwiper settitleText={(title) => this.settitleText(title)} ></CalendarSwiper>
         </View>
         <CardTypeSelect
           show_card_type_select={show_card_type_select}
@@ -354,9 +387,8 @@ export default class Calendar extends Component {
         {/* {no_sche_card_list.length && ( */}
         <View
           className={`${globalStyles.global_card_out} ${indexStyles.no_scheduling}`}
-          onClick={this.gotoNoSchedule}
-        >
-          暂未排期的工作（{no_sche_card_list.length}）
+          onClick={this.gotoNoSchedule} >
+          查看全部事项 ({no_sche_card_list.length}）
         </View>
         {/* )} */}
         <CardList schedule={"1"} />
@@ -365,6 +397,10 @@ export default class Calendar extends Component {
         {/* <View className={indexStyles.plusTasks} onClick={this.gotoAddingTasks}>
           +
         </View> */}
+        {
+          is_mask_show_Updatename ? (<UpdateUsername account_info={account_info} closeUpateUseername={() => this.closeUpateUseername()}></UpdateUsername>
+          ) : (null)
+        }
       </View>
     );
   }

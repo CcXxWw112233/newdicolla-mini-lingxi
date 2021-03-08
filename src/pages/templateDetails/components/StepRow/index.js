@@ -13,43 +13,73 @@ export default class StepRow extends Component {
     }
 
     clickOpen = (value) => {
-
+        const { current_step_id, step_id } = this.props;
         const { isOpenStep } = this.state
 
         if (isOpenStep == false) {
             this.setState({
-                isOpenStep: true
+                isOpenStep: true,
+                currentStepId: value
             })
             this.props.onClicked({ isOpenStep: true, currentStepId: value })
         } else {
-            this.setState({
-                isOpenStep: false
-            })
+            if (current_step_id == step_id) {
+                value = ''
+                this.setState({
+                    isOpenStep: false,
+                    currentStepId: ''
+                })
+            } else {
+                this.setState({
+                    isOpenStep: false,
+                    currentStepId: value
+                })
+            }
+
             this.props.onClicked({ isOpenStep: false, currentStepId: value })
         }
     }
-
+    componentDidMount() {
+        const { step_id, current_step_id, is_change_open } = this.props;
+        if (step_id == current_step_id && is_change_open) {
+            this.setState({
+                isOpenStep: is_change_open,
+                currentStepId: step_id
+            })
+        }
+    }
 
     render() {
-        const { sort, name, runtime_type, step_id, } = this.props
+        const { sort, name, runtime_type, status, step_id, current_step_id, is_change_open, is_urge } = this.props;
+        const { currentStepId } = this.state;
         return (
-            <View className={indexStyles.viewStyle} >
-                <View className={indexStyles.select_step_number}>
+            <View className={indexStyles.viewStyle} onClick={() => this.clickOpen(step_id)}>
+                <View className={`${indexStyles.select_step_number} ${status == '1' ? indexStyles.currentStep : ''}`}>
                     {sort ? sort : ''}
                 </View>
 
                 <View class={indexStyles.step_name}>
                     {name ? name : ''}
+                    {is_change_open && currentStepId && currentStepId == current_step_id && is_urge == '1' ? (
+                        <View className={indexStyles.urge}><Text className={`${globalStyle.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text> 催办</View>
+                    ) :
+                        (null)}
                 </View>
 
                 <View className={indexStyles.runtime_type}>
-                    {runtime_type == '1' ? '被驳回' : ''}
+                    {runtime_type == '1' ? '驳回' : ''}
                 </View>
 
-                <View className={indexStyles.open_icon} onClick={() => this.clickOpen(step_id)} >
-                    <Text className={`${globalStyle.global_iconfont}`}>&#xe8ec;</Text>
+                <View className={indexStyles.open_icon}  >
+                    {
+                        is_change_open && currentStepId && currentStepId == current_step_id ? (
+                            <Text className={`${globalStyle.global_iconfont}`}>&#xe675;</Text>
+                        ) : (
+                                <Text className={`${globalStyle.global_iconfont}`}>&#xe8ec;</Text>
+                            )
+                    }
                 </View>
-            </ View>
+            </View>
         )
     }
 }

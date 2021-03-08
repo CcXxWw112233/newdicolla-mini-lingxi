@@ -39,15 +39,33 @@
         font-weight    : 400;
     }
 
+    .currentStep {
+        color           : white;
+        background-color: #1890FF;
+    }
+
     .step_name {
-        flex         : 1;
-        font-size    : pxTrans(16);
-        font-weight  : 400;
-        color        : rgba(0, 0, 0, 0.65);
-        line-height  : pxTrans(24);
-        overflow     : hidden;
-        text-overflow: ellipsis;
-        white-space  : nowrap;
+        flex          : 1;
+        font-size     : pxTrans(16);
+        font-weight   : 400;
+        color         : rgba(0, 0, 0, 0.65);
+        line-height   : pxTrans(24);
+        overflow      : hidden;
+        text-overflow : ellipsis;
+        white-space   : nowrap;
+        display       : flex;
+        flex-direction: row;
+    }
+
+    .urge {
+        color      : #FF5050 !important;
+        font-size  : pxTrans(12) !important;
+        margin-left: pxTrans(5);
+        line-height: pxTrans(26);
+    }
+
+    .urgeicon {
+        margin-right: pxTrans(5);
     }
 
     .runtime_type {

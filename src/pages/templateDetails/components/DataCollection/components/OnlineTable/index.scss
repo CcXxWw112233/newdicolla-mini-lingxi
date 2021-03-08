@@ -3,7 +3,6 @@
 .viewStyle {
     display         : flex;
     flex-direction  : column;
-    align-items     : center;
     background-color: #FFFFFF;
     height          : pxTrans(56);
 
@@ -24,32 +23,64 @@
     }
 
     .content_cell {
-        flex          : 1;
-        display       : flex;
-        flex-direction: row;
-        margin-right  : pxTrans(16);
-        width         : 100%;
-        align-items   : center;
+        // flex             : 1;
+        display          : flex;
+        flex-direction   : row;
+        margin           : 0 pxTrans(16);
+        justify-content  : space-between;
+        // align-items   : center;
+        height           : pxTrans(56);
+        line-height      : pxTrans(56);
+
+
+
+        .content_title {
+            display       : flex;
+            flex-direction: row;
+
+        }
+
+        .titleCenter {
+            margin-left   : pxTrans(10);
+            display       : flex;
+            flex-direction: column;
+        }
 
         .title {
-            margin-left : pxTrans(16);
-            margin-right: pxTrans(16);
-            font-size   : pxTrans(14);
-            font-weight : 500;
-            line-height : pxTrans(24);
-            color       : rgba(0, 0, 0, 0.45);
-            line-height : pxTrans(22);
+
+            font-size  : pxTrans(16);
+            font-weight: 500;
+            color      : #575C75;
+            line-height: pxTrans(56);
+
+        }
+
+        .icon {
+            margin-top: pxTrans(18);
+            height    : pxTrans(24);
+            width     : pxTrans(24);
+        }
+
+        .onineTable {
+            text-align      : center;
+            margin-top      : pxTrans(10);
+            height          : pxTrans(35);
+            background-color: #408661;
+            color           : white;
+            width           : pxTrans(60);
+            border-radius   : pxTrans(8);
+            line-height     : pxTrans(35);
+            font-size       : pxTrans(14);
         }
 
         .time {
-            flex           : 1;
-            display        : flex;
-            flex-direction : row;
-            font-size      : pxTrans(14);
-            font-weight    : 400;
-            line-height    : pxTrans(22);
-            color          : rgba(0, 0, 0, 0.25);
-            justify-content: flex-end;
+            flex          : 1;
+            display       : flex;
+            flex-direction: row;
+            font-size     : pxTrans(14);
+            font-weight   : 400;
+            line-height   : pxTrans(22);
+            color         : rgba(0, 0, 0, 0.25);
         }
     }
 }

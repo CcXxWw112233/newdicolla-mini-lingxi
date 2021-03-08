@@ -22,6 +22,7 @@ export default {
                         workflowDatas: res.data,
                     }
                 })
+                return res.data;
 
                 setBoardIdStorage(boardId)
 

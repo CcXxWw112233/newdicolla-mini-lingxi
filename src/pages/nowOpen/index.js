@@ -1,9 +1,9 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Image, Button } from '@tarojs/components'
+import { View, Image, Button, Text } from '@tarojs/components'
 import indexStyles from './index.scss'
-import now_Open_Image from '../../asset/Invitation/now_Open_Image.png'
-import globalStyles from '../../gloalSet/styles/globalStyles.scss'
+import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
+import logoImage from '../../asset/Invitation/logo.png'
 
 @connect(({ nowOpen }) => ({
   nowOpen
@@ -42,15 +42,22 @@ export default class nowOpen extends Component {
 
   render() {
     return (
-      <View className={`${globalStyles.global_horrizontal_padding}`}>
+      <View className={`${indexStyles.index}`}>
         <View className={indexStyles.contain1}>
-          <Image src={now_Open_Image} className={indexStyles.nowOpenImage} />
+          <Image src={logoImage} className={indexStyles.nowOpenImage} />
         </View>
-        <View className={indexStyles.textStyle}>即可开启协作之旅</View>
-        <Button className={`${indexStyles.login_btn_wx} ${indexStyles.login_btn}`} open_type={'getUserInfo'} onGetUserInfo={this.getUserInfo}>使用微信登录</Button>
-        <View className={`${indexStyles.change_login_type_out}`}>
-          <View onClick={this.gotoLoginPage} className={`${indexStyles.change_login_type}`}>已有账户登录</View>
+        <View className={indexStyles.textStyle}>欢迎来到聆悉协作</View>
+        <Button className={`${indexStyles.login_btn_wx} ${indexStyles.login_btn}`} open_type={'getUserInfo'} onGetUserInfo={this.getUserInfo}>
+          <Text className={`${globalStyle.global_iconfont} ${indexStyles.wx_iconfont}`}>&#xe846;</Text>
+          <View className={indexStyles.wx_text}>使用微信登录</View>
+        </Button>
+        <View className={`${indexStyles.login_btn} ${indexStyles.login_btn_Account}`}>
+          <View onClick={this.gotoLoginPage} className={`${indexStyles.change_login_type}`}>手机号码登录/注册
+</View>
         </View>
+
+        <View className={indexStyles.loginMark}>登录代表您已同意<Text className={indexStyles.loginMarkText}>聆悉用户服务协议、隐私政策</Text></View>
+
       </View>
     )
   }

@@ -33,7 +33,7 @@ export default class CardList extends Component {
     if (!array || !!!array.length) return [];
     let newArray = JSON.parse(JSON.stringify(array || []));
     newArray = newArray.map(item => {
-      if (item.flag == "0" || item.flag == "meeting") {
+      if (item.flag == "0" || item.flag == "meeting" || item.flag == '2' || item.flag == '1' || item.flag == '3') {
         let new_item = { ...item };
         let compare_time = item.due_time
           ? item.due_time
@@ -97,22 +97,20 @@ export default class CardList extends Component {
     const { isReachBottom } = this.props;
     // console.log(this.props.meeting_list);
     const promptText =
-      sche_card_list.length > 0
+      card_list.length > 0
         ? `${isReachBottom === true ? "加载更多..." : "没有更多内容了"}`
         : "暂无数据";
-    // console.log(selected_timestamp, temp_);
     return (
       <View
-        className={`${indexstyles.card_item_out_01} ${globalStyles.global_horrizontal_padding}`}
-      >
+        className={`${indexstyles.card_item_out_01} ${globalStyles.global_horrizontal_padding}`} >
         {card_list.map((value, key) => {
           const { content_id, flag, id } = value;
           return (
-            flag != "3" && (
-              <View key={content_id || id}>
-                <CardItem itemValue={value} schedule={schedule} />
-              </View>
-            )
+
+            <View key={content_id || id}>
+              <CardItem itemValue={value} schedule={schedule} />
+            </View>
+
           );
         })}
         <View className={indexstyles.no_more_text}>{promptText}</View>
