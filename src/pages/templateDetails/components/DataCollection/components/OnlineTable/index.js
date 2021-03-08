@@ -41,7 +41,7 @@ export default class index extends Component {
                     <View className={indexStyles.content_title}>
                         <Image src={Table} className={indexStyles.icon}></Image>
                         <View className={indexStyles.titleCenter}>
-                            <View className={indexStyles.title} >在线表格</View>
+                            <View className={indexStyles.title} >表格</View>
                         </View>
                     </View>
                     <View className={indexStyles.onineTable} onClick={this.onLineTableAction}>查看</View>
