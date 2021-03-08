@@ -13,7 +13,6 @@ import { getOrgName, timestampToTimeZH } from "../../../utils/basicFunction";
 }))
 export default class CardItem extends Component {
   gotoListItemDetails = itemValue => {
-    console.log("itemValue===", itemValue);
     const { flag, content_id, board_id, parent_id } = itemValue;
     if (itemValue && ["0", "1"].indexOf(flag) !== -1) {
       let tasks_id = parent_id ? parent_id : content_id;
@@ -31,7 +30,6 @@ export default class CardItem extends Component {
 
   // 点击复制链接
   handleSetClipboardData = (start_url) => {
-    console.log(start_url)
     Taro.setClipboardData({
       data: start_url.meetingUrl,
       success: function (res) {
@@ -167,7 +165,6 @@ export default class CardItem extends Component {
     };
 
     var now = Date.parse(new Date());
-    console.log(now);
     var isToday = new Date(parseInt(start_time)).toDateString() === new Date().toDateString()
     return (
       <View

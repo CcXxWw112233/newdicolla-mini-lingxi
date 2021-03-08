@@ -182,8 +182,6 @@ export default class Calendar extends Component {
         var newArr = moldArr.filter(function (item, index) {
             return item.length > 0;
         })
-        console.log('...................');
-        console.log(moldArr)
         var isCheckedBorard = boardidList && boardidList.length > 0;
         const isShowClear = isCheckedBorard || newArr.length > 0;
         typeof this.props.isShowCheckMenu == "function" &&
@@ -231,7 +229,7 @@ export default class Calendar extends Component {
                 <View className={indexStyles.menuList}>
                     {menuList.map((value, index) => {
                         return (
-                            <View className={`${indexStyles.menuItem} ${secletIndex == index ? indexStyles.selectmenuItem : null}`} id={index} onClick={this.selectMenu}>
+                            <View className={`${indexStyles.menuItem} ${secletIndex == index ? indexStyles.selectmenuItem : null}`} id={index} onClick={this.selectMenu} key={index}>
                                 {value}
                                 {
                                     secletIndex == index ? (<Text className={`${globalStyle.global_iconfont}`}>&#xe675;</Text>) : (<Text className={`${globalStyle.global_iconfont}`}>&#xe8ec;</Text>)
@@ -251,7 +249,7 @@ export default class Calendar extends Component {
                                 </View>) : (
                                     boardlist && boardlist.map((value, index) => {
                                         return (
-                                            <View key={'1'}>
+                                            <View key={index}>
                                                 {
                                                     value.isSelect ? (
                                                         <View className={indexStyles.checkedMenuItem} id={index} onClick={this.deleteSelectedBorad}>
@@ -269,12 +267,12 @@ export default class Calendar extends Component {
                             {selectedMenuValueList.map((item, index) => {
                                 const isAll = moldArr[index][0] == 'all';
                                 return (
-                                    <View className={indexStyles.checkedMenuList}>
+                                    <View className={indexStyles.checkedMenuList} key={index}>
                                         {
 
                                             item && item.length > 0 ? (
                                                 isAll ? (
-                                                    <View className={indexStyles.checkedMenuItem} id={index} onClick={this.deleteAllSelectedMenu} key={'1'}>
+                                                    <View className={indexStyles.checkedMenuItem} id={index} onClick={this.deleteAllSelectedMenu} >
                                                         {item[0]}
                                                         <Text className={`${globalStyle.global_iconfont} ${indexStyles.delete_iconfont}`}> &#xe639;</Text>
                                                     </View>
@@ -283,7 +281,7 @@ export default class Calendar extends Component {
                                                     item.map((value, index1) => {
 
                                                         return (
-                                                            <View className={indexStyles.checkedMenuItem} id={index + '_' + index1} onClick={this.deleteSelectedMenu} key={index1}>
+                                                            <View className={indexStyles.checkedMenuItem} key={index1} id={index + '_' + index1} onClick={this.deleteSelectedMenu} >
                                                                 {value}
                                                                 <Text className={`${globalStyle.global_iconfont} ${indexStyles.
                                                                     delete_iconfont}`}> &#xe639;</Text>
