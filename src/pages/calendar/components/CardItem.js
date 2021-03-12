@@ -69,6 +69,7 @@ export default class CardItem extends Component {
   //   }
   //   return title_icon;
   // };
+  //  {/* 0 任务 1 会议  2 流程节点  3 里程碑 */ }
 
   render() {
     const { itemValue = {}, index, schedule, org_list, selected_timestamp } = this.props;
@@ -96,8 +97,8 @@ export default class CardItem extends Component {
 
     const users = itemValue["data"] || [];
     var timeStamp = new Date(parseInt(selected_timestamp)).setHours(0, 0, 0, 0), duetimeStamp = new Date(parseInt(due_time)).setHours(0, 0, 0, 0);
-    var is_warning = time_warning && (timeStamp > (duetimeStamp - 86400000 * time_warning) || timeStamp == (duetimeStamp - 86400000 * time_warning)) ? true : false
-    var duetime = !!due_time && due_time.length < 11 ? due_time * 1000 : due_time;
+    var is_warning = time_warning && (timeStamp > (duetimeStamp - 86400000 * time_warning) || timeStamp == (duetimeStamp - 86400000 * time_warning)) ? true : false;
+    var duetime = !!due_time && due_time.length < 11 ? parseInt(due_time) * 1000 : due_time;
     const card_logo_1 = (
       <Text
         className={`${globalStyles.global_iconfont} ${indexStyles.iconfont_size}`}
@@ -180,7 +181,7 @@ export default class CardItem extends Component {
           <View className={`${indexStyles.card_content_middle}`}>
             <View className={`${indexStyles.card_content_middle_top}`}>
               <Text className={`${indexStyles.card_title}`}>
-                {content_name || topic}
+                {content_name || topic} -- {index}
               </Text>
 
               {
@@ -195,7 +196,7 @@ export default class CardItem extends Component {
                   <View className={indexStyles.urge}><Text className={`${globalStyles.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text> 催办</View>) : (null)
               }
               {
-                !!due_time && now > duetime && (flag == '0' || flag == '2') && is_realize == '0' ? (<View className={indexStyles.urge}><Text className={`${globalStyles.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text>
+                itemValue.due_time && now > duetime && (flag == '0' || flag == '2') && is_realize == '0' ? (<View className={indexStyles.urge}><Text className={`${globalStyles.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text>
 逾期</View>) : (null)
               }
             </View>
