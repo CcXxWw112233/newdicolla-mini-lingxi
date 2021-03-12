@@ -891,10 +891,10 @@ export default class File extends Component {
                         })}
                     </View>
                     ) : (
-                            <View className={indexStyles.contain1}>
-                                <Image src={file_list_empty} className={indexStyles.file_list_empty} />
-                            </View>
-                        )
+                        <View className={indexStyles.contain1}>
+                            <Image src={file_list_empty} className={indexStyles.file_list_empty} />
+                        </View>
+                    )
                 }
 
                 {

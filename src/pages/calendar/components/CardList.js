@@ -32,16 +32,16 @@ export default class CardList extends Component {
   compareEvaluationTimeArray = (array = []) => {
     if (!array || !!!array.length) return [];
     let newArray = JSON.parse(JSON.stringify(array || []));
-    newArray = newArray.map(item => {
-      if (item.flag == "0" || item.flag == "meeting" || item.flag == '2' || item.flag == '1' || item.flag == '3') {
-        let new_item = { ...item };
-        let compare_time = item.due_time
-          ? item.due_time
-          : item.end_time || item.start_time;
-        new_item = { ...item, compare_time: compare_time };
-        return new_item;
-      }
-    });
+    // newArray = newArray.map(item => {
+    // // if (item.flag == "0" || item.flag == "meeting" || item.flag == '2' || item.flag == '1' || item.flag == '3') {
+    // let new_item = { ...item };
+    // let compare_time = item.due_time
+    // ? item.due_time
+    // : item.end_time || item.start_time;
+    // new_item = { ...item, compare_time: compare_time };
+    // return new_item;
+    // }
+    // });
     return newArray;
   };
 
@@ -56,7 +56,8 @@ export default class CardList extends Component {
     let temp_ = timeSort(
       removeEmptyArrayEle(
         this.compareEvaluationTimeArray(
-          [].concat(...sche_card_list, ...meeting_list)
+          [].concat(...sche_card_list)
+          // , ...meeting_list
         )
       ),
       "compare_time"
@@ -108,7 +109,7 @@ export default class CardList extends Component {
           return (
 
             <View key={key}>
-              <CardItem itemValue={value} schedule={schedule} />
+              <CardItem itemValue={value} index={key} schedule={schedule} />
             </View>
 
           );
