@@ -187,7 +187,6 @@ class App extends Component {
     };
     initImData().catch(
       (e) => {
-        console.log("============****=============");
         console.log(String(e))
       },
     );
