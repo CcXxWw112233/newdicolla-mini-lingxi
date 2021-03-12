@@ -56,8 +56,9 @@ export default class CardList extends Component {
     let temp_ = timeSort(
       removeEmptyArrayEle(
         this.compareEvaluationTimeArray(
-          [].concat(...sche_card_list)
-          // , ...meeting_list
+          [].concat(...sche_card_list
+            // , ...meeting_list
+          )
         )
       ),
       "compare_time"
