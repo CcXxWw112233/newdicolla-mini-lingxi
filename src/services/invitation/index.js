@@ -23,7 +23,7 @@ export const userScanCodeJoinBoard = (data, notShowLoading) => {
   }, notShowLoading)
 }
 
-/* 
+/*
 * mark - parms 新的加入组织接口
 */
 //用户扫码加入 组织/任务/项目/会议===1
@@ -46,4 +46,46 @@ export const commInviteQRCodejoin = (data, notShowLoading) => {
     method: 'POST',
     url: `${API_BOARD}/comm/invite/QRCode/join`,
   }, notShowLoading)
+}
+
+/**
+ * 关注扫描的二维码
+ */
+export const FollowQrcode = (data) => {
+  return request({
+    data,
+    method: 'POST',
+    url: `${API_BOARD}/report/follow?report_id=${data.id}`
+  })
+}
+
+/**
+ * 获取扫码详情
+ */
+export const getQrCodeInfo = (data) => {
+  return request({
+    url: `${API_BOARD}/report/follow/${data.id}`,
+    method: 'GET',
+  })
+}
+
+/**
+ * 获取扫码列表
+ */
+export const getQrCodeHistory = (data) => {
+  return request({
+    url: `${API_BOARD}/report/follow/list`,
+    data,
+    method: 'GET'
+  })
+}
+
+/**
+ * 删除二维码列表
+ */
+export const removeQrcode = (data) => {
+  return request({
+    url: `${API_BOARD}/report/unfollow?report_id=${data.id}`,
+    method: 'POST'
+  })
 }

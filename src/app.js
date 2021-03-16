@@ -72,6 +72,7 @@ class App extends Component {
       // "pages/fieldPersonMultiple/index",
       "pages/jumpToMeeting/index",
       "pages/OnlineTableWebView/index",
+      "pages/qrcodeHistory/index"
 
     ],
     "subpackages": [
@@ -137,7 +138,7 @@ class App extends Component {
           selectedIconPath: "./asset/tabBar/meeting_selected.png",
         },
         {
-          pagePath: "pages/seeBoardChart/index",
+          pagePath: "pages/qrcodeHistory/index",
           text: "统计",
           iconPath: "./asset/tabBar/stastics.png",
           selectedIconPath: "./asset/tabBar/stastics_selected.png",
