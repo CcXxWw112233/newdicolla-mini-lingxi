@@ -53,29 +53,51 @@ export default class CardList extends Component {
       type: "calendar/updateDatas",
       payload: {
         isCartListScroll: false,
-        isHandleOpen: false
+        isHandleOpen: false,
+        clientY: 0
       }
     });
   }
 
   // 判断是否滑动 
-  touchStart = (e) => {
-    const { schedule, dispatch, isHandleOpen } = this.props;
-    if (schedule == "1" && !isHandleOpen) {
-      let query = Taro.createSelectorQuery()
-      query.select("card_item_out_01").boundingClientRect()
-      query.selectViewport().scrollOffset()
-      query.exec(function (res) {
-        if (res[1].scrollTop > 20) {
-          dispatch({
-            type: "calendar/updateDatas",
-            payload: {
-              isCartListScroll: true
-            }
-          });
+  onTouchMove = (e) => {
+    const { clientY } = this.state;
+    var currentClientY = e.changedTouches[0].clientY;
+    const { schedule, dispatch } = this.props;
+
+    if (currentClientY + 30 < clientY) {
+      dispatch({
+        type: "calendar/updateDatas",
+        payload: {
+          isCartListScroll: true
         }
-      })
+      });
     }
+    // const { schedule, dispatch, isHandleOpen } = this.props;
+    // if (schedule == "1") {
+    // let query = Taro.createSelectorQuery()
+    // query.select("card_item_out_01").boundingClientRect()
+    // query.selectViewport().scrollOffset()
+    // query.exec(function (res) {
+    // console.log(res)
+
+    // if (res[1].scrollTop > 20) {
+    // dispatch({
+    // type: "calendar/updateDatas",
+    // payload: {
+    // isCartListScroll: true
+    // }
+    // });
+    // }
+    // })
+    // }
+  }
+
+  onTouchStart = (e) => {
+    this.setState({
+      clientY: e.changedTouches[0].clientY,
+    })
+
   }
   render() {
     const {
@@ -136,8 +158,8 @@ export default class CardList extends Component {
         : "暂无数据";
     return (
       <View
-        className={`${indexstyles.card_item_out_01} ${globalStyles.global_horrizontal_padding}`} onTouchMove={(e) => this.touchStart(e)} id='card_item_out_01'>
-        {card_list && card_list.map((value, key) => {
+        className={`${indexstyles.card_item_out_01} ${globalStyles.global_horrizontal_padding}`} onTouchMove={(e) => this.onTouchMove(e)} onTouchStart={(e) => this.onTouchStart(e)} id='card_item_out_01'  >
+        { card_list && card_list.map((value, key) => {
           const { content_id, flag, id } = value;
           return (
 
@@ -146,9 +168,10 @@ export default class CardList extends Component {
             </View>
 
           );
-        })}
+        })
+        }
         <View className={indexstyles.no_more_text}>{promptText}</View>
-      </View>
+      </View >
     );
   }
 }

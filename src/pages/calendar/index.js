@@ -15,6 +15,8 @@ import { onSysMsgUnread } from "../../models/im/actions";
 
 @connect(
   ({
+    file: {
+      file_list = [] },
     calendar: {
       no_sche_card_list,
       selected_board_name,
@@ -39,6 +41,7 @@ import { onSysMsgUnread } from "../../models/im/actions";
     unread_all_number,
     is_mask_show_Updatename,
     navTitle,
+    file_list
   })
 )
 export default class Calendar extends Component {
@@ -125,6 +128,17 @@ export default class Calendar extends Component {
         });
       }
     });
+
+    dispatch({
+      type: 'file/getFilePage',
+      payload: {
+        _organization_id: 0,
+        board_id: '',
+        folder_id: '',
+        page_number: '',
+        page_size: '',
+      },
+    })
   }
 
   componentDidShow() {
@@ -398,7 +412,7 @@ export default class Calendar extends Component {
         <View
           className={`${globalStyles.global_card_out} ${indexStyles.no_scheduling}`}
           onClick={this.gotoNoSchedule} >
-          查看全部事项 ({no_sche_card_list.length}}
+          查看全部事项 ({no_sche_card_list.length})
         </View>
         {/* )} */}
         <CardList schedule={"1"} cartlistSlide={() => this.cartlistSlide()} closeUpateUseername={() => this.closeUpateUseername()} />

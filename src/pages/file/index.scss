@@ -1,8 +1,12 @@
 @import "../../gloalSet/styles/constant";
 
 .index {
-    margin     : 0;
+    margin: 0;
+
     // position: relative;
+    .SearchAndMenu {
+        z-index: 999 !important;
+    }
 
     .head_background {
         height    : pxTrans(123);
