@@ -180,9 +180,9 @@ export default class CardItem extends Component {
 
           <View className={`${indexStyles.card_content_middle}`}>
             <View className={`${indexStyles.card_content_middle_top}`}>
-              <Text className={`${indexStyles.card_title}`}>
-                {content_name || topic} -- {index}
-              </Text>
+              <View className={`${indexStyles.card_title}`}>
+                {content_name || topic}
+              </View>
 
               {
                 is_warning && flag == '0' && is_realize == '0' && !(due_time && now > duetime) ? (

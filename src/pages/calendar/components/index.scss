@@ -35,18 +35,22 @@
     }
 
     .card_content_middle_top {
-      display: flex;
-      flex-direction:
-        row;
-      white-space  : nowrap;
-      overflow     : hidden;
-      text-overflow: ellipsis;
+      display       : flex;
+      flex-direction: row;
+
+
+
 
       .card_title {
         color      : $color_1;
         font-size  : $fontsize_16;
         line-height: pxTrans(26);
         font-weight: bold;
+        word-wrap  : break-word;
+
+        word-break: normal;
+        width     : 80%;
+
       }
 
       .urge {

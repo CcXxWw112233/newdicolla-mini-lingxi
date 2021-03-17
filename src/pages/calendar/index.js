@@ -111,6 +111,8 @@ export default class Calendar extends Component {
       })
     ).then(res => {
       const { unread_all_number } = this.props;
+
+      console.log("*********************************-----****" + unread_all_number)
       if (unread_all_number != 0 && unread_all_number) {
         wx.setTabBarBadge({
           index: 1,
@@ -337,6 +339,13 @@ export default class Calendar extends Component {
       }
     });
   }
+
+  // 卡片滑动
+  cartlistSlide = () => {
+    console.log("----滑动-------")
+  }
+
+
   render() {
     const { show_card_type_select, search_mask_show } = this.state;
     const { no_sche_card_list = [], is_mask_show_Updatename, navTitle } = this.props;
@@ -350,6 +359,7 @@ export default class Calendar extends Component {
     const statusBar_Height = SystemInfo.statusBarHeight;
     const navBar_Height = SystemInfo.platform == "ios" ? 44 : 48;
 
+    console.log("")
     return (
       <View className={indexStyles.view_style}>
         <CustomNavigation
@@ -365,8 +375,8 @@ export default class Calendar extends Component {
             closePersonalCenter={() => this.showPersonalCenter(false)}
           />
         ) : (
-            ""
-          )}
+          ""
+        )}
         <View
           style={{
             position: "sticky",
@@ -388,10 +398,10 @@ export default class Calendar extends Component {
         <View
           className={`${globalStyles.global_card_out} ${indexStyles.no_scheduling}`}
           onClick={this.gotoNoSchedule} >
-          查看全部事项 ({no_sche_card_list.length}）
+          查看全部事项 ({no_sche_card_list.length}}
         </View>
         {/* )} */}
-        <CardList schedule={"1"} />
+        <CardList schedule={"1"} cartlistSlide={() => this.cartlistSlide()} closeUpateUseername={() => this.closeUpateUseername()} />
         <View style="height: 50px"></View>
 
         {/* <View className={indexStyles.plusTasks} onClick={this.gotoAddingTasks}>

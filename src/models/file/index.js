@@ -230,11 +230,11 @@ export default {
         * verifyAuthority({ payload }, { select, call, put }) {
             const res = yield call(verifyAuthority, payload)
             if (isApiResponseOk(res)) {
-                yield put({
-                    type: 'verifyAuthority',
-                    payload: {
-                    }
-                })
+                // yield put({
+                // type: 'verifyAuthority',
+                // payload: {
+                // }
+                // })
                 return res;
             } else {
                 console.log('res:', res);

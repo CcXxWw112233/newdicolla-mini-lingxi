@@ -1,14 +1,16 @@
 @import "../../../../gloalSet/styles/constant.scss";
 
-.addressText{
-  background-color: #ddd;
-  border-radius: 50px;
-  padding: 4px 8px;
-  display: inline-block;
+.addressText {
+    background-color: #ddd;
+    border-radius   : 50px;
+    padding         : 4px 8px;
+    display         : inline-block;
 }
-.addressBox{
-  text-align: center;
+
+.addressBox {
+    text-align: center;
 }
+
 .choice_folder_modal_mask {
     width     : 100%;
     height    : 100%;
@@ -73,21 +75,31 @@
                 }
 
                 .thumbnail_view_style {
-                    width              : 100%;
-                    height             : pxTrans(160);
+                    width                 : 100%;
+                    height                : pxTrans(160);
                     // margin-top      : pxTrans(28);
-                    text-align         : center;
+                    text-align            : center;
                     // display         : flex;
-                    white-space        : nowrap;
-                    display            : inline-block;
-                    overflow           : hidden;
+                    white-space           : nowrap;
+                    // display            : inline-block;
+                    // overflow           : hidden;
+                    display               : flex;
+                    flex-direction        : row !important;
+
+
+
+
 
                     .choice_image_thumbnail_style {
                         width       : pxTrans(160);
                         height      : pxTrans(160);
                         margin-left : pxTrans(3);
                         margin-right: pxTrans(3);
+                        color       : rgba(0, 0, 0, 0.35);
                         position    : relative;
+                        font-size   : pxTrans(160);
+                        line-height : pxTrans(160);
+                        display     : inline-block;
 
                         .position_style {
                             width     : pxTrans(160);
@@ -97,9 +109,22 @@
                             bottom    : 0;
                             position  : absolute;
 
+                            .choice_file_thumbail_style {
+                                line-height: pxTrans(160) !important;
+                                font-size  : pxTrans(60) !important;
+                                position   : relative;
+                                top        : 0;
+                            }
+
                             .position_icon_style {
-                                font-size : pxTrans(12);
-                                background: rgba(0, 0, 0, 1);
+                                position   : absolute;
+                                left       : 0;
+                                top        : 0;
+                                line-height: pxTrans(160);
+                                width      : pxTrans(160);
+                                text-align : center;
+                                font-size  : pxTrans(60);
+                                color      : lightgray
                             }
 
                             .position_text_style {
@@ -153,7 +178,7 @@
 
             .board_list_view_style {
                 // height: pxTrans(225);
-                width    : 100%;
+                width: 100%;
 
                 .board_item_style {
                     width    : 100%;
@@ -279,4 +304,34 @@
 
     }
 
+    .other_icon_style {
+        width          : pxTrans(160);
+        height         : pxTrans(160);
+        text-align     : center;
+        justify-content: center;
+        display        : flex;
+        flex-direction : column;
+        align-items    : center;
+
+        .folder_type_icon {
+            line-height: pxTrans(160);
+            font-size  : pxTrans(36);
+            top        : pxTrans(22);
+            color      : rgba(0, 0, 0, 0.25);
+        }
+
+        .other_name_style {
+            max-height        : pxTrans(40);
+            font-size         : pxTrans(12);
+            font-weight       : 400;
+            color             : rgba(0, 0, 0, 0.45);
+            line-height       : pxTrans(20);
+            margin            : 0 pxTrans(10) 0 pxTrans(10);
+            overflow          : hidden;
+            text-overflow     : ellipsis;
+            word-break        : break-all;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+        }
+    }
 }

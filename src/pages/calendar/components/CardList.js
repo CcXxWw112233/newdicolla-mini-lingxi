@@ -17,14 +17,16 @@ import {
       no_sche_card_list,
       isReachBottom,
       meeting_list = [],
-      selected_timestamp
+      selected_timestamp,
+      isHandleOpen
     }
   }) => ({
     sche_card_list,
     no_sche_card_list,
     isReachBottom,
     meeting_list,
-    selected_timestamp
+    selected_timestamp,
+    isHandleOpen
   })
 )
 export default class CardList extends Component {
@@ -45,6 +47,36 @@ export default class CardList extends Component {
     return newArray;
   };
 
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: "calendar/updateDatas",
+      payload: {
+        isCartListScroll: false,
+        isHandleOpen: false
+      }
+    });
+  }
+
+  // 判断是否滑动 
+  touchStart = (e) => {
+    const { schedule, dispatch, isHandleOpen } = this.props;
+    if (schedule == "1" && !isHandleOpen) {
+      let query = Taro.createSelectorQuery()
+      query.select("card_item_out_01").boundingClientRect()
+      query.selectViewport().scrollOffset()
+      query.exec(function (res) {
+        if (res[1].scrollTop > 20) {
+          dispatch({
+            type: "calendar/updateDatas",
+            payload: {
+              isCartListScroll: true
+            }
+          });
+        }
+      })
+    }
+  }
   render() {
     const {
       schedule,
@@ -104,7 +136,7 @@ export default class CardList extends Component {
         : "暂无数据";
     return (
       <View
-        className={`${indexstyles.card_item_out_01} ${globalStyles.global_horrizontal_padding}`} >
+        className={`${indexstyles.card_item_out_01} ${globalStyles.global_horrizontal_padding}`} onTouchMove={(e) => this.touchStart(e)} id='card_item_out_01'>
         {card_list && card_list.map((value, key) => {
           const { content_id, flag, id } = value;
           return (

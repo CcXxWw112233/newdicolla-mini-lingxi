@@ -52,17 +52,18 @@
             }
 
             .files_album_camera_view_style {
-                position       : fixed;
-                right          : pxTrans(16);
-                width          : pxTrans(76);
-                height         : pxTrans(34);
-                display        : flex;
-                justify-content: space-between;
+                position          : fixed;
+                right             : pxTrans(16);
+                // width          : pxTrans(76);
+                height            : pxTrans(34);
+                display           : flex;
+                justify-content   : space-between;
 
                 .files_album_camera_button_style {
                     width          : pxTrans(32);
                     height         : pxTrans(32);
                     border-radius  : pxTrans(32);
+                    margin-left    : pxTrans(10);
                     background     : rgba(255, 255, 255, 1);
                     box-shadow     : 0 0 pxTrans(16) 0 rgba(0, 0, 0, 0.35);
                     opacity        : 0.98;
@@ -103,9 +104,9 @@
             }
 
             .redcircle {
-                width           : pxTrans(10);
-                height          : pxTrans(10);
-                border-radius   : pxTrans(5);
+                width           : pxTrans(8);
+                height          : pxTrans(8);
+                border-radius   : pxTrans(4);
                 background-color: red;
                 margin-left     : pxTrans(105);
                 margin-top      : pxTrans(10);
@@ -144,9 +145,9 @@
             }
 
             .unread_red {
-                width           : pxTrans(10);
-                height          : pxTrans(10);
-                border-radius   : pxTrans(5);
+                width           : pxTrans(8);
+                height          : pxTrans(8);
+                border-radius   : pxTrans(4);
                 background-color: red;
                 position        : absolute;
             }
@@ -209,6 +210,21 @@
                     margin   : pxTrans(6);
                 }
             }
+        }
+    }
+
+    .uploadSheet_View {
+        position        : fixed;
+        bottom          : 0;
+        left            : 0;
+        width           : 100%;
+        background-color: white;
+
+        .uploadSheet_item {
+            display       : flex;
+            flex-direction: row;
+            height        : pxTrans(48);
+            line-height   : pxTrans(48);
         }
     }
 }

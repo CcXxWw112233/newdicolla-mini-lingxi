@@ -1,6 +1,6 @@
 
 import Taro, { Component, getApp } from '@tarojs/taro'
-import { View, Text, Image } from '@tarojs/components'
+import { View, Text, Image, RichText, ScrollView } from '@tarojs/components'
 import indexStyles from './ChoiceFolder.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
@@ -9,7 +9,7 @@ import TreeFile from './TreeFile'
 import EXIF from 'exif-js'  //第三方库获取图片exif信息
 import QQMapWX from '../../../../utils/qqmap-wx-jssdk1.2/qqmap-wx-jssdk.min.js'
 import { QQMAPSDK_KEY } from "../../../../gloalSet/js/constant";
-
+import { filterFileFormatType } from "../../../../utils/util"
 @connect(({
     file: {
         isShowChoiceFolder,
@@ -50,17 +50,26 @@ export default class ChoiceFolder extends Component {
 
     getChoiceImageThumbnail = () => {
         const { choiceImageThumbnail = [], } = this.props
-        let array = []
+        let array = [], arr = [];
         choiceImageThumbnail.map((item, index) => {
             let obj = {}
+            let type = item.split('.')[1]
             obj['index'] = index
             obj['filePath'] = item
-            array.push(obj)
+            obj['type'] = type
+            if (type == 'jpg' || type == 'png' || type == 'jpeg') {
+                array.push(obj)
+            } else {
+                arr.push(obj)
+            }
         })
+
         // let promise = [];
         // console.log(array)
         this.setState({
-            thumb_image_info: array
+            thumb_image_info: array,
+            thumb_file_info: arr
+
         })
         this.getLocation()
         // array.forEach(item => {
@@ -370,6 +379,7 @@ export default class ChoiceFolder extends Component {
                 })
             }
         })
+
     }
 
     //获取图片Exif信息
@@ -420,7 +430,7 @@ export default class ChoiceFolder extends Component {
 
         const { folder_tree = {}, org_list, upload_folder_name, choice_board_folder_id, choice_board_id, current_selection_board_id, current_board_open, } = this.props
         const { child_data = [], } = folder_tree
-        const { is_show_board_list, thumb_image_info = [], addressName } = this.state
+        const { is_show_board_list, thumb_image_info = [], addressName, thumb_file_info = [] } = this.state
 
         const SystemInfo = Taro.getSystemInfoSync()
         const { windowHeight } = SystemInfo
@@ -428,7 +438,7 @@ export default class ChoiceFolder extends Component {
         const contentHeight = (windowHeight - (80 * 2) - 47) + 'px'
         const contentCenterHeight = (windowHeight - (80 * 2) - 47 - 56) + 'px'
         let board_list = this.filterSelectBoard();
-
+        let scrollX = true;
         return (
 
             <View className={indexStyles.choice_folder_modal_mask} >
@@ -448,22 +458,20 @@ export default class ChoiceFolder extends Component {
 
                                 <View className={indexStyles.modal_content_center_style} style={{ height: contentCenterHeight }}>
                                     <View className={indexStyles.choice_folder_button_style} onClick={this.choiceFolder}>{upload_folder_name}</View>
-                                    <ScrollView
-                                        scrollX
-                                        scrollWithAnimation
-                                        className={indexStyles.thumbnail_view_style}
-                                    >
+                                    <ScrollView scrollX={scrollX} scrollWithAnimation className={indexStyles.thumbnail_view_style}>
                                         {thumb_image_info && thumb_image_info.map((item, key) => {
                                             const { filePath } = item
                                             return (
-                                                <Image mode='aspectFill' className={indexStyles.choice_image_thumbnail_style} src={filePath}>
-                                                    {/* {address ? (<View className={indexStyles.position_style}>
-                                                        <Text className={`${globalStyle.global_iconfont} ${indexStyles.position_icon_style}`}>&#xe790;</Text>
-                                                        <Text className={indexStyles.position_text_style}>
-                                                            {address}
-                                                        </Text>
-                                                    </View>) : ''} */}
-                                                </Image>
+                                                <Image mode='aspectFill' className={indexStyles.choice_image_thumbnail_style} src={filePath} key={key}></Image>
+                                            )
+                                        })}
+                                        {thumb_file_info && thumb_file_info.map((item, key) => {
+                                            const fileType = filterFileFormatType(item.filePath)
+                                            return (
+                                                <View className={`${indexStyles.choice_image_thumbnail_style} ${indexStyles.choice_flie_thumbnail_style}`} key={key}>
+                                                    <RichText className={`${globalStyle.global_iconfont} ${indexStyles.choice_file_thumbail_style}`} nodes={fileType} />
+
+                                                </View>
                                             )
                                         })}
                                     </ScrollView>
@@ -477,69 +485,69 @@ export default class ChoiceFolder extends Component {
                             </View>
                         </View>
                     ) : (
-                            <View className={indexStyles.choice_board_view_style}>
-                                <View className={indexStyles.modal_content_top_style} style={{ height: 56 + 'px' }}>
-                                    <View className={indexStyles.modal_tips_text_style} onClick={this.backHideBoardList}>{'< '}返回</View>
-                                    <View className={indexStyles.folder_name_style}>{upload_folder_name}</View>
-                                </View>
-                                <ScrollView
-                                    scrollY
-                                    scrollWithAnimation
-                                    className={indexStyles.board_list_view_style} style={{ height: scrollHeight }}>
-                                    {board_list && board_list.map(item => {
-                                        const org_id = item.org_id
-                                        return (
-                                            <View key={item.board_id} className={indexStyles.board_item_style} >
+                        <View className={indexStyles.choice_board_view_style}>
+                            <View className={indexStyles.modal_content_top_style} style={{ height: 56 + 'px' }}>
+                                <View className={indexStyles.modal_tips_text_style} onClick={this.backHideBoardList}>{'< '}返回</View>
+                                <View className={indexStyles.folder_name_style}>{upload_folder_name}</View>
+                            </View>
+                            <ScrollView
+                                scrollY
+                                scrollWithAnimation
+                                className={indexStyles.board_list_view_style} style={{ height: scrollHeight }}>
+                                {board_list && board_list.map(item => {
+                                    const org_id = item.org_id
+                                    return (
+                                        <View key={item.board_id} className={indexStyles.board_item_style} >
 
-                                                <View className={indexStyles.board_item_cell_style}>
-                                                    <View className={indexStyles.choice_button_style} onClick={() => this.selectionBoardRootDirectory(item, org_id)}>
-                                                        {
-                                                            item.board_id === choice_board_id ? (
-                                                                <Text className={`${globalStyle.global_iconfont} ${indexStyles.choice_button_icon_style}`}>&#xe844;</Text>
-                                                            ) : (
-                                                                    <Text className={`${globalStyle.global_iconfont} ${indexStyles.un_choice_button_icon_style}`}>&#xe6df;</Text>
-                                                                )
-                                                        }
+                                            <View className={indexStyles.board_item_cell_style}>
+                                                <View className={indexStyles.choice_button_style} onClick={() => this.selectionBoardRootDirectory(item, org_id)}>
+                                                    {
+                                                        item.board_id === choice_board_id ? (
+                                                            <Text className={`${globalStyle.global_iconfont} ${indexStyles.choice_button_icon_style}`}>&#xe844;</Text>
+                                                        ) : (
+                                                            <Text className={`${globalStyle.global_iconfont} ${indexStyles.un_choice_button_icon_style}`}>&#xe6df;</Text>
+                                                        )
+                                                    }
+                                                </View>
+
+                                                <View className={indexStyles.board_item_cell_content_style} onClick={() => this.selectedBoardItem('0', item.board_id, '', item)}>
+
+                                                    <View className={indexStyles.board_folder_view_style}>
+                                                        <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_folder_icon_style}`}>&#xe662;</Text>
                                                     </View>
 
-                                                    <View className={indexStyles.board_item_cell_content_style} onClick={() => this.selectedBoardItem('0', item.board_id, '', item)}>
+                                                    <View className={indexStyles.board_item_cell_content_top_style}>
+                                                        <View className={indexStyles.board_item_name}>{item.board_name}</View>
 
-                                                        <View className={indexStyles.board_folder_view_style}>
-                                                            <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_folder_icon_style}`}>&#xe662;</Text>
-                                                        </View>
+                                                        {org_list && org_list.length > 0 ? (<View className={indexStyles.org_name_style}>
+                                                            {'#'}{getOrgName({ org_id, org_list })}
+                                                        </View>) : ''}
+                                                    </View>
 
-                                                        <View className={indexStyles.board_item_cell_content_top_style}>
-                                                            <View className={indexStyles.board_item_name}>{item.board_name}</View>
+                                                    <View className={indexStyles.board_item_open_view_style}>
+                                                        {
+                                                            item.board_id === current_selection_board_id && current_board_open === true ? (
+                                                                <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_open_icon_style}`}>&#xe653;</Text>
+                                                            ) : (
+                                                                <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_open_icon_style}`}>&#xe642;</Text>
+                                                            )
+                                                        }
 
-                                                            {org_list && org_list.length > 0 ? (<View className={indexStyles.org_name_style}>
-                                                                {'#'}{getOrgName({ org_id, org_list })}
-                                                            </View>) : ''}
-                                                        </View>
-
-                                                        <View className={indexStyles.board_item_open_view_style}>
-                                                            {
-                                                                item.board_id === current_selection_board_id && current_board_open === true ? (
-                                                                    <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_open_icon_style}`}>&#xe653;</Text>
-                                                                ) : (
-                                                                        <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_open_icon_style}`}>&#xe642;</Text>
-                                                                    )
-                                                            }
-
-                                                        </View>
                                                     </View>
                                                 </View>
-                                                {child_data && item.board_id === current_selection_board_id ?
-                                                    <View className={indexStyles.folder_tree_view}>
-                                                        <TreeFile folderTree={child_data} boardId={item.board_id} orgId={item.org_id} boardName={item.board_name} />
-                                                    </View> : ''
-                                                }
                                             </View>
-                                        )
-                                    })
-                                    }
-                                </ScrollView>
-                            </View>
-                        )
+                                            {child_data && item.board_id === current_selection_board_id ?
+                                                <View className={indexStyles.folder_tree_view}>
+                                                    <TreeFile folderTree={child_data} boardId={item.board_id} orgId={item.org_id} boardName={item.board_name} />
+                                                </View> : ''
+                                            }
+                                        </View>
+                                    )
+                                })
+                                }
+                            </ScrollView>
+                        </View>
+                    )
                     }
 
 
@@ -549,12 +557,12 @@ export default class ChoiceFolder extends Component {
                             choice_board_id != '' || choice_board_folder_id != '' ? (
                                 <View className={indexStyles.confirm_button_style} onClick={this.handleConfirm}>上传</View>
                             ) : (
-                                    <View className={indexStyles.un_confirm_button_style}>上传</View>
-                                )
+                                <View className={indexStyles.un_confirm_button_style}>上传</View>
+                            )
                         }
                     </View>
                 </View>
-            </View>
+            </View >
         )
     }
 }
