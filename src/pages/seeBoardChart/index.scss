@@ -1,4 +1,5 @@
 @import "../../gloalSet/styles/constant";
+@import "../../gloalSet/styles/theme.scss";
 
 .err_area {
   height: 100vh;
@@ -14,5 +15,44 @@
   .err_text {
     margin-top: 40rpx;
     font-size: $fontsize_16;
+  }
+}
+.scanCodeBtn{
+  margin-top: 50rpx;
+}
+.webview_container{
+  position: relative;
+  .operations{
+    position: absolute;
+    left: 10px;
+    top: 10px;
+  }
+}
+.navibar{
+  background-color: #1D90FF;
+  color: #fff;
+}
+.item_icon{
+  font-size: 1.8rem;
+  color: #1D90FF;
+}
+.iconfont{
+  font-family: 'iconfont';
+}
+.navBar_Scss {
+  width          : 100%;
+  align-items    : center;
+  display        : flex;
+  .backmenu{
+    font-family: 'iconfont';
+    width: 80rpx;
+    text-align: center;
+  }
+  .title{
+    text-align: center;
+    flex: 1;
+  }
+  .more{
+    width: 10%;
   }
 }
