@@ -6,8 +6,8 @@ import indexStyles from "./index.scss";
 import globalStyles from "../../../../gloalSet/styles/globalStyles.scss";
 import { getMonthDate, isToday, isSamDay } from "./getDate";
 
-@connect(({ calendar: { sign_data, calendar_mark_list } }) => ({
-  sign_data, calendar_mark_list
+@connect(({ calendar: { sign_data, calendar_mark_list, isCartListScroll } }) => ({
+  sign_data, calendar_mark_list, isCartListScroll
 }))
 export default class CalendarSwiper extends Component {
   constructor(props) {
@@ -18,7 +18,8 @@ export default class CalendarSwiper extends Component {
     current_indi: 1, //滑动组件当前所在哪个点
     windowWidth: 0,
     selected_timestamp: new Date().getTime(), //当前选择的日期
-    show_whole_calendar: "0", // 0 /1 /2 初始/展开/关闭
+    show_whole_calendar: "0", // 0 /1 /2 初始/展开/关闭,
+    isHandOpen: false, //是否是手动展开日历
     todayMaginTop: 0 //收起日历时日历的位置
   };
 
@@ -203,21 +204,41 @@ export default class CalendarSwiper extends Component {
   }
 
   setShowWholeCalendar() {
+    const { dispatch, isCartListScroll } = this.props;
     const { show_whole_calendar } = this.state;
     let show_flag = "0";
-    if ("0" == show_whole_calendar) {
-      show_flag = "2";
-      // this.calculationTodayMaginTop("dynamic");
-    } else if ("1" == show_whole_calendar) {
-      show_flag = "2";
-      // this.calculationTodayMaginTop("dynamic");
-    } else if ("2" == show_whole_calendar) {
+
+    if (isCartListScroll) {
+      dispatch({
+        type: "calendar/updateDatas",
+        payload: {
+          isCartListScroll: false
+        }
+      });
       show_flag = "1";
-      // this.calculationTodayMaginTop("initial");
     } else {
+      if ("0" == show_whole_calendar) {
+        show_flag = "2";
+        // this.calculationTodayMaginTop("dynamic");
+      } else if ("1" == show_whole_calendar) {
+        show_flag = "2";
+        // this.calculationTodayMaginTop("dynamic");
+      } else if ("2" == show_whole_calendar) {
+        show_flag = "1";
+        // this.calculationTodayMaginTop("initial");
+      } else {
+      }
+    }
+    if (show_flag == '0' || show_flag == '1') {
+      dispatch({
+        type: "calendar/updateDatas",
+        payload: {
+          isHandleOpen: true
+        }
+      });
     }
     this.setState({
-      show_whole_calendar: show_flag
+      show_whole_calendar: show_flag,
     });
   }
 
@@ -325,7 +346,7 @@ export default class CalendarSwiper extends Component {
   };
 
   render() {
-    const {
+    var {
       swiper_list = [],
       current_indi,
       windowWidth,
@@ -336,10 +357,12 @@ export default class CalendarSwiper extends Component {
       select_date_no,
       select_week_day_dec,
       show_whole_calendar,
-      todayMaginTop
+      todayMaginTop,
+      isHandOpen
     } = this.state;
-    const { calendar_mark_list } = this.props;
+    const { calendar_mark_list, isCartListScroll } = this.props;
     const week_array = ["日", "一", "二", "三", "四", "五", "六"];
+
     const renderDate = (
       <View className={indexStyles.month_area}>
         <View className={indexStyles.week_head} style={{ height: 30 + "px" }}>
@@ -484,9 +507,9 @@ export default class CalendarSwiper extends Component {
         <View className={indexStyles.calendar_out}>
           <Swiper
             className={`${indexStyles.month_area_swiper
-              } ${show_whole_calendar == "0" &&
-              indexStyles.swiper_show_nomal} ${show_whole_calendar == "1" &&
-              indexStyles.swiper_show_whole} ${show_whole_calendar == "2" &&
+              } ${(show_whole_calendar == "0" && !isCartListScroll) &&
+              indexStyles.swiper_show_nomal} ${show_whole_calendar == "1" && !isCartListScroll &&
+              indexStyles.swiper_show_whole} ${(show_whole_calendar == "2" || isCartListScroll) &&
               indexStyles.swiper_show_part}`}
             onChange={this.swiperChange}
             current={current_indi}
@@ -517,16 +540,16 @@ export default class CalendarSwiper extends Component {
                 </View>*/}
 
             {
-              show_whole_calendar == '0' || show_whole_calendar == '1' ? (<View onClick={this.setShowWholeCalendar} className={indexStyles.showcalendar}></View>) : (<Text className={`${globalStyles.global_iconfont} ${indexStyles.hidecalendaricon}`}>&#xe642;</Text>)
+              ((show_whole_calendar == '0' || show_whole_calendar == '1') && !isCartListScroll) ? (<View onClick={this.setShowWholeCalendar} className={indexStyles.showcalendar}></View>) : (<Text className={`${globalStyles.global_iconfont} ${indexStyles.hidecalendaricon}`}>&#xe642;</Text>)
             }
 
           </View>
         </View>
         <View
           className={`${indexStyles.calendar_back} ${show_whole_calendar ==
-            "0" && indexStyles.calendar_back_nomal} ${show_whole_calendar ==
-            "1" && indexStyles.calendar_back_all} ${show_whole_calendar ==
-            "2" && indexStyles.calendar_back_part}`}
+            "0" && !isCartListScroll && indexStyles.calendar_back_nomal} ${show_whole_calendar ==
+            "1" && !isCartListScroll && indexStyles.calendar_back_all} ${(show_whole_calendar ==
+              "2" || isCartListScroll) && indexStyles.calendar_back_part}`}
         ></View>
       </View>
     );

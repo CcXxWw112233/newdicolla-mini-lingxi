@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro'
 import { isApiResponseOk } from "../../utils/request";
-import { qrCodeIsInvitation, userScanCodeJoinBoard, userScanCodeJoinOrganization, commInviteQRCodejoin } from "../../services/invitation/index";
+import { qrCodeIsInvitation, userScanCodeJoinOrganization, commInviteQRCodejoin } from "../../services/invitation/index";
 import { NODE_ENV } from '../../gloalSet/js/constant';
 
 export default {

@@ -104,6 +104,7 @@ export default class File extends Component {
         officialAccountFileInfo: {}, //获取从公众号进入小程序预览文件
         file_list_state: [], //最终文件列表
         un_read_file_array: [], //文件未读数组
+        upload_sheet_list: [{ icon: '&#xe846;', value: '从微信导入文件' }, { icon: '&#xe664;', value: '从相册导入文件' }, { icon: '&#xe86f;', value: '从相机导入文件' }]
     }
 
     onShareAppMessage() {
@@ -173,6 +174,8 @@ export default class File extends Component {
         this.setState({
             officialAccountFileInfo: Taro.getStorageSync('switchTabFileInfo'),
         })
+
+
     }
 
     //加载数据
@@ -306,10 +309,10 @@ export default class File extends Component {
                 // eslint-disable-next-line react/no-unused-state
                 un_read_file_array: cardNumArr,
             }, () => {
-                Taro.pageScrollTo({
-                    scrollTop: 100000,
-                    duration: 100,
-                })
+                // Taro.pageScrollTo({
+                // scrollTop: 100000,
+                // duration: 100,
+                // })
             })
         })
     }
@@ -582,13 +585,11 @@ export default class File extends Component {
         })
     }
 
-
-
-    // 获取授权
-    getAuthSetting = (imageSourceType) => {
+    // 判断是否选择项目
+    judgeIsSelectProject() {
         let that = this;
-        const { header_folder_name } = this.props;
 
+        const { header_folder_name } = this.props;
         if (!this.state.uplaodAuto) {
             Taro.showToast({
                 title: header_folder_name == '全部文件' ? '请选择相应的项目' : '您没有该项目的上传权限',
@@ -597,6 +598,28 @@ export default class File extends Component {
             });
             return;
         }
+        Taro.showActionSheet({
+            itemList: ['从微信导入文件', '从相册导入文件', '从相机导入文件'],
+            success: function (res) {
+                console.log(res.tapIndex)
+                if (res.tapIndex == 0) {
+                    that.getAuthSetting('file')
+                } else if (res.tapIndex == 1) {
+                    that.getAuthSetting('album')
+                } else if (res.tapIndex == 2) {
+                    that.getAuthSetting('camera')
+                }
+            },
+            fail: function (res) {
+                console.log(res.errMsg)
+            }
+        })
+
+    }
+
+    // 获取授权
+    getAuthSetting = (imageSourceType) => {
+        let that = this;
         this.getLocationAuth().then(msg => {
             Taro.getSetting({
                 success(res) {
@@ -673,6 +696,9 @@ export default class File extends Component {
                         } else {
                             that.fileUploadAlbumCamera(imageSourceType)
                         }
+                    } else if (imageSourceType === 'file') {
+                        console.log('文件上传')
+                        that.fileUploadMessageFile(imageSourceType)
                     }
                 },
                 fail(res) {
@@ -723,6 +749,31 @@ export default class File extends Component {
             }
         })
     }
+
+    // 上传微信聊天文件
+    fileUploadMessageFile = (imageSourceType) => {
+        var that = this;
+        Taro.chooseMessageFile({
+            count: 10,
+            type: 'all',
+            success: function (res) {
+                // tempFilePath可以作为img标签的src属性显示图片
+                // const tempFilePaths = res.tempFilePaths
+                var tempFilePaths = res.tempFiles.map(function (item, index, input) {
+                    return item.path;
+                })
+                that.uploadChoiceFolder();
+                that.setState({
+                    makePho: imageSourceType,
+                    choice_image_temp_file_paths: tempFilePaths,
+                })
+                console.log(tempFilePaths)
+                console.log(res.tempFiles)
+            }
+        })
+
+    }
+
 
     uploadChoiceFolder = () => {
         const { dispatch } = this.props
@@ -833,10 +884,10 @@ export default class File extends Component {
     render() {
 
         const { isShowBoardList, header_folder_name, isShowChoiceFolder } = this.props
-        const { is_tips_longpress_file, choice_image_temp_file_paths = [], makePho, file_list_state } = this.state
+        const { is_tips_longpress_file, choice_image_temp_file_paths = [], makePho, file_list_state, upload_sheet_list } = this.state
 
         return (
-            <View className={indexStyles.index}>
+            <View className={indexStyles.index} >
                 {
                     isShowBoardList === true ?
                         <BoardFile closeBoardList={() => this.choiceBoard(false)} selectedBoardFile={(org_id, board_id, folder_id) => this.getFilePage(org_id, board_id, folder_id)} />
@@ -847,7 +898,7 @@ export default class File extends Component {
                 }
                 <View style={{ position: 'sticky', top: 0 + 'px', left: 0 }}>
                     <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={'0'} onSearch={(value) => this.onSearch(value)} isDisabled={false} />
-                </View>
+                </View >
 
                 <View className={indexStyles.head_background}>
                     <View className={indexStyles.hear_function}>
@@ -858,8 +909,16 @@ export default class File extends Component {
                         </View>
 
                         <View className={indexStyles.files_album_camera_view_style}>
-                            <View className={indexStyles.files_album_camera_button_style} onClick={this.getAuthSetting.bind(this, 'album')}><Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe664;</Text></View>
-                            <View className={indexStyles.files_album_camera_button_style} onClick={this.getAuthSetting.bind(this, 'camera')}><Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe86f;</Text></View>
+                            {/*  <View className={indexStyles.files_album_camera_button_style} onClick=
+                                {this.getAuthSetting.bind(this, 'file')}><Text className={`${globalStyle.global_iconfont} ${indexStyles.
+                                    files_album_camera_icon_style}`}>&#xe662;</Text></View>
+                            <View className={indexStyles.files_album_camera_button_style} onClick={this.getAuthSetting.bind(this, 'album')}>
+                            <Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe664;</Text>
+                            </View>
+                                */}
+
+                            <View className={indexStyles.files_album_camera_button_style} onClick={this.judgeIsSelectProject.bind(this, 'camera')}><Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe7b7;</Text></View>
+                            {/* &#xe86f; */}
                         </View>
 
                     </View>
@@ -867,11 +926,14 @@ export default class File extends Component {
                 {
                     file_list_state && file_list_state.length !== 0 ? (<View className={indexStyles.grid_style}>
                         {file_list_state.map((value, key) => {
-                            const { thumbnail_url, msg_ids } = value
-                            const fileType = filterFileFormatType(value.file_name)
+                            const { thumbnail_url, msg_ids, visited } = value
+                            const fileType = filterFileFormatType(value.file_name);
+
                             return (
                                 <View className={indexStyles.lattice_style} onClick={this.goFileDetails.bind(this, value, value.file_name)} onLongPress={this.longPress.bind(this, value)} key={key}>
-                                    {/* <View className={indexStyles.redcircle}></View> */}
+                                    {
+                                        visited != '1' ? (<View className={indexStyles.redcircle}></View>) : (null)
+                                    }
                                     {
                                         msg_ids != null ? <View className={indexStyles.unread_red}>
                                         </View> : (<View></View>)
@@ -910,7 +972,8 @@ export default class File extends Component {
                         </View>
                     </View>) : ''
                 }
-            </View>
+
+            </View >
         )
     }
 }

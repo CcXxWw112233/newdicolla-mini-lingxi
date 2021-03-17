@@ -10,6 +10,16 @@
   }
 }
 
+.swiper_show_part1 {
+  from {
+    height: pxTrans(270) !important;
+  }
+
+  to {
+    height: pxTrans(70) !important;
+  }
+}
+
 @keyframes swiper_show_part {
   from {
     height: pxTrans(270);
@@ -271,6 +281,7 @@
       width        : pxTrans(4);
       height       : pxTrans(4);
       border-radius: pxTrans(4);
+      background   : white !important;
     }
 
     .has_task {
