@@ -1,6 +1,7 @@
 @import "../../gloalSet/styles/constant";
 @import "../../gloalSet/styles/theme.scss";
 @import "~taro-ui/dist/style/components/swipe-action.scss";
+@import "~taro-ui/dist/style/components/float-layout.scss";
 
 .scrollView{
   height: 100vh;
@@ -59,4 +60,22 @@
       }
     }
   }
+}
+.confirmTitle{
+  display: flex;
+  flex-direction: column;
+  height: 46vh;
+  .text_content{
+    flex: 1;
+  }
+  .text_button{
+    flex: none;
+    height: 80rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+.actionBox{
+  margin-bottom: 15rpx;
 }

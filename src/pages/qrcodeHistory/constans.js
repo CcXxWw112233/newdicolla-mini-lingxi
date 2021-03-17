@@ -14,7 +14,7 @@ export const BOARDSTATISTICS = 'board_statistic'
 /**
  * 任务统计标识
  */
-export const TASKSTATISTICS = 'task_statistic'
+export const TASKSTATISTICS = 'card_statistic'
 /**
  * 项目统计页面地址
  */

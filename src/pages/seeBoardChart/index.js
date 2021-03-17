@@ -83,7 +83,7 @@ export default class index extends Component {
       const { board_ids, query_condition } = response.data;
       Taro.setStorageSync(
         "web_redirect_url",
-        "http://192.168.1.81:8665/board_statistics.html" ||
+        /**"http://192.168.1.81:8665/board_statistics.html" ||*/
           `${BASE_URL}${rela_content}`
       );
       Taro.setStorageSync("web_param_board_id", board_ids);
@@ -94,6 +94,12 @@ export default class index extends Component {
     } else {
       this.setState({
         show_err: true
+      });
+      Taro.hideLoading();
+      Taro.showModal({
+        showCancel: false,
+        title: "扫码错误",
+        content: res.message
       });
     }
     // dispatch({
@@ -140,7 +146,7 @@ export default class index extends Component {
         loading: false,
         wsrc: `${web_redirect_url}?board_ids=${web_param_board_id}&token=${Taro.getStorageSync(
           "access_token"
-        )}&${query_condition}`
+        )}&${query_condition}&id=${id}`
       });
     } else {
       const redirectPath = `../seeBoardChart/index`;
@@ -218,8 +224,11 @@ export default class index extends Component {
   };
 
   offcialMessageEntry = () => {
-    const { web_param_board_id, web_redirect_url } = this.$router.params;
-    Taro.setStorageSync("web_redirect_url", web_redirect_url || `${BASE_URL}${web_redirect_url}`);
+    const { web_param_board_id, web_redirect_url, id } = this.$router.params;
+    Taro.setStorageSync(
+      "web_redirect_url",
+      web_redirect_url || `${BASE_URL}${web_redirect_url}`
+    );
     Taro.setStorageSync("web_param_board_id", web_param_board_id);
     this.setState(
       {
@@ -227,7 +236,7 @@ export default class index extends Component {
         loading: false
       },
       () => {
-        this.getAuth();
+        this.getAuth(id);
       }
     );
   };
@@ -257,7 +266,7 @@ export default class index extends Component {
   handleHistoryInfo = async val => {
     const res = await this.getQrcodeInfo(val.id);
     // console.log(res);
-    const { board_ids, query_condition } = res.data;
+    const { board_ids, query_condition, id } = res.data;
 
     const web_redirect_url = Taro.getStorageSync("web_redirect_url");
     this.setState({
@@ -265,7 +274,7 @@ export default class index extends Component {
       show_err: false,
       wsrc: `${web_redirect_url}?board_ids=${board_ids}&token=${Taro.getStorageSync(
         "access_token"
-      )}&${query_condition}`
+      )}&${query_condition}&id=${id}`
     });
   };
 

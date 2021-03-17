@@ -89,3 +89,14 @@ export const removeQrcode = (data) => {
     method: 'POST'
   })
 }
+
+/**
+ * 修改二维码数据的名称
+ */
+export const EditHistoryTitle = (data) => {
+  return request({
+    url: `${API_BOARD}/report/qrcode/record/${data.id}?report_title=${data.report_title}`,
+    data,
+    method: 'PUT'
+  })
+}
