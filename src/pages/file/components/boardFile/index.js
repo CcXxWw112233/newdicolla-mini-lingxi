@@ -117,7 +117,8 @@ export default class BoardFile extends Component {
                 </View>
 
                 {filter_board_list && filter_board_list.map(item => {
-                    const org_id = item.org_id
+                    const org_id = item.org_id;
+                    const { file_all_visited } = item;
                     return (
                         <View className={indexStyles.board_item_style} hoverClass={indexStyles.board_item_hover_style} onClick={() => this.selectedBoardItem(org_id, item.board_id, '', item)}>
 
@@ -126,6 +127,11 @@ export default class BoardFile extends Component {
                                 <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_icon}`}>&#xe662;</Text>
 
                                 <View className={indexStyles.board_item_name}>{item.board_name}</View>
+                                {
+                                    file_all_visited != '1' ? (<View className={indexStyles.redCircel}></View>) : (null)}
+
+
+
                                 {org_list && org_list.length > 0 ? (<View className={indexStyles.org_name_style}>
                                     {'#'} {item.name}
                                 </View>) : ''}

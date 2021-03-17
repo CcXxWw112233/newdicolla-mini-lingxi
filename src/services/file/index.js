@@ -37,7 +37,7 @@ export const getDownloadUrl = (data, notShowLoading) => {
         requestClientType: "wxapp",
       }
     },
-    url: `${API_BOARD}/file/download`
+    url: `${API_BOARD}/v2/file/download`
   }, notShowLoading)
 }
 

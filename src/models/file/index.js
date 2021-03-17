@@ -23,6 +23,7 @@ export default {
         current_custom_message: {},// 点击的动态通知数据
         current_custom_comment: [],// 加载的comment数据
         load_custom_file_msg: {},// 通过接口加载的文件数据
+        unvisited_file_list_count: 0 //未读文件的数量
     },
     effects: {
         //全部文件信息
@@ -30,6 +31,9 @@ export default {
             Taro.showLoading({
                 title: '加载中...',
             })
+            console.log(payload);
+
+            const { board_id, _organization_id } = payload;
             const res = yield call(getFilePage, payload)
             if (isApiResponseOk(res)) {
                 yield put({
@@ -38,6 +42,25 @@ export default {
                         file_list: res.data
                     }
                 })
+                if (board_id == '' && _organization_id == '') {
+                    var unvisited_file_list = res.data.filter(function (value) {
+                        return value.visited != '1';
+                    })
+                    yield put({
+                        type: 'updateDatas',
+                        payload: {
+                            unvisited_file_list_count: unvisited_file_list.length
+                        }
+                    })
+                    Taro.setTabBarBadge({
+                        index: 2,
+                        text: unvisited_file_list.length > 99
+                            ? "99+"
+                            : unvisited_file_list.length
+                                ? unvisited_file_list.length + ""
+                                : "0"
+                    });
+                }
             } else {
                 Taro.showToast({
                     title: res.message,

@@ -19,6 +19,7 @@ import { BASE_URL, API_BOARD } from "../../gloalSet/js/constant";
         isShowChoiceFolder,
         selected_board_folder_info,
         unread_file_list = [],
+        unvisited_file_list_count,
     },
     im: {
         allBoardList,
@@ -32,6 +33,7 @@ import { BASE_URL, API_BOARD } from "../../gloalSet/js/constant";
         selected_board_folder_info,
         currentBoard,
         unread_file_list,
+        unvisited_file_list_count
     }),
     dispatch => {
         return {
@@ -182,7 +184,6 @@ export default class File extends Component {
     loadData = (params) => {
         const { org_id, board_id, folder_id } = params
         this.getFilePage(org_id, board_id, folder_id)
-
     }
 
     getFilePage = (org_id, board_id, folder_id) => {
@@ -350,13 +351,13 @@ export default class File extends Component {
     //预览文件详情
     goFileDetails = (value, fileName) => {
         Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
-        const { file_resource_id, board_id, } = value
+        const { id, board_id, } = value
         const { dispatch } = this.props
         setBoardIdStorage(board_id)
         const fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
         const parameter = {
             board_id,
-            ids: file_resource_id,
+            file_ids: id,
             _organization_id: getOrgIdByBoardId(board_id),
         }
 
@@ -396,6 +397,25 @@ export default class File extends Component {
         arr.push(value.msg_ids);
         //把文件改为已读
         this.readFile(dispatch, arr);
+
+        var { unvisited_file_list_count } = this.props;
+        unvisited_file_list_count = unvisited_file_list_count - 1;
+
+
+        Taro.setTabBarBadge({
+            index: 2,
+            text: unvisited_file_list_count > 99
+                ? "99+"
+                : unvisited_file_list_count
+                    ? unvisited_file_list_count + ""
+                    : "0"
+        });
+        dispatch({
+            type: 'file/updateDatas',
+            payload: {
+                unvisited_file_list_count: unvisited_file_list_count,
+            },
+        })
     }
 
     readFile = (dispatch, msg_ids) => {
@@ -890,13 +910,14 @@ export default class File extends Component {
             <View className={indexStyles.index} >
                 {
                     isShowBoardList === true ?
+
                         <BoardFile closeBoardList={() => this.choiceBoard(false)} selectedBoardFile={(org_id, board_id, folder_id) => this.getFilePage(org_id, board_id, folder_id)} />
                         : ''
                 }
                 {
                     isShowChoiceFolder === true ? (<ChoiceFolder makePho={makePho} choiceImageThumbnail={choice_image_temp_file_paths} fileUpload={(val) => this.fileUpload(val)} />) : ''
                 }
-                <View style={{ position: 'sticky', top: 0 + 'px', left: 0 }}>
+                <View style={{ position: 'sticky', top: 0 + 'px', left: 0 }} className={indexStyles.SearchAndMenu}>
                     <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={'0'} onSearch={(value) => this.onSearch(value)} isDisabled={false} />
                 </View >
 

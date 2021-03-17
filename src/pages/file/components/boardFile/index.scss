@@ -6,11 +6,12 @@
     position      : fixed;
     top           : 0;
     left          : 0;
-    z-index       : 100;
+    z-index       : 9999;
     overflow      : auto;
     background    : rgba(0, 0, 0, .8);
     color         : rgba(255, 255, 255, 1);
     padding-bottom: pxTrans(50);
+
 
     .whole_file_style {
         margin-top: pxTrans(20);
@@ -55,6 +56,14 @@
                 line-height: pxTrans(26);
                 max-width  : pxTrans(500);
                 padding    : pxTrans(5) 0 pxTrans(5) 0;
+            }
+
+            .redCircel {
+                height       : pxTrans(8);
+                width        : pxTrans(8);
+                border-radius: pxTrans(4);
+                margin       : pxTrans(10);
+                background   : red;
             }
 
             .org_name_style {
