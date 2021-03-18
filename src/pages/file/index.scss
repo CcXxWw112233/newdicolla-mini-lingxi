@@ -15,6 +15,7 @@
         left      : 0;
         top       : pxTrans(44);
         background: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.6) 70%);
+        z-index   : 10;
 
         .image_head_background {
             position: absolute;
