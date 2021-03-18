@@ -42,34 +42,33 @@ export default {
                         file_list: res.data
                     }
                 })
-                if (board_id == '' && (_organization_id == '' || _organization_id == 0)) {
 
-                    var unvisited_file_list = res.data.filter(function (value) {
-                        return value.visited != '1';
-                    })
-                    yield put({
-                        type: 'updateDatas',
-                        payload: {
-                            unvisited_file_list_count: unvisited_file_list.length
-                        }
-                    })
-                    if (unvisited_file_list.length > 0) {
-                        if (unvisited_file_list.length == 0) {
-                            Taro.removeTabBarBadge({
-                                index: 2
-                            })
-                        } else {
-                            Taro.setTabBarBadge({
-                                index: 2,
-                                text: unvisited_file_list.length > 99
-                                    ? "99+"
-                                    : unvisited_file_list.length
-                                        ? unvisited_file_list.length + ""
-                                        : ""
-                            });
-                        }
+                var unvisited_file_list = res.data.filter(function (value) {
+                    return value.visited != '1';
+                })
+                yield put({
+                    type: 'updateDatas',
+                    payload: {
+                        unvisited_file_list_count: unvisited_file_list.length
+                    }
+                })
+                if (unvisited_file_list.length > 0) {
+                    if (unvisited_file_list.length == 0) {
+                        Taro.removeTabBarBadge({
+                            index: 2
+                        })
+                    } else {
+                        Taro.setTabBarBadge({
+                            index: 2,
+                            text: unvisited_file_list.length > 99
+                                ? "99+"
+                                : unvisited_file_list.length
+                                    ? unvisited_file_list.length + ""
+                                    : ""
+                        });
                     }
                 }
+
             } else {
                 Taro.showToast({
                     title: res.message,
