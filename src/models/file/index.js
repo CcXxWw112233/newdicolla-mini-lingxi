@@ -52,14 +52,22 @@ export default {
                             unvisited_file_list_count: unvisited_file_list.length
                         }
                     })
-                    Taro.setTabBarBadge({
-                        index: 2,
-                        text: unvisited_file_list.length > 99
-                            ? "99+"
-                            : unvisited_file_list.length
-                                ? unvisited_file_list.length + ""
-                                : "0"
-                    });
+                    if (unvisited_file_list.length > 0) {
+                        if (unvisited_file_list.length == 0) {
+                            Taro.removeTabBarBadge({
+                                index: 2
+                            })
+                        } else {
+                            Taro.setTabBarBadge({
+                                index: 2,
+                                text: unvisited_file_list.length > 99
+                                    ? "99+"
+                                    : unvisited_file_list.length
+                                        ? unvisited_file_list.length + ""
+                                        : ""
+                            });
+                        }
+                    }
                 }
             } else {
                 Taro.showToast({

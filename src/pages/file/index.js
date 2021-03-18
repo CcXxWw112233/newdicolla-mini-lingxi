@@ -399,23 +399,30 @@ export default class File extends Component {
         this.readFile(dispatch, arr);
 
         var { unvisited_file_list_count } = this.props;
-        unvisited_file_list_count = unvisited_file_list_count - 1;
+        if (unvisited_file_list_count > 0) {
 
-
-        Taro.setTabBarBadge({
-            index: 2,
-            text: unvisited_file_list_count > 99
-                ? "99+"
-                : unvisited_file_list_count
-                    ? unvisited_file_list_count + ""
-                    : "0"
-        });
-        dispatch({
-            type: 'file/updateDatas',
-            payload: {
-                unvisited_file_list_count: unvisited_file_list_count,
-            },
-        })
+            unvisited_file_list_count = unvisited_file_list_count - 1;
+            if (unvisited_file_list_count == 0) {
+                Taro.removeTabBarBadge({
+                    index: 2,
+                })
+            } else {
+                Taro.setTabBarBadge({
+                    index: 2,
+                    text: unvisited_file_list_count > 99
+                        ? "99+"
+                        : unvisited_file_list_count
+                            ? unvisited_file_list_count + ""
+                            : ""
+                });
+                dispatch({
+                    type: 'file/updateDatas',
+                    payload: {
+                        unvisited_file_list_count: unvisited_file_list_count,
+                    },
+                })
+            }
+        }
     }
 
     readFile = (dispatch, msg_ids) => {
@@ -806,7 +813,8 @@ export default class File extends Component {
     }
 
     addSendPromise = (filePath, data, authorization, base_info) => {
-        // console.log(data)
+        console.log("***************~~~~~~~~~~~~~~~~~~***********")
+        console.log(filePath)
         return new Promise((resolve, reject) => {
             Taro.uploadFile({
                 url: BASE_URL + API_BOARD + '/file/batch/upload', //后端接口
@@ -871,7 +879,6 @@ export default class File extends Component {
             longitude, latitude
         }
 
-        console.log("===============================");
         console.log(data)
 
         const base_info = setRequestHeaderBaseInfo({ data, headers: authorization })
@@ -879,6 +886,11 @@ export default class File extends Component {
         Taro.showToast({ icon: "loading", title: `正在上传...` });
         // 统一上传
         let promise = [];
+        console.log("===============================");
+
+        console.log(choice_image_temp_file_paths);
+
+
         //开发者服务器访问接口，微信服务器通过这个接口上传文件到开发者服务器
         for (var i = 0; i < choice_image_temp_file_paths.length; i++) {
             promise.push(this.addSendPromise(choice_image_temp_file_paths[i], data, authorization, base_info))
@@ -953,7 +965,6 @@ export default class File extends Component {
                         {file_list_state.map((value, key) => {
                             const { thumbnail_url, msg_ids, visited } = value
                             const fileType = filterFileFormatType(value.file_name);
-
                             return (
                                 <View className={indexStyles.lattice_style} onClick={this.goFileDetails.bind(this, value, value.file_name)} onLongPress={this.longPress.bind(this, value)} key={key}>
                                     {
