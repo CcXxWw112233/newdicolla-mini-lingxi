@@ -20,7 +20,8 @@ export default class CalendarSwiper extends Component {
     selected_timestamp: new Date().getTime(), //当前选择的日期
     show_whole_calendar: "0", // 0 /1 /2 初始/展开/关闭,
     isHandOpen: false, //是否是手动展开日历
-    todayMaginTop: 0 //收起日历时日历的位置
+    todayMaginTop: 0, //收起日历时日历的位置
+    clientY: 0
   };
 
   componentDidMount() {
@@ -345,6 +346,37 @@ export default class CalendarSwiper extends Component {
     return !!i;
   };
 
+  onTouchStart = (e) => {
+    this.setState({
+      clientY: e.changedTouches[0].clientY,
+    })
+  }
+
+
+  onTouchMove = (e) => {
+    const { clientY } = this.state;
+    var currentClientY = e.changedTouches[0].clientY;
+    const { schedule, dispatch } = this.props;
+    if (currentClientY + 30 < clientY) {
+      dispatch({
+        type: "calendar/updateDatas",
+        payload: {
+          isCartListScroll: true
+        }
+      });
+    } else if (currentClientY - 30 > clientY) {
+      dispatch({
+        type: "calendar/updateDatas",
+        payload: {
+          isCartListScroll: false
+        }
+      });
+      this.setState({
+        show_whole_calendar: '1'
+      })
+    }
+  }
+
   render() {
     var {
       swiper_list = [],
@@ -364,7 +396,7 @@ export default class CalendarSwiper extends Component {
     const week_array = ["日", "一", "二", "三", "四", "五", "六"];
 
     const renderDate = (
-      <View className={indexStyles.month_area}>
+      <View className={indexStyles.month_area} >
         <View className={indexStyles.week_head} style={{ height: 30 + "px" }}>
           {week_array.map((value, index) => {
             return (
@@ -503,7 +535,7 @@ export default class CalendarSwiper extends Component {
     );
 
     return (
-      <View className={indexStyles.index}>
+      <View className={indexStyles.index} onTouchMove={(e) => this.onTouchMove(e)} onTouchStart={(e) => this.onTouchStart(e)}>
         <View className={indexStyles.calendar_out}>
           <Swiper
             className={`${indexStyles.month_area_swiper

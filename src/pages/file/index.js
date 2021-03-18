@@ -192,7 +192,7 @@ export default class File extends Component {
         const params = {
             org_id: org_id,
             board_id: board_id,
-            folder_id: folder_id,
+            folder_id: folder_id == undefined ? '' : folder_id,
         }
         const { dispatch, header_folder_name } = this.props;
         var that = this;
@@ -206,7 +206,7 @@ export default class File extends Component {
                 payload: {
                     _organization_id: org_id,
                     board_id: board_id,
-                    folder_id: folder_id,
+                    folder_id: folder_id == undefined ? '' : folder_id,
                     page_number: '',
                     page_size: '',
                 },
@@ -856,7 +856,7 @@ export default class File extends Component {
         const params = {
             org_id: org_id,
             board_id: board_id,
-            folder_id: folder_id,
+            folder_id: folder_id == undefined ? '' : folder_id,
         }
         Taro.setStorageSync('file_pull_down_refresh', JSON.stringify(params))
 
@@ -865,11 +865,15 @@ export default class File extends Component {
         const authorization = Taro.getStorageSync('access_token')
         const data = {
             board_id: board_id,
-            folder_id: folder_id,
+            folder_id: folder_id == undefined ? '' : folder_id,
             type: 1,
             upload_type: 1,
             longitude, latitude
         }
+
+        console.log("===============================");
+        console.log(data)
+
         const base_info = setRequestHeaderBaseInfo({ data, headers: authorization })
         // let num = 1;
         Taro.showToast({ icon: "loading", title: `正在上传...` });
