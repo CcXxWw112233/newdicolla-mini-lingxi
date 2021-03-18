@@ -20,6 +20,7 @@ import { BASE_URL, API_BOARD } from "../../gloalSet/js/constant";
         selected_board_folder_info,
         unread_file_list = [],
         unvisited_file_list_count,
+        verify_authority_list
     },
     im: {
         allBoardList,
@@ -33,7 +34,8 @@ import { BASE_URL, API_BOARD } from "../../gloalSet/js/constant";
         selected_board_folder_info,
         currentBoard,
         unread_file_list,
-        unvisited_file_list_count
+        unvisited_file_list_count,
+        verify_authority_list
     }),
     dispatch => {
         return {
@@ -106,6 +108,7 @@ export default class File extends Component {
         officialAccountFileInfo: {}, //获取从公众号进入小程序预览文件
         file_list_state: [], //最终文件列表
         un_read_file_array: [], //文件未读数组
+        uplaodAuto: false,
         upload_sheet_list: [{ icon: '&#xe846;', value: '从微信导入文件' }, { icon: '&#xe664;', value: '从相册导入文件' }, { icon: '&#xe86f;', value: '从相机导入文件' }]
     }
 
@@ -177,7 +180,11 @@ export default class File extends Component {
             officialAccountFileInfo: Taro.getStorageSync('switchTabFileInfo'),
         })
 
-
+        dispatch({
+            type: 'file/verifyAuthority',
+            payload: {
+            },
+        })
     }
 
     //加载数据
@@ -212,6 +219,9 @@ export default class File extends Component {
                 },
             })
         ).then(() => {
+            this.setState({
+                uplaodAuto: false
+            })
             this.verifyAuthority(board_id)
 
 
@@ -249,35 +259,26 @@ export default class File extends Component {
         })
     }
     verifyAuthority = (board_id) => {
-        const { dispatch, header_folder_name } = this.props;
+        const { dispatch, header_folder_name, verify_authority_list } = this.props;
         var that = this;
         if (header_folder_name == '全部文件') {
             return false;
         } else {
             console.log(header_folder_name);
-            Promise.resolve(
-                dispatch({
-                    type: 'file/verifyAuthority',
-                    payload: {
-                    },
-                })
-            ).then((res) => {
-                const dataList = res.data;
-                console.log(dataList)
-                console.log(board_id)
-                for (var key in dataList) {//遍历json对象的每个key/value对,p为key
-                    if (board_id == key) {
-                        dataList[key].map(item => {
-                            if (item == 'project:files:file:upload') {
-                                that.setState({
-                                    uplaodAuto: true
-                                })
-                            }
-                        })
-                    }
+            console.log(board_id)
+            for (var key in verify_authority_list) {//遍历json对象的每个key/value对,p为key
+                if (board_id == key) {
+                    verify_authority_list[key].map(item => {
+                        if (item == 'project:files:file:upload') {
+                            that.setState({
+                                uplaodAuto: true
+                            })
+                        }
+                    })
                 }
-                console.log(this.state.uplaodAuto)
-            })
+            }
+            console.log(this.state.uplaodAuto)
+
         }
     }
     //获取未读文件list
@@ -803,8 +804,6 @@ export default class File extends Component {
                     makePho: imageSourceType,
                     choice_image_temp_file_paths: tempFilePaths,
                 })
-                console.log(tempFilePaths)
-                console.log(res.tempFiles)
             }
         })
 
@@ -822,8 +821,6 @@ export default class File extends Component {
     }
 
     addSendPromise = (filePath, data, authorization, base_info) => {
-        console.log("***************~~~~~~~~~~~~~~~~~~***********")
-        console.log(filePath)
         return new Promise((resolve, reject) => {
             Taro.uploadFile({
                 url: BASE_URL + API_BOARD + '/file/batch/upload', //后端接口
@@ -928,7 +925,7 @@ export default class File extends Component {
     render() {
 
         const { isShowBoardList, header_folder_name, isShowChoiceFolder } = this.props
-        const { is_tips_longpress_file, choice_image_temp_file_paths = [], makePho, file_list_state, upload_sheet_list } = this.state
+        const { is_tips_longpress_file, choice_image_temp_file_paths = [], makePho, file_list_state, upload_sheet_list, uplaodAuto } = this.state
 
         return (
             <View className={indexStyles.index} >
@@ -962,7 +959,7 @@ export default class File extends Component {
                             </View>
                                 */}
 
-                            <View className={indexStyles.files_album_camera_button_style} onClick={this.judgeIsSelectProject.bind(this, 'camera')}><Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe7b7;</Text></View>
+                            <View className={`${indexStyles.files_album_camera_button_style} ${uplaodAuto ? '' : indexStyles.files_unused_button_style}`} onClick={this.judgeIsSelectProject.bind(this, 'camera')}><Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe7b7;</Text></View>
                             {/* &#xe86f; */}
                         </View>
 

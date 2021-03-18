@@ -56,6 +56,11 @@
                 }
             }
 
+            .files_unused_button_style {
+                background-color: #F5F7FB !important;
+                color           : #BCC2D6 !important;
+            }
+
             .files_album_camera_view_style {
                 position          : fixed;
                 right             : pxTrans(16);
@@ -63,6 +68,7 @@
                 height            : pxTrans(34);
                 display           : flex;
                 justify-content   : space-between;
+                color             : rgba(24, 144, 255, 1);
 
                 .files_album_camera_button_style {
                     width          : pxTrans(32);
@@ -78,7 +84,6 @@
 
                     .files_album_camera_icon_style {
                         font-size: pxTrans(20);
-                        color    : rgba(24, 144, 255, 1);
                     }
                 }
             }
