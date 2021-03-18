@@ -81,7 +81,7 @@ class CustomNavigation extends Component {
                             </View>)
                         )
                     }
-                    <View style={{ width: '80px', display: 'inline-block', display: 'flex', justifyContent: 'center', color: '#FFFFFF' }}>
+                    <View style={{ width: '150px', display: 'inline-block', display: 'flex', justifyContent: 'center', color: '#FFFFFF' }} className={indexStyles.navTitle}>
                         <Text>{navTitle}</Text>
                     </View>
                     <View style={{ width: '80px', display: 'inline-block' }}></View>

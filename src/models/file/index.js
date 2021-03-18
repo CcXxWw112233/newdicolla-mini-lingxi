@@ -42,7 +42,10 @@ export default {
                         file_list: res.data
                     }
                 })
-                if (board_id == '' && _organization_id == '') {
+                if (board_id == '' && (_organization_id == '' || _organization_id == 0)) {
+                    console.log("***************************")
+
+
                     var unvisited_file_list = res.data.filter(function (value) {
                         return value.visited != '1';
                     })
