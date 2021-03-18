@@ -218,8 +218,8 @@ export default class File extends Component {
             dispatch({
                 type: 'file/getFilePage',
                 payload: {
-                    _organization_id: org_id,
-                    board_id: board_id,
+                    _organization_id: org_id == undefined ? '' : org_id,
+                    board_id: board_id == undefined ? '' : board_id,
                     folder_id: folder_id == undefined ? '' : folder_id,
                     page_number: '',
                     page_size: '',
