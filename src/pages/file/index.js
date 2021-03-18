@@ -162,7 +162,7 @@ export default class File extends Component {
         }
         //保存数据, 用作下拉刷新参数
         Taro.setStorageSync('file_pull_down_refresh', JSON.stringify(params))
-        this.loadData(params)
+        // this.loadData(params)
 
         const { dispatch } = this.props
         dispatch({
@@ -213,6 +213,15 @@ export default class File extends Component {
             })
         ).then(() => {
             this.verifyAuthority(board_id)
+
+
+            dispatch({
+                type: 'file/filevisited',
+                payload: {
+                },
+            })
+
+
 
             ///从公众号消息推送过来查看文件详情
             const { officialAccountFileInfo = {} } = this.state
@@ -398,31 +407,31 @@ export default class File extends Component {
         //把文件改为已读
         this.readFile(dispatch, arr);
 
-        var { unvisited_file_list_count } = this.props;
-        if (unvisited_file_list_count > 0) {
+        // var { unvisited_file_list_count } = this.props;
+        // if (unvisited_file_list_count > 0) {
 
-            unvisited_file_list_count = unvisited_file_list_count - 1;
-            if (unvisited_file_list_count == 0) {
-                Taro.removeTabBarBadge({
-                    index: 2,
-                })
-            } else {
-                Taro.setTabBarBadge({
-                    index: 2,
-                    text: unvisited_file_list_count > 99
-                        ? "99+"
-                        : unvisited_file_list_count
-                            ? unvisited_file_list_count + ""
-                            : ""
-                });
-                dispatch({
-                    type: 'file/updateDatas',
-                    payload: {
-                        unvisited_file_list_count: unvisited_file_list_count,
-                    },
-                })
-            }
-        }
+        // unvisited_file_list_count = unvisited_file_list_count - 1;
+        // if (unvisited_file_list_count == 0) {
+        // Taro.removeTabBarBadge({
+        // index: 2,
+        // })
+        // } else {
+        // Taro.setTabBarBadge({
+        // index: 2,
+        // text: unvisited_file_list_count > 99
+        // ? "99+"
+        // : unvisited_file_list_count
+        // ? unvisited_file_list_count + ""
+        // : ""
+        // });
+        // dispatch({
+        // type: 'file/updateDatas',
+        // payload: {
+        // unvisited_file_list_count: unvisited_file_list_count,
+        // },
+        // })
+        // }
+        // }
     }
 
     readFile = (dispatch, msg_ids) => {
@@ -888,7 +897,6 @@ export default class File extends Component {
         let promise = [];
         console.log("===============================");
 
-        console.log(choice_image_temp_file_paths);
 
 
         //开发者服务器访问接口，微信服务器通过这个接口上传文件到开发者服务器
@@ -933,9 +941,9 @@ export default class File extends Component {
                 {
                     isShowChoiceFolder === true ? (<ChoiceFolder makePho={makePho} choiceImageThumbnail={choice_image_temp_file_paths} fileUpload={(val) => this.fileUpload(val)} />) : ''
                 }
-                <View style={{ position: 'sticky', top: 0 + 'px', left: 0 }} className={indexStyles.SearchAndMenu}>
-                    <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={'0'} onSearch={(value) => this.onSearch(value)} isDisabled={false} />
-                </View >
+                {/* <View style={{ position: 'sticky', top: 0 + 'px', left: 0 }} className={indexStyles.SearchAndMenu}> */}
+                {/* {/* <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={'0'} onSearch={(value) => this.onSearch(value)} isDisabled={false} /> */}
+                {/* </View > */}
 
                 <View className={indexStyles.head_background}>
                     <View className={indexStyles.hear_function}>

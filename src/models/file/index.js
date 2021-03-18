@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { getFilePage, getFileDetails, getFolder, getDownloadUrl, uploadFile, sendFileComment, getFileUnreadList, verifyAuthority } from '../../services/file/index'
+import { getFilePage, getFileDetails, getFolder, getDownloadUrl, uploadFile, sendFileComment, getFileUnreadList, verifyAuthority, filevisited } from '../../services/file/index'
 import { isApiResponseOk, } from "../../utils/request";
 
 export default {
@@ -42,36 +42,33 @@ export default {
                         file_list: res.data
                     }
                 })
-                if (board_id == '' && (_organization_id == '' || _organization_id == 0)) {
-                    console.log("***************************")
 
-
-                    var unvisited_file_list = res.data.filter(function (value) {
-                        return value.visited != '1';
-                    })
-                    yield put({
-                        type: 'updateDatas',
-                        payload: {
-                            unvisited_file_list_count: unvisited_file_list.length
-                        }
-                    })
-                    if (unvisited_file_list.length > 0) {
-                        if (unvisited_file_list.length == 0) {
-                            Taro.removeTabBarBadge({
-                                index: 2
-                            })
-                        } else {
-                            Taro.setTabBarBadge({
-                                index: 2,
-                                text: unvisited_file_list.length > 99
-                                    ? "99+"
-                                    : unvisited_file_list.length
-                                        ? unvisited_file_list.length + ""
-                                        : ""
-                            });
-                        }
+                var unvisited_file_list = res.data.filter(function (value) {
+                    return value.visited != '1';
+                })
+                yield put({
+                    type: 'updateDatas',
+                    payload: {
+                        unvisited_file_list_count: unvisited_file_list.length
+                    }
+                })
+                if (unvisited_file_list.length > 0) {
+                    if (unvisited_file_list.length == 0) {
+                        Taro.removeTabBarBadge({
+                            index: 2
+                        })
+                    } else {
+                        Taro.setTabBarBadge({
+                            index: 2,
+                            text: unvisited_file_list.length > 99
+                                ? "99+"
+                                : unvisited_file_list.length
+                                    ? unvisited_file_list.length + ""
+                                    : ""
+                        });
                     }
                 }
+
             } else {
                 Taro.showToast({
                     title: res.message,
@@ -183,6 +180,29 @@ export default {
 
         },
 
+        // 读文件
+        *filevisited({ payload }, { select, call, put }) {
+            const res = yield call(filevisited)
+            if (isApiResponseOk(res)) {
+                yield put({
+                    type: 'updateDatas',
+                    payload: {
+                        unvisited_file_list_count: 0
+                    }
+                })
+
+                Taro.removeTabBarBadge({
+                    index: 2
+                })
+            } else {
+                Taro.showToast({
+                    title: res.message,
+                    icon: 'none',
+                    duration: 2000
+                })
+            }
+        },
+
         //文件夹树形列表
         * getFolder({ payload }, { select, call, put }) {
             const res = yield call(getFolder, payload)
@@ -264,11 +284,13 @@ export default {
         * verifyAuthority({ payload }, { select, call, put }) {
             const res = yield call(verifyAuthority, payload)
             if (isApiResponseOk(res)) {
-                // yield put({
-                // type: 'verifyAuthority',
-                // payload: {
-                // }
-                // })
+                yield put({
+                    type: 'updateDatas',
+                    payload: {
+                        verify_authority_list: res.data
+                    }
+                })
+                console.log(res)
                 return res;
             } else {
                 console.log('res:', res);
