@@ -23,7 +23,8 @@ export default {
         current_custom_message: {},// 点击的动态通知数据
         current_custom_comment: [],// 加载的comment数据
         load_custom_file_msg: {},// 通过接口加载的文件数据
-        unvisited_file_list_count: 0 //未读文件的数量
+        unvisited_file_list_count: 0,//权限数据 //未读文件的数量
+        verify_authority_list: {}
     },
     effects: {
         //全部文件信息
