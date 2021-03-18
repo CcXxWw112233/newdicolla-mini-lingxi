@@ -111,6 +111,7 @@ export default class File extends Component {
         uplaodAuto: false,
         upload_sheet_list: [{ icon: '&#xe846;', value: '从微信导入文件' }, { icon: '&#xe664;', value: '从相册导入文件' }, { icon: '&#xe86f;', value: '从相机导入文件' }],
         isFirstLoadData: true,
+        isPullDown: false
     }
 
     onShareAppMessage() {
@@ -135,6 +136,10 @@ export default class File extends Component {
             Taro.stopPullDownRefresh()
             Taro.hideNavigationBarLoading()
         }, 300)
+
+        this.setState({
+            isPullDown: true
+        })
     }
 
     componentDidHide() {
@@ -230,6 +235,11 @@ export default class File extends Component {
             if (this.state.isFirstLoadData) {
                 this.setState({
                     isFirstLoadData: false
+                })
+            } else if (this.state.isPullDown) {
+                this.setState({
+                    isPullDown: false,
+                    isFirstLoadData: true
                 })
             } else {
                 dispatch({

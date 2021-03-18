@@ -94,6 +94,17 @@ export default class Calendar extends Component {
       Taro.stopPullDownRefresh();
       Taro.hideNavigationBarLoading();
     }, 300);
+
+    dispatch({
+      type: 'file/getFilePage',
+      payload: {
+        _organization_id: 0,
+        board_id: '',
+        folder_id: '',
+        page_number: '',
+        page_size: '',
+      },
+    })
   }
 
   onReachBottom() {
@@ -170,6 +181,17 @@ export default class Calendar extends Component {
     } else {
       console.log("当前微信版本不支持");
     }
+
+    dispatch({
+      type: 'file/getFilePage',
+      payload: {
+        _organization_id: 0,
+        board_id: '',
+        folder_id: '',
+        page_number: '',
+        page_size: '',
+      },
+    })
   }
 
   componentDidHide() {
