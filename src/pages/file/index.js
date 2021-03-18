@@ -165,7 +165,7 @@ export default class File extends Component {
         }
         //保存数据, 用作下拉刷新参数
         Taro.setStorageSync('file_pull_down_refresh', JSON.stringify(params))
-        // this.loadData(params)
+        this.loadData(params, true)
 
         const { dispatch } = this.props
         dispatch({
@@ -179,7 +179,7 @@ export default class File extends Component {
         this.setState({
             officialAccountFileInfo: Taro.getStorageSync('switchTabFileInfo'),
         })
-
+        // 获取项目权限数据
         dispatch({
             type: 'file/verifyAuthority',
             payload: {
@@ -188,12 +188,13 @@ export default class File extends Component {
     }
 
     //加载数据
-    loadData = (params) => {
+    loadData = (params, isAllRead) => {
         const { org_id, board_id, folder_id } = params
-        this.getFilePage(org_id, board_id, folder_id)
+        this.getFilePage(org_id, board_id, folder_id, isAllRead)
     }
 
-    getFilePage = (org_id, board_id, folder_id) => {
+    // 获取文件列表
+    getFilePage = (org_id, board_id, folder_id, isAllRead) => {
 
         //保存数据, 用作下拉刷新参数
         const params = {
@@ -223,14 +224,15 @@ export default class File extends Component {
                 uplaodAuto: false
             })
             this.verifyAuthority(board_id)
+            if (isAllRead) {
 
-
-            dispatch({
-                type: 'file/filevisited',
-                payload: {
-                },
-            })
-
+            } else {
+                dispatch({
+                    type: 'file/filevisited',
+                    payload: {
+                    },
+                })
+            }
 
 
             ///从公众号消息推送过来查看文件详情
@@ -258,6 +260,7 @@ export default class File extends Component {
             this.getUnreadFileList(dispatch);
         })
     }
+    // 判断是否有上传权限
     verifyAuthority = (board_id) => {
         const { dispatch, header_folder_name, verify_authority_list } = this.props;
         var that = this;
@@ -599,6 +602,7 @@ export default class File extends Component {
         })
     }
 
+    // 获取定位权限
     getLocationAuth() {
         return new Promise((resolve, reject) => {
             Taro.getSetting({
