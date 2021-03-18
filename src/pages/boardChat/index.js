@@ -138,7 +138,7 @@ export default class BoardChat extends Component {
     this.getChatBoardList();
 
     Taro.showNavigationBarLoading();
-    setTimeout(function() {
+    setTimeout(function () {
       Taro.stopPullDownRefresh();
       Taro.hideNavigationBarLoading();
     }, 300);
@@ -308,7 +308,7 @@ export default class BoardChat extends Component {
       this.setState({ isProhibitRepeatClick: false });
       this.isClickedGroupItem({ board_id, im_id });
       const that = this;
-      setTimeout(function() {
+      setTimeout(function () {
         that.setState({ isProhibitRepeatClick: true });
       }, 2000);
     }
@@ -504,17 +504,17 @@ export default class BoardChat extends Component {
 
     currentBoardIdWithDefaultUnReadAndLastMsg.childs =
       currentBoardIdWithDefaultUnReadAndLastMsg.childs &&
-      currentBoardIdWithDefaultUnReadAndLastMsg.childs.length
+        currentBoardIdWithDefaultUnReadAndLastMsg.childs.length
         ? currentBoardIdWithDefaultUnReadAndLastMsg.childs.map(i => {
-            return {
-              ...i,
-              unRead: 0,
-              lastMsg: this.getGroupLastMsgFromRawMessageList(
-                `team-${i.im_id}`,
-                rawMessageList
-              )
-            };
-          })
+          return {
+            ...i,
+            unRead: 0,
+            lastMsg: this.getGroupLastMsgFromRawMessageList(
+              `team-${i.im_id}`,
+              rawMessageList
+            )
+          };
+        })
         : [];
 
     const currentBoardSessionList = i =>
@@ -552,7 +552,7 @@ export default class BoardChat extends Component {
     return new Promise(resolve => {
       //1.1将没像个项目圈的unRead全部添加到一个数组
       //1.2把数组里面元素(unRead)全部相加等于总未读数
-      var sumUnRead = filter_list.reduce(function(a, b) {
+      var sumUnRead = filter_list.reduce(function (a, b) {
         return a + parseInt(b.unread);
       }, 0);
 
@@ -573,7 +573,7 @@ export default class BoardChat extends Component {
           success: e => {
             resolve(e);
           },
-          complete: e => {}
+          complete: e => { }
         });
       }
     });
@@ -623,11 +623,11 @@ export default class BoardChat extends Component {
     let listArray = this.boardListForView();
     return (
       <View className={indexStyles.index}>
-        <SearchAndMenu
+        {/*  <SearchAndMenu
           onSelectType={this.onSelectType}
           search_mask_show={search_mask_show}
         />
-
+*/}
         {listArray.map((value, key) => {
           const {
             board_id,
@@ -663,10 +663,10 @@ export default class BoardChat extends Component {
               )}
               onClickedGroupItem={this.hanldClickedGroupItem}
 
-              // isExpand={isShouldExpandSubGroup}
-              // onExpandChange={this.handleExpandSubGroupChange}
-              // isSubGroup={false}
-              // isShouldShowExpandOpertor={childs.length}
+            // isExpand={isShouldExpandSubGroup}
+            // onExpandChange={this.handleExpandSubGroupChange}
+            // isSubGroup={false}
+            // isShouldShowExpandOpertor={childs.length}
             />
           );
         })}
