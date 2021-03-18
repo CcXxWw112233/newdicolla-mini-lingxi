@@ -23,6 +23,17 @@ export const getFileDetails = (data, notShowLoading) => {
   }, notShowLoading)
 }
 
+// 读文件
+export const filevisited = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'POST',
+    url: `${API_BOARD}/file/visited`
+  }, notShowLoading)
+}
+
 //下载文件
 export const getDownloadUrl = (data, notShowLoading) => {
   return request({
