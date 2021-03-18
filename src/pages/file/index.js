@@ -109,7 +109,8 @@ export default class File extends Component {
         file_list_state: [], //最终文件列表
         un_read_file_array: [], //文件未读数组
         uplaodAuto: false,
-        upload_sheet_list: [{ icon: '&#xe846;', value: '从微信导入文件' }, { icon: '&#xe664;', value: '从相册导入文件' }, { icon: '&#xe86f;', value: '从相机导入文件' }]
+        upload_sheet_list: [{ icon: '&#xe846;', value: '从微信导入文件' }, { icon: '&#xe664;', value: '从相册导入文件' }, { icon: '&#xe86f;', value: '从相机导入文件' }],
+        isFirstLoadData: true,
     }
 
     onShareAppMessage() {
@@ -146,7 +147,7 @@ export default class File extends Component {
 
     componentDidShow() {
         const refreshStr = Taro.getStorageSync('file_pull_down_refresh')
-        const refreshData = JSON.parse(refreshStr)
+        const refreshData = refreshStr ? JSON.parse(refreshStr) : {}
         const { org_id, board_id, folder_id } = refreshData
         const params = {
             org_id: org_id,
@@ -165,7 +166,7 @@ export default class File extends Component {
         }
         //保存数据, 用作下拉刷新参数
         Taro.setStorageSync('file_pull_down_refresh', JSON.stringify(params))
-        this.loadData(params, true)
+        this.loadData(params, "true")
 
         const { dispatch } = this.props
         dispatch({
@@ -223,9 +224,13 @@ export default class File extends Component {
             this.setState({
                 uplaodAuto: false
             })
-            this.verifyAuthority(board_id)
-            if (isAllRead) {
 
+
+            this.verifyAuthority(board_id)
+            if (this.state.isFirstLoadData) {
+                this.setState({
+                    isFirstLoadData: false
+                })
             } else {
                 dispatch({
                     type: 'file/filevisited',
