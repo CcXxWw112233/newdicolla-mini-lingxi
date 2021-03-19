@@ -240,7 +240,7 @@ export default class File extends Component {
             })
 
 
-            this.verifyAuthority(board_id)
+            // this.verifyAuthority(board_id)
             if (this.state.isFirstLoadData) {
                 this.setState({
                     isFirstLoadData: false
@@ -267,6 +267,8 @@ export default class File extends Component {
                 //根据公众号消息的文件id在文件列表中查找出文件item
                 var previewFileInfo = file_list.find(item => item.id == officialAccountFileInfo.contentId);
                 const { file_name } = previewFileInfo
+
+                console.log(previewFileInfo)
                 ///进行预览
                 that.goFileDetails(previewFileInfo, file_name);
                 //同时清除缓存
@@ -388,14 +390,14 @@ export default class File extends Component {
     //预览文件详情
     goFileDetails = (value, fileName) => {
         Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
-        const { id, board_id, } = value
+        const { id, board_id, org_id } = value
         const { dispatch } = this.props
         setBoardIdStorage(board_id)
         const fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
         const parameter = {
             board_id,
             file_ids: id,
-            _organization_id: getOrgIdByBoardId(board_id),
+            _organization_id: getOrgIdByBoardId(board_id) ? getOrgIdByBoardId(board_id) : org_id,
         }
 
         // 清除缓存文件
