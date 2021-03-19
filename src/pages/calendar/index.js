@@ -12,6 +12,7 @@ import CustomNavigation from "../acceptInvitation/components/CustomNavigation.js
 import PersonalCenter from "./components/PersonalCenter";
 import UpdateUsername from "./components/UpdateUsername"
 import { onSysMsgUnread } from "../../models/im/actions";
+import { judgeJurisdictionProject } from "../../utils/basicFunction"
 
 @connect(
   ({
@@ -126,7 +127,6 @@ export default class Calendar extends Component {
     ).then(res => {
       const { unread_all_number } = this.props;
 
-      console.log("*********************************-----****" + unread_all_number)
       if (unread_all_number != 0 && unread_all_number) {
         wx.setTabBarBadge({
           index: 1,
@@ -148,6 +148,17 @@ export default class Calendar extends Component {
         folder_id: '',
         page_number: '',
         page_size: '',
+      },
+    })
+    // 获取项目权限数据
+    dispatch({
+      type: 'file/verifyAuthority',
+      payload: {
+      },
+    })
+    dispatch({
+      type: 'login/verifyOrgAuthority',
+      payload: {
       },
     })
   }
@@ -333,6 +344,7 @@ export default class Calendar extends Component {
     Taro.navigateTo({
       url: `../../pages/noSchedulesCard/index?title=${selected_board_name}`
     });
+    // console.log(judgeJurisdictionProject('1351785004451106816', "project:fles:file:upload"))
   };
 
   newlyBuildThingProject = () => {

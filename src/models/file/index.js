@@ -32,8 +32,6 @@ export default {
             Taro.showLoading({
                 title: '加载中...',
             })
-            console.log(payload);
-
             const { board_id, _organization_id } = payload;
             const res = yield call(getFilePage, payload)
             if (isApiResponseOk(res)) {
@@ -291,7 +289,8 @@ export default {
                         verify_authority_list: res.data
                     }
                 })
-                console.log(res)
+                Taro.setStorageSync('verify_project_authority_list', res.data)
+
                 return res;
             } else {
                 console.log('res:', res);

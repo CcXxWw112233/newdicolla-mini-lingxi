@@ -194,12 +194,6 @@ export default class File extends Component {
         this.setState({
             officialAccountFileInfo: Taro.getStorageSync('switchTabFileInfo'),
         })
-        // 获取项目权限数据
-        dispatch({
-            type: 'file/verifyAuthority',
-            payload: {
-            },
-        })
     }
 
     //加载数据
@@ -240,7 +234,7 @@ export default class File extends Component {
             })
 
 
-            this.verifyAuthority(board_id)
+            // this.verifyAuthority(board_id)
             if (this.state.isFirstLoadData) {
                 this.setState({
                     isFirstLoadData: false

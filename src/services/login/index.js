@@ -132,3 +132,11 @@ export const updateNickName = (data, notShowLoading) => {
     url: `${API_UPMS}/user`,
   }, notShowLoading)
 }
+
+export const getVerifyOrgJurisdiction = (notShowLoading) => {
+  return request({
+    method: 'GET',
+    url: `${API_UPMS}/permissions/org`,
+  }, notShowLoading);
+}
+
