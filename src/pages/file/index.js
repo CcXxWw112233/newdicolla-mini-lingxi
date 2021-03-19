@@ -111,7 +111,8 @@ export default class File extends Component {
         uplaodAuto: false,
         upload_sheet_list: [{ icon: '&#xe846;', value: '从微信导入文件' }, { icon: '&#xe664;', value: '从相册导入文件' }, { icon: '&#xe86f;', value: '从相机导入文件' }],
         isFirstLoadData: true,
-        isPullDown: false
+        isPullDown: false,
+        routeIsRead: false
     }
 
     onShareAppMessage() {
@@ -159,8 +160,16 @@ export default class File extends Component {
             board_id: board_id,
             folder_id: folder_id,
         }
-
-        this.loadData(params);
+        if (this.state.routeIsRead) {
+            this.setState({
+                routeIsRead: false
+            })
+        } else {
+            this.loadData(params);
+        }
+        Taro.removeTabBarBadge({
+            index: 2
+        })
     }
 
     componentDidMount() {
@@ -420,12 +429,13 @@ export default class File extends Component {
             })
         }
 
-
+        this.setState({
+            routeIsRead: true
+        })
         var arr = [];
         arr.push(value.msg_ids);
         //把文件改为已读
         this.readFile(dispatch, arr);
-
         // var { unvisited_file_list_count } = this.props;
         // if (unvisited_file_list_count > 0) {
 
@@ -463,14 +473,14 @@ export default class File extends Component {
 
         const refreshStr = Taro.getStorageSync('file_pull_down_refresh')
         const refreshData = JSON.parse(refreshStr)
-        const { org_id, board_id, folder_id } = refreshData
-        const params = {
-            org_id: org_id,
-            board_id: board_id,
-            folder_id: folder_id,
-        }
+        // const { org_id, board_id, folder_id } = refreshData
+        // const params = {
+        // org_id: org_id,
+        // board_id: board_id,
+        // folder_id: folder_id,
+        // }
 
-        this.loadData(params);
+        // this.loadData(params);
 
         Taro.removeStorageSync('switchTabFileInfo');
         this.setState({
@@ -827,6 +837,7 @@ export default class File extends Component {
         })
 
     }
+
 
 
     uploadChoiceFolder = () => {
