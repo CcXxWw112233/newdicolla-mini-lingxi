@@ -194,6 +194,12 @@ export default class File extends Component {
         this.setState({
             officialAccountFileInfo: Taro.getStorageSync('switchTabFileInfo'),
         })
+
+        dispatch({
+            type: 'file/verifyAuthority',
+            payload: {
+            },
+        })
     }
 
     //加载数据
@@ -234,7 +240,7 @@ export default class File extends Component {
             })
 
 
-            // this.verifyAuthority(board_id)
+            this.verifyAuthority(board_id)
             if (this.state.isFirstLoadData) {
                 this.setState({
                     isFirstLoadData: false
@@ -287,6 +293,7 @@ export default class File extends Component {
         } else {
             console.log(header_folder_name);
             console.log(board_id)
+            console.log()
             for (var key in verify_authority_list) {//遍历json对象的每个key/value对,p为key
                 if (board_id == key) {
                     verify_authority_list[key].map(item => {
