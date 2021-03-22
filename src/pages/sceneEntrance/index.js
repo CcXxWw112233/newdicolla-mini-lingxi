@@ -131,7 +131,7 @@ export default class sceneEntrance extends Component {
          * boardId 项目id
          * currentDate 每日代办的日期时间
          */
-        const { redirectType, contentId, boardId, currentDate } = options
+        const { redirectType, contentId, boardId, currentDate, orgId } = options
         const { globalData: { store: { dispatch } } } = Taro.getApp()
         let pageObject
         let that = this
@@ -223,6 +223,7 @@ export default class sceneEntrance extends Component {
                     Taro.setStorageSync('switchTabFileInfo', {
                         contentId: contentId,
                         boardId: boardId,
+                        orgId: orgId,
                         push: 'officialAccount',
                     })
                 ).then(() => {
