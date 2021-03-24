@@ -351,3 +351,14 @@ export const deleteFileFieldsFileRemove = (data, notShowLoading) => {
     url: `${API_BOARD}/file/remove`,
   }, notShowLoading, true)
 }
+
+// 删除任务
+export const deleteTask = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'DELETE',
+    url: `${API_BOARD}/v2/card/${data.card_id}`,
+  }, notShowLoading, true)
+}

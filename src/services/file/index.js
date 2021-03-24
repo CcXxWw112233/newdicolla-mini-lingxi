@@ -164,3 +164,18 @@ export const verifyAuthority = (data, header,
     url: `${API_BOARD}/permissions/board`
   }, notShowLoading)
 }
+
+
+// 批量删除文件
+export const deleteFiles = (data, header, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    header: {
+      ...header
+    },
+    method: "POST",
+    url: `${API_BOARD}/file/remove`
+  }, notShowLoading)
+}

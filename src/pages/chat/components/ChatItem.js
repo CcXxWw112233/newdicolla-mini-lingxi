@@ -152,8 +152,8 @@ class ChatItem extends Component {
       second * step >= maxWidth
         ? maxWidth
         : second * step <= minWidth
-        ? minWidth
-        : second * step;
+          ? minWidth
+          : second * step;
     return `${ret}px`;
   };
   timestampToTime = timestamp => {
@@ -221,7 +221,7 @@ class ChatItem extends Component {
   onResendMessage = someMsg => {
     const { history_newSession, dispatch } = this.props;
     // 1.1 遍历出失败的那条在本地渲染列表数组中删掉
-    Array.prototype.removeByValue = function(val) {
+    Array.prototype.removeByValue = function (val) {
       for (var i = 0; i < this.length; i++) {
         if (JSON.stringify(this[i]).indexOf(JSON.stringify(val)) != -1) {
           this.splice(i, 1);
@@ -268,7 +268,7 @@ class ChatItem extends Component {
     onResendMsg(someMsg);
   };
 
-  bindpause = e => {};
+  bindpause = e => { };
   startPlay = e => {
     var _index = e.currentTarget.dataset.id;
     this.setState({
@@ -278,7 +278,7 @@ class ChatItem extends Component {
     var videoContextPrev = Taro.createVideoContext(_index + "");
 
     videoContextPrev.stop();
-    setTimeout(function() {
+    setTimeout(function () {
       //将点击视频进行播放
       var videoContext = Taro.createVideoContext(_index + "");
       videoContext.play();
@@ -370,13 +370,13 @@ class ChatItem extends Component {
   handleSetClipboardData = ({ start_url }) => {
     wx.setClipboardData({
       data: start_url,
-      success: function(res) {
+      success: function (res) {
         wx.showToast({
           title: "复制成功",
           duration: 3000
         });
         wx.getClipboardData({
-          success: function(res) {}
+          success: function (res) { }
         });
       }
     });
@@ -389,19 +389,19 @@ class ChatItem extends Component {
     console.log(file.url);
     Taro.downloadFile({
       url: file.url,
-      success: function(res) {
+      success: function (res) {
         var filePath = res.tempFilePath;
         //console.log('filePath', filePath)
         Taro.saveFile({
           tempFilePath: filePath,
-          success: function(res1) {
+          success: function (res1) {
             Taro.openDocument({
               filePath: res1.savedFilePath,
               fileType: file.ext, //指定文件类型 file_type
-              success: function(res2) {
+              success: function (res2) {
                 console.log("打开文档成功", res);
               },
-              fail: function(res2) {
+              fail: function (res2) {
                 console.log(res2);
                 Taro.showToast({
                   title: "文件过大或不支持该格式",
@@ -410,13 +410,13 @@ class ChatItem extends Component {
                 });
                 // console.log("fail", res);
               },
-              complete: function(res2) {
+              complete: function (res2) {
                 Taro.hideLoading();
                 //console.log("complete", res);
               }
             });
           },
-          fail: function(res1) {
+          fail: function (res1) {
             Taro.hideLoading();
             Taro.showToast({
               title: "文件过大或不支持该格式",
@@ -425,12 +425,12 @@ class ChatItem extends Component {
             });
             //console.log("saveFile", res.errMsg);
           },
-          complete: function(res2) {
+          complete: function (res2) {
             // console.log("saveFile", res);
           }
         });
       },
-      fail: function(e) {
+      fail: function (e) {
         Taro.hideLoading();
         Taro.showToast({
           title: "文件过大或不支持该格式",
@@ -439,7 +439,7 @@ class ChatItem extends Component {
         });
         // console.log('fail', res)
       },
-      complete: function(res) {
+      complete: function (res) {
         // console.log('complete', res)
       }
     });
@@ -571,383 +571,374 @@ class ChatItem extends Component {
           type === "image" ||
           type === "file" ||
           type === "video") && (
-          <View
-            className={`${styles.contentWrapper} ${
-              flow === "in" ? styles.contentWrapperIn : styles.contentWrapperOut
-            }`}
-          >
-            <View className={styles.avatarWrapper}>
-              {this.isValidImgUrl(avatar) ? (
-                <Image src={avatar} className={`${styles.avatar}`} />
-              ) : avatar === "dynamicAssistant" ? (
-                <View
-                  className={`${globalStyles.global_iconfont} ${styles.avatarAssistant}`}
-                  style={{
-                    fontSize: "36px",
-                    borderRadius: "50%",
-                    color: "#fff"
-                  }}
-                >
-                  &#xe645;
-                </View>
-              ) : (
-                <View
-                  className={`${globalStyles.global_iconfont} ${styles.avatar}`}
-                  style={{
-                    fontSize: "36px",
-                    borderRadius: "50%"
-                  }}
-                >
-                  {iconAvatar}
-                </View>
-              )}
-            </View>
-
             <View
-              className={styles.messageConcentWrapper}
-              onLongPress={this.longPressRecallAction.bind(this, someMsg)}
+              className={`${styles.contentWrapper} ${flow === "in" ? styles.contentWrapperIn : styles.contentWrapperOut
+                }`}
             >
-              {status === "fail" ? (
-                <View onClick={this.onResendMessage.bind(this, someMsg)}>
-                  <Text
-                    className={`${globalStyles.global_iconfont} ${styles.failWrapper}`}
+              <View className={styles.avatarWrapper}>
+                {this.isValidImgUrl(avatar) ? (
+                  <Image src={avatar} className={`${styles.avatar}`} />
+                ) : avatar === "dynamicAssistant" ? (
+                  <View
+                    className={`${globalStyles.global_iconfont} ${styles.avatarAssistant}`}
+                    style={{
+                      fontSize: "36px",
+                      borderRadius: "50%",
+                      color: "#fff"
+                    }}
                   >
-                    &#xe848;
-                  </Text>
-                </View>
-              ) : (
-                ""
-              )}
-              <View className={styles.newsWrapper}>
-                {flow === "in" && (
-                  <View className={styles.newsName}>{from_nick}</View>
+                    &#xe645;
+                  </View>
+                ) : (
+                  <View
+                    className={`${globalStyles.global_iconfont} ${styles.avatar}`}
+                    style={{
+                      fontSize: "36px",
+                      borderRadius: "50%"
+                    }}
+                  >
+                    {iconAvatar}
+                  </View>
                 )}
-                <View
-                  className={`${styles.newsContentWrapper} ${
-                    type === "custom" && !isPinupEmoji
+              </View>
+
+              <View
+                className={styles.messageConcentWrapper}
+                onLongPress={this.longPressRecallAction.bind(this, someMsg)}
+              >
+                {status === "fail" ? (
+                  <View onClick={this.onResendMessage.bind(this, someMsg)}>
+                    <Text
+                      className={`${globalStyles.global_iconfont} ${styles.failWrapper}`}
+                    >
+                      &#xe848;
+                  </Text>
+                  </View>
+                ) : (
+                  ""
+                )}
+                <View className={styles.newsWrapper}>
+                  {flow === "in" && (
+                    <View className={styles.newsName}>{from_nick}</View>
+                  )}
+                  <View
+                    className={`${styles.newsContentWrapper} ${type === "custom" && !isPinupEmoji
                       ? styles.newContentAssistantWrapper
                       : ""
-                  }`}
-                >
-                  {type === "text" && (
-                    <View className={styles.newContent}>
-                      {parseEmoji(text).map(i => {
-                        const { categ, cont } = i;
-                        return (
-                          <EmojiItem
-                            key={categ + cont}
-                            categ={isValidEmoji(cont) ? "emoji" : "text"}
-                            cont={
-                              isValidEmoji(cont) ? isValidEmoji(cont) : cont
-                            }
-                          />
-                        );
-                      })}
-                    </View>
-                  )}
-                  {type === "image" && (
-                    <Image
-                      onClick={() => this.handlePreviewImage(file)}
-                      src={
-                        typeof file === "string"
-                          ? JSON.parse(file).url
-                          : file.url
-                      }
-                      style={{
-                        width: this.genImageSize(
-                          file.w,
-                          Number(file.w / file.h),
-                          "w"
-                        ),
-                        height: this.genImageSize(
-                          file.h,
-                          Number(file.w / file.h),
-                          "h"
-                        )
-                      }}
-                      mode="aspectFill"
-                    />
-                  )}
-                  {type === "file" && (
-                    <View
-                      onClick={() => this.hanldeFile(chatFile)}
-                      style={{
-                        alignItems: "center",
-                        display: "flex",
-                        flexDirection: "column",
-                        "justify-content": "space-around",
-                        width: "80px",
-                        height: "90px"
-                      }}
-                    >
-                      <View
+                      }`}
+                  >
+                    {type === "text" && (
+                      <View className={styles.newContent}>
+                        {parseEmoji(text).map(i => {
+                          const { categ, cont } = i;
+                          return (
+                            <EmojiItem
+                              key={categ + cont}
+                              categ={isValidEmoji(cont) ? "emoji" : "text"}
+                              cont={
+                                isValidEmoji(cont) ? isValidEmoji(cont) : cont
+                              }
+                            />
+                          );
+                        })}
+                      </View>
+                    )}
+                    {type === "image" && (
+                      <Image
+                        onClick={() => this.handlePreviewImage(file)}
+                        src={
+                          typeof file === "string"
+                            ? JSON.parse(file).url
+                            : file.url
+                        }
                         style={{
-                          width: "60px",
-                          height: "60px",
-                          textAlign: "center"
+                          width: this.genImageSize(
+                            file.w,
+                            Number(file.w / file.h),
+                            "w"
+                          ),
+                          height: this.genImageSize(
+                            file.h,
+                            Number(file.w / file.h),
+                            "h"
+                          )
+                        }}
+                        mode="aspectFill"
+                      />
+                    )}
+                    {type === "file" && (
+                      <View
+                        onClick={() => this.hanldeFile(chatFile)}
+                        style={{
+                          alignItems: "center",
+                          display: "flex",
+                          flexDirection: "column",
+                          "justify-content": "space-around",
+                          width: "80px",
+                          height: "90px"
                         }}
                       >
-                        {/* <Text className={`${globalStyles.global_iconfont} ${styles.icon_file_style}`} style={{ fontSize: '50px', color: 'lightgray' }}> */}
+                        <View
+                          style={{
+                            width: "60px",
+                            height: "60px",
+                            textAlign: "center"
+                          }}
+                        >
+                          {/* <Text className={`${globalStyles.global_iconfont} ${styles.icon_file_style}`} style={{ fontSize: '50px', color: 'lightgray' }}> */}
 
-                        {/* </Text> */}
+                          {/* </Text> */}
 
-                        <RichText
-                          className={`${globalStyles.global_iconfont} ${styles.icon_file_style}`}
-                          style={{ fontSize: "50px", color: "lightgray" }}
-                          nodes={fileType}
+                          <RichText
+                            className={`${globalStyles.global_iconfont} ${styles.icon_file_style}`}
+                            style={{ fontSize: "50px", color: "lightgray" }}
+                            nodes={fileType}
+                          />
+                        </View>
+                        {chatFile.ext}文件
+                      </View>
+                    )}
+                    {type === "video" && (
+                      <Video
+                        poster-for-crawler={file.url + "&vframe"}
+                        src={
+                          typeof file === "string"
+                            ? JSON.parse(file).url
+                            : file.url
+                        }
+                        duration={parseInt(
+                          `${Math.ceil(
+                            ((typeof file === "string"
+                              ? JSON.parse(file).dur
+                              : file.dur) || 0) / 1000
+                          )}" `
+                        )}
+                        loop={true}
+                        onPlay={this.startPlay}
+                        onPause={this.bindpause}
+                        bindplause
+                        style={{
+                          width: this.genImageSize(
+                            file.w,
+                            Number(file.w / file.h),
+                            "w"
+                          ),
+                          height: this.genImageSize(
+                            file.h,
+                            Number(file.w / file.h),
+                            "h"
+                          )
+                        }}
+                      ></Video>
+                    )}
+                    {type === "custom" && isPinupEmoji && (
+                      <View className={styles.pinupWrapper}>
+                        <Image
+                          src={parsePinup(content)}
+                          style={{ width: "100px", height: "100px" }}
                         />
                       </View>
-                      {chatFile.ext}文件
-                    </View>
-                  )}
-                  {type === "video" && (
-                    <Video
-                      poster-for-crawler={file.url + "&vframe"}
-                      src={
-                        typeof file === "string"
-                          ? JSON.parse(file).url
-                          : file.url
-                      }
-                      duration={parseInt(
-                        `${Math.ceil(
-                          ((typeof file === "string"
-                            ? JSON.parse(file).dur
-                            : file.dur) || 0) / 1000
-                        )}" `
-                      )}
-                      loop={true}
-                      onPlay={this.startPlay}
-                      onPause={this.bindpause}
-                      bindplause
-                      style={{
-                        width: this.genImageSize(
-                          file.w,
-                          Number(file.w / file.h),
-                          "w"
-                        ),
-                        height: this.genImageSize(
-                          file.h,
-                          Number(file.w / file.h),
-                          "h"
-                        )
-                      }}
-                    ></Video>
-                  )}
-                  {type === "custom" && isPinupEmoji && (
-                    <View className={styles.pinupWrapper}>
-                      <Image
-                        src={parsePinup(content)}
-                        style={{ width: "100px", height: "100px" }}
-                      />
-                    </View>
-                  )}
-                  {type === "custom" && !isPinupEmoji && (
-                    <View className={styles.customNewsWrapper}>
-                      {content && content.data && content.data.d ? (
-                        <View className={styles.customNewsContentWrapper}>
-                          {[JSON.parse(content.data.d)].map((data, index) => {
-                            const {
-                              activityType,
-                              creator,
-                              action,
-                              activityContent,
-                              range
-                            } = parseActivityNewsBody(data);
-                            return (
-                              <View
-                                key={data.creatorId}
-                                className={styles.customNewsContent}
-                                onClick={this.activityClick.bind(this, data)}
-                              >
-                                <Text className={styles.creator}>
-                                  {creator && creator.name
-                                    ? `${creator.name}`
-                                    : ""}
-                                  <Text
-                                    style={{
-                                      display: "inline-block",
-                                      width: "6px"
-                                    }}
-                                  >
-                                    &nbsp;
+                    )}
+                    {type === "custom" && !isPinupEmoji && (
+                      <View className={styles.customNewsWrapper}>
+                        {content && content.data && content.data.d ? (
+                          <View className={styles.customNewsContentWrapper}>
+                            {[JSON.parse(content.data.d)].map((data, index) => {
+                              const {
+                                activityType,
+                                creator,
+                                action,
+                                activityContent,
+                                range
+                              } = parseActivityNewsBody(data);
+                              return (
+                                <View
+                                  key={data.creatorId}
+                                  className={styles.customNewsContent}
+                                  onClick={this.activityClick.bind(this, data)}
+                                >
+                                  <Text className={styles.creator}>
+                                    {creator && creator.name
+                                      ? `${creator.name}`
+                                      : ""}
+                                    <Text
+                                      style={{
+                                        display: "inline-block",
+                                        width: "6px"
+                                      }}
+                                    >
+                                      &nbsp;
                                   </Text>
-                                </Text>
-                                <Text className={styles.action}></Text>
-                                <Text className={styles.action}>
-                                  {/* {action ? `${action}` : ''} */}
-                                  {action === "项目成员角色发生变更"
-                                    ? `${"将" +
-                                        (activityContent &&
-                                          activityContent.rela_users[0]) +
-                                        "在" +
-                                        (activityContent &&
-                                          activityContent.board.name) +
-                                        "项目中的角色设置为" +
-                                        (activityContent &&
-                                          activityContent.rela_data)}`
-                                    : ` ${action} ${
-                                        activityContent.flow_node_instance.name
-                                          .length > 0
-                                          ? activityContent.flow_node_instance
-                                              .name
-                                          : ""
-                                      }  ${
+                                  </Text>
+                                  <Text className={styles.action}></Text>
+                                  <Text className={styles.action}>
+                                    {/* {action ? `${action}` : ''} */}
+                                    {action === "项目成员角色发生变更"
+                                      ? `${"将" +
+                                      (activityContent &&
+                                        activityContent.rela_users[0]) +
+                                      "在" +
+                                      (activityContent &&
+                                        activityContent.board.name) +
+                                      "项目中的角色设置为" +
+                                      (activityContent &&
+                                        activityContent.rela_data)}`
+                                      : ` ${action} ${activityContent.flow_node_instance.name
+                                        .length > 0
+                                        ? activityContent.flow_node_instance
+                                          .name
+                                        : ""
+                                      }  ${activityContent.flow_instance.name
+                                        .length > 0
+                                        ? " " +
                                         activityContent.flow_instance.name
-                                          .length > 0
-                                          ? " " +
-                                            activityContent.flow_instance.name
-                                          : ""
+                                        : ""
                                       }`}
 
-                                  <Text
-                                    style={{
-                                      display: "inline-block",
-                                      width: "6px"
-                                    }}
-                                  >
-                                    &nbsp;
+                                    <Text
+                                      style={{
+                                        display: "inline-block",
+                                        width: "6px"
+                                      }}
+                                    >
+                                      &nbsp;
                                   </Text>
-                                </Text>
-                                {range && range["rangeText"] && (
-                                  <Text
-                                    className={`${styles.range} ${
-                                      range && range["isNavigate"]
+                                  </Text>
+                                  {range && range["rangeText"] && (
+                                    <Text
+                                      className={`${styles.range} ${range && range["isNavigate"]
                                         ? styles.customNewsNav
                                         : ""
-                                    }`}
-                                  >
-                                    {range["rangeText"] && range["rangeObj"]
-                                      ? range["rangeText"].replace(
+                                        }`}
+                                    >
+                                      {range["rangeText"] && range["rangeObj"]
+                                        ? range["rangeText"].replace(
                                           "{placeholder}",
                                           range["rangeObj"]["name"]
                                         )
-                                      : "sssss"}
-                                  </Text>
-                                )}
-                                <Text
-                                  className={`${styles.thing} ${
-                                    activityType === "card" ||
-                                    activityContent["isNavigate"] ||
-                                    activityType == "meeting"
+                                        : "sssss"}
+                                    </Text>
+                                  )}
+                                  <Text
+                                    className={`${styles.thing} ${activityType === "card" ||
+                                      activityContent["isNavigate"] ||
+                                      activityType == "meeting"
                                       ? styles.customNewsNav
                                       : ""
-                                  }`}
-                                  onClick={e =>
-                                    this.handleClickItem(
-                                      e,
-                                      "custom",
-                                      activityType,
-                                      activityContent &&
-                                        activityContent[activityType] &&
-                                        activityContent[activityType]["id"]
-                                        ? activityContent[activityType]["id"]
-                                        : null
-                                    )
-                                  }
-                                >
-                                  {this.getSubStr(
-                                    activityContent["contentText"]
-                                      ? `“${activityContent["contentText"]}”`
-                                      : activityContent[activityType]
-                                      ? `“${
-                                          activityContent[activityType]["name"]
+                                      }`}
+                                    onClick={e =>
+                                      this.handleClickItem(
+                                        e,
+                                        "custom",
+                                        activityType,
+                                        activityContent &&
+                                          activityContent[activityType] &&
+                                          activityContent[activityType]["id"]
+                                          ? activityContent[activityType]["id"]
+                                          : null
+                                      )
+                                    }
+                                  >
+                                    {this.getSubStr(
+                                      activityContent["contentText"]
+                                        ? `“${activityContent["contentText"]}”`
+                                        : activityContent[activityType]
+                                          ? `“${activityContent[activityType]["name"]
                                             ? activityContent[activityType][
-                                                "name"
-                                              ]
-                                            : activityContent[activityType][
-                                                "meeting_name"
-                                              ]
-                                        }”`
-                                      : ""
-                                    , activityContent.contentObj || {})}
-                                </Text>
-                                {activityType == "meeting" && (
-                                  <View>
-                                    {activityContent[activityType] &&
-                                      activityContent[activityType][
-                                        "start_time"
-                                      ] && (
-                                        <Text
-                                          style={{ color: "rgba(0,0,0,0.35)" }}
-                                        >
-                                          {timestampToTimeNormal(
-                                            activityContent[activityType][
-                                              "start_time"
-                                            ],
-                                            "/",
-                                            true
-                                          )}
-                                          开始
-                                        </Text>
-                                      )}
-                                    <View
-                                      onClick={() => {
-                                        this.handleSetClipboardData({
-                                          start_url:
-                                            activityContent[activityType][
-                                              "start_url"
+                                            "name"
                                             ]
-                                        });
-                                      }}
-                                      className={styles.meeting_btn}
-                                    >
-                                      复制链接参会
+                                            : activityContent[activityType][
+                                            "meeting_name"
+                                            ]
+                                          }”`
+                                          : ""
+                                      , activityContent.contentObj || {})}
+                                  </Text>
+                                  {activityType == "meeting" && (
+                                    <View>
+                                      {activityContent[activityType] &&
+                                        activityContent[activityType][
+                                        "start_time"
+                                        ] && (
+                                          <Text
+                                            style={{ color: "rgba(0,0,0,0.35)" }}
+                                          >
+                                            {timestampToTimeNormal(
+                                              activityContent[activityType][
+                                              "start_time"
+                                              ],
+                                              "/",
+                                              true
+                                            )}
+                                          开始
+                                          </Text>
+                                        )}
+                                      <View
+                                        onClick={() => {
+                                          this.handleSetClipboardData({
+                                            start_url:
+                                              activityContent[activityType][
+                                              "start_url"
+                                              ]
+                                          });
+                                        }}
+                                        className={styles.meeting_btn}
+                                      >
+                                        复制链接参会
                                     </View>
-                                  </View>
-                                )}
-                              </View>
-                            );
-                          })}
-                        </View>
-                      ) : (
-                        <Text>未知消息内容</Text>
-                      )}
-                    </View>
-                  )}
-                  {type === "audio" && (
-                    <View
-                      className={styles.audioContent}
-                      onClick={() => this.handlePlayAudio(file)}
-                    >
-                      <Text
-                        style={{
-                          width: this.genAudioNewsWidth(
-                            typeof file === "string"
-                              ? JSON.parse(file).dur
-                              : file.dur
-                          )
-                        }}
-                        className={styles.audioDur}
-                      >{`${Math.ceil(
-                        ((typeof file === "string"
-                          ? JSON.parse(file).dur
-                          : file.dur) || 0) / 1000
-                      )}" `}</Text>
-                      <View
-                        className={`${globalStyles.global_iconfont} ${
-                          styles.audioIcon
-                        } ${
-                          isAudioPlaying
-                            ? flow === "in"
-                              ? styles.audioIconPlayingIn
-                              : styles.audioIconPlayingOut
-                            : ""
-                        }`}
-                        style={{
-                          fontSize: "18px",
-                          color: flow === "in" ? "#313D40" : "#FFFBFE"
-                        }}
-                      >
-                        {/* &#xe656; */}
+                                    </View>
+                                  )}
+                                </View>
+                              );
+                            })}
+                          </View>
+                        ) : (
+                          <Text>未知消息内容</Text>
+                        )}
                       </View>
-                    </View>
-                  )}
-                  <View className={styles.newsContentBubble} />
+                    )}
+                    {type === "audio" && (
+                      <View
+                        className={styles.audioContent}
+                        onClick={() => this.handlePlayAudio(file)}
+                      >
+                        <Text
+                          style={{
+                            width: this.genAudioNewsWidth(
+                              typeof file === "string"
+                                ? JSON.parse(file).dur
+                                : file.dur
+                            )
+                          }}
+                          className={styles.audioDur}
+                        >{`${Math.ceil(
+                          ((typeof file === "string"
+                            ? JSON.parse(file).dur
+                            : file.dur) || 0) / 1000
+                        )}" `}</Text>
+                        <View
+                          className={`${globalStyles.global_iconfont} ${styles.audioIcon
+                            } ${isAudioPlaying
+                              ? flow === "in"
+                                ? styles.audioIconPlayingIn
+                                : styles.audioIconPlayingOut
+                              : ""
+                            }`}
+                          style={{
+                            fontSize: "18px",
+                            color: flow === "in" ? "#313D40" : "#FFFBFE"
+                          }}
+                        >
+                          {/* &#xe656; */}
+                        </View>
+                      </View>
+                    )}
+                    <View className={styles.newsContentBubble} />
+                  </View>
                 </View>
               </View>
             </View>
-          </View>
-        )}
+          )}
         {type === "timestamp" && (
           <View
             className={`${styles.notificationWrapper} ${styles.notificationTime}`}
@@ -957,9 +948,8 @@ class ChatItem extends Component {
           <View
             className={`${styles.notificationWrapperTip} ${styles.notificationTip}`}
           >
-            <View className={styles.notificationTipText}>{`${
-              text ? text : '"' + fromNick + '"' + " 撤回了一条消息"
-            }`}</View>
+            <View className={styles.notificationTipText}>{`${text ? text : '"' + fromNick + '"' + " 撤回了一条消息"
+              }`}</View>
           </View>
         )}
         {/* {type === 'notification' && (  //此种类型暂时不处理

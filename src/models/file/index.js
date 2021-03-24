@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { getFilePage, getFileDetails, getFolder, getDownloadUrl, uploadFile, sendFileComment, getFileUnreadList, verifyAuthority, filevisited } from '../../services/file/index'
+import { getFilePage, getFileDetails, getFolder, getDownloadUrl, uploadFile, sendFileComment, getFileUnreadList, verifyAuthority, filevisited, deleteFiles } from '../../services/file/index'
 import { isApiResponseOk, } from "../../utils/request";
 
 export default {
@@ -24,7 +24,8 @@ export default {
         current_custom_comment: [],// 加载的comment数据
         load_custom_file_msg: {},// 通过接口加载的文件数据
         unvisited_file_list_count: 0,//权限数据 //未读文件的数量
-        verify_authority_list: {}
+        verify_authority_list: {},
+        current_previewImage: '',//当前预览的图片
     },
     effects: {
         //全部文件信息
@@ -32,8 +33,6 @@ export default {
             Taro.showLoading({
                 title: '加载中...',
             })
-            console.log(payload);
-
             const { board_id, _organization_id } = payload;
             const res = yield call(getFilePage, payload)
             if (isApiResponseOk(res)) {
@@ -82,7 +81,7 @@ export default {
 
         //下载文件
         * getDownloadUrl({ payload }, { select, call, put }) {
-            const { parameter, fileType } = payload
+            const { parameter, fileType, downLoadAuto } = payload
             Taro.showLoading({
                 title: '加载中...',
             })
@@ -97,6 +96,20 @@ export default {
                         current: res.data[0],
                         urls: res.data
                     })
+                    // var filePath = '';
+                    // Taro.downloadFile({
+                    // url: res.data[0],
+                    // success: function (res) {
+                    // filePath = res.tempFilePath
+                    // console.log("------------" + filePath)
+                    // }
+                    // })
+                    // yield put({
+                    // type: 'updateDatas',
+                    // payload: {
+                    // current_previewImage: filePath
+                    // }
+                    // })
                     Taro.hideLoading()
                 } else {
                     //通过web-view 中打开 url查看文档类文件详情
@@ -116,6 +129,7 @@ export default {
                                     Taro.openDocument({
                                         filePath: res.savedFilePath,
                                         fileType: file_type,  //指定文件类型 file_type
+                                        showMenu: downLoadAuto,
                                         success: function (res) {
                                             //console.log("打开文档成功", res)
                                         },
@@ -291,13 +305,26 @@ export default {
                         verify_authority_list: res.data
                     }
                 })
-                console.log(res)
+                Taro.setStorageSync('verify_project_authority_list', res.data)
+
                 return res;
             } else {
                 console.log('res:', res);
             }
         },
+        // 批量删除文件
+        *deleteFiles({ payload }, { select, call, put }) {
+            const res = yield call(deleteFiles, payload)
+            if (isApiResponseOk(res)) {
+                console.log(res)
+                return res.data;
+            } else {
+                console.log('res:', res);
+            }
+        },
     },
+
+
 
     reducers: {
         updateDatas(state, { payload }) {

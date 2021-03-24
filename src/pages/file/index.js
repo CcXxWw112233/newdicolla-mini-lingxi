@@ -8,8 +8,8 @@ import { filterFileFormatType } from './../../utils/util';
 import file_list_empty from '../../asset/file/file_list_empty.png'
 import BoardFile from './components/boardFile/index.js'
 import ChoiceFolder from './components/boardFile/ChoiceFolder.js'
-import { getOrgIdByBoardId, setBoardIdStorage, setRequestHeaderBaseInfo } from '../../utils/basicFunction'
-import { BASE_URL, API_BOARD } from "../../gloalSet/js/constant";
+import { getOrgIdByBoardId, setBoardIdStorage, setRequestHeaderBaseInfo, judgeJurisdictionProject } from '../../utils/basicFunction'
+import { BASE_URL, API_BOARD, PROJECT_FILES_FILE_DELETE, PROJECT_FILES_FILE_DOWNLOAD } from "../../gloalSet/js/constant";
 
 @connect(({
     file: {
@@ -20,7 +20,8 @@ import { BASE_URL, API_BOARD } from "../../gloalSet/js/constant";
         selected_board_folder_info,
         unread_file_list = [],
         unvisited_file_list_count,
-        verify_authority_list
+        verify_authority_list,
+        current_previewImage
     },
     im: {
         allBoardList,
@@ -35,7 +36,8 @@ import { BASE_URL, API_BOARD } from "../../gloalSet/js/constant";
         currentBoard,
         unread_file_list,
         unvisited_file_list_count,
-        verify_authority_list
+        verify_authority_list,
+        current_previewImage
     }),
     dispatch => {
         return {
@@ -108,11 +110,15 @@ export default class File extends Component {
         officialAccountFileInfo: {}, //获取从公众号进入小程序预览文件
         file_list_state: [], //最终文件列表
         un_read_file_array: [], //文件未读数组
-        uplaodAuto: false,
+        uplaodAuto: false, //上传文件权限
+        downLoadAuto: false,//下载权限
+        deleteAuto: false,//删除权限
         upload_sheet_list: [{ icon: '&#xe846;', value: '从微信导入文件' }, { icon: '&#xe664;', value: '从相册导入文件' }, { icon: '&#xe86f;', value: '从相机导入文件' }],
         isFirstLoadData: true,
         isPullDown: false,
-        routeIsRead: false
+        routeIsRead: false,
+        isDeleteMenuOnclick: false,
+        selectFiles: [],
     }
 
     onShareAppMessage() {
@@ -137,7 +143,6 @@ export default class File extends Component {
             Taro.stopPullDownRefresh()
             Taro.hideNavigationBarLoading()
         }, 300)
-
         this.setState({
             isPullDown: true
         })
@@ -173,16 +178,22 @@ export default class File extends Component {
     }
 
     componentDidMount() {
+        const { dispatch } = this.props
+
         const params = {
             org_id: '0',
             board_id: '',
             folder_id: ''
         }
+        dispatch({
+            type: 'file/verifyAuthority',
+            payload: {
+            },
+        })
         //保存数据, 用作下拉刷新参数
         Taro.setStorageSync('file_pull_down_refresh', JSON.stringify(params))
         this.loadData(params, "true")
 
-        const { dispatch } = this.props
         dispatch({
             type: 'file/updateDatas',
             payload: {
@@ -194,12 +205,7 @@ export default class File extends Component {
         this.setState({
             officialAccountFileInfo: Taro.getStorageSync('switchTabFileInfo'),
         })
-        // 获取项目权限数据
-        dispatch({
-            type: 'file/verifyAuthority',
-            payload: {
-            },
-        })
+
     }
 
     //加载数据
@@ -239,8 +245,9 @@ export default class File extends Component {
                 uplaodAuto: false
             })
 
+            // 上传权限
+            this.verifyAuthority(board_id)
 
-            // this.verifyAuthority(board_id)
             if (this.state.isFirstLoadData) {
                 this.setState({
                     isFirstLoadData: false
@@ -306,9 +313,16 @@ export default class File extends Component {
                     })
                 }
             }
-            console.log(this.state.uplaodAuto)
-
         }
+
+
+        if (header_folder_name != "全部文件") {
+            this.setState({
+                downLoadAuto: judgeJurisdictionProject(board_id, PROJECT_FILES_FILE_DOWNLOAD),
+                deleteAuto: judgeJurisdictionProject(board_id, PROJECT_FILES_FILE_DELETE)
+            })
+        }
+
     }
     //获取未读文件list
     getUnreadFileList = (dispatch) => {
@@ -358,7 +372,6 @@ export default class File extends Component {
     }
 
     updateHeaderFolderName = (current_folder_name) => {
-
         const { dispatch } = this.props
         dispatch({
             type: 'file/updateDatas',
@@ -385,10 +398,21 @@ export default class File extends Component {
                 isShowBoardList: e,
             },
         })
+        this.setState({
+            isDeleteMenuOnclick: false
+        })
     }
 
     //预览文件详情
     goFileDetails = (value, fileName) => {
+
+        const { isDeleteMenuOnclick, downLoadAuto } = this.state;
+        console.log(isDeleteMenuOnclick)
+        if (isDeleteMenuOnclick) {
+            this.selectDeleteFile(value)
+            return;
+        }
+
         Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
         const { id, board_id, org_id } = value
         const { dispatch } = this.props
@@ -419,6 +443,7 @@ export default class File extends Component {
             payload: {
                 parameter,
                 fileType: fileType,
+                downLoadAuto: downLoadAuto
             },
         })
 
@@ -522,6 +547,10 @@ export default class File extends Component {
 
     //长按进入圈子
     longPress = (value) => {
+        const { isDeleteMenuOnclick } = this.state;
+        if (isDeleteMenuOnclick) {
+            return;
+        }
         let { dispatch } = this.props;
         // Taro.setStorageSync('isRefreshFetchAllIMTeamList', 'true')
         // Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
@@ -679,7 +708,6 @@ export default class File extends Component {
                 }
             },
             fail: function (res) {
-                console.log(res.errMsg)
             }
         })
 
@@ -954,10 +982,131 @@ export default class File extends Component {
         })
     }
 
+
+    // 点击顶部删除icon
+    showDeleteView = () => {
+        const { header_folder_name, } = this.props;
+        const { file_list_state } = this.state;
+
+        if (!this.state.deleteAuto) {
+            Taro.showToast({
+                title: header_folder_name == '全部文件' ? '请选择相应的项目' : '您没有该项目的删除权限',
+                icon: 'none',
+                duration: 2000
+            });
+            return;
+        }
+
+        if (file_list_state.length == 0) {
+            Taro.showToast({
+                title: "该项目没有可删除的文件",
+                icon: 'none',
+                duration: 2000
+            });
+            return;
+        }
+        this.setState({
+            isDeleteMenuOnclick: true
+        })
+    }
+    // 取消删除
+    cancelDeleteFile = () => {
+        this.setState({
+            isDeleteMenuOnclick: false,
+            selectFiles: []
+        })
+    }
+    // 选择删除的文件
+    selectDeleteFile = (value) => {
+        const { selectFiles } = this.state;
+        var files = selectFiles;
+
+        if (files && files.length > 0) {
+            var isExit = files.some(function (currentValue) {
+
+                return value.id == currentValue.id
+            });
+            var item = {
+                type: value.type,
+                id: value.id
+            }
+            if (isExit) {
+                files = files.filter(currentValue => currentValue.id != value.id);
+            } else {
+                files.push(item)
+            }
+        } else {
+            var item = {
+                type: value.type,
+                id: value.id
+            }
+            files.push(item)
+        }
+        this.setState({
+            selectFiles: files,
+            board_id: value.board_id
+        })
+    }
+
+
+    // deleteFiles
+    confirmDelete = () => {
+        // const refreshStr = Taro.getStorageSync('file_pull_down_refresh')
+        // const refreshData = refreshStr ? JSON.parse(refreshStr) : {}
+        // const { org_id, boardid, folder_id } = refreshData;
+        var that = this;
+        const { selectFiles } = this.state;
+        if (selectFiles && selectFiles.length > 0) {
+            Taro.showModal({
+                title: '温馨提示',
+                content: '确定删除这些文件?',
+                success: function (res) {
+                    if (res.confirm) {
+                        that.deleteFiles();
+                    } else if (res.cancel) {
+                        console.log('用户点击取消')
+                    }
+                }
+            })
+        } else {
+            Taro.showToast({
+                title: '请先选择删除的文件',
+                icon: 'none',
+                duration: 2000
+            })
+        }
+    }
+
+    deleteFiles() {
+        const { dispatch } = this.props;
+        const { selectFiles, board_id } = this.state;
+        Promise.resolve(dispatch({
+            type: 'file/deleteFiles',
+            payload: {
+                board_id: board_id,
+                arrays: JSON.stringify(selectFiles),
+            },
+        })
+        ).then(() => {
+            this.setState({
+                isDeleteMenuOnclick: false
+            })
+            const refreshStr = Taro.getStorageSync('file_pull_down_refresh')
+            const refreshData = JSON.parse(refreshStr)
+            const { org_id, boardid, folder_id } = refreshData
+            const params = {
+                org_id: org_id,
+                board_id: boardid ? boardid : board_id,
+                folder_id: folder_id,
+            }
+            this.loadData(params)
+        })
+    }
+
     render() {
 
         const { isShowBoardList, header_folder_name, isShowChoiceFolder } = this.props
-        const { is_tips_longpress_file, choice_image_temp_file_paths = [], makePho, file_list_state, upload_sheet_list, uplaodAuto } = this.state
+        const { is_tips_longpress_file, choice_image_temp_file_paths = [], makePho, file_list_state, upload_sheet_list, uplaodAuto, isDeleteMenuOnclick, selectFiles, deleteAuto } = this.state
 
         return (
             <View className={indexStyles.index} >
@@ -978,22 +1127,23 @@ export default class File extends Component {
                     <View className={indexStyles.hear_function}>
 
                         <View className={indexStyles.folderPath} onClick={() => this.choiceBoard(true)}>
-                            <Text className={`${globalStyle.global_iconfont} ${indexStyles.folder_Path_icon}`}>&#xe6c6;</Text>
+                            <Text className={`${globalStyle.global_iconfont} ${indexStyles.folder_Path_icon}`}>&#xe7f4;</Text>
                             <Text className={indexStyles.header_folder_name_style}>{header_folder_name}</Text>
                         </View>
 
-                        <View className={indexStyles.files_album_camera_view_style}>
-                            {/*  <View className={indexStyles.files_album_camera_button_style} onClick=
-                                {this.getAuthSetting.bind(this, 'file')}><Text className={`${globalStyle.global_iconfont} ${indexStyles.
-                                    files_album_camera_icon_style}`}>&#xe662;</Text></View>
-                            <View className={indexStyles.files_album_camera_button_style} onClick={this.getAuthSetting.bind(this, 'album')}>
-                            <Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe664;</Text>
-                            </View>
-                                */}
+                        {
+                            !isDeleteMenuOnclick && <View className={indexStyles.files_album_camera_view_style}>
+                                {/*  <View className={indexStyles.files_album_camera_button_style} onClick=
+            {this.getAuthSetting.bind(this, 'file')}><Text className={`${globalStyle.global_iconfont} ${indexStyles.
+                files_album_camera_icon_style}`}>&#xe662;</Text></View>*/}
+                                <View className={`${indexStyles.files_album_camera_button_style} ${deleteAuto ? '' : indexStyles.files_unused_button_style}`} onClick={this.showDeleteView.bind(this)}>
+                                    <Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe845;</Text>
+                                </View>
 
-                            <View className={`${indexStyles.files_album_camera_button_style} ${uplaodAuto ? '' : indexStyles.files_unused_button_style}`} onClick={this.judgeIsSelectProject.bind(this, 'camera')}><Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe7b7;</Text></View>
-                            {/* &#xe86f; */}
-                        </View>
+
+                                <View className={`${indexStyles.files_album_camera_button_style} ${uplaodAuto ? '' : indexStyles.files_unused_button_style}`} onClick={this.judgeIsSelectProject.bind(this)}><Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe7b7;</Text></View>
+                            </View>
+                        }
 
                     </View>
                 </View>
@@ -1002,6 +1152,9 @@ export default class File extends Component {
                         {file_list_state.map((value, key) => {
                             const { thumbnail_url, msg_ids, visited } = value
                             const fileType = filterFileFormatType(value.file_name);
+                            const isSelected = selectFiles.some(function (currentValue) {
+                                return value.id == currentValue.id && value.type == currentValue.type
+                            });
                             return (
                                 <View className={indexStyles.lattice_style} onClick={this.goFileDetails.bind(this, value, value.file_name)} onLongPress={this.longPress.bind(this, value)} key={key}>
                                     {
@@ -1011,6 +1164,17 @@ export default class File extends Component {
                                         msg_ids != null ? <View className={indexStyles.unread_red}>
                                         </View> : (<View></View>)
                                     }
+
+                                    {
+                                        // onClick={this.selectDeleteFile.bind(this, value)}
+                                        isDeleteMenuOnclick && <View className={indexStyles.fileSelect_View} >
+                                            {
+                                                isSelected && <Text className={`${globalStyle.global_iconfont} ${indexStyles.
+                                                    file_select_icon}`}>&#xe844;</Text>
+                                            }
+                                        </View>
+                                    }
+
                                     {
                                         thumbnail_url ?
                                             (<Image mode='aspectFill' className={indexStyles.img_style} src={thumbnail_url}>
@@ -1022,6 +1186,8 @@ export default class File extends Component {
                                             </View>)
                                     }
                                 </View>
+
+
                             )
                         })}
                     </View>
@@ -1044,6 +1210,13 @@ export default class File extends Component {
                             </View>
                         </View>
                     </View>) : ''
+                }
+
+                {
+                    isDeleteMenuOnclick && <View className={indexStyles.file_delete_view}>
+                        <View className={indexStyles.file_delete_cancel_view} onClick={this.cancelDeleteFile}>取消</View>
+                        <View className={indexStyles.file_delete_confirm_view} onClick={this.confirmDelete}>删除</View>
+                    </View>
                 }
 
             </View >

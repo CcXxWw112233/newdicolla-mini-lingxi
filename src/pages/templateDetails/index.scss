@@ -7,3 +7,32 @@
 .interval {
     height: pxTrans(16);
 }
+
+.moreBtnView {
+    position        : fixed;
+    bottom          : 0;
+    left            : 0;
+    width           : 100%;
+    height          : pxTrans(60);
+    background-color: white;
+    text-align      : center;
+    font-size       : pxTrans(18);
+    line-height     : pxTrans(60);
+    color           : #3F445D;
+}
+
+.placeholder_View {
+    height: pxTrans(60);
+
+}
+
+.isIphoneX {
+    height: pxTrans(80) !important;
+}
+
+.more_iconfont {
+    position   : fixed;
+    right      : pxTrans(25);
+    font-size  : pxTrans(25) !important;
+    line-height: pxTrans(60);
+}

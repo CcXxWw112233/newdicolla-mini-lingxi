@@ -1,8 +1,8 @@
 //线上环境
-export const BASE_URL = "https://lingxi.di-an.com";
+// export const BASE_URL = "https://lingxi.di-an.com";
 //测试环境
-// export const BASE_URL = "http://test.lingxi.new-di.com";
-//稳定版开发服务器
+export const BASE_URL = "http://test.lingxi.new-di.com";
+// 稳定版开发服务器
 // export const BASE_URL = 'http://dev.lingxi.new-di.com'
 //本地环境
 // export const BASE_URL = 'http://192.168.1.81:8836'
@@ -62,3 +62,52 @@ export const RESPONSE_DATA_CODE_DATA = "data";
 export const QQMAPSDK_KEY = "AECBZ-47EKW-RCCRD-RMJH5-T64O2-HEFTQ";
 
 export const MEETING_APPID = "wxa68e2267756b3f16";
+
+
+//权限列表
+export const ORG_TEAM_BOARD_CREATE = 'org:team:board:create' //创建项目 permission_type = 1
+export const ORG_TEAM_BOARD_JOIN = 'org:team:board:join' //加入项目 permission_type = 1
+export const ORG_UPMS_ORGANIZATION_MEMBER_ADD = 'org:upms:organization:member:add' //添加成员permission_type=1
+export const ORG_UPMS_ORGANIZATION_MEMBER_EDIT = 'org:upms:organization:member:edit' //编辑成permission_type=1
+export const ORG_UPMS_ORGANIZATION_MEMBER_REMOVE = 'org:upms:organization:member:remove' //移除成员 permission_type=1
+export const ORG_UPMS_ORGANIZATION_GROUP = 'org:upms:organization:group' //管理分组 permission_type=1
+export const ORG_UPMS_ORGANIZATION_EDIT = 'org:upms:organization:edit' //编辑基本信息 permission_type=1
+export const ORG_UPMS_ORGANIZATION_DELETE = 'org:upms:organization:delete' //删除组织 permission_type=1
+export const ORG_UPMS_ORGANIZATION_ROLE_CREATE = 'org:upms:organization:role:create' //创建角permission_type=1
+export const ORG_UPMS_ORGANIZATION_ROLE_EDIT = 'org:upms:organization:role:edit' //编辑角色 permission_type=1
+export const ORG_UPMS_ORGANIZATION_ROLE_DELETE = 'org:upms:organization:role:delete' //删除角permission_type=1
+export const ORG_TEAM_BOARD_QUERY = 'org:team:board:query' //查看项目 permission_type=1
+export const ORG_TEAM_BOARD_EDIT = 'org:team:board:edit' //编辑项目 permission_type=1
+export const ORG_UPMS_ORGANIZATION_MEMBER_QUERY = 'org:upms:organization:member:query' //查看成员 permission_type=1
+export const ORG_TEAM_FLOW_TEMPLETE = 'org:team:flow:template' //组织管理流程模板 permission_type=1
+export const PROJECT_TEAM_BOARD_MEMBER = 'project:team:board:member' //成员管理 permission_type=2
+export const PROJECT_TEAM_BOARD_EDIT = 'project:team:board:edit' //编辑项目 permission_type=2
+export const PROJECT_TEAM_BOARD_ARCHIVE = 'project:team:board:archive' //归档项目 permission_type=2
+export const PROJECT_TEAM_BOARD_DELETE = 'project:team:board:delete' //删除项目 permission_type=2
+export const PROJECT_TEAM_BOARD_CONTENT_PRIVILEGE = 'project:team:board:content:privilege' // 访问控制 permission_type=2
+export const PROJECT_FLOWS_FLOW_TEMPLATE = 'project:flows:flow:template' //管理流程模板 permission_type=2
+export const PROJECT_FLOWS_FLOW_CREATE = 'project:flows:flow:create' //新增流程 permission_type=2
+export const PROJECT_FLOWS_FLOW_DELETE = 'project:flows:flow:delete' //删除流程 permission_type=2
+export const PROJECT_FLOWS_FLOW_ABORT = 'project:flows:flow:abort' //中止流程 permission_type=2
+export const PROJECT_FLOW_FLOW_ACCESS = 'project:flows:flow:access' //访问流程 permission_type=2
+export const PROJECT_FLOWS_FLOW_COMMENT = 'project:flows:flow:comment' //发表评论 //
+
+export const PROJECT_TEAM_CARD_INTERVIEW = 'project:team:card:interview' //访问任务 permission_type=2
+export const PROJECT_TEAM_CARD_CREATE = 'project:team:card:create' //创建任务 permission_type=2
+export const PROJECT_TEAM_CARD_EDIT = 'project:team:card:edit' //编辑任务 permission_type=2
+export const PROJECT_TEAM_CARD_COMPLETE = 'project:team:card:complete' //完成/重做任务 permission_type=2
+export const PROJECT_TEAM_CARD_DELETE = 'project:team:card:delete' //删除任务 permission_type=2
+export const PROJECT_TEAM_CARD_GROUP = 'project:team:card:group' //管理任务分组 permission_type=2
+export const PROJECT_TEAM_CARD_EDIT_FINISH_TIME = 'project:team:card:edit:finishTime' //修改任务完成时间
+export const PROJECT_TEAM_CARD_COMMENT_PUBLISH = 'project:team:card:comment:publish' //发表评论 permission_type=2
+export const PROJECT_TEAM_CARD_ATTACHMENT_UPLOAD = 'project:team:card:attachment:upload' // 上传附件 premission_type = 2
+export const PROJECT_FILES_FILE_INTERVIEW = 'project:files:file:interview' //访问文件 permission_type=2
+export const PROJECT_FILES_FILE_UPLOAD = 'project:files:file:upload' //上传文件 permission_type=2
+export const PROJECT_FILES_FILE_DOWNLOAD = 'project:files:file:download' //下载文件 permission_type=2
+export const PROJECT_FILES_FILE_UPDATE = 'project:files:file:update' //更新文件 permission_type=2
+export const PROJECT_FILES_FILE_DELETE = 'project:files:file:delete' //删除文件 permission_type=2
+export const PROJECT_FILES_FILE_EDIT = 'project:files:file:edit' //编辑文件 permission_type=2
+export const PROJECT_FILES_FOLDER = 'project:files:folder' //管理文件夹 permission_type=2
+export const PROJECT_FILES_COMMENT_PUBLISH = 'project:files:comment:publish' //发表评论 permission_type=2
+export const PROJECT_FILES_COMMENT_VIEW = 'project:files:comment:view' //查看评论 permission_type=2
+export const PROJECT_TEAM_BOARD_MILESTONE = 'project:team:board:milestone' // 查看项

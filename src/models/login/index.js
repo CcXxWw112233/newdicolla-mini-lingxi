@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro'
 import { isApiResponseOk } from "../../utils/request";
-import { weChatAuthLogin, weChatPhoneLogin, getAccountInfo, initializeOrganization } from "../../services/login/index";
+import { weChatAuthLogin, weChatPhoneLogin, getAccountInfo, initializeOrganization, getVerifyOrgJurisdiction } from "../../services/login/index";
 import { sceneEntrancePages } from '../../services/sceneEntrance/index'
 
 
@@ -307,7 +307,26 @@ export default {
         });
       };
       initImData().catch(e => Taro.showToast({ title: String(e), icon: 'none', duration: 2000 }));
-    }
+    },
+
+
+
+
+    *verifyOrgAuthority({ payload }, { select, call, put }) {
+      const res = yield call(getVerifyOrgJurisdiction, payload)
+      if (isApiResponseOk(res)) {
+        yield put({
+          type: 'updateDatas',
+          payload: {
+            verify_org_authority_list: res.data
+          }
+        })
+        Taro.setStorageSync('verify_org_authority_list', res.data)
+        return res;
+      } else {
+        console.log('res:', res);
+      }
+    },
   },
 
   reducers: {

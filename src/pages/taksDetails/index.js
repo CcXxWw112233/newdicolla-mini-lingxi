@@ -1,5 +1,5 @@
 import Taro, { Component } from "@tarojs/taro";
-import { View, Picker } from "@tarojs/components";
+import { View, Picker, Text } from "@tarojs/components";
 import indexStyles from "./index.scss";
 import globalStyle from "../../gloalSet/styles/globalStyles.scss";
 import TasksTime from "../../components/tasksRelevant/TasksTime/index";
@@ -17,7 +17,8 @@ import DescribeTasks from "./components/DescribeTasks/index";
 import TaksChoiceFolder from "./components/TaksChoiceFolder/index";
 import MultipleSelectionField from "./components/MultipleSelectionField/index";
 import FileFields from "./components/FileFields/index";
-import { timestampToDateTime, } from "../../utils/basicFunction";
+import { timestampToDateTime, judgeJurisdictionProject } from "../../utils/basicFunction";
+import { PROJECT_TEAM_CARD_EDIT, PROJECT_TEAM_CARD_DELETE, PROJECT_TEAM_CARD_EDIT_FINISH_TIME, PROJECT_TEAM_CARD_COMPLETE, PROJECT_TEAM_CARD_ATTACHMENT_UPLOAD, PROJECT_FILES_FILE_INTERVIEW } from "../../gloalSet/js/constant";
 
 @connect(
     ({
@@ -42,7 +43,14 @@ export default class taksDetails extends Component {
         backIcon: "",
         type_flag: "",
         board_id: "",
+        isIphoneX: false,
         milestone_show: false,
+        editAuth: false, //编辑权限
+        deleteAuth: false, //删除权限
+        editFinishTimeAuth: false,//修改结束时间权限
+        completeAuth: false,//完成权限
+        uploadAuth: false,//上传附件权限,
+        fileInterViewAuth: false
     };
 
     onShareAppMessage() {
@@ -60,23 +68,29 @@ export default class taksDetails extends Component {
             Taro.setStorageSync("tasks_detail_contentId", contentId);
         }
         var that = this;
-        Taro.getSystemInfo({
-            success(res) {
-                console.log(res);
-                if (res.system.split(" ")[0] == "iOS" && res.screenHeight > 736) {
-                    that.setState({
-                        screenHeight: res.screenHeight,
-                        isIphoneX: true,
-                    });
-                }
-            }
-        })
+        // Taro.getSystemInfo({
+        // success(res) {
+        // console.log(res);
+        // if (res.system.split(" ")[0] == "iOS" && res.screenHeight > 736) {
+        // that.setState({
+        // screenHeight: res.screenHeight,
+        // isIphoneX: true,
+        // });
+        // }
+        // }
+        // })
 
         this.setState({
             content_Id: contentId,
             backIcon: back_icon,
             type_flag: flag,
             board_id: boardId,
+            editAuth: judgeJurisdictionProject(boardId, PROJECT_TEAM_CARD_EDIT),
+            deleteAuth: judgeJurisdictionProject(boardId, PROJECT_TEAM_CARD_DELETE),
+            editFinishTimeAuth: judgeJurisdictionProject(boardId, PROJECT_TEAM_CARD_EDIT_FINISH_TIME),
+            completeAuth: judgeJurisdictionProject(boardId, PROJECT_TEAM_CARD_COMPLETE),
+            uploadAuth: judgeJurisdictionProject(boardId, PROJECT_TEAM_CARD_ATTACHMENT_UPLOAD),
+            fileInterViewAuth: judgeJurisdictionProject(PROJECT_FILES_FILE_INTERVIEW)
         });
         this.loadTasksDetail(contentId, boardId);
     }
@@ -91,7 +105,6 @@ export default class taksDetails extends Component {
             contentId = Taro.getStorageSync("tasks_detail_contentId");
             boardId = Taro.getStorageSync("tasks_detail_boardId");
         }
-
         const { dispatch } = this.props;
         const that = this;
         Promise.resolve(
@@ -103,7 +116,6 @@ export default class taksDetails extends Component {
                 },
             })
         ).then((res) => {
-            console.log("***************")
             that.getCardProperties();
         });
     };
@@ -176,29 +188,41 @@ export default class taksDetails extends Component {
         const { dispatch } = this.props;
 
         let isRealize;
-        if (timeInfo.isRealize === "1") {
-            this.modifyRealize({ is_realize: "0" }, type, timeInfo.cardId);
-            isRealize = 0;
-        } else if (timeInfo.isRealize === "0") {
-            this.modifyRealize({ is_realize: "1" }, type, timeInfo.cardId);
-            isRealize = 1;
-        }
 
-        Promise.resolve(
-            dispatch({
-                type: "tasks/setTasksRealize",
-                payload: {
-                    card_id: timeInfo.cardId,
-                    is_realize: isRealize,
-                },
-            })
-        ).then((res) => {
-            if (type === "SonTasks") {
-                let contentId = Taro.getStorageSync("tasks_detail_contentId");
-                let boardId = Taro.getStorageSync("tasks_detail_boardId");
-                this.loadTasksDetail(contentId, boardId);
+        const { completeAuth } = this.state;
+        if (completeAuth) {
+
+            if (timeInfo.isRealize === "1") {
+                this.modifyRealize({ is_realize: "0" }, type, timeInfo.cardId);
+                isRealize = 0;
+            } else if (timeInfo.isRealize === "0") {
+                this.modifyRealize({ is_realize: "1" }, type, timeInfo.cardId);
+                isRealize = 1;
             }
-        });
+
+            Promise.resolve(
+                dispatch({
+                    type: "tasks/setTasksRealize",
+                    payload: {
+                        card_id: timeInfo.cardId,
+                        is_realize: isRealize,
+                    },
+                })
+            ).then((res) => {
+                if (type === "SonTasks") {
+                    let contentId = Taro.getStorageSync("tasks_detail_contentId");
+                    let boardId = Taro.getStorageSync("tasks_detail_boardId");
+                    this.loadTasksDetail(contentId, boardId);
+                }
+            });
+        } else {
+            Taro.showToast({
+                title: '您没有该项目的结束/重做权限',
+                icon: 'none',
+                duration: 2000
+            })
+
+        }
     };
 
     modifyRealize = (new_data = {}, type, card_id) => {
@@ -258,7 +282,49 @@ export default class taksDetails extends Component {
 
         return { name: item_value };
     };
+    // 编辑没有权限提示
+    showNoAuthToast() {
+        Taro.showToast({
+            title: '您没有此项目的编辑权限',
+            icon: 'none',
+            duration: 2000
+        })
+    }
+    // 删除任务
+    deleteTask(e) {
 
+        const { dispatch, tasksDetailDatas } = this.props;
+        const cardID = e.currentTarget.id;
+        if (this.state.deleteAuth) {
+            Taro.showActionSheet({
+                itemList: ['确定删除'],
+                success: function (res) {
+                    if (res.tapIndex == 0) {
+                        Promise.resolve(
+                            dispatch({
+                                type: 'tasks/deleteTask',
+                                payload: {
+                                    card_id: cardID
+                                }
+                            })
+                        ).then((res) => {
+                            Taro.navigateBack({
+                                delta: 1
+                            })
+                        });
+                    }
+                },
+                fail: function (res) {
+                }
+            })
+        } else {
+            Taro.showToast({
+                title: '您没有删除此项目的权限',
+                icon: 'none',
+                duration: 2000
+            })
+        }
+    }
     render() {
         const {
             tasksDetailDatas = {},
@@ -296,17 +362,15 @@ export default class taksDetails extends Component {
         const SystemInfo = Taro.getSystemInfoSync();
         const statusBar_Height = SystemInfo.statusBarHeight;
         const navBar_Height = SystemInfo.platform == "ios" ? 44 : 48;
-        const { isIphoneX } = this.state;
+        const { isIphoneX, editAuth, deleteAuth, completeAuth, uploadAuth, fileInterViewAuth, } = this.state;
         const { type_flag } = this.props;
 
         var { properties = [], fields = [], org_id, board_id } = tasksDetailDatas;
 
         board_id = Taro.getStorageSync("tasks_detail_boardId") || board_id;
-
-        console.log('======' + board_id);
         return (
             <View>
-                <CustomNavigation backIcon={backIcon} />
+                <CustomNavigation backIcon={backIcon} pop='previous' />
 
                 <View
                     style={{
@@ -323,6 +387,7 @@ export default class taksDetails extends Component {
                                     this.tasksDetailsRealizeStatus(timeInfo, "TasksTime")
                                 }
                                 flag={type_flag}
+                                completeAuth={completeAuth}
                             />) : <View></View>
                         }
 
@@ -385,6 +450,9 @@ export default class taksDetails extends Component {
                                                 propertyId={id}
                                                 cardId={card_id}
                                                 onClickAction={this.onClickAction}
+                                                uploadAuth={uploadAuth}
+                                                deleteAuth={deleteAuth}
+                                                fileInterViewAuth={fileInterViewAuth}
                                                 onTasksDetailsRealizeStatus={(timeInfo, type) =>
                                                     this.tasksDetailsRealizeStatus(timeInfo, "SonTasks")
                                                 }
@@ -409,6 +477,9 @@ export default class taksDetails extends Component {
                                                 boardId={board_id}
                                                 propertyId={id}
                                                 cardId={card_id}
+                                                uploadAuth={uploadAuth}
+                                                fileInterViewAuth={fileInterViewAuth}
+
                                             />
                                         ) : (
                                             ""
@@ -577,6 +648,8 @@ export default class taksDetails extends Component {
                         type="5"
                         onClickAction={this.onClickAction}
                     />
+                    <View className={`${indexStyles.placeholder_view}`}>
+                    </View>
                 </View>
 
                 {folder_tree &&
@@ -594,6 +667,13 @@ export default class taksDetails extends Component {
                     <View></View>
                 )}
                 {isIphoneX ? (<View className={indexStyles.isIphoneX}></View>) : (null)}
+                {
+                    !editAuth && <View className={indexStyles.obscurationView} onClick={this.showNoAuthToast}></View>
+                }
+                <View className={`${indexStyles.deleteView}`} id={card_id} onClick={this.deleteTask}>
+                    <Text className={`${globalStyle.global_iconfont} ${indexStyles.delete_iconfont} ${deleteAuth ? "" : indexStyles.unused_iconfont}`}>&#xe845;</Text>
+                </View>
+
             </View>
         );
     }

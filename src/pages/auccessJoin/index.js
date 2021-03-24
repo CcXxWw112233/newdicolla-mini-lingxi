@@ -158,7 +158,6 @@ export default class auccessJoin extends Component {
       currentBoard,
 
     } = this.props
-    debugger
     if (!im_id) {
       Taro.showToast({
         title: '当前群未注册',

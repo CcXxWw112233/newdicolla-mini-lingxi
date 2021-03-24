@@ -63,7 +63,6 @@ export default class Tree extends Component {
 
     render() {
         const { arr = [], choice_board_folder_id, boardId } = this.props
-
         return (
             <View>
                 {arr && arr.map(item => {
@@ -75,8 +74,8 @@ export default class Tree extends Component {
                                     choice_board_folder_id && item.folder_id && choice_board_folder_id === item.folder_id ? (
                                         <Text className={`${globalStyle.global_iconfont} ${indexStyles.choice_folder_button_icon_style}`}>&#xe844;</Text>
                                     ) : (
-                                            <Text className={`${globalStyle.global_iconfont} ${indexStyles.un_choice_folder_button_icon_style}`}>&#xe6df;</Text>
-                                        )
+                                        <Text className={`${globalStyle.global_iconfont} ${indexStyles.un_choice_folder_button_icon_style}`}>&#xe6df;</Text>
+                                    )
                                 }
                             </View>
 

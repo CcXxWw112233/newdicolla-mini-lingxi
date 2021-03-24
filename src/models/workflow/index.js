@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { getTemplateDetails, putApprovalComplete, putApprovalReject, } from '../../services/workflow/index'
+import { getTemplateDetails, putApprovalComplete, putApprovalReject, flowAbort, flowDelete, flowContinue, flowRenew } from '../../services/workflow/index'
 import { isApiResponseOk } from "../../utils/request";
 import { setBoardIdStorage } from '../../utils/basicFunction'
 
@@ -95,6 +95,79 @@ export default {
                     type: 'getTemplateDetails',
                     payload: {
                         id: flow_instance_id,
+                    }
+                })
+            } else {
+                Taro.showToast({
+                    title: res.message,
+                    icon: 'none',
+                    duration: 2000,
+                })
+            }
+        },
+        // 流程中止
+        *flowAbort({ payload }, { select, call, put }) {
+            const { id } = payload;
+            const res = yield call(flowAbort, payload)
+            if (isApiResponseOk(res)) {
+                yield put({
+                    type: 'getTemplateDetails',
+                    payload: {
+                        id: id,
+                    }
+                })
+            } else {
+                Taro.showToast({
+                    title: res.message,
+                    icon: 'none',
+                    duration: 2000,
+                })
+            }
+        },
+        // 流程删除
+        *flowDelete({ payload }, { select, call, put }) {
+            const { id } = payload;
+            const res = yield call(flowDelete, payload)
+            if (isApiResponseOk(res)) {
+                Taro.navigateBack({
+                    delta: 1
+                })
+            } else {
+                Taro.showToast({
+                    title: res.message,
+                    icon: 'none',
+                    duration: 2000,
+                })
+            }
+        },
+        // 流程继续执行
+        *flowContinue({ payload }, { select, call, put }) {
+            const { id } = payload;
+            const res = yield call(flowContinue, payload)
+            if (isApiResponseOk(res)) {
+                yield put({
+                    type: 'getTemplateDetails',
+                    payload: {
+                        id: id,
+                    }
+                })
+            } else {
+                Taro.showToast({
+                    title: res.message,
+                    icon: 'none',
+                    duration: 2000,
+                })
+            }
+        },
+        // 流程重新发起
+        *flowRenew({ payload }, { select, call, put }) {
+            const { id } = payload;
+            const res = yield call(flowRenew, payload)
+            if (isApiResponseOk(res)) {
+                yield put({
+                    type: 'getTemplateDetails',
+                    payload: {
+                        id: id,
                     }
                 })
             } else {

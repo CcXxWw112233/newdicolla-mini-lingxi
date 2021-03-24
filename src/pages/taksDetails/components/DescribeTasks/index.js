@@ -4,7 +4,8 @@ import indexStyles from './index.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { AtActionSheet, AtActionSheetItem } from "taro-ui"
 import { connect } from '@tarojs/redux'
-import { getOrgIdByBoardId, setBoardIdStorage } from '../../../../utils/basicFunction'
+import { getOrgIdByBoardId, setBoardIdStorage, judgeJurisdictionProject } from '../../../../utils/basicFunction'
+import { PROJECT_FILES_FILE_DOWNLOAD } from "../../../../gloalSet/js/constant";
 
 @connect(({ tasks: { tasksDetailDatas = {}, }, }) => ({
     tasksDetailDatas,
@@ -46,8 +47,18 @@ export default class index extends Component {
     }
 
     uploadDescribeTasksFile = () => {
-        this.setDescribeTasksIsOpen()
-        this.getAuthSetting()
+        const { uploadAuth } = this.props;
+        console.log(uploadAuth)
+        if (uploadAuth) {
+            this.setDescribeTasksIsOpen()
+            this.getAuthSetting()
+        } else {
+            Taro.showToast({
+                title: '您没有上传附件的权限',
+                icon: 'none',
+                duration: 2000
+            })
+        }
     }
 
     // 获取授权
@@ -179,17 +190,25 @@ export default class index extends Component {
     deleteDescribeTasks = () => {
 
         const { dispatch, propertyId, cardId } = this.props
+        if (judgeJurisdictionProject(PROJECT_FILES_FILE_DOWNLOAD)) {
+            dispatch({
+                type: 'tasks/deleteCardProperty',
+                payload: {
+                    property_id: propertyId,
+                    card_id: cardId,
+                    callBack: this.deleteTasksFieldRelation(propertyId),
+                },
+            })
 
-        dispatch({
-            type: 'tasks/deleteCardProperty',
-            payload: {
-                property_id: propertyId,
-                card_id: cardId,
-                callBack: this.deleteTasksFieldRelation(propertyId),
-            },
-        })
+            this.setDescribeTasksIsOpen()
+        } else {
+            Taro.showToast({
+                title: '您没有删除附件的权限',
+                icon: 'none',
+                duration: 2000
+            })
+        }
 
-        this.setDescribeTasksIsOpen()
     }
 
     fileOption = (id, file_resource_id, board_id, fileName, file_id) => {
@@ -256,19 +275,27 @@ export default class index extends Component {
 
     deleteFile = () => {
 
-        const { dispatch, cardId } = this.props
+        const { dispatch, cardId, fileInterViewAuth } = this.props
         const { file_id, file_item_id, } = this.state
-        dispatch({
-            type: 'tasks/deleteCardAttachment',
-            payload: {
-                attachment_id: file_id,
-                card_id: cardId,
-                code: "REMARK",
-                calback: this.deleteCardAttachment(cardId, file_item_id,),
-            }
-        })
+        if (fileInterViewAuth) {
+            dispatch({
+                type: 'tasks/deleteCardAttachment',
+                payload: {
+                    attachment_id: file_id,
+                    card_id: cardId,
+                    code: "REMARK",
+                    calback: this.deleteCardAttachment(cardId, file_item_id,),
+                }
+            })
+            this.setFileOptionIsOpen()
+        } else {
+            Taro.showToast({
+                title: '您没有预览该文件的权限',
+                icon: 'none',
+                duration: 2000
+            })
+        }
 
-        this.setFileOptionIsOpen()
     }
 
     deleteCardAttachment = (cardId, file_item_id) => {

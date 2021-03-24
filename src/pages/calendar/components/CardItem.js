@@ -5,7 +5,8 @@ import { View, Button, Text } from "@tarojs/components";
 import indexStyles from "./index.scss";
 import globalStyles from "../../../gloalSet/styles/globalStyles.scss";
 import Avatar from "../../../components/avatar";
-import { getOrgName, timestampToTimeZH } from "../../../utils/basicFunction";
+import { getOrgName, timestampToTimeZH, judgeJurisdictionProject } from "../../../utils/basicFunction";
+import { PROJECT_TEAM_CARD_INTERVIEW, PROJECT_FLOW_FLOW_ACCESS } from "../../../gloalSet/js/constant";
 
 @connect(({ my: { org_list }, calendar: { selected_timestamp } }) => ({
   org_list,
@@ -16,14 +17,32 @@ export default class CardItem extends Component {
     const { flag, content_id, board_id, parent_id } = itemValue;
     if (itemValue && ["0", "1"].indexOf(flag) !== -1) {
       let tasks_id = parent_id ? parent_id : content_id;
-      Taro.navigateTo({
-        url: `../../pages/taksDetails/index?flag=${flag}&contentId=${tasks_id}&boardId=${board_id}&back_icon=arrow_icon`
-      });
-    } else if (itemValue && ["2"].indexOf(flag) !== -1) {
+      // 判断有没有任务访问权限 
+      if (judgeJurisdictionProject(board_id, PROJECT_TEAM_CARD_INTERVIEW)) {
+        Taro.navigateTo({
+          url: `../../pages/taksDetails/index?flag=${flag}&contentId=${tasks_id}&boardId=${board_id}&back_icon=arrow_icon`
+        });
+      } else {
+        Taro.showToast({
+          title: '您没有该项目的访问权限',
+          icon: 'none',
+          duration: 2000
+        })
+      }
 
-      Taro.navigateTo({
-        url: `../../pages/templateDetails/index?flag=${flag}&contentId=${content_id}&boardId=${board_id}&back_icon=arrow_icon`
-      });
+    } else if (itemValue && ["2"].indexOf(flag) !== -1) {
+      if (judgeJurisdictionProject(board_id, PROJECT_FLOW_FLOW_ACCESS)) {
+        Taro.navigateTo({
+          url: `../../pages/templateDetails/index?flag=${flag}&contentId=${content_id}&boardId=${board_id}&back_icon=arrow_icon`
+        });
+      } else {
+        Taro.showToast({
+          title: '您没有该流程的访问权限',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+
     } else {
     }
   };

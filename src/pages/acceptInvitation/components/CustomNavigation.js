@@ -18,10 +18,6 @@ class CustomNavigation extends Component {
 
                 }
             })
-
-
-
-
         } else {
             Taro.switchTab({ url: `../../pages/calendar/index` })
         }

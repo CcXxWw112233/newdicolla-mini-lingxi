@@ -2,6 +2,7 @@
 import Taro from '@tarojs/taro'
 import { number, string } from 'prop-types';
 import { Base64 } from 'js-base64';
+import { connect } from '@tarojs/redux';
 
 export const getCurrentOrgByStorage = () => {
   const account_info_string = Taro.getStorageSync('account_info')
@@ -493,5 +494,50 @@ export const loadFindAssignees = (assignees = []) => {
   }
   else {
     return false;
+  }
+}
+
+
+// 判断项目权限 
+export const judgeJurisdictionProject = (board_id, jurisdiction) => {
+  try {
+    var hasJurisdiction = false;
+    var value = Taro.getStorageSync('verify_project_authority_list')
+    if (value) {
+      for (var key in value) {//遍历json对象的每个key/value对,p为key
+        if (board_id == key) {
+          value[key].map(item => {
+            if (item == jurisdiction) {
+              hasJurisdiction = true
+            }
+          })
+        }
+      }
+    }
+    return hasJurisdiction;
+  } catch (e) {
+    // Do something when catch error
+  }
+}
+
+// 判断组织权限 
+export const judgeJurisdictionOrg = (org_id, jurisdiction) => {
+  try {
+    var hasJurisdiction = false;
+    var value = Taro.getStorageSync('verify_project_authority_list')
+    if (value) {
+      for (var key in value) {//遍历json对象的每个key/value对,p为key
+        if (org_id == key) {
+          value[key].map(item => {
+            if (item == jurisdiction) {
+              hasJurisdiction = true
+            }
+          })
+        }
+      }
+    }
+    return hasJurisdiction;
+  } catch (e) {
+    // Do something when catch error
   }
 }

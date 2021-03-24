@@ -4,8 +4,9 @@ import indexStyles from './index.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { AtActionSheet, AtActionSheetItem } from "taro-ui"
 import { connect } from '@tarojs/redux'
-import { getOrgIdByBoardId, setBoardIdStorage } from '../../../../utils/basicFunction'
+import { getOrgIdByBoardId, setBoardIdStorage, judgeJurisdictionProject } from '../../../../utils/basicFunction'
 import { AddSonTask } from '../../../../pages/addSonTask'
+import { PROJECT_FILES_FILE_DOWNLOAD } from "../../../../gloalSet/js/constant";
 
 @connect(({ tasks: { tasksDetailDatas = {}, choice_image_temp_file_paths = '' }, }) => ({
     tasksDetailDatas, choice_image_temp_file_paths,
@@ -86,8 +87,17 @@ export default class index extends Component {
     }
 
     uploadFile = () => {
-        this.setSongTaskIsOpen()
-        this.getAuthSetting()
+        const { uploadAuth } = this.props;
+        if (uploadAuth) {
+            this.setSongTaskIsOpen()
+            this.getAuthSetting()
+        } else {
+            Taro.showToast({
+                title: '您没有上传附件的权限',
+                icon: 'none',
+                duration: 2000
+            })
+        }
     }
 
     // 获取授权
@@ -219,20 +229,40 @@ export default class index extends Component {
 
     deleteSongTasks = () => {
 
-        const { dispatch, tasksDetailDatas = {} } = this.props
+        const { dispatch, tasksDetailDatas = {}, deleteAuth } = this.props
         const { card_id } = tasksDetailDatas
         const { song_task_id } = this.state
-
-        dispatch({
-            type: 'tasks/deleteCard',
-            payload: {
-                id: song_task_id,
-                card_id: card_id,
-                callBack: this.deleteCard(song_task_id),
-            }
+        var that = this;
+        this.setState({
+            song_task_isOpen: false
         })
+        if (deleteAuth) {
+            Taro.showActionSheet({
+                itemList: ['确定删除'],
+                success: function (res) {
+                    if (res.tapIndex == 0) {
+                        dispatch({
+                            type: 'tasks/deleteCard',
+                            payload: {
+                                id: song_task_id,
+                                card_id: card_id,
+                                callBack: that.deleteCard(song_task_id),
+                            }
+                        })
+                        that.setSongTaskIsOpen()
+                    }
+                },
+                fail: function (res) {
+                }
+            })
 
-        this.setSongTaskIsOpen()
+        } else {
+            Taro.showToast({
+                title: '您没有删除此项目的权限',
+                icon: 'none',
+                duration: 2000
+            })
+        }
     }
 
 
@@ -268,7 +298,7 @@ export default class index extends Component {
     }
 
 
-    fileOption = (id, file_resource_id, board_id, fileName, card_id, file_id,) => {
+    fileOption = (id, file_resource_id, board_id, fileName, card_id, file_id, create_by, create_time) => {
 
         this.setState({
             file_option_isOpen: true,
@@ -278,63 +308,95 @@ export default class index extends Component {
             board_id: board_id,
             fileName: fileName,
             cardId: card_id,
+            create_by: create_by,
+            create_time: create_time
         })
     }
+
 
     previewFile = () => {
 
-        const { dispatch } = this.props
+        const { dispatch, fileInterViewAuth } = this.props
 
         const { file_resource_id, board_id, fileName, } = this.state
 
-        setBoardIdStorage(board_id)
-        const fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
-        const parameter = {
-            board_id,
-            ids: file_resource_id,
-            _organization_id: getOrgIdByBoardId(board_id),
-        }
+        if (fileInterViewAuth) {
 
-        // 清除缓存文件
-        Taro.getSavedFileList({
-            success(res) {
-                if (res.fileList.length > 0) {
-                    Taro.removeSavedFile({
-                        filePath: res.fileList[0].filePath,
-                        complete(res) {
-                            //console.log('清除成功', res)
-                        }
-                    })
-                }
+            setBoardIdStorage(board_id)
+            const fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
+            const parameter = {
+                board_id,
+                ids: file_resource_id,
+                _organization_id: getOrgIdByBoardId(board_id),
             }
-        })
 
-        dispatch({
-            type: 'file/getDownloadUrl',
-            payload: {
-                parameter,
-                fileType: fileType,
-            },
-        })
+            // 清除缓存文件
+            Taro.getSavedFileList({
+                success(res) {
+                    if (res.fileList.length > 0) {
+                        Taro.removeSavedFile({
+                            filePath: res.fileList[0].filePath,
+                            complete(res) {
+                                //console.log('清除成功', res)
+                            }
+                        })
+                    }
+                }
+            })
 
-        this.setFileOptionIsOpen()
+            dispatch({
+                type: 'file/getDownloadUrl',
+                payload: {
+                    parameter,
+                    fileType: fileType,
+                },
+            })
+
+            this.setFileOptionIsOpen()
+        } else {
+            Taro.showToast({
+                title: '您没有预览此文件的权限',
+                icon: 'none',
+                duration: 2000
+            })
+        }
     }
 
     deleteFile = () => {
-
         const { dispatch, tasksDetailDatas = {} } = this.props
         const { card_id } = tasksDetailDatas
-        const { file_id, cardId, fileId, } = this.state
-        dispatch({
-            type: 'tasks/deleteCardAttachment',
-            payload: {
-                attachment_id: fileId,
-                card_id: card_id,
-                calback: this.deleteCardAttachment(cardId, file_id,),
-            }
-        })
+        const { file_id, cardId, fileId, create_by, create_time, board_id } = this.state
+        const account_info = JSON.parse(Taro.getStorageSync('account_info'));
 
-        this.setFileOptionIsOpen()
+        if (account_info.id == create_by && (new Date().getTime() - parseInt(create_time) * 1000) < 2 * 60 * 1000) {
+            dispatch({
+                type: 'tasks/deleteCardAttachment',
+                payload: {
+                    attachment_id: fileId,
+                    card_id: card_id,
+                    calback: this.deleteCardAttachment(cardId, file_id,),
+                }
+            })
+            this.setFileOptionIsOpen()
+        } else if (judgeJurisdictionProject(board_id, PROJECT_FILES_FILE_DOWNLOAD)) {
+            dispatch({
+                type: 'tasks/deleteCardAttachment',
+                payload: {
+                    attachment_id: fileId,
+                    card_id: card_id,
+                    calback: this.deleteCardAttachment(cardId, file_id,),
+                }
+            })
+            this.setFileOptionIsOpen()
+        } else {
+            Taro.showToast({
+                title: '您没有删除附件的权限',
+                icon: 'none',
+                duration: 2000
+            })
+
+        }
+
     }
 
     fileHandleCancel = () => {
@@ -353,7 +415,6 @@ export default class index extends Component {
     }
 
     deleteCardAttachment = (cardId, file_id) => {
-
         const { dispatch, tasksDetailDatas, child_data } = this.props
         const { properties = [] } = tasksDetailDatas
 
@@ -532,7 +593,6 @@ export default class index extends Component {
     render() {
         const { child_data = [], boardId, tasksDetailDatas = {}, } = this.props
         const { list_id, card_id } = tasksDetailDatas
-
         const { isAddSonTaskShow } = this.state
         return (
             <View className={indexStyles.list_item}>
@@ -580,13 +640,13 @@ export default class index extends Component {
 
                                     {
                                         deliverables.map((item, key1) => {
-                                            const { id, name, file_resource_id, board_id, file_id, } = item
+                                            const { id, name, file_resource_id, board_id, file_id, create_by, create_time } = item
                                             return (
                                                 <View className={indexStyles.song_tasks_file}>
                                                     <View className={`${indexStyles.list_item_file_iconnext}`}>
                                                         <Text className={`${globalStyle.global_iconfont}`}>&#xe669;</Text>
                                                     </View>
-                                                    <View className={indexStyles.song_tasks_file_name} onClick={() => this.fileOption(id, file_resource_id, board_id, name, item.card_id, file_id,)}>{name}</View>
+                                                    <View className={indexStyles.song_tasks_file_name} onClick={() => this.fileOption(id, file_resource_id, board_id, name, item.card_id, file_id, create_by, create_time)}>{name}</View>
                                                 </View>
                                             )
                                         })
