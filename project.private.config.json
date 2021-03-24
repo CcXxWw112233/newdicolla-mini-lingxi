@@ -68,7 +68,6 @@
           "scene": null
         },
         {
-          "id": -1,
           "name": "pages/calendar/index",
           "pathName": "pages/calendar/index",
           "query": "contentId=1209439669922697216&boardId=1206886569806532608&redirectType=7&currentDate=1572437967000",
@@ -97,7 +96,7 @@
         {
           "name": "pages/templateDetails/index",
           "pathName": "pages/templateDetails/index",
-          "query": "contentId=1357225808191688704",
+          "query": "contentId= 1357225739665149952",
           "scene": null
         },
         {

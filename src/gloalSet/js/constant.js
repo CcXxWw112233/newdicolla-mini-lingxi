@@ -1,8 +1,8 @@
 //线上环境
-export const BASE_URL = "https://lingxi.di-an.com";
+// export const BASE_URL = "https://lingxi.di-an.com";
 //测试环境
-// export const BASE_URL = "http://test.lingxi.new-di.com";
-//稳定版开发服务器
+export const BASE_URL = "http://test.lingxi.new-di.com";
+// 稳定版开发服务器
 // export const BASE_URL = 'http://dev.lingxi.new-di.com'
 //本地环境
 // export const BASE_URL = 'http://192.168.1.81:8836'
@@ -91,6 +91,7 @@ export const PROJECT_FLOWS_FLOW_DELETE = 'project:flows:flow:delete' //删除流
 export const PROJECT_FLOWS_FLOW_ABORT = 'project:flows:flow:abort' //中止流程 permission_type=2
 export const PROJECT_FLOW_FLOW_ACCESS = 'project:flows:flow:access' //访问流程 permission_type=2
 export const PROJECT_FLOWS_FLOW_COMMENT = 'project:flows:flow:comment' //发表评论 //
+
 export const PROJECT_TEAM_CARD_INTERVIEW = 'project:team:card:interview' //访问任务 permission_type=2
 export const PROJECT_TEAM_CARD_CREATE = 'project:team:card:create' //创建任务 permission_type=2
 export const PROJECT_TEAM_CARD_EDIT = 'project:team:card:edit' //编辑任务 permission_type=2

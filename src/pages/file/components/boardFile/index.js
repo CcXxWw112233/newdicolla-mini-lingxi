@@ -82,7 +82,6 @@ export default class BoardFile extends Component {
     }
 
     render() {
-
         const { all_file_text } = this.state
         const { v2_board_list, org_list } = this.props
 

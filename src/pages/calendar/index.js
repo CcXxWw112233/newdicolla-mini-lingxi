@@ -139,7 +139,17 @@ export default class Calendar extends Component {
         });
       }
     });
-
+    // 获取权限列表
+    dispatch({
+      type: 'file/verifyAuthority',
+      payload: {
+      },
+    })
+    // dispatch({
+    // type: 'login/verifyOrgAuthority',
+    // payload: {
+    // },
+    // })
     dispatch({
       type: 'file/getFilePage',
       payload: {
@@ -148,17 +158,6 @@ export default class Calendar extends Component {
         folder_id: '',
         page_number: '',
         page_size: '',
-      },
-    })
-    // 获取项目权限数据
-    dispatch({
-      type: 'file/verifyAuthority',
-      payload: {
-      },
-    })
-    dispatch({
-      type: 'login/verifyOrgAuthority',
-      payload: {
       },
     })
   }
@@ -203,6 +202,17 @@ export default class Calendar extends Component {
         page_size: '',
       },
     })
+    // 获取权限列表
+    dispatch({
+      type: 'file/verifyAuthority',
+      payload: {
+      },
+    })
+    // dispatch({
+    // type: 'login/verifyOrgAuthority',
+    // payload: {
+    // },
+    // })
   }
 
   componentDidHide() {

@@ -107,16 +107,16 @@ export default class index extends Component {
         let promise = [];
         //开发者服务器访问接口，微信服务器通过这个接口上传文件到开发者服务器
         for (var i = 0; i < choice_image_temp_file_paths.length; i++) {
-            promise.push(this.addSendPromise(choice_image_temp_file_paths[i], data, authorization, base_info, board_id, choice_board_folder_id, song_task_id,))
+            this.addSendPromise(choice_image_temp_file_paths[i], data, authorization, base_info, board_id, choice_board_folder_id, song_task_id,)
+            // )
         }
 
         Promise.all(promise).then(res => {
-            //重新掉列表接口, 刷新列表
+            // 重新掉列表接口, 刷新列表
             Taro.showToast({
                 icon: "success",
                 title: "上传完成"
             })
-
             typeof this.props.onLoadTasksDetail == 'function' && this.props.onLoadTasksDetail();
 
         }).catch(err => {
@@ -202,7 +202,6 @@ export default class index extends Component {
                 title: "上传完成"
             })
 
-            typeof this.props.onLoadTasksDetail == 'function' && this.props.onLoadTasksDetail();
 
         }).catch(err => {
             console.log(err)
@@ -237,6 +236,8 @@ export default class index extends Component {
                     // console.log(res)
                     if (res.statusCode === 200) {
                         let d = JSON.parse(res.data);
+                        console.log("_____________________")
+                        typeof this.props.onLoadTasksDetail == 'function' && this.props.onLoadTasksDetail();
                         if (d.code == 0)
                             resolve(res);
                         else {
@@ -350,8 +351,8 @@ export default class index extends Component {
                             choice_board_id != '' || choice_board_folder_id != '' ? (
                                 <View className={indexStyles.confirm_button_style} onClick={this.handleConfirm}>上传</View>
                             ) : (
-                                    <View className={indexStyles.un_confirm_button_style}>上传</View>
-                                )
+                                <View className={indexStyles.un_confirm_button_style}>上传</View>
+                            )
                         }
                     </View>
                 </View>

@@ -173,9 +173,9 @@ export default class ProjectNameCell extends Component {
         ).then((res) => {
             if (isApiResponseOk(res)) {
                 if (res.data && res.data.length > 0) {
-                    Taro.navigateTo({
-                        // url: `../../pages/milestoneList/index?contentId=${contentId}&milestoneId=${data.id}`,
-                    });
+                    // Taro.navigateTo({
+                    // url: `../../pages/milestoneList/index?contentId=${contentId}&milestoneId=${data.id}`,
+                    // });
                     this.setState({
                         milestoneList: res.data,
                         milestoneId: data.id

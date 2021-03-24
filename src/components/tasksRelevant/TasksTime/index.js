@@ -145,7 +145,7 @@ export default class TasksTime extends Component {
     onTimeChangeDue = e => {
 
         let value = e['detail']['value']
-        debugger
+
         this.setState({
             task_due_time: value,
             due_time_str: value,
@@ -200,7 +200,7 @@ export default class TasksTime extends Component {
 
         const { start_date_str, start_time_str, due_date_str, due_time_str, } = this.state
 
-        const { cellInfo = {}, isPermission, flag, } = this.props
+        const { cellInfo = {}, isPermission, flag, completeAuth } = this.props
         const card_name = cellInfo.cardDefinition
         const sTime = cellInfo.sTime
         const eTime = cellInfo.eTime
@@ -220,17 +220,17 @@ export default class TasksTime extends Component {
                             is_Realize === '1' && isPermission === true ? (
                                 <Text className={`${globalStyles.global_iconfont}`} style={{ color: '#1890FF' }}>&#xe66a;</Text>
                             ) : (
-                                    <Text className={`${globalStyles.global_iconfont}`}>&#xe661;</Text>
-                                )
+                                <Text className={`${globalStyles.global_iconfont}`}>&#xe661;</Text>
+                            )
                         ) : (
-                                //日程
-                                //当前时间小于结束时间, 日程为: 完成状态
-                                unix > eTime ? (
-                                    <Text className={`${globalStyles.global_iconfont}`} style={{ color: '#1890FF' }}>&#xe63e;</Text>
-                                ) : (
-                                        <Text className={`${globalStyles.global_iconfont}`}>&#xe63e;</Text>
-                                    )
-                            )}
+                            //日程
+                            //当前时间小于结束时间, 日程为: 完成状态
+                            unix > eTime ? (
+                                <Text className={`${globalStyles.global_iconfont}`} style={{ color: '#1890FF' }}>&#xe63e;</Text>
+                            ) : (
+                                <Text className={`${globalStyles.global_iconfont}`}>&#xe63e;</Text>
+                            )
+                        )}
                     </View>
 
                     <Input

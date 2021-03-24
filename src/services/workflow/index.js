@@ -35,3 +35,48 @@ export const putApprovalReject = (data, notShowLoading) => {
         url: `${API_BOARD}/v2/flow/task/reject`,
     }, notShowLoading, true)
 }
+
+// 流程中止  id
+export const flowAbort = (data, notShowLoading) => {
+    return request({
+        data: {
+            ...data
+        },
+        method: 'GET',
+        url: `${API_BOARD}/v2/workflow/end`,
+    }, notShowLoading, true)
+}
+
+// 流程删除  id
+export const flowDelete = (data, notShowLoading) => {
+    return request({
+        data: {
+            ...data
+        },
+        method: 'DELETE',
+        url: `${API_BOARD}/v2/workflow?id=${data.id}`,
+    }, notShowLoading, true)
+}
+
+// 流程继续执行
+//  id
+export const flowContinue = (data, notShowLoading) => {
+    return request({
+        data: {
+            ...data
+        },
+        method: 'GET',
+        url: `${API_BOARD}/v2/workflow/restart`,
+    }, notShowLoading, true)
+}
+
+// 重新发起 id
+export const flowRenew = (data, notShowLoading) => {
+    return request({
+        data: {
+            ...data
+        },
+        method: 'GET',
+        url: `${API_BOARD}/v2/template`,
+    }, notShowLoading, true)
+}

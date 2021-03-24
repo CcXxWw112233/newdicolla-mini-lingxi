@@ -1,6 +1,6 @@
 import { connect } from '@tarojs/redux'
 import Taro, { Component } from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { View, Text } from '@tarojs/components'
 import indexStyles from './index.scss'
 import CustomNavigation from '../acceptInvitation/components/CustomNavigation.js'
 import TitileRow from './components/TitileRow/index'
@@ -8,6 +8,9 @@ import StepRow from './components/StepRow/index'
 import DataCollection from './components/DataCollection/index'
 import Approval from './components/Approval/index'
 import Score from './components/Score/index'
+import globalStyle from "../../gloalSet/styles/globalStyles.scss";
+import { PROJECT_FLOWS_FLOW_CREATE, PROJECT_FLOWS_FLOW_DELETE, PROJECT_FLOWS_FLOW_ABORT } from "../../gloalSet/js/constant";
+import { judgeJurisdictionProject } from "../../utils/basicFunction";
 
 @connect(({ workflow: { workflowDatas = {}, }, },) => ({
     workflowDatas,
@@ -38,11 +41,11 @@ export default class templateDetails extends Component {
     componentDidMount() {
         const { flag, boardId, contentId, back_icon } = this.$router.params
         const { workflowDatas } = this.props;
+        var that = this;
         if (boardId || contentId) {
             Taro.setStorageSync('workflow_detail_boardId', boardId)
             Taro.setStorageSync('workflow_detail_contentId', contentId)
         }
-
         this.setState({
             content_Id: contentId,
             backIcon: back_icon,
@@ -50,6 +53,18 @@ export default class templateDetails extends Component {
         })
 
         this.loadTemplateDetails(contentId, boardId)
+
+        Taro.getSystemInfo({
+            success(res) {
+                console.log(res);
+                if (res.system.split(" ")[0] == "iOS" && res.screenHeight > 736) {
+                    that.setState({
+                        screenHeight: res.screenHeight,
+                        isIphoneX: true,
+                    });
+                }
+            }
+        })
     }
 
     loadTemplateDetails(content_id, board_id) {
@@ -74,12 +89,13 @@ export default class templateDetails extends Component {
                 }
             })
         ).then((res) => {
+            console.log(res)
             var nodes = res.nodes;
             nodes.map(item => {
                 if (item.status == '1') {
                     that.setState({
                         current_step_id: item.id,
-                        is_change_open: true
+                        is_change_open: true,
                     })
                 }
             })
@@ -96,19 +112,147 @@ export default class templateDetails extends Component {
             current_step_id: currentStepId,
         })
     }
+    // flowCreateAuth: false,//新增流程权限
+    // flowDeleteAuth: false,//删除流程权限
+    // flowAbort: false,//中止流程权限
+    // 底部更多   进行中 :中止 删除    ; 中止之后: 重新发起 继续执行 删除
+    moreAction() {
+        const { workflowDatas } = this.props;
+        var that = this;
+        if (workflowDatas.status == '2') {
+            Taro.showActionSheet({
+                itemList: ['继续执行', '删除'], //'重新发起',
+                success: function (res) {
+                    console.log(res.tapIndex)
+                    // if (res.tapIndex == 0) {
+                    // that.flowRenew();
+                    // } else 
+                    if (res.tapIndex == 0) {
+                        that.flowContinue()
+                    } else if (res.tapIndex == 1) {
+                        that.flowDelete()
+                    }
+                },
+                fail: function (res) {
+                }
+            })
+        } else if (workflowDatas.status == '3') {
+            Taro.showActionSheet({
+                itemList: ['删除'],
+                success: function (res) {
+                    if (res.tapIndex == 0) {
+                        that.flowDelete()
+                    }
+                },
+                fail: function (res) {
+                }
+            })
+        } else {
+            Taro.showActionSheet({
+                itemList: ['中止', '删除'],
+                success: function (res) {
+                    console.log(res.tapIndex)
+                    if (res.tapIndex == 0) {
+                        that.flowAbort();
+                    } else if (res.tapIndex == 1) {
+                        that.flowDelete()
+                    }
+                },
+                fail: function (res) {
+                }
+            })
+        }
+    }
+    // 中止流程
+    flowAbort() {
+        const { dispatch, workflowDatas } = this.props
+        console.log(judgeJurisdictionProject(workflowDatas.board_id, PROJECT_FLOWS_FLOW_ABORT))
+        if (judgeJurisdictionProject(workflowDatas.board_id, PROJECT_FLOWS_FLOW_ABORT)) {
+            dispatch({
+                type: 'workflow/flowAbort',
+                payload: {
+                    id: workflowDatas.id,
+                    board_id: workflowDatas.board_id
+                }
+            })
+        } else {
+            Taro.showToast({
+                title: '您没有权限中止此流程',
+                icon: 'none',
+                duration: 2000
+            })
+        }
+    }
+    // 删除流程
+    flowDelete() {
+        const { dispatch, workflowDatas } = this.props
+        if (judgeJurisdictionProject(workflowDatas.board_id, PROJECT_FLOWS_FLOW_DELETE)) {
+            dispatch({
+                type: 'workflow/flowDelete',
+                payload: {
+                    id: workflowDatas.id,
+                    board_id: workflowDatas.board_id
+
+                }
+            })
+        } else {
+            Taro.showToast({
+                title: '您没有权限删除此流程',
+                icon: 'none',
+                duration: 2000
+            })
+        }
+    }
+    // 重新发起 (没有模板界面 暂时不做)
+    flowRenew() {
+        const { dispatch, workflowDatas } = this.props
+        if (judgeJurisdictionProject(workflowDatas.board_id, PROJECT_FLOWS_FLOW_CREATE)) {
+            dispatch({
+                type: 'workflow/flowRenew',
+                payload: {
+                    id: workflowDatas.flow_template_id,
+                    board_id: workflowDatas.board_id
+
+                }
+            })
+        } else {
+            Taro.showToast({
+                title: '您没有权限重新发起此流程',
+                icon: 'none',
+                duration: 2000
+            })
+        }
+    }
+    // 继续执行
+    flowContinue() {
+        const { dispatch, workflowDatas } = this.props
+        if (judgeJurisdictionProject(workflowDatas.board_id, PROJECT_FLOWS_FLOW_ABORT)) {
+            dispatch({
+                type: 'workflow/flowContinue',
+                payload: {
+                    id: workflowDatas.id,
+                    board_id: workflowDatas.board_id
+                }
+            })
+        } else {
+            Taro.showToast({
+                title: '您没有权限继续执行此流程',
+                icon: 'none',
+                duration: 2000
+            })
+        }
+    }
 
     render() {
         const SystemInfo = Taro.getSystemInfoSync()
         const statusBar_Height = SystemInfo.statusBarHeight
         const navBar_Height = SystemInfo.platform == 'ios' ? 44 : 48
 
-        const { backIcon, is_change_open, current_step_id } = this.state
+        const { backIcon, is_change_open, current_step_id, isIphoneX } = this.state
 
         const { workflowDatas, } = this.props
 
-        const { name, create_time, nodes = [], board_id, } = workflowDatas
-
-
+        const { name, create_time, nodes = [], board_id, status } = workflowDatas
         return (
             <View className={indexStyles.index}>
                 <CustomNavigation backIcon={backIcon} pop='previous' />
@@ -180,6 +324,13 @@ export default class templateDetails extends Component {
                         )
                     })}
                 </View>
+                <View className={`${indexStyles.placeholder_View} ${isIphoneX ? indexStyles.isIphoneX : ''}`}></View>
+                <View className={`${indexStyles.moreBtnView} ${isIphoneX ? indexStyles.isIphoneX : ''}`} onClick={this.moreAction} >
+                    {status == '2' ? '已中止' : ''}
+                    {status == '3' ? '已完成' : ''}
+                    <Text className={`${globalStyle.global_iconfont} ${indexStyles.more_iconfont}`}>&#xe63f;</Text>
+                </View>
+
             </View>
         )
     }

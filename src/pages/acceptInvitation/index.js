@@ -135,6 +135,7 @@ export default class acceptInvitation extends Component {
       })
     }
     else if (["3", "4", "5"].indexOf(qrCodeInfo.rela_type) != -1) {  //任务
+
       Taro.redirectTo({
         url: `../../pages/taksDetails/index?flag=${'0'}&contentId=${qrCodeInfo.rela_id}&back_icon=arrow_icon`
       })
