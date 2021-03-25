@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { getTaskGroupList, addTask, getTasksDetail, getCardCommentListAll, boardAppRelaMiletones, addComment, checkContentLink, getTaskExecutorsList, getTaskMilestoneList, setTasksRealize, updataTasks, putCardBaseInfo, getLabelList, postCardLabel, deleteCardLabel, getCardList, deleteCardExecutor, addCardExecutor, deleteAppRelaMiletones, deleteCard, deleteCardAttachment, deleteCardProperty, getBoardFieldGroupList, putBoardFieldRelation, deleteBoardFieldRelation, postBoardFieldRelation, postV2Card, getCardProperties, postCardProperty, deleteFileFieldsFileRemove, deleteTask } from '../../services/tasks/index'
+import { getTaskGroupList, addTask, getTasksDetail, getCardCommentListAll, boardAppRelaMiletones, addComment, checkContentLink, getTaskExecutorsList, getTaskMilestoneList, setTasksRealize, updataTasks, putCardBaseInfo, getLabelList, postCardLabel, deleteCardLabel, getCardList, deleteCardExecutor, addCardExecutor, deleteAppRelaMiletones, deleteCard, deleteCardAttachment, deleteCardProperty, getBoardFieldGroupList, putBoardFieldRelation, deleteBoardFieldRelation, postBoardFieldRelation, postV2Card, getCardProperties, postCardProperty, deleteFileFieldsFileRemove, deleteTask, getRoleList } from '../../services/tasks/index'
 import { isApiResponseOk } from "../../utils/request";
 import { setBoardIdStorage } from '../../utils/basicFunction'
 
@@ -19,8 +19,10 @@ export default {
     properties_list: [], //任务属性列表
     choice_image_temp_file_paths: '', //选择文件上传保存在本地的路径
     song_task_id: '', //子任务id/属性id
-    tasks_upload_file_type: '', //上传类型,(子任务, 任务描述)
-
+    tasks_upload_file_type: '', //上传类型,(子任务, 任务描述),
+    roleOrOwnAuth: false,
+    canEditRoleList: [],
+    canEditpersonageList: []
   },
   effects: {
     //获取任务列表
@@ -47,6 +49,7 @@ export default {
       const { id, boardId } = payload;
       const res = yield call(getTasksDetail, { id: id })
       if (isApiResponseOk(res)) {
+        console.log(res);
         yield put({
           type: 'updateDatas',
           payload: {
@@ -70,6 +73,46 @@ export default {
             link_local: '3',
           }
         })
+        const account_info = JSON.parse(Taro.getStorageSync('account_info'));
+
+        if (res.data.privileges && res.data.privileges.length > 0) {
+          var canEditpersonageList = res.data.privileges.filter(function (value) {
+            return (value.user_info && value.user_info.id) == account_info.id && (value.content_privilege_code == 'edit');
+          })
+          yield put({
+            type: 'updateDatas',
+            payload: {
+              canEditpersonageList: canEditpersonageList,
+            }
+          })
+        }
+
+        const res1 = yield call(getRoleList,
+          {
+            board_id: res.data.board_id,
+            id: res.data.board_id,
+          });
+
+        if (isApiResponseOk(res1)) {
+          var list = res1.data.data.filter(function (value) {
+            return value.user_id == account_info.id;
+          })
+          if (list && list.length > 0) {
+            var canEditRoleList = res.data.privileges.filter(function (value) {
+              return (value.role_info && value.role_info.id) == list[0].role_id && (value.
+                content_privilege_code == 'edit');
+            })
+
+            yield put({
+              type: 'updateDatas',
+              payload: {
+                canEditRoleList: canEditRoleList,
+              }
+            })
+          }
+
+        } else {
+        }
 
       } else {
         if (res.code === 401) { //未登录, 没有权限查看
@@ -92,6 +135,9 @@ export default {
         }
       }
     },
+
+
+
 
     //新增任务
     * addTask({ payload }, { select, call, put }) {

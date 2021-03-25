@@ -362,3 +362,15 @@ export const deleteTask = (data, notShowLoading) => {
     url: `${API_BOARD}/v2/card/${data.card_id}`,
   }, notShowLoading, true)
 }
+
+// 角色
+export const getRoleList = (data, notShowLoading) => {
+  console.log("************************~~~~~~~~~~~~*****")
+  console.log(data)
+  return request({
+    data: {
+    },
+    method: 'GET',
+    url: `${API_BOARD}/board/detail/${data.board_id}`,
+  }, notShowLoading)
+}

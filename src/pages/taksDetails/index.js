@@ -18,11 +18,12 @@ import TaksChoiceFolder from "./components/TaksChoiceFolder/index";
 import MultipleSelectionField from "./components/MultipleSelectionField/index";
 import FileFields from "./components/FileFields/index";
 import { timestampToDateTime, judgeJurisdictionProject } from "../../utils/basicFunction";
-import { PROJECT_TEAM_CARD_EDIT, PROJECT_TEAM_CARD_DELETE, PROJECT_TEAM_CARD_EDIT_FINISH_TIME, PROJECT_TEAM_CARD_COMPLETE, PROJECT_TEAM_CARD_ATTACHMENT_UPLOAD, PROJECT_FILES_FILE_INTERVIEW } from "../../gloalSet/js/constant";
+import { PROJECT_TEAM_CARD_EDIT, PROJECT_TEAM_CARD_DELETE, PROJECT_TEAM_CARD_EDIT_FINISH_TIME, PROJECT_TEAM_CARD_COMPLETE, PROJECT_TEAM_CARD_ATTACHMENT_UPLOAD, PROJECT_FILES_FILE_INTERVIEW, PROJECT_FILES_FILE_UPLOAD } from "../../gloalSet/js/constant";
 
 @connect(
     ({
-        tasks: { tasksDetailDatas = {}, properties_list = [] },
+        tasks: { tasksDetailDatas = {}, properties_list = [], canEditRoleList = [],
+            canEditpersonageList = [] },
         calendar: { isOtherPageBack = {} },
         file: { folder_tree, isShowChoiceFolder },
     }) => ({
@@ -31,6 +32,8 @@ import { PROJECT_TEAM_CARD_EDIT, PROJECT_TEAM_CARD_DELETE, PROJECT_TEAM_CARD_EDI
         properties_list,
         folder_tree,
         isShowChoiceFolder,
+        canEditRoleList,
+        canEditpersonageList
     })
 )
 export default class taksDetails extends Component {
@@ -85,17 +88,18 @@ export default class taksDetails extends Component {
             backIcon: back_icon,
             type_flag: flag,
             board_id: boardId,
-            editAuth: judgeJurisdictionProject(boardId, PROJECT_TEAM_CARD_EDIT),
-            deleteAuth: judgeJurisdictionProject(boardId, PROJECT_TEAM_CARD_DELETE),
             editFinishTimeAuth: judgeJurisdictionProject(boardId, PROJECT_TEAM_CARD_EDIT_FINISH_TIME),
+            deleteAuth: judgeJurisdictionProject(boardId, PROJECT_TEAM_CARD_DELETE),
+
             completeAuth: judgeJurisdictionProject(boardId, PROJECT_TEAM_CARD_COMPLETE),
-            uploadAuth: judgeJurisdictionProject(boardId, PROJECT_TEAM_CARD_ATTACHMENT_UPLOAD),
+            uploadAuth: judgeJurisdictionProject(boardId, PROJECT_FILES_FILE_UPLOAD),
             fileInterViewAuth: judgeJurisdictionProject(PROJECT_FILES_FILE_INTERVIEW)
         });
         this.loadTasksDetail(contentId, boardId);
     }
 
     loadTasksDetail = (content_id, board_id) => {
+        const { dispatch } = this.props;
         let contentId;
         let boardId;
         if (content_id || board_id) {
@@ -105,7 +109,7 @@ export default class taksDetails extends Component {
             contentId = Taro.getStorageSync("tasks_detail_contentId");
             boardId = Taro.getStorageSync("tasks_detail_boardId");
         }
-        const { dispatch } = this.props;
+        console.log("*******************~~~~~~~~~~~~~~~*********")
         const that = this;
         Promise.resolve(
             dispatch({
@@ -116,18 +120,30 @@ export default class taksDetails extends Component {
                 },
             })
         ).then((res) => {
-            that.getCardProperties();
+            console.log("________________________________")
+            that.getCardProperties(boardId);
         });
     };
 
-    getCardProperties = () => {
-        const { dispatch } = this.props;
-        const { tasksDetailDatas } = this.props;
+    getCardProperties = (boardId) => {
+        const { tasksDetailDatas, canEditRoleList, canEditpersonageList, dispatch } = this.props;
 
         dispatch({
             type: "tasks/getCardProperties",
             payload: {},
         });
+        var editAuth = false;
+        editAuth = judgeJurisdictionProject(tasksDetailDatas.board_id, PROJECT_TEAM_CARD_EDIT)
+        if (canEditRoleList && canEditRoleList.length > 0) {
+
+            editAuth = true;
+        }
+        if (canEditpersonageList && canEditpersonageList.length > 0) {
+            editAuth = true
+        }
+        this.setState({
+            editAuth: editAuth
+        })
         this.getBoardFileList(tasksDetailDatas.board_id);
 
     };
@@ -158,7 +174,6 @@ export default class taksDetails extends Component {
         }
     }
     onClickAction() {
-
         const { dispatch } = this.props;
         dispatch({
             type: "calendar/updateDatas",
@@ -292,7 +307,6 @@ export default class taksDetails extends Component {
     }
     // 删除任务
     deleteTask(e) {
-
         const { dispatch, tasksDetailDatas } = this.props;
         const cardID = e.currentTarget.id;
         if (this.state.deleteAuth) {
@@ -422,7 +436,6 @@ export default class taksDetails extends Component {
                                                     cardId={card_id}
                                                     type="3"
                                                     onClickAction={this.onClickAction}
-
                                                 // onLoadTasksDetail={this.loadTasksDetail.bind(board_id, card_id)}
                                                 />
                                             ) : (
@@ -661,6 +674,7 @@ export default class taksDetails extends Component {
                         org_id={org_id}
                         board_id={board_id}
                         card_id={card_id}
+                        onClickAction={this.onClickAction}
                         onLoadTasksDetail={this.loadTasksDetail.bind(board_id, card_id)}
                     />
                 ) : (

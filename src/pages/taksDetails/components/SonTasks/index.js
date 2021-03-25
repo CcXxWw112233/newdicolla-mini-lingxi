@@ -6,7 +6,7 @@ import { AtActionSheet, AtActionSheetItem } from "taro-ui"
 import { connect } from '@tarojs/redux'
 import { getOrgIdByBoardId, setBoardIdStorage, judgeJurisdictionProject } from '../../../../utils/basicFunction'
 import { AddSonTask } from '../../../../pages/addSonTask'
-import { PROJECT_FILES_FILE_DOWNLOAD } from "../../../../gloalSet/js/constant";
+import { PROJECT_FILES_FILE_DOWNLOAD, PROJECT_FILES_FILE_DELETE } from "../../../../gloalSet/js/constant";
 
 @connect(({ tasks: { tasksDetailDatas = {}, choice_image_temp_file_paths = '' }, }) => ({
     tasksDetailDatas, choice_image_temp_file_paths,
@@ -179,6 +179,7 @@ export default class index extends Component {
                 let tempFilePaths = res.tempFilePaths;
                 that.setFileOptionIsOpen()
                 that.uploadChoiceFolder();
+
                 that.saveChoiceImageTempFilePaths(tempFilePaths)
             }
         })
@@ -378,7 +379,7 @@ export default class index extends Component {
                 }
             })
             this.setFileOptionIsOpen()
-        } else if (judgeJurisdictionProject(board_id, PROJECT_FILES_FILE_DOWNLOAD)) {
+        } else if (judgeJurisdictionProject(board_id, PROJECT_FILES_FILE_DELETE)) {
             dispatch({
                 type: 'tasks/deleteCardAttachment',
                 payload: {

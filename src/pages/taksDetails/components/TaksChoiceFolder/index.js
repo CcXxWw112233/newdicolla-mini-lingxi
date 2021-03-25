@@ -202,6 +202,7 @@ export default class index extends Component {
                 title: "上传完成"
             })
 
+            typeof this.props.onLoadTasksDetail == 'function' && this.props.onLoadTasksDetail();
 
         }).catch(err => {
             console.log(err)
@@ -236,8 +237,6 @@ export default class index extends Component {
                     // console.log(res)
                     if (res.statusCode === 200) {
                         let d = JSON.parse(res.data);
-                        console.log("_____________________")
-                        typeof this.props.onLoadTasksDetail == 'function' && this.props.onLoadTasksDetail();
                         if (d.code == 0)
                             resolve(res);
                         else {
