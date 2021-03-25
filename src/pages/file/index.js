@@ -21,7 +21,8 @@ import { BASE_URL, API_BOARD, PROJECT_FILES_FILE_DELETE, PROJECT_FILES_FILE_DOWN
         unread_file_list = [],
         unvisited_file_list_count,
         verify_authority_list,
-        current_previewImage
+        current_previewImage,
+        uploadNowList = []
     },
     im: {
         allBoardList,
@@ -37,7 +38,8 @@ import { BASE_URL, API_BOARD, PROJECT_FILES_FILE_DELETE, PROJECT_FILES_FILE_DOWN
         unread_file_list,
         unvisited_file_list_count,
         verify_authority_list,
-        current_previewImage
+        current_previewImage,
+        uploadNowList
     }),
     dispatch => {
         return {
@@ -225,8 +227,6 @@ export default class File extends Component {
         }
         const { dispatch, header_folder_name } = this.props;
         var that = this;
-
-        console.log("*****************" + header_folder_name)
 
         Taro.setStorageSync('file_pull_down_refresh', JSON.stringify(params))
         Promise.resolve(
@@ -443,7 +443,8 @@ export default class File extends Component {
             payload: {
                 parameter,
                 fileType: fileType,
-                downLoadAuto: downLoadAuto
+                downLoadAuto: judgeJurisdictionProject(board_id, PROJECT_FILES_FILE_DOWNLOAD),
+                fileName: fileName,
             },
         })
 
@@ -985,10 +986,10 @@ export default class File extends Component {
 
     // 点击顶部删除icon
     showDeleteView = () => {
-        const { header_folder_name, } = this.props;
+        const { header_folder_name, uploadNowList } = this.props;
         const { file_list_state } = this.state;
-
-        if (!this.state.deleteAuto) {
+        console.log(uploadNowList.length)
+        if (!this.state.deleteAuto && uploadNowList.length == 0) {
             Taro.showToast({
                 title: header_folder_name == '全部文件' ? '请选择相应的项目' : '您没有该项目的删除权限',
                 icon: 'none',
@@ -996,6 +997,7 @@ export default class File extends Component {
             });
             return;
         }
+
 
         if (file_list_state.length == 0) {
             Taro.showToast({
@@ -1018,8 +1020,46 @@ export default class File extends Component {
     }
     // 选择删除的文件
     selectDeleteFile = (value) => {
-        const { selectFiles } = this.state;
+        const { selectFiles, deleteAuto } = this.state;
+        const account_info = JSON.parse(Taro.getStorageSync('account_info'));
+        console.log(value)
         var files = selectFiles;
+        if (!deleteAuto) {
+            if (value.create_by.id != account_info.id || new Date().getTime() - parseInt(value.create_time) > 2 * 60 * 1000) {
+                Taro.showToast({
+                    title: '您没有权限删除此文件',
+                    icon: 'none',
+                    duration: 2000
+                });
+            } else {
+                if (files && files.length > 0) {
+                    var isExit = files.some(function (currentValue) {
+                        return value.id == currentValue.id
+                    });
+                    var item = {
+                        type: value.type,
+                        id: value.id
+                    }
+                    if (isExit) {
+                        files = files.filter(currentValue => currentValue.id != value.id);
+                    } else {
+                        files.push(item)
+                    }
+                } else {
+                    var item = {
+                        type: value.type,
+                        id: value.id
+                    }
+                    files.push(item)
+                }
+                this.setState({
+                    selectFiles: files,
+                    board_id: value.board_id
+                })
+            }
+            console.log(new Date().getTime() - parseInt(value.create_time));
+            return;
+        }
 
         if (files && files.length > 0) {
             var isExit = files.some(function (currentValue) {
@@ -1048,7 +1088,6 @@ export default class File extends Component {
         })
     }
 
-
     // deleteFiles
     confirmDelete = () => {
         // const refreshStr = Taro.getStorageSync('file_pull_down_refresh')
@@ -1057,11 +1096,13 @@ export default class File extends Component {
         var that = this;
         const { selectFiles } = this.state;
         if (selectFiles && selectFiles.length > 0) {
+
             Taro.showModal({
                 title: '温馨提示',
                 content: '确定删除这些文件?',
                 success: function (res) {
                     if (res.confirm) {
+
                         that.deleteFiles();
                     } else if (res.cancel) {
                         console.log('用户点击取消')
@@ -1105,9 +1146,13 @@ export default class File extends Component {
 
     render() {
 
-        const { isShowBoardList, header_folder_name, isShowChoiceFolder } = this.props
+        const { isShowBoardList, header_folder_name, isShowChoiceFolder, uploadNowList } = this.props
         const { is_tips_longpress_file, choice_image_temp_file_paths = [], makePho, file_list_state, upload_sheet_list, uplaodAuto, isDeleteMenuOnclick, selectFiles, deleteAuto } = this.state
 
+        /**
+         * can remove
+         */
+        const enabledDelete = (deleteAuto || !!uploadNowList.length)
         return (
             <View className={indexStyles.index} >
                 {
@@ -1128,7 +1173,7 @@ export default class File extends Component {
 
                         <View className={indexStyles.folderPath} onClick={() => this.choiceBoard(true)}>
                             <Text className={`${globalStyle.global_iconfont} ${indexStyles.folder_Path_icon}`}>&#xe7f4;</Text>
-                            <Text className={indexStyles.header_folder_name_style}>{header_folder_name}</Text>
+                            <Text className={indexStyles.header_folder_name_style}>{header_folder_name}-{uploadNowList.length}</Text>
                         </View>
 
                         {
@@ -1136,12 +1181,12 @@ export default class File extends Component {
                                 {/*  <View className={indexStyles.files_album_camera_button_style} onClick=
             {this.getAuthSetting.bind(this, 'file')}><Text className={`${globalStyle.global_iconfont} ${indexStyles.
                 files_album_camera_icon_style}`}>&#xe662;</Text></View>*/}
-                                <View className={`${indexStyles.files_album_camera_button_style} ${deleteAuto ? '' : indexStyles.files_unused_button_style}`} onClick={this.showDeleteView.bind(this)}>
+                                <View className={`${indexStyles.files_album_camera_button_style} ${enabledDelete ? '' : indexStyles.files_unused_button_style}`} onClick={this.showDeleteView.bind(this)}>
                                     <Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe845;</Text>
                                 </View>
 
 
-                                <View className={`${indexStyles.files_album_camera_button_style} ${uplaodAuto ? '' : indexStyles.files_unused_button_style}`} onClick={this.judgeIsSelectProject.bind(this)}><Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe7b7;</Text></View>
+                                <View className={`${indexStyles.files_album_camera_button_style} ${uplaodAuto ? '' : indexStyles.files_unused_button_style}`} onClick={this.judgeIsSelectProject.bind(this)}><Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe84b;</Text></View>
                             </View>
                         }
 
@@ -1170,7 +1215,8 @@ export default class File extends Component {
                                         isDeleteMenuOnclick && <View className={indexStyles.fileSelect_View} >
                                             {
                                                 isSelected && <Text className={`${globalStyle.global_iconfont} ${indexStyles.
-                                                    file_select_icon}`}>&#xe844;</Text>
+                                                    file_select_icon}`}
+                                                >&#xe844;</Text>
                                             }
                                         </View>
                                     }

@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { getFilePage, getFileDetails, getFolder, getDownloadUrl, uploadFile, sendFileComment, getFileUnreadList, verifyAuthority, filevisited, deleteFiles } from '../../services/file/index'
+import { getFilePage, getFileDetails, getFolder, getDownloadUrl, uploadFile, sendFileComment, getFileUnreadList, verifyAuthority, filevisited, deleteFiles, } from '../../services/file/index'
 import { isApiResponseOk, } from "../../utils/request";
 
 export default {
@@ -26,6 +26,7 @@ export default {
         unvisited_file_list_count: 0,//权限数据 //未读文件的数量
         verify_authority_list: {},
         current_previewImage: '',//当前预览的图片
+        uploadNowList: [],//两分钟内上传的图片
     },
     effects: {
         //全部文件信息
@@ -68,7 +69,27 @@ export default {
                         });
                     }
                 }
-
+                if (board_id.length > 0) {
+                    console.log("jklsdljsklfjsklj;")
+                    const account_info = JSON.parse(Taro.getStorageSync('account_info'));
+                    var uploadNowList = res.data.filter(function (value) {
+                        return value.create_by.id == account_info.id && new Date().getTime() -
+                            parseInt(value.create_time) < 2 * 60 * 1000;
+                    })
+                    yield put({
+                        type: 'updateDatas',
+                        payload: {
+                            uploadNowList: uploadNowList
+                        }
+                    })
+                } else {
+                    yield put({
+                        type: 'updateDatas',
+                        payload: {
+                            uploadNowList: []
+                        }
+                    })
+                }
             } else {
                 Taro.showToast({
                     title: res.message,
@@ -81,7 +102,7 @@ export default {
 
         //下载文件
         * getDownloadUrl({ payload }, { select, call, put }) {
-            const { parameter, fileType, downLoadAuto } = payload
+            const { parameter, fileType, downLoadAuto, fileName } = payload
             Taro.showLoading({
                 title: '加载中...',
             })
@@ -117,51 +138,57 @@ export default {
                     // Taro.navigateTo({
                     //     url: `../../pages/webView/index`
                     // })
+
+
                     Taro.downloadFile({
                         url: res.data[0],
+                        filePath: `${wx.env.USER_DATA_PATH}/${fileName}`,
                         success: function (res) {
-                            var filePath = res.tempFilePath
-                            //console.log('filePath', filePath)
-                            Taro.saveFile({
-                                tempFilePath: filePath,
+
+                            var filePath = res.filePath
+                            // Taro.saveFile({
+                            // tempFilePath: filePath,
+                            // success: function (res) {
+                            // console.log("saveFile=====ssss", res.savedFilePath, file_type)
+                            // console.log("~~~~~~~~~")
+                            // console.log(res)
+
+                            Taro.openDocument({
+                                filePath: filePath,
+                                fileType: file_type,  //指定文件类型 file_type
+                                showMenu: downLoadAuto,
                                 success: function (res) {
-                                    //console.log("saveFile=====ssss", res.savedFilePath, file_type)
-                                    Taro.openDocument({
-                                        filePath: res.savedFilePath,
-                                        fileType: file_type,  //指定文件类型 file_type
-                                        showMenu: downLoadAuto,
-                                        success: function (res) {
-                                            //console.log("打开文档成功", res)
-                                        },
-                                        fail: function (res) {
-                                            Taro.showToast({
-                                                title: '文件过大或不支持该格式',
-                                                icon: 'none',
-                                                duration: 2000
-                                            })
-                                            // console.log("fail", res);
-                                        },
-                                        complete: function (res) {
-                                            Taro.hideLoading()
-                                            //console.log("complete", res);
-                                        }
-                                    })
+                                    //console.log("打开文档成功", res)
                                 },
                                 fail: function (res) {
-                                    Taro.hideLoading()
                                     Taro.showToast({
                                         title: '文件过大或不支持该格式',
                                         icon: 'none',
                                         duration: 2000
                                     })
-                                    //console.log("saveFile", res);
+                                    // console.log("fail", res);
                                 },
                                 complete: function (res) {
-                                    // console.log("saveFile", res);
+                                    Taro.hideLoading()
+                                    //console.log("complete", res);
                                 }
                             })
-
                         },
+                        // fail: function (res) {
+                        // Taro.hideLoading()
+                        // Taro.showToast({
+                        // title: '文件过大或不支持该格式',
+                        // icon: 'none',
+                        // duration: 2000
+                        // })
+                        // console.log("saveFile", res);
+                        // },
+                        // complete: function (res) {
+                        // console.log("saveFile", res);
+                        // }
+                        // })
+
+                        // },
                         fail: function (res) {
                             Taro.hideLoading()
                             Taro.showToast({
@@ -319,7 +346,11 @@ export default {
                 console.log(res)
                 return res.data;
             } else {
-                console.log('res:', res);
+                Taro.showToast({
+                    title: res.message,
+                    icon: 'none',
+                    duration: 2000,
+                })
             }
         },
     },

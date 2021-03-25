@@ -56,3 +56,4 @@ export const v2BoardList = (data, notShowLoading) => {
     url: `${API_BOARD}/board/list/filter/app`,
   }, notShowLoading)
 }
+

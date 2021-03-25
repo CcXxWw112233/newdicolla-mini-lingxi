@@ -214,7 +214,7 @@ export default class TasksTime extends Component {
         return (
             <View className={indexStyles.view_Style}>
                 <View className={indexStyles.input_View}>
-                    <View className={`${indexStyles.list_item_iconnext}`} onClick={this.tasksRealizeStatus}>
+                    <View className={`${indexStyles.list_item_iconnext}`} onClick={this.tasksRealizeStatus} >
                         {flag === '0' || flag === '2' ? (
                             //任务
                             is_Realize === '1' && isPermission === true ? (

@@ -5,7 +5,7 @@ import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { AtActionSheet, AtActionSheetItem } from "taro-ui"
 import { connect } from '@tarojs/redux'
 import { getOrgIdByBoardId, setBoardIdStorage, judgeJurisdictionProject } from '../../../../utils/basicFunction'
-import { PROJECT_FILES_FILE_DOWNLOAD } from "../../../../gloalSet/js/constant";
+import { PROJECT_FILES_FILE_DOWNLOAD, PROJECT_FILES_FILE_DELETE } from "../../../../gloalSet/js/constant";
 
 @connect(({ tasks: { tasksDetailDatas = {}, }, }) => ({
     tasksDetailDatas,
@@ -190,28 +190,20 @@ export default class index extends Component {
     deleteDescribeTasks = () => {
 
         const { dispatch, propertyId, cardId } = this.props
-        if (judgeJurisdictionProject(PROJECT_FILES_FILE_DOWNLOAD)) {
-            dispatch({
-                type: 'tasks/deleteCardProperty',
-                payload: {
-                    property_id: propertyId,
-                    card_id: cardId,
-                    callBack: this.deleteTasksFieldRelation(propertyId),
-                },
-            })
+        dispatch({
+            type: 'tasks/deleteCardProperty',
+            payload: {
+                property_id: propertyId,
+                card_id: cardId,
+                callBack: this.deleteTasksFieldRelation(propertyId),
+            },
+        })
 
-            this.setDescribeTasksIsOpen()
-        } else {
-            Taro.showToast({
-                title: '您没有删除附件的权限',
-                icon: 'none',
-                duration: 2000
-            })
-        }
+        this.setDescribeTasksIsOpen()
 
     }
 
-    fileOption = (id, file_resource_id, board_id, fileName, file_id) => {
+    fileOption = (id, file_resource_id, board_id, fileName, file_id, create_by, create_time) => {
 
         this.setState({
             file_option_isOpen: true,
@@ -221,6 +213,8 @@ export default class index extends Component {
             board_id: board_id,
             fileName: fileName,
             file_item_id: file_id,
+            create_by: create_by,
+            create_time: create_time
         })
 
         const { cardId, dispatch, } = this.props
@@ -275,9 +269,22 @@ export default class index extends Component {
 
     deleteFile = () => {
 
-        const { dispatch, cardId, fileInterViewAuth } = this.props
-        const { file_id, file_item_id, } = this.state
-        if (fileInterViewAuth) {
+        const { dispatch, cardId, fileInterViewAuth, } = this.props
+        const { file_id, file_item_id, create_by, create_time, board_id } = this.state
+        const account_info = JSON.parse(Taro.getStorageSync('account_info'));
+        if (account_info.id == create_by && (new Date().getTime() - parseInt(create_time) *
+            1000) < 2 * 60 * 1000) {
+            dispatch({
+                type: 'tasks/deleteCardAttachment',
+                payload: {
+                    attachment_id: file_id,
+                    card_id: cardId,
+                    code: "REMARK",
+                    calback: this.deleteCardAttachment(cardId, file_item_id,),
+                }
+            })
+            this.setFileOptionIsOpen()
+        } else if (judgeJurisdictionProject(board_id, PROJECT_FILES_FILE_DELETE)) {
             dispatch({
                 type: 'tasks/deleteCardAttachment',
                 payload: {
@@ -409,13 +416,13 @@ export default class index extends Component {
 
                 {
                     dec_files && dec_files.map((item, key) => {
-                        const { id, file_resource_id, board_id, file_id, } = item
+                        const { id, file_resource_id, board_id, file_id, create_by, create_time } = item
                         return (
                             <View key={key} className={indexStyles.song_tasks_file}>
                                 <View className={`${indexStyles.list_item_file_iconnext}`}>
                                     <Text className={`${globalStyle.global_iconfont}`}>&#xe669;</Text>
                                 </View>
-                                <View className={indexStyles.song_tasks_file_name} onClick={() => this.fileOption(id, file_resource_id, board_id, name, file_id)}>{item.name}</View>
+                                <View className={indexStyles.song_tasks_file_name} onClick={() => this.fileOption(id, file_resource_id, board_id, name, file_id, create_by, create_time)}>{item.name}</View>
                             </View>
                         )
                     })

@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { getBoardList, getBoardDetail, v2BoardList, } from '../../services/board/index'
+import { getBoardList, getBoardDetail, v2BoardList } from '../../services/board/index'
 import { isApiResponseOk } from "../../utils/request";
 
 export default {
