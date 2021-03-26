@@ -18,8 +18,17 @@ export default class index extends Component {
 
   clickTagCell = () => {
 
-    const { dispatch, label_data, } = this.props
+    const { dispatch, label_data, editAuth } = this.props
     const { isTagCellClick, } = this.state
+
+    if (!editAuth) {
+      Taro.showToast({
+        title: '您没有该项目的编辑权限',
+        icon: 'none',
+        duration: 2000
+      })
+      return;
+    }
 
     if (isTagCellClick) {
       this.setState({
@@ -63,8 +72,15 @@ export default class index extends Component {
   }
   deleteCardProperty = () => {
 
-    const { dispatch, propertyId, cardId } = this.props
-
+    const { dispatch, propertyId, cardId, editAuth } = this.props
+    if (!editAuth) {
+      Taro.showToast({
+        title: '您没有该项目的编辑权限',
+        icon: 'none',
+        duration: 2000
+      })
+      return;
+    }
     dispatch({
       type: 'tasks/deleteCardProperty',
       payload: {
@@ -102,7 +118,7 @@ export default class index extends Component {
   render() {
     let contentId = Taro.getStorageSync('tasks_detail_contentId')
 
-    const { label_data = [] } = this.props
+    const { label_data = [], editAuth } = this.props
     const { labelSelectionShow } = this.state;
     return (
       <View className={indexStyles.list_item} >

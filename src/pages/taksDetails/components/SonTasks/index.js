@@ -501,16 +501,23 @@ export default class index extends Component {
 
     deleteCardProperty = () => {
 
-        const { dispatch, propertyId, cardId } = this.props
-
-        dispatch({
-            type: 'tasks/deleteCardProperty',
-            payload: {
-                property_id: propertyId,
-                card_id: cardId,
-                callBack: this.deleteTasksFieldRelation(propertyId),
-            },
-        })
+        const { dispatch, propertyId, cardId, deleteAuth } = this.props
+        if (deleteAuth) {
+            dispatch({
+                type: 'tasks/deleteCardProperty',
+                payload: {
+                    property_id: propertyId,
+                    card_id: cardId,
+                    callBack: this.deleteTasksFieldRelation(propertyId),
+                },
+            })
+        } else {
+            Taro.showToast({
+                title: '您没有该项目的删除权限',
+                icon: 'none',
+                duration: 2000
+            })
+        }
 
     }
 
@@ -559,6 +566,19 @@ export default class index extends Component {
 
     }
 
+
+
+    reminderToast() {
+        const { editAuth } = this.props;
+        if (!editAuth) {
+            Taro.showToast({
+                title: '您没有该项目的编辑权限',
+                icon: 'none',
+                duration: 2000
+            })
+
+        }
+    }
     putCardBaseInfo = (value, cardId) => {
 
         const { dispatch, tasksDetailDatas, child_data = [], } = this.props
@@ -592,7 +612,7 @@ export default class index extends Component {
     }
 
     render() {
-        const { child_data = [], boardId, tasksDetailDatas = {}, } = this.props
+        const { child_data = [], boardId, tasksDetailDatas = {}, editAuth } = this.props
         const { list_id, card_id } = tasksDetailDatas
         const { isAddSonTaskShow } = this.state
         return (
@@ -625,14 +645,16 @@ export default class index extends Component {
                                         }
 
                                         {/* <View className={indexStyles.song_task_name}>{card_name}</View> */}
-
-                                        <Input
-                                            className={indexStyles.song_task_name}
-                                            value={card_name}
-                                            confirmType='完成'
-                                            onBlur={this.updataInput.bind(this, card_id)}
-                                        >
-                                        </Input>
+                                        <View onClick={this.reminderToast}>
+                                            <Input
+                                                className={indexStyles.song_task_name}
+                                                value={card_name}
+                                                confirmType='完成'
+                                                onBlur={this.updataInput.bind(this, card_id)}
+                                                disabled={!editAuth}
+                                            >
+                                            </Input>
+                                        </View>
 
                                         <View className={`${indexStyles.list_item_rigth_iconnext}`} onClick={() => this.tasksOption(card_id)}>
                                             <Text className={`${globalStyle.global_iconfont}`}>&#xe63f;</Text>

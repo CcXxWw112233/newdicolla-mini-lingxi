@@ -70,6 +70,7 @@ export default class taskGroupPicker extends Component {
                 payload: {
                     card_id: contentId,
                     list_id: currtne_value,
+
                     calback: this.putCardBaseInfo(currtne_value, listId),
                 }
             }).then(res => {
@@ -84,12 +85,13 @@ export default class taskGroupPicker extends Component {
         const {
             title,
             tasksGroupList,
+            editAuth
         } = this.props;
         const { current_select_taskGroup_name } = this.state;
         var rangeKey = 'list_name';
         return (
             <View>
-                <Picker rangeKey={rangeKey} mode='selector' range={tasksGroupList} onChange={this.onChange}>
+                <Picker rangeKey={rangeKey} disabled={!editAuth} mode='selector' range={tasksGroupList} onChange={this.onChange}>
                     <View className={indexStyles.projectNameCellPicker}>
                         {current_select_taskGroup_name != '未选择' || !title ? current_select_taskGroup_name : title}
                     </View>

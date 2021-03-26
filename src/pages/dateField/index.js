@@ -146,7 +146,7 @@ export default class dateField extends Component {
     render() {
 
         const { dateSel, timeSel, is_show_time_picker, date_field_code, startTimeArray } = this.state
-
+        const { editAuth } = this.props;
         let titleString = '设置时间'
         let isShowTime = true;
         if (date_field_code === 'YM') { //年月
@@ -169,7 +169,9 @@ export default class dateField extends Component {
                 <Picker
                     mode='date'
                     onChange={this.onDateChange}
+                    disabled={!editAuth}
                     value={dateSel}>
+
                     <View className={styles.atListItem}>
                         {dateSel ? dateSel : titleString}
                     </View>
@@ -183,6 +185,7 @@ export default class dateField extends Component {
                             onChange={this.onTimeChange}
                             value={timeSel}
                             range={startTimeArray}
+                            disabled={!editAuth}
                         >
 
                             <View className={`${styles.atListItem} ${styles.timeText}`}>
@@ -199,6 +202,7 @@ export default class dateField extends Component {
                             mode='time'
                             onChange={this.onTimeChange}
                             value={timeSel}
+                            disabled={!editAuth}
                         >
                             <View className={`${styles.atListItem} ${styles.timeText}`}>
                                 {timeSel ? timeSel : '选择时分'}

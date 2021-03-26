@@ -15,8 +15,16 @@ export default class AddFunctionCell extends Component {
 
     selectFunction = (code, id) => {
 
-        const { dispatch, tasksDetailDatas, } = this.props
+        const { dispatch, tasksDetailDatas, editAuth } = this.props
         const { card_id } = tasksDetailDatas
+        if (!editAuth) {
+            Taro.showToast({
+                title: '您没有该项目的编辑权限',
+                icon: 'none',
+                duration: 2000
+            })
+            return;
+        }
 
         dispatch({
             type: 'tasks/postCardProperty',

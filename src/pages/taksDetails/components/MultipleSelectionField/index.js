@@ -16,8 +16,15 @@ export default class index extends Component {
 
     clickTagCell = () => {
 
-        const { data = [], fieldValue, item_id, } = this.props
-
+        const { data = [], fieldValue, item_id, editAuth } = this.props
+        if (!editAuth) {
+            Taro.showToast({
+                title: '您没有该项目的编辑权限',
+                icon: 'none',
+                duration: 2000
+            })
+            return;
+        }
         // Taro.navigateTo({
         // // url: `../../pages/multipleSelectionField/index?data=${JSON.stringify(data)}&fieldValue=${fieldValue}&item_id=${item_id}`
         // })

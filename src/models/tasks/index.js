@@ -49,14 +49,12 @@ export default {
       const { id, boardId } = payload;
       const res = yield call(getTasksDetail, { id: id })
       if (isApiResponseOk(res)) {
-        console.log(res);
         yield put({
           type: 'updateDatas',
           payload: {
             tasksDetailDatas: res.data,
           }
-        }
-        )
+        })
         setBoardIdStorage(boardId)
         // yield put({
         //   type: 'getCardCommentListAll',

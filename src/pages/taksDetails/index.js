@@ -109,7 +109,6 @@ export default class taksDetails extends Component {
             contentId = Taro.getStorageSync("tasks_detail_contentId");
             boardId = Taro.getStorageSync("tasks_detail_boardId");
         }
-        console.log("*******************~~~~~~~~~~~~~~~*********")
         const that = this;
         Promise.resolve(
             dispatch({
@@ -120,7 +119,6 @@ export default class taksDetails extends Component {
                 },
             })
         ).then((res) => {
-            console.log("________________________________")
             that.getCardProperties(boardId);
         });
     };
@@ -402,6 +400,7 @@ export default class taksDetails extends Component {
                                 }
                                 flag={type_flag}
                                 completeAuth={completeAuth}
+                                editAuth={editAuth}
                             />) : <View></View>
                         }
 
@@ -411,6 +410,8 @@ export default class taksDetails extends Component {
                         data={{ name: board_name }}
                         boardId={board_id}
                         type="1"
+                        editAuth={editAuth}
+
                     />
                     <View className={indexStyles.tasks_name_style}>
                         <ProjectNameCell
@@ -418,6 +419,7 @@ export default class taksDetails extends Component {
                             data={{ name: list_name }}
                             boardId={board_id}
                             type="2"
+                            editAuth={editAuth}
                         />
                     </View>
                     <View>
@@ -436,6 +438,8 @@ export default class taksDetails extends Component {
                                                     cardId={card_id}
                                                     type="3"
                                                     onClickAction={this.onClickAction}
+                                                    editAuth={editAuth}
+
                                                 // onLoadTasksDetail={this.loadTasksDetail.bind(board_id, card_id)}
                                                 />
                                             ) : (
@@ -451,6 +455,8 @@ export default class taksDetails extends Component {
                                                     propertyId={id}
                                                     cardId={card_id}
                                                     type="4"
+                                                    editAuth={editAuth}
+
                                                 />
                                             ) : (
                                                 ""
@@ -465,6 +471,7 @@ export default class taksDetails extends Component {
                                                 onClickAction={this.onClickAction}
                                                 uploadAuth={uploadAuth}
                                                 deleteAuth={deleteAuth}
+                                                editAuth={editAuth}
                                                 fileInterViewAuth={fileInterViewAuth}
                                                 onTasksDetailsRealizeStatus={(timeInfo, type) =>
                                                     this.tasksDetailsRealizeStatus(timeInfo, "SonTasks")
@@ -479,6 +486,8 @@ export default class taksDetails extends Component {
                                                 propertyId={id}
                                                 cardId={card_id}
                                                 onClickAction={this.onClickAction}
+                                                editAuth={editAuth}
+
                                             />
                                         ) : (
                                             ""
@@ -507,7 +516,7 @@ export default class taksDetails extends Component {
                     {properties && properties.length > 0 && properties_list &&
                         properties_list.length > 0 &&
                         properties.length !== properties_list.length ? (
-                        <AddFunctionCell properties_list={properties_list} />
+                        <AddFunctionCell editAuth={editAuth} properties_list={properties_list} />
                     ) : (
                         <View></View>
                     )}
@@ -560,6 +569,8 @@ export default class taksDetails extends Component {
                                             // cardId={card_id}
                                             type="6"
                                             item_id={item.id}
+                                            editAuth={editAuth}
+
                                         />
                                     ) : (
                                         ""
@@ -572,6 +583,8 @@ export default class taksDetails extends Component {
                                             type="7"
                                             item_id={item.id}
                                             onClickAction={this.onClickAction}
+                                            editAuth={editAuth}
+
                                         />
                                     ) : (
                                         ""
@@ -586,6 +599,8 @@ export default class taksDetails extends Component {
                                             type="8"
                                             item_id={item.id}
                                             fieldSet={field_set}
+                                            editAuth={editAuth}
+
                                         />
                                     ) : (
                                         ""
@@ -599,6 +614,8 @@ export default class taksDetails extends Component {
                                             field_value={field_value}
                                             type="9"
                                             item_id={item.id}
+                                            editAuth={editAuth}
+
                                         />
                                     ) : (
                                         ""
@@ -612,6 +629,8 @@ export default class taksDetails extends Component {
                                             field_value={field_value}
                                             type="10"
                                             item_id={item.id}
+                                            editAuth={editAuth}
+
                                         />
                                     ) : (
                                         ""
@@ -629,6 +648,8 @@ export default class taksDetails extends Component {
                                                 board_id,
                                                 card_id
                                             )}
+                                            editAuth={editAuth}
+
                                         />
                                     ) : (
                                         ""
@@ -645,6 +666,8 @@ export default class taksDetails extends Component {
                                             item_id={item.id}
                                             fieldSet={field_set}
                                             onClickAction={this.onClickAction}
+                                            editAuth={editAuth}
+
                                         />
                                     ) : (
                                         ""
@@ -660,6 +683,8 @@ export default class taksDetails extends Component {
                         cardId={card_id}
                         type="5"
                         onClickAction={this.onClickAction}
+                        editAuth={editAuth}
+
                     />
                     <View className={`${indexStyles.placeholder_view}`}>
                     </View>
@@ -682,7 +707,7 @@ export default class taksDetails extends Component {
                 )}
                 {isIphoneX ? (<View className={indexStyles.isIphoneX}></View>) : (null)}
                 {
-                    !editAuth && <View className={indexStyles.obscurationView} onClick={this.showNoAuthToast}></View>
+                    // !editAuth && <View className={indexStyles.obscurationView} onClick={this.showNoAuthToast}></View>
                 }
                 <View className={`${indexStyles.deleteView}`} id={card_id} onClick={this.deleteTask}>
                     <Text className={`${globalStyle.global_iconfont} ${indexStyles.delete_iconfont} ${deleteAuth ? "" : indexStyles.unused_iconfont}`}>&#xe845;</Text>
