@@ -125,7 +125,7 @@ export default class FieldPersonSinglePicker extends Component {
 
         const { singleList = [], current_select_name, executors1 = [] } = this.state;
         const rangeKey = "name";
-        const { executors = [], item_id, executorsList, title } = this.props;
+        const { executors = [], item_id, executorsList, title, editAuth } = this.props;
         var isShowAvator = false;
         if (executors.length) {
             isShowAvator = true
@@ -141,7 +141,7 @@ export default class FieldPersonSinglePicker extends Component {
                     value={this.state.value}
                     onClick={this.handleChange.bind(this)}
                 /> */}
-                <Picker rangeKey={rangeKey} mode='selector' range={executorsList} onChange={this.onChange}>
+                <Picker rangeKey={rangeKey} mode='selector' disabled={!editAuth} range={executorsList} onChange={this.onChange}>
                     <View className={indexStyles.projectNameCellPicker}>
                         {!isShowAvator ? "未选择" : <Avatar avartarTotal={"multiple"} userList={executors1.length ? executors1 : executors} />}
                     </View>

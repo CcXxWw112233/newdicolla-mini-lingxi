@@ -165,7 +165,8 @@ export default class milestoneCellPicker extends Component {
         const {
             title,
             dataArray,
-            tag
+            tag,
+            editAuth
         } = this.props;
         var rangeKey = 'name';
         // if (tag == 3) {
@@ -173,7 +174,7 @@ export default class milestoneCellPicker extends Component {
         const { current_select_milestone_name } = this.state;
         return (
             <View>
-                <Picker rangeKey={rangeKey} mode='selector' range={dataArray} onChange={this.onChange}>
+                <Picker rangeKey={rangeKey} mode='selector' range={dataArray} disabled={!editAuth} onChange={this.onChange}>
                     <View className={indexStyles.projectNameCellPicker}>
                         {current_select_milestone_name != '未选择' || !title ? current_select_milestone_name : title}
 

@@ -76,7 +76,7 @@ export default class textField extends Component {
 
     render() {
 
-        const { field_value, type } = this.props
+        const { field_value, type, editAuth } = this.props
 
         return (
             // <View className={indexStyles.viewStyle}>
@@ -104,6 +104,7 @@ export default class textField extends Component {
                     confirmType='完成'
                     onBlur={this.updataContent.bind(this,)}
                     type={type}
+                    disabled={!editAuth}
                 ></Input>
 
 

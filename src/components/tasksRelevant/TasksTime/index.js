@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text, Picker, } from '@tarojs/components'
+import { View, Text, Picker, Input } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyles from '../../../gloalSet/styles/globalStyles.scss'
 import { timestampToDateZH, timestampToHoursMinZH, timestampToTime, timestampToHM, } from '../../../utils/basicFunction'
@@ -195,12 +195,22 @@ export default class TasksTime extends Component {
 
         this.putTasksDueTime('0')
     }
+    reminderToast() {
+        const { editAuth } = this.props;
+        if (!editAuth) {
+            Taro.showToast({
+                title: '您没有该项目的编辑权限',
+                icon: 'none',
+                duration: 2000
+            })
 
+        }
+    }
     render() {
 
         const { start_date_str, start_time_str, due_date_str, due_time_str, } = this.state
 
-        const { cellInfo = {}, isPermission, flag, completeAuth } = this.props
+        const { cellInfo = {}, isPermission, flag, completeAuth, editAuth } = this.props
         const card_name = cellInfo.cardDefinition
         const sTime = cellInfo.sTime
         const eTime = cellInfo.eTime
@@ -232,29 +242,31 @@ export default class TasksTime extends Component {
                             )
                         )}
                     </View>
-
-                    <Input
-                        className={indexStyles.card_title}
-                        placeholder='填写名称'
-                        value={card_name}
-                        confirmType='完成'
-                        onBlur={this.updataCardName.bind(this, card_id)}
-                    ></Input>
+                    <View onClick={this.reminderToast}>
+                        <Input
+                            className={indexStyles.card_title}
+                            placeholder='填写名称'
+                            value={card_name}
+                            confirmType='完成'
+                            onBlur={this.updataCardName.bind(this, card_id)}
+                            disabled={!editAuth}
+                        ></Input>
+                    </View>
 
                 </View>
                 <View className={indexStyles.selectionTime}>
 
                     <View className={indexStyles.start_content}>
 
-                        <View className={indexStyles.start_date_style}>
+                        <View className={indexStyles.start_date_style} onClick={this.reminderToast}>
 
-                            <Picker mode='date' onChange={this.onDateChangeStart} className={indexStyles.startTime} >
+                            <Picker mode='date' onChange={this.onDateChangeStart} disabled={!editAuth} className={indexStyles.startTime} >
                                 {sTime && sTime != '0' ? timestampToDateZH(sTime) : start_date_str}
                             </Picker>
                         </View>
 
                         <View className={indexStyles.start_time_style}>
-                            <Picker mode='time' onChange={this.onTimeChangeStart} className={indexStyles.startTime}>
+                            <Picker mode='time' onChange={this.onTimeChangeStart} disabled={!editAuth} className={indexStyles.startTime}>
                                 {sTime ? timestampToHoursMinZH(sTime) : start_time_str}
                             </Picker>
                         </View>
@@ -267,16 +279,16 @@ export default class TasksTime extends Component {
 
                     </View>
 
-                    <View className={indexStyles.due_content}>
+                    <View className={indexStyles.due_content} onClick={this.reminderToast}>
 
                         <View className={indexStyles.due_date_style}>
-                            <Picker mode='date' onChange={this.onDateChangeDue} className={indexStyles.endTime}>
+                            <Picker mode='date' onChange={this.onDateChangeDue} disabled={!editAuth} className={indexStyles.endTime}>
                                 {eTime && eTime != '0' ? timestampToDateZH(eTime) : due_date_str}
                             </Picker>
                         </View>
 
                         <View className={indexStyles.due_time_style}>
-                            <Picker mode='time' onChange={this.onTimeChangeDue} className={indexStyles.endTime}>
+                            <Picker mode='time' onChange={this.onTimeChangeDue} disabled={!editAuth} className={indexStyles.endTime}>
                                 {eTime ? timestampToHoursMinZH(eTime) : due_time_str}
                             </Picker>
                         </View>

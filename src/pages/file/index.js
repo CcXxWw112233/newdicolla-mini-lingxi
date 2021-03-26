@@ -1173,7 +1173,7 @@ export default class File extends Component {
 
                         <View className={indexStyles.folderPath} onClick={() => this.choiceBoard(true)}>
                             <Text className={`${globalStyle.global_iconfont} ${indexStyles.folder_Path_icon}`}>&#xe7f4;</Text>
-                            <Text className={indexStyles.header_folder_name_style}>{header_folder_name}-{uploadNowList.length}</Text>
+                            <Text className={indexStyles.header_folder_name_style}>{header_folder_name}</Text>
                         </View>
 
                         {
@@ -1184,7 +1184,6 @@ export default class File extends Component {
                                 <View className={`${indexStyles.files_album_camera_button_style} ${enabledDelete ? '' : indexStyles.files_unused_button_style}`} onClick={this.showDeleteView.bind(this)}>
                                     <Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe845;</Text>
                                 </View>
-
 
                                 <View className={`${indexStyles.files_album_camera_button_style} ${uplaodAuto ? '' : indexStyles.files_unused_button_style}`} onClick={this.judgeIsSelectProject.bind(this)}><Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe84b;</Text></View>
                             </View>

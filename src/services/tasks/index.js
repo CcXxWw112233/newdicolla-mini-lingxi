@@ -365,8 +365,6 @@ export const deleteTask = (data, notShowLoading) => {
 
 // 角色
 export const getRoleList = (data, notShowLoading) => {
-  console.log("************************~~~~~~~~~~~~*****")
-  console.log(data)
   return request({
     data: {
     },

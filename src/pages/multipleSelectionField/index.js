@@ -29,9 +29,6 @@ export default class LabelSelection extends Component {
         this.setState({
             item_id: item_id,
         })
-        console.log("---------")
-        console.log(data);
-        console.log(fieldValue);
         itemData.forEach(item => {
             item['label'] = item.item_value
             item['value'] = item.id

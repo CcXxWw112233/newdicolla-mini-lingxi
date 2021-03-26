@@ -94,7 +94,7 @@ export default class SingleChoicePicker extends Component {
 
     componentDidMount() {
 
-        const { items, field_value, field_item_id, tasksDetailDatas } = this.props
+        const { items, field_value, field_item_id, tasksDetailDatas, editAuth } = this.props
         const itemsData = items;
         const { fields = [] } = tasksDetailDatas
 
@@ -134,7 +134,7 @@ export default class SingleChoicePicker extends Component {
         return (
             <View >
 
-                <Picker rangeKey={rangeKey} mode='selector' range={singleList} onChange={this.onChange}>
+                <Picker rangeKey={rangeKey} mode='selector' disabled={!editAuth} range={singleList} onChange={this.onChange}>
                     <View className={indexStyles.projectNameCellPicker}>
                         {current_select_name != '未选择' || !title ? current_select_name : title}
                     </View>
