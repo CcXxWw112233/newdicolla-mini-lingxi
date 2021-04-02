@@ -1,7 +1,7 @@
 //线上环境
-// export const BASE_URL = "https://lingxi.di-an.com";
+export const BASE_URL = "https://lingxi.di-an.com";
 //测试环境
-export const BASE_URL = "http://test.lingxi.new-di.com";
+// export const BASE_URL = "http://test.lingxi.new-di.com";
 // 稳定版开发服务器
 // export const BASE_URL = 'http://dev.lingxi.new-di.com'
 //本地环境

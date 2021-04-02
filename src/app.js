@@ -132,16 +132,16 @@ class App extends Component {
           selectedIconPath: "./asset/tabBar/personal_selected.png",
         },
         {
-          pagePath: "pages/jumpToMeeting/index",
-          text: "会协宝",
-          iconPath: "./asset/tabBar/meeting.png",
-          selectedIconPath: "./asset/tabBar/meeting_selected.png",
-        },
-        {
           pagePath: "pages/qrcodeHistory/index",
           text: "统计",
           iconPath: "./asset/tabBar/stastics.png",
           selectedIconPath: "./asset/tabBar/stastics_selected.png",
+        },
+        {
+          pagePath: "pages/jumpToMeeting/index",
+          text: "会协宝",
+          iconPath: "./asset/tabBar/meeting.png",
+          selectedIconPath: "./asset/tabBar/meeting_selected.png",
         },
         // {
         //   pagePath: "pages/settingTabbar/index",

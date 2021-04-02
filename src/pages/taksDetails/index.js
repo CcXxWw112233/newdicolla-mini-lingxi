@@ -234,7 +234,6 @@ export default class taksDetails extends Component {
                 icon: 'none',
                 duration: 2000
             })
-
         }
     };
 

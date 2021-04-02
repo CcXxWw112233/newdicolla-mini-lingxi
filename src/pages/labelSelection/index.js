@@ -26,11 +26,7 @@ export default class LabelSelection extends Component {
         this.setState({
             card_id: contentId,
         })
-        console.log("---------")
-        console.log(this.props);
         const { label_list = [], tasksDetailDatas = {}, } = this.props
-        console.log("=================")
-        console.log(label_list);
         label_list.forEach(item => {
             item['label'] = item.name
             item['value'] = item.id

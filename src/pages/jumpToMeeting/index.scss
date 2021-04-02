@@ -1,24 +1,51 @@
-.container{
-  height: 100vh;
-  display: flex;
+@import "../../gloalSet/styles/constant";
+
+.container {
+  display        : flex;
   justify-content: center;
-  align-items: center;
-  .content{
-    width: 80%;
-    text-align: center;
-    color: rgba(0, 0, 0, 0.45);
-    & > View {
-      margin-top: 40rpx;
-    }
-    button{
-      border-radius: 100rpx;
-      color: #fff;
-      background-color: rgba(24, 144, 255, 1);
-      width: 100%;
-    }
-    .meeting_alt{
-      width: 160rpx;
-      height: 160rpx;
+  // align-items: center;
+
+  .content {
+    width        : 90%;
+    // text-align: center;
+    color        : rgba(0, 0, 0, 0.45);
+
+    .appItem {
+      display         : flex;
+      flex-direction  : row;
+      padding         : pxTrans(15);
+      margin-top      : pxTrans(20);
+      background-color: white;
+      border-radius   : pxTrans(10);
+
+      .appItem_image {
+        margin-top      : pxTrans(10);
+        width           : pxTrans(60);
+        height          : pxTrans(60);
+        background-color: rebeccapurple;
+      }
+
+      .appItem_Text {
+        display       : flex;
+        flex-direction: column;
+        margin-left   : pxTrans(10);
+        text-align    : left;
+        flex          : 1;
+
+        .appItem_Title {
+          line-height: pxTrans(25);
+          font-weight: 600;
+          color      : rgba(1, 3, 31, 0.65);
+          font-size  : pxTrans(18);
+        }
+
+        .appItem_intro {
+          font-size  : pxTrans(13);
+          line-height: pxTrans(20);
+          color      : #01031F;
+          font-weight: 300;
+        }
+      }
     }
   }
 }

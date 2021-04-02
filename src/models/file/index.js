@@ -70,9 +70,9 @@ export default {
                     }
                 }
                 if (board_id.length > 0) {
-                    console.log("jklsdljsklfjsklj;")
                     const account_info = JSON.parse(Taro.getStorageSync('account_info'));
                     var uploadNowList = res.data.filter(function (value) {
+
                         return value.create_by.id == account_info.id && new Date().getTime() -
                             parseInt(value.create_time) < 2 * 60 * 1000;
                     })

@@ -43,7 +43,6 @@ export default class milestoneCellPicker extends Component {
         const { dispatch } = this.props
         const { card_id, current_select_milestone_name } = this.state
         if (current_select_milestone_id == dataArray[e.detail.value]['id']) { //删除关联里程碑
-            console.log("----------1");
             // this.setState({
             // current_select_milestone_id: '',
             // current_select_milestone_name: '',
@@ -59,9 +58,7 @@ export default class milestoneCellPicker extends Component {
             // })
         }
         else {  //添加关联里程碑
-            console.log("-----------" + current_select_milestone_id)
             if (current_select_milestone_id == '' || current_select_milestone_id == 'undefined' || current_select_milestone_id == null) {
-                console.log("----------2");
 
                 dispatch({
                     type: 'tasks/boardAppRelaMiletones',
@@ -73,7 +70,6 @@ export default class milestoneCellPicker extends Component {
                     },
                 })
             } else {
-                console.log("----------3");
 
                 //先删除, 再关联
                 Promise.resolve(
