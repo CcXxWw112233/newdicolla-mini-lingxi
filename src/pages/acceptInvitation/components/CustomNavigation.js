@@ -1,11 +1,13 @@
 import Taro, { Component } from '@tarojs/taro';
-import { View, Image } from '@tarojs/components';
+import { View, Image, Input } from '@tarojs/components';
 import indexStyles from './customNavigation.scss';
 import globalStyle from '../../../gloalSet/styles/globalStyles.scss'
 import defaultPhoto from "../../../asset/chat/defaultPhoto.png";
 
 class CustomNavigation extends Component {
-
+    state = {
+        isShowDeleteIcon:false
+    }
     goToHomePages = () => {
         const { pop } = this.props;
 
@@ -35,19 +37,35 @@ class CustomNavigation extends Component {
 
         }
     }
-
-
+    // 搜索跳转
+    searchClick = e => {
+        this.props.searchMenuClick(e.detail.value)
+    }
+      // 监控是否输入
+  startPrint = e => {
+    console.log("开始输入",e)
+    if(e.detail.value.length > 0) {
+      this.setState({
+        isShowDeleteIcon:true,
+      })
+    }
+  }
+  formReset = e => {
+    this.setState({
+      isShowDeleteIcon:false,
+    })
+  }
     render() {
 
         const SystemInfo = Taro.getSystemInfoSync()
         const screen_Width = SystemInfo.screenWidth
         const statusBar_Height = SystemInfo.statusBarHeight
         const navBar_Height = SystemInfo.platform == 'ios' ? 44 : 48
-        const { backIcon, home_personal_center, personal_center_image, title, } = this.props
+        const { backIcon, home_personal_center, personal_center_image, title,isSearch } = this.props
+        const {isShowDeleteIcon} = this.props;
         const navTitle = title ? title : '聆悉'
-
         return (
-            <View className={indexStyles.CustomNavigation_Scss} style={{ height: statusBar_Height + navBar_Height + 'px' }}>
+            <View className= {`${indexStyles.CustomNavigation_Scss} ${isSearch ? indexStyles.CustomNavigation_white:''}`} style={{ height: statusBar_Height + navBar_Height + 'px' }}>
                 <View className={indexStyles.statusBar_Scss} style={{ height: statusBar_Height + 'px' }}></View>
                 <View className={indexStyles.navBar_Scss} style={{ height: navBar_Height + 'px' }}>
                     {home_personal_center === 'homePersonalCenter' ?
@@ -64,9 +82,9 @@ class CustomNavigation extends Component {
                         </View>)
                         :
                         (backIcon === 'arrow_icon' ?
-                            (<View className={indexStyles.back_Wapper} style={{ width: '80px', lineHeight: navBar_Height + 'px' }} onClick={this.goToHomePages}>
-                                <View className={indexStyles.left_back_icon}>
-                                    <Text className={`${globalStyle.global_iconfont}`}>&#xe646;</Text>
+                            (<View className={indexStyles.back_Wapper} style={{  lineHeight: navBar_Height + 'px' }} onClick={this.goToHomePages}>
+                                <View className={`${indexStyles.left_back_icon}`}>
+                                    <Text className={`${globalStyle.global_iconfont}  ${isSearch ? indexStyles.iconColor:''}`}>&#xe646;</Text>
                                 </View>
                             </View>)
                             :
@@ -77,10 +95,24 @@ class CustomNavigation extends Component {
                             </View>)
                         )
                     }
-                    <View style={{ width: '150px', display: 'inline-block', display: 'flex', justifyContent: 'center', color: '#FFFFFF' }} className={indexStyles.navTitle}>
-                        <Text>{navTitle}</Text>
-                    </View>
-                    <View style={{ width: '80px', display: 'inline-block' }}></View>
+                    {
+                        isSearch ? (
+                            <Form  className={indexStyles.searchForm} onReset={this.formReset}>
+                              <View className={indexStyles.searchBarView}>
+                                <Text className={`${globalStyle.global_iconfont} ${indexStyles.searchIcon}`} >&#xe643;</Text>
+                                <Input placeholder='搜索' onInput={this.startPrint}  placeholderClass={indexStyles.searchBarInput_placeholderStyle} onInput={this.startPrint} className={indexStyles.searchBarInput} onConfirm={this.searchClick}></Input>
+                                {
+                                  isShowDeleteIcon &&  <Button className={`${globalStyle.global_iconfont} ${indexStyles.deleteIcon}`} formType='reset'  >&#xe639;</Button>
+                                }
+                              </View>
+                            </Form>
+                        ):(
+                            <View style={{ width: '250px', display: 'inline-block', display: 'flex', justifyContent: 'center', color: '#FFFFFF' }} className={indexStyles.navTitle}>
+                                <Text>{navTitle}</Text>
+                            </View>
+                        )
+                    }
+                   
                 </View>
             </View>
         );

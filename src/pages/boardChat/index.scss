@@ -3,7 +3,9 @@
 page {
     background-color: $bg_color_3;
 }
-
+.placeView {
+    height: pxTrans(50);
+}
 .contain1 {
     height          : pxTrans(72);
     background      : $bg_color_3;

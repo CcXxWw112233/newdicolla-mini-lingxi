@@ -1143,7 +1143,13 @@ export default class File extends Component {
             this.loadData(params)
         })
     }
-
+    // 前往文件搜索页
+    goSearchFile () {
+        console.log("文件搜索页")
+        Taro.navigateTo({
+            url:'/pages/file/fileSearch/index'
+        })
+    }
     render() {
 
         const { isShowBoardList, header_folder_name, isShowChoiceFolder, uploadNowList } = this.props
@@ -1178,14 +1184,16 @@ export default class File extends Component {
 
                         {
                             !isDeleteMenuOnclick && <View className={indexStyles.files_album_camera_view_style}>
-                                {/*  <View className={indexStyles.files_album_camera_button_style} onClick=
-            {this.getAuthSetting.bind(this, 'file')}><Text className={`${globalStyle.global_iconfont} ${indexStyles.
-                files_album_camera_icon_style}`}>&#xe662;</Text></View>*/}
+                                 <View className={indexStyles.files_album_camera_button_style} onClick= {this.goSearchFile}>
+                                     <Text className={`${globalStyle.global_iconfont} ${indexStyles.filesSearch_style}`}>&#xe643;</Text>
+                                 </View>
                                 <View className={`${indexStyles.files_album_camera_button_style} ${enabledDelete ? '' : indexStyles.files_unused_button_style}`} onClick={this.showDeleteView.bind(this)}>
                                     <Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe845;</Text>
                                 </View>
 
-                                <View className={`${indexStyles.files_album_camera_button_style} ${uplaodAuto ? '' : indexStyles.files_unused_button_style}`} onClick={this.judgeIsSelectProject.bind(this)}><Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe84b;</Text></View>
+                                <View className={`${indexStyles.files_album_camera_button_style} ${uplaodAuto ? '' : indexStyles.files_unused_button_style}`} onClick={this.judgeIsSelectProject.bind(this)}>
+                                    <Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe84b;</Text>
+                                </View>
                             </View>
                         }
 

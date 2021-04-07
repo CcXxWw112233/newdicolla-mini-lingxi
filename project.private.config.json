@@ -135,6 +135,18 @@
           "pathName": "pages/auccessJoin/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "pages/file/fileSearch/index",
+          "pathName": "pages/file/fileSearch/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/file/previewImage/index",
+          "pathName": "pages/file/previewImage/index",
+          "query": "",
+          "scene": null
         }
       ]
     }

@@ -44,17 +44,20 @@
 
                 .folder_Path_icon {
                     font-size: pxTrans(20);
-                    margin   : pxTrans(9) pxTrans(4) pxTrans(9) pxTrans(14);
+                    margin   : pxTrans(9) pxTrans(4) pxTrans(9) pxTrans(9);
+                    color: #9EA6C2 !important;
                 }
 
                 .header_folder_name_style {
+                    margin-left: pxTrans(10);
                     margin-right : pxTrans(9);
                     overflow     : hidden;
                     text-overflow: ellipsis;
                     white-space  : nowrap;
-                    font-size    : pxTrans(16);
+                    font-size    : pxTrans(14);
                     font-weight  : 600;
                     line-height  : pxTrans(22);
+                    color:#3F445D;
                 }
             }
 
@@ -85,6 +88,10 @@
                     align-items    : center;
 
                     .files_album_camera_icon_style {
+                        font-size: pxTrans(20);
+                    }
+                    .filesSearch_style {
+                        color: #9EA6C2 !important;
                         font-size: pxTrans(20);
                     }
                 }

@@ -1,0 +1,57 @@
+@import "../../gloalSet/styles/constant";
+@import '../../gloalSet/styles/pxTrans';
+  .index {
+      position: fixed;
+      display: flex;
+      height: pxTrans(50);
+      top: 0;
+      left: 0;
+      width: 100%;
+      justify-content: center;
+      align-items    : center;
+      align-items: center;
+  }
+  .searchForm {
+    width: 100%;
+    height: pxTrans(50);
+  }
+  .content_View {    
+      width: 90%;
+      height: pxTrans(32);
+      border-radius: pxTrans(16);
+      background-color: #F5F7FB;
+      display: flex;
+      flex-direction: row;
+      line-height: pxTrans(32);
+      border: 1px solid #F5F7FB;
+      padding-left: pxTrans(15);
+      padding-right: pxTrans(10);
+  }
+  .searchIcon {
+    margin-right: pxTrans(10);
+    color: #D1D5E4 !important;
+    font-size: pxTrans(20) !important;
+  }
+  .deleteIcon{
+    font-size: pxTrans(20) !important;
+    color: #9EA6C2 !important;
+    height: pxTrans(32);
+    width: pxTrans(40);
+    line-height: pxTrans(32);
+    background-color: transparent;
+    outline: none; 
+    border: 0;
+    text-align: center;
+    // background-color: red;
+    }
+  Button::after { 
+    border: none; 
+  }
+  .searchBarInput {
+    height: pxTrans(32);
+    flex: 1;
+    margin-right: pxTrans(10);
+  }
+  .searchBarInput_placeholderStyle {
+    color: #D1D5E4;
+  }

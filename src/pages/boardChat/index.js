@@ -7,6 +7,8 @@ import SearchAndMenu from "../board/components/SearchAndMenu";
 import { isPlainObject, filterListAuth } from "./../../utils/util";
 import { isApiResponseOk } from "../../utils/request";
 import { getImHistory, getAllIMTeamList } from "../../services/im";
+import SearchBar from '../../components/searchBar'
+
 
 @connect(
   ({
@@ -556,7 +558,6 @@ export default class BoardChat extends Component {
         return a + parseInt(b.unread);
       }, 0);
 
-      console.log("---------------------------");
       //消息未读数
       if (sumUnRead) {
         /**
@@ -615,7 +616,10 @@ export default class BoardChat extends Component {
       .sort((a, b) => +(b.updateTime || 0) - +(a.updateTime || 0)); //(b-a)时间正序
     return listArray;
   };
-
+  // 搜索
+  searchMenuClick = value => {
+    console.log('sssssssssss',value)
+  }
   render() {
     const { search_mask_show } = this.state;
     let { userUID } = this.props;
@@ -623,11 +627,12 @@ export default class BoardChat extends Component {
     let listArray = this.boardListForView();
     return (
       <View className={indexStyles.index}>
-        {/*  <SearchAndMenu
+         {/* <SearchAndMenu
           onSelectType={this.onSelectType}
           search_mask_show={search_mask_show}
-        />
-*/}
+        /> */}
+        <SearchBar searchMenuClick={(value) => this.searchMenuClick(value)}/>
+        <View className={indexStyles.placeView}></View>
         {listArray.map((value, key) => {
           const {
             board_id,
