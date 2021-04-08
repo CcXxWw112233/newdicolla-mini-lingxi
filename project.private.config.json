@@ -147,6 +147,12 @@
           "pathName": "pages/file/previewImage/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "pages/loginMain/index",
+          "pathName": "pages/loginMain/index",
+          "query": "",
+          "scene": null
         }
       ]
     }
