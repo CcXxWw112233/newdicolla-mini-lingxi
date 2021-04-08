@@ -48,12 +48,18 @@ class CustomNavigation extends Component {
       this.setState({
         isShowDeleteIcon:true,
       })
+    } else {
+        this.setState({
+            isShowDeleteIcon:false,
+        })
+        this.props.cancelSearchMenuClick('')
     }
   }
   formReset = e => {
     this.setState({
       isShowDeleteIcon:false,
     })
+    this.props.cancelSearchMenuClick('')
   }
     render() {
 
