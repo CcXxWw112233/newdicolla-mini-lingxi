@@ -64,7 +64,6 @@ export default class Calendar extends Component {
 
     componentDidMount() {
         var that = this;
-
         Taro.getSystemInfo({
             success(res) {
                 that.setState({
@@ -139,7 +138,7 @@ export default class Calendar extends Component {
         }, 300);
     }
 // 获取数据
-    getNoScheCardList() {
+    getNoScheCardList(search_content) {
         const { dispatch, } = this.props;
         const { boardidList, moldArr } = this.state;
         var boardidListArr = boardidList.length > 0 ? boardidList.split(",") : [];
@@ -152,6 +151,7 @@ export default class Calendar extends Component {
             type: "calendar/getNoScheCardList",
             payload: {
                 org_id: '0',
+                search_content:search_content ? search_content : '',
                 board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] :
                     boardidListArr) : [],
                 query_milestone: moldArr[0] && moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) : isall,
@@ -215,8 +215,10 @@ export default class Calendar extends Component {
     }
     // 点击搜索
     searchMenuClick  = value =>{
-        console.log("********************", value)
-       
+       this.getNoScheCardList(value)
+    }
+    cancelSearchMenuClick = value => {
+        this.getNoScheCardList('')
     }
     render() {
         const { show_card_type_select, search_mask_show, TopmenuIndex, screenHeight, filterData, filterDropdownValue, isShowCheckMenu } = this.state;
@@ -230,6 +232,7 @@ export default class Calendar extends Component {
                     isSearch={true}
                     backIcon='arrow_icon'
                     searchMenuClick={(value) => this.searchMenuClick(value)}
+                    cancelSearchMenuClick = {(value) => this.cancelSearchMenuClick(value)}
                 />
                 <View style={{ height: navBar_Height + navBar_Height +  'px' }}></View>
                 {/* <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} /> */}

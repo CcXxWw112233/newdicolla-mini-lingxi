@@ -7,30 +7,46 @@
     width: 100%;
     height: 100%;
     background-color: white;
-}
+} 
 .placeView {
    height: pxTrans(50)
+}
+.search_file_list_view {
+   display: flex;
+   height: 90%;
 }
 .fileContant {
     display: flex;
     flex-direction: row;
+    border-top: 1px solid #F2F4F8;
+   border-bottom: 1px solid #F2F4F8;
 }
 .fileItem {
    height: pxTrans(56); 
-   border-top: 1px solid #F2F4F8;
-   border-bottom: 1px solid #F2F4F8;
+   
    display: flex;
    flex-direction: row;
    padding: 0 pxTrans(20);
    background-color: white;
    z-index: 5;
-   width: 90%;
+   width: 80%;    
 }
 .fileItem_image {
     margin-top: pxTrans(12);
     height: pxTrans(32);
     width : pxTrans(32);
-    background-color: red;
+}
+.folder_type_icon {
+    line-height: pxTrans(32);
+    font-size  : pxTrans(30) !important;
+    text-align : center;
+    color      : #9EA6C2 !important;
+}
+.folder_more_icon {
+    position: absolute;
+    line-height: pxTrans(56) !important;
+    font-size: pxTrans(25) !important;
+    right: pxTrans(15);
 }
 .fileItem_Text {
     line-height: pxTrans(56);

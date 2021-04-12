@@ -21,6 +21,11 @@ export default class Authorize extends Component {
       this.setState({
         isShowDeleteIcon:true,
       })
+    } else {
+      this.setState({
+        isShowDeleteIcon:false,
+      })
+      this.props.cancelSearchMenuClick('')
     }
   }
   formReset = e => {
@@ -28,6 +33,7 @@ export default class Authorize extends Component {
       isShowDeleteIcon:false,
       inputValue:''
     })
+    this.props.cancelSearchMenuClick('')
   }
   render() {
     const {isShowDeleteIcon,inputValue} = this.state;

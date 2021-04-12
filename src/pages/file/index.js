@@ -298,6 +298,9 @@ export default class File extends Component {
         const { dispatch, header_folder_name, verify_authority_list } = this.props;
         var that = this;
         if (header_folder_name == '全部文件') {
+            this.setState({
+                deleteAuto:false
+            })
             return false;
         } else {
             console.log(header_folder_name);
@@ -321,8 +324,11 @@ export default class File extends Component {
                 downLoadAuto: judgeJurisdictionProject(board_id, PROJECT_FILES_FILE_DOWNLOAD),
                 deleteAuto: judgeJurisdictionProject(board_id, PROJECT_FILES_FILE_DELETE)
             })
+        } else {
+            this.setState({
+                deleteAuto:false
+            })
         }
-
     }
     //获取未读文件list
     getUnreadFileList = (dispatch) => {
@@ -356,7 +362,12 @@ export default class File extends Component {
                 }
             })
 
-
+            dispatch({
+                type: 'file/updateDatas',
+                payload: {
+                fileList: d,
+                },
+            })
             this.setState({
                 // eslint-disable-next-line react/no-unused-state
                 file_list_state: d,
@@ -556,25 +567,31 @@ export default class File extends Component {
         // Taro.setStorageSync('isRefreshFetchAllIMTeamList', 'true')
         // Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
         // console.log(value)
-
-        let obj = {
-            id: value.id,
-            actionType: "file",
-            board_id: value.board_id
-        }
-
-        dispatch({
-            type: "file/updateDatas",
-            payload: {
-                current_custom_message: obj
+        var that = this;
+        Taro.showActionSheet({
+          itemList: ['删除', '进入圈子'],
+          success: function (res) {
+            console.log(res.tapIndex)
+            if(res.tapIndex == 0) {
+                let selectFiles = [{
+                    type:'2',
+                    id  :value.id
+                  }]
+                  that.setState({
+                    selectFiles:selectFiles 
+                  },() => {
+                    that.confirmDelete(value.board_id)
+                  }
+                )
+            } else {
+              that.goFileChat(value)
             }
+          },
+          fail: function (res) {
+            console.log(res.errMsg)
+          }
         })
-        setTimeout(() => {
-            Taro.navigateTo({
-                url: "/pages/filesChat/index"
-            })
-        }, 50)
-
+      
         // const { dispatch, setCurrentBoardId, setCurrentBoard, allBoardList, checkTeamStatus, } = this.props
         // const { board_id } = value
         // dispatch({
@@ -608,6 +625,26 @@ export default class File extends Component {
         //     .catch(e => console.log('error in boardDetail: ' + e));
     }
 
+    goFileChat = value => {
+        let obj = {
+            id: value.id,
+            actionType: "file",
+            board_id: value.board_id
+        }
+
+        dispatch({
+            type: "file/updateDatas",
+            payload: {
+                current_custom_message: obj
+            }
+        })
+        setTimeout(() => {
+            Taro.navigateTo({
+                url: "/pages/filesChat/index"
+            })
+        }, 50)
+
+    }
     validGroupChat = ({ im_id }, { value }) => {
         const {
             setCurrentChatTo,
@@ -1089,21 +1126,19 @@ export default class File extends Component {
     }
 
     // deleteFiles
-    confirmDelete = () => {
+    confirmDelete = (boardId) => {
         // const refreshStr = Taro.getStorageSync('file_pull_down_refresh')
         // const refreshData = refreshStr ? JSON.parse(refreshStr) : {}
         // const { org_id, boardid, folder_id } = refreshData;
         var that = this;
         const { selectFiles } = this.state;
         if (selectFiles && selectFiles.length > 0) {
-
             Taro.showModal({
                 title: '温馨提示',
-                content: '确定删除这些文件?',
+                content: '确定删除文件?',
                 success: function (res) {
                     if (res.confirm) {
-
-                        that.deleteFiles();
+                        that.deleteFiles(boardId);
                     } else if (res.cancel) {
                         console.log('用户点击取消')
                     }
@@ -1117,14 +1152,14 @@ export default class File extends Component {
             })
         }
     }
-
-    deleteFiles() {
+    // 删除文件
+    deleteFiles(boardId) {
         const { dispatch } = this.props;
         const { selectFiles, board_id } = this.state;
         Promise.resolve(dispatch({
             type: 'file/deleteFiles',
             payload: {
-                board_id: board_id,
+                board_id: board_id ? board_id: boardId,
                 arrays: JSON.stringify(selectFiles),
             },
         })
@@ -1185,7 +1220,7 @@ export default class File extends Component {
                         {
                             !isDeleteMenuOnclick && <View className={indexStyles.files_album_camera_view_style}>
                                  <View className={indexStyles.files_album_camera_button_style} onClick= {this.goSearchFile}>
-                                     <Text className={`${globalStyle.global_iconfont} ${indexStyles.filesSearch_style}`}>&#xe643;</Text>
+                                     <Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style} ${indexStyles.filesSearch_style}`}>&#xe643;</Text>
                                  </View>
                                 <View className={`${indexStyles.files_album_camera_button_style} ${enabledDelete ? '' : indexStyles.files_unused_button_style}`} onClick={this.showDeleteView.bind(this)}>
                                     <Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe845;</Text>
