@@ -75,6 +75,8 @@ class App extends Component {
       "pages/jumpToMeeting/index",
       "pages/OnlineTableWebView/index",
       "pages/qrcodeHistory/index",
+      "pages/loginMain/index",
+
     ],
     "subpackages": [
       {

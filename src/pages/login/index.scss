@@ -23,35 +23,42 @@ page {
 
     .login_header {
         color     : #262626;
-        text-align: center;
-        padding   : pxTrans(24) 0 pxTrans(12);
-        font-size : pxTrans(20);
+        // text-align: center;
+        padding   : pxTrans(24) pxTrans(24);
+        font-size : pxTrans(28);
     }
 
     .login_content {
-        padding: 0 pxTrans(16);
+        padding: 0 pxTrans(25);
         color  : #8C8C8C;
 
         .login-item-wrap {
             margin-bottom: pxTrans(8);
         }
-
+        .login_item_psw {
+            margin-top: pxTrans(5) !important;
+        }
         .login_item {
-            position     : relative;
+            margin-top: pxTrans(30);
             margin-bottom: pxTrans(4);
-
+            width: 100%;
+            display: flex;
+            flex-direction: row;
             .login_icon {
                 position : absolute;
                 font-size: pxTrans(18);
                 top      : 50%;
                 transform: translateY(-50%);
             }
-
+            .login_input_placeholder {
+                font-weight: 400;
+                color: #BCC2D6;
+            }
             .login_input {
-                border-bottom: pxTrans(1) solid #f0f0f0;
-                height       : pxTrans(48);
-                line-height  : pxTrans(48);
-                padding-left : pxTrans(26);
+                border-bottom   : pxTrans(1) solid #f0f0f0;
+                height          : pxTrans(48);
+                line-height     : pxTrans(48);
+                width: 100%;
 
                 &:focus {
                     border-bottom-color: pxTrans(1) solid #40A9FF;
@@ -183,4 +190,122 @@ page {
 .ssss {
     color    : red;
     font-size: pxTrans(16);
+}
+
+.inputForm {
+    width: 100%;
+}
+.deleteIcon{
+    position: absolute;
+    font-size: pxTrans(20) !important;
+    color: #9EA6C2 !important;
+    height: pxTrans(48);
+    width: pxTrans(40);
+    line-height: pxTrans(48);
+    background-color: transparent;
+    outline: none; 
+    border: 0;
+    right: pxTrans(20);
+    text-align: center;
+    z-index: 99;
+}
+.deletePswdIcon {
+    right: pxTrans(50) !important;
+}
+.iptbox_code {
+    position: relative;
+    margin-top: pxTrans(25);
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+}
+.ipt_code {
+    width: pxTrans(40);
+    height: pxTrans(40);
+    border-bottom: 1px solid #E6E8F1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.ipt_code_active {
+    border-bottom: 1px solid #6A9AFF !important;
+}
+.ipt_place {
+    position: fixed;
+    left: 0;
+    height: pxTrans(40);
+    width: 100%;
+    height: pxTrans(50);
+    opacity: 0;
+    color:white;
+    z-index: 100;
+    caret-color:white;
+}
+.ipt_text_tips {
+    margin-top: pxTrans(20);
+    font-weight: 400;
+    color: #575C75;
+    line-height: pxTrans(14);
+    font-size: pxTrans(14);
+}
+.ipt_text_tips_getcode {
+    color: #1890FF !important;
+}
+.login_code_button {
+    background: linear-gradient(270deg, #4FADFF 0%, #4790FF 100%);
+    border-radius: pxTrans(24);
+    font-weight: 500;
+    color: #FFFFFF;
+    height: pxTrans(48);
+    font-size: pxTrans(16);
+    line-height: pxTrans(48);
+    margin-top: pxTrans(50);
+}
+.unused_login_code_button {
+    background: #F5F7FB !important;
+    color: #BCC2D6 !important;
+}
+.login_other_q {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+Button::after { 
+    border: none; 
+}
+.other_login_way {
+    position: absolute;
+    bottom: pxTrans(70);
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+}
+.other_login_way_item {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+.other_login_way_icon_bg {
+    height: pxTrans(44);
+    width: pxTrans(44);
+    border-radius: pxTrans(22);
+    background-color: #F5F7FB;
+    line-height: pxTrans(44);
+    font-size:pxTrans(20);
+    text-align: center;
+}
+.wx_login_icon { 
+    color: #2DC100 !important;
+}
+.psw_login_icon {
+    color: #575C75 !important;
+}
+.other_login_way_item_text{
+    margin-top: pxTrans(10);
+    color: #9EA6C2;
+    font-weight: 300;
+    font-size: pxTrans(10);
 }

@@ -3,21 +3,25 @@ import { View, Button, Text, Image, Swiper, SwiperItem } from '@tarojs/component
 import { getAccountInfo } from "../../services/login";
 import { isApiResponseOk } from '../../utils/request';
 import { connect } from '@tarojs/redux'
-
+import logo_image from '../../asset/Invitation/logo.png'
 import styles from './index.scss'
+import globalStyles from '../../gloalSet/styles/globalStyles.scss'
 
 @connect(({ login }) => ({
   login
 }))
 class Index extends Component {
   config = {
-    navigationBarTitleText: '首页'
+    navigationBarTitleText: '首页',
+    navigationBarBackgroundColor: "#FFFFFF",
+    navigationBarTextStyle: "black",
   }
   constructor(props) {
     super(props);
     this.state = {
       is_to_login: false,
-      isLoading: true
+      isLoading: true,
+      swiperCurrent:0
     }
 
     this.swiperItems = [
@@ -136,9 +140,14 @@ class Index extends Component {
       })
     }
   }
-
+  // 轮播滚动
+  swiperChange = e => {
+    this.setState({
+      swiperCurrent:e.detail.current
+    })
+  }
   render() {
-    let { is_to_login, isLoading } = this.state;
+    let { is_to_login, isLoading, swiperCurrent} = this.state;
     return (
       <View className={styles.index}>
         {isLoading && (
@@ -148,8 +157,14 @@ class Index extends Component {
             </View>
           </View>
         )}
-        <View className={styles.container}>
-          <Swiper indicatorDots={true} className={styles.swipers}
+       
+       {
+            !is_to_login ?
+       <View className={styles.container}>
+          <Swiper 
+          // indicatorDots={true} 
+          onChange = {this.swiperChange}
+          className={styles.swipers}
             indicatorActiveColor="#1890FF"
             indicatorColor="rgba(0,0,0,0.09)"
             circular={true}>
@@ -167,28 +182,49 @@ class Index extends Component {
               )
             })}
           </Swiper>
+          <View className={styles.indicatorDots_View}>
+            <View className={styles.indicatorDots_contant}>  
+            {this.swiperItems.map((item, key) => {
+                return (
+                  <View key={key} className={`${styles.indicatorDots} ${swiperCurrent == key ? styles.currentIndicatorDots:''}`}></View>
+                )
+              })
+            }
+            </View>
+          </View>
           {/* </View> */}
-          {
-            !is_to_login ? <View>
+
               <Button className={styles.startBtn} onClick={() => this.setState({ is_to_login: true })}>
                 登录/注册
-            </Button>
+              </Button>
               <View className={styles.startTips}>
                 登录后可使用上述所有功能
-            </View>
+              </View>
             </View> : (
-                <View>
-                  <Button className={`${styles.startBtn_wx}`}
-                    open-type={'getUserInfo'}
-                    onGetUserInfo={this.getUserInfo}>微信授权登录</Button>
-                  <Button className={styles.startBtn} onClick={this.toLogin}>
-                    已有账号登录
-              </Button>
+                <View className={styles.container}>
+                  <View className={styles.logo_image_view}>
+                    <Image className={styles.logo_image} src={logo_image}></Image>
+                    <Text className={styles.welcomeTitle}>欢迎来到聆悉协作</Text>
+                  </View>
+                  <View className={styles.bottomLoginView}>
+                      <Button className={`${styles.startBtn_wx}`}
+                      open-type={'getUserInfo'}
+                      onGetUserInfo={this.getUserInfo}>
+                        <Text className={`${globalStyles.global_iconfont} ${styles.wxloginIcon}`}>
+                          &#xe846;
+                        </Text>
+                        微信授权登录
+                      </Button>
+
+                      <Button className={`${styles.startBtn} ${styles.accountLogin}`} onClick={this.toLogin}>
+                        手机号码登录/注册
+                      </Button>
+                      <View className={styles.markTips}>登录代表您已同意<Text className={styles.loginmarkKeynote}>聆悉用户服务协议、隐私政策</Text></View>
+                    </View>
                 </View>
               )
           }
         </View>
-      </View>
     )
   }
 }

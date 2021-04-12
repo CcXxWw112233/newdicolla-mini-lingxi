@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text, Button, Input } from '@tarojs/components'
+import { View, Text, Button, Input,Form } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyles from '../../gloalSet/styles/globalStyles.scss'
 import { validateTel, validateEmail } from '../../utils/verify';
@@ -13,15 +13,21 @@ import { isApiResponseOk } from '../../utils/request';
   login
 }))
 export default class Login extends Component {
+  config = {
+    navigationBarTitleText: '手机验证码登录',
+    navigationBarBackgroundColor: "#FFFFFF",
+    navigationBarTextStyle: "black",
+  }
   state = {
     isMobile: true,     //是否为手机类型
-    isCoded: false,     //是否点击过发送验证码或者重新发送
+    isCoded : false,     //是否点击过发送验证码或者重新发送
     showCode: true,       //是否验证码登陆
     user: '',
     pswd: '',
     verifycode: '',
     captcha_key: '',
     codeMessage: '获取验证码',
+    messageTime:60,
     pswdErrorType: 0,
     userMessageType: 0,
     verifycodeErrorType: 0,
@@ -30,12 +36,26 @@ export default class Login extends Component {
     captchaKey: '',
     token_invalid: false,
     show_copywriting: false,
+    isPassword:false, //密码输入框是否是密码类型
+    is_code_remit:false
   }
   componentWillMount() {
     const sourcePage = this.$router.params;
     // this.checkTokenValid(sourcePage)
     this.setState({
       sourcePage,
+    })
+    // ios 12 系统以上支持验证码免输入 
+    Taro.getSystemInfo({
+      success: function (res) {
+        console.log('sssssssssss',res.system)
+        console.log(parseInt(res.system.split(' ')[1]))
+        if(parseInt(res.system.split(' ')[1]) > 12 && parseInt(res.system.split(' ')[0]) == 'iOS') {
+            this.setState({
+              is_code_remit:true
+            })
+        }
+      }
     })
   }
   // 登录页面初始化时调用接口验证是否存在token有效,如果有效就直接进入 '主页', 否则
@@ -82,6 +102,9 @@ export default class Login extends Component {
       showCode: !this.state.showCode,
       pswd: ''
     })
+    Taro.setNavigationBarTitle({
+      title: !this.state.showCode ? '手机验证码登录':'密码登录'
+    })
   }
   //用户输入框
   inputUser = (e) => {
@@ -103,6 +126,9 @@ export default class Login extends Component {
     }
     if (validateTel(value)) {
       userMessageType = 2
+    }
+    if(value.length == 11 && !validateTel(value) && !validateEmail(value)) {
+      userMessageType = 1
     }
     this.setState({
       isMobile: isMobile,
@@ -127,13 +153,17 @@ export default class Login extends Component {
   // 输入验证码或者密码
   inputPswd = (e) => {
     let value = e.target.value;
-    let { pswdErrorType } = this.state;
+    let { pswdErrorType,showCode } = this.state;
     if (String(value).length > 0) {
       pswdErrorType = 0;
     }
     this.setState({
       pswd: value,
       pswdErrorType: pswdErrorType
+    },()=> {
+      if(showCode && value.length == 6) {
+        this.normalLogin()
+      }
     })
   }
 
@@ -147,6 +177,7 @@ export default class Login extends Component {
       verifycode: value,
       verifycodeErrorType: verifycodeErrorType
     })
+    
   }
   //验证密码框
   checkPswd = (e) => {
@@ -182,6 +213,7 @@ export default class Login extends Component {
       mobile: user,
       type: '2'
     }
+
     let _this = this;
     sendVerifyCode(data).then(res => {
       if (res.code !== '0') {
@@ -205,10 +237,12 @@ export default class Login extends Component {
         })
       } else {
         let messageTime = 60;
+      
         const fun = () => {
           messageTime = messageTime - 1;
           this.setState({
-            codeMessage: messageTime,
+            // codeMessage: messageTime,
+            messageTime:messageTime,
             isCoded: true
           })
           if (messageTime === 0) {
@@ -313,10 +347,64 @@ export default class Login extends Component {
       }
     });
   }
-
+  // 微信登录
+  getUserInfo = (res) => {
+    const { detail = {} } = res
+    const { encryptedData, iv } = detail
+    if (!!encryptedData) {
+      const { dispatch } = this.props
+      Taro.showLoading({
+        title: "登录中"
+      });
+      Taro.login().then(res => {
+        const code = res.code
+        Taro.getUserInfo().then(async res2 => {
+          const parmas = {
+            encryptedData: res2.encryptedData, iv: res2.iv, code: code
+          }
+          await dispatch({
+            type: 'login/weChatAuthLogin',
+            payload: {
+              parmas,
+            }
+          })
+          Taro.hideLoading();
+        }).catch(() => {
+          Taro.hideLoading();
+        })
+      }).catch(() => {
+        Taro.hideLoading();
+      })
+    }
+  }
+  // 账号删除
+  formReset = e => {
+    this.setState({
+      user:'',
+    })
+  }
+  /**
+   * 
+   * @returns 密码删除
+   */
+   formPswdReset = e => {
+    this.setState({
+      pswd:'',
+    })
+   }
+   /**
+    * 密码输入框设置密码类型
+    * @returns 
+    */
+    setInputPassword = e => {
+      this.setState({
+        isPassword: !this.state.isPassword,
+      })
+    }
   render() {
-    let { showCode, codeMessage = '', userMessageType, pswdErrorType, verifycodeErrorType, user, pswd, verifycode, captcha_key, verifyShow, verifycodeBase64Img, token_invalid, show_copywriting } = this.state;
+    let { showCode, codeMessage = '',isPassword,isFocus, userMessageType, pswdErrorType, verifycodeErrorType, user, pswd, verifycode, captcha_key, verifyShow, verifycodeBase64Img, token_invalid, show_copywriting } = this.state;
     let userErrorMessage;
+    var codeLength = ['','','','','',''];
     switch (userMessageType) {      //userMessageType === 2 通过正则表达式校验
       case 1: userErrorMessage = '请输入正确的手机号或邮箱'; break;
       // case 3: userErrorMessage = '登录的手机号不存在'; break;
@@ -355,6 +443,12 @@ export default class Login extends Component {
           <View className={`${indexStyles.login_error}`}>{verifycodeErrorMessage}</View>
         </View>)
     }
+    let pswdlist =  pswd ? pswd.split("") : [];
+    /**
+     * 账号登录按钮是否可用
+     */
+    let canLogin = userMessageType == 2 && pswdlist.length > 0;
+    let pswdlistLength = pswdlist.length;
     return (
       <View className={`${indexStyles.login}`}>
         {/* {
@@ -368,12 +462,18 @@ export default class Login extends Component {
             </View>
           )
         } */}
-        <View className={`${indexStyles.login_header}`}>{!showCode ? '账号密码' : '手机验证码'}登录</View>
-        <View className={`${indexStyles.login_content}`}>
-          <View>
+        {/* <View className={`${indexStyles.login_header}`}>{!showCode ? '账号密码' : '手机验证码'}登录</View> */}
+        <View className={`${indexStyles.login_header}`}>
+          {
+            isCoded && showCode ? '输入验证码':'欢迎登录聆悉协作'
+          } 
+        </View>
+        {/* 
+          <View className={`${indexStyles.login_content}`}>
+         <View>
             <View className={`${indexStyles.login_item}`}>
               <Text className={`${indexStyles.login_icon} ${globalStyles.global_iconfont}`}>&#xe640;</Text>
-              <Input type='text' onBlur={this.checkUser} onInput={this.inputUser} className={`${indexStyles.login_input}`} placeholder='手机号/邮箱' value={user} />
+              <Input type='text' onBlur={this.checkUser} onInput={this.inputUser} className={`${indexStyles.login_input}`} placeholderClass={`${indexStyles.login_input_placeholder}`} placeholder='请输入手机号' value={user} />
             </View>
             <View className={`${indexStyles.login_error}`}>{userErrorMessage}</View>
           </View>
@@ -386,7 +486,7 @@ export default class Login extends Component {
             </View>
             <View className={`${indexStyles.login_error}`}>{pswdErrorMessage}</View>
           </View>
-          {/*账号密码登录验证码*/}
+          //账号密码登录验证码
           {verifycodeView}
         </View>
         <View className={`${indexStyles.login_footer}`}>
@@ -395,7 +495,123 @@ export default class Login extends Component {
         <View className={`${indexStyles.change_login_type_out}`}>
           <View onClick={this.ChangeLoginType} className={`${indexStyles.change_login_type}`}>{showCode ? '账号密码' : '验证码'}登录</View>
         </View>
-      </View >
+      */}
+      <View className={`${indexStyles.login_content}`}>
+      {
+        showCode ? (
+          <View>
+             {
+              isCoded ? 
+              (
+                <View>
+                  <View className={indexStyles.ipt_text_tips}>验证码已发送至 {user} </View>
+                    <View className={indexStyles.iptbox_code}>
+                    {
+                      codeLength.map((item, index) => {
+                        return <Input className={`${indexStyles.ipt_code} ${pswdlistLength == index ? indexStyles.ipt_code_active : ''}`} value={pswdlist.length >= index+1 ? pswdlist[index]:''} disabled></Input>
+                      })
+                    }
+                    {
+                      is_code_remit ? (
+                        <Input  className={indexStyles.ipt_place} maxLength={6}  onInput={this.inputPswd}></Input>  
+                      ) : (
+                        <Input type='number' className={indexStyles.ipt_place} maxLength={6}  onInput={this.inputPswd}></Input>  
+                      )
+                    }
+                    </View>
+                  {
+                    messageTime == 0 ? (<View onClick={this.setCodeMessage} className={`${indexStyles.ipt_text_tips} ${indexStyles.ipt_text_tips_getcode}`} >重新获取</View>) : (<View className={indexStyles.ipt_text_tips}>{messageTime}  秒后重新获取验证码</View>)
+                  } 
+                </View>
+              )
+              :
+              (
+              <View>
+                <Form  className={indexStyles.inputForm} onReset={this.formReset}>
+                  <View className={`${indexStyles.login_item} `}>
+                    <Input type = 'number' onBlur={this.checkUser}  maxLength={11} onInput={this.inputUser} className={`${indexStyles.login_input}`} placeholderClass={`${indexStyles.login_input_placeholder}`} placeholder='请输入手机号' /> 
+                   {
+                     user && <Button className={`${globalStyles.global_iconfont} ${indexStyles.deleteIcon}`} formType='reset'  >&#xe7fc;</Button>
+                   } 
+                  </View>
+                </Form>
+                <View className={`${indexStyles.login_error}`}>{userErrorMessage}</View>
+                <Button className={`${indexStyles.login_code_button} ${userMessageType == 2 ? '' : indexStyles.unused_login_code_button}`} onClick={this.setCodeMessage}>获取短信验证码</Button>
+                
+              </View> 
+              )
+            }   
+          </View>
+        ) : (
+          <View>
+            <Form  className={indexStyles.inputForm} onReset={this.formReset}>
+              <View className={`${indexStyles.login_item}`}>
+                <Input type = 'number' onBlur={this.checkUser}  maxLength={11} onInput={this.inputUser} className={`${indexStyles.login_input}`} placeholderClass={`${indexStyles.login_input_placeholder}`} placeholder='请输入手机号' />
+                {
+                  user && <Button className={`${globalStyles.global_iconfont} ${indexStyles.deleteIcon}`} formType='reset'  >&#xe7fc;</Button>
+                } 
+              </View>
+            </Form>
+            <View className={`${indexStyles.login_error}`}>{userErrorMessage}</View>
+            <Form  className={indexStyles.inputForm} onReset={this.formPswdReset}>
+              <View className={`${indexStyles.login_item} ${indexStyles.login_item_psw}`}>
+                <Input password={isPassword}  onInput={this.inputPswd} className={`${indexStyles.login_input}`} placeholderClass={`${indexStyles.login_input_placeholder}`} placeholder='请输入密码' />
+                {
+                  pswd ? (
+                    <View>
+                      <Button className={`${globalStyles.global_iconfont} ${indexStyles.deleteIcon} ${indexStyles.deletePswdIcon}`} formType='reset'>&#xe7fc;</Button>
+                    </View>
+                  ) : ('')
+                } 
+                {
+                  isPassword ? (
+                    <Button className={`${globalStyles.global_iconfont} ${indexStyles.deleteIcon}`} onClick={this.setInputPassword}>&#xe859;</Button>
+                  ) : (
+                    <Button className={`${globalStyles.global_iconfont} ${indexStyles.deleteIcon}`} onClick={this.setInputPassword}>&#xe85a;</Button>
+                  )
+                }
+              </View>
+            </Form>
+           
+            <Button className={`${indexStyles.login_code_button}  ${canLogin ? '' : indexStyles.unused_login_code_button}`} onClick={this.normalLogin}>登录</Button>
+          </View>
+        )
+      }
+        </View>
+        <View className={indexStyles.other_login_way}>
+           <View className={indexStyles.other_login_way_item}></View>
+            <View className={indexStyles.other_login_way_item}>
+              <Button className={indexStyles.other_login_way_icon_bg}  open-type={'getUserInfo'}
+                      onGetUserInfo={this.getUserInfo}>
+                <Text
+                    className={`${globalStyles.global_iconfont} ${indexStyles.wx_login_icon}`}>&#xe846;</Text>
+              </Button>
+              <View className={indexStyles.other_login_way_item_text}>微信登录</View>
+            </View>
+            {
+              showCode ? 
+              (
+                <View className={indexStyles.other_login_way_item} onClick={this.ChangeLoginType}>
+                <View className={indexStyles.other_login_way_icon_bg}>
+                  <Text
+                    className={`${globalStyles.global_iconfont} ${indexStyles.psw_login_icon}`}>&#xe858;</Text>
+                </View>
+                <View className={indexStyles.other_login_way_item_text} >密码登录</View>
+              </View>
+              ) :
+              (
+                <View className={indexStyles.other_login_way_item} onClick={this.ChangeLoginType}>
+                <View className={indexStyles.other_login_way_icon_bg}>
+                  <Text
+                    className={`${globalStyles.global_iconfont} ${indexStyles.psw_login_icon}`}>&#xe857;</Text>
+                </View>
+                <View className={indexStyles.other_login_way_item_text} >验证登录</View>
+              </View>
+              )
+            }
+            <View className={indexStyles.other_login_way_item}></View>
+        </View>
+      </View>
     )
   }
 }
