@@ -7,6 +7,8 @@ import SearchAndMenu from "../board/components/SearchAndMenu";
 import { isPlainObject, filterListAuth } from "./../../utils/util";
 import { isApiResponseOk } from "../../utils/request";
 import { getImHistory, getAllIMTeamList } from "../../services/im";
+import SearchBar from '../../components/searchBar'
+
 
 @connect(
   ({
@@ -124,6 +126,7 @@ export default class BoardChat extends Component {
     show_board_select_type: "0", //出现项目选择
     search_mask_show: "0", // 0默认 1 淡入 2淡出
     chatBoardList: [], //显示在列表中的项目圈列表
+    all_chat_list:[],
     isProhibitRepeatClick: true //禁止重复点击进入圈子
   };
 
@@ -155,7 +158,7 @@ export default class BoardChat extends Component {
         });
     });
   };
-  getChatBoardList = async () => {
+  getChatBoardList = async (value) => {
     let { userUID } = this.props;
     this.getOrgList();
     let list = await this.getAllTeam();
@@ -231,12 +234,28 @@ export default class BoardChat extends Component {
         return item;
       });
 
-      dispatch({
-        type: "im/updateStateFieldByCover",
-        payload: {
-          allBoardList: chatList
-        }
-      });
+      if(value) {
+        let new_chat_list =  chatList.filter(function(item){
+          return item.board_name.indexOf(value) != -1;
+        }); 
+        dispatch({
+          type: "im/updateStateFieldByCover",
+          payload: {
+            allBoardList: new_chat_list
+          }
+        });
+      } else {
+        dispatch({
+          type: "im/updateStateFieldByCover",
+          payload: {
+            allBoardList: chatList
+          }
+        });
+      }
+      // this.setState({
+      //   all_chat_list:chatList
+      // })
+      // console.log("***********************",chatList)
     });
   };
 
@@ -392,11 +411,11 @@ export default class BoardChat extends Component {
   };
 
   onSelectType = ({ show_type }) => {
-    this.setState({
-      // eslint-disable-next-line react/no-unused-state
-      show_card_type_select: show_type,
-      search_mask_show: show_type
-    });
+    // this.setState({
+    //   // eslint-disable-next-line react/no-unused-state
+    //   show_card_type_select: show_type,
+    //   search_mask_show: show_type
+    // });
   };
 
   genAvatarList = (users = []) => {
@@ -556,7 +575,6 @@ export default class BoardChat extends Component {
         return a + parseInt(b.unread);
       }, 0);
 
-      console.log("---------------------------");
       //消息未读数
       if (sumUnRead) {
         /**
@@ -592,10 +610,19 @@ export default class BoardChat extends Component {
       }
     });
     this.setState({
+      all_chat_list:arr,
       chatBoardList: arr
     });
     this.countSumUnRead(arr);
   }
+    // 关键词搜索
+    searchMenuClick = value => {
+      this.getChatBoardList(value)
+    }
+    // 取消检索
+    cancelSearchMenuClick = value => {
+      this.getChatBoardList('')
+    }
   getSubUnread = val => {
     let { chatBoardList } = this.state;
     let sub = chatBoardList.filter(
@@ -613,6 +640,9 @@ export default class BoardChat extends Component {
     let listArray = chatBoardList
       .filter(item => item.scene == "team" && item.type == 2)
       .sort((a, b) => +(b.updateTime || 0) - +(a.updateTime || 0)); //(b-a)时间正序
+      // this.setState({
+      //   all_chat_list:listArray
+      // })
     return listArray;
   };
 
@@ -623,11 +653,12 @@ export default class BoardChat extends Component {
     let listArray = this.boardListForView();
     return (
       <View className={indexStyles.index}>
-        {/*  <SearchAndMenu
+         {/* <SearchAndMenu
           onSelectType={this.onSelectType}
           search_mask_show={search_mask_show}
-        />
-*/}
+        /> */}
+        <SearchBar searchMenuClick={(value) => this.searchMenuClick(value)} cancelSearchMenuClick={(value) => this.cancelSearchMenuClick(value)}/>
+        <View className={indexStyles.placeView}></View>
         {listArray.map((value, key) => {
           const {
             board_id,

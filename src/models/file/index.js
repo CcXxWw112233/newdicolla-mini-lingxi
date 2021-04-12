@@ -6,13 +6,13 @@ export default {
     namespace: 'file',
     state: {
         file_list: [], //文件略缩图信息
+        search_file_list:[],
         isShowBoardList: false,  //是否显示项目列表
         folder_tree: [],  //文件数据列表
         header_folder_name: '全部文件',  //当前选中的文件夹名称
         isShowFileComment: false,  //chat页面是否显示文件评论
         isShowChoiceFolder: false, //是否显示上传文件选择文件夹modal
         unread_file_list: [],   //未读文件列表
-
         selected_board_folder_info: {}, //选择的哪一个文件夹的信息(包含org_id, board_id, folder_id), 使用model跨多个组件传值
         upload_folder_name: '选择文件夹', //要上传的文件夹的名称
         choice_board_folder_id: '',  //选中的那一个的文件夹id
@@ -40,7 +40,8 @@ export default {
                 yield put({
                     type: 'updateDatas',
                     payload: {
-                        file_list: res.data
+                        file_list: res.data,
+                        search_file_list:res.data
                     }
                 })
 

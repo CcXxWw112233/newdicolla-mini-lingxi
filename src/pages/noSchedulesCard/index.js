@@ -7,6 +7,8 @@ import indexStyles from './index.scss';
 import { connect } from '@tarojs/redux';
 import Topmenu from './components/topmenu'
 import NoDataSvg from "../../asset/nodata.svg";
+import CustomNavigation from "../acceptInvitation/components/CustomNavigation.js";
+
 
 @connect(
     ({
@@ -35,13 +37,16 @@ import NoDataSvg from "../../asset/nodata.svg";
 
 
 export default class Calendar extends Component {
-
     config = {
-        navigationBarTitleText: "",
+        navigationStyle: 'custom',
         enablePullDownRefresh: true,
-        backgroundColor: "#696969",
-        onReachBottomDistance: 50 //默认值50
-    };
+      }
+    // config = {
+        // navigationBarTitleText: "",
+        // enablePullDownRefresh: true,
+        // backgroundColor: "#696969",
+        // onReachBottomDistance: 50 //默认值50
+    // };
 
     state = {
         show_card_type_select: '0',
@@ -50,16 +55,15 @@ export default class Calendar extends Component {
         moldArr: []
     };
 
-    componentWillMount() {
-        const { title } = this.$router.params;
-        Taro.setNavigationBarTitle({
-            title: '全部事项'
-        });
-    }
+    // componentWillMount() {
+    //     const { title } = this.$router.params;
+    //     Taro.setNavigationBarTitle({
+    //         title: '全部事项'
+    //     });
+    // }
 
     componentDidMount() {
         var that = this;
-
         Taro.getSystemInfo({
             success(res) {
                 that.setState({
@@ -133,8 +137,8 @@ export default class Calendar extends Component {
             Taro.hideNavigationBarLoading();
         }, 300);
     }
-
-    getNoScheCardList() {
+// 获取数据
+    getNoScheCardList(search_content) {
         const { dispatch, } = this.props;
         const { boardidList, moldArr } = this.state;
         var boardidListArr = boardidList.length > 0 ? boardidList.split(",") : [];
@@ -147,6 +151,7 @@ export default class Calendar extends Component {
             type: "calendar/getNoScheCardList",
             payload: {
                 org_id: '0',
+                search_content:search_content ? search_content : '',
                 board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] :
                     boardidListArr) : [],
                 query_milestone: moldArr[0] && moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) : isall,
@@ -200,7 +205,7 @@ export default class Calendar extends Component {
             TopmenuIndex: index
         })
     }
-
+    // 是否展示搜索条件
     isShowCheckMenu(isShow, boardidList, moldArr) {
         this.setState({
             isShowCheckMenu: isShow,
@@ -208,19 +213,39 @@ export default class Calendar extends Component {
             moldArr: moldArr
         })
     }
+    // 点击搜索
+    searchMenuClick  = value =>{
+       this.getNoScheCardList(value)
+    }
+    cancelSearchMenuClick = value => {
+        this.getNoScheCardList('')
+    }
     render() {
         const { show_card_type_select, search_mask_show, TopmenuIndex, screenHeight, filterData, filterDropdownValue, isShowCheckMenu } = this.state;
         const { no_sche_card_list = [] } = this.props;
+        const SystemInfo = Taro.getSystemInfoSync()
+        const statusBar_Height = SystemInfo.statusBarHeight 
+        const navBar_Height = SystemInfo.platform == 'ios' ? 44 : 48;
         return (
             <View className={indexStyles.index} style={{ minHeight: screenHeight }}>
+                <CustomNavigation
+                    isSearch={true}
+                    backIcon='arrow_icon'
+                    searchMenuClick={(value) => this.searchMenuClick(value)}
+                    cancelSearchMenuClick = {(value) => this.cancelSearchMenuClick(value)}
+                />
+                <View style={{ height: navBar_Height + navBar_Height +  'px' }}></View>
                 {/* <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} /> */}
                 <Topmenu onclickTopMenu={(index) => this.onclickTopMenu(index)} className={indexStyles.topMenu} isShowCheckMenu={(isShow, boardidList, moldArr) => this.isShowCheckMenu(isShow, boardidList, moldArr)}></Topmenu>
                 {/* <CardTypeSelect show_card_type_select={show_card_type_select} onSelectType={this.onSelectType} schedule={'0'} /> */}
                 {/* isShowCheckMenu */}
 
-                <ScrollView scrollY className={`${indexStyles.no_sche_card_list} ${isShowCheckMenu ? indexStyles.isShowCheckMenu : ''}`}>
+                <ScrollView scrollY className={`${indexStyles.no_sche_card_list}`}>
+                    <View className={`${indexStyles.placeTopMenuView} ${isShowCheckMenu ? indexStyles.isShowCheckMenu : ''}`}></View>
+
                     {
                         no_sche_card_list && no_sche_card_list.length > 0 ? (
+    
                             <CardList className={indexStyles.cardList} schedule={'0'} />
 
                         ) : (
@@ -230,7 +255,7 @@ export default class Calendar extends Component {
                             </View>
                         )
                     }
-
+{navHeight}
                     <View style='height: 50px'></View>
                 </ScrollView>
             </View >

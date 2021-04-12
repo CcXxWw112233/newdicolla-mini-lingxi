@@ -1,5 +1,8 @@
 @import '../../../gloalSet/styles/pxTrans.scss';
 
+.CustomNavigation_white {
+  background-color: white !important;
+}
 .CustomNavigation_Scss {
   background-color: #428CFF;
   position        : fixed;
@@ -18,7 +21,7 @@
     width          : 100%;
     align-items    : center;
     display        : flex;
-    justify-content: space-between;
+    // justify-content: space-between;
 
     .back_Wapper {
       display    : inline-flex;
@@ -31,6 +34,11 @@
       top       : 4px;
       width     : 40px;
       text-align: center;
+      font-size: pxTrans(20);
+    }
+    .iconColor {
+      color: #9EA6C2 !important;
+      
     }
 
     .home_Wapper {
@@ -50,5 +58,46 @@
       border-radius: pxTrans(32);
       text-align   : center;
     }
+  }
+  .searchBarView {
+    background-color: #F5F7FB;
+    height: pxTrans(32);
+    margin-left: pxTrans(10);
+    display: 'inline-block';
+     width: pxTrans(217);
+     border-radius: pxTrans(16);
+     padding-left: pxTrans(15);
+     padding-right: pxTrans(10);
+     color       : rgb(0, 0, 0, 0.85);
+     display: flex;
+     flex-direction: row;
+  }
+
+  .searchIcon {
+    line-height: pxTrans(32);
+    margin-right: pxTrans(10);
+    font-size: pxTrans(20) !important;
+    color: #D1D5E4 !important;
+  }
+  .deleteIcon{
+    font-size: pxTrans(20) !important;
+    color: #9EA6C2 !important;
+    height: pxTrans(32);
+    width: pxTrans(40);
+    line-height: pxTrans(32);
+    background-color: transparent;
+    outline: none; 
+    border: 0;
+    text-align: center;
+    }
+  Button::after { 
+    border: none; 
+  }
+  .searchBarInput {
+    height: pxTrans(32);
+    width: pxTrans(180);
+  }
+  .searchBarInput_placeholderStyle {
+    color: #D1D5E4;
   }
 }

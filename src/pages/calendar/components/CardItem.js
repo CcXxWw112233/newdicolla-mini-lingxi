@@ -89,7 +89,7 @@ export default class CardItem extends Component {
   //   return title_icon;
   // };
   //  {/* 0 任务 1 会议  2 流程节点  3 里程碑 */ }
-
+  
   render() {
     const { itemValue = {}, index, schedule, org_list, selected_timestamp } = this.props;
     const {
@@ -182,10 +182,33 @@ export default class CardItem extends Component {
       }
       return opacity;
     };
-
+      // 根据类型返回相应的icon
+   let moldIcon = null
+    if (flag == 0) {
+      moldIcon =    
+      <View className={`${globalStyles.global_iconfont} ${indexStyles.moldIcon}`}>
+        &#xe84f;
+      </View>
+     } else  if(flag == 1) {
+      moldIcon =    
+      <View className={`${globalStyles.global_iconfont} ${indexStyles.moldIcon}`}>
+        &#xe851;
+      </View>
+    } else if (flag == 2) {
+      moldIcon =    
+      <View className={`${globalStyles.global_iconfont} ${indexStyles.moldIcon}`}>
+        &#xe84e;
+      </View>
+    } else if (flag == 3) {
+      moldIcon =    
+      <View className={`${globalStyles.global_iconfont} ${indexStyles.moldIcon}`}>
+       &#xe850;
+      </View>
+    } 
     var now = Date.parse(new Date());
     var isToday = new Date(parseInt(start_time)).toDateString() === new Date().toDateString()
 
+    
     return (
       <View
         onClick={() => flag != "meeting" && flag != "1" && flag != '3' && this.gotoListItemDetails(itemValue)}
@@ -200,7 +223,8 @@ export default class CardItem extends Component {
           <View className={`${indexStyles.card_content_middle}`}>
             <View className={`${indexStyles.card_content_middle_top}`}>
               <View className={`${indexStyles.card_title}`}>
-                {content_name || topic}
+              {moldIcon}
+               {content_name || topic}
               </View>
 
               {

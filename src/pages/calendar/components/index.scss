@@ -21,8 +21,13 @@
       margin-right: pxTrans(6);
       color       : $color_2;
     }
+  
   }
-
+  .moldIcon {
+    font-size   : pxTrans(16);
+    color: #5FA6FF !important;
+    margin-right: pxTrans(10) !important;
+  }
   .card_content_middle {
     flex          : 1;
     display       : flex;
@@ -47,10 +52,10 @@
         line-height: pxTrans(26);
         font-weight: bold;
         word-wrap  : break-word;
-
         word-break: normal;
-        width     : 80%;
-
+        width     : 70%;
+        display: flex;
+        flex-direction: row;
       }
 
       .urge {

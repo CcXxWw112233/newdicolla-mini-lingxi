@@ -417,7 +417,6 @@ export default class Calendar extends Component {
     const statusBar_Height = SystemInfo.statusBarHeight;
     const navBar_Height = SystemInfo.platform == "ios" ? 44 : 48;
 
-    console.log("")
     return (
       <View className={indexStyles.view_style}>
         <CustomNavigation

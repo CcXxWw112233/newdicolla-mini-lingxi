@@ -66,14 +66,15 @@ class App extends Component {
       "pages/sceneEntrance/index",
       "pages/errorPage/index",
       "pages/file/index",
+      "pages/file/fileSearch/index",
+      "pages/file/previewImage/index",
       "pages/boardChat/index",
       // "pages/templateDetails/index",
       "pages/fieldPersonSingle/index",
       // "pages/fieldPersonMultiple/index",
       "pages/jumpToMeeting/index",
       "pages/OnlineTableWebView/index",
-      "pages/qrcodeHistory/index"
-
+      "pages/qrcodeHistory/index",
     ],
     "subpackages": [
       {

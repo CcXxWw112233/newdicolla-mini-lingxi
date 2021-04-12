@@ -18,12 +18,14 @@
 }
 
 .no_sche_card_list {
-    position: absolute;
-    top     : pxTrans(50);
+    // position: absolute;
+    // top     : pxTrans(50);
 }
-
+.placeTopMenuView {
+    height: pxTrans(50);
+}
 .isShowCheckMenu {
-    top: pxTrans(90) !important;
+    height: pxTrans(90) !important;
 
 }
 
