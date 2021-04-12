@@ -153,6 +153,11 @@
           "pathName": "pages/loginMain/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "pages/login/index",
+          "pathName": "pages/login/index",
+          "scene": null
         }
       ]
     }

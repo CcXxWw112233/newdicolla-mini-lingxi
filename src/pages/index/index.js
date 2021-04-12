@@ -12,7 +12,9 @@ import globalStyles from '../../gloalSet/styles/globalStyles.scss'
 }))
 class Index extends Component {
   config = {
-    navigationBarTitleText: '首页'
+    navigationBarTitleText: '首页',
+    navigationBarBackgroundColor: "#FFFFFF",
+    navigationBarTextStyle: "black",
   }
   constructor(props) {
     super(props);
