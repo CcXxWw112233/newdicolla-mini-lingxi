@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text, } from '@tarojs/components'
+import { View, Text,ScrollView } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
@@ -80,10 +80,28 @@ export default class BoardFile extends Component {
     selectionFile = (folderId) => {
         this.props.selectionFile(folderId)
     }
+    /**
+     * 添加手势 上划关闭弹窗
+     * @param {*} e 
+     */
+    onTouchStart = e => {
+        this.setState({
+          clientY: e.changedTouches[0].clientY,
+        })
+    } 
+    onTouchMove = e => {
+        const { clientY } = this.state;
+        var currentClientY = e.changedTouches[0].clientY;
+        const { schedule, dispatch } = this.props;
+        if (currentClientY + 30 < clientY) {
+            this.props.closeBoardList()
+        } else if (currentClientY - 30 > clientY) {
 
+        }
+    }
     render() {
         const { all_file_text } = this.state
-        const { v2_board_list, org_list } = this.props
+        const { v2_board_list, org_list,header_folder_name } = this.props
 
         //根据org_id把org_list合并到v2_board_list
         org_list.forEach(function (o, d) {
@@ -105,47 +123,50 @@ export default class BoardFile extends Component {
                 return item
             }
         })
-
+        const isSelectedAll = header_folder_name == '全部文件'
         return (
             <View className={indexStyles.choice_board_file_style} >
-                <View className={indexStyles.whole_file_style}>
-                    <View className={indexStyles.whole_file_hear_style} onClick={() => this.selectedBoardItem('0', '', '', all_file_text)}>
-                        <Text className={`${globalStyle.global_iconfont} ${indexStyles.folder_Path_icon}`}>&#xe662;</Text>
-                        <View style={{ marginLeft: 10 + 'px', fontSize: 18 + 'px' }}>{all_file_text}</View>
-                    </View>
-                </View>
-
-                {filter_board_list && filter_board_list.map(item => {
-                    const org_id = item.org_id;
-                    const { file_all_visited } = item;
-                    return (
-                        <View className={indexStyles.board_item_style} hoverClass={indexStyles.board_item_hover_style} onClick={() => this.selectedBoardItem(org_id, item.board_id, '', item)}>
-
-                            <View className={indexStyles.board_item_cell_style}>
-
-                                <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_icon}`}>&#xe662;</Text>
-
-                                <View className={indexStyles.board_item_name}>{item.board_name}</View>
-                                {
-                                    file_all_visited != '1' ? (<View className={indexStyles.redCircel}></View>) : (null)}
-
-
-
-                                {org_list && org_list.length > 0 ? (<View className={indexStyles.org_name_style}>
-                                    {'#'} {item.name}
-                                </View>) : ''}
-                            </View>
+                 <ScrollView className={indexStyles.filter_board_list} scrollY scrollWithAnimation>
+                    <View className={indexStyles.whole_file_style}>
+                        <View className={`${indexStyles.whole_file_hear_style} ${isSelectedAll ? indexStyles.whole_file_hear_selected_style:''}`} onClick={() => this.selectedBoardItem('0', '', '', all_file_text)}>
+                            <Text className={`${globalStyle.global_iconfont} ${indexStyles.folder_Path_icon}`}>&#xe662;</Text>
+                            <View style={{ marginLeft: 10 + 'px', fontSize: 16 + 'px' }}>{all_file_text}</View>
                         </View>
-                    )
-                })
-                }
+                    </View>
+               
+                    {filter_board_list && filter_board_list.map((item,key) => {
+                        const org_id = item.org_id;
+                        const { file_all_visited } = item;
+                        return (
+                            <View className={indexStyles.board_item_style} key={key} hoverClass={indexStyles.board_item_hover_style} onClick={() => this.selectedBoardItem(org_id, item.board_id, '', item)}>
 
-                <View className={indexStyles.close_view_style}>
+                                <View className={`${indexStyles.board_item_cell_style} ${header_folder_name == item.board_name ? indexStyles.board_item_selected_cell_style:''}`}>
+
+                                    <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_icon}`}>&#xe662;</Text>
+
+                                    <View className={indexStyles.board_item_name}>{item.board_name}</View>
+                                    {
+                                        file_all_visited != '1' ? (<View className={indexStyles.redCircel}></View>) : (null)}
+
+
+
+                                    {org_list && org_list.length > 0 ? (<View className={indexStyles.org_name_style}>
+                                        {'#'} {item.name}
+                                    </View>) : ''}
+                                </View>
+                            </View>
+                        )
+                    })
+                    }
+                </ScrollView>
+                {/* <View className={indexStyles.close_view_style}>
                     <View className={indexStyles.close_button_style} onClick={this.closeBoardList}>
                         <Text className={`${globalStyle.global_iconfont} ${indexStyles.close_button_icon_style}`}>&#xe7fc;</Text>
                     </View>
-                </View >
-
+                </View > */}
+                <View className={indexStyles.board_bottom_style} onTouchMove={(e) => this.onTouchMove(e)} onTouchStart={(e) => this.onTouchStart(e)}>
+                    <View className={indexStyles.board_bottom_line_style} onClick={this.closeBoardList}></View>
+                </View>
             </View >
         )
     }

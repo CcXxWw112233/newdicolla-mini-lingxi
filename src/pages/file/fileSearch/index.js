@@ -46,7 +46,6 @@ export default class nowOpen extends Component {
   }
 
   state = {
-    list:['水专施工一改','百富源项目施工管理图百富源项目施工管理图百富源项目施工管理图'],
     delBtnWidth:100
   }
 
@@ -239,7 +238,7 @@ deleteFile = value => {
   // this.setState({
   //   txtStyle:txtStyle
   // });
-  const {search_file_list,dispatch} = this.props
+  const {search_file_list,file_list,dispatch} = this.props
   let selectFiles = [{
     type:'2',
     id  :value.id
@@ -252,13 +251,18 @@ deleteFile = value => {
     },
 })
 ).then(() => {
-    let new_file_list =  search_file_list.filter(function(item){
+    let new_search_file_list =  search_file_list.filter(function(item){
       return item.id != value.id;
     }); 
+    let new_file_list = file_list.filter(function(item){
+      return item.id != value.id;
+    }); 
+    // file_list
     dispatch({
       type: 'file/updateDatas',
       payload: {
-        search_file_list: new_file_list,
+        search_file_list: new_search_file_list,
+        file_list: new_file_list,
       },
     })
   })
@@ -318,7 +322,7 @@ goFileChat = value => {
          })
         }
         </ScrollView>
-        </View>
+      </View>
     )
   }
 }

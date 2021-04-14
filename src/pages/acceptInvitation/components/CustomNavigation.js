@@ -67,11 +67,11 @@ class CustomNavigation extends Component {
         const screen_Width = SystemInfo.screenWidth
         const statusBar_Height = SystemInfo.statusBarHeight
         const navBar_Height = SystemInfo.platform == 'ios' ? 44 : 48
-        const { backIcon, home_personal_center, personal_center_image, title,isSearch } = this.props
+        const { backIcon, home_personal_center, personal_center_image, title,isSearch,bgColor } = this.props
         const {isShowDeleteIcon} = this.props;
         const navTitle = title ? title : '聆悉'
         return (
-            <View className= {`${indexStyles.CustomNavigation_Scss} ${isSearch ? indexStyles.CustomNavigation_white:''}`} style={{ height: statusBar_Height + navBar_Height + 'px' }}>
+            <View className= {`${indexStyles.CustomNavigation_Scss} ${isSearch ? indexStyles.CustomNavigation_white:''}`} style={{ height: statusBar_Height + navBar_Height + 'px', backgroundColor:bgColor ? bgColor:''}}>
                 <View className={indexStyles.statusBar_Scss} style={{ height: statusBar_Height + 'px' }}></View>
                 <View className={indexStyles.navBar_Scss} style={{ height: navBar_Height + 'px' }}>
                     {home_personal_center === 'homePersonalCenter' ?

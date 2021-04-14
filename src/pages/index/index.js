@@ -146,6 +146,11 @@ class Index extends Component {
       swiperCurrent:e.detail.current
     })
   }
+  goUserAgreement = e => {
+    Taro.navigateTo({
+      url:'/pages/index/userAgreement/index'
+    })
+  }
   render() {
     let { is_to_login, isLoading, swiperCurrent} = this.state;
     return (
@@ -215,11 +220,10 @@ class Index extends Component {
                         </Text>
                         微信授权登录
                       </Button>
-
                       <Button className={`${styles.startBtn} ${styles.accountLogin}`} onClick={this.toLogin}>
                         手机号码登录/注册
                       </Button>
-                      <View className={styles.markTips}>登录代表您已同意<Text className={styles.loginmarkKeynote}>聆悉用户服务协议、隐私政策</Text></View>
+                      <View className={styles.markTips}>登录代表您已同意<Text className={styles.loginmarkKeynote} onClick={this.goUserAgreement}>聆悉用户服务协议、隐私政策</Text></View>
                     </View>
                 </View>
               )

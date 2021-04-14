@@ -20,10 +20,8 @@ export default class Login extends Component {
   render() {
     return (
       <View className={`${indexStyles.login}`}>
+           <WebView src='https://lingxi.di-an.com/#/agreement/privacy' onMessage={this.handleMessage} />
       </View >
     )
   }
 }
-
-
-

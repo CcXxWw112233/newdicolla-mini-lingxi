@@ -34,6 +34,7 @@ class App extends Component {
   config = {
     pages: [
       "pages/index/index",
+      "pages/index/userAgreement/index",
       // "pages/settingTabbar/index",
       "pages/seeBoardChart/index",
       "pages/login/index",
@@ -46,7 +47,7 @@ class App extends Component {
       "pages/chat/index",
       "pages/chatDetail/index",
       "pages/filesChat/index",
-      "pages/phoneNumberLogin/index",
+      // "pages/phoneNumberLogin/index",
       "pages/acceptInvitation/index",
       "pages/nowOpen/index",
       "pages/auccessJoin/index",
@@ -64,19 +65,17 @@ class App extends Component {
       // "pages/addSonTask/index",
       // "pages/sonTaskExecutors/index",
       "pages/sceneEntrance/index",
-      "pages/errorPage/index",
+      // "pages/errorPage/index",
       "pages/file/index",
-      "pages/file/fileSearch/index",
-      "pages/file/previewImage/index",
+      // "pages/file/fileSearch/index",
+      // "pages/file/previewImage/index",
       "pages/boardChat/index",
       // "pages/templateDetails/index",
       "pages/fieldPersonSingle/index",
       // "pages/fieldPersonMultiple/index",
       "pages/jumpToMeeting/index",
-      "pages/OnlineTableWebView/index",
+      // "pages/OnlineTableWebView/index",
       "pages/qrcodeHistory/index",
-      "pages/loginMain/index",
-
     ],
     "subpackages": [
       {
@@ -93,6 +92,36 @@ class App extends Component {
       },
       {
         "root": "pages/templateDetails",
+        "pages": [
+          "index"
+        ]
+      },
+      {
+        "root": "pages/OnlineTableWebView",
+        "pages": [
+          "index"
+        ]
+      },
+      {
+        "root": "pages/phoneNumberLogin",
+        "pages": [
+          "index"
+        ]
+      },
+      {
+        "root": "pages/errorPage",
+        "pages": [
+          "index"
+        ]
+      },
+      {
+        "root": "pages/file/fileSearch",
+        "pages": [
+          "index"
+        ]
+      },
+      {
+        "root": "pages/file/previewImage",
         "pages": [
           "index"
         ]
