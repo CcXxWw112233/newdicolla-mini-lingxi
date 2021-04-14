@@ -1,6 +1,7 @@
 import Taro from '@tarojs/taro'
 import { getFilePage, getFileDetails, getFolder, getDownloadUrl, uploadFile, sendFileComment, getFileUnreadList, verifyAuthority, filevisited, deleteFiles, } from '../../services/file/index'
 import { isApiResponseOk, } from "../../utils/request";
+import { filterFileFormatType } from '../../utils/util';
 
 export default {
     namespace: 'file',
@@ -27,6 +28,7 @@ export default {
         verify_authority_list: {},
         current_previewImage: '',//当前预览的图片
         uploadNowList: [],//两分钟内上传的图片
+        fileListTotleString:'', //图片的个数 以及 文件的个数
     },
     effects: {
         //全部文件信息
@@ -44,14 +46,24 @@ export default {
                         search_file_list:res.data
                     }
                 })
+                // var index = fileType.lastIndexOf(".");
+                // const file_type = fileType.substring(index + 1, fileType.length)
+                // const img_type_arr = ['bmp', 'jpg', 'jpeg', 'png', 'tif', 'gif', 'pcx', 'tga', 'exif', 'fpx', 'svg', 'psd', 'cdr', 'pcd', 'dxf', 'ufo', 'eps', 'ai', 'raw', 'WMF', 'webp']  //文件格式
+                const img_type_arr = ['bmp', 'jpg', 'jpeg', 'png', 'gif',]  //文件格式
+                // if (img_type_arr.indexOf(file_type) != -1) {  //打开图片
+                var image_file_list = res.data.filter(function (value) {
+                    return img_type_arr.indexOf(value.file_name.substr(value.file_name.lastIndexOf(".") + 1).toLowerCase()) != -1;
+                })
 
                 var unvisited_file_list = res.data.filter(function (value) {
                     return value.visited != '1';
                 })
+
                 yield put({
                     type: 'updateDatas',
                     payload: {
-                        unvisited_file_list_count: unvisited_file_list.length
+                        unvisited_file_list_count: unvisited_file_list.length,
+                        fileListTotleString:image_file_list.length + '张图片, ' + (res.data.length - image_file_list.length) + '个文件'
                     }
                 })
                 if (unvisited_file_list.length > 0) {

@@ -22,7 +22,8 @@ import { BASE_URL, API_BOARD, PROJECT_FILES_FILE_DELETE, PROJECT_FILES_FILE_DOWN
         unvisited_file_list_count,
         verify_authority_list,
         current_previewImage,
-        uploadNowList = []
+        uploadNowList = [],
+        fileListTotleString
     },
     im: {
         allBoardList,
@@ -39,7 +40,8 @@ import { BASE_URL, API_BOARD, PROJECT_FILES_FILE_DELETE, PROJECT_FILES_FILE_DOWN
         unvisited_file_list_count,
         verify_authority_list,
         current_previewImage,
-        uploadNowList
+        uploadNowList,
+        fileListTotleString
     }),
     dispatch => {
         return {
@@ -115,7 +117,6 @@ export default class File extends Component {
         uplaodAuto: false, //上传文件权限
         downLoadAuto: false,//下载权限
         deleteAuto: false,//删除权限
-        upload_sheet_list: [{ icon: '&#xe846;', value: '从微信导入文件' }, { icon: '&#xe664;', value: '从相册导入文件' }, { icon: '&#xe86f;', value: '从相机导入文件' }],
         isFirstLoadData: true,
         isPullDown: false,
         routeIsRead: false,
@@ -401,12 +402,11 @@ export default class File extends Component {
 
     //显示关闭项目列表
     choiceBoard = (e) => {
-
-        const { dispatch } = this.props
+        const { dispatch,isShowBoardList } = this.props
         dispatch({
             type: 'file/updateDatas',
             payload: {
-                isShowBoardList: e,
+                isShowBoardList: !isShowBoardList,
             },
         })
         this.setState({
@@ -428,13 +428,24 @@ export default class File extends Component {
         const { id, board_id, org_id } = value
         const { dispatch } = this.props
         setBoardIdStorage(board_id)
+        /**
+         * '.jpeg', JPEG格式的图片taro <Image>标签暂不支持  
+         */
         const fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
+        const img_type_arr = ['.bmp', '.jpg', '.png', '.gif',]  //文件格式
+        // 判断是否是图片
+        if(img_type_arr.indexOf(fileType.toLowerCase()) != -1) {
+            console.log('图片')
+            Taro.navigateTo({
+                url: '/pages/file/previewImage/index?imageData=' + JSON.stringify(value),
+            })
+            return;
+        }
         const parameter = {
             board_id,
             file_ids: id,
             _organization_id: getOrgIdByBoardId(board_id) ? getOrgIdByBoardId(board_id) : org_id,
         }
-
         // 清除缓存文件
         Taro.getSavedFileList({
             success(res) {
@@ -626,6 +637,7 @@ export default class File extends Component {
     }
 
     goFileChat = value => {
+        const {dispatch} = this.props
         let obj = {
             id: value.id,
             actionType: "file",
@@ -990,9 +1002,6 @@ export default class File extends Component {
         Taro.showToast({ icon: "loading", title: `正在上传...` });
         // 统一上传
         let promise = [];
-        console.log("===============================");
-
-
 
         //开发者服务器访问接口，微信服务器通过这个接口上传文件到开发者服务器
         for (var i = 0; i < choice_image_temp_file_paths.length; i++) {
@@ -1187,19 +1196,20 @@ export default class File extends Component {
     }
     render() {
 
-        const { isShowBoardList, header_folder_name, isShowChoiceFolder, uploadNowList } = this.props
-        const { is_tips_longpress_file, choice_image_temp_file_paths = [], makePho, file_list_state, upload_sheet_list, uplaodAuto, isDeleteMenuOnclick, selectFiles, deleteAuto } = this.state
+        const { isShowBoardList, header_folder_name, isShowChoiceFolder, uploadNowList,fileListTotleString } = this.props
+        const { is_tips_longpress_file, choice_image_temp_file_paths = [], makePho, file_list_state, uplaodAuto, isDeleteMenuOnclick, selectFiles, deleteAuto } = this.state
 
         /**
          * can remove
          */
         const enabledDelete = (deleteAuto || !!uploadNowList.length)
         return (
-            <View className={indexStyles.index} >
+            <View className={indexStyles.index}>
+                <View className={indexStyles.bgView}>
                 {
                     isShowBoardList === true ?
 
-                        <BoardFile closeBoardList={() => this.choiceBoard(false)} selectedBoardFile={(org_id, board_id, folder_id) => this.getFilePage(org_id, board_id, folder_id)} />
+                        <BoardFile header_folder_name={header_folder_name} closeBoardList={() => this.choiceBoard(false)} selectedBoardFile={(org_id, board_id, folder_id) => this.getFilePage(org_id, board_id, folder_id)} />
                         : ''
                 }
                 {
@@ -1219,15 +1229,14 @@ export default class File extends Component {
 
                         {
                             !isDeleteMenuOnclick && <View className={indexStyles.files_album_camera_view_style}>
-                                 <View className={indexStyles.files_album_camera_button_style} onClick= {this.goSearchFile}>
-                                     <Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style} ${indexStyles.filesSearch_style}`}>&#xe643;</Text>
-                                 </View>
-                                <View className={`${indexStyles.files_album_camera_button_style} ${enabledDelete ? '' : indexStyles.files_unused_button_style}`} onClick={this.showDeleteView.bind(this)}>
-                                    <Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe845;</Text>
+                                <View className={indexStyles.files_album_camera_button_style} onClick= {this.goSearchFile}>
+                                    <Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style} ${indexStyles.filesSearch_style}`}>&#xe643;</Text>
                                 </View>
-
+                                <View className={`${indexStyles.files_album_camera_button_style} ${enabledDelete ? '' : indexStyles.files_unused_button_style}`} onClick={this.showDeleteView.bind(this)}>
+                                    <Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe84a;</Text>
+                                </View>
                                 <View className={`${indexStyles.files_album_camera_button_style} ${uplaodAuto ? '' : indexStyles.files_unused_button_style}`} onClick={this.judgeIsSelectProject.bind(this)}>
-                                    <Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_camera_icon_style}`}>&#xe84b;</Text>
+                                    <Text className={`${globalStyle.global_iconfont} ${indexStyles.files_album_upload_icon_style}`}>&#xe85c;</Text>
                                 </View>
                             </View>
                         }
@@ -1243,7 +1252,7 @@ export default class File extends Component {
                                 return value.id == currentValue.id && value.type == currentValue.type
                             });
                             return (
-                                <View className={indexStyles.lattice_style} onClick={this.goFileDetails.bind(this, value, value.file_name)} onLongPress={this.longPress.bind(this, value)} key={key}>
+                                <View className={indexStyles.lattice_style} onClick={this.goFileDetails.bind(this, value, value.file_name)} onLongPress={this.longPress.bind(this, value)} key={key} hover-class={indexStyles.lattice_hover_style}>
                                     {
                                         visited != '1' ? (<View className={indexStyles.redcircle}></View>) : (null)
                                     }
@@ -1290,11 +1299,12 @@ export default class File extends Component {
                     is_tips_longpress_file === true ? (<View className={indexStyles.tips_view_style}>
                         <View className={indexStyles.tips_style}>
                             <View className={indexStyles.tips_cell_style}>
-                                <Text className={`${globalStyle.global_iconfont} ${indexStyles.tips_icon_style}`}>&#xe848;</Text>
-                                <View className={indexStyles.tips_text_style}>长按文件可以进入圈子交流</View>
-                                <View onClick={this.closeTips}>
+                                {/* <Text className={`${globalStyle.global_iconfont} ${indexStyles.tips_icon_style}`}>&#xe848;</Text> */}
+                                <View className={indexStyles.tips_text_style}>长按文件可以进入圈子交流/删除</View>
+                                {/* <View onClick={this.closeTips}>
                                     <Text className={`${globalStyle.global_iconfont} ${indexStyles.tips_close_style}`}>&#xe7fc;</Text>
-                                </View>
+                                </View> */}
+                                <View onClick={this.closeTips} className={indexStyles.tips_cell_read_style}>知道了</View>
                             </View>
                         </View>
                     </View>) : ''
@@ -1306,7 +1316,11 @@ export default class File extends Component {
                         <View className={indexStyles.file_delete_confirm_view} onClick={this.confirmDelete}>删除</View>
                     </View>
                 }
-
+                {
+                    file_list_state && file_list_state.length !== 0 && <View className={indexStyles.file_total_view}>{fileListTotleString}</View>
+                }
+                  
+                </View>
             </View >
         )
     }

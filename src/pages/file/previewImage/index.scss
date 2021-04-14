@@ -1,11 +1,70 @@
-.index {
+@import "../../../gloalSet/styles/constant";
+
+.comment_view {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    display: flex;
     background-color: white;
     justify-content: center;
     align-items: center;
     align-content: center;
+    flex-direction: column;
+}
+.customNavigation {
+    position: absolute;
+    left: 0;
+}
+.nav {
+    height: pxTrans(92);
+    background-color: #212434;
+}
+.content_image {
+    width: 100%;
+    height: 50%;
+}
+.comment_list_view {
+    width: 100%;
+    margin-top: pxTrans(20);
+    display: flex;
+    align-items: center;    
+    justify-content: center;
+    flex-direction: column;
+}
+.comment_list_item {
+    margin-top: pxTrans(15);
+    border-radius: 2em;
+    padding: pxTrans(10) pxTrans(15);
+    width: 80%;
+    background-color: #E6E8F1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.comment_list_item_first {
+    opacity: 0.5;
+}
+
+.comment_list_item_avatar {
+    height: pxTrans(30);
+    width: pxTrans(30);
+    border-radius: pxTrans(20);
+}
+.comment_list_item_text {
+    margin-left: pxTrans(10);
+    line-height: pxTrans(25);
+    display: -webkit-box ;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp:2;
+    width: pxTrans(300);
+    font-size: pxTrans(14);
+}
+.comment_list_item_text_out {
+    margin-right:pxTrans(10);
+    text-align: right !important;
 }

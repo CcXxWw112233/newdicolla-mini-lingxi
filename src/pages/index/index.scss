@@ -171,3 +171,7 @@
 page {
   height: 100%;
 }
+//取消button默认样式
+Button::after { 
+  border: none; 
+}

@@ -2,12 +2,25 @@
 
 .index {
     margin: 0;
-
+    background: white;
+    height: 100%;
+    width: 100%;
     // position: relative;
     .SearchAndMenu {
         z-index: 999 !important;
     }
-
+    .bgView {
+        background-color: white;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1
+    }
+    .content {
+        z-index: 9;
+    }
     .head_background {
         // height    : pxTrans(60);
         width           : 100%;
@@ -16,7 +29,7 @@
         top             : 0;
         // background: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.6) 70%);
         z-index         : 10;
-        background-color: rgba(255, 255, 255, 0.65);
+        background-color: white;
 
 
         .image_head_background {
@@ -55,7 +68,7 @@
                     text-overflow: ellipsis;
                     white-space  : nowrap;
                     font-size    : pxTrans(14);
-                    font-weight  : 600;
+                    font-weight  : 400;
                     line-height  : pxTrans(22);
                     color:#3F445D;
                 }
@@ -81,7 +94,6 @@
                     border-radius  : pxTrans(32);
                     margin-left    : pxTrans(10);
                     background     : rgba(255, 255, 255, 1);
-                    box-shadow     : 0 0 pxTrans(16) 0 rgba(0, 0, 0, 0.35);
                     opacity        : 0.98;
                     justify-content: center;
                     display        : flex;
@@ -89,6 +101,9 @@
 
                     .files_album_camera_icon_style {
                         font-size: pxTrans(20);
+                    }
+                    .files_album_upload_icon_style {
+                        font-size: pxTrans(16);
                     }
                     .filesSearch_style {
                         color: rgba(24, 144, 255, 1) !important;
@@ -107,11 +122,15 @@
         margin         : 0 auto;
         margin-top     : pxTrans(60);
 
+        .lattice_hover_style {
+            box-shadow     : 0 0 pxTrans(16) 0 rgba(0, 0, 0, 0.35);
+        }
+
         .lattice_style {
             flex         : 0 0 auto;
-            width        : 32.5%;
-            height       : pxTrans(120);
-            border       : 1px solid #fff;
+            width        : 32%;
+            height       : pxTrans(140);
+            border       : 5px solid #fff;
             background   : rgba(0, 0, 0, 0.09);
             border-radius: pxTrans(10);
 
@@ -121,7 +140,6 @@
                 display      : inline-block;
                 overflow     : hidden;
                 border-radius: pxTrans(10);
-
             }
 
             .redcircle {
@@ -136,33 +154,36 @@
 
             .other_icon_style {
                 width          : 100%;
-                height         : 100%;
                 text-align     : center;
-                justify-content: center;
-                display        : flex;
-                flex-direction : column;
+                // justify-content: center;
+                // display        : flex;
                 align-items    : center;
-
+                background-color: #F2F4F8;
+                border-radius: pxTrans(10);
+                padding-top: pxTrans(30);
                 .folder_type_icon {
-                    font-size: pxTrans(36);
-                    top      : pxTrans(22);
+                    font-size: pxTrans(50);
                     color    : rgba(0, 0, 0, 0.25);
                 }
 
                 .other_name_style {
+                    position          : relative;
+                    margin-top        : pxTrans(20);
                     max-height        : pxTrans(40);
                     font-size         : pxTrans(12);
                     font-weight       : 400;
-                    color             : rgba(0, 0, 0, 0.45);
-                    line-height       : pxTrans(20);
-                    margin            : 0 pxTrans(10) 0 pxTrans(10);
-                    overflow          : hidden;
+                    background-color  : #D1D5E4;
+                    color             : #212434;
+                    line-height       : pxTrans(32);
+                    white-space       : nowrap;
                     text-overflow     : ellipsis;
+                    overflow          : hidden;
                     word-break        : break-all;
-                    -webkit-box-orient: vertical;
-                    -webkit-line-clamp: 2;
+                    text-align        : center;
+                    height            : pxTrans(32);
+                    padding           : 0 pxTrans(10);
+                    // border-radius     : 0 0 pxTrans(10) pxTrans(10);
                 }
-
             }
 
             .unread_red {
@@ -212,17 +233,22 @@
         right          : 0;
 
         .tips_style {
-            height         : pxTrans(40);
+            position       : fixed;
+            bottom         : 0;
+            height         : pxTrans(48);
+            line-height    : pxTrans(48);
             display        : flex;
-            align-items    : center;
-            width          : pxTrans(250);
+            padding        : 0 pxTrans(16);
+            left           : 0;
+            width          : 100%;
             background     : rgba(255, 255, 255, 1);
-            box-shadow     : 0px pxTrans(4) pxTrans(12) 0px rgba(0, 0, 0, 0.15);
+            // box-shadow     : 0px pxTrans(4) pxTrans(12) 0px rgba(0, 0, 0, 0.15);
             border-radius  : pxTrans(4);
-            justify-content: center;
-
+            // justify-content: center;
+            background-color: #9EA6C2;
             .tips_cell_style {
                 display: flex;
+                flex-direction: row;
 
                 .tips_icon_style {
                     font-size: pxTrans(14);
@@ -233,14 +259,26 @@
                 .tips_text_style {
                     font-size  : pxTrans(14);
                     font-weight: 400;
-                    color      : rgba(0, 0, 0, 0.65);
-                    line-height: pxTrans(22);
+                    line-height: pxTrans(48);
+                    color      : white;
                 }
 
                 .tips_close_style {
                     font-size: pxTrans(16);
                     color    : rgba(0, 0, 0, 1);
                     margin   : pxTrans(6);
+                }
+                .tips_cell_read_style {
+                    position: absolute;
+                    right: pxTrans(50);
+                    background: linear-gradient(270deg, #4FADFF 0%, #4790FF 100%);
+                    border-radius: pxTrans(16);
+                    top: pxTrans(8);
+                    height      : pxTrans(32);
+                    line-height: pxTrans(32);
+                    width: pxTrans(72);
+                    color: white;
+                    text-align: center;
                 }
             }
         }
@@ -277,4 +315,13 @@
             color           : white;
         }
     }
+  
+}
+.file_total_view {
+    font-size: pxTrans(14);
+    color: #212434;
+    line-height: pxTrans(40);
+    margin: pxTrans(15) 0;
+    width: 100%;
+    text-align: center;
 }

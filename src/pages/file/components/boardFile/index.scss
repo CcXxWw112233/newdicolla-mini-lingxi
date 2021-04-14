@@ -2,16 +2,17 @@
 
 .choice_board_file_style {
     width         : 100%;
-    height        : 100%;
+    // max-height    : 75%;
     position      : fixed;
-    top           : 0;
+    top           : pxTrans(45);
     left          : 0;
     z-index       : 9999;
     overflow      : auto;
-    background    : rgba(0, 0, 0, .8);
-    color         : rgba(255, 255, 255, 1);
-    padding-bottom: pxTrans(50);
-
+    background    : white;
+    color         : #575C75;
+    display: flex;
+    flex-direction: column;
+    box-shadow     : 0px pxTrans(4) pxTrans(12) 0px rgba(0, 0, 0, 0.15);
 
     .whole_file_style {
         margin-top: pxTrans(20);
@@ -19,22 +20,32 @@
         height    : pxTrans(50);
         display   : flex;
         z-index   : 101;
-        background: rgba(100, 100, 100, 0.9);
+        background: white;
 
+        .whole_file_hear_selected_style {
+            color: #5A86F5 !important;
+        }
+        
         .whole_file_hear_style {
             display    : flex;
             align-items: center;
             margin-left: pxTrans(18);
-
+            font-size  : pxTrans(16);
             .folder_Path_icon {
                 font-size: pxTrans(20);
             }
         }
     }
-
+    .filter_board_list {
+        max-height       : pxTrans(450);
+    }
     .board_item_style {
         width     : 100%;
         min-height: pxTrans(50);
+
+        .board_item_selected_cell_style {
+            color: #5A86F5 !important;
+        }
 
         .board_item_cell_style {
             height        : 100%;
@@ -51,8 +62,7 @@
 
             .board_item_name {
                 // height     : pxTrans(26);
-                font-size  : pxTrans(18);
-                font-weight: 600;
+                font-size  : pxTrans(16);
                 line-height: pxTrans(26);
                 max-width  : pxTrans(500);
                 padding    : pxTrans(5) 0 pxTrans(5) 0;
@@ -109,5 +119,18 @@
             }
         }
     }
-
+    .board_bottom_style {
+        width : 100%;
+        height: pxTrans(50);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        justify-items: center;
+    }
+    .board_bottom_line_style {
+        width: pxTrans(40);
+        height: pxTrans(4);
+        background: #D1D5E4;
+        border-radius: pxTrans(2);
+    }
 }

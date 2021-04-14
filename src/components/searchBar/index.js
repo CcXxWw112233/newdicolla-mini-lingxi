@@ -16,7 +16,6 @@ export default class Authorize extends Component {
 }
   // 监控是否输入
   startPrint = e => {
-    console.log("开始输入",e)
     if(e.detail.value.length > 0) {
       this.setState({
         isShowDeleteIcon:true,

@@ -81,6 +81,8 @@
   }
 }
 .fileCommentHeader{
+  display: flex;
+  justify-content: center;
   position: relative;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -112,6 +114,7 @@
     width: 112rpx;
     height: 112rpx;
     margin-right: 40px;
+    border-radius: 10rpx;
   }
 }
 .fileDetailTitle{
@@ -121,13 +124,16 @@
   white-space: nowrap;
 }
 .showDetailBtn{
-  display: inline-block;
+  // display: inline-block;
   position: absolute;
-  right: 38px;
-  top:24px;
+  right: pxTrans(15);
+  height: pxTrans(32);
+  line-height: pxTrans(32);
+
+  top:pxTrans(25);
   // bottom: 40px;
   color: #fff;
   background-color: #1890FF;
-  border-radius: 8px;
-  padding: 8px 20px;
+  border-radius: pxTrans(16);
+  padding: 0 pxTrans(20);
 }
