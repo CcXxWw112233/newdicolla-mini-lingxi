@@ -1304,7 +1304,7 @@ export default class File extends Component {
                         <View className={indexStyles.tips_style}>
                             <View className={indexStyles.tips_cell_style}>
                                 {/* <Text className={`${globalStyle.global_iconfont} ${indexStyles.tips_icon_style}`}>&#xe848;</Text> */}
-                                <View className={indexStyles.tips_text_style}>长按文件可以进入圈子交流/删除</View>
+                                <View className={indexStyles.tips_text_style}>长按文件可以进行评价/删除</View>
                                 {/* <View onClick={this.closeTips}>
                                     <Text className={`${globalStyle.global_iconfont} ${indexStyles.tips_close_style}`}>&#xe7fc;</Text>
                                 </View> */}
