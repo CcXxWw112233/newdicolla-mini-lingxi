@@ -20,7 +20,7 @@ export default class Login extends Component {
   }
   state = {
     isMobile: true,     //是否为手机类型
-    isCoded : true,     //是否点击过发送验证码或者重新发送
+    isCoded : false,     //是否点击过发送验证码或者重新发送
     showCode: true,       //是否验证码登陆
     user: '',
     pswd: '',
