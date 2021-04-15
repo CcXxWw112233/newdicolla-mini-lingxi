@@ -6,6 +6,7 @@ import { connect } from '@tarojs/redux'
 import { filterFileFormatType } from './../../../utils/util';
 import { getOrgIdByBoardId, setBoardIdStorage, setRequestHeaderBaseInfo, judgeJurisdictionProject } from '../../../utils/basicFunction'
 import { BASE_URL, API_BOARD, PROJECT_FILES_FILE_DELETE, PROJECT_FILES_FILE_DOWNLOAD } from "../../../gloalSet/js/constant";
+import NoDataSvg from "../../../asset/nodata.svg";
 
 import SearchBar from '../../../components/searchBar'
 @connect(({
@@ -160,19 +161,20 @@ export default class nowOpen extends Component {
   }
    //预览文件详情
    goFileDetails = (value, fileName) => {
-
-    const { isDeleteMenuOnclick, downLoadAuto } = this.state;
-    console.log(isDeleteMenuOnclick)
-    if (isDeleteMenuOnclick) {
-        this.selectDeleteFile(value)
-        return;
-    }
-
     Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
     const { id, board_id, org_id } = value
     const { dispatch } = this.props
     setBoardIdStorage(board_id)
     const fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
+    const img_type_arr = ['.bmp', '.jpg', '.png', '.gif',]  //文件格式
+    // 判断是否是图片
+    if(img_type_arr.indexOf(fileType.toLowerCase()) != -1) {
+        console.log('图片')
+        Taro.navigateTo({
+            url: '/pages/file/previewImage/index?imageData=' + JSON.stringify(value),
+        })
+        return;
+    }
     const parameter = {
         board_id,
         file_ids: id,
@@ -297,9 +299,11 @@ goFileChat = value => {
       <View className={`${indexStyles.index}`} >
         <SearchBar searchMenuClick={(value) => this.searchMenuClick(value)} cancelSearchMenuClick={(value) => this.cancelSearchMenuClick(value)}/>
         <View className={indexStyles.placeView}></View>
+        {
+          search_file_list && search_file_list.length > 0 ? (
         <ScrollView className={indexStyles.search_file_list_view} scrollY={true} >
         {
-         search_file_list && search_file_list.map((value, key) => {
+          search_file_list.map((value, key) => {
           const fileType = filterFileFormatType(value.file_name);
           const { thumbnail_url, msg_ids, visited } = value
            return (
@@ -321,7 +325,15 @@ goFileChat = value => {
            )
          })
         }
-        </ScrollView>
+        </ScrollView>) : (
+          
+            <View className={indexStyles.noDataView}>
+                <Image className={indexStyles.noDataImage} src={NoDataSvg}></Image>
+                <View className={indexStyles.noDataText}>未找到符合条件的文件</View>
+            </View> 
+        )}
+        
+       
       </View>
     )
   }

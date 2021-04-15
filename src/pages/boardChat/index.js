@@ -8,6 +8,7 @@ import { isPlainObject, filterListAuth } from "./../../utils/util";
 import { isApiResponseOk } from "../../utils/request";
 import { getImHistory, getAllIMTeamList } from "../../services/im";
 import SearchBar from '../../components/searchBar'
+import NoDataSvg from "../../asset/nodata.svg";
 
 
 @connect(
@@ -236,7 +237,7 @@ export default class BoardChat extends Component {
 
       if(value) {
         let new_chat_list =  chatList.filter(function(item){
-          return item.board_name.indexOf(value) != -1;
+          return item.board_name && item.board_name.indexOf(value) != -1;
         }); 
         dispatch({
           type: "im/updateStateFieldByCover",
@@ -659,48 +660,60 @@ export default class BoardChat extends Component {
         /> */}
         <SearchBar searchMenuClick={(value) => this.searchMenuClick(value)} cancelSearchMenuClick={(value) => this.cancelSearchMenuClick(value)}/>
         <View className={indexStyles.placeView}></View>
-        {listArray.map((value, key) => {
-          const {
-            board_id,
-            board_name,
-            im_id,
-            org_name,
-            users,
-            lastMsg,
-            unread,
-            childs = [],
-            apns,
-            name,
-            subUnread
-          } = value;
-          let _math = Math.random() * 100000 + 1;
-          return (
-            <GroupItem
-              key={_math}
-              taroKey={_math}
-              data={value}
-              board_id={board_id}
-              org_name={org_name}
-              im_id={im_id}
-              name={board_name || name}
-              avatarList={this.genAvatarList(users)}
-              lastMsg={this.genLastMsg(lastMsg, value)}
-              newsNum={+unread + this.getSubUnread(value)}
-              apns={apns}
-              userid={userUID}
-              showNewsDot={this.isShouldShowNewDot(
-                unread,
-                childs.map(i => i.unread)
-              )}
-              onClickedGroupItem={this.hanldClickedGroupItem}
+       {
+         listArray && listArray.length > 0 ? (
+          <View>
+          {listArray.map((value, key) => {
+            const {
+              board_id,
+              board_name,
+              im_id,
+              org_name,
+              users,
+              lastMsg,
+              unread,
+              childs = [],
+              apns,
+              name,
+              subUnread
+            } = value;
+            let _math = Math.random() * 100000 + 1;
+            return (
+              <GroupItem
+                key={_math}
+                taroKey={_math}
+                data={value}
+                board_id={board_id}
+                org_name={org_name}
+                im_id={im_id}
+                name={board_name || name}
+                avatarList={this.genAvatarList(users)}
+                lastMsg={this.genLastMsg(lastMsg, value)}
+                newsNum={+unread + this.getSubUnread(value)}
+                apns={apns}
+                userid={userUID}
+                showNewsDot={this.isShouldShowNewDot(
+                  unread,
+                  childs.map(i => i.unread)
+                )}
+                onClickedGroupItem={this.hanldClickedGroupItem}
 
-            // isExpand={isShouldExpandSubGroup}
-            // onExpandChange={this.handleExpandSubGroupChange}
-            // isSubGroup={false}
-            // isShouldShowExpandOpertor={childs.length}
-            />
-          );
-        })}
+              // isExpand={isShouldExpandSubGroup}
+              // onExpandChange={this.handleExpandSubGroupChange}
+              // isSubGroup={false}
+              // isShouldShowExpandOpertor={childs.length}
+              />
+            );
+          })}
+         </View>
+         ) :(
+          <View className={indexStyles.noDataView}>
+            <Image className={indexStyles.noDataImage} src={NoDataSvg}></Image>
+            <View className={indexStyles.noDataText}>未找到符合条件的项目圈子</View>
+          </View>
+         )
+       } 
+        
       </View>
     );
   }

@@ -7,8 +7,8 @@ import im from '../../../../models/im'
 import TreeFile from './TreeFile'
 import { getOrgIdByBoardId, setBoardIdStorage, getOrgName } from '../../../../utils/basicFunction'
 
-@connect(({ file: { folder_tree }, board: { v2_board_list, }, my: { org_list } }) => ({
-    folder_tree, v2_board_list, org_list
+@connect(({ file: { folder_tree,current_selection_board_id }, board: { v2_board_list, }, my: { org_list } }) => ({
+    folder_tree, v2_board_list, org_list,current_selection_board_id
 }))
 export default class BoardFile extends Component {
 
@@ -42,7 +42,6 @@ export default class BoardFile extends Component {
         this.props.selectedBoardFile(org_id, board_id, file_id)
         const { all_file_text } = this.state
         const titleText = value === all_file_text ? all_file_text : value.board_name
-
         Promise.resolve(
             dispatch({
                 type: 'file/updateDatas',
@@ -101,8 +100,7 @@ export default class BoardFile extends Component {
     }
     render() {
         const { all_file_text } = this.state
-        const { v2_board_list, org_list,header_folder_name } = this.props
-
+        const { v2_board_list, org_list,header_folder_name,current_selection_board_id } = this.props
         //根据org_id把org_list合并到v2_board_list
         org_list.forEach(function (o, d) {
             for (var k in o) {
@@ -140,7 +138,7 @@ export default class BoardFile extends Component {
                         return (
                             <View className={indexStyles.board_item_style} key={key} hoverClass={indexStyles.board_item_hover_style} onClick={() => this.selectedBoardItem(org_id, item.board_id, '', item)}>
 
-                                <View className={`${indexStyles.board_item_cell_style} ${header_folder_name == item.board_name ? indexStyles.board_item_selected_cell_style:''}`}>
+                                <View className={`${indexStyles.board_item_cell_style} ${current_selection_board_id == item.board_id ? indexStyles.board_item_selected_cell_style:''}`}>
 
                                     <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_icon}`}>&#xe662;</Text>
 

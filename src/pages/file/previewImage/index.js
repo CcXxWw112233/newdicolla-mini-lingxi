@@ -4,7 +4,7 @@ import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
 import SearchBar from '../../../components/searchBar'
-import { getFileInfo, getFileComment, setFileComment } from '../../../services/file/index'
+import { getFileInfo, getFileComment,getDownloadUrl,setFileComment } from '../../../services/file/index'
 import { transformTime } from '../../../utils/util'
 import CustomNavigation from "../../acceptInvitation/components/CustomNavigation.js";
 import {  PROJECT_FILES_FILE_DOWNLOAD,PROJECT_FILES_FILE_DELETE } from "../../../gloalSet/js/constant";
@@ -31,11 +31,36 @@ export default class nowOpen extends Component {
     current_custom_comment:[]
   }
   componentDidMount() {
+    const currentImage = JSON.parse(this.$router.params.imageData)
     this.setState({
-      currentImage:JSON.parse(this.$router.params.imageData)
+      currentImage:currentImage
     },()=>{
       this.getCommentList()
     })
+    console.log(currentImage)
+//     board_id: "1376790997182320640"
+// file_ids: "1377174030129434624"
+// _organization_id: "1369188029532606464"
+    var parameter = {
+      board_id:currentImage.board_id,
+      file_ids: currentImage.id,
+      _organization_id: currentImage.org_id,
+    }
+    getDownloadUrl(parameter).then(res=>{
+      if(res.data[0]) {
+        this.setState({
+          currentImageUrl:res.data[0]
+        })
+      }  else {
+        Taro.showToast({
+          title: '网络错误,请稍后再试',
+          icon: 'none',
+          duration: 2000
+        })        
+      }
+     
+    })
+
   }
   componentDidShow() {
     this.setState({
@@ -67,6 +92,7 @@ export default class nowOpen extends Component {
         let new_list = list.filter(item=>{
           return item.text.length > 0
         })
+        
         this.setState({
           current_custom_comment: new_list.slice(-2)
         })
@@ -322,25 +348,27 @@ export default class nowOpen extends Component {
       })
   }, 50)
  }
-
+//  imageError = e => {
+//    console.log('imageError',e,this.state.currentImage)
+//  }
   render() {
-    const {currentImage,current_custom_comment=[]} = this.state;
+    const {currentImage,current_custom_comment=[],currentImageUrl} = this.state;
     return (
       <View className={`${indexStyles.index}`} >
         <CustomNavigation  className={indexStyles.customNavigation} backIcon='arrow_icon' title={currentImage.file_name} pop = 'previous' bgColor='rgba(33, 36, 52, 0.65)'/>
         <View className={indexStyles.comment_view}>
-          <Image className={indexStyles.content_image} src={currentImage.thumbnail_url} onLongPress={this.onLongClick.bind(this)} mode='aspectFit'></Image>
+          <Image className={indexStyles.content_image} src={currentImageUrl} onLongPress={this.onLongClick.bind(this)} mode='aspectFit'></Image>
           <View className={indexStyles.comment_list_view}>
             {
               current_custom_comment && current_custom_comment.map((item,key)=> {
                 return   item.flow == 'out' ? (
                   <View className={`${indexStyles.comment_list_item} ${key == 0 ? indexStyles.comment_list_item_first:''}`} key={key} onClick={this.goFileChat}>
                     <View className={`${indexStyles.comment_list_item_text} ${indexStyles.comment_list_item_text_out}`} >{item.text}</View>
-                    <Image className={indexStyles.comment_list_item_avatar} src='https://newdi-test-public.oss-cn-beijing.aliyuncs.com/2021-01-08/f352cc3b98b0438b8544d4f07a778f7d.jpg'></Image>
+                    <Image onError={this.imageError} className={indexStyles.comment_list_item_avatar} src={item.avatar}></Image>
                   </View>
                 ):(
                   <View className={`${indexStyles.comment_list_item} ${key == 0 ? indexStyles.comment_list_item_first:''}`} key={key} onClick={this.goFileChat}>
-                    <Image className={indexStyles.comment_list_item_avatar}  src='https://newdi-test-public.oss-cn-beijing.aliyuncs.com/2021-01-08/f352cc3b98b0438b8544d4f07a778f7d.jpg'></Image>
+                    <Image onError={this.imageError} className={indexStyles.comment_list_item_avatar}  src={item.avatar}></Image>
                     <View className={indexStyles.comment_list_item_text}>{item.text}</View>
                   </View>
                 )

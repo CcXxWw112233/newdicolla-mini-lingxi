@@ -28,17 +28,17 @@ class Index extends Component {
       {
         title: "日历清单",
         subTitle: "灵巧清晰管理项目任务",
-        imgUrl: "https://dian-lingxi-public.oss-cn-beijing.aliyuncs.com/common/1242739187501895680.png"
+        imgUrl: "https://dian-lingxi-public.oss-cn-beijing.aliyuncs.com/common/guide-04.png"
       },
       {
         title: "项目圈",
         subTitle: "高效专注地讨论项目事项",
-        imgUrl: "https://dian-lingxi-public.oss-cn-beijing.aliyuncs.com/common/1242739259660701696.png"
+        imgUrl: "https://dian-lingxi-public.oss-cn-beijing.aliyuncs.com/common/guide-06.png"
       },
       {
         title: "文件",
         subTitle: "随时查阅圈评项目文件",
-        imgUrl: "https://dian-lingxi-public.oss-cn-beijing.aliyuncs.com/common/1242739366732894208.png"
+        imgUrl: "https://dian-lingxi-public.oss-cn-beijing.aliyuncs.com/common/guide-02.png"
       }
     ]
   }
@@ -197,13 +197,13 @@ class Index extends Component {
             }
             </View>
           </View>
-          {/* </View> */}
-
+            <View className={styles.loginView}>
               <Button className={styles.startBtn} onClick={() => this.setState({ is_to_login: true })}>
                 登录/注册
               </Button>
               <View className={styles.startTips}>
                 登录后可使用上述所有功能
+              </View>
               </View>
             </View> : (
                 <View className={styles.container}>
