@@ -430,7 +430,6 @@ export default class File extends Component {
 
         //是否显示长按文件前往圈子的提示
         const tips_longpress_file = Taro.getStorageSync('tips_longpress_file')
-        debugger
         if (!tips_longpress_file) {
             Taro.setStorageSync('tips_longpress_file', 'tips_longpress_file')
                 this.setState({
@@ -438,6 +437,14 @@ export default class File extends Component {
                 })
         }
         setBoardIdStorage(board_id)
+
+        this.setState({
+            routeIsRead: true
+        })
+        var arr = [];
+        arr.push(value.msg_ids);
+        //把文件改为已读
+        this.readFile(dispatch, arr);
         /**
          * '.jpeg',  JPEG格式的图片taro <Image>标签暂不支持  
          */
@@ -483,13 +490,7 @@ export default class File extends Component {
 
 
 
-        this.setState({
-            routeIsRead: true
-        })
-        var arr = [];
-        arr.push(value.msg_ids);
-        //把文件改为已读
-        this.readFile(dispatch, arr);
+  
         // var { unvisited_file_list_count } = this.props;
         // if (unvisited_file_list_count > 0) {
 
@@ -1144,6 +1145,7 @@ export default class File extends Component {
         // const refreshData = refreshStr ? JSON.parse(refreshStr) : {}
         // const { org_id, boardid, folder_id } = refreshData;
         var that = this;
+        
         const { selectFiles } = this.state;
         if (selectFiles && selectFiles.length > 0) {
             Taro.showModal({
