@@ -35,8 +35,8 @@
     background-color:rgba(24, 144, 255, 1);
   }
   .bg_View {
-    position: absolute;
-    top: pxTrans(10);
+    position: fixed;
+    top: 0;
     height: 100%;
     left: 0;
     // display: flex;
