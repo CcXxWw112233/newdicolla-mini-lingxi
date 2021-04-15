@@ -1,24 +1,50 @@
+@import "../../gloalSet/styles/constant";
+
 .container{
   height: 100vh;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  // justify-content: center;
+  // align-items: center;
   .content{
-    width: 80%;
+    width: 100%;
     text-align: center;
     color: rgba(0, 0, 0, 0.45);
     & > View {
       margin-top: 40rpx;
     }
     button{
-      border-radius: 100rpx;
+      margin-top: pxTrans(70);
+      border-radius: pxTrans(24);
       color: #fff;
-      background-color: rgba(24, 144, 255, 1);
-      width: 100%;
+      height: pxTrans(48);
+      line-height: pxTrans(48);
+      font-size: pxTrans(16);
+      background: linear-gradient(270deg, #4FADFF 0%, #4790FF 100%);
+      width: pxTrans(200);
     }
     .meeting_alt{
-      width: 160rpx;
-      height: 160rpx;
+      margin-top: pxTrans(60);
+      width: 100%;
+      height: pxTrans(250);
     }
+  }
+  .topbg_View {
+    width: 100%;
+    height: pxTrans(100);
+    background-color:rgba(24, 144, 255, 1);
+  }
+  .bg_View {
+    position: absolute;
+    top: pxTrans(10);
+    height: 100%;
+    left: 0;
+    // display: flex;
+    align-items: center;
+    // justify-content: center;
+    // align-content: center;
+    width: 100%;
+    background-color: white;
+    border-radius: pxTrans(20) pxTrans(20) 0 0;
   }
 }
