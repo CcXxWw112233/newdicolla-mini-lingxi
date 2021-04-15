@@ -124,6 +124,7 @@
 
         .lattice_hover_style {
             box-shadow     : 0 0 pxTrans(16) 0 rgba(0, 0, 0, 0.35);
+            transform: scale(1.1, 1.1);
         }
 
         .lattice_style {

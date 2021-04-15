@@ -529,7 +529,7 @@ export default class Login extends Component {
               <View>
                 <Form  className={indexStyles.inputForm} onReset={this.formReset}>
                   <View className={`${indexStyles.login_item} `}>
-                    <Input type = 'number' onBlur={this.checkUser}  maxLength={11} onInput={this.inputUser} className={`${indexStyles.login_input}`} placeholderClass={`${indexStyles.login_input_placeholder}`} placeholder='请输入手机号' /> 
+                    <Input type = 'number' onBlur={this.checkUser} value={user}  maxLength={11} onInput={this.inputUser} className={`${indexStyles.login_input}`} placeholderClass={`${indexStyles.login_input_placeholder}`} placeholder='请输入手机号' /> 
                    {
                      user && <Button className={`${globalStyles.global_iconfont} ${indexStyles.deleteIcon}`} formType='reset'  >&#xe7fc;</Button>
                    } 
@@ -546,7 +546,7 @@ export default class Login extends Component {
           <View>
             <Form  className={indexStyles.inputForm} onReset={this.formReset}>
               <View className={`${indexStyles.login_item}`}>
-                <Input type = 'number' onBlur={this.checkUser}  maxLength={11} onInput={this.inputUser} className={`${indexStyles.login_input}`} placeholderClass={`${indexStyles.login_input_placeholder}`} placeholder='请输入手机号' />
+                <Input type = 'number' onBlur={this.checkUser} value={user}  maxLength={11} onInput={this.inputUser} className={`${indexStyles.login_input}`} placeholderClass={`${indexStyles.login_input_placeholder}`} placeholder='请输入手机号' />
                 {
                   user && <Button className={`${globalStyles.global_iconfont} ${indexStyles.deleteIcon}`} formType='reset'  >&#xe7fc;</Button>
                 } 

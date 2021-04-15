@@ -1252,6 +1252,7 @@ export default class File extends Component {
                                 return value.id == currentValue.id && value.type == currentValue.type
                             });
                             return (
+                                // 
                                 <View className={indexStyles.lattice_style} onClick={this.goFileDetails.bind(this, value, value.file_name)} onLongPress={this.longPress.bind(this, value)} key={key} hover-class={indexStyles.lattice_hover_style}>
                                     {
                                         visited != '1' ? (<View className={indexStyles.redcircle}></View>) : (null)
