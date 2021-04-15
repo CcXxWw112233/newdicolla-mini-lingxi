@@ -45,11 +45,9 @@ export default class Login extends Component {
     this.setState({
       sourcePage,
     })
-    // ios 12 系统以上支持验证码免输入 
+    // ios 12 系统以上支持验证码免输入  
     Taro.getSystemInfo({
       success: function (res) {
-        console.log('sssssssssss',res.system)
-        console.log(parseInt(res.system.split(' ')[1]))
         if(parseInt(res.system.split(' ')[1]) > 12 && parseInt(res.system.split(' ')[0]) == 'iOS') {
             this.setState({
               is_code_remit:true
