@@ -427,6 +427,16 @@ export default class File extends Component {
         Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
         const { id, board_id, org_id } = value
         const { dispatch } = this.props
+
+        //是否显示长按文件前往圈子的提示
+        const tips_longpress_file = Taro.getStorageSync('tips_longpress_file')
+        debugger
+        if (!tips_longpress_file) {
+            Taro.setStorageSync('tips_longpress_file', 'tips_longpress_file')
+                this.setState({
+                    is_tips_longpress_file: true
+                })
+        }
         setBoardIdStorage(board_id)
         /**
          * '.jpeg',  JPEG格式的图片taro <Image>标签暂不支持  
@@ -471,14 +481,7 @@ export default class File extends Component {
             },
         })
 
-        //是否显示长按文件前往圈子的提示
-        const tips_longpress_file = Taro.getStorageSync('tips_longpress_file')
-        if (!tips_longpress_file) {
-            Taro.setStorageSync('tips_longpress_file', 'tips_longpress_file')
-            this.setState({
-                is_tips_longpress_file: true
-            })
-        }
+
 
         this.setState({
             routeIsRead: true
