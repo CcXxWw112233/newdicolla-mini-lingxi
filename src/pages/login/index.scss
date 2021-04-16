@@ -241,11 +241,8 @@ page {
     opacity: 0;
     color:white;
     z-index: 100;
-    color: white !important;
-    caret-color: white !important;
-    text-indent: -999em; 
-    margin-left: -100%;
-
+    caret-color:white;
+    left: -100%;
 }
 .ipt_text_tips {
     margin-top: pxTrans(20);
