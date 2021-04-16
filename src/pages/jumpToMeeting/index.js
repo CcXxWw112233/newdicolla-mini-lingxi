@@ -33,11 +33,11 @@ export default class JumpToMeeting extends Component {
                 mode = 'aspectFit'
               />
               <View>
-                <Text>快速预订会议，会议资源管理</Text>
+                <Text> 快速预订会议，会议资源管理 </Text>
               </View>
             </View>
             <View>
-              <Button onClick={this.toMeeting}>前往会协宝</Button>
+              <Button onClick={this.toMeeting}> 前往会协宝 </Button>
             </View>
           </View>
         </View>
