@@ -87,7 +87,7 @@ export default class Calendar extends Component {
 
 
     getAllCard(newArr, boardidListArr) {
-        const { dispatch } = this.props;
+        const { dispatch,searchKey } = this.props;
         var arr = newArr;
         var newArr1 = arr.filter(function (item, index) {
             return item.length > 0;
@@ -97,6 +97,7 @@ export default class Calendar extends Component {
             type: "calendar/getNoScheCardList",
             payload: {
                 org_id: '0',
+                search_content:searchKey ? searchKey : '',
                 board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] : boardidListArr) : [],
                 query_milestone: newArr[0] && newArr[0].length > 0 ? (newArr[0][0] == 'all' ? ['all'] : newArr[0]) : isall,
                 query_card: newArr[1] && newArr[1].length > 0 ? (newArr[1][0] == 'all' ? ['all'] : newArr[1]) : isall,
@@ -191,7 +192,7 @@ export default class Calendar extends Component {
 
     // 清除所有的过滤选项
     clearAllChecked() {
-        const { dispatch } = this.props;
+        const { dispatch,searchKey } = this.props;
 
         var boardidList = [];
         var moldArr = [[], [], [], []];
@@ -204,6 +205,7 @@ export default class Calendar extends Component {
             type: "calendar/getNoScheCardList",
             payload: {
                 org_id: '0',
+                search_content:searchKey ? searchKey : '',
                 board_ids: [],
                 query_milestone: ['all'],
                 query_card: ['all'],
