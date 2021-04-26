@@ -53,7 +53,7 @@ class App extends Component {
       "pages/nowOpen/index",
       "pages/auccessJoin/index",
       "pages/qrCodeInvalid/index",
-      // "pages/taksDetails/index",
+      "pages/taksDetails/index",
       // "pages/labelSelection/index",
       "pages/tasksGroup/index",
       // "pages/executorsList/index",
@@ -127,13 +127,6 @@ class App extends Component {
           "index"
         ]
       },
-      {
-        "root": "pages/taksDetails",
-        "pages": [
-          "index"
-        ]
-      },
-
     ],
     permission: {
       "scope.userLocation": {
@@ -173,7 +166,7 @@ class App extends Component {
         },
         {
           pagePath: "pages/jumpToMeeting/index",
-          text: "订会",
+          text: "会协宝",
           iconPath: "./asset/tabBar/meeting.png",
           selectedIconPath: "./asset/tabBar/meeting_selected.png",
         },

@@ -428,30 +428,12 @@ export default class File extends Component {
         Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
         const { id, board_id, org_id } = value
         const { dispatch } = this.props
-
-        //是否显示长按文件前往圈子的提示
-        const tips_longpress_file = Taro.getStorageSync('tips_longpress_file')
-        if (!tips_longpress_file) {
-            Taro.setStorageSync('tips_longpress_file', 'tips_longpress_file')
-                this.setState({
-                    is_tips_longpress_file: true
-                })
-        }
         setBoardIdStorage(board_id)
-
-        this.setState({
-            routeIsRead: true
-        })
-        var arr = [];
-        arr.push(value.msg_ids);
-        //把文件改为已读
-        this.readFile(dispatch, arr);
         /**
-         * '.jpeg',  JPEG格式的图片taro <Image>标签暂不支持  
+         * '.jpeg', JPEG格式的图片taro <Image>标签暂不支持  
          */
-      
         const fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
-        const img_type_arr = ['.bmp', '.jpg', '.png', '.gif','.jpeg']  //文件格式
+        const img_type_arr = ['.bmp', '.jpg', '.png', '.gif',]  //文件格式
         // 判断是否是图片
         if(img_type_arr.indexOf(fileType.toLowerCase()) != -1) {
             console.log('图片')
@@ -489,9 +471,22 @@ export default class File extends Component {
             },
         })
 
+        //是否显示长按文件前往圈子的提示
+        const tips_longpress_file = Taro.getStorageSync('tips_longpress_file')
+        if (!tips_longpress_file) {
+            Taro.setStorageSync('tips_longpress_file', 'tips_longpress_file')
+            this.setState({
+                is_tips_longpress_file: true
+            })
+        }
 
-
-  
+        this.setState({
+            routeIsRead: true
+        })
+        var arr = [];
+        arr.push(value.msg_ids);
+        //把文件改为已读
+        this.readFile(dispatch, arr);
         // var { unvisited_file_list_count } = this.props;
         // if (unvisited_file_list_count > 0) {
 
@@ -1146,7 +1141,6 @@ export default class File extends Component {
         // const refreshData = refreshStr ? JSON.parse(refreshStr) : {}
         // const { org_id, boardid, folder_id } = refreshData;
         var that = this;
-        
         const { selectFiles } = this.state;
         if (selectFiles && selectFiles.length > 0) {
             Taro.showModal({
@@ -1259,6 +1253,7 @@ export default class File extends Component {
                                 return value.id == currentValue.id && value.type == currentValue.type
                             });
                             return (
+                                // 
                                 <View className={indexStyles.lattice_style} onClick={this.goFileDetails.bind(this, value, value.file_name)} onLongPress={this.longPress.bind(this, value)} key={key} hover-class={indexStyles.lattice_hover_style}>
                                     {
                                         visited != '1' ? (<View className={indexStyles.redcircle}></View>) : (null)
@@ -1308,7 +1303,7 @@ export default class File extends Component {
                         <View className={indexStyles.tips_style}>
                             <View className={indexStyles.tips_cell_style}>
                                 {/* <Text className={`${globalStyle.global_iconfont} ${indexStyles.tips_icon_style}`}>&#xe848;</Text> */}
-                                <View className={indexStyles.tips_text_style}>长按文件可以进行评价/删除</View>
+                                <View className={indexStyles.tips_text_style}>长按文件可以进入圈子交流/删除</View>
                                 {/* <View onClick={this.closeTips}>
                                     <Text className={`${globalStyle.global_iconfont} ${indexStyles.tips_close_style}`}>&#xe7fc;</Text>
                                 </View> */}

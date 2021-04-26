@@ -6,7 +6,6 @@ import { connect } from '@tarojs/redux'
 import { filterFileFormatType } from './../../../utils/util';
 import { getOrgIdByBoardId, setBoardIdStorage, setRequestHeaderBaseInfo, judgeJurisdictionProject } from '../../../utils/basicFunction'
 import { BASE_URL, API_BOARD, PROJECT_FILES_FILE_DELETE, PROJECT_FILES_FILE_DOWNLOAD } from "../../../gloalSet/js/constant";
-import NoDataSvg from "../../../asset/nodata.svg";
 
 import SearchBar from '../../../components/searchBar'
 @connect(({
@@ -161,6 +160,14 @@ export default class nowOpen extends Component {
   }
    //预览文件详情
    goFileDetails = (value, fileName) => {
+
+    const { isDeleteMenuOnclick, downLoadAuto } = this.state;
+    console.log(isDeleteMenuOnclick)
+    if (isDeleteMenuOnclick) {
+        this.selectDeleteFile(value)
+        return;
+    }
+
     Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
     const { id, board_id, org_id } = value
     const { dispatch } = this.props
@@ -299,11 +306,9 @@ goFileChat = value => {
       <View className={`${indexStyles.index}`} >
         <SearchBar searchMenuClick={(value) => this.searchMenuClick(value)} cancelSearchMenuClick={(value) => this.cancelSearchMenuClick(value)}/>
         <View className={indexStyles.placeView}></View>
-        {
-          search_file_list && search_file_list.length > 0 ? (
         <ScrollView className={indexStyles.search_file_list_view} scrollY={true} >
         {
-          search_file_list.map((value, key) => {
+         search_file_list && search_file_list.map((value, key) => {
           const fileType = filterFileFormatType(value.file_name);
           const { thumbnail_url, msg_ids, visited } = value
            return (
@@ -325,15 +330,7 @@ goFileChat = value => {
            )
          })
         }
-        </ScrollView>) : (
-          
-            <View className={indexStyles.noDataView}>
-                <Image className={indexStyles.noDataImage} src={NoDataSvg}></Image>
-                <View className={indexStyles.noDataText}>未找到符合条件的文件</View>
-            </View> 
-        )}
-        
-       
+        </ScrollView>
       </View>
     )
   }

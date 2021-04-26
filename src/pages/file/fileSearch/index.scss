@@ -68,26 +68,3 @@
     color: #fff;
     line-height: pxTrans(56);
 }
-
-.noDataView {
-    margin-top    : pxTrans(150);
-    display       : flex;
-    justify-content: center;
-    align-content: center;
-    flex-direction: column;
-    width         : 100%;
-}
-
-.noDataImage {
-    margin-left: pxTrans(85);
-    height     : pxTrans(200);
-    width      : pxTrans(200);
-}
-
-.noDataText {
-    width     : 100%;
-    text-align: center;
-    margin-top: pxTrans(20);
-    color     : #9EA6C2;
-    font-size : pxTrans(16);
-}

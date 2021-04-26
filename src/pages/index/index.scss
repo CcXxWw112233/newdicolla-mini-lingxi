@@ -53,7 +53,6 @@
   height: 75%;
 }
 .indicatorDots_View {
-  margin-top: -20px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -76,9 +75,7 @@
   width: pxTrans(40) !important;
   background-color: #6A9AFF !important;
 }
-.loginView {
-  margin-top: 100px;
-}
+
 .startBtn {
   height          : pxTrans(48);
   width           : 85%;
@@ -90,9 +87,7 @@
   margin-top      : 60px;
 }
 
-
 .startBtn_wx {
-  
   width           : 50%;
   height          : pxTrans(48);
   line-height     : pxTrans(48);
@@ -154,10 +149,10 @@
 .bottomLoginView {
   position: absolute;
   bottom: pxTrans(50);
-  width : 100%;
+  width: 100%;
 }
 .markTips {
-  margin-top: pxTrans(60);
+  margin-top: pxTrans(80);
   font-size: pxTrans(12);
   font-family: PingFangSC-Light, PingFang SC;
   font-weight: 300;
