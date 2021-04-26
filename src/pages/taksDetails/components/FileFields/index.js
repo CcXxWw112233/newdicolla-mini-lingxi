@@ -8,9 +8,12 @@ import {
   getOrgIdByBoardId,
   setBoardIdStorage,
   setRequestHeaderBaseInfo,
+  timestampToDateTimeLine,
 } from "../../../../utils/basicFunction";
 import { BASE_URL, API_BOARD } from "../../../../gloalSet/js/constant";
 import { isApiResponseOk, } from "../../../../utils/request";
+import iconStyle from '../../../../gloalSet/styles/lxicon.scss'
+import { filterFileFormatType } from './../../../../utils/util';
 
 @connect(({ tasks: { tasksDetailDatas = {} } }) => ({
   tasksDetailDatas,
@@ -543,30 +546,32 @@ export default class index extends Component {
         {/* <View className={indexStyles.list_item} onClick={this.gotoChangeChoiceInfoPage.bind(this,)}> */}
         <View className={indexStyles.list_item}>
           <View className={`${indexStyles.list_item_left_iconnext}`}>
-            <Text className={`${globalStyle.global_iconfont}`}>&#xe7f5;</Text>
+            <Text className={`${globalStyle.global_iconfont}`}>&#xe86b;</Text>
           </View>
 
           <View className={indexStyles.list_item_name}>{title}</View>
 
           <View
             className={`${indexStyles.list_item_iconnext}`}
-            onClick={this.deleteCardProperty}
+            onClick={this.deleteDescribeTasks}
           >
-            <Text className={`${globalStyle.global_iconfont}`}>&#xe63f;</Text>
+            <Text className={`${globalStyle.global_iconfont}`}>&#xe8b2;</Text>
           </View>
         </View>
 
         {field_value &&
           field_value.map((item, key) => {
-            const { id, file_resource_id, board_id, file_id, file_name } = item;
+            const { id, file_resource_id, board_id, file_id, file_name,create_time } = item;
+            var time = timestampToDateTimeLine(create_time,'YMDHM');
+            const fileType = filterFileFormatType(file_name);
+
             return (
               <View key={key} className={indexStyles.song_tasks_file}>
-                <View className={`${indexStyles.list_item_file_iconnext}`}>
-                  <Text className={`${globalStyle.global_iconfont}`}>
-                    &#xe669;
-                  </Text>
+                <View className={`${indexStyles.list_item_file_iconnext} ${indexStyles.list_item_file_mold_iconnext}`}>
+                 <View className={`${iconStyle.lxTaskicon}`} style={{'background': fileType}}></View>
+
                 </View>
-                <View
+                {/* <View
                   className={indexStyles.song_tasks_file_name}
                   onClick={() =>
                     this.fileOption(
@@ -579,11 +584,26 @@ export default class index extends Component {
                   }
                 >
                   {file_name}
+                </View> */}
+                <View className={indexStyles.list_item_file_center} onClick={()=>this.previewFile(file_resource_id, board_id, file_name)}>
+                    <Text className={indexStyles.list_item_file_name}>{file_name}</Text>
+                    <View className={indexStyles.list_item_file_center_timeView}>
+                        {/* <Image  className={indexStyles.list_item_file_center_photo}></Image> */}
+                        <View className={indexStyles.list_item_file_center_time}>{time}</View>
+                    </View>
+                </View>
+
+                <View className={indexStyles.list_item_file_iconnext} onClick={()=>this.deleteFile(id )}>
+                  <Text className={`${globalStyle.global_iconfont}`}>
+                  &#xe84a;
+                  </Text>
                 </View>
               </View>
             );
           })}
-
+        <View className={indexStyles.add_task_row} onClick={this.uploadDescribeTasksFile}>
+            <View className={indexStyles.add_item_name}>{dec_files && dec_files.length > 0 ? '继续上传':'上传文件'}</View>
+        </View>
         <AtActionSheet
           isOpened={this.state.file_isOpen}
           cancelText="取消"

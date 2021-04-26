@@ -157,6 +157,19 @@
         {
           "name": "pages/login/index",
           "pathName": "pages/login/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/taskCustomField/index",
+          "pathName": "pages/taskCustomField/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/chatDetail/components/inviteMember/index",
+          "pathName": "pages/chatDetail/components/inviteMember/index",
+          "query": "",
           "scene": null
         }
       ]

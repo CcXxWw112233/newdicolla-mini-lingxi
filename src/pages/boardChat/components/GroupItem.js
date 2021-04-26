@@ -6,6 +6,9 @@ import globalStyle from '../../../gloalSet/styles/globalStyles.scss'
 import Avatar from './Avatar';
 
 class GroupItem extends Component {
+  state = {
+    delBtnWidth:100
+  }
   handleClickedOperator = e => {
     if (e) e.stopPropagation();
     const { isExpand, onExpandChange } = this.props;
@@ -26,6 +29,7 @@ class GroupItem extends Component {
     }
     return false;
   }
+
   render() {
     const {
       board_id,
@@ -44,48 +48,50 @@ class GroupItem extends Component {
     } = this.props;
 
     return (
-      <View
-        className={styles.wrapper}
-        style={{
-          paddingLeft: isSubGroup ? '32px' : '17px',
-          paddingRight: isSubGroup ? '32px' : '17px'
-        }}
-      >
+      <View className={styles.index}>
         <View
-          className={styles.contentWrapper}
-          onClick={e => this.handleClickedGroupItem({ board_id, im_id }, e)}
-        >
-          <View className={styles.avatarWrapper}>
-            <Avatar
-              urlList={avatarList}
-              value={newsNum < 0 ? 0 : newsNum}
-              showDot={showNewsDot}
-            />
-          </View>
-          <View className={styles.groupInfoWrapper}>
-            <View className={styles.groupInfoTitleWrapper}>
-              <View className={styles.groupInfoTitleTitle}><Text className={data.mark ? globalStyle.global_itemMark : ""} style={{ backgroundColor: data.mark ? data.mark : "" }}></Text> {name}</View>
-              {org_name && <View className={styles.groupInfoTitleOrg}>{'#'}{org_name}</View>}
+          className={styles.wrapper}
+          style={{
+            paddingLeft: isSubGroup ? '32px' : '17px',
+            paddingRight: isSubGroup ? '32px' : '17px'
+          }}>
+          <View
+            className={styles.contentWrapper}
+            onClick={e => this.handleClickedGroupItem({ board_id, im_id }, e)}
+          >
+            <View className={styles.avatarWrapper}>
+              <Avatar
+                urlList={avatarList}
+                value={newsNum < 0 ? 0 : newsNum}
+                showDot={showNewsDot}
+              />
             </View>
-            <View className={styles.groupInfoLastMsg}>
-              {this.apnsAtMe(apns) && <Text className={styles.apnsAtMe}>[有人@我]</Text>} {lastMsg && lastMsg.replace(/<\/?[^>]*>/g, '\n')}
-            </View>
-          </View>
-          {!isSubGroup && isShouldShowExpandOpertor && (
-            <View
-              className={styles.operatorWrapper}
-              onClick={this.handleClickedOperator}
-            >
-              <View className={styles.operator}>
-                {isExpand ? (
-                  <AtIcon value="chevron-up" size="20" />
-                ) : (
-                    <AtIcon value="chevron-down" size="20" />
-                  )}
+            <View className={styles.groupInfoWrapper}>
+              <View className={styles.groupInfoTitleWrapper}>
+                <View className={styles.groupInfoTitleTitle}><Text className={data.mark ? globalStyle.global_itemMark : ""} style={{ backgroundColor: data.mark ? data.mark : "" }}></Text> {name}</View>
+                {org_name && <View className={styles.groupInfoTitleOrg}>{'#'}{org_name}</View>}
+              </View>
+              <View className={styles.groupInfoLastMsg}>
+                {this.apnsAtMe(apns) && <Text className={styles.apnsAtMe}>[有人@我]</Text>} {lastMsg && lastMsg.replace(/<\/?[^>]*>/g, '\n')}
               </View>
             </View>
-          )}
+            {!isSubGroup && isShouldShowExpandOpertor && (
+              <View
+                className={styles.operatorWrapper}
+                onClick={this.handleClickedOperator}
+              >
+                <View className={styles.operator}>
+                  {isExpand ? (
+                    <AtIcon value="chevron-up" size="20" />
+                  ) : (
+                      <AtIcon value="chevron-down" size="20" />
+                    )}
+                </View>
+              </View>
+            )}
+          </View>
         </View>
+        <View  className={styles.fileItem_innerDelete} onClick={this.deleteFile}>删除</View>
       </View>
     );
   }

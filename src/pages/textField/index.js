@@ -99,6 +99,7 @@ export default class textField extends Component {
                 <Input
                     className={indexStyles.list_item_detail}
                     placeholder='填写自定义字段'
+                    placeholderStyle='color:#BCC2D6'
                     value={field_value}
                     type={type == '8' ? 'number' : 'text'}
                     confirmType='完成'

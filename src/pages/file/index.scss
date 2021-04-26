@@ -163,8 +163,9 @@
                 border-radius: pxTrans(10);
                 padding-top: pxTrans(30);
                 .folder_type_icon {
-                    font-size: pxTrans(50);
-                    color    : rgba(0, 0, 0, 0.25);
+                    font-size: pxTrans(50) !important;
+    
+                    // color    : rgba(0, 0, 0, 0.25);
                 }
 
                 .other_name_style {

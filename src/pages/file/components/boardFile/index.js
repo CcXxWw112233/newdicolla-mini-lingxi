@@ -13,7 +13,7 @@ import { getOrgIdByBoardId, setBoardIdStorage, getOrgName } from '../../../../ut
 export default class BoardFile extends Component {
 
     state = {
-        all_file_text: '全部文件'
+        all_file_text: '全部项目'
     }
 
     componentDidMount() {
@@ -121,13 +121,13 @@ export default class BoardFile extends Component {
                 return item
             }
         })
-        const isSelectedAll = header_folder_name == '全部文件'
+        const isSelectedAll = header_folder_name == '全部项目'
         return (
             <View className={indexStyles.choice_board_file_style} >
                  <ScrollView className={indexStyles.filter_board_list} scrollY scrollWithAnimation>
                     <View className={indexStyles.whole_file_style}>
                         <View className={`${indexStyles.whole_file_hear_style} ${isSelectedAll ? indexStyles.whole_file_hear_selected_style:''}`} onClick={() => this.selectedBoardItem('0', '', '', all_file_text)}>
-                            <Text className={`${globalStyle.global_iconfont} ${indexStyles.folder_Path_icon}`}>&#xe662;</Text>
+                            <Text className={`${globalStyle.global_iconfont} ${indexStyles.folder_Path_icon}`}>&#xe899;</Text>
                             <View style={{ marginLeft: 10 + 'px', fontSize: 16 + 'px' }}>{all_file_text}</View>
                         </View>
                     </View>
@@ -140,7 +140,7 @@ export default class BoardFile extends Component {
 
                                 <View className={`${indexStyles.board_item_cell_style} ${current_selection_board_id == item.board_id ? indexStyles.board_item_selected_cell_style:''}`}>
 
-                                    <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_icon}`}>&#xe662;</Text>
+                                    <Text className={`${globalStyle.global_iconfont} ${indexStyles.board_item_icon}`}>&#xe899;</Text>
 
                                     <View className={indexStyles.board_item_name}>{item.board_name}</View>
                                     {

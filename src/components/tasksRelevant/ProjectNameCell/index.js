@@ -6,15 +6,17 @@ import Avatar from "../../avatar";
 import { connect } from "@tarojs/redux";
 import { isApiResponseOk, } from "../../../utils/request";
 import { getOrgIdByBoardId, } from '../../../utils/basicFunction'
-import { MilestoneCellPicer } from "../milestoneCellPicker";
-import { TaskGroupPicker } from "../taskGroupPicker";
+import { MilestoneCellView } from "../milestoneCellView";
+import { TaskGroupView } from "../taskGroupView";
 import { textField } from '../../../pages/textField'
 import { DateField } from '../../../pages/dateField'
 import { FieldSelection } from '../../../pages/fieldSelection'
 import { FieldPersonMultiple } from '../../../pages/fieldPersonMultiple'
-import { SingleChoicePicker } from '../SingleChoicePicker'
-import { FieldPersonSinglePicker } from '../FieldPersonSinglePicker'
+import { SingleChoiceView } from '../SingleChoiceView'
+import { FieldPersonSingleView } from '../FieldPersonSingleView'
 import { ExecutorsList } from '../../../pages/executorsList'
+import {selectPersonView} from '../../selectPersonView'
+
 
 @connect(
     ({
@@ -40,7 +42,11 @@ export default class ProjectNameCell extends Component {
         isFieldPersonSingle: true,
         isFieldSelectionShow: false,
         isFieldPersonMultipleShow: false,
-        isExecutorsListShow: false,
+        isExecutorsListShow: false,//负责人
+        isTaskGroupViewShow:false, //任务分组
+        isMilestoneCellViewShow:false,//里程碑
+        isSingleChoiceViewShow:false,//自定义字段 单选
+        isFieldPersonSingleViewShow:false,//自定义  单选成员
         milestoneList: [],
         tasksGroupList: [],
         fieldPersonSignleList: [],
@@ -48,88 +54,21 @@ export default class ProjectNameCell extends Component {
     };
 
     componentDidMount() {
-        const { type, data, tasksDetailDatas } = this.props;
-        const fieldSet = this.props.fieldSet || {};
-        const { member_selected_type, member_selected_range, } = fieldSet;
+        const {type} = this.props;
+        var that = this;
+        if(type == 2) {
+            setTimeout(function () {
+                that.getTasksGroupList()
 
-        if (type == 2) {
-            this.getTasksGroupList()
-        }
-        // if (member_selected_type === '1' || member_selected_type === 1) {  //单人
-        // if (isFieldPersonSingle) {
-        // if (member_selected_range === '2' || member_selected_range === 2) { //项目内成员
-        if (type == '12') {
-            if (member_selected_type === '1' || member_selected_type === 1) {
-                if (member_selected_range === '2' || member_selected_range === 2) {
-                    this.fieldPersonSingle();
-                } else if (member_selected_range === '1' || member_selected_range === 1) {
-                    this.getMemberAllList();
-                }
-            }
-        }
-        if (type == 4) {
-            this.getTaskMilestoneList()
+            }, 1500);
         }
     }
-    //单选项目内成员列表
-    fieldPersonSingle() {
-        let board_id = Taro.getStorageSync("tasks_detail_boardId");
-        const { dispatch, data } = this.props;
-        const item_id = this.props.item_id || "";
-
-        Promise.resolve(
-            dispatch({
-                type: 'board/getBoardDetail',
-                payload: {
-                    id: board_id,
-                }
-            })
-        ).then((res) => {
-            if (isApiResponseOk(res)) {
-                // Taro.navigateTo({
-                // url: `../../pages/fieldPersonSingle/index?contentId=${contentId}&executors=${JSON.stringify(
-                // data
-                // )}&item_id=${item_id}&executorsList=${JSON.stringify(res.data.data)}`,
-                // });
-                this.setState({
-                    fieldPersonSignleList: res.data.data
-                })
-            }
-        });
-    }
-
-    // 单选组织内成员
-    getMemberAllList() {
-        let board_id = Taro.getStorageSync("tasks_detail_boardId");
-        const { dispatch, data } = this.props;
-        const item_id = this.props.item_id || "";
-
-        Promise.resolve(
-            dispatch({
-                type: "my/getMemberAllList",
-                payload: {
-                    _organization_id: getOrgIdByBoardId(board_id),
-                },
-            })
-        ).then((res) => {
-            if (isApiResponseOk(res)) {
-                this.setState({
-                    fieldPersonSignleList: res.data.data
-                })
-                // Taro.navigateTo({
-                // url: `../../pages/fieldPersonSingle/index?contentId=${contentId}&executors=${JSON.stringify(
-                // data
-                // )}&item_id=${item_id}&executorsList=${JSON.stringify(res.data)}`,
-                // });
-            }
-        });
-
-    }
-
+   
     //获取任务分组列表
     getTasksGroupList = () => {
         let board_id = Taro.getStorageSync("tasks_detail_boardId");
-        const { dispatch, data } = this.props;
+        const { dispatch, data,tasksDetailDatas } = this.props;
+        const {list_ids = []} = tasksDetailDatas;
         Promise.resolve(
             dispatch({
                 type: "tasks/getCardList",
@@ -140,16 +79,19 @@ export default class ProjectNameCell extends Component {
         ).then((res) => {
             if (isApiResponseOk(res)) {
                 if (res.data && res.data.length > 0) {
-                    // Taro.navigateTo({
-                    // url: `../../pages/tasksGroup/index?contentId=${contentId}&listId=${list_id}`,
-                    // });
-
+                    res.data.forEach(item=>{
+                       if(item.list_id == list_ids[0]) {
+                        this.setState({
+                            currentTaskGroup: item.list_name,
+                        })
+                       }
+                    })
                     this.setState({
                         tasksGroupList: res.data,
                     })
                 } else {
                     // Taro.showToast({
-                    // title: '无分组',
+                    // title: '暂无分组可选',
                     // icon: 'none',
                     // duration: 2000
                     // })
@@ -160,7 +102,6 @@ export default class ProjectNameCell extends Component {
 
     // 获取里程碑列表
     getTaskMilestoneList = () => {
-
         const { dispatch, data, boardId, tasksDetailDatas = {} } = this.props;
         let board_id = Taro.getStorageSync("tasks_detail_boardId") || boardId;
         Promise.resolve(
@@ -173,29 +114,59 @@ export default class ProjectNameCell extends Component {
         ).then((res) => {
             if (isApiResponseOk(res)) {
                 if (res.data && res.data.length > 0) {
-                    // Taro.navigateTo({
-                    // url: `../../pages/milestoneList/index?contentId=${contentId}&milestoneId=${data.id}`,
-                    // });
                     this.setState({
                         milestoneList: res.data,
-                        milestoneId: data.id
+                        milestoneId: data.id,
+                        isMilestoneCellViewShow:true
                     })
-                } else {
-                    // Taro.showToast({
-                    // title: '没有里程碑可设置',
-                    // icon: 'none',
-                    // duration: 2000
-                    // })
+                }  else {
+                    Taro.showToast({
+                        title: '暂无里程碑可选',
+                        icon: 'none',
+                        duration: 2000
+                        })
                 }
             }
         });
     }
-
+    /**
+     * 前往选择执行人
+     * @param {*} value 
+     * @returns 
+     */
+     getExecutorsList = () => {
+        const { dispatch } = this.props;
+        let board_id = Taro.getStorageSync("tasks_detail_boardId");
+        Promise.resolve(
+            dispatch({
+                type: "tasks/getTaskExecutorsList",
+                payload: {
+                    board_id: board_id,
+                },
+            })
+        ).then((res) => {
+            if (isApiResponseOk(res)) {
+                // Taro.navigateTo({
+                //     url: `../../pages/executorsList/index?contentId=${contentId}&executors=${JSON.stringify(
+                //         data
+                //     )}`,
+                // });
+                this.setState({
+                    isExecutorsListShow: true
+                })
+            } else {
+                Taro.showToast({
+                    title: '无执行人可选',
+                    icon: 'none',
+                    duration: 2000
+                })
+            }
+        });
+     }
     gotoChangeChoiceInfoPage = (value) => {
         const { type, items, field_value, field_item_id, item_id, field_set, } = value;
         const { dispatch, tasksDetailDatas = {}, data, cardId, editAuth } = this.props;
         const { list_id, org_id, fields } = tasksDetailDatas;
-
         console.log(value);
         const {
             isFieldSelectionClick,
@@ -222,9 +193,8 @@ export default class ProjectNameCell extends Component {
             if (isTasksGroupClick) {
                 this.setState({
                     isTasksGroupClick: false,
+                    isTaskGroupViewShow:true
                 });
-
-
                 const that = this;
                 setTimeout(function () {
                     that.setState({
@@ -238,37 +208,7 @@ export default class ProjectNameCell extends Component {
                 this.setState({
                     isExecutorsListClick: false,
                 });
-                Promise.resolve(
-                    dispatch({
-                        type: "tasks/getTaskExecutorsList",
-                        payload: {
-                            board_id: board_id,
-                        },
-                    })
-                ).then((res) => {
-                    if (isApiResponseOk(res)) {
-                        // Taro.navigateTo({
-                        //     url: `../../pages/executorsList/index?contentId=${contentId}&executors=${JSON.stringify(
-                        //         data
-                        //     )}`,
-                        // });
-                        this.setState({
-                            isExecutorsListShow: true
-                        })
-                        // this.setState({
-                        //     dataArray: res.data,
-                        // })
-                        // console.log(this.state.dataArray);
-
-                    } else {
-                        Taro.showToast({
-                            title: '无执行人可选',
-                            icon: 'none',
-                            duration: 2000
-                        })
-                    }
-                });
-
+                this.getExecutorsList()
                 const that = this;
                 setTimeout(function () {
                     that.setState({
@@ -282,8 +222,7 @@ export default class ProjectNameCell extends Component {
                 this.setState({
                     isMilestoneListClick: false,
                 });
-                console.log(data.id);
-
+                this.getTaskMilestoneList()
                 const that = this;
                 setTimeout(function () {
                     that.setState({
@@ -320,9 +259,9 @@ export default class ProjectNameCell extends Component {
                             //         fields
                             //     )}&card_id=${cardId}`,
                             // });
-                            this.setState({
-                                isFieldSelectionShow: true
-                            })
+                            // this.setState({
+                            //     isFieldSelectionShow: true
+                            // })
                         } else {
                             Taro.showToast({
                                 title: '没有字段可选',
@@ -347,6 +286,9 @@ export default class ProjectNameCell extends Component {
             // items
             // )}&field_value=${field_value}&field_item_id=${field_item_id}`,
             // });
+            this.setState({
+                isSingleChoiceViewShow:true
+            })
         } else if (type === "8") {
             //日期
             // Taro.navigateTo({
@@ -380,22 +322,21 @@ export default class ProjectNameCell extends Component {
                         this.setState({
                             isFieldPersonSingle: false,
                         });
-                        // Promise.resolve(
-                        //     dispatch({
-                        //         type: 'board/getBoardDetail',
-                        //         payload: {
-                        //             id: board_id,
-                        //         }
-                        //     })
-                        // ).then((res) => {
-                        //     if (isApiResponseOk(res)) {
-                        //         Taro.navigateTo({
-                        //             url: `../../pages/fieldPersonSingle/index?contentId=${contentId}&executors=${JSON.stringify(
-                        //                 data
-                        //             )}&item_id=${item_id}&executorsList=${JSON.stringify(res.data.data)}`,
-                        //         });
-                        //     }
-                        // });
+                        Promise.resolve(
+                            dispatch({
+                                type: 'board/getBoardDetail',
+                                payload: {
+                                    id: board_id,
+                                }
+                            })
+                        ).then((res) => {
+                            if (isApiResponseOk(res)) {
+                                this.setState({
+                                    fieldPersonSignleList: res.data.data,
+                                    isFieldPersonSingleViewShow:true
+                                })
+                            }
+                        });
 
                         const that = this;
                         setTimeout(function () {
@@ -408,22 +349,21 @@ export default class ProjectNameCell extends Component {
                         this.setState({
                             isFieldPersonSingle: false,
                         });
-                        // Promise.resolve(
-                        //     dispatch({
-                        //         type: "my/getMemberAllList",
-                        //         payload: {
-                        //             _organization_id: getOrgIdByBoardId(board_id),
-                        //         },
-                        //     })
-                        // ).then((res) => {
-                        //     if (isApiResponseOk(res)) {
-                        //         Taro.navigateTo({
-                        //             url: `../../pages/fieldPersonSingle/index?contentId=${contentId}&executors=${JSON.stringify(
-                        //                 data
-                        //             )}&item_id=${item_id}&executorsList=${JSON.stringify(res.data)}`,
-                        //         });
-                        //     }
-                        // });
+                        Promise.resolve(
+                            dispatch({
+                                type: "my/getMemberAllList",
+                                payload: {
+                                    _organization_id: getOrgIdByBoardId(board_id),
+                                },
+                            })
+                        ).then((res) => {
+                            if (isApiResponseOk(res)) {
+                                this.setState({
+                                    fieldPersonSignleList: res.data.data,
+                                    isFieldPersonSingleViewShow:true
+                                })
+                            }
+                        });
 
                         const that = this;
                         setTimeout(function () {
@@ -451,11 +391,6 @@ export default class ProjectNameCell extends Component {
                             })
                         ).then((res) => {
                             if (isApiResponseOk(res)) {
-                                // Taro.navigateTo({
-                                //     url: `../../pages/fieldPersonMultiple/index?contentId=${contentId}&executors=${JSON.stringify(
-                                //         data
-                                //     )}&item_id=${item_id}&executorsList=${JSON.stringify(res.data.data)}`,
-                                // });
                                 this.setState({
                                     fieldPersonMultiplelist: res.data.data,
                                     isFieldPersonMultipleShow: true
@@ -485,18 +420,12 @@ export default class ProjectNameCell extends Component {
                             })
                         ).then((res) => {
                             if (isApiResponseOk(res)) {
-                                // Taro.navigateTo({
-                                //     url: `../../pages/fieldPersonMultiple/index?contentId=${contentId}&executors=${JSON.stringify(
-                                //         data
-                                //     )}&item_id=${item_id}&executorsList=${JSON.stringify(res.data)}`,
-                                // });
                                 this.setState({
                                     fieldPersonMultiplelist: res.data,
                                     isFieldPersonMultipleShow: true
                                 })
                             }
                         });
-
                         const that = this;
                         setTimeout(function () {
                             that.setState({
@@ -578,6 +507,9 @@ export default class ProjectNameCell extends Component {
         typeof this.props.onClickAction == "function" &&
             this.props.onClickAction();
     }
+    /**
+     * 自定义字段多选成员
+     */
     onClickFieldPersonMultiple() {
         this.setState({
             isFieldPersonMultipleShow: false
@@ -585,6 +517,9 @@ export default class ProjectNameCell extends Component {
         typeof this.props.onClickAction == "function" &&
             this.props.onClickAction();
     }
+    /**
+     * 负责人
+     */
     onClickExecutorsList() {
         this.setState({
             isExecutorsListShow: false
@@ -592,6 +527,59 @@ export default class ProjectNameCell extends Component {
         typeof this.props.onClickAction == "function" &&
             this.props.onClickAction();
     }
+    /**
+     * 任务分组
+     */
+    onClickTaskGroup() {
+        const {tasksGroupList} = this.state;
+        const { dispatch, data,tasksDetailDatas = {} } = this.props;
+        const {list_ids = []} = tasksDetailDatas;
+        tasksGroupList.forEach(item=>{
+            if(item.list_id == list_ids[0]) {
+             this.setState({
+                 currentTaskGroup: item.list_name,
+             })
+            }
+         })
+        this.setState({
+            isTaskGroupViewShow: false
+        })
+        typeof this.props.onClickAction == "function" &&
+            this.props.onClickAction();
+    }
+    /**
+     * 里程碑
+     */
+    onClickMilestone() {
+        this.setState({
+            isMilestoneCellViewShow: false
+        })
+        typeof this.props.onClickAction == "function" &&
+            this.props.onClickAction();
+    }
+    /**
+     * 自定义字段 单选
+     * @param {*} item_id 
+     */
+     onClickSingleChoice() {
+        this.setState({
+            isSingleChoiceViewShow: false
+        })
+        typeof this.props.onClickAction == "function" &&
+            this.props.onClickAction();
+     }
+     /**
+      * 自定义字段 单选成员
+      * @param {*} item_id 
+      */
+      onClickPersonSingle () {
+        this.setState({
+            isFieldPersonSingleViewShow: false
+        })
+        typeof this.props.onClickAction == "function" &&
+            this.props.onClickAction();
+      }
+
     deleteBoardFieldRelation = (item_id) => {
         const { dispatch, tasksDetailDatas } = this.props;
         const { fields = [] } = tasksDetailDatas;
@@ -613,13 +601,12 @@ export default class ProjectNameCell extends Component {
             },
         });
     };
-    clickSelectPicker() {
 
-    };
     render() {
         let contentId = Taro.getStorageSync("tasks_detail_contentId");
         const { tasksDetailDatas = {}, boardId, editAuth } = this.props;
-        const { list_id } = tasksDetailDatas;
+        const { list_ids=[] } = tasksDetailDatas;
+        const list_id = list_ids[0] || ''
         const title = this.props.title || "";
         const data = this.props.data || "";
         const type = this.props.type || "";
@@ -632,58 +619,63 @@ export default class ProjectNameCell extends Component {
         const cardId = this.props.cardId || {};
         const { member_selected_type, member_selected_range, date_field_code } = fieldSet;
         const { fields } = tasksDetailDatas;
-        const { milestoneList, milestoneId, tasksGroupList, tasksGroupId, fieldPersonSignleList, isFieldSelectionShow, fieldPersonMultiplelist, isFieldPersonMultipleShow, isExecutorsListShow } = this.state;
+        const { milestoneList, milestoneId,isSingleChoiceViewShow, currentTaskGroup,tasksGroupList,isTaskGroupViewShow, tasksGroupId, fieldPersonSignleList, isFieldSelectionShow, fieldPersonMultiplelist, isFieldPersonMultipleShow, isExecutorsListShow } = this.state;
         //左边icon
         let icon;
+        var placeText= '';
         if (type === "1") {
-            icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe6a8;</Text>;
+            icon = <Text className={`${globalStyle.global_iconfont}`} style={{color:'#5FA6FF',fontSize:'24px'}}>&#xe866;</Text>;
         } else if (type === "2") {
-            icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe6a7;</Text>;
+            icon = <Text className={`${globalStyle.global_iconfont}`} style={{color:'#5FA6FF',fontSize:'24px'}}>&#xe8b3;</Text>;
+            placeText = "选择分组";
         } else if (type === "3") {
-            icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe7ae;</Text>;
+            placeText = "指派负责人";
+            icon = <Text className={`${globalStyle.global_iconfont}`} style={{color:'#5FA6FF',fontSize:'24px'}}>&#xe877;</Text>;
         } else if (type === "4") {
-            icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe6a9;</Text>;
+            icon = <Text className={`${globalStyle.global_iconfont}`} style={{color:'#5FA6FF',fontSize:'24px'}} >&#xe850;</Text>;
+            placeText = "选择里程碑";
         } else if (type === "5") {
             icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe7be;</Text>;
         } else if (type === "6") {
-            icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe7ba;</Text>;
+            icon = <Text className={`${globalStyle.global_iconfont}`} style={{color:'#5FA6FF',fontSize:'24px'}}>&#xe8b0;</Text>;
         } else if (type === "7") {
             icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe7b8;</Text>;
         } else if (type === "8") {
-            icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe63e;</Text>;
+            icon = <Text className={`${globalStyle.global_iconfont}`} style={{color:'#5FA6FF',fontSize:'24px'}}>&#xe868;</Text>;
         } else if (type === "9") {
-            icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe7c0;</Text>;
+            icon = <Text className={`${globalStyle.global_iconfont}`} style={{color:'#5FA6FF',fontSize:'24px'}}>&#xe86a;</Text>;
         } else if (type === "10") {
-            icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe7c1;</Text>;
+            icon = <Text className={`${globalStyle.global_iconfont}`} style={{color:'#5FA6FF',fontSize:'24px'}}>&#xe869;</Text>;
         } else if (type === "12") {
-            icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe7bf;</Text>;
+            icon = <Text className={`${globalStyle.global_iconfont}`} style={{color:'#5FA6FF',fontSize:'24px'}}>&#xe878;</Text>;
         }
-
+      
         //右边icon
         let rightIcon;
-        if (type === "2" || type === "5") {
-            //向右箭头
-            rightIcon = (
-                <Text className={`${globalStyle.global_iconfont}`}>&#xe654;</Text>
-            );
-        } else if (
-            type === "3" ||
-            type === "4" ||
-            type === "6" ||
-            type === "7" ||
-            type === "8" ||
-            type === "9" ||
-            type === "10" ||
-            type === "12"
-        ) {
-            // 叉×
-            rightIcon = (
-                <Text className={`${globalStyle.global_iconfont}`}>&#xe7fc;</Text>
-            );
-        }
-
+        // if (type != 1) {
+        //     //向右箭头
+        //     rightIcon = (
+        //         <Text className={`${globalStyle.global_iconfont}`}>&#xe654;</Text>
+        //     );
+        // } 
+        // else if (
+        //     type === "3" ||
+        //     type === "4" ||
+        //     type === "6" ||
+        //     type === "7" ||
+        //     type === "8" ||
+        //     type === "9" ||
+        //     type === "10" ||
+        //     type === "12"
+        // ) {
+        //     // 叉×
+        rightIcon = (
+            <Text className={`${globalStyle.global_iconfont}`}>&#xe8b2;</Text>
+        );
+        // }
         return (
-            <View className={indexStyles.list_item}>
+            <View className={indexStyles.index}>
+              <View className={indexStyles.list_item}>
                 <View
                     className={indexStyles.list_left}
                     onClick={this.gotoChangeChoiceInfoPage.bind(this, {
@@ -696,36 +688,37 @@ export default class ProjectNameCell extends Component {
                         field_set: fieldSet,
                     })}
                 >
+
                     <View className={`${indexStyles.list_item_left_iconnext}`}>
                         {icon}
                     </View>
-
-                    <View className={indexStyles.list_item_name}>{title}</View>
-
+                    {
+                        type != 1 && type != 2 && type != 3 && type != 4 && <View className={indexStyles.list_item_name}>{title}-{type}</View>
+                    }
                     <View className={indexStyles.right_style}>
                         <View className={indexStyles.right_centre_style}>
                             <View>
-                                {(type === "3" || type === "12" && member_selected_type != 1) && data && data.length > 0 ? (
+                                {(type === "3" || type === "12") && data && data.length > 0 ? (
                                     <View className={indexStyles.executors_list_item_detail}>
                                         <View className={`${indexStyles.avata_area}`}>
-                                            <Avatar avartarTotal={"multiple"} userList={data} />
+                                            <Avatar avartarTotal={"multiple"} userList={data} maxShowAvAtar='5'/>
                                         </View>
                                     </View>
                                 ) : (
                                     <View className={indexStyles.list_item_detail} v-if>
-                                        {
+                                        {/* {
                                             type == 4 ? (
                                                 milestoneList.length ? (<MilestoneCellPicer tag={type} title={data.name} dataArray={milestoneList} contentId={contentId} clickHandle={this.
                                                     clickSelectPicker} milestoneId={milestoneId} tasksDetailDatas={tasksDetailDatas} editAuth={editAuth}></ MilestoneCellPicer>) : (<View>暂无里程碑可选</View>)
 
                                             ) : (null)
-                                        }
-                                        {
+                                        } */}
+                                        {/* {
                                             type == 2 ? (
                                                 tasksGroupList.length ? (<TaskGroupPicker contentId={contentId} tag={type} title={data.name} tasksGroupList={tasksGroupList}> editAuth={editAuth} listId={list_id} tasksDetailDatas={tasksDetailDatas}</TaskGroupPicker>) : (<View>暂无分组可选</View>)
 
                                             ) : (null)
-                                        }
+                                        } */}
                                         {
                                             type == 9 || type == 10 ? (<textField item_id={item_id} field_value={data.name} editAuth={editAuth} type={type}></textField>) : (null)
                                         }
@@ -734,18 +727,21 @@ export default class ProjectNameCell extends Component {
                                             // field_value=${field_value}&item_id=${item_id}`,
                                             type == 8 ? (<DateField field_value={field_value} item_id={item_id} editAuth={editAuth} dateFieldCode={date_field_code}></DateField>) : (null)
                                         }
-                                        {
+                                        {/* {
                                             type == 6 ? (
                                                 items.length ? (<SingleChoicePicker items={items} field_value={field_value} editAuth={editAuth} field_item_id={field_item_id}></SingleChoicePicker>) : (<View>暂无选项可选</View>)
                                             ) : (null)
-                                        }
-                                        {
+                                        } */}
+                                        {/* {
                                             type == '12' && member_selected_type == 1 ? (
                                                 fieldPersonSignleList.length ? (<FieldPersonSinglePicker contentId={contentId} editAuth={editAuth} executors={data} item_id={item_id} executorsList={fieldPersonSignleList} title={data.name}></FieldPersonSinglePicker>) : (<View>暂无选项可选</View>)
                                             ) : (null)
-                                        }
+                                        } */}
 
-                                        { type != 2 && type != 4 && type != 9 && type != 10 && type != 8 && type != 6 && (type != 12 && member_selected_type != 1) ? (<View>{data.name}</View>) : (null)}
+                                        {type != 9 && type != 10 && type != 8 && (type != 12 && member_selected_type != 1)  ? (<View className={`${indexStyles.contentdata_style} ${type == 1 ? indexStyles.contentdata_project_name_style:''}`}>{type == '2' ? currentTaskGroup : data.name}</View>):('')}
+                                        {
+                                            (type != 2 && placeText && !data.name)  || (type == 2 && !currentTaskGroup) ?(<View className={`${indexStyles.contentdata_style} ${indexStyles.place_style}`}>{placeText}</View>):('')
+                                        }
                                     </View>
                                 )}
                             </View>
@@ -763,12 +759,26 @@ export default class ProjectNameCell extends Component {
                     isFieldSelectionShow ? (<FieldSelection items={items} fields={fields} card_id={cardId} onClickAction={this.onClickFieldSelection} ></FieldSelection>) : (null)
                 }
                 {
-                    isFieldPersonMultipleShow ? (<FieldPersonMultiple contentId={contentId} executors={data} item_id={item_id} executorsList={fieldPersonMultiplelist} onClickAction={this.onClickFieldPersonMultiple}></FieldPersonMultiple>) : (null)
+                    isFieldPersonMultipleShow ? (<FieldPersonMultiple contentId={contentId} executors={data} title={title} item_id={item_id} executorsList={fieldPersonMultiplelist} onClickAction={this.onClickFieldPersonMultiple}></FieldPersonMultiple>) : (null)
                 }
                 {
-                    isExecutorsListShow ? (<ExecutorsList contentId={contentId} onClickAction={this.onClickExecutorsList} executors={data}></ExecutorsList>) : (null)
+                    isExecutorsListShow ? (<ExecutorsList title='指派负责人' contentId={contentId} onClickAction={this.onClickExecutorsList} executors={data}></ExecutorsList>) : (null)
                 }
-            </View >
+                {
+                    isTaskGroupViewShow ? (<TaskGroupView contentId={contentId} onClickAction={this.onClickTaskGroup} tag={type} title={title} listId={list_id} currentName={data.name} tasksGroupList={tasksGroupList}></TaskGroupView>):('')
+                } 
+                {
+                    isMilestoneCellViewShow ? (<MilestoneCellView onClickAction={this.onClickMilestone} tag={type}  title={title} currentName={data.name} dataArray={milestoneList} contentId={contentId} milestoneId={milestoneId} tasksDetailDatas={tasksDetailDatas} editAuth={editAuth}></MilestoneCellView>):('')
+                }
+                {
+                    isSingleChoiceViewShow ? (<SingleChoiceView onClickAction={this.onClickSingleChoice} title={title} currentName={data.name} items={items} field_value={field_value} editAuth={editAuth} field_item_id={field_item_id}></SingleChoiceView>):('')
+                } 
+                {
+                    isFieldPersonSingleViewShow ? (<FieldPersonSingleView onClickAction={this.onClickPersonSingle} contentId={contentId} editAuth={editAuth} executors={data} item_id={item_id} executorsList={fieldPersonSignleList} title={title}></FieldPersonSingleView>):('')
+                }
+              </View >
+              <View className={indexStyles.line_View}></View>
+            </View>
         );
     }
 }

@@ -6,7 +6,8 @@ import userIcon from '../../asset/test.jpg'
 export default class Avatar extends Component {
 
   render() {
-    const { avartarTotal = '', size = 20, src = '', text = '', userList = [] } = this.props || {}
+    const { avartarTotal = '', size = 20, src = '', text = '', userList = [],maxShowAvAtar } = this.props || {}
+    const maxAvAtar = maxShowAvAtar || 1;
     const AvatarStyle = `width:${size}px;height:${size}px;border-radius:${size}px;` //头像样式
     const AvartarBgStyle = `font-size:12px;color:#8c8c8c;text-align:center;line-height:${size}px;` //头像背景
     const ListAvaTarItemStyle = `margin-left:-${size / 2 - 2}px;` //头像列表时，单个头像要往左移动遮住堆叠
@@ -26,7 +27,7 @@ export default class Avatar extends Component {
         <View className={indexStyle.list_user}>
           {userList.map((value, key) => {
             const { avatar = '', name = 'U' } = value || {}
-            return key < 1 && (
+            return key < maxAvAtar && (
               <View className={indexStyle.avatar} style={`${key != 0 ? ListAvaTarItemStyle : ''}${AvatarStyle}line-height:${size}px;`} key={key}>
                 {!!avatar ? (
                   <Image src={avatar} style={AvatarStyle} />
@@ -38,7 +39,7 @@ export default class Avatar extends Component {
             )
           })}
         </View>
-        {userList.length > 1 && (
+        {userList.length > maxAvAtar && (
           <View className={`${indexStyle.avatar} ${indexStyle.list_more}`} style={`${ListAvaTarItemStyle}${AvatarStyle}`}>{(userList.length - 1)}</View>
         )}
       </View>

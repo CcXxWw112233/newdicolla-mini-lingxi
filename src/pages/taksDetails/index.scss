@@ -1,9 +1,6 @@
 @import "~taro-ui/dist/style/components/list.scss";
+@import "../../gloalSet/styles/constant";
 
-.tasks_time_style,
-.tasks_name_style {
-    margin-bottom: 16px;
-}
 
 .add_function_style {
     padding: 16px 16px 16px 16px;
@@ -37,19 +34,40 @@
     bottom          : 0;
     left            : 0;
     width           : 100%;
-    height          : 130px;
+    height          : pxTrans(80);
     background-color: white;
     z-index         : 100;
     color           : rgba(24, 144, 255, 1);
 }
+.deleteTask {
+    margin-top: pxTrans(10);
+    height: pxTrans(40);
+    width: 80%;
+    margin-left: 10%;
+    text-align: center;
+    line-height: pxTrans(40);
+    border-radius: pxTrans(20);
+    color: white;
+    background: linear-gradient(270deg, #4FADFF 0%, #4790FF 100%);
 
-.delete_iconfont {
-    position   : fixed;
-    right      : 50px;
-    font-size  : 50px;
-    line-height: 130px;
+}
+.unused_deleteTask {
+    background: #F5F7FB !important;
+    color: #BCC2D6 !important;
 }
 
-.unused_iconfont {
-    color: #BCC2D6 !important;
+.topbg_View {
+    background:rgba(24, 144, 255, 1);
+    height:250px;
+    width:100%;
+    position: fixed;
+    top:0
+}
+.tasks_contant {
+    border-radius:pxTrans(20) pxTrans(20) 0 0;
+    width: 100%;
+    position: absolute;
+    overflow: hidden;
+    bottom: pxTrans(65);
+    background-color: rgba(243, 243, 243, 1);
 }

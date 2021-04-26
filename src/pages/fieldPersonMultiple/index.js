@@ -1,8 +1,8 @@
 import Taro, { Component } from "@tarojs/taro";
 import { View, ScrollView } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
-import { AtCheckbox } from "taro-ui";
 import indexStyles from './index.scss'
+import globalStyle from "../../gloalSet/styles/globalStyles.scss";
 
 @connect(({ tasks: {
   // executors_list = [], 
@@ -26,14 +26,16 @@ export default class fieldPersonMultiple extends Component {
 
   componentDidMount() {
     const { contentId, executors = [], item_id, executorsList, } = this.props;
-    console.log("---****-------");
-    console.log(executorsList);
     let executorsData;
     let new_arr;
+    let newCheckedList = [];
     if (executors.length > 0) {
       executorsData = executors;
       //取出已经是执行人的id, 组成新数组(已选中)
       new_arr = executorsData && executorsData.map((obj) => {
+        return obj.user_id;
+      });
+      newCheckedList = executorsData && executorsData.map((obj) => {
         return obj.user_id;
       });
     }
@@ -52,6 +54,7 @@ export default class fieldPersonMultiple extends Component {
     this.setState({
       checkboxOption: executors_list,
       checkedList: new_arr,
+      newCheckedList:newCheckedList
     });
   }
 
@@ -103,30 +106,116 @@ export default class fieldPersonMultiple extends Component {
       },
     });
   };
+  /**
+    * 取消
+  */
   onClickAction() {
     typeof this.props.onClickAction == "function" &&
       this.props.onClickAction();
   }
+   /**
+   * 选择
+   * @param {*} item 
+   */
+selectItem = item => {
+  var {newCheckedList = []} = this.state;
+  if(newCheckedList.indexOf(item.user_id) != -1) {
+    newCheckedList = newCheckedList.filter((value)=> {
+          return item.user_id != value;
+      });  
+  } else {
+    newCheckedList.push(item.user_id)
+      }
+      this.setState({
+        newCheckedList:  newCheckedList,
+      })
+  }
+  /**
+   * 重置
+   */
+   resetAction() {     
+      this.setState({
+        newCheckedList:  [],
+      })
+   }
+  /**
+   * 确定选择
+   * @returns 
+   */
+  confirmSelect () {
+      const {checkedList = [],itemId,newCheckedList} = this.state;
+      const {dispatch,title} = this.props
+      if(newCheckedList && newCheckedList.length > 0) {
+        dispatch({
+          type: "tasks/putBoardFieldRelation",
+          payload: {
+            id: itemId,
+            field_value: newCheckedList.join(",")
+          },
+        });
+        this.onClickAction()
+      } else {
+        Taro.showToast({
+          title: '请选择' + title,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+  }
+
   render() {
-    const { checkboxOption = [] } = this.state;
+    const { checkboxOption = [],newCheckedList } = this.state;
 
     return (
-      <View className={indexStyles.fieldSelectionView}>
+      // <View className={indexStyles.fieldSelectionView}>
 
-        <View className={indexStyles.index}>
-          <View className={indexStyles.titleView}>请选择</View>
-          <ScrollView className={indexStyles.scrollview} scrollY scrollWithAnimation>
+      //   <View className={indexStyles.index}>
+      //     <View className={indexStyles.titleView}>请选择</View>
+      //     <ScrollView className={indexStyles.scrollview} scrollY scrollWithAnimation>
 
-            <AtCheckbox
-              options={checkboxOption}
-              selectedList={this.state.checkedList}
-              onChange={this.handleChange.bind(this)} />
-          </ScrollView>
-          <View className={indexStyles.bootomBtnView}>
-            <View onClick={this.onClickAction} className={indexStyles.btnView}>确定</View>
+      //       <AtCheckbox
+      //         options={checkboxOption}
+      //         selectedList={this.state.checkedList}
+      //         onChange={this.handleChange.bind(this)} />
+      //     </ScrollView>
+      //     <View className={indexStyles.bootomBtnView}>
+      //       <View onClick={this.onClickAction} className={indexStyles.btnView}>确定</View>
+      //     </View>
+      //   </View>
+      // </View>
+      <View className={indexStyles.index}>
+        <View className={indexStyles.content_view}>
+          <View className={indexStyles.content_topline_view}></View>
+          <View className={indexStyles.content_title_view}>
+              <View className={indexStyles.content_title_left}>
+                <View className={indexStyles.content_title_text}>{title}</View>
+              </View>
+              <View className={indexStyles.content_confirm} onClick={this.confirmSelect}>确定</View>
           </View>
+          <ScrollView className={indexStyles.scrollview} scrollY scrollWithAnimation>
+              <View className={indexStyles.grid_style}>
+                      {
+                          checkboxOption && checkboxOption.map((item,key)=>{
+                              const isSelected = newCheckedList.indexOf(item.user_id) != -1;
+                            return (
+                                <View className={indexStyles.lattice_style} key={key} onClick={this.selectItem.bind(this,item)}>  
+                                  {
+                                      isSelected ? (
+                                          <Text className={`${globalStyle.global_iconfont} ${indexStyles.checked_iconfont}`}>&#xe844;</Text>
+                                      ):('')
+                                  }
+                                    <Image src={item.avatar} className={indexStyles.content_avatar}></Image>
+                                    <Text className={indexStyles.content_avatar_name}>{item.name}</Text>
+                              </View>
+                          )
+                        })
+                      }
+              </View>
+          </ScrollView>
+          <View className={indexStyles.reset_View} onClick={this.resetAction}>重置负责人</View>
+          <View className={indexStyles.cencel_View} onClick={this.onClickAction} >取消</View>
         </View>
-      </View>
+    </View>
     );
   }
 }

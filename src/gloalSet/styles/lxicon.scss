@@ -1,0 +1,18 @@
+@import "./constant";
+
+.lxicon {
+    display: inline-block;
+    width: pxTrans(50); 
+    height: pxTrans(50);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+}
+.lxTaskicon {
+    display: inline-block;
+    width: pxTrans(30); 
+    height: pxTrans(30);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+}

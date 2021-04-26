@@ -2,47 +2,73 @@
 @import "~taro-ui/dist/style/components/list.scss";
 
 .view_Style {
-    background: rgb(255, 255, 255);
-
+    background: white;
     .input_View {
-        height       : pxTrans(60);
-        border-bottom: thick solid rgba(0, 0, 0, 0.09);
+        // height       : pxTrans(60);
+        // border-bottom: thick solid rgba(0, 0, 0, 0.09);
         border-width : 1px;
         display      : flex;
         align-items  : center;
-
+        justify-content: center;
         .list_item_iconnext {
+            margin-top  : pxTrans(10);
             color       : rgb(0, 0, 0, 0.25);
             font-size   : pxTrans(20);
             margin-left : pxTrans(20);
             margin-right: pxTrans(10);
         }
-
+        .status_iconfont {
+            font-size: pxTrans(20) !important;
+        }
+        .card_title_View {
+            display: flex;      
+            flex: 1;
+            padding: pxTrans(20) 0;
+            margin-left: pxTrans(10);
+            margin-right: pxTrans(20);
+        }
         .card_title {
-            flex        : 1;
-            margin-right: pxTrans(15);
+            margin-top: pxTrans(5);
+            padding-top: pxTrans(10);
+            max-height: pxTrans(70);
             font-size   : pxTrans(20);
             color       : rgba(0, 0, 0, 0.85);
-            line-height : 28px;
+            line-height : pxTrans(25);
+        }
+        .card_title_place_view {
+            padding-top: pxTrans(5);
+            margin-top: pxTrans(10);
+            width     : pxTrans(300);
+            font-size: pxTrans(20);
+            overflow:hidden;
+            max-height: pxTrans(70);
+            line-height : pxTrans(25);
+            text-overflow: ellipsis;
+            display:-webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow-wrap: break-word;
         }
 
     }
-
+    .line_View {
+        margin: 0 pxTrans(20);
+        height: pxTrans(1);
+        background-color:#E6E8F1;
+    }
     .selectionTime {
         height         : pxTrans(64);
         display        : flex;
         justify-content: space-between;
-
+        margin: 0 pxTrans(20);
 
         .start_content {
-            flex           : 1;
-            border-right   : pxTrans(0.5) solid rgba(0, 0, 0, 0.09);
             justify-content: center;
             align-items    : center;
             text-align     : center;
             display        : flex;
             flex-direction : row;
-
+            
             .start_date_style {
                 margin   : pxTrans(5);
                 font-size: pxTrans(13);
@@ -60,10 +86,11 @@
                 margin-right: pxTrans(5);
             }
         }
-
+        .time_Icon_style {
+            line-height: pxTrans(64);
+            color: #9EA6C2;
+        }
         .due_content {
-            flex           : 1;
-            border-left    : pxTrans(0.5) solid rgba(0, 0, 0, 0.09);
             justify-content: center;
             align-items    : center;
             text-align     : center;
@@ -73,7 +100,6 @@
             .due_date_style {
                 margin: pxTrans(5);
             }
-
             .due_time_style {
                 margin: pxTrans(5);
                 color : #608DE5;
@@ -87,5 +113,10 @@
                 margin-right: pxTrans(5);
             }
         }
+    }
+    .deleteTimeIcon {
+        font-size: pxTrans(20);
+        line-height: pxTrans(64) !important;
+        color: #9EA6C2;
     }
 }

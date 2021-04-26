@@ -4,7 +4,7 @@ import indexStyles from './index.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { AtTag } from 'taro-ui'
 import { connect } from '@tarojs/redux';
-import { MultipleSelectionField } from '../../../multipleSelectionField'
+import { MultipleSelectionView } from '../../../multipleSelectionView'
 
 @connect(({ tasks: { tasksDetailDatas = {}, }, }) => ({
     tasksDetailDatas,
@@ -77,20 +77,15 @@ export default class index extends Component {
     }
 
     getArray = (data = [], fieldValue) => {
-
         //1.1 先把 fieldValue 字符串转化为数组
         var array
         if (fieldValue) {
             array = fieldValue.split(",");
         }
-
         let dataArray = [];
-
         data.forEach(value => {
-
             //1.2 过滤出包含的
             if (array && array.indexOf(value['id']) != -1) {
-
                 //1.3 包含的就加入新的数组
                 dataArray.push(value)
             }
@@ -102,46 +97,46 @@ export default class index extends Component {
         const { title, data = [], fieldValue, item_id } = this.props
         const { isMultipleSelectionFieldShow } = this.state
         const data_array = this.getArray(data, fieldValue);
-
         return (
             <View className={indexStyles.list_item} >
-                {/* // // url: `../../pages/multipleSelectionField/index?data=${JSON.stringify(data)}&fieldValue=$ */}
-                {/* {fieldValue}&item_id=${item_id}` */}
+
                 {
-                    isMultipleSelectionFieldShow ? (<MultipleSelectionField onClickAction={this.onClickAction} data={data} fieldValue={fieldValue} item_id={item_id}></MultipleSelectionField>) : (null)
+                    isMultipleSelectionFieldShow ? (<MultipleSelectionView title={title} onClickAction={this.onClickAction} data={data} fieldValue={fieldValue} data_array={data_array} item_id={item_id}></MultipleSelectionView>) : (null)
                 }
                 <View className={indexStyles.list_left} onClick={this.clickTagCell}>
 
                     <View className={`${indexStyles.list_item_left_iconnext}`}>
-                        <Text className={`${globalStyle.global_iconfont}`}>&#xe7b8;</Text>
+                        <Text className={`${globalStyle.global_iconfont}`}>&#xe8b1;</Text>
                     </View>
 
                     <View className={indexStyles.list_item_name}>{title}</View>
 
                     <View className={indexStyles.tagCell_list_item_detail}>
-                        {
+                   
+                   {
+                       data_array && data_array.length > 0 ? (                        
                             data_array.map((tag, key) => {
-
                                 const { id, field_id, item_value, } = tag
-
                                 return (
                                     <View key={key} className={indexStyles.tagCell_list_item}>
                                         <AtTag type='primary' customStyle={{
-                                            color: `rgba(0, 0, 0,1)`,
-                                            backgroundColor: `rgba(211, 211, 211,.2)`,
-                                            border: `1px solid rgba(169, 169, 169,1)`,
+                                            color: `#FFFFFF`,
+                                            backgroundColor: `#7C83A1`,
                                         }}>
                                             {item_value}
                                         </AtTag>
                                     </View>
                                 )
                             })
-                        }
+                       ):(
+                         <View className={indexStyles.placeText}>未选择</View>  
+                       )
+                   }    
                     </View>
                 </View>
 
                 <View className={`${indexStyles.list_item_iconnext}`} onClick={this.deleteCardProperty}>
-                    <Text className={`${globalStyle.global_iconfont}`}>&#xe7fc;</Text>
+                    <Text className={`${globalStyle.global_iconfont}`}>&#xe8b2;</Text>
                 </View>
 
             </View>

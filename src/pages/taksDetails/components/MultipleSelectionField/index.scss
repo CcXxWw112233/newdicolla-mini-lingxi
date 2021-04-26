@@ -19,15 +19,16 @@
         align-items   : baseline;
 
         .list_item_left_iconnext {
-            color       : rgb(0, 0, 0, 0.25);
-            font-size   : pxTrans(20);
+            font-size   : pxTrans(24);
             margin-left : pxTrans(20);
             margin-right: pxTrans(10);
+            color: #5FA6FF;
         }
 
         .list_item_name {
             color      : rgba(0, 0, 0, 0.85);
             margin-left: pxTrans(4);
+            line-height: pxTrans(50);
         }
 
         .tagCell_list_item_detail {
@@ -43,6 +44,7 @@
 
             .tagCell_list_item {
                 margin: pxTrans(5) pxTrans(5) pxTrans(5) pxTrans(5);
+                font-size: pxTrans(14);
             }
         }
 
@@ -55,5 +57,8 @@
         color       : rgb(0, 0, 0, 0.25);
         font-size   : pxTrans(20);
         margin-right: pxTrans(10);
+    }
+    .placeText {
+        color: #BCC2D6;
     }
 }

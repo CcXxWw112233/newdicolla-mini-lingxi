@@ -1,0 +1,134 @@
+@import '../../../../gloalSet/styles/pxTrans';
+@import "~taro-ui/dist/style/components/grid.scss";
+.wrapper {
+    position: absolute;
+    left:0;
+    top:0;
+    height: 100%;
+    width: 100%;
+    background-color: white;
+}
+.searchForm {
+    width: 100%;
+  }
+  .content_View {   
+      margin-top: pxTrans(10); 
+      width: 90%;
+      height: pxTrans(50);
+      display: flex;
+      flex-direction: row;
+      line-height: pxTrans(50);
+      padding-left: pxTrans(15);
+      padding-right: pxTrans(10);
+      border-bottom: 2px solid #F2F4F8;
+  }
+  .searchIcon {
+    margin-right: pxTrans(10);
+    color: #D1D5E4 !important;
+    font-size: pxTrans(20) !important;
+  }
+  .deleteIcon{
+    font-size: pxTrans(20) !important;
+    color: #9EA6C2 !important;
+    height: pxTrans(32);
+    width: pxTrans(40);
+    line-height: pxTrans(50);
+    background-color: transparent;
+    outline: none; 
+    border: 0;
+    text-align: center;
+    // background-color: red;
+    }
+  Button::after { 
+    border: none; 
+  }
+  .searchBarInput {
+    height: pxTrans(50);
+    flex: 1;
+    font-size: pxTrans(16);
+    margin-right: pxTrans(10);
+  }
+  .searchBarInput_placeholderStyle {
+    color: #D1D5E4;
+  }
+  .scrollView {
+    position: absolute;
+    top: pxTrans(80);
+    left: 0;
+    width: 100%;
+    min-height: pxTrans(150);
+    max-height: pxTrans(250);
+    padding:0 pxTrans(20) pxTrans(20) pxTrans(20); 
+    background-color: white;
+  }
+  
+  .acatar_item_View {
+      display: flex;
+      flex-direction: row;
+      height: pxTrans(50);
+      line-height: pxTrans(50);
+      font-size: pxTrans(16);
+      color: #3F445D;
+  }
+  .acatar_item_image {
+      margin-top: pxTrans(10);
+      height: pxTrans(30);
+      width: pxTrans(30);
+      border-radius: pxTrans(15);
+      margin-right: pxTrans(10);
+  }
+
+  .selectAcatarlist {
+    margin-top: pxTrans(10);
+    display       : flex;
+    flex-wrap     : wrap;
+    padding       : 32px;
+    .avatarItemWrapper {
+      width          : 96px;
+      display        : flex;
+      flex-direction : column;
+      align-items    : center;
+      justify-content: center;
+      margin-right   : 48px;
+      margin-bottom  : 24px;
+      overflow       : hidden;
+      text-overflow  : ellipsis;
+      white-space    : nowrap;
+  
+      .avatarItemAvatar {
+        width        : 96px;
+        height       : 96px;
+        border-radius: 50%;
+      }
+  
+      .avatarItemName {
+        width        : 96px;
+        height       : 40px;
+        text-align   : center;
+        font-size    : 24px;
+        font-weight  : 400;
+        color        : #575C75;
+        line-height  : 40px;
+        overflow     : hidden;
+        text-overflow: ellipsis;
+        white-space  : nowrap;
+      }
+    }
+}
+.acatar_invite_View {
+    position: absolute;
+    bottom: pxTrans(80);
+    background: linear-gradient(270deg, #4FADFF 0%, #4790FF 100%);
+    height: pxTrans(48);
+    width: 80%;
+    left: 10%;
+    color: white;
+    line-height: pxTrans(48);
+    font-size: pxTrans(16);
+    border-radius:pxTrans(24) ;
+    text-align: center;
+}
+.acatar_invite_unuse_View {
+    background: #F5F7FB !important;
+    color: #BCC2D6 !important;
+}

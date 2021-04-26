@@ -7,22 +7,22 @@
     display       : flex;
     flex-direction: column;
     border-bottom : pxTrans(1) solid rgba(0, 0, 0, 0.09);
+    background  : rgb(255, 255, 255);
 
     .list_item {
-        min-height  : pxTrans(56);
         font-size   : pxTrans(16);
         display     : flex;
         align-items : baseline;
         margin-left : pxTrans(0);
         margin-right: pxTrans(0);
-        background  : rgb(255, 255, 255);
 
         .list_item_left_iconnext {
             color       : rgb(0, 0, 0, 0.25);
-            font-size   : pxTrans(20);
+            font-size   : pxTrans(22);
             margin-left : pxTrans(20);
             margin-right: pxTrans(10);
             margin-top  : pxTrans(18);
+            color: #5FA6FF;
         }
 
         .list_item_name {
@@ -74,19 +74,38 @@
             margin-right: pxTrans(10);
         }
     }
-
-    .song_tasks_file {
+    .add_task_row {
         height        : pxTrans(56);
+        display       : flex;
+        flex-direction: row;
+        align-items   : center;
+        align-items   : center;
+        width         : 100%;
+        padding-bottom   : pxTrans(10);
+
+        .add_item_name {
+            line-height: pxTrans(56);
+            flex       : 1;
+            font-size  : pxTrans(16);
+            font-weight: 400;
+            color      : #608DE5;
+            text-align: center;
+        }
+    }
+    .song_tasks_file {
         display       : flex;
         flex-direction: row;
         align-items   : center;
         width         : 100%;
         background    : rgb(255, 255, 255);
 
+        .list_item_file_mold_iconnext {
+            font-size   : pxTrans(35) !important;
+        }
 
         .list_item_file_iconnext {
             color       : rgb(0, 0, 0, 0.25);
-            font-size   : pxTrans(20);
+            font-size   : pxTrans(25);
             margin-left : pxTrans(20);
             margin-right: pxTrans(10);
         }
@@ -100,5 +119,48 @@
             text-overflow: ellipsis;
             white-space  : nowrap;
         }
+        .list_item_file_center {
+            display: flex;
+            flex-direction: column;
+            width: pxTrans(250);
+            padding: pxTrans(10) 0 pxTrans(10) 0;
+          }
+          .list_item_file_name {
+            color: #575C75;
+            font-size: pxTrans(14);
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            width: pxTrans(250);
+            overflow     : hidden;
+            text-overflow: ellipsis;
+            white-space  : nowrap;
+      
+          }
+          .list_item_file_center_timeView {
+            display: flex;
+            flex-direction: row;
+            margin-top: pxTrans(5);
+      
+            .list_item_file_center_photo {
+              margin-top: pxTrans(5);
+              height:pxTrans(12);
+              width: pxTrans(12);
+              border-radius:pxTrans(6);
+            }
+            .list_item_file_center_time {
+            //   margin-left:pxTrans(10) ;
+              font-size: pxTrans(12);
+              font-weight: 400;
+              color: #9EA6C2;
+              width: pxTrans(250);
+              word-break: break-all;
+            }
+          }
+    }
+    .lineView {
+        margin-left: pxTrans(60);
+        width: 100%;
+        height: pxTrans(1);
+        background-color:#E6E8F1;
     }
 }

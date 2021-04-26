@@ -94,7 +94,7 @@
     .avatarWrapper {
       margin-right: 8px;
     }
-
+    
     .newsWrapper {
       .newsName {
         margin-left: 5px;
@@ -102,7 +102,7 @@
 
       .newsContentWrapper {
         background: #ebebeb;
-
+       
         .newContent {}
 
         .audioContent {
@@ -199,7 +199,7 @@
 
   .contentWrapperOut {
     flex-direction: row-reverse;
-
+   
     .avatarWrapper {
       margin-left: 16px;
     }
@@ -215,11 +215,18 @@
       }
 
       .newsWrapper {
+        .newContentAssistantWrapperOut {
+          background: #5FA6FF !important;
+        }
         .newsContentWrapper {
           // background: linear-gradient(270deg,
           //     rgba(22, 184, 252, 1) 0%,
           //     rgba(24, 144, 255, 1) 100%);
           background: #F5F7FB;
+          
+          .newContentTextOut{
+            color: white !important;
+          }
           .newContent {
             font-size  : 32px;
             font-weight: 400;

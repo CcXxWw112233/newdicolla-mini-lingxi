@@ -3,6 +3,7 @@ import Taro, { Component, hideToast, pageScrollTo, getExtConfig } from '@tarojs/
 import { View, Text, Image, RichText } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
+import iconStyle from "../../gloalSet/styles/lxicon.scss"
 import SearchAndMenu from '../board/components/SearchAndMenu'
 import { filterFileFormatType } from './../../utils/util';
 import file_list_empty from '../../asset/file/file_list_empty.png'
@@ -200,7 +201,7 @@ export default class File extends Component {
         dispatch({
             type: 'file/updateDatas',
             payload: {
-                header_folder_name: '全部文件',
+                header_folder_name: '全部项目',
             },
         })
 
@@ -298,7 +299,7 @@ export default class File extends Component {
     verifyAuthority = (board_id) => {
         const { dispatch, header_folder_name, verify_authority_list } = this.props;
         var that = this;
-        if (header_folder_name == '全部文件') {
+        if (header_folder_name == '全部项目') {
             this.setState({
                 deleteAuto:false
             })
@@ -320,7 +321,7 @@ export default class File extends Component {
         }
 
 
-        if (header_folder_name != "全部文件") {
+        if (header_folder_name != "全部项目") {
             this.setState({
                 downLoadAuto: judgeJurisdictionProject(board_id, PROJECT_FILES_FILE_DOWNLOAD),
                 deleteAuto: judgeJurisdictionProject(board_id, PROJECT_FILES_FILE_DELETE)
@@ -565,7 +566,7 @@ export default class File extends Component {
             dispatch({
                 type: 'file/updateDatas',
                 payload: {
-                    header_folder_name: '全部文件',
+                    header_folder_name: '全部项目',
                 },
             })
         } else {
@@ -744,7 +745,7 @@ export default class File extends Component {
         const { header_folder_name } = this.props;
         if (!this.state.uplaodAuto) {
             Taro.showToast({
-                title: header_folder_name == '全部文件' ? '请选择相应的项目' : '您没有该项目的上传权限',
+                title: header_folder_name == '全部项目' ? '请选择相应的项目' : '您没有该项目的上传权限',
                 icon: 'none',
                 duration: 2000
             });
@@ -1042,7 +1043,7 @@ export default class File extends Component {
         console.log(uploadNowList.length)
         if (!this.state.deleteAuto && uploadNowList.length == 0) {
             Taro.showToast({
-                title: header_folder_name == '全部文件' ? '请选择相应的项目' : '您没有该项目的删除权限',
+                title: header_folder_name == '全部项目' ? '请选择相应的项目' : '您没有该项目的删除权限',
                 icon: 'none',
                 duration: 2000
             });
@@ -1284,7 +1285,8 @@ export default class File extends Component {
                                             </Image>)
                                             :
                                             (<View className={indexStyles.other_icon_style}>
-                                                <RichText className={`${globalStyle.global_iconfont} ${indexStyles.folder_type_icon}`} nodes={fileType} />
+                                                {/* <RichText className={`${globalStyle.global_iconfont} ${indexStyles.folder_type_icon}`} nodes={fileType} /> */}
+                                                <View className={`${iconStyle.lxicon}`} style={{'background': fileType}}></View>
                                                 <View className={indexStyles.other_name_style}>{value.file_name}</View>
                                             </View>)
                                     }

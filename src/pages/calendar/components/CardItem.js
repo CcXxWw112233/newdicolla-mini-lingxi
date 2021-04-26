@@ -230,7 +230,7 @@ export default class CardItem extends Component {
               {
                 is_warning && flag == '0' && is_realize == '0' && !(due_time && now > duetime) ? (
                   <View className={`${indexStyles.urge} ${indexStyles.iswaring}`}><Text className={`${globalStyles.
-                    global_iconfont} ${indexStyles.urgeicon} `}>&#xe849;</Text> 预警</View>)
+                    global_iconfont} ${indexStyles.urgeicon} `}>&#xe849;</Text>预警</View>)
                   : (null)
               }
 

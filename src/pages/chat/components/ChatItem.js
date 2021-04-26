@@ -563,6 +563,8 @@ class ChatItem extends Component {
       from_nick = this.getUserName(someMsg.from, someMsg.users);
     }
     const fileType = chatFile ? filterFileFormatType("." + chatFile.ext) : "";
+    const isoutText = flow != "in" && type == "text";
+    console.log('ssssssssss',flow,type,isoutText )
     return (
       <View className={styles.wrapper}>
         {(type === "text" ||
@@ -625,14 +627,16 @@ class ChatItem extends Component {
                     className={`${styles.newsContentWrapper} ${type === "custom" && !isPinupEmoji
                       ? styles.newContentAssistantWrapper
                       : ""
-                      }`}
+                      } ${isoutText ? styles.newContentAssistantWrapperOut : ''
+                    }`}
                   >
                     {type === "text" && (
-                      <View className={styles.newContent}>
+                      <View className={`${styles.newContent} ${isoutText ? styles.newContentTextOut : ''}`} >
                         {parseEmoji(text).map(i => {
                           const { categ, cont } = i;
                           return (
                             <EmojiItem
+                            flow = {flow}
                               key={categ + cont}
                               categ={isValidEmoji(cont) ? "emoji" : "text"}
                               cont={

@@ -55,13 +55,13 @@ class ChatHeader extends Component {
     return (
       <View className={styles.wrapper}>
         <View className={styles.contentWrapper}>
-          <View className={`${styles.title} ${globalStyles.global_iconfont}`} onClick={this.onShowBoardDetail}>
+          <View className={`${styles.title} ${globalStyles.global_iconfont}`} >
             <Text className={currentProject.mark ? globalStyles.global_itemMark : ""}
             style={{backgroundColor: currentProject.mark ? currentProject.mark :""}}></Text>
-            {name}
-            &#xe8ed;
+            群组信息
+            {/* &#xe8ed; */}
           </View>
-          {!hideSubList && hasSublist &&
+          {/* {!hideSubList && hasSublist && */}
           <View
             className={styles.operatorWrapper}
             onClick={this.onGoToSubChatList}>
@@ -71,9 +71,16 @@ class ChatHeader extends Component {
               {subUnread  && <View className={styles.badge}>
                 { subUnread > 99 ? '99+' : subUnread }
                 </View>}
-                &#xe6ec;
+                &#xe89c;
             </View>
-          </View>}
+            <View
+              className={`${globalStyles.global_iconfont} ${styles.operator}`}
+              onClick={this.onShowBoardDetail}
+            >
+             &#xe8b4;
+            </View>
+          </View>
+          {/* } */}
 
         </View>
       </View>

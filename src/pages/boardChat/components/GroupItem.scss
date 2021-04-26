@@ -1,7 +1,16 @@
+.index {
+  display: flex;
+  flex-direction: row;
+}
 .wrapper {
+  display: flex;
+  flex-direction: row;
   height       : 96px;
   padding      : 24px 0;
   border-bottom: 2px solid rgba(0, 0, 0, 0.09);
+  z-index: 5;
+  background-color: white;
+  width: 100%;   
 
   .contentWrapper {
     box-sizing   : border-box;
@@ -84,4 +93,15 @@
       }
     }
   }
+}
+.fileItem_innerDelete {
+  position: absolute;
+  right: 0;
+  background-color: #e64340;
+  width: 180px;
+  text-align: center;
+  z-index: 4;
+  color: #fff;
+  margin-top: 4px;
+  line-height: 100px;
 }

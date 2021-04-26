@@ -1,82 +1,94 @@
 @import "../../gloalSet/styles/constant";
 
-.labelSelectionView {
-    transform       : none;
-    position        : fixed;
-    bottom          : 0;
-    left            : 0;
-    width           : 100%;
-    height          : 100%;
-    background-color: rgba(8, 9, 30, 0.35);
-    z-index         : 99999;
-}
-
 .index {
-    padding-bottom      : pxTrans(20);
-    position            : absolute;
-    top                 : 50%;
-    left                : 50%;
-    // -webkit-transform: translate(-50%, -50%);
-    // -moz-transform   : translate(-50%, -50%);
-    // -ms-transform    : translate(-50%, -50%);
-    // -o-transform     : translate(-50%, -50%);
-    transform           : translate(-50%, -50%);
-    background-color    : white;
-    width               : 85%;
-    border-radius       : pxTrans(8);
-    display             : flex;
-    flex-direction      : column;
-
-    .scrollview {
-        max-height: pxTrans(300);
-    }
-
-    .titleView {
-        height       : pxTrans(40);
-        line-height  : pxTrans(40);
-        width        : 100%;
-        text-align   : center;
-        font-size    : pxTrans(16);
-        margin-top   : pxTrans(10);
-        margin-bottom: pxTrans(10);
-    }
-
-    .rowIndex {
-        height        : pxTrans(40);
-        width         : 100%;
-        display       : flex;
-        flex-direction: row;
-        align-items   : center;
-        border-bottom : pxTrans(1) solid rgba(0, 0, 0, 0.09);
-
-        .cellIndex {
-            flex       : 1;
-            margin-left: pxTrans(20);
-        }
-
-        .cleckIndex {
-            width       : pxTrans(30);
-            margin-right: pxTrans(20);
-            margin-left : pxTrans(20);
-        }
-    }
-
-    .bootomBtnView {
-        margin-top     : pxTrans(20);
-        display        : flex;
-        flex-direction : row;
-        justify-content: space-around;
-        font-size      : pxTrans(16);
-        line-height    : pxTrans(40);
-    }
-
-    .btnView {
-        text-align      : center;
-        height          : pxTrans(40);
-        width           : 70%;
-        border-radius   : pxTrans(8);
-        background-color: #52acff;
-        color           : white;
-    }
-
+    position: fixed;
+    top: 0;
+    height: 100%;
+    left: 0;
+    width: 100%;
+    background-color: rgba(8, 9, 30, 0.25);
+    z-index: 9999;
+}
+.content_view {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    border-radius: pxTrans(16) pxTrans(16) 0 0;
+    display: flex;
+    flex-direction: column;
+}
+.content_topline_view {
+    margin:pxTrans(10) pxTrans(10) 0 0;
+    width: pxTrans(60);
+    height: pxTrans(4);
+    margin-left: pxTrans(160);
+    background: #D1D5E4;
+    border-radius: pxTrans(2);
+}
+.content_title_view {
+    display: flex;
+    flex-direction: row;
+    line-height: pxTrans(60);
+    border-bottom: 1px solid #F2F4F8;
+    padding: 0 pxTrans(20);
+    justify-content: space-between;
+}
+.content_title_left {
+    display: flex;
+    flex-direction: row;
+}
+.content_item_identifier {
+    margin: pxTrans(15) pxTrans(10) pxTrans(15) 0; 
+    height: pxTrans(18);
+    width: pxTrans(18);
+    border-radius: pxTrans(4);
+}
+.iconfont {
+    font-size: pxTrans(25) ;
+    color: #3D7EFF !important;
+}
+.content_title_text {
+    font-size: pxTrans(16);
+    font-weight: 500;
+    color: #3F445D;
+    margin-left: pxTrans(15);
+}
+.content_confirm {
+    color: #5A86F5;
+    font-size: pxTrans(16);
+}
+.scrollview {
+    max-height: pxTrans(300);
+    min-height: pxTrans(150);
+}
+.content_item {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    line-height: pxTrans(48);
+    margin:0 pxTrans(20);
+}
+.content_item_name {
+    font-size: pxTrans(15);
+    font-weight: 400;
+    color: #575C75;
+}
+.item_iconfont {
+    font-size: pxTrans(20);
+    color: #D1D5E4;
+}
+.content_item_selected {
+    color: #5A86F5 !important;
+}
+.cencel_View {
+    border-top:pxTrans(6) solid #F2F4F8;
+    height: pxTrans(10);
+    text-align: center;
+    width: 100%;
+    color: #212434;
+    font-size: pxTrans(16);
+    line-height:pxTrans(60);
+    height: pxTrans(80);
 }
