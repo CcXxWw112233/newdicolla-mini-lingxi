@@ -72,8 +72,8 @@ export default {
           }
         })
         const account_info = JSON.parse(Taro.getStorageSync('account_info'));
-
         if (res.data.privileges && res.data.privileges.length > 0) {
+          
           var canEditpersonageList = res.data.privileges.filter(function (value) {
             return (value.user_info && value.user_info.id) == account_info.id && (value.content_privilege_code == 'edit');
           })
@@ -95,7 +95,8 @@ export default {
           var list = res1.data.data.filter(function (value) {
             return value.user_id == account_info.id;
           })
-          if (list && list.length > 0) {
+          if (list && list.length > 0 && res.data.privileges && res.data.privileges.length > 0) {
+            console.log('ssssssssssssss',res.data)
             var canEditRoleList = res.data.privileges.filter(function (value) {
               return (value.role_info && value.role_info.id) == list[0].role_id && (value.
                 content_privilege_code == 'edit');

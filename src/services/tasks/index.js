@@ -314,6 +314,7 @@ export const deleteBoardFieldRelation = (data, notShowLoading) => {
     data: {
       ...data
     },
+    
     method: 'DELETE',
     url: `${API_BOARD}/board/field/relation?id=${data.id}`,
   }, notShowLoading, true)

@@ -1,90 +1,63 @@
 @import "../../gloalSet/styles/constant";
 
-.fieldSelectionView {
-    position        : fixed;
-    bottom          : 0;
-    left            : 0;
-    width           : 100%;
-    height          : 100%;
-    background-color: rgba(8, 9, 30, 0.35);
-    z-index         : 99999;
-}
-
 .index {
-    padding-bottom      : pxTrans(20);
-    position            : absolute;
-    top                 : 50%;
-    left                : 50%;
-    // -webkit-transform: translate(-50%, -50%);
-    // -moz-transform   : translate(-50%, -50%);
-    // -ms-transform    : translate(-50%, -50%);
-    // -o-transform     : translate(-50%, -50%);
-    transform           : translate(-50%, -50%);
-    background-color    : white;
-    width               : 85%;
-    border-radius       : pxTrans(8);
-    display             : flex;
-    flex-direction      : column;
-
-    .scrollview {
-        max-height: pxTrans(300);
-    }
-
-    .titleView {
-        height       : pxTrans(40);
-        line-height  : pxTrans(40);
-        width        : 100%;
-        text-align   : center;
-        font-size    : pxTrans(16);
-        margin-top   : pxTrans(10);
-        margin-bottom: pxTrans(10);
-    }
-
-    .contentView {
-        line-height  : pxTrans(30);
-        text-align   : center;
-        font-size    : pxTrans(14);
-        margin-top   : pxTrans(10);
-        margin-bottom: pxTrans(10);
-        padding      : 0 pxTrans(20);
-    }
-
-    .rowIndex {
-        height        : pxTrans(40);
-        width         : 100%;
-        display       : flex;
-        flex-direction: row;
-        align-items   : center;
-        border-bottom : pxTrans(1) solid rgba(0, 0, 0, 0.09);
-
-        .cellIndex {
-            flex       : 1;
-            margin-left: pxTrans(20);
-        }
-
-        .cleckIndex {
-            width       : pxTrans(30);
-            margin-right: pxTrans(20);
-            margin-left : pxTrans(20);
-        }
-    }
-
-    .bootomBtnView {
-        margin-top     : pxTrans(20);
-        display        : flex;
-        flex-direction : row;
-        justify-content: space-around;
-        font-size      : pxTrans(16);
-        line-height    : pxTrans(40);
-    }
-
-    .btnView {
-        text-align      : center;
-        height          : pxTrans(40);
-        width           : 70%;
-        border-radius   : pxTrans(8);
-        background-color: #52acff;
-        color           : white;
-    }
-
+    width         : 100%;
+    display       : flex;
+    flex-direction: column;
+    background    : rgb(255, 255, 255);
+    margin-top    : pxTrans(10);
+}
+.bgView {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgb(255, 255, 255);
+}
+.topText {
+    width       : 100%;
+    text-align  : center;
+    color       : #575C75;
+    font-size   : pxTrans(14);
+    line-height : pxTrans(60);
+}
+.fileList_scrollView {
+    position: absolute; 
+    top: pxTrans(50);
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 0 pxTrans(20);
+}
+.fileList_title {
+    color: #3F445D;
+    font-size: pxTrans(16);
+    font-weight: 500;
+    margin     : pxTrans(20) 0;
+}
+.fileList_item {
+    height: pxTrans(40);
+    display: flex;
+    flex-direction: row;
+    line-height: pxTrans(40);
+    border-bottom: 1px solid #F2F4F8;
+}
+.fileList_item_icon {
+    color       : #9EA6C2 !important;
+    font-size   : pxTrans(20);
+    margin-right: pxTrans(10) !important;
+}
+.fileList_item_add_icon {
+    color: #FF5050 !important;
+}
+.fileList_item_more_icon {
+    color: #6A9AFF !important;
+}
+.fileList_item_title {
+    color    : #575C75;
+    font-size: pxTrans(15);
+}
+.bottom_placeView {
+    height: pxTrans(60);
 }

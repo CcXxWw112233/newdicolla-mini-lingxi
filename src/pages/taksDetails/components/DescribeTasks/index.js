@@ -4,8 +4,11 @@ import indexStyles from './index.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
 import { AtActionSheet, AtActionSheetItem } from "taro-ui"
 import { connect } from '@tarojs/redux'
-import { getOrgIdByBoardId, setBoardIdStorage, judgeJurisdictionProject } from '../../../../utils/basicFunction'
+import { getOrgIdByBoardId, setBoardIdStorage, judgeJurisdictionProject,timestampToDateTimeLine } from '../../../../utils/basicFunction'
 import { PROJECT_FILES_FILE_DOWNLOAD, PROJECT_FILES_FILE_DELETE } from "../../../../gloalSet/js/constant";
+import {UploadWayView} from '../../../../components/tasksRelevant/uploadWayView'
+import { filterFileFormatType } from './../../../../utils/util';
+import iconStyle from '../../../../gloalSet/styles/lxicon.scss'
 
 @connect(({ tasks: { tasksDetailDatas = {}, }, }) => ({
     tasksDetailDatas,
@@ -22,6 +25,7 @@ export default class index extends Component {
         file_resource_id: '',
         board_id: '',
         fileName: '',
+        isUploadWayViewShow:false
     }
 
     handleCancel = () => {
@@ -43,6 +47,31 @@ export default class index extends Component {
         this.setState({
             song_task_isOpen: true,
             song_task_id: cardId,
+        })
+    }
+    /**
+     * 展示上传选择方式
+     */
+     showUploadWayView = () => {
+         const {uploadAuth} = this.props
+        if (!uploadAuth) {
+            Taro.showToast({
+                title: '您没有上传附件的权限',
+                icon: 'none',
+                duration: 2000
+            })
+            return;
+        } 
+        this.setState({
+            isUploadWayViewShow: true,
+        })
+    }
+    /**
+     * 关闭上传选择方式
+     */
+    hideUploadWayView() {
+        this.setState({
+            isUploadWayViewShow: false,
         })
     }
 
@@ -124,7 +153,34 @@ export default class index extends Component {
             })
         })
     }
+// 上传微信聊天文件
+fileUploadMessageFile = () => {
+    var that = this;
+    const { uploadAuth } = this.props;
+    if (!uploadAuth) {
+        Taro.showToast({
+            title: '您没有上传附件的权限',
+            icon: 'none',
+            duration: 2000
+        })
+        return;
+    } 
+    Taro.chooseMessageFile({
+        count: 10,
+        type: 'all',
+        success: function (res) {
+            // tempFilePath可以作为img标签的src属性显示图片
+            // const tempFilePaths = res.tempFilePaths
+            var tempFilePaths = res.tempFiles.map(function (item, index, input) {
+                return item.path;
+            })
+            that.setFileOptionIsOpen()
+            that.uploadChoiceFolder();
+            that.saveChoiceImageTempFilePaths(tempFilePaths)
+        }
+    })
 
+}
     //拍照/选择图片上传
     fileUploadAlbumCamera = () => {
         Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
@@ -226,13 +282,12 @@ export default class index extends Component {
             }
         })
     }
-
+    /**
+     * 预览文件
+     */
     previewFile = () => {
-
         const { dispatch } = this.props
-
         const { file_resource_id, board_id, fileName, } = this.state
-
         setBoardIdStorage(board_id)
         const fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
         const parameter = {
@@ -240,7 +295,6 @@ export default class index extends Component {
             ids: file_resource_id,
             _organization_id: getOrgIdByBoardId(board_id),
         }
-
         // 清除缓存文件
         Taro.getSavedFileList({
             success(res) {
@@ -262,13 +316,13 @@ export default class index extends Component {
                 fileType: fileType,
             },
         })
-
-
         this.setFileOptionIsOpen()
     }
 
+    /**
+     * 删除文件
+     */
     deleteFile = () => {
-
         const { dispatch, cardId, fileInterViewAuth, } = this.props
         const { file_id, file_item_id, create_by, create_time, board_id } = this.state
         const account_info = JSON.parse(Taro.getStorageSync('account_info'));
@@ -305,6 +359,11 @@ export default class index extends Component {
 
     }
 
+    /**
+     * 删除文件的回调
+     * @param {} cardId 
+     * @param {*} file_item_id 
+     */
     deleteCardAttachment = (cardId, file_item_id) => {
 
         const { dispatch, tasksDetailDatas, } = this.props
@@ -327,7 +386,6 @@ export default class index extends Component {
     }
 
     fileHandleCancel = () => {
-
         this.setFileOptionIsOpen()
     }
 
@@ -382,10 +440,11 @@ export default class index extends Component {
     }
 
     render() {
-        const { tasksDetailDatas = {} } = this.props
+        const { tasksDetailDatas = {}, } = this.props
         const { dec_files = [] } = tasksDetailDatas
         const name = this.props.name || ''
-
+        const {isUploadWayViewShow} = this.state;
+        const cartName = '任务说明'
         return (
 
             <View className={indexStyles.wapper}>
@@ -393,9 +452,9 @@ export default class index extends Component {
                 {/* <View className={indexStyles.list_item} onClick={this.gotoChangeChoiceInfoPage.bind(this,)}> */}
                 <View className={indexStyles.list_item}>
                     <View className={`${indexStyles.list_item_left_iconnext}`}>
-                        <Text className={`${globalStyle.global_iconfont}`}>&#xe7f5;</Text>
+                        <Text className={`${globalStyle.global_iconfont}`}>&#xe86c;</Text>
                     </View>
-                    <View className={indexStyles.list_item_name}>描述</View>
+                    <View className={indexStyles.list_item_name}>任务说明</View>
                     <View className={indexStyles.right_style}>
                         <View className={indexStyles.right_centre_style}>
                             <View>
@@ -408,27 +467,51 @@ export default class index extends Component {
                         </View>
                     </View>
 
-                    <View className={`${indexStyles.list_item_iconnext}`} onClick={this.deleteCardProperty}>
-                        <Text className={`${globalStyle.global_iconfont}`}>&#xe63f;</Text>
+                    <View className={`${indexStyles.list_item_iconnext}`} onClick={this.deleteDescribeTasks}>
+                        <Text className={`${globalStyle.global_iconfont}`}>&#xe8b2;</Text>
                     </View>
 
                 </View>
 
                 {
                     dec_files && dec_files.map((item, key) => {
-                        const { id, file_resource_id, board_id, file_id, create_by, create_time } = item
+                        const { id, file_resource_id, board_id, file_id, create_by, create_time,name } = item
+                        var time = timestampToDateTimeLine(create_time,'YMDHM');
+                        const fileType = filterFileFormatType(name);
+
                         return (
-                            <View key={key} className={indexStyles.song_tasks_file}>
-                                <View className={`${indexStyles.list_item_file_iconnext}`}>
-                                    <Text className={`${globalStyle.global_iconfont}`}>&#xe669;</Text>
+                            <View>
+                                <View key={key} className={indexStyles.song_tasks_file}>
+                                    <View className={`${indexStyles.list_item_file_iconnext} ${indexStyles.list_item_file_mold_iconnext}`}>
+                                        {/* <Text className={`${globalStyle.global_iconfont}`}>&#xe669;</Text> */}
+                                        {/* <RichText className={`${globalStyle.global_iconfont}`} nodes={fileType} /> */}
+                                        <View className={`${iconStyle.lxTaskicon}`} style={{'background': fileType}}></View>
+
+                                    </View>
+                                    <View className={indexStyles.list_item_file_center} onClick={()=>this.previewFile(file_resource_id, board_id, name)}>
+                                        <Text className={indexStyles.list_item_file_name}>{item.name}</Text>
+                                        <View className={indexStyles.list_item_file_center_timeView}>
+                                            {/* <Image  className={indexStyles.list_item_file_center_photo}></Image> */}
+                                            <View className={indexStyles.list_item_file_center_time}>{time}</View>
+                                        </View>
+                                    </View>
+
+                                    <View className={indexStyles.list_item_file_iconnext} onClick={()=>this.deleteFile(id)}>
+                                        <Text className={`${globalStyle.global_iconfont}`}>
+                                        &#xe84a;
+                                        </Text>
+                                    </View>
+                                    {/* <View className={indexStyles.song_tasks_file_name} onClick={() => this.fileOption(id, file_resource_id, board_id, name, file_id, create_by, create_time)}>{item.name}</View> */}
                                 </View>
-                                <View className={indexStyles.song_tasks_file_name} onClick={() => this.fileOption(id, file_resource_id, board_id, name, file_id, create_by, create_time)}>{item.name}</View>
+                                <View className={indexStyles.lineView}></View>
                             </View>
                         )
                     })
                 }
 
-
+                <View className={indexStyles.add_task_row} onClick={()=>this.showUploadWayView()}>
+                    <View className={indexStyles.add_item_name}>{dec_files && dec_files.length > 0 ? '继续上传':'上传文件'}</View>
+                </View>
                 <AtActionSheet isOpened={this.state.song_task_isOpen} cancelText='取消' onCancel={this.handleCancel} onClose={this.handleClose}>
                     <AtActionSheetItem onClick={this.uploadDescribeTasksFile}>
                         上传说明文件
@@ -446,7 +529,9 @@ export default class index extends Component {
                         删除说明文件
                     </AtActionSheetItem>
                 </AtActionSheet>
-
+                {
+                    isUploadWayViewShow ? (<UploadWayView title={cartName}  mold='describeTasks' uploadFile={()=>this.uploadDescribeTasksFile()} deleteAction={()=>this.deleteDescribeTasks()} onClickAction={()=>this.hideUploadWayView()} uploadWXFile={()=>this.fileUploadMessageFile()}></UploadWayView>):('')
+                }
             </View>
         )
     }

@@ -15,3 +15,52 @@
         margin: pxTrans(5) pxTrans(5) pxTrans(5) pxTrans(5);
     }
 }
+.index {
+    width         : 100%;
+    display       : flex;
+    flex-direction: column;
+    background    : rgb(255, 255, 255);
+    margin-top    : pxTrans(10);
+}
+.index_title {
+    font-size: pxTrans(14);
+    font-family: PingFangSC-Medium, PingFang SC;
+    font-weight: 500;
+    margin-left: pxTrans(25);
+    line-height: pxTrans(40);
+    color: #575C75;
+}
+.list_View {
+    display: flex;
+    width  : 100%;
+    padding: pxTrans(25) 0;
+    flex-direction: row;
+    align-items  : center;
+    justify-content: space-around;
+}
+.list_item_View {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: space-between;
+}
+.list_item_icon {
+    color: #9EA6C2 !important;
+    font-size: pxTrans(26) !important;
+}
+.list_item_title {
+    line-height: pxTrans(25);
+    color: #575C75;
+    font-size: pxTrans(10);
+}
+.list_more_icon_bgView {
+    height: pxTrans(64);
+    width: pxTrans(64);
+    text-align: center;
+    line-height: pxTrans(64);
+    font-size: pxTrans(25) !important;
+    background: #F5F7FB;
+    border-radius: pxTrans(8);
+    color: #9EA6C2;
+    margin-bottom: pxTrans(20);
+}

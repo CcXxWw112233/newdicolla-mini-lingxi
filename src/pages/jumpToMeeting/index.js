@@ -29,6 +29,16 @@ export default class JumpToMeeting extends Component {
               className={styles.meeting_alt}
             />
             <View>
+              <Image src={jumpPlaceImage}
+                className={styles.meeting_alt}
+                mode = 'aspectFit'
+              />
+              <View>
+                <Text> 快速预订会议，会议资源管理 </Text>
+              </View>
+            </View>
+            <View>
+              <Button onClick={this.toMeeting}> 前往会协宝 </Button>
               <Text>开会就用会协宝</Text>
             </View>
           </View>

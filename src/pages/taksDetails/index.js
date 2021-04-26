@@ -1,5 +1,5 @@
 import Taro, { Component } from "@tarojs/taro";
-import { View, Picker, Text } from "@tarojs/components";
+import { View, Picker, Text,ScrollView } from "@tarojs/components";
 import indexStyles from "./index.scss";
 import globalStyle from "../../gloalSet/styles/globalStyles.scss";
 import TasksTime from "../../components/tasksRelevant/TasksTime/index";
@@ -19,6 +19,8 @@ import MultipleSelectionField from "./components/MultipleSelectionField/index";
 import FileFields from "./components/FileFields/index";
 import { timestampToDateTime, judgeJurisdictionProject } from "../../utils/basicFunction";
 import { PROJECT_TEAM_CARD_EDIT, PROJECT_TEAM_CARD_DELETE, PROJECT_TEAM_CARD_EDIT_FINISH_TIME, PROJECT_TEAM_CARD_COMPLETE, PROJECT_TEAM_CARD_ATTACHMENT_UPLOAD, PROJECT_FILES_FILE_INTERVIEW, PROJECT_FILES_FILE_UPLOAD } from "../../gloalSet/js/constant";
+import MoreFields from "./components/MoreField/index"
+
 
 @connect(
     ({
@@ -181,7 +183,6 @@ export default class taksDetails extends Component {
         });
 
         const { content_Id, board_id } = this.state;
-
         if (content_Id != "" && content_Id != "") {
             this.loadTasksDetail(content_Id, board_id);
         }
@@ -212,7 +213,7 @@ export default class taksDetails extends Component {
                 this.modifyRealize({ is_realize: "1" }, type, timeInfo.cardId);
                 isRealize = 1;
             }
-
+            
             Promise.resolve(
                 dispatch({
                     type: "tasks/setTasksRealize",
@@ -358,7 +359,7 @@ export default class taksDetails extends Component {
             cardId: card_id,
         };
         const board_name = tasksDetailDatas["board_name"] || "";
-        const list_name = tasksDetailDatas["list_name"] || "未分组";
+        const list_name = tasksDetailDatas["list_name"] || "";
         const description = tasksDetailDatas["description"] || "";
         const { content_Id, backIcon } = this.state;
         const executors = tasksDetailDatas["executors"] || [];
@@ -376,20 +377,21 @@ export default class taksDetails extends Component {
         const navBar_Height = SystemInfo.platform == "ios" ? 44 : 48;
         const { isIphoneX, editAuth, deleteAuth, completeAuth, uploadAuth, fileInterViewAuth, } = this.state;
         const { type_flag } = this.props;
-
         var { properties = [], fields = [], org_id, board_id } = tasksDetailDatas;
-
-        board_id = Taro.getStorageSync("tasks_detail_boardId") || board_id;
+        board_id = Taro.getStorageSync("tasks_detail_boardId")  || tasksDetailDatas.board_id;
+        console.log("ssssssssss",tasksDetailDatas)
         return (
             <View>
                 <CustomNavigation backIcon={backIcon} pop='previous' />
-
-                <View
-                    style={{
-                        marginTop: `${statusBar_Height + navBar_Height}` + "px",
+                <View className={indexStyles.topbg_View}></View>
+                <ScrollView className={indexStyles.tasks_contant} style={{
+                        top: `${statusBar_Height + navBar_Height}` + "px",
                         left: 0,
-                    }}
+                    }} 
+                    scrollY
+                    scrollWithAnimation
                 >
+                <View>
                     <View className={indexStyles.tasks_time_style}>
 
                         {
@@ -411,7 +413,6 @@ export default class taksDetails extends Component {
                         boardId={board_id}
                         type="1"
                         editAuth={editAuth}
-
                     />
                     <View className={indexStyles.tasks_name_style}>
                         <ProjectNameCell
@@ -420,7 +421,8 @@ export default class taksDetails extends Component {
                             boardId={board_id}
                             type="2"
                             editAuth={editAuth}
-                        />
+                            onClickAction={this.onClickAction}
+                            />
                     </View>
                     <View>
                         {properties &&
@@ -513,19 +515,11 @@ export default class taksDetails extends Component {
                         {/* <RelationContentCell /> */}
                     </View>
 
-                    {properties && properties.length > 0 && properties_list &&
-                        properties_list.length > 0 &&
-                        properties.length !== properties_list.length ? (
-                        <AddFunctionCell editAuth={editAuth} properties_list={properties_list} />
-                    ) : (
-                        <View></View>
-                    )}
-
                     {/* <NewBuilders />
                 <CommentCell />
                 <CommentBox content={content_Id} /> */}
 
-                    <View className={indexStyles.custom_field_interval}></View>
+                    {/* <View className={indexStyles.custom_field_interval}></View> */}
 
 
 
@@ -553,7 +547,7 @@ export default class taksDetails extends Component {
 
                             return (
                                 <View key={key}>
-                                    <View className={indexStyles.custom_field_interval}></View>
+                                    {/* <View className={indexStyles.custom_field_interval}></View> */}
                                     {field_type == "1" ? (
                                         <ProjectNameCell
                                             title={name}
@@ -672,10 +666,11 @@ export default class taksDetails extends Component {
                                     ) : (
                                         ""
                                     )}
+                                    
                                 </View>
                             );
                         })}
-                    <ProjectNameCell
+                    {/* <ProjectNameCell
                         title="字段"
                         data={{ name: "更多" }}
                         boardId={board_id}
@@ -685,9 +680,22 @@ export default class taksDetails extends Component {
                         onClickAction={this.onClickAction}
                         editAuth={editAuth}
 
-                    />
-                    <View className={`${indexStyles.placeholder_view}`}>
-                    </View>
+                    /> */}
+
+                    {properties && properties.length > 0 && properties_list &&
+                        properties_list.length > 0 &&
+                        properties.length !== properties_list.length ? (
+                        <AddFunctionCell editAuth={editAuth} properties_list={properties_list} />
+                    ) : (
+                        <MoreFields
+                            boardId={board_id}
+                            cardId={card_id}
+                            items={items}
+                            fields={fields}
+                        ></MoreFields>
+                    )}
+                    {/* <View className={`${indexStyles.placeholder_view}`}> */}
+                    {/* </View> */}
                 </View>
 
                 {folder_tree &&
@@ -710,9 +718,10 @@ export default class taksDetails extends Component {
                     // !editAuth && <View className={indexStyles.obscurationView} onClick={this.showNoAuthToast}></View>
                 }
                 <View className={`${indexStyles.deleteView}`} id={card_id} onClick={this.deleteTask}>
-                    <Text className={`${globalStyle.global_iconfont} ${indexStyles.delete_iconfont} ${deleteAuth ? "" : indexStyles.unused_iconfont}`}>&#xe845;</Text>
+                    {/* <Text className={`${globalStyle.global_iconfont} ${indexStyles.delete_iconfont} ${deleteAuth ? "" : indexStyles.unused_iconfont}`}>&#xe845;</Text> */}
+                    <View className={`${indexStyles.deleteTask} ${deleteAuth ? "" : indexStyles.unused_deleteTask}`}>删除任务</View>
                 </View>
-
+                </ScrollView>
             </View>
         );
     }

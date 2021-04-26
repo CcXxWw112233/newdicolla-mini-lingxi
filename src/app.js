@@ -46,6 +46,7 @@ class App extends Component {
       "pages/subChatDetail/index",
       "pages/chat/index",
       "pages/chatDetail/index",
+      "pages/chatDetail/components/inviteMember/index",
       "pages/filesChat/index",
       // "pages/phoneNumberLogin/index",
       "pages/acceptInvitation/index",

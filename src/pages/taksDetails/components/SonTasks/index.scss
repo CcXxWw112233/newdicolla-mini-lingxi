@@ -6,28 +6,27 @@
     display       : flex;
     flex-direction: column;
     align-items   : baseline;
-    margin-left   : pxTrans(0);
-    margin-right  : pxTrans(0);
-    border-bottom : pxTrans(1) solid rgba(0, 0, 0, 0.09);
     background    : rgb(255, 255, 255);
-
+    margin        : pxTrans(5) 0;
     .title_row {
         height        : pxTrans(56);
         display       : flex;
         flex-direction: row;
         align-items   : center;
         width         : 100%;
-        border-bottom : pxTrans(1) solid rgba(0, 0, 0, 0.09);
 
         .list_item_left_iconnext {
             color       : rgb(0, 0, 0, 0.25);
-            font-size   : pxTrans(20);
+            font-size   : pxTrans(24);
             margin-left : pxTrans(20);
             margin-right: pxTrans(10);
+            color: #5FA6FF;
         }
 
         .list_item_name {
-            color      : rgba(0, 0, 0, 0.85);
+            font-size: pxTrans(15);
+            font-weight: 500;
+            color: #212434;
             margin-left: pxTrans(4);
             flex       : 1;
         }
@@ -36,6 +35,7 @@
             color       : rgb(0, 0, 0, 0.25);
             font-size   : pxTrans(20);
             margin-right: pxTrans(10);
+            width: pxTrans(50);
         }
     }
 
@@ -46,6 +46,7 @@
         align-items   : center;
         align-items   : center;
         width         : 100%;
+        padding-bottom   : pxTrans(10);
 
         .list_item_left_iconnext {
             color       : #608DE5;
@@ -55,10 +56,12 @@
         }
 
         .add_item_name {
+            line-height: pxTrans(56);
             flex       : 1;
             font-size  : pxTrans(16);
             font-weight: 400;
             color      : #608DE5;
+            text-align: center;
         }
     }
 
@@ -66,7 +69,6 @@
         display       : flex;
         flex-direction: column;
         width         : 100%;
-        border-bottom : pxTrans(1) solid rgba(0, 0, 0, 0.09);
     }
 
     .song_task_centent {
@@ -78,16 +80,24 @@
             flex-direction   : row;
             align-items      : center;
             width            : 100%;
-            // border-bottom : pxTrans(1) solid rgba(0, 0, 0, 0.09);
+            justify-content: space-between;
+            line-height: pxTrans(56);
+
+            .song_row_left_instyle{
+                display          : flex;
+                flex-direction   : row;
+            }
 
             .list_item_select_iconnext {
                 color       : #79A1EB;
-                font-size   : pxTrans(20);
+                font-size   : pxTrans(25);
                 margin-left : pxTrans(20);
                 margin-right: pxTrans(10);
-            }
 
+            }
+         
             .song_task_name {
+                height: pxTrans(56);
                 flex       : 1;
                 font-size  : pxTrans(16);
                 font-weight: 400;
@@ -108,12 +118,17 @@
         display          : flex;
         flex-direction   : row;
         align-items      : center;
+        justify-content: space-between;
         width            : 100%;
-        // border-bottom : pxTrans(1) solid rgba(0, 0, 0, 0.09);
+        margin-bottom    :pxTrans(10);
+
+        .list_item_file_mold_iconnext {
+            font-size   : pxTrans(35) !important;
+        }
 
         .list_item_file_iconnext {
             color       : rgb(0, 0, 0, 0.25);
-            font-size   : pxTrans(20);
+            font-size   : pxTrans(25);
             margin-left : pxTrans(20);
             margin-right: pxTrans(10);
         }
@@ -127,5 +142,49 @@
             text-overflow: ellipsis;
             white-space  : nowrap;
         }
+        .list_item_file_name {
+            color: #575C75;
+            font-size: pxTrans(14);
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            width: pxTrans(250);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+      
+          }
+          .list_item_file_center {
+            display: flex;
+            flex-direction: column;
+            width: pxTrans(250);
+            padding: pxTrans(10) 0 pxTrans(10) 0;
+          }
+          .list_item_file_center_timeView {
+            display: flex;
+            flex-direction: row;
+            margin-top: pxTrans(5);
+      
+            .list_item_file_center_photo {
+              margin-top: pxTrans(5);
+              height:pxTrans(12);
+              width: pxTrans(12);
+              border-radius:pxTrans(6);
+            }
+
+            .list_item_file_center_time {
+            //   margin-left:pxTrans(10) ;
+              font-size: pxTrans(12);
+              font-weight: 400;
+              color: #9EA6C2;
+              width: pxTrans(250);
+              word-break: break-all;
+            }
+        }
+    }
+    .lineView {
+        margin-left: pxTrans(60);
+        width: 100%;
+        height: pxTrans(1);
+        background-color:#E6E8F1;
     }
 }

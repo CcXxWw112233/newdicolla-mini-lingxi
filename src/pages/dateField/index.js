@@ -5,6 +5,7 @@ import { AtList, AtListItem } from 'taro-ui'
 import { timestampToDateTimeLine, } from '../../utils/basicFunction'
 import styles from './index.scss';
 import { formatTimeN, formatDay, timePicker } from './timePicker'
+import { dateTimePicker, formatPickerDateTime,formatTypePickerDateTime,dateTimeTypePicker } from '../../components/DateTimePicker'
 @connect(({
     tasks: { tasksDetailDatas, },
 }) => ({
@@ -30,30 +31,34 @@ export default class dateField extends Component {
         const { item_id, field_value, dateFieldCode, } = this.props
 
         const date_value = timestampToDateTimeLine(field_value, dateFieldCode)
-        var arr = date_value.split(" ")
-        console.log('---------' + dateFieldCode);
-        console.log(arr);
+        // var arr = date_value.split(" ")
+        var obj = dateTimePicker(dateFieldCode);
+        var startT = formatTypePickerDateTime(obj.dateTimeArray, obj.dateTime,dateFieldCode)
         this.setState({
             current_id: item_id,
             dateSel: field_value,
+            dateStr: date_value,
             date_field_code: dateFieldCode,
-            startTimeArray: timePicker(formatTimeN(new Date())).timeArray
+            startTimeArray: timePicker(formatTimeN(new Date())).timeArray,
+            dateTime: obj.dateTime,
+            dateTimeArray: obj.dateTimeArray,
+            startT: startT
         })
 
-        if (arr) {
-            if (arr.length == 1) {
-                this.setState({
-                    dateSel: arr[0]
-                })
-            } else if (arr.length == 2) {
-                this.setState({
-                    dateSel: arr[0],
-                    timeSel: arr[1],
-                    is_show_time_picker: true
-                })
-                console.log(arr[1])
-            }
-        }
+        // if (arr) {
+        //     if (arr.length == 1) {
+        //         this.setState({
+        //             dateSel: arr[0]
+        //         })
+        //     } else if (arr.length == 2) {
+        //         this.setState({
+        //             dateSel: arr[0],
+        //             timeSel: arr[1],
+        //             is_show_time_picker: true
+        //         })
+        //         console.log(arr[1])
+        //     }
+        // }
     }
 
     updataContent = (valueText) => {
@@ -115,6 +120,7 @@ export default class dateField extends Component {
         this.updataContent(time)
     }
 
+
     onTimeChange = e => {
         const { date_field_code } = this.state
 
@@ -142,31 +148,45 @@ export default class dateField extends Component {
         var time = date.getTime()
         this.updataContent(time)
     }
+    changeDateTime = e => {
+        const { date_field_code } = this.state
 
-    render() {
-
-        const { dateSel, timeSel, is_show_time_picker, date_field_code, startTimeArray } = this.state
-        const { editAuth } = this.props;
-        let titleString = '设置时间'
-        let isShowTime = true;
-        if (date_field_code === 'YM') { //年月
-            titleString = '年月',
-                isShowTime = false
-        } else if (date_field_code === 'YMD') { //年月日
-            titleString = '年月日'
-            isShowTime = false
-        } else if (date_field_code === 'YMDH') { //年月日 时
-            titleString = '年月日 时'
-        } else if (date_field_code === 'YMDHM') { //年月日 时分
-            titleString = '年月日 时分'
-        } else if (date_field_code === 'YMDHMS') { //年月日 时分秒
-            titleString = '年月日 时分秒'
+        var startT = formatTypePickerDateTime(this.state.dateTimeArray, e.detail.value,date_field_code)
+        if(date_field_code == 'YMDH') {
+            startT = startT + ':00'
         }
+        this.setState({
+            startT: startT,
+        })
+        var date = new Date(startT.replace(/-/g, '/'));
+        var time = date.getTime()
+        this.updataContent(time)
+    }
+    render() {
+        const { dateSel, timeSel, is_show_time_picker, date_field_code, startTimeArray,dateStr,dateTime,dateTimeArray,startT } = this.state
+        const { editAuth } = this.props;
+        // let titleString = '设置时间'
+        // let isShowTime = true;
+        // if (date_field_code === 'YM') { //年月
+        //     titleString = '年月',
+        //         isShowTime = false
+        // } else if (date_field_code === 'YMD') { //年月日
+        //     titleString = '年月日'
+        //     isShowTime = false
+        // } else if (date_field_code === 'YMDH') { //年月日 时
+        //     titleString = '年月日 时'
+        // } else if (date_field_code === 'YMDHM') { //年月日 时分
+        //     titleString = '年月日 时分'
+        // } else if (date_field_code === 'YMDHMS') { //年月日 时分秒
+        //     titleString = '年月日 时分秒'
+        // }
 
         return (
             <View className={styles.dataField}>
-
-                <Picker
+                <Picker mode='multiSelector' value={dateTime} onChange={this.changeDateTime} range={dateTimeArray}>
+                    {dateStr ? (<View className={styles.dateStr_style}>{dateStr}</View>) : (<View className={styles.place_style}>选择时间</View>)}
+                </Picker>
+                {/* <Picker
                     mode='date'
                     onChange={this.onDateChange}
                     disabled={!editAuth}
@@ -210,7 +230,7 @@ export default class dateField extends Component {
                         </Picker>
 
                     ) : <View></View>
-                }
+                } */}
             </View>
         )
     }

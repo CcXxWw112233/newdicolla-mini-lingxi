@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { getBoardList, getBoardDetail, v2BoardList } from '../../services/board/index'
+import { getBoardList, getBoardDetail, v2BoardList,getAcatarlist } from '../../services/board/index'
 import { isApiResponseOk } from "../../utils/request";
 
 export default {
@@ -83,7 +83,17 @@ export default {
         }
       }
     },
-
+    *getAcatarlist({ payload }, { select, call, put }) {
+      let res = yield call(getAcatarlist, payload)
+      if (isApiResponseOk(res)) {
+        yield put({
+          type: 'updateDatas',
+          payload: {
+            searchAcatarlist: res.data
+          }
+        })
+      }
+    },
     * v2BoardList({ payload }, { select, call, put }) {
       let res = yield call(v2BoardList, payload)
       if (isApiResponseOk(res)) {

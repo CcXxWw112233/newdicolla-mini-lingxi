@@ -5,6 +5,9 @@ import globalStyles from './../../../gloalSet/styles/globalStyles.scss';
 import defaultPhoto from "./../../../asset/chat/defaultPhoto.png";
 
 class AvatarList extends Component {
+  state={
+    isShowAll:false
+  }
   isValidImgUrl = url => {
     return /^http[s]?:/.test(url);
   };
@@ -16,11 +19,51 @@ class AvatarList extends Component {
     }
     console.log(which, 'on avatar item clicked.');
   };
+
+  componentDidMount() {
+    const { avatarList = [],shouldShowAvatarMax,isshowAdd } = this.props;
+    // this.setState({
+    //   avatarList:avatarList,
+    //   shouldShowAvatarMax:shouldShowAvatarMax,
+    // })
+    var list = avatarList;
+      list.unshift({})
+    this.setState({
+      isShowAll:true,
+      avatarList:list,
+      shouldShowAvatarMax:avatarList.length
+    })
+  }
+  checkMoreGroupMenmber() {
+    const { avatarList = [],shouldShowAvatarMax } = this.props;
+    var list = avatarList;
+    list.unshift({})
+    this.setState({
+      isShowAll:true,
+      avatarList:list,
+      shouldShowAvatarMax:avatarList.length
+    })
+  }
+  
+  inviteMember() {
+    Taro.navigateTo({
+      url:'/pages/chatDetail/components/inviteMember/index'
+    })
+  }
   render() {
-    const { avatarList, shouldShowAvatarMax } = this.props;
+    const { name, } = this.props;
+    const {shouldShowAvatarMax,avatarList,isShowAll} = this.state;   
+  
     return (
+       <View className={index}>
+        <View className={styles.wrapper_top}>
+          <View className={styles.wrapper_groupName}>群名:{name}</View>
+          <View className={styles.wrapper_group_population}>群成员:{avatarList.length}/500</View>
+        </View>
       <View className={`${styles.wrapper}`}>
-        {avatarList.map((item, index) => {
+
+        {avatarList && avatarList.map((item, index) => {
+          const isaddMember = ((index === shouldShowAvatarMax && !isShowAll) || (index == 0 && isShowAll))
           return (
             <View
               key={item.id}
@@ -28,28 +71,30 @@ class AvatarList extends Component {
                 ? styles.avatarItemWrapperWithNoMargin
                 : ''
                 }`}
-              onClick={e =>
-                this.onClickAvatarItem(
-                  index === shouldShowAvatarMax ? 'all' : item.id,
-                  e
-                )
-              }
+              // onClick={e =>
+              //   this.onClickAvatarItem(
+              //     index === shouldShowAvatarMax ? 'all' : item.id,
+              //     e
+              //   )
+              // }
             >
+
               {index <= shouldShowAvatarMax ? (
                 this.isValidImgUrl(item.avatar) ? (
-                  index === shouldShowAvatarMax ? (
+                  isaddMember ? (
                     <View
                       className={`${globalStyles.global_iconfont} ${styles.avatarItemAvatar
-                        } ${index === shouldShowAvatarMax
+                        } ${isaddMember
                           ? styles.avatarItemNameShowAll
                           : ''
                         }`}
                       style={{
-                        fontSize: '45px'
+                        fontSize: '20px'
                       }}
+                      onClick={this.inviteMember}
                     >
                       {' '}
-                      &#xe63f;{' '}
+                      &#xe7b7;{' '}
                     </View>
                   ) : (
                       <Image
@@ -58,43 +103,40 @@ class AvatarList extends Component {
                         mode='aspectFill'
                       />
                     )
-                ) : index === shouldShowAvatarMax ? (
+                ) : isaddMember ? (
                   <View
                     className={`${globalStyles.global_iconfont} ${styles.avatarItemAvatar
-                      } ${index === shouldShowAvatarMax
+                      } ${isaddMember
                         ? styles.avatarItemNameShowAll
                         : ''
                       }`}
                     style={{
-                      fontSize: '45px'
+                      fontSize: '20px'
                     }}
+                    onClick={this.inviteMember}
                   >
                     {' '}
-                    &#xe63f;{' '}
+                    &#xe7b7;{' '}
                   </View>
                 ) : (
-                      // <View
-                      // className={`${globalStyles.global_iconfont} ${styles.avatarItemAvatar
-                      //  }`}
-                      // style={{
-                      // fontSize: '52px'
-                      // }}
-                      // >
-                      // &#xe647;
-                      // </View>
                       <Image src={defaultPhoto} className={`${globalStyles.global_iconfont} ${styles.avatarItemAvatar}`}></Image>
                     )
               ) : null}
               {index <= shouldShowAvatarMax ? (
                 <Text className={styles.avatarItemName}>
-                  {index === shouldShowAvatarMax
-                    ? '查看全部'
+                  {isaddMember
+                    ? '邀请成员'
                     : item.name}
                 </Text>
               ) : null}
             </View>
           );
         })}
+        {/* {
+          avatarList.length > shouldShowAvatarMax &&  <View className={styles.checkMoreGroupMenmber} onClick={this.checkMoreGroupMenmber}>更多成员</View>
+        } */}
+       
+       </View>
       </View>
     );
   }

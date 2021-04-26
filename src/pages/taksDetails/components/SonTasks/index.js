@@ -2,11 +2,14 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Input, } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyle from '../../../../gloalSet/styles/globalStyles.scss'
+import iconStyle from '../../../../gloalSet/styles/lxicon.scss'
 import { AtActionSheet, AtActionSheetItem } from "taro-ui"
 import { connect } from '@tarojs/redux'
-import { getOrgIdByBoardId, setBoardIdStorage, judgeJurisdictionProject } from '../../../../utils/basicFunction'
+import { getOrgIdByBoardId, setBoardIdStorage, judgeJurisdictionProject,timestampToDateTimeLine } from '../../../../utils/basicFunction'
 import { AddSonTask } from '../../../../pages/addSonTask'
 import { PROJECT_FILES_FILE_DOWNLOAD, PROJECT_FILES_FILE_DELETE } from "../../../../gloalSet/js/constant";
+import {UploadWayView} from '../../../../components/tasksRelevant/uploadWayView'
+import { filterFileFormatType } from './../../../../utils/util';
 
 @connect(({ tasks: { tasksDetailDatas = {}, choice_image_temp_file_paths = '' }, }) => ({
     tasksDetailDatas, choice_image_temp_file_paths,
@@ -24,7 +27,8 @@ export default class index extends Component {
         fileName: '',
         cardId: '',
         fileId: '',
-        isAddSonTaskShow: false
+        isAddSonTaskShow: false,
+        isUploadWayViewShow:false
     }
     onClickAddSonTask() {
         this.setState({
@@ -37,7 +41,7 @@ export default class index extends Component {
 
         const { boardId, tasksDetailDatas = {}, } = this.props
         const { list_id, card_id } = tasksDetailDatas
-
+        console.log('sssssssss',tasksDetailDatas)
         // Taro.navigateTo({
         // // url: `../../pages/addSonTask/index?propertyId=${card_id}&boardId=${boardId}&listId=${card_id}&cardId=${card_id}`
         // })
@@ -86,6 +90,35 @@ export default class index extends Component {
         })
     }
 
+    /**
+     * 展示上传选择方式
+     */
+    showUploadWayView = (cardId,cartName) => {
+        this.setState({
+            isUploadWayViewShow: true,
+            cartName:cartName
+        })
+
+        const { dispatch } = this.props
+        dispatch({
+            type: 'tasks/updateDatas',
+            payload: {
+                song_task_id: cardId,
+                tasks_upload_file_type: 'sonTask'
+            }
+        })
+    }
+    /**
+     * 关闭上传选择方式
+     */
+    hideUploadWayView() {
+        this.setState({
+            isUploadWayViewShow: false,
+        })
+    }
+    /**
+     * 上传文件
+     */
     uploadFile = () => {
         const { uploadAuth } = this.props;
         if (uploadAuth) {
@@ -164,7 +197,35 @@ export default class index extends Component {
             })
         })
     }
+ // 上传微信聊天文件
+ fileUploadMessageFile = () => {
+    var that = this;
+    const { uploadAuth } = this.props;
+    if (!uploadAuth) {
+        Taro.showToast({
+            title: '您没有上传附件的权限',
+            icon: 'none',
+            duration: 2000
+        })
+        return;
+    } 
+    Taro.chooseMessageFile({
+        count: 10,
+        type: 'all',
+        success: function (res) {
+            // tempFilePath可以作为img标签的src属性显示图片
+            // const tempFilePaths = res.tempFilePaths
+            var tempFilePaths = res.tempFiles.map(function (item, index, input) {
+                return item.path;
+            })
 
+            that.setFileOptionIsOpen()
+            that.uploadChoiceFolder();
+            that.saveChoiceImageTempFilePaths(tempFilePaths)
+        }
+    })
+
+}
     //拍照/选择图片上传
     fileUploadAlbumCamera = () => {
         Taro.setStorageSync('isReloadFileList', 'is_reload_file_list')
@@ -418,16 +479,10 @@ export default class index extends Component {
     deleteCardAttachment = (cardId, file_id) => {
         const { dispatch, tasksDetailDatas, child_data } = this.props
         const { properties = [] } = tasksDetailDatas
-
-
         child_data.forEach(obj => {
-
             if (obj.card_id === cardId) {
-
                 obj.deliverables.forEach(item => {
-
                     if (item.file_id === file_id) {
-
                         this.removeObjWithArr(obj.deliverables, item);
                     }
                 })
@@ -560,8 +615,7 @@ export default class index extends Component {
             }
 
         }).then(res => {
-            // if () {
-            // }
+
         })
 
     }
@@ -580,7 +634,7 @@ export default class index extends Component {
         }
     }
     putCardBaseInfo = (value, cardId) => {
-
+        
         const { dispatch, tasksDetailDatas, child_data = [], } = this.props
         const { properties = [], } = tasksDetailDatas
 
@@ -612,20 +666,20 @@ export default class index extends Component {
     }
 
     render() {
-        const { child_data = [], boardId, tasksDetailDatas = {}, editAuth } = this.props
+        const { child_data = [],  tasksDetailDatas = {}, editAuth ,boardId} = this.props
         const { list_id, card_id } = tasksDetailDatas
-        const { isAddSonTaskShow } = this.state
+        const { isAddSonTaskShow,isUploadWayViewShow,cartName } = this.state
         return (
             <View className={indexStyles.list_item}>
 
                 <View className={indexStyles.title_row}>
                     <View className={`${indexStyles.list_item_left_iconnext}`}>
-                        <Text className={`${globalStyle.global_iconfont}`}>&#xe7f4;</Text>
+                        <Text className={`${globalStyle.global_iconfont}`}>&#xe867;</Text>
                     </View>
                     <View className={indexStyles.list_item_name}>子任务</View>
-                    <View className={`${indexStyles.list_item_rigth_iconnext}`} onClick={this.deleteCardProperty}>
+                    {/* <View className={`${indexStyles.list_item_rigth_iconnext}`} onClick={this.deleteCardProperty}>
                         <Text className={`${globalStyle.global_iconfont}`}>&#xe7fc;</Text>
-                    </View>
+                    </View> */}
                 </View>
 
                 <View className={indexStyles.song_task_centent}>
@@ -636,27 +690,29 @@ export default class index extends Component {
                             return (
                                 <View key={key} className={indexStyles.content}>
                                     <View className={indexStyles.song_row_instyle}>
-                                        {
-                                            is_realize == '0' ? (<View className={`${indexStyles.list_item_select_iconnext}`} onClick={() => this.tasksRealizeStatus(card_id, is_realize)}>
-                                                <Text className={`${globalStyle.global_iconfont}`}>&#xe6df;</Text>
-                                            </View>) : (<View className={`${indexStyles.list_item_select_iconnext}`} onClick={() => this.tasksRealizeStatus(card_id, is_realize)}>
-                                                <Text className={`${globalStyle.global_iconfont}`}>&#xe844;</Text>
-                                            </View>)
-                                        }
+                                        <View className={indexStyles.song_row_left_instyle}>
+                                            {
+                                                is_realize == '0' ? (<View className={`${indexStyles.list_item_select_iconnext}`} onClick={() => this.tasksRealizeStatus(card_id, is_realize)}>
+                                                    <Text className={`${globalStyle.global_iconfont}`}>&#xe6df;</Text>
+                                                </View>) : (<View className={`${indexStyles.list_item_select_iconnext}`} onClick={() => this.tasksRealizeStatus(card_id, is_realize)}>
+                                                    <Text className={`${globalStyle.global_iconfont}`}>&#xe844;</Text>
+                                                </View>)
+                                            }
 
-                                        {/* <View className={indexStyles.song_task_name}>{card_name}</View> */}
-                                        <View onClick={this.reminderToast}>
-                                            <Input
-                                                className={indexStyles.song_task_name}
-                                                value={card_name}
-                                                confirmType='完成'
-                                                onBlur={this.updataInput.bind(this, card_id)}
-                                                disabled={!editAuth}
-                                            >
-                                            </Input>
+                                            {/* <View className={indexStyles.song_task_name}>{card_name}</View> */}
+                                            <View onClick={this.reminderToast}>
+                                                <Input
+                                                    className={indexStyles.song_task_name}
+                                                    value={card_name}
+                                                    confirmType='完成'
+                                                    onBlur={this.updataInput.bind(this, card_id)}
+                                                    disabled={!editAuth}
+                                                >
+                                                </Input>
+                                            </View>
                                         </View>
-
-                                        <View className={`${indexStyles.list_item_rigth_iconnext}`} onClick={() => this.tasksOption(card_id)}>
+                                        {/* tasksOption */}
+                                        <View className={`${indexStyles.list_item_rigth_iconnext}`} onClick={() => this.showUploadWayView(card_id,card_name)}>
                                             <Text className={`${globalStyle.global_iconfont}`}>&#xe63f;</Text>
                                         </View>
                                     </View>
@@ -664,12 +720,41 @@ export default class index extends Component {
                                     {
                                         deliverables.map((item, key1) => {
                                             const { id, name, file_resource_id, board_id, file_id, create_by, create_time } = item
+                                            var time = timestampToDateTimeLine(create_time,'YMDHM');
+                                            const fileType = filterFileFormatType(name);
+
                                             return (
-                                                <View className={indexStyles.song_tasks_file}>
-                                                    <View className={`${indexStyles.list_item_file_iconnext}`}>
+                                                <View className={indexStyles.song_tasks_file} key={key}>
+                                                    {/* <View className={`${indexStyles.list_item_file_iconnext}`}>
                                                         <Text className={`${globalStyle.global_iconfont}`}>&#xe669;</Text>
                                                     </View>
-                                                    <View className={indexStyles.song_tasks_file_name} onClick={() => this.fileOption(id, file_resource_id, board_id, name, item.card_id, file_id, create_by, create_time)}>{name}</View>
+                                                    <View className={indexStyles.song_tasks_file_name} onClick={() => this.fileOption(id, file_resource_id, board_id, name, item.card_id, file_id, create_by, create_time)}>{name}</View> */}
+                                                     <View>
+                                                     <View  className={indexStyles.song_tasks_file}>
+                                                        <View className={`${indexStyles.list_item_file_iconnext} ${indexStyles.list_item_file_mold_iconnext}`}>
+                                                            {/* <Text className={`${globalStyle.global_iconfont}`}>
+                                                                &#xe669;
+                                                            </Text> */}
+                                                            <View className={`${iconStyle.lxTaskicon}`} style={{'background': fileType}}></View>
+
+                                                            {/* <RichText className={`${globalStyle.global_iconfont}`} nodes={fileType} /> */}
+
+                                                        </View>
+                                                        <View className={indexStyles.list_item_file_center} onClick={()=>this.previewFile(file_resource_id, board_id, name)}>
+                                                            <Text className={indexStyles.list_item_file_name}>{name}</Text>
+                                                            <View className={indexStyles.list_item_file_center_timeView}>
+                                                                {/* <Image  className={indexStyles.list_item_file_center_photo}></Image> */}
+                                                                <View className={indexStyles.list_item_file_center_time}>{time}</View>
+                                                            </View>
+                                                        </View>
+                                                        <View className={indexStyles.list_item_file_iconnext} onClick={()=>this.deleteFile(id,file_id,card_id )}>
+                                                            <Text className={`${globalStyle.global_iconfont}`}>
+                                                                &#xe84a;
+                                                            </Text>
+                                                        </View>
+                                                    </View>
+                                                    <View className={indexStyles.lineView}></View>
+                                                    </View>
                                                 </View>
                                             )
                                         })
@@ -682,9 +767,9 @@ export default class index extends Component {
                 </View>
 
                 <View className={indexStyles.add_task_row} onClick={this.addSonTask}>
-                    <View className={`${indexStyles.list_item_left_iconnext}`}>
+                    {/* <View className={`${indexStyles.list_item_left_iconnext}`}>
                         <Text className={`${globalStyle.global_iconfont}`}>&#xe7b7;</Text>
-                    </View>
+                    </View> */}
                     <View className={indexStyles.add_item_name}>添加子任务</View>
                 </View>
 
@@ -706,7 +791,10 @@ export default class index extends Component {
                     </AtActionSheetItem>
                 </AtActionSheet>
                 {
-                    isAddSonTaskShow ? (<AddSonTask propertyId={card_id} boardId={boardId} listId={card_id} cardId={card_id} onClickAction={this.onClickAddSonTask}></AddSonTask>) : (null)
+                    isAddSonTaskShow   ? (<AddSonTask propertyId={card_id} boardId={boardId} listId={card_id} cardId={card_id} onClickAction={this.onClickAddSonTask}></AddSonTask>) : (null)
+                }
+                {
+                    isUploadWayViewShow ? (<UploadWayView title={cartName}  mold='subTask' uploadFile={()=>this.uploadFile()} deleteAction={()=>this.deleteSongTasks()} onClickAction={()=>this.hideUploadWayView()} uploadWXFile={()=>this.fileUploadMessageFile()}></UploadWayView>):('')
                 }
             </View>
         )

@@ -1,11 +1,32 @@
+@import '../../../gloalSet/styles/pxTrans';
+.index {
+  background-color: white;
+  padding-bottom: pxTrans(30);
+}
+.wrapper_top {
+  display       : flex;
+  flex-direction: column;
+  padding       : pxTrans(20) 0 pxTrans(20) pxTrans(20);
+  background    : #fff;
+  .wrapper_groupName {
+    font-size: pxTrans(16);
+    font-weight: 500;
+    color: #3F445D;
+    line-height: pxTrans(30);
+  }
+  .wrapper_group_population {
+    color: #7C83A1;
+    font-size: pxTrans(13);
+  }
+}
 .wrapper {
   display       : flex;
   flex-wrap     : wrap;
   padding       : 32px;
   padding-bottom: 0px;
-  background    : #fff;
   max-height    : 630px;
-
+  background    : #fff;
+ 
   .avatarItemWrapper {
     width          : 96px;
     display        : flex;
@@ -30,20 +51,33 @@
       text-align   : center;
       font-size    : 24px;
       font-weight  : 400;
-      color        : rgba(0, 0, 0, 0.65);
+      color        : #575C75;
       line-height  : 40px;
       overflow     : hidden;
       text-overflow: ellipsis;
       white-space  : nowrap;
     }
-
-    .avatarItemNameShowAll {
-      color     : rgba(0, 0, 0, 0.25);
-      background: rgba(0, 0, 0, 0.02);
-    }
   }
-
+  .avatarItemNameShowAll {
+    line-height: 96px;
+    text-align: center;
+    color     : #BCC2D6;
+    background: #F2F4F8;
+  }
   .avatarItemWrapperWithNoMargin {
     margin-right: 0px;
   }
+}
+.checkMoreGroupMenmber {
+  margin: pxTrans(30) 0;
+  width: 80%;
+  margin-left: 10%;
+  background-color: white;
+  text-align: center;
+  line-height:pxTrans(40) ;
+  height: pxTrans(40);
+  color: #3F445D;
+  font-size:pxTrans(14);
+  border-radius: pxTrans(24);
+  border: 1px solid #D1D5E4;
 }

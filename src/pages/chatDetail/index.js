@@ -10,7 +10,7 @@ import DetailItem from './components/DetailItem.js';
 }))
 class ChatDetail extends Component {
   handleShowAllGroupMember = () => {
-    this.pageJump('/pages/groupMember/index')
+    // this.pageJump('/pages/groupMember/index')
   };
   handleTurnToHistoryPage = () => {
     console.log('should show history page.');
@@ -37,14 +37,20 @@ class ChatDetail extends Component {
     }));
 
     return (
+      <View>
+                <View className={styles.bgView}>
+
       <View className={styles.wrapper}>
         <View className={styles.avatarWrapper}>
           <AvatarList
             avatarList={avatarList}
             onShowAll={this.handleShowAllGroupMember}
+            shouldShowAvatarMax={2}
+            name={name}
+            isshowAdd={true}
           />
         </View>
-        <View className={styles.historyWrapper}>
+        {/* <View className={styles.historyWrapper}>
           <DetailItem
             itemText='查找聊天记录'
             onItemClick={this.handleTurnToHistoryPage}
@@ -56,13 +62,15 @@ class ChatDetail extends Component {
             itemTextKeyValue={['群聊名称:', name]}
             isCanOperator={false}
             isShowBottomBorder
-          />
-          <DetailItem
+          /> */}
+          {/* <DetailItem
             itemTextKeyValue={['人数:', users.length]}
             isCanOperator={false}
-          />
-          <View className={styles.hackAFuckingBorderBottom}></View>
-        </View>
+          /> */}
+          {/* <View className={styles.hackAFuckingBorderBottom}></View> */}
+        {/* </View> */}
+      </View>
+      </View>
       </View>
     );
   }

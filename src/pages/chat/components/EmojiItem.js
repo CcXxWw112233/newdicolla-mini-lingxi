@@ -3,8 +3,11 @@ import { Text, Image } from '@tarojs/components';
 
 class EmojiItem extends Component {
   render() {
-    const { categ, cont } = this.props;
-
+    const { categ, cont ,flow} = this.props;
+    
+    if(flow == 'out') {
+      
+    }
     //过滤掉<dev>等标签
     const newCont = cont.replace(/<\/?[^>]*>/g, '\n')
     
@@ -24,6 +27,7 @@ class EmojiItem extends Component {
     return (
       <Text decode='true' 
         style={{ lineHeight: '24px', height: '24px', verticalAlign: 'middle' }}
+        
       >
         {newCont}
       </Text>

@@ -173,6 +173,15 @@ export default class nowOpen extends Component {
     const { dispatch } = this.props
     setBoardIdStorage(board_id)
     const fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
+    const img_type_arr = ['.bmp', '.jpg', '.png', '.gif','.jpeg']  //文件格式
+    // 判断是否是图片
+    if(img_type_arr.indexOf(fileType.toLowerCase()) != -1) {
+        console.log('图片')
+        Taro.navigateTo({
+            url: '/pages/file/previewImage/index?imageData=' + JSON.stringify(value),
+        })
+        return;
+    }
     const parameter = {
         board_id,
         file_ids: id,

@@ -2,8 +2,11 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Picker, Input } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyles from '../../../gloalSet/styles/globalStyles.scss'
-import { timestampToDateZH, timestampToHoursMinZH, timestampToTime, timestampToHM, } from '../../../utils/basicFunction'
+import { timestampToDateZH, timestampToHoursMinZH, timestampToTime, timestampToHM, timestampToDateTimeLine } from '../../../utils/basicFunction'
 import { connect } from '@tarojs/redux'
+import { dateTimePicker, formatPickerDateTime,formatTypePickerDateTime } from '../../DateTimePicker'
+
+
 @connect(({ tasks: { isPermission, tasksDetailDatas = {}, }, }) => ({
     isPermission, tasksDetailDatas,
 }))
@@ -25,12 +28,17 @@ export default class TasksTime extends Component {
     componentDidMount() {
 
         const { cellInfo = {}, } = this.props
-        const { sTime, eTime, } = cellInfo
+        const { sTime, eTime, } = cellInfo       
+        var obj = dateTimePicker('YMDHM');
+        var startT = formatTypePickerDateTime(obj.dateTimeArray, obj.dateTime,'YMDHM')
         this.setState({
             task_start_date: timestampToTime(sTime),
             task_due_date: timestampToTime(eTime),
             task_start_time: timestampToHM(sTime),
             task_due_time: timestampToHM(eTime),
+            dateTime: obj.dateTime,
+            dateTimeArray: obj.dateTimeArray,
+            startT: startT
         })
     }
 
@@ -45,6 +53,10 @@ export default class TasksTime extends Component {
     updataCardName = (cardId, value) => {
 
         const { dispatch } = this.props
+        this.setState({
+            isStartprint:false,
+            new_card_name:value['detail']["value"]
+        })
         dispatch({
             type: 'tasks/putCardBaseInfo',
             payload: {
@@ -126,42 +138,32 @@ export default class TasksTime extends Component {
 
 
     onDateChangeDue = e => {
-
         let value = e['detail']['value']
-
         this.setState({
             task_due_date: value,
             due_date_str: value,
         })
-
         var strTime = value + ' ' + '23:59:59'
         var date = new Date(strTime.replace(/-/g, '/'));
         var time = date.getTime()
-
         this.putTasksDueTime(time)
     }
 
 
     onTimeChangeDue = e => {
-
         let value = e['detail']['value']
-
         this.setState({
             task_due_time: value,
             due_time_str: value,
         })
-
         const { task_due_date, } = this.state
-
         var strTime = task_due_date + ' ' + value
         var date = new Date(strTime.replace(/-/g, '/'));
         var time = date.getTime()
-
         this.putTasksDueTime(time)
     }
-
+    // 更新结束时间
     putTasksDueTime = (time) => {
-
         //更新任务结束时间
         const { dispatch, tasksDetailDatas, cellInfo = {}, } = this.props
         const { cardId } = cellInfo
@@ -186,15 +188,14 @@ export default class TasksTime extends Component {
             }
         })
     }
-
+    // 清除结束日期
     cleanDueDateTime = () => {
-
         this.setState({
             due_date_str: '结束日期',
         })
-
         this.putTasksDueTime('0')
     }
+    // 没有权限的弹窗
     reminderToast() {
         const { editAuth } = this.props;
         if (!editAuth) {
@@ -203,17 +204,65 @@ export default class TasksTime extends Component {
                 icon: 'none',
                 duration: 2000
             })
-
         }
+    }
+    /**
+     * 删除时间
+     * @param {} e 
+     */
+     cleanDateTime = e => {
+        this.cleanDueDateTime()
+        this.cleanStartDateTime()
+     }
+    /**
+     * 获取焦点
+     * @param {*} e 
+     */
+    getfouces = e => {
+        this.setState({
+            isStartprint:true
+        })
+    }
+    /**
+     * 修改开始时间
+     * @param {*} e 
+     */
+    changeStartDateTime = e => {
+        console.log(e.detail.value);
+        var startT = formatTypePickerDateTime(this.state.dateTimeArray, e.detail.value,'YMDHM')
+        this.setState({
+            startT: startT,
+        })
+        var date = new Date(startT.replace(/-/g, '/'));
+        var time = date.getTime()
+        console.log(time);
+        this.putTasksStartTime(time)
+    }
+    /**
+     * 修改结束时间
+     * @param {*} e 
+     */
+    changeEndDateTime = e => {
+        console.log(e.detail.value);
+        var startT = formatTypePickerDateTime(this.state.dateTimeArray, e.detail.value,'YMDHM')
+        this.setState({
+            startT: startT,
+        })
+        var date = new Date(startT);
+        var time = date.getTime()
+        console.log(time);
+        this.putTasksDueTime(time)
     }
     render() {
 
-        const { start_date_str, start_time_str, due_date_str, due_time_str, } = this.state
-
+        const { start_date_str, start_time_str, due_date_str, due_time_str,isStartprint,new_card_name,dateTime,dateTimeArray } = this.state
         const { cellInfo = {}, isPermission, flag, completeAuth, editAuth } = this.props
-        const card_name = cellInfo.cardDefinition
-        const sTime = cellInfo.sTime
-        const eTime = cellInfo.eTime
+        const card_name = (new_card_name && card_name != cellInfo.cardDefinition) ? new_card_name : cellInfo.cardDefinition
+        var sTime = cellInfo.sTime ? timestampToDateTimeLine(cellInfo.sTime, 'YMDHM',true) : ''
+        var eTime = cellInfo.eTime ? timestampToDateTimeLine(cellInfo.eTime, 'YMDHM',true) : ''
+        const isSameYear = sTime.substring(0,4) == eTime.substring(0,4);
+        sTime = isSameYear ? sTime.substring(5) : sTime;
+        eTime = isSameYear ? eTime.substring(5) : eTime;
         const card_id = cellInfo.cardId
         const is_Realize = cellInfo.isRealize
 
@@ -228,9 +277,9 @@ export default class TasksTime extends Component {
                         {flag === '0' || flag === '2' ? (
                             //任务
                             is_Realize === '1' && isPermission === true ? (
-                                <Text className={`${globalStyles.global_iconfont}`} style={{ color: '#1890FF' }}>&#xe66a;</Text>
+                                <Text className={`${globalStyles.global_iconfont} ${globalStyles.status_iconfont}`} style={{ color: '#1890FF' }}>&#xe844;</Text>
                             ) : (
-                                <Text className={`${globalStyles.global_iconfont}`}>&#xe661;</Text>
+                                <Text className={`${globalStyles.global_iconfont} ${globalStyles.status_iconfont}`}>&#xe6df;</Text>
                             )
                         ) : (
                             //日程
@@ -242,24 +291,35 @@ export default class TasksTime extends Component {
                             )
                         )}
                     </View>
-                    <View onClick={this.reminderToast}>
-                        <Input
-                            className={indexStyles.card_title}
-                            placeholder='填写名称'
-                            value={card_name}
-                            confirmType='完成'
-                            onBlur={this.updataCardName.bind(this, card_id)}
-                            disabled={!editAuth}
-                        ></Input>
+                    <View onClick={this.reminderToast} className={indexStyles.card_title_View}>
+                        {
+                            isStartprint ? (
+                                <Textarea
+                                className={indexStyles.card_title}
+                                placeholder='填写名称'
+                                value={card_name}
+                                confirmType='完成'
+                                auto-height="true"
+                                onBlur={this.updataCardName.bind(this, card_id)}
+                                disabled={!isStartprint}
+                            ></Textarea>
+                            ) :(
+                                <View
+                                className={indexStyles.card_title_place_view}
+                                onClick={this.getfouces}
+                                >{card_name}</View>
+                            )
+                        }
                     </View>
 
                 </View>
+                <View className={indexStyles.line_View}></View>
                 <View className={indexStyles.selectionTime}>
 
                     <View className={indexStyles.start_content}>
 
+                        {/*
                         <View className={indexStyles.start_date_style} onClick={this.reminderToast}>
-
                             <Picker mode='date' onChange={this.onDateChangeStart} disabled={!editAuth} className={indexStyles.startTime} >
                                 {sTime && sTime != '0' ? timestampToDateZH(sTime) : start_date_str}
                             </Picker>
@@ -270,17 +330,20 @@ export default class TasksTime extends Component {
                                 {sTime ? timestampToHoursMinZH(sTime) : start_time_str}
                             </Picker>
                         </View>
-
-                        {
-                            sTime && sTime != '0' ? (<View className={`${indexStyles.list_item_left_iconnext}`} onClick={this.cleanStartDateTime}>
+                    */}
+                        <Picker mode='multiSelector' value={dateTime} onChange={this.changeStartDateTime} range={dateTimeArray}>
+                            {sTime ? (<View>{sTime}</View>) : (<View>开始时间</View>)}
+                        </Picker>
+                        {/* {
+                         sTime && sTime != '0' ? (<View className={`${indexStyles.list_item_left_iconnext}`} onClick={this.cleanStartDateTime}>
                                 <Text className={`${globalStyles.global_iconfont}`}>&#xe77d;</Text>
                             </View>) : <View></View>
-                        }
+                        }  */}
 
                     </View>
-
+                    <Text className={`${globalStyles.global_iconfont} ${indexStyles.time_Icon_style}`}>&#xe654;</Text>
                     <View className={indexStyles.due_content} onClick={this.reminderToast}>
-
+                        {/** 
                         <View className={indexStyles.due_date_style}>
                             <Picker mode='date' onChange={this.onDateChangeDue} disabled={!editAuth} className={indexStyles.endTime}>
                                 {eTime && eTime != '0' ? timestampToDateZH(eTime) : due_date_str}
@@ -292,20 +355,30 @@ export default class TasksTime extends Component {
                                 {eTime ? timestampToHoursMinZH(eTime) : due_time_str}
                             </Picker>
                         </View>
+                        */}
 
-
-                        {
-                            eTime && eTime != '0' ? (<View className={`${indexStyles.list_item_right_iconnext}`} onClick={this.cleanDueDateTime}>
-                                <Text className={`${globalStyles.global_iconfont}`}>&#xe77d;</Text>
-                            </View>
-                            ) : <View></View>
-                        }
+                            <Picker mode='multiSelector' value={dateTime} onChange={this.
+                                changeEndDateTime} range={dateTimeArray}>
+                                {eTime ? (<View>{eTime}</View>) : (<View>结束时间</View>)}
+                            </Picker>
+                            {/* {
+                                eTime && eTime != '0' ? (<View className={`${indexStyles.list_item_right_iconnext}`} onClick={this.cleanDueDateTime}>
+                                    <Text className={`${globalStyles.global_iconfont}`}>&#xe77d;</Text>
+                                </View>
+                                ) : <View></View>
+                            } */}
 
 
                     </View>
-
+                    {
+                        eTime && eTime != '0' ? (
+                            <View onClick={this.cleanDateTime} className={indexStyles.deleteTimeIcon}>
+                                <Text className={`${globalStyles.global_iconfont}`}>&#xe639;</Text>
+                            </View>
+                        ) : <View></View>
+                    }
                 </View>
-
+                <View className={indexStyles.line_View}></View>
             </View >
         )
     }

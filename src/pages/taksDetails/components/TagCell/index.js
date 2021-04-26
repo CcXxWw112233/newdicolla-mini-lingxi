@@ -124,7 +124,7 @@ export default class index extends Component {
       <View className={indexStyles.list_item} >
         <View className={indexStyles.list_left} onClick={this.clickTagCell}>
           <View className={`${indexStyles.list_item_left_iconnext}`}>
-            <Text className={`${globalStyle.global_iconfont}`}>&#xe6ac;</Text>
+            <Text className={`${globalStyle.global_iconfont}`}>&#xe86d;</Text>
           </View>
           <View className={indexStyles.list_item_name}>标签</View>
           <View className={indexStyles.tagCell_list_item_detail}>

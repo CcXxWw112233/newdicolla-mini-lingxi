@@ -1,5 +1,5 @@
 import { request, packagePromise, } from "../../utils/request";
-import { API_BOARD, REQUEST_INTERGFACE_VERSIONN } from "../../gloalSet/js/constant";
+import { API_BOARD,API_UPMS, REQUEST_INTERGFACE_VERSIONN } from "../../gloalSet/js/constant";
 
 //获取项目列表
 export const getBoardList = (data, notShowLoading) => {
@@ -56,4 +56,27 @@ export const v2BoardList = (data, notShowLoading) => {
     url: `${API_BOARD}/board/list/filter/app`,
   }, notShowLoading)
 }
+// 模糊检索用户信息
+export const getAcatarlist = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'GET',
+    url: `${API_UPMS}/user/associate`,
+  }, notShowLoading)
+}
 
+// 发送邀请
+export const invitationMenber = (data, notShowLoading) => {
+  return request(
+    {
+      data: {
+        ...data
+      },
+      method: "POST",
+      url: `${API_UPMS}/organization/invite/web/join`,
+    },
+    notShowLoading
+  );
+};

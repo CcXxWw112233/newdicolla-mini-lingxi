@@ -275,6 +275,7 @@ export default class Calendar extends Component {
       payload: {
         org_id: '0',
         board_ids: [],
+        search_content:'',
         query_milestone: ['all'],
         query_card: ['all'],
         query_flow: ['all'],
