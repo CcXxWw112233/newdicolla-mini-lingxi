@@ -37,7 +37,7 @@
       line-height: pxTrans(26);
       color      : $color_3;
       font-size  : pxTrans(12);
-      margin-left: pxTrans(10);
+      margin-left: pxTrans(25);
     }
 
     .card_content_middle_top {
@@ -50,13 +50,9 @@
         color      : $color_1;
         font-size  : $fontsize_16;
         line-height: pxTrans(26);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        width      :pxTrans(200);
+        max-width: pxTrans(250);
         display    : flex;
         flex-direction: row;
-        overflow: hidden;
       }
 
       .urge {
@@ -96,7 +92,7 @@
     }
 
     .card_content_middle_bott {
-      margin-top   : pxTrans(10);
+      margin-left: pxTrans(25);
       // color     : $color_3;
       font-size    : $fontsize_12;
       white-space  : nowrap;

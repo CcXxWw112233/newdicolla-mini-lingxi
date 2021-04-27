@@ -61,7 +61,7 @@
                 color       : $color_3;
                 font-size   : pxTrans(11);
                 margin-left : pxTrans(12);
-                margin-right: pxTrans(12);
+                margin-right: pxTrans(20);
                 margin-top  : pxTrans(6);
             }
         }
@@ -71,10 +71,12 @@
             margin-left : pxTrans(12);
             color       : rgb(0, 0, 0, 0.25);
             font-size   : pxTrans(20);
-            margin-right: pxTrans(10);
+            margin-right: pxTrans(20);
         }
         .addDesribeTaskText {
             font-size: pxTrans(17);
+            margin-right: pxTrans(10) !important;
+
         }
     }
 

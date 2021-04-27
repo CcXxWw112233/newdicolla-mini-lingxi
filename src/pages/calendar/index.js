@@ -125,6 +125,7 @@ export default class Calendar extends Component {
         payload: {}
       })
     ).then(res => {
+      
       const { unread_all_number } = this.props;
 
       if (unread_all_number != 0 && unread_all_number) {

@@ -239,6 +239,9 @@ export default class QrcodeHistory extends Component {
     const { qrcode_history } = this.state;
     return (
       <View className={styles.container}>
+      <View className={styles.topbg_View}></View>
+      <View className={styles.bg_View}>
+
         {qrcode_history.length ? (
           <ScrollView
             scrollY
@@ -309,15 +312,17 @@ export default class QrcodeHistory extends Component {
               <Image src={NoDataSvg} />
             </View>
             <View className={styles.err_text}>
-              请前往电脑端，扫描统计二维码
+              访问 <Text className={styles.com_domain}>lingxi.di-an.com</Text> ，扫描统计二维码
             </View>
-            <View className={styles.scanCodeBtn}>
-              <Button type="primary" plain="true" onClick={this.toScanCode}>
-                扫描二维码
+            {/* <View className={styles.scanCodeBtn}> */}
+              <Button   onClick={this.toScanCode}>
+              扫描二维码
               </Button>
-            </View>
+            {/* </View> */}
           </View>
         )}
+      </View>
+
         <AtFloatLayout
           isOpened={this.state.openConfirm}
           title="修改标题"

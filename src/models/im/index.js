@@ -438,6 +438,7 @@ export default {
     * getImAllHistoryUnread({ payload }, { select, call, put }) {
       const res = yield call(getImAllHistoryUnread, payload)
       if (isApiResponseOk(res)) {
+        console.log('sssssssssssssssssssss圈子未读',res)
         yield put({
           type: 'updateDatas',
           payload: {

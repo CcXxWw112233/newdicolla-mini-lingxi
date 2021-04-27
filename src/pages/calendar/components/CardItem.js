@@ -92,7 +92,7 @@ export default class CardItem extends Component {
   
   render() {
     const { itemValue = {}, index, schedule, org_list, selected_timestamp } = this.props;
-    var {
+    const {
       board_id,
       content_id,
       content_name,
@@ -167,9 +167,11 @@ export default class CardItem extends Component {
           opacity = "0.6";
         }
       } else if ("1" == flag) {
-        if (due_time && due_time < new Date().getTime() / 1000) {
-          opacity = "0.6";
-        }
+        // if (due_time && due_time < new Date().getTime() / 1000) {
+          if(!isToday) {
+            opacity = "0.6";
+          }
+        // }
       } else if ("2" == flag) {
         if (is_realize == "1") {
           opacity = "0.6";
@@ -207,18 +209,18 @@ export default class CardItem extends Component {
     } 
     var now = Date.parse(new Date());
     var isToday = new Date(parseInt(start_time)).toDateString() === new Date().toDateString()
+    var sTime = start_time ? timestampToDateTimeLine(start_time, 'YMDHM',true) : '';
+    var eTime = duetime ? timestampToDateTimeLine(duetime, 'YMDHM',true) : '';
 
-    // var start_time = start_time ? timestampToDateTimeLine(start_time, 'YMDHM',true) : '';
-    // var duetime = duetime ? timestampToDateTimeLine(duetime, 'YMDHM',true) : '';
-    // duetime =  duetime.substring(duetime.length - 5) == '00:00' || duetime.substring(duetime.length - 5) == '23:59' ? duetime.substring(0,duetime.length - 5) : duetime;
-    // start_time =  start_time.substring(start_time.length - 5) == '00:00' || start_time.substring(start_time.length - 5) == '23:59' ? start_time.substring(0,start_time.length - 5) : start_time;
+    eTime =  eTime.substring(eTime.length - 5) == '00:00' || eTime.substring(eTime.length - 5) == '23:59' ? eTime.substring(0,eTime.length - 5) : eTime;
+    sTime =  sTime.substring(sTime.length - 5) == '00:00' || sTime.substring(sTime.length - 5) == '23:59' ? sTime.substring(0,sTime.length - 5) : sTime
 
-    // const isSameYear = start_time.substring(0,4) == duetime.substring(0,4);
-    // var nowTime = timestampToDateTimeLine(new Date().getTime(), 'YMDHM',true)
-    // const isCurrentYear = nowTime.substring(0,4) == duetime.substring(0,4) && start_time.substring(0,4) == nowTime.substring(0,4);
-    // start_time = isSameYear && isCurrentYear ? start_time.substring(5) : start_time;
-    // duetime = isSameYear && isCurrentYear ? duetime.substring(5) : duetime;
-    // console.log('ssssssssss',start_time - duetime)
+    const isSameYear = sTime.substring(0,4) == eTime.substring(0,4);
+    var nowTime = timestampToDateTimeLine(new Date().getTime(), 'YMDHM',true)
+    const isCurrentYear = nowTime.substring(0,4) == eTime.substring(0,4) && sTime.substring(0,4) == nowTime.substring(0,4);
+    sTime = isSameYear && isCurrentYear ? sTime.substring(5) : sTime;
+    eTime = isSameYear && isCurrentYear ? eTime.substring(5) : eTime;
+
     return (
       <View
         onClick={() => flag != "meeting" && flag != "1" && flag != '3' && this.gotoListItemDetails(itemValue)}
@@ -233,25 +235,28 @@ export default class CardItem extends Component {
           <View className={`${indexStyles.card_content_middle}`}>
             <View className={`${indexStyles.card_content_middle_top}`}>
               <View className={`${indexStyles.card_title}`}>
+
               {moldIcon}
                {content_name || topic}
-              </View>
-
+               <Text>
               {
                 is_warning && flag == '0' && is_realize == '0' && !(due_time && now > duetime) ? (
-                  <View className={`${indexStyles.urge} ${indexStyles.iswaring}`}><Text className={`${globalStyles.
-                    global_iconfont} ${indexStyles.urgeicon} `}>&#xe849;</Text>预警</View>)
+                  <Text className={`${indexStyles.urge} ${indexStyles.iswaring}`}><Text className={`${globalStyles.
+                    global_iconfont} ${indexStyles.urgeicon} `}>&#xe849;</Text>预警</Text>)
                   : (null)
               }
 
               {
                 is_urge == '1' && flag == '2' ? (
-                  <View className={indexStyles.urge}><Text className={`${globalStyles.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text> 催办</View>) : (null)
+                  <Text className={indexStyles.urge}><Text className={`${globalStyles.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text> 催办</Text>) : (null)
               }
               {
-                itemValue.due_time && now > duetime && (flag == '0' || flag == '2') && is_realize == '0' ? (<View className={indexStyles.urge}><Text className={`${globalStyles.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text>
-逾期</View>) : (null)
+                itemValue.due_time && now > duetime && (flag == '0' || flag == '2') && is_realize == '0' ? (<Text className={indexStyles.urge}><Text className={`${globalStyles.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text>
+逾期</Text>) : (null)
               }
+              </Text>
+              </View>
+
             </View>
             <View className={`${indexStyles.organize}`}>
               {/* #{getOrgName({ org_id, org_list })}&gt;{board_name} */}{
@@ -268,11 +273,11 @@ export default class CardItem extends Component {
             >
               {!due_time
                 ? "未排期"
-                : `${start_time
-                  ? (timestampToTimeZH(start_time).substring(0, 4) == timestampToTimeZH(due_time || end_time).substring(0, 4) ? timestampToTimeZH(start_time).substring(5) : timestampToTimeZH(start_time))
+                : `${sTime
+                  ? sTime
                   : "开始时间未设置"
-                } - ${due_time || end_time
-                  ? (timestampToTimeZH(due_time || end_time).substring(0, 4) == timestampToTimeZH(start_time).substring(0, 4) ? timestampToTimeZH(due_time || end_time).substring(5) : timestampToTimeZH(due_time || end_time))
+                } - ${eTime
+                  ? eTime
                   : "截止时间未设置"
                 }`}
             </View>
