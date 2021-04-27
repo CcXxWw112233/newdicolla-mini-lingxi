@@ -72,7 +72,7 @@ export default class taskGroupPicker extends Component {
                 payload: {
                     card_id: contentId,
                     list_id: currtne_value,
-                    calback: this.putCardBaseInfo(currtne_value, listId),
+                    // calback: this.putCardBaseInfo(currtne_value, listId),
                 }
             }).then(res => {
                 this.setState({
@@ -114,7 +114,8 @@ export default class taskGroupPicker extends Component {
             // this.setState({
             //     current_select_taskGroup_name: tasksGroupList[e.detail.value]['list_name']
             // })
-            this.cancelSelect()
+            typeof this.props.onClickAction == "function" &&
+            this.props.onClickAction(currentItem.list_name);
         })
     }
     /**

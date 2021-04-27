@@ -165,7 +165,6 @@ selectItem = item => {
 
   render() {
     const { checkboxOption = [],newCheckedList } = this.state;
-
     return (
       // <View className={indexStyles.fieldSelectionView}>
 
@@ -204,8 +203,15 @@ selectItem = item => {
                                           <Text className={`${globalStyle.global_iconfont} ${indexStyles.checked_iconfont}`}>&#xe844;</Text>
                                       ):('')
                                   }
-                                    <Image src={item.avatar} className={indexStyles.content_avatar}></Image>
-                                    <Text className={indexStyles.content_avatar_name}>{item.name}</Text>
+                                  {
+                                    item.avatar ? (
+                                      <Image src={item.avatar} className={indexStyles.content_avatar}></Image>
+                                    ) :(
+                                      <View className={`${globalStyle.global_iconfont} ${indexStyles.content_avatar}`}>&#xe878;</View>
+                                    )
+
+                                  }
+                                    <Text className={indexStyles.content_avatar_name}>{item.name || item.mobile}</Text>
                               </View>
                           )
                         })

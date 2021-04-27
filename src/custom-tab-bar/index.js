@@ -86,7 +86,6 @@ class customTabBar extends Component {
 
   componentDidMount() {
     const { tabbar_index } = this.props;
-    console.log("tabbarssssssss", tabbar_index);
   }
 
   // 自定义 tabBar的页面

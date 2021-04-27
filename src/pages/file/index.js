@@ -429,11 +429,9 @@ export default class File extends Component {
         const { id, board_id, org_id } = value
         const { dispatch } = this.props
         setBoardIdStorage(board_id)
-        /**
-         * '.jpeg', JPEG格式的图片taro <Image>标签暂不支持  
-         */
+   
         const fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
-        const img_type_arr = ['.bmp', '.jpg', '.png', '.gif',]  //文件格式
+        const img_type_arr = ['.bmp', '.jpg', '.png', '.gif','.jpeg']  //文件格式
         // 判断是否是图片
         if(img_type_arr.indexOf(fileType.toLowerCase()) != -1) {
             console.log('图片')

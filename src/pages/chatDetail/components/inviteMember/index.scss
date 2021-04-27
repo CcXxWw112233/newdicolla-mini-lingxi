@@ -98,7 +98,13 @@
       .avatarItemAvatar {
         width        : 96px;
         height       : 96px;
+        line-height: 96px;
+        text-align: center;
         border-radius: 50%;
+        background-color: #F5F7FB;
+        color: #9EA6C2;
+        font-size: pxTrans(25);
+    
       }
   
       .avatarItemName {

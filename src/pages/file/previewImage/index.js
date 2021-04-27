@@ -4,7 +4,7 @@ import indexStyles from './index.scss'
 import globalStyle from '../../gloalSet/styles/globalStyles.scss'
 import { connect } from '@tarojs/redux'
 import SearchBar from '../../../components/searchBar'
-import { getFileInfo, getFileComment, setFileComment } from '../../../services/file/index'
+import { getFileInfo, getFileComment, setFileComment,getDownloadUrl } from '../../../services/file/index'
 import { transformTime } from '../../../utils/util'
 import CustomNavigation from "../../acceptInvitation/components/CustomNavigation.js";
 import {  PROJECT_FILES_FILE_DOWNLOAD,PROJECT_FILES_FILE_DELETE } from "../../../gloalSet/js/constant";
@@ -31,6 +31,18 @@ export default class nowOpen extends Component {
     current_custom_comment:[]
   }
   componentDidMount() {
+    var that = this;
+    const imageData = JSON.parse(this.$router.params.imageData);
+    const param = {
+      board_id: imageData.board_id,
+      file_ids: imageData.file_id,
+      _organization_id: imageData.org_id,
+    }
+    getDownloadUrl(param).then(res=>{
+      that.setState({
+        currenImage:res.data[0]
+      })
+    })
     this.setState({
       currentImage:JSON.parse(this.$router.params.imageData)
     },()=>{
@@ -300,6 +312,10 @@ export default class nowOpen extends Component {
       }
   })
  }
+ /**
+  * 前往评论
+  * @param {*} value 
+  */
  goFileChat = value => {
   const {dispatch} = this.props
   const {currentImage = {}} = this.state;
@@ -322,25 +338,32 @@ export default class nowOpen extends Component {
       })
   }, 50)
  }
-
+ allScreenImage (){
+   const {currenImage} = this.state
+   console.log(currenImage)
+  Taro.previewImage({
+    current: currenImage,
+    urls: [currenImage]
+})
+ }
   render() {
-    const {currentImage,current_custom_comment=[]} = this.state;
+    const {currentImage,current_custom_comment=[],currenImage} = this.state;
     return (
       <View className={`${indexStyles.index}`} >
         <CustomNavigation  className={indexStyles.customNavigation} backIcon='arrow_icon' title={currentImage.file_name} pop = 'previous' bgColor='rgba(33, 36, 52, 0.65)'/>
         <View className={indexStyles.comment_view}>
-          <Image className={indexStyles.content_image} src={currentImage.thumbnail_url} onLongPress={this.onLongClick.bind(this)} mode='aspectFit'></Image>
+          <Image className={indexStyles.content_image} onClick={this.allScreenImage} src={currenImage} onLongPress={this.onLongClick.bind(this)} mode='aspectFit'></Image>
           <View className={indexStyles.comment_list_view}>
             {
               current_custom_comment && current_custom_comment.map((item,key)=> {
                 return   item.flow == 'out' ? (
                   <View className={`${indexStyles.comment_list_item} ${key == 0 ? indexStyles.comment_list_item_first:''}`} key={key} onClick={this.goFileChat}>
                     <View className={`${indexStyles.comment_list_item_text} ${indexStyles.comment_list_item_text_out}`} >{item.text}</View>
-                    <Image className={indexStyles.comment_list_item_avatar} src='https://newdi-test-public.oss-cn-beijing.aliyuncs.com/2021-01-08/f352cc3b98b0438b8544d4f07a778f7d.jpg'></Image>
+                    <Image className={indexStyles.comment_list_item_avatar} src={item.avatar}></Image>
                   </View>
                 ):(
                   <View className={`${indexStyles.comment_list_item} ${key == 0 ? indexStyles.comment_list_item_first:''}`} key={key} onClick={this.goFileChat}>
-                    <Image className={indexStyles.comment_list_item_avatar}  src='https://newdi-test-public.oss-cn-beijing.aliyuncs.com/2021-01-08/f352cc3b98b0438b8544d4f07a778f7d.jpg'></Image>
+                    <Image className={indexStyles.comment_list_item_avatar}  src={item.avatar}></Image>
                     <View className={indexStyles.comment_list_item_text}>{item.text}</View>
                   </View>
                 )

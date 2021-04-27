@@ -379,7 +379,6 @@ export default class taksDetails extends Component {
         const { type_flag } = this.props;
         var { properties = [], fields = [], org_id, board_id } = tasksDetailDatas;
         board_id = Taro.getStorageSync("tasks_detail_boardId")  || tasksDetailDatas.board_id;
-        console.log("ssssssssss",tasksDetailDatas)
         return (
             <View>
                 <CustomNavigation backIcon={backIcon} pop='previous' />

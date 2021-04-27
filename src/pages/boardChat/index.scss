@@ -79,3 +79,12 @@ page {
     }
 
 }
+.contain_empty {
+    margin-top: pxTrans(200);
+    text-align: center;
+
+    .file_list_empty {
+        width : pxTrans(167);
+        height: pxTrans(122);
+    }
+}

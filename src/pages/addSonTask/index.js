@@ -430,7 +430,7 @@ export default class addSonTask extends Component {
                                         <View className={`${indexStyles.timeInfoView}`}>
                                              <Text className={`${indexStyles.timeInfo_subTitle}`}>执行人:</Text>
                                              <View className={`${indexStyles.avatar_place}`}></View>
-                                             <Avatar avartarTotal={'multiple'} userList={selectExecutorsList} maxShowAvAtar={5}/>
+                                             <Avatar avartarTotal={'multiple'} userList={selectExecutorsList} listMore={10}/>
                                         </View>
                                     </View>
                                 ) : (

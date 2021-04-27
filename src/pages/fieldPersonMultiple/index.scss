@@ -93,6 +93,11 @@
     height: pxTrans(48);
     width: pxTrans(48);
     border-radius: pxTrans(24);
+    background-color: #F5F7FB;
+    color: #9EA6C2;
+    font-size: pxTrans(25);
+    line-height: pxTrans(48);
+    text-align: center;
 }
 .content_avatar_name {
     line-height: pxTrans(20);
@@ -101,10 +106,10 @@
 }
 .checked_iconfont {
     font-size: pxTrans(25);
-    left     : pxTrans(50);
+    margin-left: pxTrans(50);
     position : absolute;
-    top      : pxTrans(10);
     color    : #6A9AFF;
+    margin-top: - pxTrans(50);
 }
 .reset_View {
     height: pxTrans(48);

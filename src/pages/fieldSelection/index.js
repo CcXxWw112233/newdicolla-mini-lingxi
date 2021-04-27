@@ -240,7 +240,6 @@ export default class fieldSelection extends Component {
 
     render() {
         const { checkboxOption = [],checkedList=[] } = this.state
-        console.log('ssssssssssssssssssss',checkboxOption,checkedList)
         //  1 单选字段
         //                     2 多选字段
         //                     3 日期字段
