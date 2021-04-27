@@ -32,8 +32,9 @@ export const request = (options, notShowLoading, isNewLogin, redirectPage = true
         // if (!notShowLoading) {
         //   Taro.hideLoading();
         // }
-
+        // console.log('sssssssssssssss',res)
         //获取是哪个页面未登录=>跳转到登录
+        
         let pages = Taro.getCurrentPages();
         let currPage = null;
         if (pages.length) {
@@ -63,7 +64,10 @@ export const request = (options, notShowLoading, isNewLogin, redirectPage = true
             isNavigatePushLogin = true
           }, 1000)
         }
-
+        //未登录的权限提示不展示toast  直接登录
+        if(res.statusCode == 401) {
+          return;
+        }
         resolve(res.data);
       },
       fail: function (error) {

@@ -413,22 +413,30 @@ export default class taksDetails extends Component {
                         type="1"
                         editAuth={editAuth}
                     />
-                    <View className={indexStyles.tasks_name_style}>
-                        <ProjectNameCell
-                            title="任务分组"
-                            data={{ name: list_name }}
-                            boardId={board_id}
-                            type="2"
-                            editAuth={editAuth}
-                            onClickAction={this.onClickAction}
-                            />
-                    </View>
+
                     <View>
                         {properties &&
                             properties.map((item, key) => {
                                 const { code, name, id, data = [] } = item;
+                                console.log(code)
                                 return (
                                     <View key={key}>
+                                       <View>
+                                        {
+                                            code == 'DEPENDENCY' ? (
+                                                <ProjectNameCell
+                                                        title="任务分组"
+                                                        data={{ name: list_name }}
+                                                        boardId={board_id}
+                                                        propertyId={id}
+                                                        cardId={card_id}
+                                                        type="2"
+                                                        editAuth={editAuth}
+                                                        onClickAction={this.onClickAction}
+                                                        />
+                                                ):('')
+                                        }
+                                       </View>
                                         <View>
                                             {code == "EXECUTOR" ? (
                                                 <ProjectNameCell

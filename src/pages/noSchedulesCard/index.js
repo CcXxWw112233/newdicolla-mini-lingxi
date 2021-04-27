@@ -236,8 +236,8 @@ export default class Calendar extends Component {
         const SystemInfo = Taro.getSystemInfoSync()
         const {searchKey} = this.state;
         const statusBar_Height = SystemInfo.statusBarHeight 
-        console.log(SystemInfo.platform)
-        const navBar_Height = SystemInfo.platform == 'ios' ? 40 : 48;
+        const navBar_Height = SystemInfo.platform == 'ios' ? 44 : 48;
+        console.log('ssssssslllllssssssss',navBar_Height, statusBar_Height)
 
         return (
             <View className={indexStyles.index} style={{ minHeight: screenHeight }}>
