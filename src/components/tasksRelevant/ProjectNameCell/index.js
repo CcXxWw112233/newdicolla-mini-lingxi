@@ -167,6 +167,7 @@ export default class ProjectNameCell extends Component {
         const { type, items, field_value, field_item_id, item_id, field_set, } = value;
         const { dispatch, tasksDetailDatas = {}, data, cardId, editAuth } = this.props;
         const { list_id, org_id, fields } = tasksDetailDatas;
+
         console.log(value);
         const {
             isFieldSelectionClick,
@@ -174,6 +175,7 @@ export default class ProjectNameCell extends Component {
             isExecutorsListClick,
             isMilestoneListClick,
             isFieldPersonSingle,
+            tasksGroupList
         } = this.state;
 
         let board_id = Taro.getStorageSync("tasks_detail_boardId");
@@ -193,8 +195,18 @@ export default class ProjectNameCell extends Component {
             if (isTasksGroupClick) {
                 this.setState({
                     isTasksGroupClick: false,
-                    isTaskGroupViewShow:true
                 });
+                if(tasksGroupList && tasksGroupList.length > 0) {
+                    this.setState({
+                        isTaskGroupViewShow:true
+                    })
+                } else {
+                    Taro.showToast({
+                        title: '暂无分组可选',
+                        icon: 'none',
+                        duration: 2000
+                    })
+                }
                 const that = this;
                 setTimeout(function () {
                     that.setState({
@@ -530,19 +542,15 @@ export default class ProjectNameCell extends Component {
     /**
      * 任务分组
      */
-    onClickTaskGroup() {
+    onClickTaskGroup = currentTaskGroup => {
         const {tasksGroupList} = this.state;
+        
         const { dispatch, data,tasksDetailDatas = {} } = this.props;
         const {list_ids = []} = tasksDetailDatas;
-        tasksGroupList.forEach(item=>{
-            if(item.list_id == list_ids[0]) {
-             this.setState({
-                 currentTaskGroup: item.list_name,
-             })
-            }
-         })
+     
         this.setState({
-            isTaskGroupViewShow: false
+            isTaskGroupViewShow: false,
+            currentTaskGroup:currentTaskGroup
         })
         typeof this.props.onClickAction == "function" &&
             this.props.onClickAction();
@@ -693,7 +701,7 @@ export default class ProjectNameCell extends Component {
                         {icon}
                     </View>
                     {
-                        type != 1 && type != 2 && type != 3 && type != 4 && <View className={indexStyles.list_item_name}>{title}-{type}</View>
+                        type != 1 && type != 2 && type != 3 && type != 4 && <View className={indexStyles.list_item_name}>{title}</View>
                     }
                     <View className={indexStyles.right_style}>
                         <View className={indexStyles.right_centre_style}>
@@ -701,7 +709,7 @@ export default class ProjectNameCell extends Component {
                                 {(type === "3" || type === "12") && data && data.length > 0 ? (
                                     <View className={indexStyles.executors_list_item_detail}>
                                         <View className={`${indexStyles.avata_area}`}>
-                                            <Avatar avartarTotal={"multiple"} userList={data} maxShowAvAtar='5'/>
+                                            <Avatar avartarTotal={"multiple"} userList={data} listMore={20} />
                                         </View>
                                     </View>
                                 ) : (
@@ -765,7 +773,7 @@ export default class ProjectNameCell extends Component {
                     isExecutorsListShow ? (<ExecutorsList title='指派负责人' contentId={contentId} onClickAction={this.onClickExecutorsList} executors={data}></ExecutorsList>) : (null)
                 }
                 {
-                    isTaskGroupViewShow ? (<TaskGroupView contentId={contentId} onClickAction={this.onClickTaskGroup} tag={type} title={title} listId={list_id} currentName={data.name} tasksGroupList={tasksGroupList}></TaskGroupView>):('')
+                    isTaskGroupViewShow ? (<TaskGroupView contentId={contentId} onClickAction={(groupName)=>this.onClickTaskGroup(groupName)} tag={type} title={title} listId={list_id} currentName={data.name} tasksGroupList={tasksGroupList}></TaskGroupView>):('')
                 } 
                 {
                     isMilestoneCellViewShow ? (<MilestoneCellView onClickAction={this.onClickMilestone} tag={type}  title={title} currentName={data.name} dataArray={milestoneList} contentId={contentId} milestoneId={milestoneId} tasksDetailDatas={tasksDetailDatas} editAuth={editAuth}></MilestoneCellView>):('')

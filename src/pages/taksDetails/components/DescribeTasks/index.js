@@ -438,7 +438,14 @@ fileUploadMessageFile = () => {
             }
         })
     }
-
+    /**
+     * 添加任务说明备注
+     */
+    addDesribeTaskText () {
+        Taro.navigateTo({
+            url:'/pages/taksDetails/components/AddDesribeTaskText/index'
+        })
+    }
     render() {
         const { tasksDetailDatas = {}, } = this.props
         const { dec_files = [] } = tasksDetailDatas
@@ -456,7 +463,7 @@ fileUploadMessageFile = () => {
                     </View>
                     <View className={indexStyles.list_item_name}>任务说明</View>
                     <View className={indexStyles.right_style}>
-                        <View className={indexStyles.right_centre_style}>
+                        {/* <View className={indexStyles.right_centre_style}>
                             <View>
                                 <View className={indexStyles.list_item_detail}>
                                     {
@@ -464,15 +471,18 @@ fileUploadMessageFile = () => {
                                     }
                                 </View>
                             </View>
-                        </View>
+                        </View> */}
                     </View>
 
+                    <View className={`${indexStyles.list_item_iconnext} ${indexStyles.addDesribeTaskText}`} onClick={this.addDesribeTaskText}>
+                        <Text className={`${globalStyle.global_iconfont}`}>&#xe8b6;</Text>
+                    </View>
                     <View className={`${indexStyles.list_item_iconnext}`} onClick={this.deleteDescribeTasks}>
                         <Text className={`${globalStyle.global_iconfont}`}>&#xe8b2;</Text>
                     </View>
 
                 </View>
-
+            
                 {
                     dec_files && dec_files.map((item, key) => {
                         const { id, file_resource_id, board_id, file_id, create_by, create_time,name } = item
@@ -508,7 +518,18 @@ fileUploadMessageFile = () => {
                         )
                     })
                 }
-
+                <View className={indexStyles.desText_View}>
+                    <View className={indexStyles.desText_View_subTitle}>备注:</View>    
+                    <View className={indexStyles.right_centre_style}>
+                        <View>
+                            <View className={indexStyles.desText_View_detail}>
+                                {
+                                    <RichText className='text' nodes={name} />
+                                }
+                            </View>
+                        </View>
+                    </View>
+                </View>
                 <View className={indexStyles.add_task_row} onClick={()=>this.showUploadWayView()}>
                     <View className={indexStyles.add_item_name}>{dec_files && dec_files.length > 0 ? '继续上传':'上传文件'}</View>
                 </View>

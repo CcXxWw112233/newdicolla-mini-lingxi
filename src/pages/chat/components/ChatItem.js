@@ -564,7 +564,6 @@ class ChatItem extends Component {
     }
     const fileType = chatFile ? filterFileFormatType("." + chatFile.ext) : "";
     const isoutText = flow != "in" && type == "text";
-    console.log('ssssssssss',flow,type,isoutText )
     return (
       <View className={styles.wrapper}>
         {(type === "text" ||

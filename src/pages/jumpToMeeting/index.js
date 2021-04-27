@@ -23,30 +23,31 @@ export default class JumpToMeeting extends Component {
   }
   render() {
     return (
-      <View className={styles.container}>
+    <View className={styles.container}>
+          {/* <Image src={require('../../asset/meeting/meeting_alt.png')}
+            className={styles.meeting_alt}
+          /> */}
+      <View className={styles.topbg_View}></View>
+      <View className={styles.bg_View}>
         <View className={styles.content}>
           <View>
-            {/* <Image src={require('../../asset/meeting/meeting_alt.png')}
+            <Image src={jumpPlaceImage}
               className={styles.meeting_alt}
-            /> */}
+              mode = 'aspectFit'
+            />
             <View>
-              <Image src={jumpPlaceImage}
-                className={styles.meeting_alt}
-                mode = 'aspectFit'
-              />
-              <View>
-                <Text> 快速预订会议，会议资源管理 </Text>
-              </View>
-            </View>
-            <View>
-              <Button onClick={this.toMeeting}> 前往会协宝 </Button>
+              <Text>快速预订会议，会议资源管理</Text>
             </View>
           </View>
-          {/* <View>
+          <View>
             <Button onClick={this.toMeeting}>前往会协宝</Button>
-          </View> */}
+          </View>
         </View>
-      </View>
+        {/* <View>
+          <Button onClick={this.toMeeting}>前往会协宝</Button>
+        </View> */}
+    </View>
+    </View>
     )
   }
 }

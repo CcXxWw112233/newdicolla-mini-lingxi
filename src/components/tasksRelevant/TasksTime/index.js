@@ -260,9 +260,14 @@ export default class TasksTime extends Component {
         const card_name = (new_card_name && card_name != cellInfo.cardDefinition) ? new_card_name : cellInfo.cardDefinition
         var sTime = cellInfo.sTime ? timestampToDateTimeLine(cellInfo.sTime, 'YMDHM',true) : ''
         var eTime = cellInfo.eTime ? timestampToDateTimeLine(cellInfo.eTime, 'YMDHM',true) : ''
+        eTime =  eTime.substring(eTime.length - 5) == '00:00' || eTime.substring(eTime.length - 5) == '23:59' ? eTime.substring(0,eTime.length - 5) : eTime;
+        sTime =  sTime.substring(sTime.length - 5) == '00:00' || sTime.substring(sTime.length - 5) == '23:59' ? sTime.substring(0,sTime.length - 5) : sTime
+
         const isSameYear = sTime.substring(0,4) == eTime.substring(0,4);
-        sTime = isSameYear ? sTime.substring(5) : sTime;
-        eTime = isSameYear ? eTime.substring(5) : eTime;
+        var nowTime = timestampToDateTimeLine(new Date().getTime(), 'YMDHM',true)
+        const isCurrentYear = nowTime.substring(0,4) == eTime.substring(0,4) && sTime.substring(0,4) == nowTime.substring(0,4);
+        sTime = isSameYear && isCurrentYear ? sTime.substring(5) : sTime;
+        eTime = isSameYear && isCurrentYear ? eTime.substring(5) : eTime;
         const card_id = cellInfo.cardId
         const is_Realize = cellInfo.isRealize
 

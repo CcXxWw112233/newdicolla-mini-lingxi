@@ -8,6 +8,7 @@ import { isPlainObject, filterListAuth } from "./../../utils/util";
 import { isApiResponseOk } from "../../utils/request";
 import { getImHistory, getAllIMTeamList } from "../../services/im";
 import SearchBar from '../../components/searchBar'
+import file_list_empty from '../../asset/file/file_list_empty.png'
 
 
 @connect(
@@ -260,6 +261,13 @@ export default class BoardChat extends Component {
   };
 
   componentDidMount() {
+    var that = this;
+    setTimeout(function () {
+      that.setState({
+        isShowImage:true
+      })
+  }, 1500);
+  
     this.getChatBoardList();
   }
 
@@ -647,7 +655,7 @@ export default class BoardChat extends Component {
   };
 
   render() {
-    const { search_mask_show } = this.state;
+    const { search_mask_show,isShowImage } = this.state;
     let { userUID } = this.props;
     // 对消息进行排序, 根据lastMsg里面的time最新的排在最上面
     let listArray = this.boardListForView();
@@ -659,48 +667,59 @@ export default class BoardChat extends Component {
         /> */}
         <SearchBar searchMenuClick={(value) => this.searchMenuClick(value)} cancelSearchMenuClick={(value) => this.cancelSearchMenuClick(value)}/>
         <View className={indexStyles.placeView}></View>
-        {listArray.map((value, key) => {
-          const {
-            board_id,
-            board_name,
-            im_id,
-            org_name,
-            users,
-            lastMsg,
-            unread,
-            childs = [],
-            apns,
-            name,
-            subUnread
-          } = value;
-          let _math = Math.random() * 100000 + 1;
-          return (
-            <GroupItem
-              key={_math}
-              taroKey={_math}
-              data={value}
-              board_id={board_id}
-              org_name={org_name}
-              im_id={im_id}
-              name={board_name || name}
-              avatarList={this.genAvatarList(users)}
-              lastMsg={this.genLastMsg(lastMsg, value)}
-              newsNum={+unread + this.getSubUnread(value)}
-              apns={apns}
-              userid={userUID}
-              showNewsDot={this.isShouldShowNewDot(
+        
+          {listArray && listArray.length > 0 ? (
+             listArray.map((value, key) => {
+              const {
+                board_id,
+                board_name,
+                im_id,
+                org_name,
+                users,
+                lastMsg,
                 unread,
-                childs.map(i => i.unread)
-              )}
-              onClickedGroupItem={this.hanldClickedGroupItem}
+                childs = [],
+                apns,
+                name,
+                subUnread
+              } = value;
+              let _math = Math.random() * 100000 + 1;
+              return (
+                <GroupItem
+                  key={_math}
+                  taroKey={_math}
+                  data={value}
+                  board_id={board_id}
+                  org_name={org_name}
+                  im_id={im_id}
+                  name={board_name || name}
+                  avatarList={this.genAvatarList(users)}
+                  lastMsg={this.genLastMsg(lastMsg, value)}
+                  newsNum={+unread + this.getSubUnread(value)}
+                  apns={apns}
+                  userid={userUID}
+                  showNewsDot={this.isShouldShowNewDot(
+                    unread,
+                    childs.map(i => i.unread)
+                  )}
+                  onClickedGroupItem={this.hanldClickedGroupItem}
+    
+                // isExpand={isShouldExpandSubGroup}
+                // onExpandChange={this.handleExpandSubGroupChange}
+                // isSubGroup={false}
+                // isShouldShowExpandOpertor={childs.length}
+                />
+                
+              )
+            }) 
+          ):(
+            isShowImage &&
+            <View className={indexStyles.contain_empty}>
+                  <Image src={file_list_empty} className={indexStyles.file_list_empty} />
+              </View>
+          )
+        } 
 
-            // isExpand={isShouldExpandSubGroup}
-            // onExpandChange={this.handleExpandSubGroupChange}
-            // isSubGroup={false}
-            // isShouldShowExpandOpertor={childs.length}
-            />
-          );
-        })}
       </View>
     );
   }

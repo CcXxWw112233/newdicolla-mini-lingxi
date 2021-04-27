@@ -189,7 +189,6 @@ export default class milestoneCellPicker extends Component {
         var rangeKey = 'name';
         // if (tag == 3) {
         // }
-        console.log('sssssssssssssssssss',dataArray)
         const { current_select_milestone_name } = this.state;
 
         return (

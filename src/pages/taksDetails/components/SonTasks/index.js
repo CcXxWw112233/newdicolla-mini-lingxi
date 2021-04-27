@@ -41,7 +41,6 @@ export default class index extends Component {
 
         const { boardId, tasksDetailDatas = {}, } = this.props
         const { list_id, card_id } = tasksDetailDatas
-        console.log('sssssssss',tasksDetailDatas)
         // Taro.navigateTo({
         // // url: `../../pages/addSonTask/index?propertyId=${card_id}&boardId=${boardId}&listId=${card_id}&cardId=${card_id}`
         // })
@@ -677,9 +676,9 @@ export default class index extends Component {
                         <Text className={`${globalStyle.global_iconfont}`}>&#xe867;</Text>
                     </View>
                     <View className={indexStyles.list_item_name}>子任务</View>
-                    {/* <View className={`${indexStyles.list_item_rigth_iconnext}`} onClick={this.deleteCardProperty}>
-                        <Text className={`${globalStyle.global_iconfont}`}>&#xe7fc;</Text>
-                    </View> */}
+                    <View className={`${indexStyles.list_item_rigth_iconnext}`} onClick={this.deleteCardProperty}>
+                        <Text className={`${globalStyle.global_iconfont}`}>&#xe8b2;</Text>
+                    </View>
                 </View>
 
                 <View className={indexStyles.song_task_centent}>

@@ -5,7 +5,7 @@ import { View, Button, Text } from "@tarojs/components";
 import indexStyles from "./index.scss";
 import globalStyles from "../../../gloalSet/styles/globalStyles.scss";
 import Avatar from "../../../components/avatar";
-import { getOrgName, timestampToTimeZH, judgeJurisdictionProject } from "../../../utils/basicFunction";
+import { getOrgName, timestampToTimeZH, judgeJurisdictionProject,timestampToDateTimeLine } from "../../../utils/basicFunction";
 import { PROJECT_TEAM_CARD_INTERVIEW, PROJECT_FLOW_FLOW_ACCESS } from "../../../gloalSet/js/constant";
 
 @connect(({ my: { org_list }, calendar: { selected_timestamp } }) => ({
@@ -92,7 +92,7 @@ export default class CardItem extends Component {
   
   render() {
     const { itemValue = {}, index, schedule, org_list, selected_timestamp } = this.props;
-    const {
+    var {
       board_id,
       content_id,
       content_name,
@@ -208,7 +208,17 @@ export default class CardItem extends Component {
     var now = Date.parse(new Date());
     var isToday = new Date(parseInt(start_time)).toDateString() === new Date().toDateString()
 
-    
+    // var start_time = start_time ? timestampToDateTimeLine(start_time, 'YMDHM',true) : '';
+    // var duetime = duetime ? timestampToDateTimeLine(duetime, 'YMDHM',true) : '';
+    // duetime =  duetime.substring(duetime.length - 5) == '00:00' || duetime.substring(duetime.length - 5) == '23:59' ? duetime.substring(0,duetime.length - 5) : duetime;
+    // start_time =  start_time.substring(start_time.length - 5) == '00:00' || start_time.substring(start_time.length - 5) == '23:59' ? start_time.substring(0,start_time.length - 5) : start_time;
+
+    // const isSameYear = start_time.substring(0,4) == duetime.substring(0,4);
+    // var nowTime = timestampToDateTimeLine(new Date().getTime(), 'YMDHM',true)
+    // const isCurrentYear = nowTime.substring(0,4) == duetime.substring(0,4) && start_time.substring(0,4) == nowTime.substring(0,4);
+    // start_time = isSameYear && isCurrentYear ? start_time.substring(5) : start_time;
+    // duetime = isSameYear && isCurrentYear ? duetime.substring(5) : duetime;
+    // console.log('ssssssssss',start_time - duetime)
     return (
       <View
         onClick={() => flag != "meeting" && flag != "1" && flag != '3' && this.gotoListItemDetails(itemValue)}

@@ -54,12 +54,15 @@ class Chat extends Component {
   componentDidMount() {
 
   }
+  /**
+   * 校验头像网址
+   */
   isValidImgUrl = url => {
     return /^http[s]?:/.test(url);
   };
   // 确认检索
   searchClick = e => {
-    this.allAcatarlist(e.detail.value)
+    this.allAcatarlist(e.detail.value,true)
   }
 // 监控是否输入
 startPrint = e => {
@@ -79,7 +82,7 @@ startPrint = e => {
  * 模糊检索用户
  * @param {*} key 
  */
-allAcatarlist (key) {
+allAcatarlist (key,isshowToast) {
   const {currentBoardDetail = {}} = this.props;
   const {org_id} = currentBoardDetail;
   var param= {
@@ -89,9 +92,19 @@ allAcatarlist (key) {
   }
   getAcatarlist(param).then(res=>{
     if (isApiResponseOk(res)) {
-      this.setState({
-        allAcatarlist:res.data
-      })
+      if(res.data) {
+        this.setState({
+          allAcatarlist:res.data
+        })
+      } else {
+        if (isshowToast) {
+          Taro.showToast({
+            title: '没检索到相关成员',
+            icon: 'none',
+            duration: 2000
+          }) 
+        }
+      }
     }
     console.log(res)
   })
@@ -185,8 +198,8 @@ formReset = e => {
                         mode='aspectFill'
                       />
                 ) : (
-                      <Image src={defaultPhoto} className={`${globalStyle.global_iconfont} ${styles.avatarItemAvatar}`}></Image>
-                    )
+                  <View className={`${globalStyle.global_iconfont} ${styles.avatarItemAvatar}`}>&#xe878;</View>
+                  )
                 }
                 <Text className={styles.avatarItemName}>
                     {item.name}

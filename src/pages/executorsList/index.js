@@ -234,16 +234,23 @@ export default class executorsList extends Component {
                 <View className={indexStyles.grid_style}>
                         {
                             checkboxOption && checkboxOption.map((item,key)=>{
-                                const isSelected = newCheckedList.indexOf(item.user_id) != -1;
+                              const isSelected = newCheckedList.indexOf(item.user_id) != -1;
                               return (
                                   <View className={indexStyles.lattice_style} key={key} onClick={this.selectItem.bind(this,item)}>  
                                      {
                                          isSelected ? (
                                             <Text className={`${globalStyle.global_iconfont} ${indexStyles.checked_iconfont}`}>&#xe844;</Text>
-                                         ):('')
+                                          ):('')
                                      }
+                                     {
+                                    item.avatar ? (
                                       <Image src={item.avatar} className={indexStyles.content_avatar}></Image>
-                                      <Text className={indexStyles.content_avatar_name}>{item.name}</Text>
+                                    ) :(
+                                      <View className={`${globalStyle.global_iconfont} ${indexStyles.content_avatar}`}>&#xe878;</View>
+                                    )
+
+                                  }
+                                <Text className={indexStyles.content_avatar_name}>{item.name || item.mobile}</Text>
                                  </View>
                              )
                           })

@@ -6,6 +6,7 @@ import { connect } from '@tarojs/redux'
 import { filterFileFormatType } from './../../../utils/util';
 import { getOrgIdByBoardId, setBoardIdStorage, setRequestHeaderBaseInfo, judgeJurisdictionProject } from '../../../utils/basicFunction'
 import { BASE_URL, API_BOARD, PROJECT_FILES_FILE_DELETE, PROJECT_FILES_FILE_DOWNLOAD } from "../../../gloalSet/js/constant";
+import iconStyle from "../../../gloalSet/styles/lxicon.scss"
 
 import SearchBar from '../../../components/searchBar'
 @connect(({
@@ -55,7 +56,6 @@ export default class nowOpen extends Component {
 // 开始检索
   searchMenuClick = value => {
     const {file_list,dispatch} = this.props
-      console.log('sssssssssss', value)
       if(value) {
         let new_file_list =  file_list.filter(function(item){
           return item.file_name.indexOf(value) != -1;
@@ -318,7 +318,7 @@ goFileChat = value => {
                  thumbnail_url && thumbnail_url.length > 0 ? (<Image className={indexStyles.fileItem_image} src={thumbnail_url}></Image>) : 
                  (
                   <View className={indexStyles.fileItem_image}>
-                    <RichText className={`${globalStyle.global_iconfont} ${indexStyles.folder_type_icon}`} nodes={fileType} />
+                      <View className={`${iconStyle.searchlx_Fileicon}`} style={{'background': fileType}}></View>
                   </View>
                  )
                } 

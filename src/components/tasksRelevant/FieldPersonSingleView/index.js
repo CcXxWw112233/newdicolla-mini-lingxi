@@ -115,8 +115,10 @@ export default class FieldPersonSinglePicker extends Component {
      * @param {*} item 
      */
     selectItem = item => {
+        const {select_user_id} = this.state
+        
         this.setState({
-            select_user_id:item.user_id
+            select_user_id:item.user_id == select_user_id ? '' : item.user_id
         })
     }
     /**
@@ -125,18 +127,28 @@ export default class FieldPersonSinglePicker extends Component {
      */
      confirmSelect () {
          const {select_user_id, current_select_user_id,} = this.state; 
-         const {item_id,dispatch} = this.props;
-         if(current_select_user_id != select_user_id) {
-            dispatch({
-                type: "tasks/putBoardFieldRelation",
-                payload: {
-                    id: item_id,
-                    field_value: select_user_id,
-                    calback: this.putBoardFieldRelation(select_user_id),
-                },
-            });
+
+         const {item_id,dispatch,title} = this.props;
+         if(select_user_id) {
+            if(current_select_user_id != select_user_id) {
+                dispatch({
+                    type: "tasks/putBoardFieldRelation",
+                    payload: {
+                        id: item_id,
+                        field_value: select_user_id,
+                        calback: this.putBoardFieldRelation(select_user_id),
+                    },
+                });
+             }
+             this.onClickAction()
+         } else {
+            Taro.showToast({
+                title: '请选择' + title,
+                icon: 'none',
+                duration: 2000
+              })
          }
-         this.onClickAction()
+        
      }
     render() {
 
@@ -151,7 +163,6 @@ export default class FieldPersonSinglePicker extends Component {
         if (current_select_name != '未选择') {
             isShowAvator = true
         }
-        console.log('ssssssss',singleList,select_user_id,current_select_user_id)
         return (
             // <View>
             //     {/* <AtRadio
@@ -186,8 +197,15 @@ export default class FieldPersonSinglePicker extends Component {
                                             <Text className={`${globalStyle.global_iconfont} ${indexStyles.checked_iconfont}`}>&#xe844;</Text>
                                          ):('')
                                      }
+                                    {
+                                    item.avatar ? (
                                       <Image src={item.avatar} className={indexStyles.content_avatar}></Image>
-                                      <Text className={indexStyles.content_avatar_name}>{item.name}</Text>
+                                    ) :(
+                                      <View className={`${globalStyle.global_iconfont} ${indexStyles.content_avatar}`}>&#xe878;</View>
+                                    )
+
+                                  }
+                                    <Text className={indexStyles.content_avatar_name}>{item.name || item.mobile}</Text>
                                  </View>
                              )
                           })

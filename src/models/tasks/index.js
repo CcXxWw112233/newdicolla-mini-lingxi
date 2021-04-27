@@ -96,7 +96,6 @@ export default {
             return value.user_id == account_info.id;
           })
           if (list && list.length > 0 && res.data.privileges && res.data.privileges.length > 0) {
-            console.log('ssssssssssssss',res.data)
             var canEditRoleList = res.data.privileges.filter(function (value) {
               return (value.role_info && value.role_info.id) == list[0].role_id && (value.
                 content_privilege_code == 'edit');
@@ -344,8 +343,8 @@ export default {
 
     //修改任务
     * putCardBaseInfo({ payload }, { select, call, put }) {
-      const { card_id, card_name, name, due_time, list_id, calback, start_time } = payload;
-      const res = yield call(putCardBaseInfo, { id: card_id, card_name: card_name, name: name, due_time: due_time, list_id: list_id, start_time: start_time })
+      const { card_id, card_name, name, due_time, list_id, calback, start_time, description} = payload;
+      const res = yield call(putCardBaseInfo, { id: card_id, card_name: card_name, name: name, due_time: due_time, list_id: list_id, start_time: start_time,description })
 
       if (isApiResponseOk(res)) {
         if (typeof calback == 'function') calback()

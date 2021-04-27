@@ -171,6 +171,12 @@
           "pathName": "pages/chatDetail/components/inviteMember/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "pages/taksDetails/components/AddDesribeTaskText",
+          "pathName": "pages/taksDetails/components/AddDesribeTaskText",
+          "query": "",
+          "scene": null
         }
       ]
     }

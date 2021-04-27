@@ -130,20 +130,6 @@ export default {
                         current: res.data[0],
                         urls: res.data
                     })
-                    // var filePath = '';
-                    // Taro.downloadFile({
-                    // url: res.data[0],
-                    // success: function (res) {
-                    // filePath = res.tempFilePath
-                    // console.log("------------" + filePath)
-                    // }
-                    // })
-                    // yield put({
-                    // type: 'updateDatas',
-                    // payload: {
-                    // current_previewImage: filePath
-                    // }
-                    // })
                     Taro.hideLoading()
                 } else {
                     //通过web-view 中打开 url查看文档类文件详情

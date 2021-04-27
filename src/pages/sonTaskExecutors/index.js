@@ -235,8 +235,11 @@ export default class sonTaskExecutors extends Component {
                                             <Text className={`${globalStyle.global_iconfont} ${indexStyles.checked_iconfont}`}>&#xe844;</Text>
                                          ):('')
                                      }
+                                    {   item.avatar ? (
                                       <Image src={item.avatar} className={indexStyles.content_avatar}></Image>
-                                      <Text className={indexStyles.content_avatar_name}>{item.name}</Text>
+                                    ) :(
+                                      <View className={`${globalStyle.global_iconfont} ${indexStyles.content_avatar}`}>&#xe878;</View>
+                                    )}
                                  </View>
                              )
                           })

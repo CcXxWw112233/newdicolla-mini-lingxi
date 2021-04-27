@@ -73,6 +73,27 @@
             font-size   : pxTrans(20);
             margin-right: pxTrans(10);
         }
+        .addDesribeTaskText {
+            font-size: pxTrans(17);
+        }
+    }
+
+
+    .desText_View {
+        margin:pxTrans(20) ;
+        display: flex;
+        flex-direction: column;
+        .desText_View_detail {
+            background-color: #F5F7FB;
+            color: #3F445D;
+            padding:pxTrans(10);
+            font-size: pxTrans(15);
+            border-radius: pxTrans(5);
+        }
+        .desText_View_subTitle {
+            color: #3F445D;
+            line-height:  pxTrans(30);
+        }
     }
     .add_task_row {
         height        : pxTrans(56);

@@ -1,0 +1,35 @@
+
+@import "../../../../gloalSet/styles/constant";
+
+.wapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background:white;
+}
+.wapper_Textarea {
+    width: 100%;
+    height: pxTrans(300);
+    padding: pxTrans(30);
+    color: #575C75;
+    font-size: pxTrans(16);
+}
+.desrlbeTask {
+    position: absolute;
+    bottom: pxTrans(80);
+    background: linear-gradient(270deg, #4FADFF 0%, #4790FF 100%);
+    height: pxTrans(48);
+    width: 80%;
+    left: 10%;
+    color: white;
+    line-height: pxTrans(48);
+    font-size: pxTrans(16);
+    border-radius:pxTrans(24) ;
+    text-align: center;
+}
+.desrlbeTask_unuse {
+    background: #F5F7FB !important;
+    color: #BCC2D6 !important;
+}
