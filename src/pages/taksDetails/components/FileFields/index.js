@@ -410,10 +410,10 @@ fileUploadMessageFile = () => {
 /**
  * 预览文件
  */
-  previewFile = () => {
+  previewFile = (file_resource_id, board_id, fileName) => {
     const { dispatch } = this.props;
 
-    const { file_resource_id, board_id, fileName } = this.state;
+    // const { file_resource_id, board_id, fileName } = this.state;
 
     setBoardIdStorage(board_id);
     const fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();

@@ -424,18 +424,19 @@ export default class index extends Component {
         }
     }
 
-    deleteFile = (id,file_id,create_by,create_time) => {
-        const { dispatch, tasksDetailDatas = {} } = this.props
+    deleteFile = (e) => {
+        const { dispatch, tasksDetailDatas = {} ,child_data = []} = this.props
         const account_info = JSON.parse(Taro.getStorageSync('account_info'));
         const {board_id,card_id} = tasksDetailDatas
-        
-        if (account_info.id == create_by && (new Date().getTime() - parseInt(create_time) * 1000) < 2 * 60 * 1000) {
+        var arr = e.currentTarget.id.split("_");
+        debugger
+        if (account_info.id == arr[2] && (new Date().getTime() - parseInt(arr[3]) * 1000) < 2 * 60 * 1000) {
             dispatch({
                 type: 'tasks/deleteCardAttachment',
                 payload: {
-                    attachment_id: id,
+                    attachment_id: child_data[arr[0]]["deliverables"][arr[1]],
                     card_id: card_id,
-                    calback: this.deleteCardAttachment(card_id, file_id,),
+                    // calback: this.deleteCardAttachment(card_id, file_id,),
                 }
             })
             typeof this.props.onClickAction == "function" &&
@@ -445,9 +446,9 @@ export default class index extends Component {
             dispatch({
                 type: 'tasks/deleteCardAttachment',
                 payload: {
-                    attachment_id: id,
+                    attachment_id: child_data[arr[0]]["deliverables"][arr[1]]['id'],
                     card_id: card_id,
-                    calback: this.deleteCardAttachment(card_id, file_id,),
+                    // calback: this.deleteCardAttachment(card_id, file_id,),
                 }
             })
             this.setFileOptionIsOpen()
@@ -750,7 +751,7 @@ export default class index extends Component {
                                                                 <View className={indexStyles.list_item_file_center_time}>{time}</View>
                                                             </View>
                                                         </View>
-                                                        <View className={indexStyles.list_item_file_iconnext} onClick={()=>this.deleteFile(id,file_id,create_by,create_time )}>
+                                                        <View className={indexStyles.list_item_file_iconnext}  id={key+'_'+key1+'_'+create_by+'_'+create_time} onClick={(e)=>this.deleteFile(e)}>
                                                             <Text className={`${globalStyle.global_iconfont}`}>
                                                                 &#xe84a;
                                                             </Text>
