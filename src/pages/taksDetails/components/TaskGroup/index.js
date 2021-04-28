@@ -45,25 +45,22 @@ export default class index extends Component {
      /**
      * 任务分组回调
      */
-      onClickTaskGroup = currentTaskGroup => {
-        const {groupList} = this.state;
-        
-        const { dispatch, data,tasksDetailDatas = {} } = this.props;
-        const {list_ids = []} = tasksDetailDatas;
-     
-        
-        typeof this.props.onClickAction == "function" &&
-            this.props.onClickAction();
+      onClickTaskGroup = newCheckedList=> {
+        this.setState({
+            currentTaskGroup:newCheckedList,
+            isTaskGroupViewShow:false
+        })
     }
 
     componentDidMount() {
+        const { tasksDetailDatas = {} } = this.props;
         this.getTasksGroupList()
     }
      //获取任务分组列表
      getTasksGroupList = () => {
         let board_id = Taro.getStorageSync("tasks_detail_boardId");
-        const { dispatch, data,tasksDetailDatas,list_ids} = this.props;
-        // const {list_ids = []} = tasksDetailDatas;
+        const { dispatch, data,tasksDetailDatas} = this.props;
+        const {list_ids = []} = tasksDetailDatas;
         console.log(this.props.list_ids)
         Promise.resolve(
             dispatch({
@@ -76,7 +73,9 @@ export default class index extends Component {
             if (isApiResponseOk(res)) {
                 if (res.data && res.data.length > 0) {
                     this.setState({
-                        groupList:res.data
+                        groupList:res.data,
+                        currentTaskGroup:list_ids
+
                     })
                 } else {
                 }
@@ -85,15 +84,15 @@ export default class index extends Component {
     }
 
     
+    
     render() {
         const { title, data = [], fieldValue, item_id } = this.props
         const { tasksDetailDatas = {}, boardId, editAuth } = this.props;
         let contentId = Taro.getStorageSync("tasks_detail_contentId");
 
-        const { list_ids=[] } = tasksDetailDatas;
-        var {groupList = []} = this.state
+        var {groupList = [],currentTaskGroup} = this.state
         var selectgroupList = groupList.filter(item=>{
-            return list_ids.indexOf(item.list_id) != -1
+            return currentTaskGroup.indexOf(item.list_id) != -1
         })
         return (
             <View className={indexStyles.list_item} >
@@ -112,7 +111,7 @@ export default class index extends Component {
                    {
                        selectgroupList && selectgroupList.length > 0 ? (         
 
-                            list_ids.map((tag, key) => {
+                        selectgroupList.map((tag, key) => {
                                 const {  list_id, list_name, } = tag
                                 return (
                                     <View key={key} className={indexStyles.tagCell_list_item}>
@@ -132,7 +131,7 @@ export default class index extends Component {
                     </View>
                 </View>
                 {
-                    isTaskGroupViewShow ? (<TaskGroupView contentId={contentId} onClickAction={(groupName)=>this.onClickTaskGroup(groupName)}  title={title} selectgroupList={selectgroupList}  groupList={groupList}></TaskGroupView>):('')
+                    isTaskGroupViewShow ? (<TaskGroupView contentId={contentId} onClickAction={(newCheckedList)=>this.onClickTaskGroup(newCheckedList)}  title={title} selectgroupList={selectgroupList}  groupList={groupList}></TaskGroupView>):('')
                 } 
             </View>
         )

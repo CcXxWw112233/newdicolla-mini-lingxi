@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { getTaskGroupList, addTask, getTasksDetail, getCardCommentListAll, boardAppRelaMiletones, addComment, checkContentLink, getTaskExecutorsList, getTaskMilestoneList, setTasksRealize, updataTasks, putCardBaseInfo, getLabelList, postCardLabel, deleteCardLabel, getCardList, deleteCardExecutor, addCardExecutor, deleteAppRelaMiletones, deleteCard, deleteCardAttachment, deleteCardProperty, getBoardFieldGroupList, putBoardFieldRelation, deleteBoardFieldRelation, postBoardFieldRelation, postV2Card, getCardProperties, postCardProperty, deleteFileFieldsFileRemove, deleteTask, getRoleList } from '../../services/tasks/index'
+import { getTaskGroupList, addTask, getTasksDetail,putBoardtaskGroup,deleteTaskGroup, getCardCommentListAll, boardAppRelaMiletones, addComment, checkContentLink, getTaskExecutorsList, getTaskMilestoneList, setTasksRealize, updataTasks, putCardBaseInfo, getLabelList, postCardLabel, deleteCardLabel, getCardList, deleteCardExecutor, addCardExecutor, deleteAppRelaMiletones, deleteCard, deleteCardAttachment, deleteCardProperty, getBoardFieldGroupList, putBoardFieldRelation, deleteBoardFieldRelation, postBoardFieldRelation, postV2Card, getCardProperties, postCardProperty, deleteFileFieldsFileRemove, deleteTask, getRoleList } from '../../services/tasks/index'
 import { isApiResponseOk } from "../../utils/request";
 import { setBoardIdStorage } from '../../utils/basicFunction'
 
@@ -374,7 +374,34 @@ export default {
         })
       }
     },
-
+    // 添加任务分组
+    *putBoardtaskGroup({ payload }, { select, call, put }) {
+      const { callBack } = payload
+      const res = yield call(putBoardtaskGroup, payload)
+      if (isApiResponseOk(res)) {
+        if (typeof callBack == 'function') callBack()
+      } else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    },
+    //删除任务分组
+    *deleteTaskGroup({ payload }, { select, call, put }) {
+      const { callBack } = payload
+      const res = yield call(deleteTaskGroup, payload)
+      if (isApiResponseOk(res)) {
+        if (typeof callBack == 'function') callBack()
+      } else {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    },
     //标签列表
     * getLabelList({ payload }, { select, call, put }) {
       const res = yield call(getLabelList, payload)

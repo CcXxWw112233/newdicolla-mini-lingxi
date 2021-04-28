@@ -438,6 +438,8 @@ export default class index extends Component {
                     calback: this.deleteCardAttachment(card_id, file_id,),
                 }
             })
+            typeof this.props.onClickAction == "function" &&
+            this.props.onClickAction();
             this.setFileOptionIsOpen()
         } else if (judgeJurisdictionProject(board_id, PROJECT_FILES_FILE_DELETE)) {
             dispatch({
@@ -449,6 +451,8 @@ export default class index extends Component {
                 }
             })
             this.setFileOptionIsOpen()
+            typeof this.props.onClickAction == "function" &&
+            this.props.onClickAction();
         } else {
             Taro.showToast({
                 title: '您没有删除附件的权限',

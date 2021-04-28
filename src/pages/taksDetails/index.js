@@ -175,16 +175,22 @@ export default class taksDetails extends Component {
     }
     onClickAction() {
         const { dispatch } = this.props;
-        dispatch({
-            type: "calendar/updateDatas",
-            payload: {
-                isOtherPageBack: true,
-            },
-        });
-
+        // dispatch({
+        //     type: "calendar/updateDatas",
+        //     payload: {
+        //         isOtherPageBack: true,
+        //     },
+        // });
         const { content_Id, board_id } = this.state;
-        if (content_Id != "" && content_Id != "") {
-            this.loadTasksDetail(content_Id, board_id);
+        
+        if (content_Id != "" && board_id != "") {
+            dispatch({
+                type: "tasks/getTasksDetail",
+                payload: {
+                    id: content_Id,
+                    boardId: board_id,
+                },
+            })
         }
     }
     componentWillUnmount() {
@@ -421,7 +427,7 @@ export default class taksDetails extends Component {
                         propertyId={id}
                         cardId={card_id}
                         type="2"
-                        
+                        content
                         editAuth={editAuth}
                         onClickAction={this.onClickAction}
                         list_ids={list_ids}
@@ -461,6 +467,7 @@ export default class taksDetails extends Component {
                                                     cardId={card_id}
                                                     type="4"
                                                     editAuth={editAuth}
+                                                    onClickAction={this.onClickAction}
 
                                                 />
                                             ) : (

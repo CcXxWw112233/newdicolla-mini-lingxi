@@ -90,9 +90,8 @@ export default class AddFunctionCell extends Component {
                 return item
             }
         })
-        // DEPENDENCY
         new_array = new_array.filter(item =>{
-            return new_array.code == "DEPENDENCY"
+            return item.code != "DEPENDENCY"
         })
         new_array.push(
             {
