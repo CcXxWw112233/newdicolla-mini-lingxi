@@ -89,7 +89,6 @@ export default class FieldPersonSinglePicker extends Component {
         const itemsData = executors;
         const itemsDataIdValue = itemsData && itemsData[0] && itemsData[0]["id"];
         const select_user_id = itemsData && itemsData[0] && itemsData[0]["id"];
-
         const executors_list = executorsList;
         executors_list && executors_list.forEach((item) => {
             item["label"] = item.name;

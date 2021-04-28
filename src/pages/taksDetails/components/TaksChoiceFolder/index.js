@@ -117,7 +117,7 @@ export default class index extends Component {
                 icon: "success",
                 title: "上传完成"
             })
-            typeof this.props.onLoadTasksDetail == 'function' && this.props.onLoadTasksDetail();
+            typeof this.props.onClickAction == 'function' && this.props.onClickAction();
 
         }).catch(err => {
             console.log(err)
@@ -202,7 +202,7 @@ export default class index extends Component {
                 title: "上传完成"
             })
 
-            typeof this.props.onLoadTasksDetail == 'function' && this.props.onLoadTasksDetail();
+            typeof this.props.onClickAction == 'function' && this.props.onClickAction();
 
         }).catch(err => {
             console.log(err)

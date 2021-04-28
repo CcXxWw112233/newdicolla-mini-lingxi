@@ -3,6 +3,8 @@ import Taro, { Component } from "@tarojs/taro";
 import { View, Image, Text, Button, RichText, Video } from "@tarojs/components";
 import styles from "./ChatItem.scss";
 import globalStyles from "./../../../gloalSet/styles/globalStyles.scss";
+import iconStyle from "./../../../gloalSet/styles/lxicon.scss"
+
 import { parseActivityNewsBody } from "./../../../models/im/utils/activityHandle.js";
 import { timestampFormat } from "../../../utils/basicFunction";
 import EmojiItem from "./EmojiItem.js";
@@ -692,11 +694,13 @@ class ChatItem extends Component {
 
                           {/* </Text> */}
 
-                          <RichText
+                          {/* <RichText
                             className={`${globalStyles.global_iconfont} ${styles.icon_file_style}`}
                             style={{ fontSize: "50px", color: "lightgray" }}
                             nodes={fileType}
-                          />
+                          /> */}
+                            <View className={`${iconStyle.lxicon}`} style={{'background': fileType}}></View>
+
                         </View>
                         {chatFile.ext}文件
                       </View>

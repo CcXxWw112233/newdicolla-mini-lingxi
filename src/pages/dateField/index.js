@@ -82,6 +82,9 @@ export default class dateField extends Component {
         const { fields = [] } = tasksDetailDatas
         const { current_id } = this.state
 
+        typeof this.props.onClickAction == "function" &&
+        this.props.onClickAction();
+
         fields.forEach(item => {
 
             if (item.id === current_id) {
@@ -156,7 +159,8 @@ export default class dateField extends Component {
             startT = startT + ':00'
         }
         this.setState({
-            startT: startT,
+            dateStr: startT,
+            startT:startT
         })
         var date = new Date(startT.replace(/-/g, '/'));
         var time = date.getTime()

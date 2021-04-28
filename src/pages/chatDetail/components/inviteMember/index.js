@@ -120,6 +120,7 @@ addacatarItem = ( item)=>{
   this.setState({
     selectAcatarlist:selectAcatarlist,
   })
+  console.log(selectAcatarlist)
   this.formReset()
 }
 //确认邀请
@@ -198,11 +199,11 @@ formReset = e => {
                         mode='aspectFill'
                       />
                 ) : (
-                  <View className={`${globalStyle.global_iconfont} ${styles.avatarItemAvatar}`}>&#xe878;</View>
+                  <View className={`${globalStyle.global_iconfont} ${styles.content_avatar}`}>&#xe878;</View>
                   )
                 }
                 <Text className={styles.avatarItemName}>
-                    {item.name}
+                    {item.name} || {item.mobile}
                 </Text>
         
             </View>
@@ -221,8 +222,21 @@ formReset = e => {
               allAcatarlist.map((item,key)=> {
                 return (
                   <View className={styles.acatar_item_View} onClick={this.addacatarItem.bind(this,item)}>
-                    <Image className={styles.acatar_item_image} src={item.avatar}></Image>
-                    {item.nickname}
+                     {this.isValidImgUrl(item.avatar) ?  (
+                      <Image
+                        className={styles.acatar_item_image}
+                        src={item.avatar}
+                        mode='aspectFill'
+                      />
+                ) : (
+                  <View className={`${globalStyle.global_iconfont} ${styles.acatar_item_image}`}>&#xe878;</View>
+                  )
+                }
+                {/* <Text className={styles.avatarItemName}> */}
+                    {item.name} 
+                {/* </Text> */}
+                    {/* <Image className={styles.acatar_item_image} src={item.avatar}></Image>
+                    {item.nickname} */}
                   </View>
                 )
               })

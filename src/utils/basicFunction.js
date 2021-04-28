@@ -287,13 +287,13 @@ export const timestampToDateTimeLine = (timestamp, dateType, gap) => {
   if (dateType === 'YM') { //年月
     resultStr = `${year}${gap?'年':'-'}${month}${gap?'月':''}`
   } else if (dateType === 'YMD') { //年月日
-    resultStr = `${year}${gap?'年':'-'}${month}${gap?'月':'-'}${date_no}日`
+    resultStr = `${year}${gap?'年':'-'}${month}${gap?'月':'-'}${date_no}`
   } else if (dateType === 'YMDH') { //年月日 时
-    resultStr = `${year}${gap?'年':'-'}${month}${gap?'月':'-'}${date_no}日 ${hours}`
+    resultStr = `${year}${gap?'年':'-'}${month}${gap?'月':'-'}${date_no} ${hours}`
   } else if (dateType === 'YMDHM') { //年月日 时分
-    resultStr = `${year}${gap?'年':'-'}${month}${gap?'月':'-'}${date_no}日 ${hours}:${min}`
+    resultStr = `${year}${gap?'年':'-'}${month}${gap?'月':'-'}${date_no} ${hours}:${min}`
   } else if (dateType === 'YMDHMS') { //年月日 时分秒
-    resultStr = `${year}${gap?'年':'-'}${month}${gap?'月':'-'}${date_no}日 ${hours}:${min}:${sec}`
+    resultStr = `${year}${gap?'年':'-'}${month}${gap?'月':'-'}${date_no} ${hours}:${min}:${sec}`
   }
 
   return resultStr;

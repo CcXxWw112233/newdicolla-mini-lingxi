@@ -353,7 +353,9 @@ fileUploadMessageFile = () => {
                     calback: this.deleteCardAttachment(cardId, file_id),
                 }
             })
-            this.setFileOptionIsOpen()
+            // typeof this.props.onClickAction == "function" &&
+            // this.props.onClickAction();
+            // this.setFileOptionIsOpen()
         } else if (!judgeJurisdictionProject(board_id, PROJECT_FILES_FILE_DELETE)) {
             dispatch({
                 type: 'tasks/deleteCardAttachment',
@@ -364,7 +366,8 @@ fileUploadMessageFile = () => {
                     calback: this.deleteCardAttachment(cardId, file_id),
                 }
             })
-            this.setFileOptionIsOpen()
+         
+            // this.setFileOptionIsOpen()
         } else {
             Taro.showToast({
                 title: '您没有删除该文件的权限',
@@ -381,24 +384,25 @@ fileUploadMessageFile = () => {
      * @param {*} file_item_id 
      */
     deleteCardAttachment = (cardId, file_item_id) => {
-
-        const { dispatch, tasksDetailDatas, } = this.props
-        const { dec_files = [] } = tasksDetailDatas
-        let array = [];
-        dec_files.forEach(item => {
-            if (item['file_id'] !== file_item_id) {
-                array.push(item)
-            }
-        })
-        dispatch({
-            type: 'tasks/updateDatas',
-            payload: {
-                tasksDetailDatas: {
-                    ...tasksDetailDatas,
-                    ...{ dec_files: array },
-                }
-            }
-        })
+        typeof this.props.onClickAction == "function" &&
+        this.props.onClickAction();
+        // const { dispatch, tasksDetailDatas, } = this.props
+        // const { dec_files = [] } = tasksDetailDatas
+        // let array = [];
+        // dec_files.forEach(item => {
+        //     if (item['file_id'] !== file_item_id) {
+        //         array.push(item)
+        //     }
+        // })
+        // dispatch({
+        //     type: 'tasks/updateDatas',
+        //     payload: {
+        //         tasksDetailDatas: {
+        //             ...tasksDetailDatas,
+        //             ...{ dec_files: array },
+        //         }
+        //     }
+        // })
     }
 
     fileHandleCancel = () => {
@@ -459,13 +463,20 @@ fileUploadMessageFile = () => {
      */
     addDesribeTaskText () {
         Taro.navigateTo({
-            url:'/pages/taksDetails/components/AddDesribeTaskText/index'
+            url:'/pages/taksDetails/components/AddDesribeTaskText/index?markText=' + this.props.name
         })
     }
     render() {
         const { tasksDetailDatas = {}, } = this.props
         const { dec_files = [] } = tasksDetailDatas
-        const name = this.props.name || ''
+        var name = this.props.name || ''
+        if(name.length > 0) {
+            name=name.replace("</p>","");
+            name=name.replace("<p>","");
+    
+        }
+       
+
         const {isUploadWayViewShow} = this.state;
         const cartName = '任务说明'
         return (
@@ -537,12 +548,14 @@ fileUploadMessageFile = () => {
                     name && name.length > 0 &&  
                         <View className={indexStyles.desText_View}>
                             <View className={indexStyles.desText_View_subTitle}>备注:</View>    
-                            <View className={indexStyles.right_centre_style}>
+                            <View className={indexStyles.right_centre_style} onClick={this.addDesribeTaskText}>
                                 <View>
                                     <View className={indexStyles.desText_View_detail}>
                                         {
-                                            <RichText className='text' nodes={name} />
+                                            // <Text  className='text' nodes={name} />
+                                            <Text>{name}</Text>
                                         }
+                                        
                                     </View>
                                 </View>
                             </View>
