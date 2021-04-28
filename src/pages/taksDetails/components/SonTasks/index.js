@@ -95,7 +95,8 @@ export default class index extends Component {
     showUploadWayView = (cardId,cartName) => {
         this.setState({
             isUploadWayViewShow: true,
-            cartName:cartName
+            cartName:cartName,
+            song_task_id: cardId
         })
 
         const { dispatch } = this.props
@@ -114,6 +115,7 @@ export default class index extends Component {
         this.setState({
             isUploadWayViewShow: false,
         })
+        // onLoadTasksDetail
     }
     /**
      * 上传文件
@@ -375,11 +377,10 @@ export default class index extends Component {
     }
 
 
-    previewFile = () => {
+    previewFile = (file_resource_id, board_id, fileName) => {
 
         const { dispatch, fileInterViewAuth } = this.props
 
-        const { file_resource_id, board_id, fileName, } = this.state
 
         if (fileInterViewAuth) {
 
@@ -423,19 +424,18 @@ export default class index extends Component {
         }
     }
 
-    deleteFile = () => {
+    deleteFile = (id,file_id,create_by,create_time) => {
         const { dispatch, tasksDetailDatas = {} } = this.props
-        const { card_id } = tasksDetailDatas
-        const { file_id, cardId, fileId, create_by, create_time, board_id } = this.state
         const account_info = JSON.parse(Taro.getStorageSync('account_info'));
-
+        const {board_id,card_id} = tasksDetailDatas
+        
         if (account_info.id == create_by && (new Date().getTime() - parseInt(create_time) * 1000) < 2 * 60 * 1000) {
             dispatch({
                 type: 'tasks/deleteCardAttachment',
                 payload: {
-                    attachment_id: fileId,
+                    attachment_id: id,
                     card_id: card_id,
-                    calback: this.deleteCardAttachment(cardId, file_id,),
+                    calback: this.deleteCardAttachment(card_id, file_id,),
                 }
             })
             this.setFileOptionIsOpen()
@@ -443,9 +443,9 @@ export default class index extends Component {
             dispatch({
                 type: 'tasks/deleteCardAttachment',
                 payload: {
-                    attachment_id: fileId,
+                    attachment_id: id,
                     card_id: card_id,
-                    calback: this.deleteCardAttachment(cardId, file_id,),
+                    calback: this.deleteCardAttachment(card_id, file_id,),
                 }
             })
             this.setFileOptionIsOpen()
@@ -746,7 +746,7 @@ export default class index extends Component {
                                                                 <View className={indexStyles.list_item_file_center_time}>{time}</View>
                                                             </View>
                                                         </View>
-                                                        <View className={indexStyles.list_item_file_iconnext} onClick={()=>this.deleteFile(id,file_id,card_id )}>
+                                                        <View className={indexStyles.list_item_file_iconnext} onClick={()=>this.deleteFile(id,file_id,create_by,create_time )}>
                                                             <Text className={`${globalStyle.global_iconfont}`}>
                                                                 &#xe84a;
                                                             </Text>

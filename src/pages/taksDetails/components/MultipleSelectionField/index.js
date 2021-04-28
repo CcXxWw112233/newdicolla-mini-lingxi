@@ -64,7 +64,7 @@ export default class index extends Component {
                 new_array.push(element)
             }
         });
-
+        
         dispatch({
             type: 'tasks/updateDatas',
             payload: {

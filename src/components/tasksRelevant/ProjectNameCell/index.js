@@ -453,7 +453,6 @@ export default class ProjectNameCell extends Component {
 
     deleteCardProperty = (type, item_id, propertyId) => {
         const { dispatch, cardId, editAuth } = this.props;
-        debugger
         if (!editAuth) {
             Taro.showToast({
                 title: '您没有该项目的编辑权限',
@@ -661,7 +660,7 @@ export default class ProjectNameCell extends Component {
 
         //右边icon
         let rightIcon;
-        // if (type != 1) {
+        if (type != 1 && type != 2) {
         //     //向右箭头
         //     rightIcon = (
         //         <Text className={`${globalStyle.global_iconfont}`}>&#xe654;</Text>
@@ -681,7 +680,7 @@ export default class ProjectNameCell extends Component {
         rightIcon = (
             <Text className={`${globalStyle.global_iconfont}`}>&#xe8b2;</Text>
         );
-        // }
+        }
         return (
             <View className={indexStyles.index}>
               <View className={indexStyles.list_item}>

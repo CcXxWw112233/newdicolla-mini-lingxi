@@ -65,6 +65,14 @@ export default class index extends Component {
         this.setState({
             isUploadWayViewShow: true,
         })
+        const { cardId, dispatch, } = this.props
+        dispatch({
+            type: 'tasks/updateDatas',
+            payload: {
+                song_task_id: cardId,
+                tasks_upload_file_type: 'describeTasks',
+            }
+        })
     }
     /**
      * 关闭上传选择方式
@@ -285,9 +293,10 @@ fileUploadMessageFile = () => {
     /**
      * 预览文件
      */
-    previewFile = () => {
-        const { dispatch } = this.props
-        const { file_resource_id, board_id, fileName, } = this.state
+    previewFile = (file_resource_id, board_id, fileName) => {
+        const { dispatch ,fileInterViewAuth} = this.props
+        if (fileInterViewAuth) {
+
         setBoardIdStorage(board_id)
         const fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
         const parameter = {
@@ -317,14 +326,21 @@ fileUploadMessageFile = () => {
             },
         })
         this.setFileOptionIsOpen()
+    } else {
+        Taro.showToast({
+            title: '您没有预览此文件的权限',
+            icon: 'none',
+            duration: 2000
+        })
+    }
     }
 
     /**
      * 删除文件
      */
-    deleteFile = () => {
-        const { dispatch, cardId, fileInterViewAuth, } = this.props
-        const { file_id, file_item_id, create_by, create_time, board_id } = this.state
+    deleteFile = (id,file_id,create_by,create_time) => {
+        const { dispatch, cardId,tasksDetailDatas={} } = this.props
+        const {board_id} = tasksDetailDatas
         const account_info = JSON.parse(Taro.getStorageSync('account_info'));
         if (account_info.id == create_by && (new Date().getTime() - parseInt(create_time) *
             1000) < 2 * 60 * 1000) {
@@ -334,24 +350,24 @@ fileUploadMessageFile = () => {
                     attachment_id: file_id,
                     card_id: cardId,
                     code: "REMARK",
-                    calback: this.deleteCardAttachment(cardId, file_item_id,),
+                    calback: this.deleteCardAttachment(cardId, file_id),
                 }
             })
             this.setFileOptionIsOpen()
-        } else if (judgeJurisdictionProject(board_id, PROJECT_FILES_FILE_DELETE)) {
+        } else if (!judgeJurisdictionProject(board_id, PROJECT_FILES_FILE_DELETE)) {
             dispatch({
                 type: 'tasks/deleteCardAttachment',
                 payload: {
                     attachment_id: file_id,
                     card_id: cardId,
                     code: "REMARK",
-                    calback: this.deleteCardAttachment(cardId, file_item_id,),
+                    calback: this.deleteCardAttachment(cardId, file_id),
                 }
             })
             this.setFileOptionIsOpen()
         } else {
             Taro.showToast({
-                title: '您没有预览该文件的权限',
+                title: '您没有删除该文件的权限',
                 icon: 'none',
                 duration: 2000
             })
@@ -505,8 +521,7 @@ fileUploadMessageFile = () => {
                                             <View className={indexStyles.list_item_file_center_time}>{time}</View>
                                         </View>
                                     </View>
-
-                                    <View className={indexStyles.list_item_file_iconnext} onClick={()=>this.deleteFile(id)}>
+                                    <View className={indexStyles.list_item_file_iconnext} onClick={()=>this.deleteFile(id,file_id,create_by,create_time)}>
                                         <Text className={`${globalStyle.global_iconfont}`}>
                                         &#xe84a;
                                         </Text>
@@ -518,18 +533,22 @@ fileUploadMessageFile = () => {
                         )
                     })
                 }
-                <View className={indexStyles.desText_View}>
-                    <View className={indexStyles.desText_View_subTitle}>备注:</View>    
-                    <View className={indexStyles.right_centre_style}>
-                        <View>
-                            <View className={indexStyles.desText_View_detail}>
-                                {
-                                    <RichText className='text' nodes={name} />
-                                }
+                {
+                    name && name.length > 0 &&  
+                        <View className={indexStyles.desText_View}>
+                            <View className={indexStyles.desText_View_subTitle}>备注:</View>    
+                            <View className={indexStyles.right_centre_style}>
+                                <View>
+                                    <View className={indexStyles.desText_View_detail}>
+                                        {
+                                            <RichText className='text' nodes={name} />
+                                        }
+                                    </View>
+                                </View>
                             </View>
                         </View>
-                    </View>
-                </View>
+                }
+               
                 <View className={indexStyles.add_task_row} onClick={()=>this.showUploadWayView()}>
                     <View className={indexStyles.add_item_name}>{dec_files && dec_files.length > 0 ? '继续上传':'上传文件'}</View>
                 </View>

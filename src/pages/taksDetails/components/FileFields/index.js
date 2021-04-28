@@ -14,6 +14,7 @@ import { BASE_URL, API_BOARD } from "../../../../gloalSet/js/constant";
 import { isApiResponseOk, } from "../../../../utils/request";
 import iconStyle from '../../../../gloalSet/styles/lxicon.scss'
 import { filterFileFormatType } from './../../../../utils/util';
+import {UploadWayView} from '../../../../components/tasksRelevant/uploadWayView'
 
 @connect(({ tasks: { tasksDetailDatas = {} } }) => ({
   tasksDetailDatas,
@@ -23,6 +24,7 @@ export default class index extends Component {
     file_isOpen: false,
     song_task_id: "",
     file_option_isOpen: false,
+    isUploadWayViewShow:false,
     file_id: "",
     file_item_id: "",
 
@@ -120,6 +122,35 @@ export default class index extends Component {
       });
   };
 
+
+// 上传微信聊天文件
+fileUploadMessageFile = () => {
+  var that = this;
+  const { uploadAuth } = this.props;
+  if (!uploadAuth) {
+      Taro.showToast({
+          title: '您没有上传附件的权限',
+          icon: 'none',
+          duration: 2000
+      })
+      return;
+  } 
+  Taro.chooseMessageFile({
+      count: 10,
+      type: 'all',
+      success: function (res) {
+          // tempFilePath可以作为img标签的src属性显示图片
+          // const tempFilePaths = res.tempFilePaths
+          var tempFilePaths = res.tempFiles.map(function (item, index, input) {
+              return item.path;
+          })
+          that.setFileOptionIsOpen();
+        that.fileUpload(tempFilePaths);
+      }
+  })
+
+}
+
   //拍照/选择图片上传
   fileUploadAlbumCamera = () => {
     Taro.setStorageSync("isReloadFileList", "is_reload_file_list");
@@ -165,7 +196,7 @@ export default class index extends Component {
 
   //文件字段文件
   fileUpload = (tempFilePaths,) => {
-    const { boardId } = this.props;
+    const { boardId,cardId } = this.props;
 
     //上传
     const authorization = Taro.getStorageSync("access_token");
@@ -226,6 +257,8 @@ export default class index extends Component {
           .then(() => {
             this.putBoardFieldRelation(fields)
           }).then(() => {
+
+
             dispatch({
               type: "tasks/updateDatas",
               payload: {
@@ -235,6 +268,8 @@ export default class index extends Component {
                 },
               },
             });
+            typeof this.props.onClickAction == "function" &&
+            this.props.onClickAction();
           })
           .catch(e => console.log('error:' + e));
       })
@@ -372,7 +407,9 @@ export default class index extends Component {
       },
     });
   };
-
+/**
+ * 预览文件
+ */
   previewFile = () => {
     const { dispatch } = this.props;
 
@@ -410,10 +447,12 @@ export default class index extends Component {
 
     this.setFileOptionIsOpen();
   };
-
-  deleteFile = () => {
+/**
+ * 删除文件
+ * @param {*} file_id 
+ */
+  deleteFile = (file_id) => {
     const { dispatch, item_id } = this.props;
-    const { file_id } = this.state;
 
     Promise.resolve(
       dispatch({
@@ -515,6 +554,10 @@ export default class index extends Component {
     });
   };
 
+  /**
+   * 删除文件字段
+   * @param {*} propertyId 
+   */
   deleteTasksFieldRelation = (propertyId) => {
     const { dispatch, tasksDetailDatas } = this.props;
     const { properties = [] } = tasksDetailDatas;
@@ -536,11 +579,36 @@ export default class index extends Component {
       },
     });
   };
+  /**
+   * 展示上传方式弹窗
+   */
+  showUploadWayView() {
+    this.setState({
+      isUploadWayViewShow:true
+    })
+
+    const { cardId, dispatch } = this.props;
+    dispatch({
+      type: "tasks/updateDatas",
+      payload: {
+        song_task_id: cardId,
+        tasks_upload_file_type: "describeTasks",
+      },
+    });
+  }
+    /**
+     * 关闭上传选择方式
+     */
+     hideUploadWayView() {
+      this.setState({
+          isUploadWayViewShow: false,
+      })
+  }
 
   render() {
     const { field_value = [] } = this.props;
     const title = this.props.title || "";
-
+    const {isUploadWayViewShow} = this.state;
     return (
       <View className={indexStyles.wapper}>
         {/* <View className={indexStyles.list_item} onClick={this.gotoChangeChoiceInfoPage.bind(this,)}> */}
@@ -601,9 +669,12 @@ export default class index extends Component {
               </View>
             );
           })}
-        <View className={indexStyles.add_task_row} onClick={this.uploadDescribeTasksFile}>
+        <View className={indexStyles.add_task_row} onClick={this.showUploadWayView}>
             <View className={indexStyles.add_item_name}>{dec_files && dec_files.length > 0 ? '继续上传':'上传文件'}</View>
         </View>
+        {
+            isUploadWayViewShow ? (<UploadWayView title={title} mold ='file' uploadFile={()=>this.uploadFileFieldsFiels()}  onClickAction={()=>this.hideUploadWayView()} uploadWXFile={()=>this.fileUploadMessageFile()}></UploadWayView>):('')
+        }
         <AtActionSheet
           isOpened={this.state.file_isOpen}
           cancelText="取消"

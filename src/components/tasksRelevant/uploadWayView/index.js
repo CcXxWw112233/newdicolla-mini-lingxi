@@ -38,9 +38,9 @@ export default class SingleChoicePicker extends Component {
         var currentSingleList = singleList;
         if(mold =='subTask') {
             currentSingleList[0].text = '上传交付物';
-        } else if(mold == 'describeTasks') {
+        } else if(mold == 'describeTasks' || mold == 'file') {
             currentSingleList.pop()
-        }
+        } 
         this.setState({
             singleList:currentSingleList
         })
@@ -73,7 +73,7 @@ export default class SingleChoicePicker extends Component {
         this.props.onClickAction();
     }
     render() {
-        const { singleList = [] } = this.state
+        const { singleList = [], } = this.state
         const {title} = this.props
         return (
             <View className={indexStyles.index}>

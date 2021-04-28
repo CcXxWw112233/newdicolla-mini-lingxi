@@ -255,29 +255,39 @@ export default class fieldSelection extends Component {
                 <View className={indexStyles.topText}>添加和调整显示在“任务详情”中的字段</View>
                 <ScrollView className={indexStyles.fileList_scrollView} scrollY scrollWithAnimation>
                     <View className={indexStyles.fileList_title}>已添加</View>
-                        {
-                        checkedList && checkedList.map((item,key)=> {
-                            
-                            return (
-                            <View className = {indexStyles.fileList_item} key={key} >
-                                <View onClick = {this.deleteField.bind(this,item)} className={`${globalStyle.global_iconfont} ${indexStyles.fileList_item_icon} ${indexStyles.fileList_item_add_icon}`}>&#xe891;</View>
-                                <RichText className={`${globalStyle.global_iconfont} ${indexStyles.fileList_item_icon}`} nodes={this.leftIcon(item.field_content.field_type)}></RichText>
-                                <Text className={indexStyles.indexStyles.fileList_item_title}>{item.field_content.name}</Text>
-                            </View>
-                            )
-                          })
-                        }
+                      {
+                          checkedList && checkedList.length > 0 ? (
+                            checkedList.map((item,key)=> {
+                                return (
+                                <View className = {indexStyles.fileList_item} key={key} >
+                                    <View onClick = {this.deleteField.bind(this,item)} className={`${globalStyle.global_iconfont} ${indexStyles.fileList_item_icon} ${indexStyles.fileList_item_add_icon}`}>&#xe891;</View>
+                                    <RichText className={`${globalStyle.global_iconfont} ${indexStyles.fileList_item_icon}`} nodes={this.leftIcon(item.field_content.field_type)}></RichText>
+                                    <Text className={indexStyles.indexStyles.fileList_item_title}>{item.field_content.name}</Text>
+                                </View>
+                                )
+                              })
+                          ) :(
+                            <View className={indexStyles.noDataText_View}>未添加字段</View>
+                          )
+                      }
+                      
+
                     <View className={indexStyles.fileList_title}>更多</View>
                         {
-                            checkboxOption && checkboxOption.map((item,index)=> {
-                                return (
-                                    <View className = {indexStyles.fileList_item} key={key} >
-                                        <View  onClick={this.addField.bind(this,item)} className={`${globalStyle.global_iconfont}  ${indexStyles.fileList_item_icon} ${indexStyles.fileList_item_more_icon}`} >&#xe890;</View>
-                                        <RichText className={`${globalStyle.global_iconfont} ${indexStyles.fileList_item_icon}`} nodes={this.leftIcon(item.field_type)}></RichText>
-                                        <Text className={indexStyles.indexStyles.fileList_item_title}>{item.label}</Text>
-                                    </View>
-                                )
-                            })
+                            checkboxOption && checkboxOption.length > 0 ? (
+                                checkboxOption && checkboxOption.map((item,key)=> {
+                                    return (
+                                        <View className = {indexStyles.fileList_item} key={key} >
+                                            <View  onClick={this.addField.bind(this,item)} className={`${globalStyle.global_iconfont}  ${indexStyles.fileList_item_icon} ${indexStyles.fileList_item_more_icon}`} >&#xe890;</View>
+                                            <RichText className={`${globalStyle.global_iconfont} ${indexStyles.fileList_item_icon}`} nodes={this.leftIcon(item.field_type)}></RichText>
+                                            <Text className={indexStyles.indexStyles.fileList_item_title}>{item.label}</Text>
+                                        </View>
+    
+                                    )
+                                })
+                            ):(
+                                <View className={indexStyles.noDataText_View}>暂无更多字段可添加</View>
+                            )    
                         }
                     <View className={indexStyles.bottom_placeView}></View>
                 </ScrollView>
