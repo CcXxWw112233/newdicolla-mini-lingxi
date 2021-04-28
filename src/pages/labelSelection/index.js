@@ -116,7 +116,7 @@ export default class LabelSelection extends Component {
         const {dispatch ,title} = this.props
         if(newCheckedList.length == 0 || !newCheckedList) {
             Taro.showToast({
-                title: '请选择' + {title},
+                title: '请选择标签',
                 icon: 'none',
                 duration: 2000
               })
