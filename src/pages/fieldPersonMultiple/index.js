@@ -33,10 +33,10 @@ export default class fieldPersonMultiple extends Component {
       executorsData = executors;
       //取出已经是执行人的id, 组成新数组(已选中)
       new_arr = executorsData && executorsData.map((obj) => {
-        return obj.user_id;
+        return item.id ? item.id : item.user_id;
       });
       newCheckedList = executorsData && executorsData.map((obj) => {
-        return obj.user_id;
+        return item.id ? item.id : item.user_id;
       });
     }
 
@@ -119,12 +119,13 @@ export default class fieldPersonMultiple extends Component {
    */
 selectItem = item => {
   var {newCheckedList = []} = this.state;
-  if(newCheckedList.indexOf(item.user_id) != -1) {
+
+  if(newCheckedList.indexOf(item.id) != -1) {
     newCheckedList = newCheckedList.filter((value)=> {
-          return item.user_id != value;
+          return item.id != value;
       });  
   } else {
-    newCheckedList.push(item.user_id)
+    newCheckedList.push(item.id)
       }
       this.setState({
         newCheckedList:  newCheckedList,
@@ -195,7 +196,7 @@ selectItem = item => {
               <View className={indexStyles.grid_style}>
                       {
                           checkboxOption && checkboxOption.map((item,key)=>{
-                              const isSelected = newCheckedList.indexOf(item.user_id) != -1;
+                              const isSelected = newCheckedList.indexOf(item.id) != -1;
                             return (
                                 <View className={indexStyles.lattice_style} key={key} onClick={this.selectItem.bind(this,item)}>  
                                   {

@@ -114,10 +114,10 @@ export default class FieldPersonSinglePicker extends Component {
      * @param {*} item 
      */
     selectItem = item => {
-        const {select_user_id} = this.state
+        const {current_select_user_id} = this.state
         
         this.setState({
-            select_user_id:item.user_id == select_user_id ? '' : item.user_id
+            current_select_user_id:item.id == current_select_user_id ? '' : item.id
         })
     }
     /**
@@ -128,14 +128,14 @@ export default class FieldPersonSinglePicker extends Component {
          const {select_user_id, current_select_user_id,} = this.state; 
 
          const {item_id,dispatch,title} = this.props;
-         if(select_user_id) {
+         if(current_select_user_id) {
             if(current_select_user_id != select_user_id) {
                 dispatch({
                     type: "tasks/putBoardFieldRelation",
                     payload: {
                         id: item_id,
-                        field_value: select_user_id,
-                        calback: this.putBoardFieldRelation(select_user_id),
+                        field_value: current_select_user_id,
+                        calback: this.putBoardFieldRelation(current_select_user_id),
                     },
                 });
              }
@@ -188,7 +188,9 @@ export default class FieldPersonSinglePicker extends Component {
                 <View className={indexStyles.grid_style}>
                         {
                             singleList && singleList.map((item,key)=>{
-                                const isSelected = select_user_id == item.user_id;
+
+                                const isSelected = current_select_user_id == item.id;
+                                console.log('sssssssssssssssss',isSelected,current_select_user_id,item)
                               return (
                                   <View className={indexStyles.lattice_style} key={key} onClick={this.selectItem.bind(this,item)}>  
                                      {

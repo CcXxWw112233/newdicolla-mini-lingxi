@@ -88,9 +88,11 @@ export default class index extends Component {
     render() {
         const { title, data = [], fieldValue, item_id } = this.props
         const { tasksDetailDatas = {}, boardId, editAuth } = this.props;
+        let contentId = Taro.getStorageSync("tasks_detail_contentId");
+
         const { list_ids=[] } = tasksDetailDatas;
         var {groupList = []} = this.state
-        groupList = groupList.filter(item=>{
+        var selectgroupList = groupList.filter(item=>{
             return list_ids.indexOf(item.list_id) != -1
         })
         return (
@@ -108,7 +110,7 @@ export default class index extends Component {
                     <View className={indexStyles.tagCell_list_item_detail}>
                    
                    {
-                       groupList && groupList.length > 0 ? (         
+                       selectgroupList && selectgroupList.length > 0 ? (         
 
                             list_ids.map((tag, key) => {
                                 const {  list_id, list_name, } = tag
@@ -129,9 +131,9 @@ export default class index extends Component {
                    }    
                     </View>
                 </View>
-                {/* {
-                    isTaskGroupViewShow ? (<TaskGroupView contentId={contentId} onClickAction={(groupName)=>this.onClickTaskGroup(groupName)} tag={type} title={title} listId={list_id} currentName={data.name} tasksGroupList={tasksGroupList}></TaskGroupView>):('')
-                }  */}
+                {
+                    isTaskGroupViewShow ? (<TaskGroupView contentId={contentId} onClickAction={(groupName)=>this.onClickTaskGroup(groupName)}  title={title} selectgroupList={selectgroupList}  groupList={groupList}></TaskGroupView>):('')
+                } 
             </View>
         )
     }

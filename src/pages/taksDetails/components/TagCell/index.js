@@ -126,7 +126,7 @@ export default class index extends Component {
           <View className={`${indexStyles.list_item_left_iconnext}`}>
             <Text className={`${globalStyle.global_iconfont}`}>&#xe86d;</Text>
           </View>
-          <View className={indexStyles.list_item_name}>标签</View>
+          {/* <View className={indexStyles.list_item_name}>标签</View> */}
           <View className={indexStyles.tagCell_list_item_detail}>
             {
               label_data.map((tag, key) => {
@@ -151,7 +151,7 @@ export default class index extends Component {
         </View>
         {
 
-          labelSelectionShow ? (<LabelSelection onClickAction={this.onClickAction} labelSelectionShow={labelSelectionShow} data={label_data} contentId={contentId}></LabelSelection>) : (null)
+          labelSelectionShow ? (<LabelSelection onClickAction={this.onClickAction} title="标签" labelSelectionShow={labelSelectionShow} data={label_data} contentId={contentId}></LabelSelection>) : (null)
         }
 
       </View>
