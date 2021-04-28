@@ -14,15 +14,18 @@ export default class taskGroupPicker extends Component {
     }
 
     componentDidMount() {
-        const { contentId, listId,currentName } = this.props;
-        this.setState({
-            card_id: contentId,
-            value: listId,
-            listId:listId,
-            current_select_taskGroup_name:currentName
-        })
-        const { tasksGroupList = [],cu } = this.props
+        const { contentId } = this.props;
+       
+        const { selectgroupList = [],groupList = [] } = this.props
 
+        var selectIdList = selectgroupList.map(item=>{
+            return item.list_id
+        })
+        this.setState({
+            selectgroupList: selectIdList,
+            groupList:groupList,
+            newCheckedList:selectIdList
+        })
         // tasksGroupList.forEach(item => {
         //     item['label'] = item.list_name
         //     item['value'] = item.list_id
@@ -86,11 +89,22 @@ export default class taskGroupPicker extends Component {
      * @param {*} item 
      */
     selectItem = (item) => {
-        console.log(item)
+        // console.log(item)
+        // this.setState({
+        //     currentItem:item,
+        //     listId:item.list_id,
+        //     current_select_taskGroup_name:item.list_name
+        // })
+        var {newCheckedList = []} = this.state;
+        if(newCheckedList.indexOf(item.list_id) != -1) {
+            newCheckedList = newCheckedList.filter((value)=> {
+                return item.list_id != value;
+            });  
+        } else {
+            newCheckedList.push(item.list_id)
+        }
         this.setState({
-            currentItem:item,
-            listId:item.list_id,
-            current_select_taskGroup_name:item.list_name
+            newCheckedList:  newCheckedList,
         })
     }
     /**
@@ -127,12 +141,10 @@ export default class taskGroupPicker extends Component {
     }
     render() {
         const {
-            title,
-            tasksGroupList,
-            editAuth,
-        } = this.props;
-        const { current_select_taskGroup_name,listId } = this.state;
-        var rangeKey = 'list_name';
+             selectgroupList,
+            groupList,
+            newCheckedList
+        } = this.state;
         return (
             <View className={indexStyles.index}>
                 {/* <Picker rangeKey={rangeKey} disabled={!editAuth} mode='selector' range={tasksGroupList} onChange={this.onChange}>
@@ -151,19 +163,20 @@ export default class taskGroupPicker extends Component {
                     </View>
                     <ScrollView className={indexStyles.scrollview} scrollY scrollWithAnimation>
                        {
-                           tasksGroupList && tasksGroupList.map((item,key)=>{
-                               const isSelected = item.list_id == listId;
-                               return (
-                                
+                           groupList && groupList.map((item,key)=>{
+                               
+                            const  isSelected = newCheckedList.indexOf(item.list_id) != -1;
+                            return (
+
                                    <View className={`${indexStyles.content_item}`} onClick={this.selectItem.bind(this,item)}>
                                        <View className={`${indexStyles.content_item_name} ${isSelected ? indexStyles.content_item_selected : ''}`}>{item.list_name}</View>
                                        {
-                                           isSelected ? (
-                                            <View className={`${globalStyles.global_iconfont} ${indexStyles.item_iconfont} ${isSelected ? indexStyles.content_item_selected : ''}`}>&#xe844;</View>
-                                           ):(
-                                            <View className={`${globalStyles.global_iconfont} ${indexStyles.item_iconfont}`}>&#xe6df;</View>
-                                           )
-                                       }
+                                            isSelected ? (
+                                            <View className={`${globalStyles.global_iconfont} ${indexStyles.item_iconfont} ${isSelected ? indexStyles.content_item_selected : ''}`}>&#xe66a;</View>
+                                            ):(
+                                            <View className={`${globalStyles.global_iconfont} ${indexStyles.item_iconfont}`}>&#xe661;</View>
+                                            )
+                                        }
                                    </View>
                                )
                            })
