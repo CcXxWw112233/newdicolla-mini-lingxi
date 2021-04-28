@@ -30,35 +30,20 @@ export default class milestoneCellPicker extends Component {
         const { contentId, milestoneId,title,currentName } = this.props;
         this.setState({
             card_id: contentId,
-            current_select_milestone_name :currentName
+            current_select_milestone_name :currentName,
+            new_select_milestone_name:currentName
         })
         Taro.setStorageSync('current_select_milestone_id', milestoneId)
     }
     onChange = e => {
-        const { contentId, milestoneId, title } = this.props;
-        const {currentItem} = this.state;
+        const { contentId, milestoneId, title,dispatch } = this.props;
+        const {currentItem,new_select_milestone_name,card_id, current_select_milestone_name} = this.state;
         const {
             dataArray = [],
         } = this.props;
         var current_select_milestone_id = Taro.getStorageSync('current_select_milestone_id')
-        const { dispatch } = this.props
-        const { card_id, current_select_milestone_name } = this.state
-        if (current_select_milestone_id == currentItem['id']) { //删除关联里程碑
+        if (current_select_milestone_name == new_select_milestone_name) { //删除关联里程碑
             this.cancelSelect()
-
-            // this.setState({
-            // current_select_milestone_id: '',
-            // current_select_milestone_name: '',
-            // })
-
-            // dispatch({
-            // type: 'tasks/deleteAppRelaMiletones',
-            // payload: {
-            // id: select_milestone_id,
-            // rela_id: card_id,
-            // callBack: this.deleteAppRelaMiletones(),
-            // },
-            // })
         }
         else {  //添加关联里程碑
             if (current_select_milestone_id == '' || current_select_milestone_id == 'undefined' || current_select_milestone_id == null) {
@@ -97,9 +82,6 @@ export default class milestoneCellPicker extends Component {
                     }).then(res=>{
                         this.cancelSelect()
                     })
-                })
-                this.setState({
-                    current_select_milestone_name: currentItem['name'],
                 })
             }
         }
@@ -159,7 +141,7 @@ export default class milestoneCellPicker extends Component {
         console.log(item)
         this.setState({
             currentItem:item,
-            current_select_milestone_name:item.name
+            new_select_milestone_name:item.name
         })
     }
      /**
@@ -189,7 +171,7 @@ export default class milestoneCellPicker extends Component {
         var rangeKey = 'name';
         // if (tag == 3) {
         // }
-        const { current_select_milestone_name } = this.state;
+        const { new_select_milestone_name} = this.state;
 
         return (
             <View className={indexStyles.index}> 
@@ -211,7 +193,7 @@ export default class milestoneCellPicker extends Component {
                     <ScrollView className={indexStyles.scrollview} scrollY scrollWithAnimation>
                        {
                            dataArray && dataArray.map((item,key)=>{
-                               const isSelected = item.name == current_select_milestone_name;
+                               const isSelected = item.name == new_select_milestone_name;
                                return (
                                 
                                    <View className={`${indexStyles.content_item}`} onClick={this.selectItem.bind(this,item)}>

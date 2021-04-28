@@ -14,17 +14,20 @@ export default class taskGroupPicker extends Component {
     }
 
     componentDidMount() {
-        const { contentId } = this.props;
-       
+        let contentId = Taro.getStorageSync("tasks_detail_contentId");
         const { selectgroupList = [],groupList = [] } = this.props
 
         var selectIdList = selectgroupList.map(item=>{
             return item.list_id
         })
+        var newCheckedList = selectgroupList.map(item=>{
+            return item.list_id
+        })
         this.setState({
             selectgroupList: selectIdList,
             groupList:groupList,
-            newCheckedList:selectIdList
+            newCheckedList:newCheckedList,
+            contentId:contentId
         })
         // tasksGroupList.forEach(item => {
         //     item['label'] = item.list_name
@@ -106,38 +109,91 @@ export default class taskGroupPicker extends Component {
         this.setState({
             newCheckedList:  newCheckedList,
         })
+
     }
+    
     /**
      * 确定选择
      */
     confirmSelect () {
-        const {contentId,dispatch,listId} = this.props;
-        const {currentItem} = this.state;
-        if(!currentItem)  {
-            this.cancelSelect()
-            return
+
+        const {dispatch,listId} = this.props;
+        const {contentId} = this.state
+        // const {currentItem} = this.state;
+        // if(!currentItem)  {
+        //     this.cancelSelect()
+        //     return
+        // }
+        // dispatch({
+        //     type: 'tasks/putCardBaseInfo',
+        //     payload: {
+        //         card_id: contentId,
+        //         list_id: currentItem.list_id,
+        //         calback: this.putCardBaseInfo(currentItem.list_id,listId),
+        //     }
+        // }).then(res => {
+        //     // this.setState({
+        //     //     current_select_taskGroup_name: tasksGroupList[e.detail.value]['list_name']
+        //     // })
+        //     typeof this.props.onClickAction == "function" &&
+        //     this.props.onClickAction(currentItem.list_name);
+        // })
+        const {newCheckedList = [],card_id,selectgroupList=[]} = this.state;
+        if(newCheckedList.length == 0 || !newCheckedList) {
+            Taro.showToast({
+                title: '请选择任务分组',
+                icon: 'none',
+                duration: 2000
+              })
+              return
         }
-        dispatch({
-            type: 'tasks/putCardBaseInfo',
-            payload: {
-                card_id: contentId,
-                list_id: currentItem.list_id,
-                calback: this.putCardBaseInfo(currentItem.list_id,listId),
+        // 现在选择的和已选择的差集
+        const handelarr = newCheckedList.concat(selectgroupList).filter(function(v, i, arr) {
+            return arr.indexOf(v) === arr.lastIndexOf(v);     
+        });
+        handelarr.forEach(item => {
+            // 删除
+            if(selectgroupList.indexOf(item) != -1) {
+                console.log("删除",item)
+                  dispatch({
+                    type: 'tasks/deleteTaskGroup',
+                    payload: {
+                        list_id: item,
+                        card_id: contentId,
+                        // callBack: this.putCardLabel(newCheckedList),
+                    },
+                  })
+            } else {
+                console.log("增加",item)
+
+                // 增加
+                   dispatch({
+                        type: 'tasks/putBoardtaskGroup',
+                        payload: {
+                            list_id: item,
+                        card_id: contentId,
+                        // calback: this.putCardBaseInfo(currentItem.list_id,listId),
+                        },
+                    })
             }
-        }).then(res => {
-            // this.setState({
-            //     current_select_taskGroup_name: tasksGroupList[e.detail.value]['list_name']
-            // })
-            typeof this.props.onClickAction == "function" &&
-            this.props.onClickAction(currentItem.list_name);
         })
+            
+        this.cancelSelect(newCheckedList)
+
+        
+        // this.putCardLabel(newCheckedList)
     }
     /**
      * 取消选择
      */
-    cancelSelect () {
+     cancelSelect (newCheckedList) {
+        const {selectgroupList=[]} = this.state;
+
+         if(!newCheckedList) {
+            newCheckedList = selectgroupList
+         }
         typeof this.props.onClickAction == "function" &&
-        this.props.onClickAction();
+        this.props.onClickAction(newCheckedList);
     }
     render() {
         const {
@@ -157,7 +213,7 @@ export default class taskGroupPicker extends Component {
                     <View className={indexStyles.content_title_view}>
                        <View className={indexStyles.content_title_left}>
                           <View className={`${globalStyles.global_iconfont} ${indexStyles.iconfont}`}>&#xe6a8;</View>
-                          <View className={indexStyles.content_title_text}>{title}</View>
+                          <View className={indexStyles.content_title_text}>任务分组</View>
                        </View>
                        <View className={indexStyles.content_confirm} onClick={this.confirmSelect}>确定</View>
                     </View>

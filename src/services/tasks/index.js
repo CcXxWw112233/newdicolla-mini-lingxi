@@ -373,3 +373,26 @@ export const getRoleList = (data, notShowLoading) => {
     url: `${API_BOARD}/board/detail/${data.board_id}`,
   }, notShowLoading)
 }
+
+/**
+ * 添加任务分组
+ */
+export const putBoardtaskGroup = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'POST',
+    url: `${API_BOARD}/card/lists/rela`,
+  }, notShowLoading, true)
+}
+// 删除任务分组
+export const deleteTaskGroup = (data, notShowLoading) => {
+  return request({
+    data: {
+      ...data
+    },
+    method: 'DELETE',
+    url: `${API_BOARD}/card/lists/rela`,
+  }, notShowLoading, true)
+}

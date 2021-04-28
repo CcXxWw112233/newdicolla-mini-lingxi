@@ -353,8 +353,8 @@ fileUploadMessageFile = () => {
                     calback: this.deleteCardAttachment(cardId, file_id),
                 }
             })
-            // typeof this.props.onClickAction == "function" &&
-            // this.props.onClickAction();
+            typeof this.props.onClickAction == "function" &&
+            this.props.onClickAction();
             // this.setFileOptionIsOpen()
         } else if (!judgeJurisdictionProject(board_id, PROJECT_FILES_FILE_DELETE)) {
             dispatch({
@@ -366,7 +366,8 @@ fileUploadMessageFile = () => {
                     calback: this.deleteCardAttachment(cardId, file_id),
                 }
             })
-         
+            typeof this.props.onClickAction == "function" &&
+            this.props.onClickAction();
             // this.setFileOptionIsOpen()
         } else {
             Taro.showToast({

@@ -528,8 +528,8 @@ export default class ProjectNameCell extends Component {
         this.setState({
             isMilestoneCellViewShow: false
         })
-        // typeof this.props.onClickAction == "function" &&
-            // this.props.onClickAction();
+        typeof this.props.onClickAction == "function" &&
+            this.props.onClickAction();
     }
     /**
      * 时间
@@ -558,7 +558,7 @@ export default class ProjectNameCell extends Component {
             isFieldPersonSingleViewShow: false
         })
         typeof this.props.onClickAction == "function" &&
-            this.props.onClickAction();
+        this.props.onClickAction();
       }
 
     deleteBoardFieldRelation = (item_id) => {
