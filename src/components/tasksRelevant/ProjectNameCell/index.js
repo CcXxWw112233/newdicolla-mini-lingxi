@@ -309,7 +309,7 @@ export default class ProjectNameCell extends Component {
                         ).then((res) => {
                             if (isApiResponseOk(res)) {
                                 this.setState({
-                                    fieldPersonSignleList: res.data,
+                                    fieldPersonSignleList: res.data.data,
                                     isFieldPersonSingleViewShow:true
                                 })
                             }
@@ -337,7 +337,7 @@ export default class ProjectNameCell extends Component {
                             if (isApiResponseOk(res)) {
 
                                 this.setState({
-                                    fieldPersonSignleList: res.data,
+                                    fieldPersonSignleList: res.data.data,
                                     isFieldPersonSingleViewShow:true
                                 })
                             }
@@ -399,7 +399,7 @@ export default class ProjectNameCell extends Component {
                         ).then((res) => {
                             if (isApiResponseOk(res)) {
                                 this.setState({
-                                    fieldPersonMultiplelist: res.data,
+                                    fieldPersonMultiplelist: res.data.data,
                                     isFieldPersonMultipleShow: true
                                 })
                             }
