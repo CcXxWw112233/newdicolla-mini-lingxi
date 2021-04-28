@@ -92,22 +92,23 @@ class Index extends Component {
   }
 
   toLogin = () => {
-    // 验证token
-    getAccountInfo().then(res => {
-      if (isApiResponseOk(res)) {
-        // 注册im
-        this.registerIm();
-
-        Taro.switchTab({
-          url: '../../pages/calendar/index'
-        })
-      } else {
-        Taro.redirectTo({
-          url: "../../pages/login/index"
-        })
-      }
-    }).catch(err => {
+    Taro.redirectTo({
+      url: "../../pages/login/index"
     })
+    // 验证token
+    // getAccountInfo().then(res => {
+    //   if (isApiResponseOk(res)) {
+    //     // 注册im
+    //     this.registerIm();
+
+    //     Taro.switchTab({
+    //       url: '../../pages/calendar/index'
+    //     })
+    //   } else {
+       
+    //   }
+    // }).catch(err => {
+    // })
   }
 
   //获取授权信息，然后进行微信授权登录

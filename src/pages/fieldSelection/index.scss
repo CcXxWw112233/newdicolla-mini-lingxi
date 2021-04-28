@@ -61,3 +61,12 @@
 .bottom_placeView {
     height: pxTrans(60);
 }
+.noDataText_View {
+    height:pxTrans(50);
+    text-align: center;
+    width: 100%;
+    color: #BCC2D6;
+    font-size: pxTrans(14);
+    line-height: pxTrans(50);
+    margin-left: pxTrans(-20);
+}

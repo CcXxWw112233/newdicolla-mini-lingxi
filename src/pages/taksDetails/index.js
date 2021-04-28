@@ -95,7 +95,7 @@ export default class taksDetails extends Component {
 
             completeAuth: judgeJurisdictionProject(boardId, PROJECT_TEAM_CARD_COMPLETE),
             uploadAuth: judgeJurisdictionProject(boardId, PROJECT_FILES_FILE_UPLOAD),
-            fileInterViewAuth: judgeJurisdictionProject(PROJECT_FILES_FILE_INTERVIEW)
+            fileInterViewAuth: judgeJurisdictionProject(boardId,PROJECT_FILES_FILE_INTERVIEW)
         });
         this.loadTasksDetail(contentId, boardId);
     }
@@ -413,30 +413,23 @@ export default class taksDetails extends Component {
                         type="1"
                         editAuth={editAuth}
                     />
-
+                    <ProjectNameCell
+                        title="任务分组"
+                        data={{ name: list_name }}
+                        boardId={board_id}
+                        propertyId={id}
+                        cardId={card_id}
+                        type="2"
+                        editAuth={editAuth}
+                        onClickAction={this.onClickAction}
+                    />
                     <View>
                         {properties &&
                             properties.map((item, key) => {
                                 const { code, name, id, data = [] } = item;
-                                console.log(code)
                                 return (
                                     <View key={key}>
-                                       <View>
-                                        {
-                                            code == 'DEPENDENCY' ? (
-                                                <ProjectNameCell
-                                                        title="任务分组"
-                                                        data={{ name: list_name }}
-                                                        boardId={board_id}
-                                                        propertyId={id}
-                                                        cardId={card_id}
-                                                        type="2"
-                                                        editAuth={editAuth}
-                                                        onClickAction={this.onClickAction}
-                                                        />
-                                                ):('')
-                                        }
-                                       </View>
+                                    
                                         <View>
                                             {code == "EXECUTOR" ? (
                                                 <ProjectNameCell
@@ -649,6 +642,7 @@ export default class taksDetails extends Component {
                                                 board_id,
                                                 card_id
                                             )}
+                                            onClickAction={this.onClickAction}
                                             editAuth={editAuth}
 
                                         />
