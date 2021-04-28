@@ -20,7 +20,7 @@ import FileFields from "./components/FileFields/index";
 import { timestampToDateTime, judgeJurisdictionProject } from "../../utils/basicFunction";
 import { PROJECT_TEAM_CARD_EDIT, PROJECT_TEAM_CARD_DELETE, PROJECT_TEAM_CARD_EDIT_FINISH_TIME, PROJECT_TEAM_CARD_COMPLETE, PROJECT_TEAM_CARD_ATTACHMENT_UPLOAD, PROJECT_FILES_FILE_INTERVIEW, PROJECT_FILES_FILE_UPLOAD } from "../../gloalSet/js/constant";
 import MoreFields from "./components/MoreField/index"
-
+import TaskGroup from "./components/TaskGroup/index"
 
 @connect(
     ({
@@ -360,6 +360,7 @@ export default class taksDetails extends Component {
         };
         const board_name = tasksDetailDatas["board_name"] || "";
         const list_name = tasksDetailDatas["list_name"] || "";
+        const list_ids = tasksDetailDatas["list_ids"] || [];
         const description = tasksDetailDatas["description"] || "";
         const { content_Id, backIcon } = this.state;
         const executors = tasksDetailDatas["executors"] || [];
@@ -413,15 +414,17 @@ export default class taksDetails extends Component {
                         type="1"
                         editAuth={editAuth}
                     />
-                    <ProjectNameCell
-                        title="任务分组"
+                    <TaskGroup
+                        // title="任务分组"
                         data={{ name: list_name }}
                         boardId={board_id}
                         propertyId={id}
                         cardId={card_id}
                         type="2"
+                        
                         editAuth={editAuth}
                         onClickAction={this.onClickAction}
+                        list_ids={list_ids}
                     />
                     <View>
                         {properties &&
@@ -429,7 +432,7 @@ export default class taksDetails extends Component {
                                 const { code, name, id, data = [] } = item;
                                 return (
                                     <View key={key}>
-                                    
+                                        
                                         <View>
                                             {code == "EXECUTOR" ? (
                                                 <ProjectNameCell
@@ -485,6 +488,7 @@ export default class taksDetails extends Component {
                                         {code == "LABEL" ? (
                                             <TagCell
                                                 label_data={data}
+                                                title="标签"
                                                 propertyId={id}
                                                 cardId={card_id}
                                                 onClickAction={this.onClickAction}
@@ -503,6 +507,7 @@ export default class taksDetails extends Component {
                                                 cardId={card_id}
                                                 uploadAuth={uploadAuth}
                                                 fileInterViewAuth={fileInterViewAuth}
+                                                onClickAction={this.onClickAction}
 
                                             />
                                         ) : (

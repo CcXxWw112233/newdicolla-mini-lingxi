@@ -53,7 +53,7 @@ class App extends Component {
       "pages/nowOpen/index",
       "pages/auccessJoin/index",
       "pages/qrCodeInvalid/index",
-      "pages/taksDetails/index",
+      // "pages/taksDetails/index",
       // "pages/labelSelection/index",
       "pages/tasksGroup/index",
       // "pages/executorsList/index",
@@ -77,7 +77,6 @@ class App extends Component {
       "pages/jumpToMeeting/index",
       // "pages/OnlineTableWebView/index",
       "pages/qrcodeHistory/index",
-      "pages/taksDetails/components/AddDesribeTaskText/index"
     ],
     "subpackages": [
       {
@@ -128,6 +127,14 @@ class App extends Component {
           "index"
         ]
       },
+      {
+
+        "root": "pages/taksDetails",
+        "pages": [
+          "index",
+          "components/AddDesribeTaskText/index"
+        ]
+      }
     ],
     permission: {
       "scope.userLocation": {

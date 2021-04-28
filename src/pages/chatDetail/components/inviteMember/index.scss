@@ -76,6 +76,11 @@
       width: pxTrans(30);
       border-radius: pxTrans(15);
       margin-right: pxTrans(10);
+      background-color: #F5F7FB;
+      color: #9EA6C2;
+      font-size: pxTrans(20);
+      line-height: pxTrans(30);
+      text-align: center;
   }
 
   .selectAcatarlist {
@@ -137,4 +142,14 @@
 .acatar_invite_unuse_View {
     background: #F5F7FB !important;
     color: #BCC2D6 !important;
+}
+.content_avatar {
+  height: pxTrans(48);
+  width: pxTrans(48);
+  border-radius: pxTrans(24);
+  background-color: #F5F7FB;
+  color: #9EA6C2;
+  font-size: pxTrans(25);
+  line-height: pxTrans(48);
+  text-align: center;
 }

@@ -61,10 +61,10 @@ class ChatHeader extends Component {
             群组信息
             {/* &#xe8ed; */}
           </View>
-          {/* {!hideSubList && hasSublist && */}
           <View
             className={styles.operatorWrapper}
             onClick={this.onGoToSubChatList}>
+            {!hideSubList && hasSublist &&
             <View
               className={`${globalStyles.global_iconfont} ${styles.operator}`}
             >
@@ -73,6 +73,7 @@ class ChatHeader extends Component {
                 </View>}
                 &#xe89c;
             </View>
+          } 
             <View
               className={`${globalStyles.global_iconfont} ${styles.operator}`}
               onClick={this.onShowBoardDetail}
@@ -80,7 +81,7 @@ class ChatHeader extends Component {
              &#xe8b4;
             </View>
           </View>
-          {/* } */}
+          
 
         </View>
       </View>

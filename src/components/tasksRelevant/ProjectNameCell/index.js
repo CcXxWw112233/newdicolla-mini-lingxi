@@ -7,7 +7,6 @@ import { connect } from "@tarojs/redux";
 import { isApiResponseOk, } from "../../../utils/request";
 import { getOrgIdByBoardId, } from '../../../utils/basicFunction'
 import { MilestoneCellView } from "../milestoneCellView";
-import { TaskGroupView } from "../taskGroupView";
 import { textField } from '../../../pages/textField'
 import { DateField } from '../../../pages/dateField'
 import { FieldSelection } from '../../../pages/fieldSelection'
@@ -56,49 +55,15 @@ export default class ProjectNameCell extends Component {
     componentDidMount() {
         const {type} = this.props;
         var that = this;
-        if(type == 2) {
-            setTimeout(function () {
-                that.getTasksGroupList()
+        // if(type == 2) {
+        //     setTimeout(function () {
+        //         that.getTasksGroupList()
 
-            }, 1500);
-        }
+        //     }, 1500);
+        // }
     }
    
-    //获取任务分组列表
-    getTasksGroupList = () => {
-        let board_id = Taro.getStorageSync("tasks_detail_boardId");
-        const { dispatch, data,tasksDetailDatas } = this.props;
-        const {list_ids = []} = tasksDetailDatas;
-        Promise.resolve(
-            dispatch({
-                type: "tasks/getCardList",
-                payload: {
-                    board_id: board_id,
-                },
-            })
-        ).then((res) => {
-            if (isApiResponseOk(res)) {
-                if (res.data && res.data.length > 0) {
-                    res.data.forEach(item=>{
-                       if(item.list_id == list_ids[0]) {
-                        this.setState({
-                            currentTaskGroup: item.list_name,
-                        })
-                       }
-                    })
-                    this.setState({
-                        tasksGroupList: res.data,
-                    })
-                } else {
-                    // Taro.showToast({
-                    // title: '暂无分组可选',
-                    // icon: 'none',
-                    // duration: 2000
-                    // })
-                }
-            }
-        });
-    }
+  
 
     // 获取里程碑列表
     getTaskMilestoneList = () => {
@@ -344,7 +309,7 @@ export default class ProjectNameCell extends Component {
                         ).then((res) => {
                             if (isApiResponseOk(res)) {
                                 this.setState({
-                                    fieldPersonSignleList: res.data.data,
+                                    fieldPersonSignleList: res.data,
                                     isFieldPersonSingleViewShow:true
                                 })
                             }
@@ -370,8 +335,9 @@ export default class ProjectNameCell extends Component {
                             })
                         ).then((res) => {
                             if (isApiResponseOk(res)) {
+
                                 this.setState({
-                                    fieldPersonSignleList: res.data.data,
+                                    fieldPersonSignleList: res.data,
                                     isFieldPersonSingleViewShow:true
                                 })
                             }
@@ -562,8 +528,15 @@ export default class ProjectNameCell extends Component {
         this.setState({
             isMilestoneCellViewShow: false
         })
+        // typeof this.props.onClickAction == "function" &&
+            // this.props.onClickAction();
+    }
+    /**
+     * 时间
+     */
+    onDateClickAction() {
         typeof this.props.onClickAction == "function" &&
-            this.props.onClickAction();
+        this.props.onClickAction();
     }
     /**
      * 自定义字段 单选
@@ -733,7 +706,7 @@ export default class ProjectNameCell extends Component {
 
                                         {
                                             // field_value=${field_value}&item_id=${item_id}`,
-                                            type == 8 ? (<DateField field_value={field_value} item_id={item_id} editAuth={editAuth} dateFieldCode={date_field_code}></DateField>) : (null)
+                                            type == 8 ? (<DateField field_value={field_value}  onClickAction={this.onDateClickAction} item_id={item_id} editAuth={editAuth} dateFieldCode={date_field_code}></DateField>) : (null)
                                         }
                                         {/* {
                                             type == 6 ? (
@@ -772,9 +745,9 @@ export default class ProjectNameCell extends Component {
                 {
                     isExecutorsListShow ? (<ExecutorsList title='指派负责人' contentId={contentId} onClickAction={this.onClickExecutorsList} executors={data}></ExecutorsList>) : (null)
                 }
-                {
+                {/* {
                     isTaskGroupViewShow ? (<TaskGroupView contentId={contentId} onClickAction={(groupName)=>this.onClickTaskGroup(groupName)} tag={type} title={title} listId={list_id} currentName={data.name} tasksGroupList={tasksGroupList}></TaskGroupView>):('')
-                } 
+                }  */}
                 {
                     isMilestoneCellViewShow ? (<MilestoneCellView onClickAction={this.onClickMilestone} tag={type}  title={title} currentName={data.name} dataArray={milestoneList} contentId={contentId} milestoneId={milestoneId} tasksDetailDatas={tasksDetailDatas} editAuth={editAuth}></MilestoneCellView>):('')
                 }

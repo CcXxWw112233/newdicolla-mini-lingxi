@@ -43,7 +43,6 @@ export default class AddFunctionCell extends Component {
     }
 
     postCardProperty = (code) => {
-
         const { dispatch, tasksDetailDatas, properties_list, } = this.props
         const { properties = [], } = tasksDetailDatas
         properties_list.forEach(element => {
@@ -90,6 +89,10 @@ export default class AddFunctionCell extends Component {
             if (item.code != gold_code) {
                 return item
             }
+        })
+        // DEPENDENCY
+        new_array = new_array.filter(item =>{
+            return new_array.code == "DEPENDENCY"
         })
         new_array.push(
             {
@@ -140,8 +143,11 @@ export default class AddFunctionCell extends Component {
             <View className={indexStyles.list_View}>
                 {
                   dataArray && dataArray.map((item,key) => {
+                    
                     const { id, code, name, } = item
-                   return (
+                    
+                   return (    
+                    
                     <View key={key} className={indexStyles.list_item_View} onClick={() => this.selectFunction(code, id)}>
                         <RichText className={`${globalStyle.global_iconfont} ${indexStyles.list_item_icon}`} nodes={this.iconFont(code)}></RichText>
                         <Text className={indexStyles.list_item_title}>{item.name}</Text>

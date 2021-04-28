@@ -25,6 +25,12 @@ export default class index extends Component {
             desText:e.detail.value
         })
     }
+
+    componentDidMount() {
+        this.setState({
+            desText:this.$router.params.markText
+        })
+    }
     /**
      * 确定添加
      */
@@ -56,7 +62,7 @@ export default class index extends Component {
         const {desText} = this.state
         return (
             <View className={indexStyles.wapper}>
-                <Textarea className={indexStyles.wapper_Textarea}  onInput={this.startPrint} autoFocus={true} placeholder='请输入任务说明'/>
+                <Textarea className={indexStyles.wapper_Textarea} value={desText}  onInput={this.startPrint} autoFocus={true} placeholder='请输入任务说明'/>
                 <View className={`${indexStyles.desrlbeTask} ${desText ? '':indexStyles.desrlbeTask_unuse}`}  onClick={this.confirmadd} >确认添加</View>
             </View>
         )
