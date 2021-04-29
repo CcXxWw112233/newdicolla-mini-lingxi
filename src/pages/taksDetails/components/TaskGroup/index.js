@@ -114,12 +114,13 @@ export default class index extends Component {
     
     
     render() {
-        const { title, data = [], fieldValue, item_id } = this.props
+        const { title, data = [], fieldValue, item_id,list_ids } = this.props
         const { tasksDetailDatas = {}, boardId, editAuth } = this.props;
-        const {list_ids} = tasksDetailDatas;
+        // const {list_ids} = tasksDetailDatas;
         let contentId = Taro.getStorageSync("tasks_detail_contentId");
         var {groupList = [],currentTaskGroup} = this.state
         var selectgroupList = []
+        
         if(list_ids && list_ids.length > 0) {
              selectgroupList = groupList && groupList.filter(item=>{
                 return list_ids && list_ids.indexOf(item.list_id) != -1
