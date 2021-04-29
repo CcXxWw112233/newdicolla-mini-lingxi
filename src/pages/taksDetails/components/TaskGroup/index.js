@@ -29,17 +29,18 @@ export default class index extends Component {
             })
             return;
         }
-        if(groupList.length > 0) {
-            this.setState({
-                isTaskGroupViewShow: true
-            })
-        } else {
-            Taro.showToast({
-                title: '暂无任务分组可选',
-                icon: 'none',
-                duration: 2000
-            })
-        }
+        this.getTasksGroupList()
+        // if(groupList.length > 0) {
+        //     this.setState({
+        //         isTaskGroupViewShow: true
+        //     })
+        // } else {
+        //     Taro.showToast({
+        //         title: '暂无任务分组可选',
+        //         icon: 'none',
+        //         duration: 2000
+        //     })
+        // }
 
     }
      /**
@@ -62,7 +63,7 @@ export default class index extends Component {
         const { tasksDetailDatas = {} } = this.props;
     }
     componentWillMount() {
-        this.getTasksGroupList()
+        // this.getTasksGroupList()
     }
      //获取任务分组列表
      getTasksGroupList = () => {
@@ -82,10 +83,15 @@ export default class index extends Component {
                 if (res.data && res.data.length > 0) {
                     this.setState({
                         groupList:res.data,
-                        currentTaskGroup:list_ids
-
+                        currentTaskGroup:list_ids,
+                        isTaskGroupViewShow: true
                     })
                 } else {
+                    Taro.showToast({
+                        title: '暂无任务分组可选',
+                        icon: 'none',
+                        duration: 2000
+                    })
                 }
             }
         });

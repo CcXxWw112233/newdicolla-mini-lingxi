@@ -29,6 +29,7 @@ export default class taskGroupPicker extends Component {
             newCheckedList:newCheckedList,
             contentId:contentId
         })
+        
         // tasksGroupList.forEach(item => {
         //     item['label'] = item.list_name
         //     item['value'] = item.list_id
@@ -154,7 +155,7 @@ export default class taskGroupPicker extends Component {
         const handelarr = newCheckedList.concat(selectgroupList).filter(function(v, i, arr) {
             return arr.indexOf(v) === arr.lastIndexOf(v);     
         });
-        debugger
+        // debugger
         handelarr.forEach(item => {
             // 删除
             if(selectgroupList.indexOf(item) != -1) {
