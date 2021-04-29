@@ -144,8 +144,11 @@ fileUploadMessageFile = () => {
           var tempFilePaths = res.tempFiles.map(function (item, index, input) {
               return item.path;
           })
+          tempFilePaths.forEach(item=>{
+            that.fileUpload([item]);
+
+          })
           that.setFileOptionIsOpen();
-        that.fileUpload(tempFilePaths);
       }
   })
 
@@ -194,7 +197,7 @@ fileUploadMessageFile = () => {
     });
   }
 
-  //文件字段文件
+  //文件字段文件上传
   fileUpload = (tempFilePaths,) => {
     const { boardId,cardId } = this.props;
 
@@ -453,7 +456,7 @@ fileUploadMessageFile = () => {
  */
   deleteFile = (file_id) => {
     const { dispatch, item_id } = this.props;
-
+// debugger
     Promise.resolve(
       dispatch({
         type: "tasks/deleteFileFieldsFileRemove",
@@ -473,7 +476,6 @@ fileUploadMessageFile = () => {
             return array;
           }
         }); // 生成数组
-
         let valueText = array.join(",");
         dispatch({
           type: "tasks/putBoardFieldRelation",
@@ -483,6 +485,8 @@ fileUploadMessageFile = () => {
             calback: this.deleteFileFieldsFileRemove(),
           },
         });
+        typeof this.props.onClickAction == "function" &&
+        this.props.onClickAction();
       }
       else {
         Taro.showToast({

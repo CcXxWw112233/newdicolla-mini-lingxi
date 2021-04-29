@@ -195,7 +195,6 @@ export default class FieldPersonSinglePicker extends Component {
                                 var id = item.user_id ? item.user_id : item.id;
 
                                 const isSelected = current_select_user_id == id;
-                                console.log('sssssssssssssssss',isSelected,current_select_user_id,item)
                               return (
                                   <View className={indexStyles.lattice_style} key={key} onClick={this.selectItem.bind(this,item)}>  
                                      {

@@ -15,6 +15,7 @@ import { PROJECT_TEAM_CARD_INTERVIEW, PROJECT_FLOW_FLOW_ACCESS } from "../../../
 export default class CardItem extends Component {
   gotoListItemDetails = itemValue => {
     const { flag, content_id, board_id, parent_id } = itemValue;
+    
     if (itemValue && ["0", "1"].indexOf(flag) !== -1) {
       let tasks_id = parent_id ? parent_id : content_id;
       // 判断有没有任务访问权限 
@@ -43,7 +44,13 @@ export default class CardItem extends Component {
         })
       }
 
-    } else {
+    } else if (itemValue && ["3"].indexOf(flag) !== -1) {
+        Taro.showToast({
+          title: '里程碑暂无详情可查看',
+          icon: 'none',
+          duration: 2000
+        }) 
+    }else {
     }
   };
 
@@ -223,7 +230,7 @@ export default class CardItem extends Component {
 
     return (
       <View
-        onClick={() => flag != "meeting" && flag != "1" && flag != '3' && this.gotoListItemDetails(itemValue)}
+        onClick={() => flag != "meeting" && flag != "1"  && this.gotoListItemDetails(itemValue)}
       >
         <View
           className={`${globalStyles.global_card_out} ${indexStyles.card_content} `}
