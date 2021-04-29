@@ -45,15 +45,23 @@ export default class index extends Component {
      /**
      * 任务分组回调
      */
-      onClickTaskGroup = newCheckedList=> {
-        this.setState({
-            currentTaskGroup:newCheckedList,
-            isTaskGroupViewShow:false
-        })
+      onClickTaskGroup = (newCheckedList,isCancel)=> {
+          if(isCancel) {
+            this.setState({
+                isTaskGroupViewShow:false
+            }) 
+          } else {
+            this.setState({
+                currentTaskGroup:newCheckedList,
+                isTaskGroupViewShow:false
+            })
+          }
     }
 
     componentDidMount() {
         const { tasksDetailDatas = {} } = this.props;
+    }
+    componentWillMount() {
         this.getTasksGroupList()
     }
      //获取任务分组列表
@@ -135,7 +143,7 @@ export default class index extends Component {
                     </View>
                 </View>
                 {
-                    isTaskGroupViewShow ? (<TaskGroupView contentId={contentId} onClickAction={(newCheckedList)=>this.onClickTaskGroup(newCheckedList)}  title={title} selectgroupList={selectgroupList}  groupList={groupList}></TaskGroupView>):('')
+                    isTaskGroupViewShow ? (<TaskGroupView contentId={contentId} onClickAction={(newCheckedList,isCancel)=>this.onClickTaskGroup(newCheckedList,isCancel)}  title={title} selectgroupList={selectgroupList}  groupList={groupList}></TaskGroupView>):('')
                 } 
             </View>
         )

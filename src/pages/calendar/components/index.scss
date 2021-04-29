@@ -3,7 +3,10 @@
 .card_item_out {
   margin-top: pxTrans(100);
 }
-
+.lattice_hover_style {
+  box-shadow     : 0 0 pxTrans(16) 0 rgba(0, 0, 0, 0.35);
+  transform: scale(1.05, 1.05);
+}
 .card_item_out_01 {
   margin-top: pxTrans(10);
 }

@@ -235,6 +235,8 @@ export default class CardItem extends Component {
         <View
           className={`${globalStyles.global_card_out} ${indexStyles.card_content} `}
           style={`opacity: ${dis_due_style()}`}
+          hover-class={indexStyles.lattice_hover_style}
+
         >
           {/* <View className={`${indexStyles.card_content_left}`}> */}
           {/* {/* {/* {"0" == flag ? is_realize == "1" ? card_logo_1_relize : card_logo_1: "1" == flag ? card_logo_2 : "2" == flag ? card_logo_3 : "meeting" == flag ? card_logo_meeting: card_logo_4}</View> */}
