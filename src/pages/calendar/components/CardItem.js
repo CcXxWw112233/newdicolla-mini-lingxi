@@ -43,10 +43,10 @@ export default class CardItem extends Component {
           duration: 2000
         })
       }
-
+      
     } else if (itemValue && ["3"].indexOf(flag) !== -1) {
         Taro.showToast({
-          title: '里程碑暂无详情可查看',
+          title: '里程碑详情正在开发中···',
           icon: 'none',
           duration: 2000
         }) 

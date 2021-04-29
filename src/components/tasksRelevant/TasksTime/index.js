@@ -235,7 +235,6 @@ export default class TasksTime extends Component {
      * @param {*} e 
      */
     changeStartDateTime = e => {
-        console.log(e.detail.value);
         var startT = formatTypePickerDateTime(this.state.dateTimeArray, e.detail.value,'YMDHM')
         this.setState({
             startT: startT,
@@ -244,7 +243,6 @@ export default class TasksTime extends Component {
       
         var date = new Date(startT.replace(/-/g, '/'));
         var time = date.getTime()
-        console.log(time);
         this.putTasksStartTime(time)
     }
     /**
@@ -252,7 +250,6 @@ export default class TasksTime extends Component {
      * @param {*} e 
      */
     changeEndDateTime = e => {
-        console.log(e.detail.value);
         var startT = formatTypePickerDateTime(this.state.dateTimeArray, e.detail.value,'YMDHM')
         this.setState({
             startT: startT,
@@ -260,7 +257,6 @@ export default class TasksTime extends Component {
         })
         var date = new Date(startT);
         var time = date.getTime()
-        console.log(time);
         this.putTasksDueTime(time)
 
     }

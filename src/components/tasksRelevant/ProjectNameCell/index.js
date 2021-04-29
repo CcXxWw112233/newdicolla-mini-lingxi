@@ -133,7 +133,6 @@ export default class ProjectNameCell extends Component {
         const { dispatch, tasksDetailDatas = {}, data, cardId, editAuth } = this.props;
         const { list_id, org_id, fields } = tasksDetailDatas;
 
-        console.log(value);
         const {
             isFieldSelectionClick,
             isTasksGroupClick,

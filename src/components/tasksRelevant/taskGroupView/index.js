@@ -159,7 +159,6 @@ export default class taskGroupPicker extends Component {
         handelarr.forEach(item => {
             // 删除
             if(selectgroupList.indexOf(item) != -1) {
-                console.log("删除",item)
                 promise.push (
                     dispatch({
                         type: 'tasks/deleteTaskGroup',
@@ -172,7 +171,6 @@ export default class taskGroupPicker extends Component {
                 )
                
             } else {
-                console.log("增加",item)
                 promise.push (
                     dispatch({
                         type: 'tasks/putBoardtaskGroup',
