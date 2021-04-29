@@ -656,6 +656,7 @@ export default class taksDetails extends Component {
                                             )}
                                             onClickAction={this.onClickAction}
                                             editAuth={editAuth}
+                                            uploadAuth={uploadAuth}
 
                                         />
                                     ) : (

@@ -107,10 +107,8 @@ export default class index extends Component {
         let promise = [];
         //开发者服务器访问接口，微信服务器通过这个接口上传文件到开发者服务器
         for (var i = 0; i < choice_image_temp_file_paths.length; i++) {
-            this.addSendPromise(choice_image_temp_file_paths[i], data, authorization, base_info, board_id, choice_board_folder_id, song_task_id,)
-            // )
+            promise.push(this.addSendPromise(choice_image_temp_file_paths[i], data, authorization, base_info, board_id, choice_board_folder_id, song_task_id,))
         }
-
         Promise.all(promise).then(res => {
             // 重新掉列表接口, 刷新列表
             Taro.showToast({
