@@ -182,7 +182,6 @@ export default class taksDetails extends Component {
         //     },
         // });
         const { content_Id, board_id } = this.state;
-        
         if (content_Id != "" && board_id != "") {
             dispatch({
                 type: "tasks/getTasksDetail",
@@ -406,6 +405,7 @@ export default class taksDetails extends Component {
                                 tasksDetailsRealizeStatus={(timeInfo, type) =>
                                     this.tasksDetailsRealizeStatus(timeInfo, "TasksTime")
                                 }
+                                onClickAction={this.onClickAction}
                                 flag={type_flag}
                                 completeAuth={completeAuth}
                                 editAuth={editAuth}
