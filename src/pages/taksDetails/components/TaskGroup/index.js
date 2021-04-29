@@ -56,6 +56,8 @@ export default class index extends Component {
                 currentTaskGroup:newCheckedList,
                 isTaskGroupViewShow:false
             })
+            typeof this.props.onClickAction == "function" &&
+            this.props.onClickAction([],true);
           }
     }
 
