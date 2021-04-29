@@ -342,12 +342,25 @@ fileUploadMessageFile = () => {
         const { dispatch, cardId,tasksDetailDatas={} } = this.props
         const {board_id} = tasksDetailDatas
         const account_info = JSON.parse(Taro.getStorageSync('account_info'));
-        if (account_info.id == create_by && (new Date().getTime() - parseInt(create_time) *
-            1000) < 2 * 60 * 1000) {
+        // if (account_info.id == create_by && (new Date().getTime() - parseInt(create_time) *
+        //     1000) < 2 * 60 * 1000) {
+        //     dispatch({
+        //         type: 'tasks/deleteCardAttachment',
+        //         payload: {
+        //             attachment_id: file_id,
+        //             card_id: cardId,
+        //             code: "REMARK",
+        //             calback: this.deleteCardAttachment(cardId, file_id),
+        //         }
+        //     })
+        //     typeof this.props.onClickAction == "function" &&
+        //     this.props.onClickAction();
+        //     // this.setFileOptionIsOpen()
+        // } else if (!judgeJurisdictionProject(board_id, PROJECT_FILES_FILE_DELETE)) {
             dispatch({
                 type: 'tasks/deleteCardAttachment',
                 payload: {
-                    attachment_id: file_id,
+                    attachment_id: id,
                     card_id: cardId,
                     code: "REMARK",
                     calback: this.deleteCardAttachment(cardId, file_id),
@@ -356,26 +369,13 @@ fileUploadMessageFile = () => {
             typeof this.props.onClickAction == "function" &&
             this.props.onClickAction();
             // this.setFileOptionIsOpen()
-        } else if (!judgeJurisdictionProject(board_id, PROJECT_FILES_FILE_DELETE)) {
-            dispatch({
-                type: 'tasks/deleteCardAttachment',
-                payload: {
-                    attachment_id: file_id,
-                    card_id: cardId,
-                    code: "REMARK",
-                    calback: this.deleteCardAttachment(cardId, file_id),
-                }
-            })
-            typeof this.props.onClickAction == "function" &&
-            this.props.onClickAction();
-            // this.setFileOptionIsOpen()
-        } else {
-            Taro.showToast({
-                title: '您没有删除该文件的权限',
-                icon: 'none',
-                duration: 2000
-            })
-        }
+        // } else {
+        //     Taro.showToast({
+        //         title: '您没有删除该文件的权限',
+        //         icon: 'none',
+        //         duration: 2000
+        //     })
+        // }
 
     }
 
