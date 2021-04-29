@@ -37,6 +37,9 @@ export default class index extends Component {
         typeof this.props.onClickAction == "function" &&
             this.props.onClickAction();
     }
+    /**
+     * 新增子任务弹窗
+     */
     addSonTask = () => {
 
         const { boardId, tasksDetailDatas = {}, } = this.props
@@ -290,6 +293,9 @@ export default class index extends Component {
         })
     }
 
+    /**
+     * 删除子任务
+     */
     deleteSongTasks = () => {
 
         const { dispatch, tasksDetailDatas = {}, deleteAuth } = this.props
@@ -328,21 +334,15 @@ export default class index extends Component {
         }
     }
 
-
+    // 删除本地的子任务数据
     deleteCard = (song_task_id) => {
-
         const { dispatch, tasksDetailDatas, child_data } = this.props
         const { properties = [] } = tasksDetailDatas
-
-
         child_data.forEach(obj => {
-
             if (obj.card_id === song_task_id) {
-
                 this.removeObjWithArr(child_data, obj);
             }
         })
-
         properties.forEach(item => {
             if (item['code'] === 'SUBTASK') {
                 item.data = child_data;
@@ -362,7 +362,6 @@ export default class index extends Component {
 
 
     fileOption = (id, file_resource_id, board_id, fileName, card_id, file_id, create_by, create_time) => {
-
         this.setState({
             file_option_isOpen: true,
             file_id: file_id,
@@ -376,19 +375,23 @@ export default class index extends Component {
         })
     }
 
-
-    previewFile = (file_resource_id, board_id, fileName) => {
-
-        const { dispatch, fileInterViewAuth } = this.props
-
-
+    /**
+     * 预览文件
+     * @param {*} e 
+     */
+    previewFile = (e) => {
+        const { dispatch, tasksDetailDatas = {} ,child_data = [],fileInterViewAuth} = this.props
+        const account_info = JSON.parse(Taro.getStorageSync('account_info'));
+        const {board_id,card_id} = tasksDetailDatas //board_id,
+        var arr = e.currentTarget.id.split("_");
+        var item = child_data[arr[0]]["deliverables"][arr[1]]
         if (fileInterViewAuth) {
-
+           var  fileName = item["name"];
             setBoardIdStorage(board_id)
             const fileType = fileName.substr(fileName.lastIndexOf(".")).toLowerCase();
             const parameter = {
                 board_id,
-                ids: file_resource_id,
+                ids:item['file_resource_id'],
                 _organization_id: getOrgIdByBoardId(board_id),
             }
 
@@ -424,6 +427,10 @@ export default class index extends Component {
         }
     }
 
+    /**
+     * 删除文件
+     * @param {*} e 
+     */
     deleteFile = (e) => {
         const { dispatch, tasksDetailDatas = {} ,child_data = []} = this.props
         const account_info = JSON.parse(Taro.getStorageSync('account_info'));
@@ -434,7 +441,7 @@ export default class index extends Component {
             dispatch({
                 type: 'tasks/deleteCardAttachment',
                 payload: {
-                    attachment_id: child_data[arr[0]]["deliverables"][arr[1]],
+                    attachment_id: child_data[arr[0]]["deliverables"][arr[1]]['id'],
                     card_id: card_id,
                     // calback: this.deleteCardAttachment(card_id, file_id,),
                 }
@@ -744,7 +751,7 @@ export default class index extends Component {
                                                             {/* <RichText className={`${globalStyle.global_iconfont}`} nodes={fileType} /> */}
 
                                                         </View>
-                                                        <View className={indexStyles.list_item_file_center} onClick={()=>this.previewFile(file_resource_id, board_id, name)}>
+                                                        <View className={indexStyles.list_item_file_center} id={key+'_'+key1+'_'+create_by+'_'+create_time} onClick={(e)=>this.previewFile(e,file_resource_id, board_id, name)}>
                                                             <Text className={indexStyles.list_item_file_name}>{name}</Text>
                                                             <View className={indexStyles.list_item_file_center_timeView}>
                                                                 {/* <Image  className={indexStyles.list_item_file_center_photo}></Image> */}

@@ -5,6 +5,7 @@ import globalStyles from '../../../gloalSet/styles/globalStyles.scss'
 import { filterFileFormatType } from './../../../utils/util';
 import { connect } from '@tarojs/redux'
 import { getOrgIdByBoardId, setBoardIdStorage } from '../../../utils/basicFunction'
+import iconStyle from "../../../gloalSet/styles/lxicon.scss"
 
 @connect(({ }) => ({}))
 export default class FileChat extends Component {
@@ -134,8 +135,11 @@ export default class FileChat extends Component {
                                                 </Image>
                                             ) : (
                                                 <View className={indexStyles.other_icon_style}>
-                                                    <RichText className={`${globalStyles.global_iconfont} ${indexStyles.folder_type_icon}`} nodes={fileType} />
+                                                    {/* <RichText className={`${globalStyles.global_iconfont} ${indexStyles.folder_type_icon}`} nodes={fileType} /> */}
+                                                    <View className={`${iconStyle.lxicon}`} style={{'background': fileType}}></View>
+
                                                 </View>)
+
                                     }
                                 </View>
                                 <View className={indexStyles.file_chat_view_hear_text_style}>
