@@ -121,6 +121,7 @@ export default class taksDetails extends Component {
                 },
             })
         ).then((res) => {
+            that.TaskGroup.getTasksGroupList()
             that.getCardProperties(boardId);
         });
     };
@@ -343,6 +344,9 @@ export default class taksDetails extends Component {
             })
         }
     }
+    onRef (name,ref) {
+        this.TaskGroup = ref
+    }
     render() {
         const {
             tasksDetailDatas = {},
@@ -431,6 +435,8 @@ export default class taksDetails extends Component {
                         editAuth={editAuth}
                         onClickAction={this.onClickAction}
                         list_ids={list_ids}
+                        onRef={this.onRef.bind(this)}
+
                     />
                     <View>
                         {properties &&
