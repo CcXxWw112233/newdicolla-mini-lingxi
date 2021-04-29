@@ -649,19 +649,10 @@ export default class BoardChat extends Component {
       // this.setState({
       //   all_chat_list:listArray
       // })
-      if(!listArray || listArray.length == 0) {
-        this.setState({
-          isShowImage:true
-        })
-      }
       Taro.hideLoading()
     return listArray;
   };
-  componentWillUnmount() {
-    this.setState({
-      isShowImage:false
-    })
-  }
+ 
   render() {
     const { search_mask_show,isShowImage } = this.state;
     let { userUID } = this.props;
@@ -722,7 +713,7 @@ export default class BoardChat extends Component {
               )
             }) 
           ):(
-            isShowImage &&
+           
             <View className={indexStyles.contain_empty}>
                   <Image src={file_list_empty} className={indexStyles.file_list_empty} />
               </View>
