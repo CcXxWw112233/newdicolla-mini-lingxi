@@ -33,10 +33,10 @@ export default class fieldPersonMultiple extends Component {
       executorsData = executors;
       //取出已经是执行人的id, 组成新数组(已选中)
       new_arr = executorsData && executorsData.map((obj) => {
-        return item.id ? item.id : item.user_id;
+        return obj.user_id ? obj.user_id : obj.id;
       });
       newCheckedList = executorsData && executorsData.map((obj) => {
-        return item.id ? item.id : item.user_id;
+        return obj.user_id ? obj.user_id : obj.id;
       });
     }
 
@@ -85,7 +85,8 @@ export default class fieldPersonMultiple extends Component {
     let array = [];
     for (let i = 0; i < value.length; i++) {
       executors_list.forEach((obj) => {
-        if (obj.id === value[i]) {
+        var id = obj.id ? obj.id : obj.user_id;
+        if (id === value[i]) {
           array.push(obj);
         }
       });
@@ -119,13 +120,13 @@ export default class fieldPersonMultiple extends Component {
    */
 selectItem = item => {
   var {newCheckedList = []} = this.state;
-
-  if(newCheckedList.indexOf(item.id) != -1) {
+  var id = item.id ? item.id : item.user_id;
+  if(newCheckedList.indexOf(id) != -1) {
     newCheckedList = newCheckedList.filter((value)=> {
-          return item.id != value;
+          return id != value;
       });  
   } else {
-    newCheckedList.push(item.id)
+    newCheckedList.push(id)
       }
       this.setState({
         newCheckedList:  newCheckedList,
@@ -146,7 +147,7 @@ selectItem = item => {
   confirmSelect () {
       const {checkedList = [],itemId,newCheckedList} = this.state;
       const {dispatch,title} = this.props
-      if(newCheckedList && newCheckedList.length > 0) {
+      // if(newCheckedList && newCheckedList.length > 0) {
         dispatch({
           type: "tasks/putBoardFieldRelation",
           payload: {
@@ -155,13 +156,13 @@ selectItem = item => {
           },
         });
         this.onClickAction()
-      } else {
-        Taro.showToast({
-          title: '请选择' + title,
-          icon: 'none',
-          duration: 2000
-        })
-      }
+      // } else {
+      //   Taro.showToast({
+      //     title: '请选择' + title,
+      //     icon: 'none',
+      //     duration: 2000
+      //   })
+      // }
   }
 
   render() {
@@ -196,7 +197,9 @@ selectItem = item => {
               <View className={indexStyles.grid_style}>
                       {
                           checkboxOption && checkboxOption.map((item,key)=>{
-                              const isSelected = newCheckedList.indexOf(item.id) != -1;
+                            var id = item.id ? item.id : item.user_id;
+
+                              const isSelected = newCheckedList.indexOf(id) != -1;
                             return (
                                 <View className={indexStyles.lattice_style} key={key} onClick={this.selectItem.bind(this,item)}>  
                                   {

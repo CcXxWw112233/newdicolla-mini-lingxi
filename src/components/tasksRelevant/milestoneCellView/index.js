@@ -44,7 +44,18 @@ export default class milestoneCellPicker extends Component {
         var current_select_milestone_id = Taro.getStorageSync('current_select_milestone_id')
         if (current_select_milestone_name == new_select_milestone_name) { //删除关联里程碑
             this.cancelSelect()
-        }
+        }  else  if (current_select_milestone_name && new_select_milestone_name == "") { //删除关联里程碑
+            dispatch({
+                type: 'tasks/deleteAppRelaMiletones',
+                payload: {
+                    id: current_select_milestone_id ? current_select_milestone_id : '',
+                    rela_id: card_id,
+                },
+            }).then(res=>{
+                this.cancelSelect()
+            })
+        } 
+
         else {  //添加关联里程碑
             if (current_select_milestone_id == '' || current_select_milestone_id == 'undefined' || current_select_milestone_id == null) {
                 dispatch({
@@ -71,6 +82,9 @@ export default class milestoneCellPicker extends Component {
                 ).then(res => {
                     Taro.removeStorageSync('current_select_milestone_id')
                     Taro.setStorageSync('current_select_milestone_id', currentItem['id']);
+                    if(currentItem['id']) {
+                        
+                    }
                     dispatch({
                         type: 'tasks/boardAppRelaMiletones',
                         payload: {
@@ -139,10 +153,18 @@ export default class milestoneCellPicker extends Component {
      */
       selectItem = (item) => {
         console.log(item)
-        this.setState({
-            currentItem:item,
-            new_select_milestone_name:item.name
-        })
+        const {new_select_milestone_name} = this.state
+        if(new_select_milestone_name == item.name) {
+            this.setState({
+                currentItem:"",
+                new_select_milestone_name:''
+            })
+        } else {
+            this.setState({
+                currentItem:item,
+                new_select_milestone_name:item.name
+            })
+        }
     }
      /**
      * 确定选择

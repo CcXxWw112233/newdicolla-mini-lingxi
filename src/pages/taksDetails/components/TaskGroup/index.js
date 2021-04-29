@@ -91,9 +91,13 @@ export default class index extends Component {
         let contentId = Taro.getStorageSync("tasks_detail_contentId");
 
         var {groupList = [],currentTaskGroup} = this.state
-        var selectgroupList = groupList.filter(item=>{
-            return currentTaskGroup.indexOf(item.list_id) != -1
-        })
+        var selectgroupList = []
+        if(currentTaskGroup && currentTaskGroup.length > 0) {
+             selectgroupList = groupList && groupList.filter(item=>{
+                return currentTaskGroup && currentTaskGroup.indexOf(item.list_id) != -1
+            })
+        }
+
         return (
             <View className={indexStyles.list_item} >
 

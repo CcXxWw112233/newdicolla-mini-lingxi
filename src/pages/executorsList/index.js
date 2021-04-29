@@ -125,14 +125,14 @@ export default class executorsList extends Component {
     confirmSelect () {
         const {checkedList = [],card_id,newCheckedList} = this.state;
         const {dispatch} = this.props
-        if(newCheckedList.length == 0 || !newCheckedList) {
-            Taro.showToast({
-                title: '请选择负责人',
-                icon: 'none',
-                duration: 2000
-              })
-              return
-        }
+        // if(newCheckedList.length == 0 || !newCheckedList) {
+        //     Taro.showToast({
+        //         title: '请选择负责人',
+        //         icon: 'none',
+        //         duration: 2000
+        //       })
+        //       return
+        // }
         // 现在选择的和已选择的差集
         const handelarr = newCheckedList.concat(checkedList).filter(function(v, i, arr) {
             return arr.indexOf(v) === arr.lastIndexOf(v);     
