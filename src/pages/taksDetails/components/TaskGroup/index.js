@@ -29,32 +29,41 @@ export default class index extends Component {
             })
             return;
         }
-        if(groupList.length > 0) {
-            this.setState({
-                isTaskGroupViewShow: true
-            })
-        } else {
-            Taro.showToast({
-                title: '暂无任务分组可选',
-                icon: 'none',
-                duration: 2000
-            })
-        }
+        this.getTasksGroupList()
+        // if(groupList.length > 0) {
+        //     this.setState({
+        //         isTaskGroupViewShow: true
+        //     })
+        // } else {
+        //     Taro.showToast({
+        //         title: '暂无任务分组可选',
+        //         icon: 'none',
+        //         duration: 2000
+        //     })
+        // }
 
     }
      /**
      * 任务分组回调
      */
-      onClickTaskGroup = newCheckedList=> {
-        this.setState({
-            currentTaskGroup:newCheckedList,
-            isTaskGroupViewShow:false
-        })
+      onClickTaskGroup = (newCheckedList,isCancel)=> {
+          if(isCancel) {
+            this.setState({
+                isTaskGroupViewShow:false
+            }) 
+          } else {
+            this.setState({
+                currentTaskGroup:newCheckedList,
+                isTaskGroupViewShow:false
+            })
+          }
     }
 
     componentDidMount() {
         const { tasksDetailDatas = {} } = this.props;
-        this.getTasksGroupList()
+    }
+    componentWillMount() {
+        // this.getTasksGroupList()
     }
      //获取任务分组列表
      getTasksGroupList = () => {
@@ -74,10 +83,15 @@ export default class index extends Component {
                 if (res.data && res.data.length > 0) {
                     this.setState({
                         groupList:res.data,
-                        currentTaskGroup:list_ids
-
+                        currentTaskGroup:list_ids,
+                        isTaskGroupViewShow: true
                     })
                 } else {
+                    Taro.showToast({
+                        title: '暂无任务分组可选',
+                        icon: 'none',
+                        duration: 2000
+                    })
                 }
             }
         });
@@ -135,7 +149,7 @@ export default class index extends Component {
                     </View>
                 </View>
                 {
-                    isTaskGroupViewShow ? (<TaskGroupView contentId={contentId} onClickAction={(newCheckedList)=>this.onClickTaskGroup(newCheckedList)}  title={title} selectgroupList={selectgroupList}  groupList={groupList}></TaskGroupView>):('')
+                    isTaskGroupViewShow ? (<TaskGroupView contentId={contentId} onClickAction={(newCheckedList,isCancel)=>this.onClickTaskGroup(newCheckedList,isCancel)}  title={title} selectgroupList={selectgroupList}  groupList={groupList}></TaskGroupView>):('')
                 } 
             </View>
         )

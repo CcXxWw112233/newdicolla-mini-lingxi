@@ -29,10 +29,14 @@ export default class taskGroupPicker extends Component {
             newCheckedList:newCheckedList,
             contentId:contentId
         })
+        
         // tasksGroupList.forEach(item => {
         //     item['label'] = item.list_name
         //     item['value'] = item.list_id
         // })
+    }
+    componentDidShow() {
+        
     }
     putCardBaseInfo = (value, currtne_value,) => {
         const { tasksGroupList = [], } = this.state
@@ -151,6 +155,7 @@ export default class taskGroupPicker extends Component {
         const handelarr = newCheckedList.concat(selectgroupList).filter(function(v, i, arr) {
             return arr.indexOf(v) === arr.lastIndexOf(v);     
         });
+        // debugger
         handelarr.forEach(item => {
             // 删除
             if(selectgroupList.indexOf(item) != -1) {
@@ -178,22 +183,19 @@ export default class taskGroupPicker extends Component {
             }
         })
             
-        this.cancelSelect(newCheckedList)
+        // this.cancelSelect(newCheckedList,false)
 
-        
+     
+        typeof this.props.onClickAction == "function" &&
+        this.props.onClickAction(newCheckedList,false);
         // this.putCardLabel(newCheckedList)
     }
     /**
      * 取消选择
      */
-     cancelSelect (newCheckedList) {
-        const {selectgroupList=[]} = this.state;
-
-         if(!newCheckedList) {
-            newCheckedList = selectgroupList
-         }
+     cancelSelect () {
         typeof this.props.onClickAction == "function" &&
-        this.props.onClickAction(newCheckedList);
+        this.props.onClickAction([],true);
     }
     render() {
         const {
