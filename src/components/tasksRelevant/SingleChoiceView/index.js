@@ -151,7 +151,6 @@ cancelSelect () {
     render() {
         const { singleList = [], title, current_select_name } = this.state
         const rangeKey = 'label';
-        console.log(singleList);
         return (
             <View className={indexStyles.index}>
 

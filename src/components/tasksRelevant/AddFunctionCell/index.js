@@ -135,7 +135,6 @@ export default class AddFunctionCell extends Component {
     render() {
 
         const { dataArray = [] } = this.state
-        console.log(dataArray)
         return (
             <View className={indexStyles.index}>
             <View className={indexStyles.index_title}>添加字段</View>

@@ -152,7 +152,6 @@ export default class milestoneCellPicker extends Component {
      * @param {*} item 
      */
       selectItem = (item) => {
-        console.log(item)
         const {new_select_milestone_name} = this.state
         if(new_select_milestone_name == item.name) {
             this.setState({

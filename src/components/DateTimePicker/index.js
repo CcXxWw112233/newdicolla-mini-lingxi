@@ -61,7 +61,7 @@ export function getNewDateArry() {
 export function dateTimePicker(date_field_code,startYear, endYear, date) {
     // 返回默认显示的数组和联动数组的声明
     var dateTime = [], dateTimeArray = [[], [], [], [], [], []];
-    var start = startYear || 2000;
+    var start = startYear || 2010;
     var end = endYear || 2100;
     // 默认开始显示数据 
     var defaultDate = date ? [...date.split(' ')[0].split('-'), ...date.split(' ')[1].split(':')] : getNewDateArry();

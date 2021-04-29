@@ -139,6 +139,7 @@ export default class BoardChat extends Component {
   }
 
   onPullDownRefresh(res) {
+    
     this.getChatBoardList();
 
     Taro.showNavigationBarLoading();
@@ -262,12 +263,9 @@ export default class BoardChat extends Component {
 
   componentDidMount() {
     var that = this;
-    setTimeout(function () {
-      that.setState({
-        isShowImage:true
-      })
-  }, 1500);
-  
+    Taro.showLoading({
+      title: '加载中',
+    })
     this.getChatBoardList();
   }
 
@@ -651,14 +649,25 @@ export default class BoardChat extends Component {
       // this.setState({
       //   all_chat_list:listArray
       // })
+      if(!listArray || listArray.length == 0) {
+        this.setState({
+          isShowImage:true
+        })
+      }
+      Taro.hideLoading()
     return listArray;
   };
-
+  componentWillUnmount() {
+    this.setState({
+      isShowImage:false
+    })
+  }
   render() {
     const { search_mask_show,isShowImage } = this.state;
     let { userUID } = this.props;
     // 对消息进行排序, 根据lastMsg里面的time最新的排在最上面
     let listArray = this.boardListForView();
+  
     return (
       <View className={indexStyles.index}>
          {/* <SearchAndMenu
