@@ -70,7 +70,6 @@ class CustomNavigation extends Component {
         const { backIcon, home_personal_center, personal_center_image, title,isSearch,bgColor } = this.props
         const {isShowDeleteIcon} = this.props;
         const navTitle = title ? title : '聆悉'
-        console.log('sssssssssssssss',navBar_Height, statusBar_Height)
         return (
             <View className= {`${indexStyles.CustomNavigation_Scss} ${isSearch ? indexStyles.CustomNavigation_white:''}`} style={{ height: statusBar_Height + navBar_Height + 'px', backgroundColor:bgColor ? bgColor:''}}>
                 <View className={indexStyles.statusBar_Scss} style={{ height: statusBar_Height + 'px' }}></View>

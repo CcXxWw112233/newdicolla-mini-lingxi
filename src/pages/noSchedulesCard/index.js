@@ -237,7 +237,6 @@ export default class Calendar extends Component {
         const {searchKey} = this.state;
         const statusBar_Height = SystemInfo.statusBarHeight 
         const navBar_Height = SystemInfo.platform == 'ios' ? 44 : 48;
-        console.log('ssssssslllllssssssss',navBar_Height, statusBar_Height)
 
         return (
             <View className={indexStyles.index} style={{ minHeight: screenHeight }}>
@@ -247,9 +246,9 @@ export default class Calendar extends Component {
                     searchMenuClick={(value) => this.searchMenuClick(value)}
                     cancelSearchMenuClick = {(value) => this.cancelSearchMenuClick(value)}
                 />
-                <View style={{ height: navBar_Height + navBar_Height +  'px' }}></View>
+                <View style={{ height: navBar_Height + statusBar_Height +  'px' }} ></View>
                 {/* <SearchAndMenu onSelectType={this.onSelectType} search_mask_show={search_mask_show} /> */}
-                <Topmenu searchKey = {searchKey} onclickTopMenu={(index) => this.onclickTopMenu(index)} className={indexStyles.topMenu} isShowCheckMenu={(isShow, boardidList, moldArr) => this.isShowCheckMenu(isShow, boardidList, moldArr)}></Topmenu>
+                <Topmenu searchKey = {searchKey} onclickTopMenu={(index) => this.onclickTopMenu(index)}  isShowCheckMenu={(isShow, boardidList, moldArr) => this.isShowCheckMenu(isShow, boardidList, moldArr)}></Topmenu>
                 {/* <CardTypeSelect show_card_type_select={show_card_type_select} onSelectType={this.onSelectType} schedule={'0'} /> */}
                 {/* isShowCheckMenu */}
 
@@ -268,7 +267,6 @@ export default class Calendar extends Component {
                             </View>
                         )
                     }
-{navHeight}
                     <View style='height: 50px'></View>
                 </ScrollView>
             </View >
