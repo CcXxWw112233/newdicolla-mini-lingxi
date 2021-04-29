@@ -110,6 +110,8 @@
                             position  : absolute;
 
                             .choice_file_thumbail_style {
+                                height: pxTrans(160) !important;
+                                width: pxTrans(160) !important;
                                 line-height: pxTrans(160) !important;
                                 font-size  : pxTrans(60) !important;
                                 position   : relative;
