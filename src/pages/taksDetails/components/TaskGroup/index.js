@@ -29,7 +29,7 @@ export default class index extends Component {
             })
             return;
         }
-        this.getTasksGroupList()
+        this.getTasksGroupList(true,true)
         // if(groupList.length > 0) {
         //     this.setState({
         //         isTaskGroupViewShow: true
@@ -57,18 +57,23 @@ export default class index extends Component {
                 isTaskGroupViewShow:false
             })
             typeof this.props.onClickAction == "function" &&
-            this.props.onClickAction([],true);
+            this.props.onClickAction();
           }
     }
 
     componentDidMount() {
-        const { tasksDetailDatas = {} } = this.props;
+        this.getTasksGroupList(false)
     }
     componentWillMount() {
+        
         // this.getTasksGroupList()
     }
+    componentDidShow() {
+        this.getTasksGroupList(false)
+
+    }
      //获取任务分组列表
-     getTasksGroupList = () => {
+     getTasksGroupList = (isShowToast,isTaskGroupViewShow) => {
         let board_id = Taro.getStorageSync("tasks_detail_boardId");
         const { dispatch, data,tasksDetailDatas} = this.props;
         const {list_ids = []} = tasksDetailDatas;
@@ -86,14 +91,21 @@ export default class index extends Component {
                     this.setState({
                         groupList:res.data,
                         currentTaskGroup:list_ids,
-                        isTaskGroupViewShow: true
                     })
+                    if(isTaskGroupViewShow) {
+                        this.setState({
+                            isTaskGroupViewShow: true
+                        })
+                    }
                 } else {
-                    Taro.showToast({
-                        title: '暂无任务分组可选',
-                        icon: 'none',
-                        duration: 2000
-                    })
+                    if(isShowToast) {
+                        Taro.showToast({
+                            title: '暂无任务分组可选',
+                            icon: 'none',
+                            duration: 2000
+                        })
+                    }
+                 
                 }
             }
         });
@@ -104,16 +116,15 @@ export default class index extends Component {
     render() {
         const { title, data = [], fieldValue, item_id } = this.props
         const { tasksDetailDatas = {}, boardId, editAuth } = this.props;
+        const {list_ids} = tasksDetailDatas;
         let contentId = Taro.getStorageSync("tasks_detail_contentId");
-
         var {groupList = [],currentTaskGroup} = this.state
         var selectgroupList = []
-        if(currentTaskGroup && currentTaskGroup.length > 0) {
+        if(list_ids && list_ids.length > 0) {
              selectgroupList = groupList && groupList.filter(item=>{
-                return currentTaskGroup && currentTaskGroup.indexOf(item.list_id) != -1
+                return list_ids && list_ids.indexOf(item.list_id) != -1
             })
         }
-
         return (
             <View className={indexStyles.list_item} >
 

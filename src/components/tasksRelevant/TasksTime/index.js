@@ -19,10 +19,9 @@ export default class TasksTime extends Component {
         task_due_date: '',
         task_due_time: '',
 
-        start_date_str: '开始日期',
-        start_time_str: '开始时间',
-        due_date_str: '结束日期',
-        due_time_str: '结束时间',
+        start_date_str: '',
+        due_date_str: '',
+    
     }
 
     componentDidMount() {
@@ -100,11 +99,9 @@ export default class TasksTime extends Component {
     }
 
     cleanStartDateTime = () => {
-
         this.setState({
-            start_date_str: '开始日期',
+            start_date_str: '开始时间',
         })
-
         this.putTasksStartTime('0')
     }
 
@@ -191,9 +188,10 @@ export default class TasksTime extends Component {
     // 清除结束日期
     cleanDueDateTime = () => {
         this.setState({
-            due_date_str: '结束日期',
+            due_date_str: '结束时间',
         })
         this.putTasksDueTime('0')
+        
     }
     // 没有权限的弹窗
     reminderToast() {
@@ -211,8 +209,17 @@ export default class TasksTime extends Component {
      * @param {} e 
      */
      cleanDateTime = e => {
+        var promise = []
         this.cleanDueDateTime()
         this.cleanStartDateTime()
+        // promise.push()
+        // promise.push()
+
+        // Promise.all(promise).then(res => {
+        //     typeof this.props.onClickAction == "function" &&
+        //     this.props.onClickAction();
+        // })
+
      }
     /**
      * 获取焦点
@@ -232,7 +239,9 @@ export default class TasksTime extends Component {
         var startT = formatTypePickerDateTime(this.state.dateTimeArray, e.detail.value,'YMDHM')
         this.setState({
             startT: startT,
+            start_date_str:''
         })
+      
         var date = new Date(startT.replace(/-/g, '/'));
         var time = date.getTime()
         console.log(time);
@@ -247,19 +256,21 @@ export default class TasksTime extends Component {
         var startT = formatTypePickerDateTime(this.state.dateTimeArray, e.detail.value,'YMDHM')
         this.setState({
             startT: startT,
+            due_date_str:''
         })
         var date = new Date(startT);
         var time = date.getTime()
         console.log(time);
         this.putTasksDueTime(time)
+
     }
     render() {
 
         const { start_date_str, start_time_str, due_date_str, due_time_str,isStartprint,new_card_name,dateTime,dateTimeArray } = this.state
         const { cellInfo = {}, isPermission, flag, completeAuth, editAuth } = this.props
         const card_name = (new_card_name && card_name != cellInfo.cardDefinition) ? new_card_name : cellInfo.cardDefinition
-        var sTime = cellInfo.sTime ? timestampToDateTimeLine(cellInfo.sTime, 'YMDHM',true) : ''
-        var eTime = cellInfo.eTime ? timestampToDateTimeLine(cellInfo.eTime, 'YMDHM',true) : ''
+        var sTime = cellInfo.sTime ? timestampToDateTimeLine(cellInfo.sTime, 'YMDHM',true) : '开始时间'
+        var eTime = cellInfo.eTime ? timestampToDateTimeLine(cellInfo.eTime, 'YMDHM',true) : '结束时间'
         eTime =  eTime.substring(eTime.length - 5) == '00:00' || eTime.substring(eTime.length - 5) == '23:59' ? eTime.substring(0,eTime.length - 5) : eTime;
         sTime =  sTime.substring(sTime.length - 5) == '00:00' || sTime.substring(sTime.length - 5) == '23:59' ? sTime.substring(0,sTime.length - 5) : sTime
 
@@ -268,6 +279,8 @@ export default class TasksTime extends Component {
         const isCurrentYear = nowTime.substring(0,4) == eTime.substring(0,4) && sTime.substring(0,4) == nowTime.substring(0,4);
         sTime = isSameYear && isCurrentYear ? sTime.substring(5) : sTime;
         eTime = isSameYear && isCurrentYear ? eTime.substring(5) : eTime;
+        sTime = due_date_str ? due_date_str : sTime;
+        eTime = start_date_str ? start_date_str : eTime;
         const card_id = cellInfo.cardId
         const is_Realize = cellInfo.isRealize
 

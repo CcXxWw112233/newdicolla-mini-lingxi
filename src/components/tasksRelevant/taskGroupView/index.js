@@ -155,24 +155,26 @@ export default class taskGroupPicker extends Component {
         const handelarr = newCheckedList.concat(selectgroupList).filter(function(v, i, arr) {
             return arr.indexOf(v) === arr.lastIndexOf(v);     
         });
-        // debugger
+        var promise = []
         handelarr.forEach(item => {
             // 删除
             if(selectgroupList.indexOf(item) != -1) {
                 console.log("删除",item)
-                  dispatch({
-                    type: 'tasks/deleteTaskGroup',
-                    payload: {
-                        list_id: item,
-                        card_id: contentId,
-                        // callBack: this.putCardLabel(newCheckedList),
-                    },
-                  })
+                promise.push (
+                    dispatch({
+                        type: 'tasks/deleteTaskGroup',
+                        payload: {
+                            list_id: item,
+                            card_id: contentId,
+                            // callBack: this.putCardLabel(newCheckedList),
+                        },
+                      })
+                )
+               
             } else {
                 console.log("增加",item)
-
-                // 增加
-                   dispatch({
+                promise.push (
+                    dispatch({
                         type: 'tasks/putBoardtaskGroup',
                         payload: {
                             list_id: item,
@@ -180,14 +182,20 @@ export default class taskGroupPicker extends Component {
                         // calback: this.putCardBaseInfo(currentItem.list_id,listId),
                         },
                     })
+                )
+                // 增加
+                  
             }
         })
             
         // this.cancelSelect(newCheckedList,false)
+        Promise.all(promise).then(res => {
+            typeof this.props.onClickAction == "function" &&
+            this.props.onClickAction(newCheckedList,false);
+        })
 
      
-        typeof this.props.onClickAction == "function" &&
-        this.props.onClickAction(newCheckedList,false);
+    
         // this.putCardLabel(newCheckedList)
     }
     /**
