@@ -114,14 +114,14 @@ export default class LabelSelection extends Component {
     confirmSelect () {
         const {newCheckedList = [],card_id,checkedList=[]} = this.state;
         const {dispatch ,title} = this.props
-        if(newCheckedList.length == 0 || !newCheckedList) {
-            Taro.showToast({
-                title: '请选择标签',
-                icon: 'none',
-                duration: 2000
-              })
-              return
-        }
+        // if(newCheckedList.length == 0 || !newCheckedList) {
+        //     Taro.showToast({
+        //         title: '请选择标签',
+        //         icon: 'none',
+        //         duration: 2000
+        //       })
+        //       return
+        // }
         // 现在选择的和已选择的差集
         const handelarr = newCheckedList.concat(checkedList).filter(function(v, i, arr) {
             return arr.indexOf(v) === arr.lastIndexOf(v);     

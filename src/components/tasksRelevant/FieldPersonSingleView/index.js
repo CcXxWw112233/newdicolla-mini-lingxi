@@ -59,7 +59,9 @@ export default class FieldPersonSinglePicker extends Component {
 
         let fieldValue = "";
         singleList.forEach((obj) => {
-            if (obj["id"] === value) {
+            var id = obj.user_id ? obj.user_id : obj.id;
+
+            if (id === value) {
                 fieldValue = obj.id;
             }
         });
@@ -68,7 +70,9 @@ export default class FieldPersonSinglePicker extends Component {
         const { fields = [] } = tasksDetailDatas;
 
         fields.forEach((item) => {
-            if (item.id === field_item_id) {
+           var id = item.user_id ? item.user_id : item.id;
+
+            if (id === field_item_id) {
                 item.field_value = fieldValue;
             }
         });
@@ -115,9 +119,9 @@ export default class FieldPersonSinglePicker extends Component {
      */
     selectItem = item => {
         const {current_select_user_id} = this.state
-        
+        var id = item.user_id ? item.user_id : item.id;
         this.setState({
-            current_select_user_id:item.id == current_select_user_id ? '' : item.id
+            current_select_user_id:id == current_select_user_id ? '' : id
         })
     }
     /**
@@ -128,7 +132,7 @@ export default class FieldPersonSinglePicker extends Component {
          const {select_user_id, current_select_user_id,} = this.state; 
 
          const {item_id,dispatch,title} = this.props;
-         if(current_select_user_id) {
+        //  if(current_select_user_id) {
             if(current_select_user_id != select_user_id) {
                 dispatch({
                     type: "tasks/putBoardFieldRelation",
@@ -140,13 +144,13 @@ export default class FieldPersonSinglePicker extends Component {
                 });
              }
              this.onClickAction()
-         } else {
-            Taro.showToast({
-                title: '请选择' + title,
-                icon: 'none',
-                duration: 2000
-              })
-         }
+        //  } else {
+        //     Taro.showToast({
+        //         title: '请选择' + title,
+        //         icon: 'none',
+        //         duration: 2000
+        //       })
+        //  }
         
      }
     render() {
@@ -188,8 +192,9 @@ export default class FieldPersonSinglePicker extends Component {
                 <View className={indexStyles.grid_style}>
                         {
                             singleList && singleList.map((item,key)=>{
+                                var id = item.user_id ? item.user_id : item.id;
 
-                                const isSelected = current_select_user_id == item.id;
+                                const isSelected = current_select_user_id == id;
                                 console.log('sssssssssssssssss',isSelected,current_select_user_id,item)
                               return (
                                   <View className={indexStyles.lattice_style} key={key} onClick={this.selectItem.bind(this,item)}>  

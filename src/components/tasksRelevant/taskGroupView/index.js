@@ -139,14 +139,14 @@ export default class taskGroupPicker extends Component {
         //     this.props.onClickAction(currentItem.list_name);
         // })
         const {newCheckedList = [],card_id,selectgroupList=[]} = this.state;
-        if(newCheckedList.length == 0 || !newCheckedList) {
-            Taro.showToast({
-                title: '请选择任务分组',
-                icon: 'none',
-                duration: 2000
-              })
-              return
-        }
+        // if(newCheckedList.length == 0 || !newCheckedList) {
+        //     Taro.showToast({
+        //         title: '请选择任务分组',
+        //         icon: 'none',
+        //         duration: 2000
+        //       })
+        //       return
+        // }
         // 现在选择的和已选择的差集
         const handelarr = newCheckedList.concat(selectgroupList).filter(function(v, i, arr) {
             return arr.indexOf(v) === arr.lastIndexOf(v);     
@@ -221,7 +221,7 @@ export default class taskGroupPicker extends Component {
                        {
                            groupList && groupList.map((item,key)=>{
                                
-                            const  isSelected = newCheckedList.indexOf(item.list_id) != -1;
+                            const  isSelected = newCheckedList && newCheckedList.indexOf(item.list_id) != -1;
                             return (
 
                                    <View className={`${indexStyles.content_item}`} onClick={this.selectItem.bind(this,item)}>

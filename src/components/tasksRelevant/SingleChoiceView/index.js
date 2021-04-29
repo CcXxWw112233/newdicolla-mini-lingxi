@@ -32,7 +32,7 @@ export default class SingleChoicePicker extends Component {
         else {
             this.setState({
                 field_single_choice_id: value,
-                current_select_name: currentItem['label']
+                current_select_name: currentItem['label'] ? currentItem['label'] : ''
             })
             fieldValue = value
             dispatch({
@@ -121,10 +121,18 @@ export default class SingleChoicePicker extends Component {
      * @param {*} item 
      */
   selectItem = (item) => {
-    this.setState({
-        currentItem:item,
-        current_select_name:item.label
-    })
+      const {current_select_name} = this.state
+      if(current_select_name == item.label) {
+        this.setState({
+            currentItem:'',
+            current_select_name:''
+        })
+      } else {
+        this.setState({
+            currentItem:item,
+            current_select_name:item.label
+        })
+      }
 }
  /**
  * 确定选择
