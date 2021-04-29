@@ -436,7 +436,7 @@ export default class index extends Component {
         const account_info = JSON.parse(Taro.getStorageSync('account_info'));
         const {board_id,card_id} = tasksDetailDatas
         var arr = e.currentTarget.id.split("_");
-        debugger
+        // debugger
         if (account_info.id == arr[2] && (new Date().getTime() - parseInt(arr[3]) * 1000) < 2 * 60 * 1000) {
             dispatch({
                 type: 'tasks/deleteCardAttachment',
@@ -458,6 +458,7 @@ export default class index extends Component {
                     // calback: this.deleteCardAttachment(card_id, file_id,),
                 }
             })
+            
             this.setFileOptionIsOpen()
             typeof this.props.onClickAction == "function" &&
             this.props.onClickAction();

@@ -117,7 +117,7 @@ export default class index extends Component {
                 icon: "success",
                 title: "上传完成"
             })
-            debugger
+            // debugger
             typeof this.props.onClickAction == 'function' && this.props.onClickAction();
 
         }).catch(err => {
