@@ -62,7 +62,9 @@ export default class index extends Component {
     }
 
     componentDidMount() {
-        this.getTasksGroupList(false)
+        this.props.onRef('taskGroup', this)
+
+        // this.getTasksGroupList(false)
     }
     componentWillMount() {
         
@@ -70,14 +72,13 @@ export default class index extends Component {
     }
     componentDidShow() {
         this.getTasksGroupList(false)
-
     }
      //获取任务分组列表
      getTasksGroupList = (isShowToast,isTaskGroupViewShow) => {
         let board_id = Taro.getStorageSync("tasks_detail_boardId");
-        const { dispatch, data,tasksDetailDatas} = this.props;
+        const { dispatch, data,tasksDetailDatas,boardId} = this.props;
         const {list_ids = []} = tasksDetailDatas;
-        console.log(this.props.list_ids)
+        console.log(this.props.list_ids,board_id)
         Promise.resolve(
             dispatch({
                 type: "tasks/getCardList",
@@ -114,18 +115,18 @@ export default class index extends Component {
     
     
     render() {
-        const { title, data = [], fieldValue, item_id,list_ids } = this.props
+        const { title, data = [], fieldValue, item_id } = this.props
         const { tasksDetailDatas = {}, boardId, editAuth } = this.props;
-        // const {list_ids} = tasksDetailDatas;
+        const {list_ids} = tasksDetailDatas;
         let contentId = Taro.getStorageSync("tasks_detail_contentId");
         var {groupList = [],currentTaskGroup} = this.state
         var selectgroupList = []
-        
         if(list_ids && list_ids.length > 0) {
-             selectgroupList = groupList && groupList.filter(item=>{
-                return list_ids && list_ids.indexOf(item.list_id) != -1
-            })
-        }
+            selectgroupList = groupList && groupList.filter(item=>{
+                  return list_ids && list_ids.indexOf(item.list_id) != -1
+              })
+          }
+
         return (
             <View className={indexStyles.list_item} >
 
