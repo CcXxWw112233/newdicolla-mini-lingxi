@@ -1,3 +1,5 @@
+import Taro, { Component } from '@tarojs/taro'
+
 /* eslint-disable import/prefer-default-export */
 //设置日期的两位数显示
 export function withData(param) {
@@ -38,6 +40,9 @@ export function getMonthDay(year, month) {
     }
     return array;
 }
+
+
+
 export function getNewDateArry() {
     // 当前时间的处理
     var newDate = new Date();
@@ -47,7 +52,6 @@ export function getNewDateArry() {
         hour = withData(newDate.getHours()),
         minu = withData(newDate.getMinutes()),
         seco = withData(newDate.getSeconds());
-        
     return [year, mont, date, hour, minu, seco];
 }
 /**
@@ -116,18 +120,19 @@ export function dateTimePicker(date_field_code,startYear, endYear, date) {
 /** 对数组中的时间信息进行格式化
  *  dateTimeArray :通过dateTimePicker获取的日期范围数组
  *  dateTime：     选择的日期数组信息
+ * date_field_code: 返回的时间格式 年月日时分秒
  */
 export function formatPickerDateTime(dateTimeArray, dateTime) {
-
-    var obj = dateTimePicker()
+    // var obj = dateTimePicker()
     var format = dateTimeArray[0][dateTime[0]].substring(0,dateTimeArray[0][dateTime[0]].length-1) + '-' + dateTimeArray[1][dateTime[1]].substring(0,dateTimeArray[1][dateTime[1]].length-1) + '-'
         + dateTimeArray[2][dateTime[2]].substring(0,dateTimeArray[2][dateTime[2]].length - 1) + ' ' +
         dateTimeArray[3][dateTime[3]].substring(0,dateTimeArray[3][dateTime[3]].length - 1) + ':'  + dateTimeArray[4][dateTime[4]].substring(0,dateTimeArray[4][dateTime[4]].length - 1)
     + ':' + dateTimeArray[5][dateTime[5]].substring(0,dateTimeArray[5][dateTime[5]].length - 1)
     return format
 }
+
 export function formatTypePickerDateTime(dateTimeArray, dateTime, date_field_code) {
-    var obj = dateTimePicker()
+    // var obj = dateTimePicker()
     var format = dateTimeArray[0][dateTime[0]].substring(0,dateTimeArray[0][dateTime[0]].length-1) + '-' + dateTimeArray[1][dateTime[1]].substring(0,dateTimeArray[1][dateTime[1]].length-1);
     if (date_field_code === 'YM') { //年月
         return format;
@@ -135,7 +140,7 @@ export function formatTypePickerDateTime(dateTimeArray, dateTime, date_field_cod
         return format+ '-' + dateTimeArray[2][dateTime[2]].substring(0,dateTimeArray[2][dateTime[2]].length - 1);
     } else if (date_field_code === 'YMDH') { //年月日 时
         return format + '-' + dateTimeArray[2][dateTime[2]].substring(0,dateTimeArray[2][dateTime[2]].length - 1) + ' ' +
-        dateTimeArray[3][dateTime[3]].substring(0,dateTimeArray[3][dateTime[3]].length - 1);
+        dateTimeArray[3][dateTime[3]].substring(0,dateTimeArray[3][dateTime[3]].length - 1) + ":00";
     } else if (date_field_code === 'YMDHM') { //年月日 时分
         return format+ '-' + dateTimeArray[2][dateTime[2]].substring(0,dateTimeArray[2][dateTime[2]].length - 1) + ' ' +
         dateTimeArray[3][dateTime[3]].substring(0,dateTimeArray[3][dateTime[3]].length - 1) + ':'  + dateTimeArray[4][dateTime[4]].substring(0,dateTimeArray[4][dateTime[4]].length - 1);

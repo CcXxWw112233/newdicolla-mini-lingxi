@@ -68,7 +68,7 @@ export const getAcatarlist = (data, notShowLoading) => {
 }
 
 // 发送邀请
-export const invitationMenber = (data, notShowLoading) => {
+export const invitationMenberIntoOrg = (data, notShowLoading) => {
   return request(
     {
       data: {
@@ -76,6 +76,19 @@ export const invitationMenber = (data, notShowLoading) => {
       },
       method: "POST",
       url: `${API_UPMS}/organization/invite/web/join`,
+    },
+    notShowLoading
+  );
+};
+// 发送邀请
+export const invitationMenberIntoPrejoct = (data, notShowLoading) => {
+  return request(
+    {
+      data: {
+        ...data
+      },
+      method: "POST",
+      url: `${API_BOARD}/comm/invite/web/join`,
     },
     notShowLoading
   );

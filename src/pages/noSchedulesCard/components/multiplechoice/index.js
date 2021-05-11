@@ -80,7 +80,7 @@ export default class Calendar extends Component {
         const { newArr } = this.state;
         const { type } = this.props;
         return (
-            <View className={indexStyles.index}>
+            <View className={indexStyles.index} onTouchMove={(e) => {e.stopPropagation()}}>
                 {
                     type == 2 ? (<View className={indexStyles.conditionRowList}>
                         {newArr.map((value, index) => {

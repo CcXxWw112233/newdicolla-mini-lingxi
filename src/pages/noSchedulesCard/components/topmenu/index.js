@@ -215,7 +215,6 @@ export default class Calendar extends Component {
         });
         typeof this.props.isShowCheckMenu == "function" &&
             this.props.isShowCheckMenu(false, boardidList, moldArr);
-
     }
 
     render() {

@@ -259,8 +259,8 @@ export default class fieldSelection extends Component {
                           checkedList && checkedList.length > 0 ? (
                             checkedList.map((item,key)=> {
                                 return (
-                                <View className = {indexStyles.fileList_item} key={key} >
-                                    <View onClick = {this.deleteField.bind(this,item)} className={`${globalStyle.global_iconfont} ${indexStyles.fileList_item_icon} ${indexStyles.fileList_item_add_icon}`}>&#xe891;</View>
+                                <View className = {indexStyles.fileList_item} key={key} onClick = {this.deleteField.bind(this,item)}>
+                                    <View  className={`${globalStyle.global_iconfont} ${indexStyles.fileList_item_icon} ${indexStyles.fileList_item_add_icon}`}>&#xe891;</View>
                                     <RichText className={`${globalStyle.global_iconfont} ${indexStyles.fileList_item_icon}`} nodes={this.leftIcon(item.field_content.field_type)}></RichText>
                                     <Text className={indexStyles.indexStyles.fileList_item_title}>{item.field_content.name}</Text>
                                 </View>
@@ -277,8 +277,8 @@ export default class fieldSelection extends Component {
                             checkboxOption && checkboxOption.length > 0 ? (
                                 checkboxOption && checkboxOption.map((item,key)=> {
                                     return (
-                                        <View className = {indexStyles.fileList_item} key={key} >
-                                            <View  onClick={this.addField.bind(this,item)} className={`${globalStyle.global_iconfont}  ${indexStyles.fileList_item_icon} ${indexStyles.fileList_item_more_icon}`} >&#xe890;</View>
+                                        <View className = {indexStyles.fileList_item} key={key} onClick={this.addField.bind(this,item)}>
+                                            <View   className={`${globalStyle.global_iconfont}  ${indexStyles.fileList_item_icon} ${indexStyles.fileList_item_more_icon}`} >&#xe890;</View>
                                             <RichText className={`${globalStyle.global_iconfont} ${indexStyles.fileList_item_icon}`} nodes={this.leftIcon(item.field_type)}></RichText>
                                             <Text className={indexStyles.indexStyles.fileList_item_title}>{item.label}</Text>
                                         </View>

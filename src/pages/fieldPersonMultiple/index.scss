@@ -32,7 +32,7 @@
     flex-direction: row;
     line-height: pxTrans(60);
     border-bottom: 1px solid #F2F4F8;
-    padding: 0 pxTrans(20);
+    padding: 0  pxTrans(20) pxTrans(10) pxTrans(20);
     justify-content: space-between;
 }
 .content_title_left {
@@ -50,8 +50,14 @@
     margin-left: pxTrans(15);
 }
 .content_confirm {
-    color: #5A86F5;
+    margin-top: pxTrans(15);
+    line-height: pxTrans(32);
+    color: white;
+    background: linear-gradient(270deg, #4FADFF 0%, #4790FF 100%);
     font-size: pxTrans(16);
+    height: pxTrans(32);
+    padding: 0 pxTrans(15);
+    border-radius: pxTrans(5);
 }
 .scrollview {
     max-height: pxTrans(300);
@@ -106,18 +112,20 @@
 }
 .checked_iconfont {
     font-size: pxTrans(25);
-    margin-left: pxTrans(50);
+    margin-left: pxTrans(20);
     position : absolute;
     color    : #6A9AFF;
-    margin-top: - pxTrans(50);
+    margin-top: -pxTrans(30);
 }
 .reset_View {
     height: pxTrans(48);
     line-height: pxTrans(48);
-    background-color: #F2F4F8;
+    border-top:2px solid #E6E8F1;
     width: 100%;
     text-align: center;
-    margin: pxTrans(10) 0;
     color: #212434;
     font-size: pxTrans(16);
+}
+.lattice_hover_style {
+    background-color: #F2F4F8 !important;
 }

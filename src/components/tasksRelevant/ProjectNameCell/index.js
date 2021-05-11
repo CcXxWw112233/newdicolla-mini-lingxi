@@ -617,9 +617,11 @@ export default class ProjectNameCell extends Component {
         } else if (type === "5") {
             icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe7be;</Text>;
         } else if (type === "6") {
+            placeText = '选择' + title;
             icon = <Text className={`${globalStyle.global_iconfont}`} style={{color:'#5FA6FF',fontSize:'24px'}}>&#xe8b0;</Text>;
         } else if (type === "7") {
             icon = <Text className={`${globalStyle.global_iconfont}`}>&#xe7b8;</Text>;
+            placeText = '选择' + title;
         } else if (type === "8") {
             icon = <Text className={`${globalStyle.global_iconfont}`} style={{color:'#5FA6FF',fontSize:'24px'}}>&#xe868;</Text>;
         } else if (type === "9") {
@@ -627,6 +629,7 @@ export default class ProjectNameCell extends Component {
         } else if (type === "10") {
             icon = <Text className={`${globalStyle.global_iconfont}`} style={{color:'#5FA6FF',fontSize:'24px'}}>&#xe869;</Text>;
         } else if (type === "12") {
+            placeText = '选择' + title;
             icon = <Text className={`${globalStyle.global_iconfont}`} style={{color:'#5FA6FF',fontSize:'24px'}}>&#xe878;</Text>;
         }
 
@@ -705,7 +708,7 @@ export default class ProjectNameCell extends Component {
 
                                         {
                                             // field_value=${field_value}&item_id=${item_id}`,
-                                            type == 8 ? (<DateField field_value={field_value}  onClickAction={this.onDateClickAction} item_id={item_id} editAuth={editAuth} dateFieldCode={date_field_code}></DateField>) : (null)
+                                            type == 8 ? (<DateField field_value={field_value} title={title} onClickAction={this.onDateClickAction} item_id={item_id} editAuth={editAuth} dateFieldCode={date_field_code}></DateField>) : (null)
                                         }
                                         {/* {
                                             type == 6 ? (

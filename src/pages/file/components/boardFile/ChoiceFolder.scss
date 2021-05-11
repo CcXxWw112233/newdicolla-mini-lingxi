@@ -87,9 +87,6 @@
                     flex-direction        : row !important;
 
 
-
-
-
                     .choice_image_thumbnail_style {
                         width       : pxTrans(160);
                         height      : pxTrans(160);
@@ -100,7 +97,8 @@
                         font-size   : pxTrans(160);
                         line-height : pxTrans(160);
                         display     : inline-block;
-
+                        background-color  : #eceef3;
+                        
                         .position_style {
                             width     : pxTrans(160);
                             height    : pxTrans(20);

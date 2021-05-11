@@ -294,17 +294,25 @@ export default class nowOpen extends Component {
             type:'2',
             id  :currentImage.id
           }]
-          Promise.resolve(dispatch({
+          dispatch({
               type: 'file/deleteFiles',
               payload: {
                   board_id: currentImage.board_id,
                   arrays: JSON.stringify(selectFiles),
               },
-          })
-          ).then(() => {
-            Taro.navigateBack({
-              delta: 1
-            })            
+          }).then((res) => {
+            if(res.code == 0 || res.code == "0") {
+              Taro.showToast({
+                title: "删除成功",
+                icon: 'none',
+                duration: 2000,
+              }).then(res=>{
+                Taro.navigateBack({
+                  delta: 1
+                })      
+              })
+
+            }
           })
           } else if (res.cancel) {
               console.log('用户点击取消')
@@ -357,12 +365,12 @@ export default class nowOpen extends Component {
             {
               current_custom_comment && current_custom_comment.map((item,key)=> {
                 return   item.flow == 'out' ? (
-                  <View className={`${indexStyles.comment_list_item} ${key == 0 ? indexStyles.comment_list_item_first:''}`} key={key} onClick={this.goFileChat}>
+                  <View className={`${indexStyles.comment_list_item} ${key == 0 && current_custom_comment.length > 1 ? indexStyles.comment_list_item_first:''}`} key={key} onClick={this.goFileChat}>
                     <View className={`${indexStyles.comment_list_item_text} ${indexStyles.comment_list_item_text_out}`} >{item.text}</View>
                     <Image className={indexStyles.comment_list_item_avatar} src={item.avatar}></Image>
                   </View>
                 ):(
-                  <View className={`${indexStyles.comment_list_item} ${key == 0 ? indexStyles.comment_list_item_first:''}`} key={key} onClick={this.goFileChat}>
+                  <View className={`${indexStyles.comment_list_item} ${key == 0 && current_custom_comment.length > 1 ? indexStyles.comment_list_item_first:''}`} key={key} onClick={this.goFileChat}>
                     <Image className={indexStyles.comment_list_item_avatar}  src={item.avatar}></Image>
                     <View className={indexStyles.comment_list_item_text}>{item.text}</View>
                   </View>

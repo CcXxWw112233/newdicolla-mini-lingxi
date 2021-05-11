@@ -22,7 +22,7 @@ export default {
     tasks_upload_file_type: '', //上传类型,(子任务, 任务描述),
     roleOrOwnAuth: false,
     canEditRoleList: [],
-    canEditpersonageList: []
+    canEditpersonageList: [],
   },
   effects: {
     //获取任务列表
@@ -656,7 +656,7 @@ export default {
 
 
   },
-
+  
   reducers: {
     updateDatas(state, { payload }) {
       return { ...state, ...payload };

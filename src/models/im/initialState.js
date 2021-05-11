@@ -18,7 +18,7 @@ const INITIAL_STATE = {
   rawMessageList: {}, // 所有的聊天列表都在里面, 消息列表, 当受到新的消息列表的时候，如果存在当前群，则筛选，更新当前群的聊天信息
   isTouchChatContentScrollView: false, //是否正在触摸聊天内容滚动列表
   currentGroupMembers: [],  //当前的群成员列表
-
+  scrollTop:1100,
   //目前没有用到的字段，p2p时可能会用
   friendCard: {}, //好友列表，含名片信息，额外添加在线信息
   onlineList: {}, // 在线好友列表

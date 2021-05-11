@@ -168,7 +168,7 @@ export default class dateField extends Component {
     }
     render() {
         const { dateSel, timeSel, is_show_time_picker, date_field_code, startTimeArray,dateStr,dateTime,dateTimeArray,startT } = this.state
-        const { editAuth } = this.props;
+        const { editAuth,title } = this.props;
         // let titleString = '设置时间'
         // let isShowTime = true;
         // if (date_field_code === 'YM') { //年月
@@ -187,8 +187,8 @@ export default class dateField extends Component {
 
         return (
             <View className={styles.dataField}>
-                <Picker mode='multiSelector' value={dateTime} onChange={this.changeDateTime} range={dateTimeArray}>
-                    {dateStr ? (<View className={styles.dateStr_style}>{dateStr}</View>) : (<View className={styles.place_style}>选择时间</View>)}
+                <Picker mode='multiSelector' className={styles.dateStr_style} value={dateTime} onChange={this.changeDateTime} range={dateTimeArray}>
+                    {dateStr ? (<View className={styles.dateStr_style}>{dateStr}</View>) : (<View className={styles.place_style}>{'选择'+title}</View>)}
                 </Picker>
                 {/* <Picker
                     mode='date'

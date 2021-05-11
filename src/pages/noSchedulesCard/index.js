@@ -56,12 +56,6 @@ export default class Calendar extends Component {
         searchKey:''
     };
 
-    // componentWillMount() {
-    //     const { title } = this.$router.params;
-    //     Taro.setNavigationBarTitle({
-    //         title: '全部事项'
-    //     });
-    // }
 
     componentDidMount() {
         var that = this;
@@ -129,7 +123,6 @@ export default class Calendar extends Component {
         // isReachBottom: true
         // }
         // });
-        console.log(selected_timestamp);
         this.getNoScheCardList();
         this.getOrgBoardList();
         Taro.showNavigationBarLoading();

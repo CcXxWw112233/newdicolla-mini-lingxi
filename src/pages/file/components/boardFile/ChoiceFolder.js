@@ -471,10 +471,9 @@ export default class ChoiceFolder extends Component {
                                             const fileType = filterFileFormatType(item.filePath)
                                             return (
                                                 <View className={`${indexStyles.choice_image_thumbnail_style} ${indexStyles.choice_flie_thumbnail_style}`} key={key}>
-                                                    {/* <RichText className={`${globalStyle.global_iconfont} ${indexStyles.choice_file_thumbail_style}`} nodes={fileType} /> */}
-                                                    <View className={`${iconStyle.lxicon} ${indexStyles.choice_file_thumbail_style}`} style={{'background': fileType}}></View>
+                                                    <View className={`${iconStyle.lx_file_icon} ${indexStyles.choice_file_thumbail_style}`} style={{'background': fileType}}></View>
 
-                                                </View>
+                                                 </View>
                                             )
                                         })}
                                     </ScrollView>

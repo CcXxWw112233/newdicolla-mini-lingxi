@@ -34,7 +34,7 @@
     flex-direction: row;
     line-height: pxTrans(60);
     border-bottom: 1px solid #F2F4F8;
-    padding: 0 pxTrans(20);
+    padding: 0  pxTrans(20) pxTrans(10) pxTrans(20);
     justify-content: space-between;
 }
 .content_title_left {
@@ -52,8 +52,14 @@
     margin-left: pxTrans(15);
 }
 .content_confirm {
-    color: #5A86F5;
+    margin-top: pxTrans(15);
+    line-height: pxTrans(32);
+    color: white;
+    background: linear-gradient(270deg, #4FADFF 0%, #4790FF 100%);
     font-size: pxTrans(16);
+    height: pxTrans(32);
+    padding: 0 pxTrans(15);
+    border-radius: pxTrans(5);
 }
 .scrollview {
     max-height: pxTrans(300);

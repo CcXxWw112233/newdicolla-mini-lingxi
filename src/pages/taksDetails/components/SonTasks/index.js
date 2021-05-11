@@ -10,9 +10,10 @@ import { AddSonTask } from '../../../../pages/addSonTask'
 import { PROJECT_FILES_FILE_DOWNLOAD, PROJECT_FILES_FILE_DELETE } from "../../../../gloalSet/js/constant";
 import {UploadWayView} from '../../../../components/tasksRelevant/uploadWayView'
 import { filterFileFormatType } from './../../../../utils/util';
+import { SonTaskExecutors } from '../../../../pages/sonTaskExecutors';
 
-@connect(({ tasks: { tasksDetailDatas = {}, choice_image_temp_file_paths = '' }, }) => ({
-    tasksDetailDatas, choice_image_temp_file_paths,
+@connect(({ tasks: { tasksDetailDatas = {},executors_list=[],selectExecutorsList=[], choice_image_temp_file_paths = '' }, }) => ({
+    tasksDetailDatas, choice_image_temp_file_paths,executors_list,selectExecutorsList
 }))
 export default class index extends Component {
 
@@ -28,7 +29,8 @@ export default class index extends Component {
         cardId: '',
         fileId: '',
         isAddSonTaskShow: false,
-        isUploadWayViewShow:false
+        isUploadWayViewShow:false,
+        isSonTaskExecutorsShow:false,
     }
     onClickAddSonTask() {
         this.setState({
@@ -676,11 +678,49 @@ export default class index extends Component {
         })
 
     }
+    showSonTaskExecutors () {
+        this.setState({
+            isSonTaskExecutorsShow:true
+        })
+    }
+    onClickSonTaskExecutors() {
+        this.setState({
+            isSonTaskExecutorsShow: false
+        })
+        var users = Taro.getStorageSync('son_tasks_executors')
+        var userData = []
+        if (users && users != '[]') {
+            userData = JSON.parse(users)
+        }
+        let new_array = []
+        const { executors_list = [], } = this.props
+        new_array = executors_list.filter(item => {
+            const gold_code = (userData.find(n => {
+                if (item.id == n) {
+                    return n
+                }
+            }) || {})
+            if (item.id == gold_code) {
+                return item
+            }
+        })
+        this.setState({
+            isSonTaskExecutorsShow: false
+        })
+        const { dispatch } = this.props
+        dispatch({
+            type: 'tasks/updateDatas',
+            payload: {
+                selectExecutorsList: new_array,
+            }
+        })
+
+    }
 
     render() {
-        const { child_data = [],  tasksDetailDatas = {}, editAuth ,boardId} = this.props
+        const { child_data = [],  tasksDetailDatas = {}, editAuth ,boardId,selectExecutorsList=[]} = this.props
         const { list_id, card_id } = tasksDetailDatas
-        const { isAddSonTaskShow,isUploadWayViewShow,cartName } = this.state
+        const { isAddSonTaskShow,isUploadWayViewShow,cartName,isSonTaskExecutorsShow } = this.state
         return (
             <View className={indexStyles.list_item}>
 
@@ -803,11 +843,13 @@ export default class index extends Component {
                     </AtActionSheetItem>
                 </AtActionSheet>
                 {
-                    isAddSonTaskShow   ? (<AddSonTask propertyId={card_id} boardId={boardId} listId={card_id} cardId={card_id} onClickAction={this.onClickAddSonTask}></AddSonTask>) : (null)
+                    isAddSonTaskShow   ? (<AddSonTask propertyId={card_id}   showSonTaskExecutors={()=>this.showSonTaskExecutors()}  boardId={boardId} listId={card_id} cardId={card_id} onClickAction={this.onClickAddSonTask}></AddSonTask>) : (null)
                 }
                 {
                     isUploadWayViewShow ? (<UploadWayView title={cartName}  mold='subTask' uploadFile={()=>this.uploadFile()} deleteAction={()=>this.deleteSongTasks()} onClickAction={()=>this.hideUploadWayView()} uploadWXFile={()=>this.fileUploadMessageFile()}></UploadWayView>):('')
                 }
+                {isSonTaskExecutorsShow ? (<SonTaskExecutors  contentId={card_id} onClickAction={this.onClickSonTaskExecutors} executors={selectExecutorsList}></SonTaskExecutors>) : (null)}
+
             </View>
         )
     }

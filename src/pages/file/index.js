@@ -229,7 +229,6 @@ export default class File extends Component {
         }
         const { dispatch, header_folder_name } = this.props;
         var that = this;
-
         Taro.setStorageSync('file_pull_down_refresh', JSON.stringify(params))
         Promise.resolve(
             dispatch({
@@ -246,10 +245,8 @@ export default class File extends Component {
             this.setState({
                 uplaodAuto: false
             })
-
             // 上传权限
             this.verifyAuthority(board_id)
-
             if (this.state.isFirstLoadData) {
                 this.setState({
                     isFirstLoadData: false
@@ -266,17 +263,13 @@ export default class File extends Component {
                     },
                 })
             }
-
-
             ///从公众号消息推送过来查看文件详情
             const { officialAccountFileInfo = {} } = this.state
             if (officialAccountFileInfo && officialAccountFileInfo.push == 'officialAccount') {
                 const { file_list = [] } = this.props
-
                 //根据公众号消息的文件id在文件列表中查找出文件item
                 var previewFileInfo = file_list.find(item => item.id == officialAccountFileInfo.contentId);
                 const { file_name } = previewFileInfo
-
                 console.log(previewFileInfo)
                 ///进行预览
                 that.goFileDetails(previewFileInfo, file_name);
@@ -581,7 +574,6 @@ export default class File extends Component {
         Taro.showActionSheet({
           itemList: ['删除', '进入圈子'],
           success: function (res) {
-            console.log(res.tapIndex)
             if(res.tapIndex == 0) {
                 let selectFiles = [{
                     type:'2',
@@ -1133,11 +1125,7 @@ export default class File extends Component {
         })
     }
 
-    // deleteFiles
     confirmDelete = (boardId) => {
-        // const refreshStr = Taro.getStorageSync('file_pull_down_refresh')
-        // const refreshData = refreshStr ? JSON.parse(refreshStr) : {}
-        // const { org_id, boardid, folder_id } = refreshData;
         var that = this;
         const { selectFiles } = this.state;
         if (selectFiles && selectFiles.length > 0) {
@@ -1164,40 +1152,45 @@ export default class File extends Component {
     deleteFiles(boardId) {
         const { dispatch } = this.props;
         const { selectFiles, board_id } = this.state;
-        Promise.resolve(dispatch({
+            dispatch({
             type: 'file/deleteFiles',
             payload: {
                 board_id: board_id ? board_id: boardId,
                 arrays: JSON.stringify(selectFiles),
             },
-        })
-        ).then(() => {
-            this.setState({
-                isDeleteMenuOnclick: false
-            })
-            const refreshStr = Taro.getStorageSync('file_pull_down_refresh')
-            const refreshData = JSON.parse(refreshStr)
-            const { org_id, boardid, folder_id } = refreshData
-            const params = {
-                org_id: org_id,
-                board_id: boardid ? boardid : board_id,
-                folder_id: folder_id,
+        }).then((res) => {
+            console.log(res)
+            if(res.code == 0 || res.code == "0") {
+                this.setState({
+                    isDeleteMenuOnclick: false
+                })
+                const refreshStr = Taro.getStorageSync('file_pull_down_refresh')
+                const refreshData = JSON.parse(refreshStr)
+                const { org_id, folder_id } = refreshData
+                const params = {
+                    org_id: org_id,
+                    board_id: refreshData.board_id ? refreshData.board_id : board_id,
+                    folder_id: folder_id,
+                }
+                this.loadData(params);
+                Taro.showToast({
+                    title: "删除成功",
+                    icon: 'none',
+                    duration: 2000,
+                })
             }
-            this.loadData(params)
         })
     }
     // 前往文件搜索页
     goSearchFile () {
-        console.log("文件搜索页")
         Taro.navigateTo({
             url:'/pages/file/fileSearch/index'
         })
     }
-    render() {
 
+    render() {
         const { isShowBoardList, header_folder_name, isShowChoiceFolder, uploadNowList,fileListTotleString } = this.props
         const { is_tips_longpress_file, choice_image_temp_file_paths = [], makePho, file_list_state, uplaodAuto, isDeleteMenuOnclick, selectFiles, deleteAuto } = this.state
-
         /**
          * can remove
          */

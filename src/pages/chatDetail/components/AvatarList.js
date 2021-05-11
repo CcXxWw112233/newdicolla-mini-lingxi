@@ -3,7 +3,11 @@ import { View, Image, Text } from '@tarojs/components';
 import styles from './AvatarList.scss';
 import globalStyles from './../../../gloalSet/styles/globalStyles.scss';
 import defaultPhoto from "./../../../asset/chat/defaultPhoto.png";
+import { connect } from '@tarojs/redux';
 
+@connect(({ im: { currentBoardDetail } }) => ({
+  currentBoardDetail
+}))
 class AvatarList extends Component {
   state={
     isShowAll:false
@@ -21,28 +25,39 @@ class AvatarList extends Component {
   };
 
   componentDidMount() {
-    const { avatarList = [],shouldShowAvatarMax,isshowAdd } = this.props;
+    // const { avatarList = [],shouldShowAvatarMax,isshowAdd } = this.props;
     // this.setState({
     //   avatarList:avatarList,
     //   shouldShowAvatarMax:shouldShowAvatarMax,
     // })
-    var list = avatarList;
-      list.unshift({})
-    this.setState({
-      isShowAll:true,
-      avatarList:list,
-      shouldShowAvatarMax:avatarList.length
-    })
+    // var list = avatarList;
+    // list.unshift({})
+    // this.setState({
+    //   isShowAll:true,
+    //   avatarList:list,
+    //   shouldShowAvatarMax:avatarList.length
+    // })
+    
   }
   checkMoreGroupMenmber() {
-    const { avatarList = [],shouldShowAvatarMax } = this.props;
-    var list = avatarList;
+    const { currentBoardDetail: { users = [], name = '未知群名' } = {} } = this.props;
+    var list = users.map(i => ({
+      id: i.id,
+      name: i.name,
+      avatar: i.avatar
+    }));
     list.unshift({})
     this.setState({
       isShowAll:true,
       avatarList:list,
-      shouldShowAvatarMax:avatarList.length
+      shouldShowAvatarMax:list.length
     })
+  }
+
+  componentDidShow() {
+    // const { avatarList = [],shouldShowAvatarMax } = this.props;
+    // console.log('ssssssssssssssssss16',avatarList)
+    this.checkMoreGroupMenmber()
   }
   
   inviteMember() {
@@ -58,7 +73,7 @@ class AvatarList extends Component {
        <View className={index}>
         <View className={styles.wrapper_top}>
           <View className={styles.wrapper_groupName}>群名:{name}</View>
-          <View className={styles.wrapper_group_population}>群成员:{avatarList.length}/500</View>
+          <View className={styles.wrapper_group_population}>群成员:{avatarList.length - 1}/500</View>
         </View>
       <View className={`${styles.wrapper}`}>
 

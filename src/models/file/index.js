@@ -10,7 +10,7 @@ export default {
         search_file_list:[],
         isShowBoardList: false,  //是否显示项目列表
         folder_tree: [],  //文件数据列表
-        header_folder_name: '全部文件',  //当前选中的文件夹名称
+        header_folder_name: '全部项目',  //当前选中的文件夹名称
         isShowFileComment: false,  //chat页面是否显示文件评论
         isShowChoiceFolder: false, //是否显示上传文件选择文件夹modal
         unread_file_list: [],   //未读文件列表
@@ -83,7 +83,6 @@ export default {
                     }
                 }
                 if (board_id.length > 0) {
-                    console.log("jklsdljsklfjsklj;")
                     const account_info = JSON.parse(Taro.getStorageSync('account_info'));
                     var uploadNowList = res.data.filter(function (value) {
                         return value.create_by.id == account_info.id && new Date().getTime() -
@@ -342,8 +341,11 @@ export default {
         *deleteFiles({ payload }, { select, call, put }) {
             const res = yield call(deleteFiles, payload)
             if (isApiResponseOk(res)) {
-                console.log(res)
-                return res.data;
+                Taro.showToast({
+                    title: "删除成功",
+                    icon: 'none',
+                    duration: 2000,
+                })
             } else {
                 Taro.showToast({
                     title: res.message,
@@ -351,6 +353,7 @@ export default {
                     duration: 2000,
                 })
             }
+            return res || {}
         },
     },
 

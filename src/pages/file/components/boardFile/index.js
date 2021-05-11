@@ -125,7 +125,7 @@ export default class BoardFile extends Component {
         })
         const isSelectedAll = header_folder_name == '全部项目'
         return (
-            <View className={indexStyles.choice_board_file_style} >
+            <View className={indexStyles.choice_board_file_style} onTouchMove={(e) => {e.stopPropagation()}}>
                  <ScrollView className={indexStyles.filter_board_list} scrollY scrollWithAnimation>
                     <View className={indexStyles.whole_file_style}>
                         <View className={`${indexStyles.whole_file_hear_style} ${isSelectedAll ? indexStyles.whole_file_hear_selected_style:''}`} onClick={() => this.selectedBoardItem('0', '', '', all_file_text)}>

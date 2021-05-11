@@ -129,7 +129,7 @@ export default class index extends Component {
                                 )
                             })
                        ):(
-                         <View className={indexStyles.placeText}>未选择</View>  
+                         <View className={indexStyles.placeText}>{'选择'+title}</View>  
                        )
                    }    
                     </View>

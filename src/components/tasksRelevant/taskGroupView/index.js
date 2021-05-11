@@ -210,13 +210,13 @@ export default class taskGroupPicker extends Component {
             newCheckedList
         } = this.state;
         return (
-            <View className={indexStyles.index}>
+            <View className={indexStyles.index} onTouchMove={(e) => {e.stopPropagation()}} onClick={this.cancelSelect}>
                 {/* <Picker rangeKey={rangeKey} disabled={!editAuth} mode='selector' range={tasksGroupList} onChange={this.onChange}>
                     <View className={indexStyles.projectNameCellPicker}>
                         {current_select_taskGroup_name != '未选择' || !title ? current_select_taskGroup_name : title}
                     </View>
                 </Picker> */}
-                <View className={indexStyles.content_view}>
+                <View className={indexStyles.content_view} onClick={(e) => {e.stopPropagation()}}>
                     <View className={indexStyles.content_topline_view}></View>
                     <View className={indexStyles.content_title_view}>
                        <View className={indexStyles.content_title_left}>

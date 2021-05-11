@@ -6,17 +6,18 @@ import indexStyles from "./index.scss";
 import globalStyles from "../../../gloalSet/styles/globalStyles.scss";
 import Avatar from "../../../components/avatar";
 import { getOrgName, timestampToTimeZH, judgeJurisdictionProject,timestampToDateTimeLine } from "../../../utils/basicFunction";
-import { PROJECT_TEAM_CARD_INTERVIEW, PROJECT_FLOW_FLOW_ACCESS } from "../../../gloalSet/js/constant";
+import { PROJECT_TEAM_CARD_INTERVIEW, PROJECT_FLOW_FLOW_ACCESS,MEETING_APPID } from "../../../gloalSet/js/constant";
+
 
 @connect(({ my: { org_list }, calendar: { selected_timestamp } }) => ({
   org_list,
   selected_timestamp
 }))
 export default class CardItem extends Component {
-  gotoListItemDetails = itemValue => {
+  gotoListItemDetails = (itemValue) => {
     const { flag, content_id, board_id, parent_id } = itemValue;
     
-    if (itemValue && ["0", "1"].indexOf(flag) !== -1) {
+    if (itemValue && ["0"].indexOf(flag) !== -1) {
       let tasks_id = parent_id ? parent_id : content_id;
       // 判断有没有任务访问权限 
       if (judgeJurisdictionProject(board_id, PROJECT_TEAM_CARD_INTERVIEW)) {
@@ -43,19 +44,29 @@ export default class CardItem extends Component {
           duration: 2000
         })
       }
-      
     } else if (itemValue && ["3"].indexOf(flag) !== -1) {
         Taro.showToast({
           title: '里程碑详情正在开发中···',
           icon: 'none',
           duration: 2000
         }) 
-    }else {
+    }else if (itemValue && ["1"].indexOf(flag) !== -1)  {
+        Taro.navigateToMiniProgram({
+          appId: MEETING_APPID,
+          path: '/pages/meetingDetails/index',
+          extraData: {
+            id: content_id
+          },        
+          complete: (val) => {
+            console.log(val)
+          }
+        })
     }
   };
 
   // 点击复制链接
-  handleSetClipboardData = (start_url) => {
+  handleSetClipboardData = (e,start_url) => {
+    
     Taro.setClipboardData({
       data: start_url.meetingUrl,
       success: function (res) {
@@ -229,8 +240,9 @@ export default class CardItem extends Component {
     eTime = isSameYear && isCurrentYear ? eTime.substring(5) : eTime;
 
     return (
+      // () => flag != "meeting" && flag != "1"  && 
       <View
-        onClick={() => flag != "meeting" && flag != "1"  && this.gotoListItemDetails(itemValue)}
+        onClick={()=>this.gotoListItemDetails(itemValue)}
       >
         <View
           className={`${globalStyles.global_card_out} ${indexStyles.card_content} `}
@@ -259,10 +271,10 @@ export default class CardItem extends Component {
                 is_urge == '1' && flag == '2' ? (
                   <Text className={indexStyles.urge}><Text className={`${globalStyles.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text> 催办</Text>) : (null)
               }
-              {
+              {/* {
                 itemValue.due_time && now > duetime && (flag == '0' || flag == '2') && is_realize == '0' ? (<Text className={indexStyles.urge}><Text className={`${globalStyles.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text>
 逾期</Text>) : (null)
-              }
+              } */}
               </Text>
               </View>
 
@@ -292,10 +304,10 @@ export default class CardItem extends Component {
             </View>
 
             {(flag == "meeting" || flag == '1') && isToday && (
-              <View className={indexStyles.card_content_meeting_btn} onClick={() => this.handleSetClipboardData({ meetingUrl })}>
+              <View className={indexStyles.card_content_meeting_btn} onClick={(e) =>(e.stopPropagation(), this.handleSetClipboardData({ meetingUrl }))}>
                 复制链接参会
               </View>
-            )}
+            )} 
           </View>
 
           <View className={`${indexStyles.card_content_right}`}>

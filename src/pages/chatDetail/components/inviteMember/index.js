@@ -3,7 +3,7 @@ import { connect } from "@tarojs/redux";
 import { View,ScrollView,Image } from "@tarojs/components";
 import styles from "./index.scss";
 import globalStyle from './../../../../gloalSet/styles/globalStyles.scss';
-import { getAcatarlist,invitationMenber } from '../../../../services/board/index'
+import { getAcatarlist,invitationMenberIntoOrg,invitationMenberIntoPrejoct } from '../../../../services/board/index'
 import { isApiResponseOk } from "../../../../utils/request";
 import defaultPhoto from "./../../../../asset/chat/defaultPhoto.png";
 
@@ -84,7 +84,7 @@ startPrint = e => {
  */
 allAcatarlist (key,isshowToast) {
   const {currentBoardDetail = {}} = this.props;
-  const {org_id} = currentBoardDetail;
+  const {org_id,board_id} = currentBoardDetail;
   var param= {
     associate_param:key,
     _organization_id:org_id,
@@ -106,13 +106,32 @@ allAcatarlist (key,isshowToast) {
         }
       }
     }
-    console.log(res)
   })
 }
 
 // 选择检索到的
 addacatarItem = ( item)=>{
-  var {selectAcatarlist} = this.state;
+  const {currentBoardDetail = {},dispatch} = this.props;
+  var users = currentBoardDetail.users;
+  var isExist = users.some(value => {
+    return  value.mobile == item.mobile;
+  }) 
+  if(isExist) {
+    Taro.showToast({
+      title: '该成员已在项目里',
+      icon: 'none',
+      duration: 2000
+    })    
+    this.formReset()
+    return;
+  }
+  var isfind = selectAcatarlist.some(value => {
+    return  value.mobile == item.mobile;
+  }) 
+  if(isfind) {
+    this.formReset()
+    return;
+  } 
   var acatar = item;
   item['image'] = acatar['avatar'],
   item['value'] = acatar['value'],
@@ -120,28 +139,57 @@ addacatarItem = ( item)=>{
   this.setState({
     selectAcatarlist:selectAcatarlist,
   })
-  console.log(selectAcatarlist)
   this.formReset()
 }
 //确认邀请
 acatarInvate(){
-  const {currentBoardDetail = {}} = this.props;
-  const {org_id} = currentBoardDetail;
+  const {currentBoardDetail = {},dispatch} = this.props;
+  const {org_id,board_id} = currentBoardDetail;
   var {selectAcatarlist} = this.state;
   if(selectAcatarlist.length > 0) {
     var users = selectAcatarlist.map(item=>{
       return item.id
     })
+    var userList = selectAcatarlist.map(item=>{
+      return {
+        avatar    :item.avatar,
+        full_name : item.full_name,
+        name: item.name,
+        user_id:item.id,
+        mobile: item.mobile,
+        we_chat:"",
+      }
+    })
+
     var param = {
        type: "1",
        users: users,
        _organization_id: org_id
     }
-    invitationMenber(param).then(res=>{
+    invitationMenberIntoOrg(param).then(res=>{
       if (isApiResponseOk(res)) {
-        Taro.navigateBack({
-          delta: 1
-        })        
+        var params = {
+          id: board_id,
+          role_id: res.data.role_id,
+          type: "1",
+          users: res.data.users,
+        }
+        invitationMenberIntoPrejoct(params).then(res=>{
+          if (isApiResponseOk(res)) {
+            var currentGroup = currentBoardDetail;
+            var users = currentGroup.users;
+            currentGroup["users"] = users.concat(userList);
+            dispatch({
+              type: "im/updateStateFieldByCover",
+              payload: {
+                currentBoardDetail: currentGroup
+              }
+            })
+            Taro.navigateBack({
+                  delta: 1
+            })   
+          }
+        })
       } else {
         Taro.showToast({
           title: '邀请失败',
@@ -203,16 +251,13 @@ formReset = e => {
                   )
                 }
                 <Text className={styles.avatarItemName}>
-                    {item.name} || {item.mobile}
+                    {item.name || item.mobile}
                 </Text>
         
             </View>
           );
         })}
-   
-       
        </View>
-
         {
           allAcatarlist && allAcatarlist.length > 0 && 
           <ScrollView  className={styles.scrollView}
