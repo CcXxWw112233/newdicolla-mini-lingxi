@@ -129,20 +129,24 @@ export default class index extends Component {
           {/* <View className={indexStyles.list_item_name}>标签</View> */}
           <View className={indexStyles.tagCell_list_item_detail}>
             {
-              label_data.map((tag, key) => {
-                const rgb = tag.label_color;
-                return (
-                  <View className={indexStyles.tagCell_list_item}>
-                    <AtTag type='primary' customStyle={{
-                      color: `rgba(${rgb},1)`,
-                      backgroundColor: `rgba(${rgb},.2)`,
-                      border: `1px solid rgba(${rgb},1)`,
-                    }}>
-                      {tag.label_name}
-                    </AtTag>
-                  </View>
-                )
-              })
+              label_data && label_data.length > 0 ? (
+                label_data.map((tag, key) => {
+                  const rgb = tag.label_color;
+                  return (
+                    <View className={indexStyles.tagCell_list_item}>
+                      <AtTag type='primary' customStyle={{
+                        color: `rgba(${rgb},1)`,
+                        backgroundColor: `rgba(${rgb},.2)`,
+                        border: `1px solid rgba(${rgb},1)`,
+                      }}>
+                        {tag.label_name}
+                      </AtTag>
+                    </View>
+                  )
+                })
+              ):(
+                  <View className={indexStyles.place_style}>选择标签</View>
+              )
             }
           </View>
         </View>

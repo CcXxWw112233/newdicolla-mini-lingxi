@@ -121,7 +121,7 @@ export default class auccessJoin extends Component {
   }
 
   enterUse = () => {
-
+    debugger
     //查找当前文件对应的board, 对应的im_id
     const { board_id } = this.state
 
@@ -132,13 +132,19 @@ export default class auccessJoin extends Component {
       }
     })
 
-    if (fileIsCurrentBoard.length === 0) return
+    if (fileIsCurrentBoard.length === 0) {
+      Taro.reLaunch({
+        url: '/pages/calendar/index'
+      })
+      return
+    }
     const { im_id } = fileIsCurrentBoard && fileIsCurrentBoard[0]
 
     const getCurrentBoard = (arr, id) => {
       const ret = arr.find(i => i.board_id === id);
       return ret ? ret : {};
     };
+    
     Promise.resolve(setCurrentBoardId(board_id))
       .then(() => {
         setCurrentBoard(getCurrentBoard(allBoardList, board_id))

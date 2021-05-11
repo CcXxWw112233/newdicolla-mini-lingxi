@@ -177,6 +177,12 @@
           "pathName": "pages/taksDetails/components/AddDesribeTaskText",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "pages/phoneNumberLogin/index",
+          "pathName": "pages/phoneNumberLogin/index",
+          "query": "",
+          "scene": null
         }
       ]
     }

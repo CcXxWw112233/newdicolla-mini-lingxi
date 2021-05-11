@@ -8,8 +8,8 @@ import { SonTaskExecutors } from '../sonTaskExecutors';
 import { dateTimePicker, formatPickerDateTime,formatTypePickerDateTime,dateTimeTypePicker } from '../../components/DateTimePicker'
 import { timestampToDateTimeLine, } from '../../utils/basicFunction'
 
-@connect(({ tasks: { executors_list = [], tasksDetailDatas = {}, }, }) => ({
-    executors_list, tasksDetailDatas,
+@connect(({ tasks: { executors_list = [], tasksDetailDatas = {},selectExecutorsList }, }) => ({
+    executors_list, tasksDetailDatas,selectExecutorsList
 }))
 export default class addSonTask extends Component {
     // config = {
@@ -42,7 +42,7 @@ export default class addSonTask extends Component {
             board_id: '',
             list_id: '',
             card_id: '',
-            selectExecutorsList: [], //选择的任务执行人
+            // selectExecutorsList: [], //选择的任务执行人
 
             isSonTaskExecutorsShow: false
         }
@@ -66,27 +66,27 @@ export default class addSonTask extends Component {
     }
 
     componentDidShow() {
-        var users = Taro.getStorageSync('son_tasks_executors')
-        var userData = []
-        if (users && users != '[]') {
-            userData = JSON.parse(users)
-        }
+        // var users = Taro.getStorageSync('son_tasks_executors')
+        // var userData = []
+        // if (users && users != '[]') {
+        //     userData = JSON.parse(users)
+        // }
 
-        let new_array = []
-        const { executors_list = [], } = this.props
-        new_array = executors_list.filter(item => {
-            const gold_code = (userData.find(n => {
-                if (item.id == n) {
-                    return n
-                }
-            }) || {})
-            if (item.id == gold_code) {
-                return item
-            }
-        })
-        this.setState({
-            selectExecutorsList: new_array,
-        })
+        // let new_array = []
+        // const { executors_list = [], } = this.props
+        // new_array = executors_list.filter(item => {
+        //     const gold_code = (userData.find(n => {
+        //         if (item.id == n) {
+        //             return n
+        //         }
+        //     }) || {})
+        //     if (item.id == gold_code) {
+        //         return item
+        //     }
+        // })
+        // this.setState({
+        //     selectExecutorsList: new_array,
+        // })
     }
 
     componentWillUnmount() {
@@ -107,9 +107,11 @@ export default class addSonTask extends Component {
             // Taro.navigateTo({
             //     url: `../../pages/sonTaskExecutors/index?contentId=${card_id}&executors=${JSON.stringify(selectExecutorsList)}`
             // })
-            this.setState({
-                isSonTaskExecutorsShow: true,
-            })
+            typeof this.props.showSonTaskExecutors == "function" &&
+            this.props.showSonTaskExecutors();
+            // this.setState({
+            //     isSonTaskExecutorsShow: true,
+            // })
         })
     }
 
@@ -237,8 +239,16 @@ export default class addSonTask extends Component {
 
     }
     cancel() {
+        const { dispatch } = this.props
+        dispatch({
+            type: 'tasks/updateDatas',
+            payload: {
+                selectExecutorsList: [],
+            }
+        })
         typeof this.props.onClickAction == "function" &&
             this.props.onClickAction();
+           
     }
     onClickSonTaskExecutors() {
         this.setState({
@@ -319,11 +329,11 @@ export default class addSonTask extends Component {
         })
     }
     render() {
-
-        const { isShowDeleteIcon,start_date_str, due_date_str, start_time_str, due_time_str, due_start_range, selectExecutorsList = [], start_start_range, card_id, is_start_time_show, is_due_time_show, isSonTaskExecutorsShow,inputText,dateStr,dateTime,dateTimeArray,startT, } = this.state
+        const {selectExecutorsList = []} = this.props
+        const { isShowDeleteIcon,start_date_str, due_date_str, start_time_str, due_time_str, due_start_range,  start_start_range, card_id, is_start_time_show, is_due_time_show, isSonTaskExecutorsShow,inputText,dateStr,dateTime,dateTimeArray,startT, } = this.state
         return (
-            <View className={indexStyles.fieldSelectionView}>
-                <View className={indexStyles.index} hidden={isSonTaskExecutorsShow}>
+            <View className={indexStyles.fieldSelectionView} onTouchMove={(e) => {e.stopPropagation()}} onClick={this.cancel}>
+                <View className={indexStyles.index} hidden={isSonTaskExecutorsShow} onClick={(e) => {e.stopPropagation()}}>
                     <View className={indexStyles.titleView}>添加子任务</View>
                     <View className={`${globalStyle.global_iconfont} ${indexStyles.close_icon}`} onClick={this.cancel}>&#xe7fc;</View>
                   <View className={indexStyles.contant_View}>
@@ -420,13 +430,13 @@ export default class addSonTask extends Component {
                             </View>
 
                         </View>
+                        <View className={indexStyles.time_style}>
 
 
                         {
                             selectExecutorsList && selectExecutorsList.length > 0 ?
                                 (
                                     <View className={indexStyles.executors_list_item_detail} onClick={this.addExecutors}>
-
                                         <View className={`${indexStyles.timeInfoView}`}>
                                              <Text className={`${indexStyles.timeInfo_subTitle}`}>执行人:</Text>
                                              <View className={`${indexStyles.avatar_place}`}></View>
@@ -438,8 +448,8 @@ export default class addSonTask extends Component {
                                 )
                         }
 
+                        </View>
                     </View>
-
 
                     <View className={`${indexStyles.login_footer}`}>
                         {/* <Button className={`${indexStyles.login_btn_normal} ${indexStyles.login_btn} ${indexStyles.cencel_btn}`} onClick={this.cancel}>取消</Button> */}
@@ -448,7 +458,7 @@ export default class addSonTask extends Component {
                     </View>
                     </View>
                 </View>
-                {isSonTaskExecutorsShow ? (<SonTaskExecutors contentId={card_id} onClickAction={this.onClickSonTaskExecutors} executors={selectExecutorsList}></SonTaskExecutors>) : (null)}
+                {/* {isSonTaskExecutorsShow ? (<SonTaskExecutors contentId={card_id} onClickAction={this.onClickSonTaskExecutors} executors={selectExecutorsList}></SonTaskExecutors>) : (null)} */}
             </View>
         )
     }

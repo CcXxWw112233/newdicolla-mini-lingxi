@@ -184,8 +184,8 @@ selectItem = item => {
       //     </View>
       //   </View>
       // </View>
-      <View className={indexStyles.index}>
-        <View className={indexStyles.content_view}>
+      <View className={indexStyles.index} onTouchMove={(e) => {e.stopPropagation()}} onClick={this.onClickAction}>
+        <View className={indexStyles.content_view} onClick={(e) => {e.stopPropagation()}}>
           <View className={indexStyles.content_topline_view}></View>
           <View className={indexStyles.content_title_view}>
               <View className={indexStyles.content_title_left}>
@@ -222,7 +222,7 @@ selectItem = item => {
                       }
               </View>
           </ScrollView>
-          <View className={indexStyles.reset_View} onClick={this.resetAction}>重置负责人</View>
+          <View className={indexStyles.reset_View} onClick={this.resetAction} hover-class={indexStyles.lattice_hover_style}>重置负责人</View>
           <View className={indexStyles.cencel_View} onClick={this.onClickAction} >取消</View>
         </View>
     </View>

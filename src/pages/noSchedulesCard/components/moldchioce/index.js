@@ -31,8 +31,6 @@ export default class Calendar extends Component {
         const { selectedMenuList, menuList, selectedMenuValueList } = this.state;
         var arr = e.currentTarget.id.split(","), arr1 = [], arr2 = [];
         var type = menuList[arr[0]].type;
-        console.log("******")
-        console.log(arr)
         if (selectedMenuList[arr[0]] && selectedMenuList[arr[0]].length > 0) {
             arr1 = selectedMenuList[arr[0]];
             arr2 = selectedMenuValueList[arr[0]];
@@ -50,8 +48,6 @@ export default class Calendar extends Component {
                 arr2 = [];
             }
         } else {
-            console.log('ssss_3', arr1)
-            console.log('ssss_4', arr2)
             if (arr1.length == menuList[arr[0]].submenu.length) {
                 arr1.splice(0, 1);
                 arr2.splice(0, 1);
@@ -59,16 +55,9 @@ export default class Calendar extends Component {
             var index = arr1.indexOf(arr[1]);
             if (arr1 && arr1.length > 0) {
                 if (index > -1) {
-                    console.log(index)
-                    console.log(arr1)
-                    console.log(arr2)
-
                     arr1.splice(index, 1);
                     arr2.splice(arr2.indexOf(type + '/' + menuList[arr[0]].submenu[arr[2]].value), 1);
                 } else {
-                    console.log(index)
-                    console.log(arr1)
-                    console.log(arr2)
                     arr1.push(arr[1])
                     arr2.push(type + '/' + menuList[arr[0]].submenu[arr[2]].value)
                 }
@@ -98,10 +87,11 @@ export default class Calendar extends Component {
             selectedMenuValueList: [[], [], [], []],
         })
     }
+    
     render() {
         const { menuList, windowWidth, selectedMenuList } = this.state;
         return (
-            <View className={indexStyles.index}>
+            <View className={indexStyles.index} onTouchMove={(e) => {e.stopPropagation()}}> 
                 <View className={`${indexStyles.menuList}`}>
                     {menuList.map((item, index) => {
                         return (

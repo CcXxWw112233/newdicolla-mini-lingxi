@@ -120,7 +120,7 @@
 
         .executors_list_item_detail {
             height              : pxTrans(56);
-            padding             : 0 pxTrans(10);
+            padding             : 0 pxTrans(5);
             line-height         : pxTrans(56);
             width               : 100%;
             display             : flex;
@@ -130,11 +130,12 @@
         }
       
         .timeInfoView {
-            width: 100%;
+            width: pxTrans(260);
             display: flex;
             flex-direction: column;
         }
         .timeInfo_subTitle {
+            margin-top: pxTrans(5);
             color: #575C75;
             font-size: pxTrans(10);
             line-height: pxTrans(16);
@@ -142,7 +143,7 @@
         .timeInfo_date {
             color: #3F445D;
             font-size: pxTrans(16);
-            line-height: pxTrans(40);
+            line-height: pxTrans(30);
         }
         .time_style {
             display             : flex;
@@ -203,6 +204,6 @@
         }
     }
     .avatar_place {
-        height: pxTrans(10);
+        height: pxTrans(5);
     }
 }

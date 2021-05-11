@@ -164,8 +164,8 @@ class Index extends Component {
           </View>
         )}
        
-       {
-            !is_to_login ?
+      {
+      !is_to_login ?
        <View className={styles.container}>
           <Swiper 
           // indicatorDots={true} 

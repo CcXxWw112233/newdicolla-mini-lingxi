@@ -195,14 +195,14 @@ export default class milestoneCellPicker extends Component {
         const { new_select_milestone_name} = this.state;
 
         return (
-            <View className={indexStyles.index}> 
+            <View className={indexStyles.index} onTouchMove={(e) => {e.stopPropagation()}} onClick={this.cancelSelect}> 
                 {/* <Picker rangeKey={rangeKey} mode='selector' range={dataArray} disabled={!editAuth} onChange={this.onChange}>
                     <View className={indexStyles.projectNameCellPicker}>
                         {current_select_milestone_name != '未选择' || !title ? current_select_milestone_name : title}
 
                     </View>
                 </Picker> */}
-                   <View className={indexStyles.content_view}>
+                   <View className={indexStyles.content_view} onClick={(e) => {e.stopPropagation()}}>
                     <View className={indexStyles.content_topline_view}></View>
                     <View className={indexStyles.content_title_view}>
                        <View className={indexStyles.content_title_left}>

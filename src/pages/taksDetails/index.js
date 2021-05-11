@@ -737,10 +737,13 @@ export default class taksDetails extends Component {
                 {
                     // !editAuth && <View className={indexStyles.obscurationView} onClick={this.showNoAuthToast}></View>
                 }
-                    <View className={`${indexStyles.deleteView}`} id={card_id} onClick={this.deleteTask}>
+                {
+                    deleteAuth ?( <View className={`${indexStyles.deleteView}`} id={card_id} onClick={this.deleteTask}>
                     {/* <Text className={`${globalStyle.global_iconfont} ${indexStyles.delete_iconfont} ${deleteAuth ? "" : indexStyles.unused_iconfont}`}>&#xe845;</Text> */}
-                        <View className={`${indexStyles.deleteTask} ${deleteAuth ? "" : indexStyles.unused_deleteTask}`}>删除任务</View>
-                    </View>
+                        <View className={`${indexStyles.deleteTask}`}>删除任务</View>
+                    </View>):(null)
+                }
+                  
                 </ScrollView>
           
             </View>

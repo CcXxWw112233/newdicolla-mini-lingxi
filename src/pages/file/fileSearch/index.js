@@ -252,29 +252,35 @@ deleteFile = value => {
     type:'2',
     id  :value.id
   }]
-  Promise.resolve(dispatch({
+ 
+  dispatch({
     type: 'file/deleteFiles',
     payload: {
         board_id: value.board_id,
         arrays: JSON.stringify(selectFiles),
     },
-})
-).then(() => {
-    let new_search_file_list =  search_file_list.filter(function(item){
-      return item.id != value.id;
-    }); 
-    let new_file_list = file_list.filter(function(item){
-      return item.id != value.id;
-    }); 
-    // file_list
-    dispatch({
-      type: 'file/updateDatas',
-      payload: {
-        search_file_list: new_search_file_list,
-        file_list: new_file_list,
-      },
+    }).then(res=>{
+      if(res.code == 0 || res.code == "0") {
+        let new_search_file_list =  search_file_list.filter(function(item){
+          return item.id != value.id;
+        }); 
+        let new_file_list = file_list.filter(function(item){
+          return item.id != value.id;
+        }); 
+        dispatch({
+          type: 'file/updateDatas',
+          payload: {
+            search_file_list: new_search_file_list,
+            file_list: new_file_list,
+          },
+        })
+        Taro.showToast({
+          title: "删除成功",
+          icon: 'none',
+          duration: 2000,
+      })
+      }
     })
-  })
 }
 // 进入圈子
 goFileChat = value => {

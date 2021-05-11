@@ -179,8 +179,8 @@ export default class FieldPersonSinglePicker extends Component {
             //         </View>
             //     </Picker>
             // </View>
-            <View className={indexStyles.index}>
-            <View className={indexStyles.content_view}>
+            <View className={indexStyles.index} onTouchMove={(e) => {e.stopPropagation()}} onClick={this.onClickAction}>
+            <View className={indexStyles.content_view} onClick={(e) => {e.stopPropagation()}}>
              <View className={indexStyles.content_topline_view}></View>
              <View className={indexStyles.content_title_view}>
                 <View className={indexStyles.content_title_left}>

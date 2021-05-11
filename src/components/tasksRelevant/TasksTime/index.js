@@ -4,7 +4,7 @@ import indexStyles from './index.scss'
 import globalStyles from '../../../gloalSet/styles/globalStyles.scss'
 import { timestampToDateZH, timestampToHoursMinZH, timestampToTime, timestampToHM, timestampToDateTimeLine } from '../../../utils/basicFunction'
 import { connect } from '@tarojs/redux'
-import { dateTimePicker, formatPickerDateTime,formatTypePickerDateTime } from '../../DateTimePicker'
+import { dateTimePicker, formatPickerDateTime,formatTypePickerDateTime ,getMonthDay} from '../../DateTimePicker'
 
 
 @connect(({ tasks: { isPermission, tasksDetailDatas = {}, }, }) => ({
@@ -37,7 +37,8 @@ export default class TasksTime extends Component {
             task_due_time: timestampToHM(eTime),
             dateTime: obj.dateTime,
             dateTimeArray: obj.dateTimeArray,
-            startT: startT
+            startT: startT,
+            currentSelectMonth:startT.split("-")[1]
         })
     }
 
@@ -120,15 +121,17 @@ export default class TasksTime extends Component {
         }).then((res) => {
             const { code } = res
             if (code == 0 || code == '0') {
-                dispatch({
-                    type: 'tasks/updateDatas',
-                    payload: {
-                        tasksDetailDatas: {
-                            ...tasksDetailDatas,
-                            ...{ start_time: time }
-                        }
-                    }
-                })
+                typeof this.props.onClickAction == "function" &&
+                this.props.onClickAction();
+                // dispatch({
+                //     type: 'tasks/updateDatas',
+                //     payload: {
+                //         tasksDetailDatas: {
+                //             ...tasksDetailDatas,
+                //             ...{ start_time: time }
+                //         }
+                //     }
+                // })
             }
         })
     }
@@ -173,15 +176,17 @@ export default class TasksTime extends Component {
         }).then((res) => {
             const { code } = res
             if (code == 0 || code == '0') {
-                dispatch({
-                    type: 'tasks/updateDatas',
-                    payload: {
-                        tasksDetailDatas: {
-                            ...tasksDetailDatas,
-                            ...{ due_time: time }
-                        }
-                    }
-                })
+                typeof this.props.onClickAction == "function" &&
+                this.props.onClickAction();
+                // dispatch({
+                //     type: 'tasks/updateDatas',
+                //     payload: {
+                //         tasksDetailDatas: {
+                //             ...tasksDetailDatas,
+                //             ...{ due_time: time }
+                //         }
+                //     }
+                // })
             }
         })
     }
@@ -210,15 +215,15 @@ export default class TasksTime extends Component {
      */
      cleanDateTime = e => {
         var promise = []
-        this.cleanDueDateTime()
-        this.cleanStartDateTime()
-        // promise.push()
-        // promise.push()
+        
+        
+        promise.push(this.cleanDueDateTime())
+        promise.push(this.cleanStartDateTime())
 
-        // Promise.all(promise).then(res => {
-        //     typeof this.props.onClickAction == "function" &&
-        //     this.props.onClickAction();
-        // })
+        Promise.all(promise).then(res => {
+            typeof this.props.onClickAction == "function" &&
+            this.props.onClickAction();
+        })
 
      }
     /**
@@ -244,6 +249,7 @@ export default class TasksTime extends Component {
         var date = new Date(startT.replace(/-/g, '/'));
         var time = date.getTime()
         this.putTasksStartTime(time)
+
     }
     /**
      * 修改结束时间
@@ -252,7 +258,7 @@ export default class TasksTime extends Component {
     changeEndDateTime = e => {
         var startT = formatTypePickerDateTime(this.state.dateTimeArray, e.detail.value,'YMDHM')
         this.setState({
-            startT: startT,
+            endT: startT,
             due_date_str:''
         })
         var date = new Date(startT);
@@ -260,6 +266,29 @@ export default class TasksTime extends Component {
         this.putTasksDueTime(time)
 
     }
+    onColumnPickerChange = e =>{
+        var value = e.detail.value;
+        var column = e.detail.column;
+        var {dateTimeArray,currentYear,currentSelectMonth} = this.state;
+        if(column == 0) {
+            const year = dateTimeArray[0][value].substring(0,dateTimeArray[0][value].length-1);
+            dateTimeArray[2] = getMonthDay(year,currentSelectMonth).map(item => {
+                return item + '日'
+            });
+            this.setState({
+                dateTimeArray:dateTimeArray,
+                currentYear:year
+            })
+        } else if(column == 1) {
+            dateTimeArray[2] = getMonthDay(currentYear,dateTimeArray[1][value].substring(0,dateTimeArray[1][value].length-1)).map(item => {
+                return item + '日'
+            });
+            this.setState({
+                dateTimeArray:dateTimeArray,
+                currentSelectMonth:dateTimeArray[1][value].substring(0,dateTimeArray[1][value].length-1)
+            })
+        }
+    } 
     render() {
 
         const { start_date_str, start_time_str, due_date_str, due_time_str,isStartprint,new_card_name,dateTime,dateTimeArray } = this.state
@@ -269,14 +298,13 @@ export default class TasksTime extends Component {
         var eTime = cellInfo.eTime ? timestampToDateTimeLine(cellInfo.eTime, 'YMDHM',true) : '结束时间'
         eTime =  eTime.substring(eTime.length - 5) == '00:00' || eTime.substring(eTime.length - 5) == '23:59' ? eTime.substring(0,eTime.length - 5) : eTime;
         sTime =  sTime.substring(sTime.length - 5) == '00:00' || sTime.substring(sTime.length - 5) == '23:59' ? sTime.substring(0,sTime.length - 5) : sTime
-
         const isSameYear = sTime.substring(0,4) == eTime.substring(0,4);
         var nowTime = timestampToDateTimeLine(new Date().getTime(), 'YMDHM',true)
         const isCurrentYear = nowTime.substring(0,4) == eTime.substring(0,4) && sTime.substring(0,4) == nowTime.substring(0,4);
         sTime = isSameYear && isCurrentYear ? sTime.substring(5) : sTime;
         eTime = isSameYear && isCurrentYear ? eTime.substring(5) : eTime;
-        sTime = due_date_str ? due_date_str : sTime;
-        eTime = start_date_str ? start_date_str : eTime;
+        sTime = sTime ? sTime :start_date_str;
+        eTime = eTime ? eTime : due_date_str;
         const card_id = cellInfo.cardId
         const is_Realize = cellInfo.isRealize
 
@@ -325,13 +353,10 @@ export default class TasksTime extends Component {
                             )
                         }
                     </View>
-
                 </View>
                 <View className={indexStyles.line_View}></View>
                 <View className={indexStyles.selectionTime}>
-
                     <View className={indexStyles.start_content}>
-
                         {/*
                         <View className={indexStyles.start_date_style} onClick={this.reminderToast}>
                             <Picker mode='date' onChange={this.onDateChangeStart} disabled={!editAuth} className={indexStyles.startTime} >
@@ -345,9 +370,9 @@ export default class TasksTime extends Component {
                             </Picker>
                         </View>
                     */}
-                        <Picker mode='multiSelector' value={dateTime} onChange={this.changeStartDateTime} range={dateTimeArray}>
-                            {sTime ? (<View>{sTime}</View>) : (<View>开始时间</View>)}
-                        </Picker>
+                    <Picker mode='multiSelector'  onColumnChange={this.onColumnPickerChange} value={dateTime} onChange={this.changeStartDateTime} range={dateTimeArray}>
+                        <View>{sTime}</View>
+                    </Picker>
                         {/* {
                          sTime && sTime != '0' ? (<View className={`${indexStyles.list_item_left_iconnext}`} onClick={this.cleanStartDateTime}>
                                 <Text className={`${globalStyles.global_iconfont}`}>&#xe77d;</Text>
@@ -371,18 +396,16 @@ export default class TasksTime extends Component {
                         </View>
                         */}
 
-                            <Picker mode='multiSelector' value={dateTime} onChange={this.
-                                changeEndDateTime} range={dateTimeArray}>
-                                {eTime ? (<View>{eTime}</View>) : (<View>结束时间</View>)}
-                            </Picker>
+                        <Picker mode='multiSelector' value={dateTime} onChange={this.
+                                changeEndDateTime} onColumnChange={this.onColumnPickerChange} range={dateTimeArray}>
+                            <View>{eTime}</View>
+                        </Picker>
                             {/* {
                                 eTime && eTime != '0' ? (<View className={`${indexStyles.list_item_right_iconnext}`} onClick={this.cleanDueDateTime}>
                                     <Text className={`${globalStyles.global_iconfont}`}>&#xe77d;</Text>
                                 </View>
                                 ) : <View></View>
                             } */}
-
-
                     </View>
                     {
                         eTime && eTime != '0' ? (

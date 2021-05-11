@@ -76,14 +76,14 @@ export default class SingleChoicePicker extends Component {
         const { singleList = [], } = this.state
         const {title} = this.props
         return (
-            <View className={indexStyles.index}>
+            <View className={indexStyles.index} onTouchMove={(e) => {e.stopPropagation()}} onClick={this.cancelSelect}>
 
                 {/* <Picker rangeKey={rangeKey} mode='selector' disabled={!editAuth} range={singleList} onChange={this.onChange}>
                     <View className={indexStyles.projectNameCellPicker}>
                         {current_select_name != '未选择' || !title ? current_select_name : title}
                     </View>
                 </Picker> */}
-                   <View className={indexStyles.content_view}>
+                   <View className={indexStyles.content_view} onClick={(e) => {e.stopPropagation()}}>
                     <View className={indexStyles.content_topline_view}></View>
                     <View className={indexStyles.content_title_view}>
                        <View className={indexStyles.content_title_left}>

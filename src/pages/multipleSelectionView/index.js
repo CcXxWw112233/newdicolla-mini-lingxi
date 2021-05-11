@@ -144,8 +144,8 @@ export default class LabelSelection extends Component {
         const { checkboxOption = [],checkedList } = this.state
         const {title} = this.props
         return (
-            <View className={indexStyles.index}>
-               <View className={indexStyles.content_view}>
+            <View className={indexStyles.index} onTouchMove={(e) => {e.stopPropagation()}} onClick={this.cancelSelect}>
+               <View className={indexStyles.content_view} onClick={(e) => {e.stopPropagation()}}>
                 <View className={indexStyles.content_topline_view}></View>
                 <View className={indexStyles.content_title_view}>
                    <View className={indexStyles.content_title_left}>
