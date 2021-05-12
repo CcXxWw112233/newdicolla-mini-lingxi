@@ -49,11 +49,26 @@ export default class addSonTask extends Component {
     }
 
     componentDidMount() {
-
-        const { propertyId, boardId, listId, cardId } = this.props
-        // const date_value = timestampToDateTimeLine(field_value, "YMDHM")
+        var { propertyId,dispatch, boardId, listId, cardId,subTaskData={} } = this.props
         var obj = dateTimePicker("YMDHM");
-        var startT = formatTypePickerDateTime(obj.dateTimeArray, obj.dateTime, "YMDHM")
+        var startT = formatTypePickerDateTime(obj.dateTimeArray, obj.dateTime, "YMDHM");
+        var inputText = '';
+        var start_date_str = '开始时间'
+        var due_date_str = '结束时间'
+        var isUpdate = false; // 是否是更新子任务
+        if(!(JSON.stringify(subTaskData) == "{}" || subTaskData == null)) {
+            cardId = subTaskData.card_id;
+            inputText = subTaskData.card_name;
+            start_date_str = subTaskData.start_time ? timestampToDateTimeLine(subTaskData.start_time, 'YMDHM',true) : '开始时间'
+            due_date_str = subTaskData.due_time ? timestampToDateTimeLine(subTaskData.due_time, 'YMDHM',true) : '结束时间',
+            isUpdate = true
+            dispatch({
+                type: 'tasks/updateDatas',
+                payload: {
+                    selectExecutorsList: subTaskData.executors,
+                }
+            })
+        }
         this.setState({
             property_id: propertyId,
             board_id: boardId,
@@ -61,8 +76,13 @@ export default class addSonTask extends Component {
             card_id: cardId,
             dateTime: obj.dateTime,
             dateTimeArray: obj.dateTimeArray,
-            startT: startT
+            startT: startT,
+            start_date_str:start_date_str,
+            due_date_str:due_date_str,
+            inputText:inputText,
+            isUpdate:isUpdate
         })
+        
     }
 
     componentDidShow() {
@@ -133,12 +153,41 @@ export default class addSonTask extends Component {
         })
     }
     /**
+     * 修改子任务名称
+     * @param {*} value 
+     */
+    handleBlur = value =>{
+        const {isUpdate} = this.state
+        if(isUpdate) {
+            this.updataCardName(value['detail']["value"])
+        }
+        
+    }
+    //更新任务名称
+    updataCardName = (inputText) => {
+        const {card_id} = this.state
+        const {dispatch} = this.props
+        dispatch({
+            type: 'tasks/putCardBaseInfo',
+            payload: {
+                card_id: card_id,
+                card_name: inputText,
+                name: inputText,
+            }
+        })
+    }
+    /**
      * 确认添加
      * @returns 
      */
     confirm = () => {
         const { dispatch } = this.props
-        const { start_timestamp, due_timestamp, inputText, list_id, property_id, board_id, } = this.state
+        const { start_timestamp, due_timestamp, isUpdate,inputText, list_id, property_id, board_id, } = this.state
+        // 判断是否是修改子任务  修改就直接关闭弹窗
+        if(isUpdate) {
+            this.cancel()
+            return;
+        }
         if (inputText === '') {
             Taro.showToast({
                 title: '请填写子任务名称',
@@ -238,6 +287,7 @@ export default class addSonTask extends Component {
         }
 
     }
+    // 关闭弹窗
     cancel() {
         const { dispatch } = this.props
         dispatch({
@@ -246,8 +296,9 @@ export default class addSonTask extends Component {
                 selectExecutorsList: [],
             }
         })
+        const {isUpdate}  = this.state;
         typeof this.props.onClickAction == "function" &&
-            this.props.onClickAction();
+            this.props.onClickAction(isUpdate);
            
     }
     onClickSonTaskExecutors() {
@@ -292,7 +343,7 @@ export default class addSonTask extends Component {
 
     onStartTimeChange = e => {
         var value = e['detail']['value']
-        const { start_date } = this.state
+        const { start_date, } = this.state
         var strTime = start_date + ' ' + value
         var date = new Date(strTime.replace(/-/g, '/'));
         var time = date.getTime()
@@ -307,39 +358,94 @@ export default class addSonTask extends Component {
      * @param {*} e 
      */
       changeStartDateTime = e => {
+        const {isUpdate} = this.state;
         var start_date_str = formatTypePickerDateTime(this.state.dateTimeArray, e.detail.value,'YMDHM')
         var date = new Date(start_date_str.replace(/-/g, '/'));
         var time = date.getTime()
+        if(isUpdate) {
+            this.putTasksStartTime(time,start_date_str);
+            return;
+        }
         this.setState({
             start_date_str: start_date_str,
             start_timestamp:time
         })
     }
+    //更新任务开始时间
+    putTasksStartTime = (time,start_date_str) => {
+        const { dispatch} = this.props
+        const {card_id} = this.state
+        dispatch({
+            type: 'tasks/putCardBaseInfo',
+            payload: {
+                card_id: card_id,
+                start_time: time,
+            }
+        }).then((res) => {
+            const { code } = res
+            if (code == 0 || code == '0') {
+                this.setState({
+                    start_date_str: start_date_str,
+                    start_timestamp:time
+                })
+            }
+        })
+    }
+
     /**
      * 修改结束时间
      * @param {*} e 
      */
     changeEndDateTime = e => {
+        const {isUpdate} = this.state;
         var due_date_str = formatTypePickerDateTime(this.state.dateTimeArray, e.detail.value,'YMDHM')
         var date = new Date(due_date_str);
         var time = date.getTime()
+        if(isUpdate) {
+            this.putTasksDueTime(time,due_date_str)
+        }
         this.setState({
             due_date_str: due_date_str,
             due_timestamp:time
         })
     }
+
+    //更新任务结束时间
+    putTasksDueTime = (time,due_date_str) => {
+        const { dispatch} = this.props
+        const {card_id} = this.state
+        dispatch({
+            type: 'tasks/putCardBaseInfo',
+            payload: {
+                card_id: card_id,
+                due_time: time,
+            }
+        }).then((res) => {
+            const { code } = res
+            if (code == 0 || code == '0') {
+                this.setState({
+                    due_date_str: due_date_str,
+                    due_timestamp:time
+                })
+            } 
+        })
+    }
     render() {
         const {selectExecutorsList = []} = this.props
-        const { isShowDeleteIcon,start_date_str, due_date_str, start_time_str, due_time_str, due_start_range,  start_start_range, card_id, is_start_time_show, is_due_time_show, isSonTaskExecutorsShow,inputText,dateStr,dateTime,dateTimeArray,startT, } = this.state
+        const { isShowDeleteIcon,start_date_str, isUpdate,due_date_str, start_time_str, due_time_str, due_start_range,  start_start_range, card_id, is_start_time_show, is_due_time_show, isSonTaskExecutorsShow,inputText,dateStr,dateTime,dateTimeArray,startT, } = this.state
         return (
             <View className={indexStyles.fieldSelectionView} onTouchMove={(e) => {e.stopPropagation()}} onClick={this.cancel}>
                 <View className={indexStyles.index} hidden={isSonTaskExecutorsShow} onClick={(e) => {e.stopPropagation()}}>
-                    <View className={indexStyles.titleView}>添加子任务</View>
+                    <View className={indexStyles.titleView}>
+                    {
+                        isUpdate ? '修改子任务' :'添加子任务'
+                    }
+                    </View>
                     <View className={`${globalStyle.global_iconfont} ${indexStyles.close_icon}`} onClick={this.cancel}>&#xe7fc;</View>
                   <View className={indexStyles.contant_View}>
                     <Form  className={indexStyles.son_tasks_from} onReset={this.formReset}>
                         <View className={indexStyles.son_tasks_name} >
-                            <Input placeholder='任务名称' value={inputText}  placeholder-style="#BCC2D6" onInput={this.handleInput.bind(this)} className={indexStyles.son_tasks_input}></Input>
+                            <Input placeholder='任务名称' value={inputText}  placeholder-style="#BCC2D6" onBlur={this.handleBlur.bind(this)} onInput={this.handleInput.bind(this)} className={indexStyles.son_tasks_input}></Input>
                             {
                                 isShowDeleteIcon && <Button className={`${globalStyle.global_iconfont} ${indexStyles.deleteIcon}`} formType='reset'  >&#xe639;</Button>
                             }
@@ -453,7 +559,7 @@ export default class addSonTask extends Component {
 
                     <View className={`${indexStyles.login_footer}`}>
                         {/* <Button className={`${indexStyles.login_btn_normal} ${indexStyles.login_btn} ${indexStyles.cencel_btn}`} onClick={this.cancel}>取消</Button> */}
-                        <Button className={`${indexStyles.login_btn_normal} ${indexStyles.login_btn}`} type='primary' onClick={this.confirm}>确定</Button>
+                        <Button className={`${indexStyles.login_btn_normal} ${indexStyles.login_btn}`} type='primary' onClick={this.confirm}>完成</Button>
 
                     </View>
                     </View>

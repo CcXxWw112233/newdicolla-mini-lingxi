@@ -32,12 +32,15 @@ export default class index extends Component {
         isUploadWayViewShow:false,
         isSonTaskExecutorsShow:false,
     }
-    onClickAddSonTask() {
+    onClickAddSonTask = isUpdate => {
         this.setState({
-            isAddSonTaskShow: false
+            isAddSonTaskShow: false,
+            subTaskData:{}
         })
-        typeof this.props.onClickAction == "function" &&
+        if(!isUpdate) {
+            typeof this.props.onClickAction == "function" &&
             this.props.onClickAction();
+        }
     }
     /**
      * 新增子任务弹窗
@@ -50,7 +53,8 @@ export default class index extends Component {
         // // url: `../../pages/addSonTask/index?propertyId=${card_id}&boardId=${boardId}&listId=${card_id}&cardId=${card_id}`
         // })
         this.setState({
-            isAddSonTaskShow: true
+            isAddSonTaskShow: true,
+            subTaskData:null
         })
     }
 
@@ -97,11 +101,12 @@ export default class index extends Component {
     /**
      * 展示上传选择方式
      */
-    showUploadWayView = (cardId,cartName) => {
+    showUploadWayView = (cardId,cartName,key) => {
         this.setState({
             isUploadWayViewShow: true,
             cartName:cartName,
-            song_task_id: cardId
+            song_task_id: cardId,
+            key:key
         })
 
         const { dispatch } = this.props
@@ -567,7 +572,9 @@ export default class index extends Component {
         return true;
     }
 
-
+    /**
+     * 删除子任务
+     */
     deleteCardProperty = () => {
 
         const { dispatch, propertyId, cardId, deleteAuth } = this.props
@@ -633,9 +640,9 @@ export default class index extends Component {
         })
 
     }
-
-
-
+    /**
+     * 无权限提醒
+     */
     reminderToast() {
         const { editAuth } = this.props;
         if (!editAuth) {
@@ -678,11 +685,15 @@ export default class index extends Component {
         })
 
     }
+    // 展示负责人弹窗
     showSonTaskExecutors () {
         this.setState({
             isSonTaskExecutorsShow:true
         })
     }
+    /**
+     * 子任务选择负责人
+     */
     onClickSonTaskExecutors() {
         this.setState({
             isSonTaskExecutorsShow: false
@@ -708,6 +719,11 @@ export default class index extends Component {
             isSonTaskExecutorsShow: false
         })
         const { dispatch } = this.props
+        const {subTaskData} = this.state
+        if(subTaskData) {
+            this.updateSubTask(new_array)
+            
+        }
         dispatch({
             type: 'tasks/updateDatas',
             payload: {
@@ -717,10 +733,62 @@ export default class index extends Component {
 
     }
 
+    /**
+     * 修改子任务负责人
+     */
+
+    updateSubTask(new_array) {
+        const {subTaskData,song_task_id} = this.state;
+        const {dispatch} = this.props
+        var newCheckedList = new_array.map(item => {
+            return item.id;
+        })
+        var checkedList = subTaskData.executors.map(item=>{
+            return item.user_id;
+        })
+        const handelarr = newCheckedList.concat(checkedList).filter(function(v, i, arr) {
+            return arr.indexOf(v) === arr.lastIndexOf(v);     
+        });
+        handelarr.forEach(item => {
+            if(checkedList.indexOf(item) != -1) {
+                // 删除
+                dispatch({
+                    type: 'tasks/deleteCardExecutor',
+                    payload: {
+                        card_id: subTaskData.card_id,
+                        executor: item,
+                    },
+                })
+            } else {
+                // 增加
+                dispatch({
+                    type: 'tasks/addCardExecutor',
+                    payload: {
+                        card_id: subTaskData.card_id,
+                        executor: item,
+                    },
+                })
+            }
+        })
+    }
+    
+
+    editSubTask = () => {
+        const {key} = this.state;
+        const {child_data = []} = this.props
+        console.log(child_data[key])
+        this.setState({
+            isAddSonTaskShow:true,
+            isUploadWayViewShow:false,
+            subTaskData:child_data[key]
+        })
+    }
     render() {
         const { child_data = [],  tasksDetailDatas = {}, editAuth ,boardId,selectExecutorsList=[]} = this.props
         const { list_id, card_id } = tasksDetailDatas
-        const { isAddSonTaskShow,isUploadWayViewShow,cartName,isSonTaskExecutorsShow } = this.state
+        const { isAddSonTaskShow,isUploadWayViewShow,cartName,isSonTaskExecutorsShow,subTaskData } = this.state
+        var now = Date.parse(new Date()) / 1000;
+
         return (
             <View className={indexStyles.list_item}>
 
@@ -737,8 +805,9 @@ export default class index extends Component {
                 <View className={indexStyles.song_task_centent}>
                     {
                         child_data && child_data.map((value, key) => {
-                            const { card_name, deliverables = [], card_id, is_realize } = value
-
+                            const { card_name, deliverables = [], is_realize,card_id,due_time,start_time,time_warning } = value
+                            var is_warning = time_warning && (now > (due_time - 86400000 * time_warning) || now == (due_time - 86400000 * time_warning)) ? true : false;
+                            var is_overdue = due_time && now > due_time && is_realize == '0'
                             return (
                                 <View key={key} className={indexStyles.content}>
                                     <View className={indexStyles.song_row_instyle}>
@@ -764,7 +833,13 @@ export default class index extends Component {
                                             </View>
                                         </View>
                                         {/* tasksOption */}
-                                        <View className={`${indexStyles.list_item_rigth_iconnext}`} onClick={() => this.showUploadWayView(card_id,card_name)}>
+                                        <View className={`${indexStyles.list_item_rigth_iconnext}`} onClick={() => this.showUploadWayView(card_id,card_name,key)}>
+                                         {
+                                             is_overdue && <Text className={`${indexStyles.list_item_status} ${indexStyles.list_item_status_overdue}`}>逾期</Text>              
+                                         }
+                                         {
+                                             is_warning &&  <Text className={`${indexStyles.list_item_status} ${indexStyles.list_item_status_warning}`}>预警</Text>          
+                                         }
                                             <Text className={`${globalStyle.global_iconfont}`}>&#xe63f;</Text>
                                         </View>
                                     </View>
@@ -843,10 +918,10 @@ export default class index extends Component {
                     </AtActionSheetItem>
                 </AtActionSheet>
                 {
-                    isAddSonTaskShow   ? (<AddSonTask propertyId={card_id}   showSonTaskExecutors={()=>this.showSonTaskExecutors()}  boardId={boardId} listId={card_id} cardId={card_id} onClickAction={this.onClickAddSonTask}></AddSonTask>) : (null)
+                    isAddSonTaskShow   ? (<AddSonTask subTaskData={subTaskData} propertyId={card_id}  showSonTaskExecutors={()=>this.showSonTaskExecutors()}   boardId={boardId} listId={card_id} cardId={card_id} onClickAction={(isUpdate)=>this.onClickAddSonTask(isUpdate)}></AddSonTask>) : (null)
                 }
                 {
-                    isUploadWayViewShow ? (<UploadWayView title={cartName}  mold='subTask' uploadFile={()=>this.uploadFile()} deleteAction={()=>this.deleteSongTasks()} onClickAction={()=>this.hideUploadWayView()} uploadWXFile={()=>this.fileUploadMessageFile()}></UploadWayView>):('')
+                    isUploadWayViewShow ? (<UploadWayView title={cartName}  editSubTask={()=>this.editSubTask()} mold='subTask' uploadFile={()=>this.uploadFile()} deleteAction={()=>this.deleteSongTasks()} onClickAction={()=>this.hideUploadWayView()} uploadWXFile={()=>this.fileUploadMessageFile()}></UploadWayView>):('')
                 }
                 {isSonTaskExecutorsShow ? (<SonTaskExecutors  contentId={card_id} onClickAction={this.onClickSonTaskExecutors} executors={selectExecutorsList}></SonTaskExecutors>) : (null)}
 

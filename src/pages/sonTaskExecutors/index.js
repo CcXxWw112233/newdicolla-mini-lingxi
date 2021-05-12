@@ -193,9 +193,7 @@ export default class sonTaskExecutors extends Component {
     }
 
     render() {
-
         const { checkboxOption = [], newCheckedList} = this.state
-
         return (
 
             // <View className={indexStyles.labelSelectionView}>
@@ -213,8 +211,8 @@ export default class sonTaskExecutors extends Component {
             //         </View>
             //     </View>
             // </View>
-            <View className={indexStyles.index} onTouchMove={(e) => {e.stopPropagation()}} onClick={this.onClickAction}>
-            <View className={indexStyles.content_view} onClick={(e) => {e.stopPropagation()}}>
+             <View className={indexStyles.index} onTouchMove={(e) => {e.stopPropagation()}} onClick={this.onClickAction}>
+             <View className={indexStyles.content_view} onClick={(e) => {e.stopPropagation()}}>
              <View className={indexStyles.content_topline_view}></View>
              <View className={indexStyles.content_title_view}>
                 <View className={indexStyles.content_title_left}>

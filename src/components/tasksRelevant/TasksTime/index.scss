@@ -27,6 +27,11 @@
             margin-left: pxTrans(10);
             margin-right: pxTrans(20);
         }
+        .card_top_View {
+            display: flex;
+            margin-left: 0 !important;
+            justify-content: space-between;
+        }
         .card_title {
             margin-top: pxTrans(5);
             padding-top: pxTrans(10);
@@ -34,6 +39,10 @@
             font-size   : pxTrans(20);
             color       : rgba(0, 0, 0, 0.85);
             line-height : pxTrans(25);
+            width     : pxTrans(300);
+        }
+        .card_title_hasChild {
+            width: pxTrans(200) !important;
         }
         .card_title_place_view {
             padding-top: pxTrans(5);
@@ -49,6 +58,17 @@
             -webkit-box-orient: vertical;
             overflow-wrap: break-word;
         }
+        .card_status {
+            margin-top:pxTrans(10);
+            color: #212434;
+            font-size: pxTrans(14);
+            padding: 0 pxTrans(20);
+            height: pxTrans(30);
+            border-radius: pxTrans(15);
+            line-height: pxTrans(30);
+            background-color: #F5F7FB;
+            margin-right: pxTrans(20);
+        }
 
     }
     .line_View {
@@ -56,12 +76,22 @@
         height: pxTrans(1);
         background-color:#E6E8F1;
     }
+    .progress_View {
+        margin: 0 pxTrans(20); 
+    }
+    .selectionTime_overdue {
+        color: rgba(255, 80, 80, 0.5) !important;
+    }
+    .selectionTime_warning {
+        color: rgba(255, 160, 0, 0.5) !important;
+    }
     .selectionTime {
         height         : pxTrans(64);
         display        : flex;
         justify-content: space-between;
         margin: 0 pxTrans(20);
 
+      
         .start_content {
             justify-content: center;
             align-items    : center;
@@ -118,5 +148,16 @@
         font-size: pxTrans(20);
         line-height: pxTrans(64) !important;
         color: #9EA6C2;
+    }
+    .card_mark {
+        font-size: pxTrans(14);
+        margin-left: pxTrans(30);
+        line-height: pxTrans(64);
+    }
+    .card_mark_overdue {
+        color: #FF5050 !important;
+    }
+    .card_mark_warning {
+        color: #FFA000 !important;
     }
 }
