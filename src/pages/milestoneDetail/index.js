@@ -96,16 +96,16 @@ mileStoneRealizeStatus(info) {
     const {board_id,board_name,content_list=[],id,parent_id,is_finished,progress_percent,chird_list=[],deadline} = mileStone_detail;
     const name = mileStone_detail['name'];
     var ishasChild = content_list.length > 0 && chird_list.length > 0;
-    var isHasTaskNoFinish =  content_list.length > 0 && content_list[0].data.some(item=>{
+    var isHasTaskNoFinish =  content_list.length > 0 &&  content_list.some(item=>{
            return item.is_completed == '0'
         })
-    var isHasTaskFinish =  content_list.length > 0 && content_list[0].data.some(item=>{
+    var isHasTaskFinish =  content_list.length > 0 &&  content_list.some(item=>{
            return item.is_completed == '1'
     })
-    var isAllChirdNoFinish =  content_list.length > 0 && content_list[0].data.some(item=>{
+    var isAllChirdNoFinish =  content_list.length > 0 && chird_list.some(item=>{
            return item.is_completed == '0'
     })
-    var isAllChirdFinish =  content_list.length > 0 && content_list[0].data.some(item=>{
+    var isAllChirdFinish =  content_list.length > 0 && chird_list.some(item=>{
            return item.is_completed == '1'
     })
     var isHasNoFinish = isAllChirdNoFinish && isHasTaskNoFinish;
