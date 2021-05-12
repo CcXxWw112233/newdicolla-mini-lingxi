@@ -25,14 +25,10 @@ export default class TasksTime extends Component {
     }
 
     componentDidMount() {
+        const { cellInfo = {}, } = this.props
+        const { sTime, eTime, } = cellInfo
 
-        const { cellInfo = {},time_warning } = this.props
-        const { sTime, eTime, } = cellInfo       
         var obj = dateTimePicker('YMDHM');
-        var now = Date.parse(new Date()) / 1000;
-
-        var is_overdue = eTime && now > eTime;
-        var is_warning = time_warning && (now > (eTime - 86400000 * time_warning) || now == (eTime - 86400000 * time_warning)) ? true : false;
 
         var startT = formatTypePickerDateTime(obj.dateTimeArray, obj.dateTime,'YMDHM')
         this.setState({
@@ -44,8 +40,7 @@ export default class TasksTime extends Component {
             dateTimeArray: obj.dateTimeArray,
             startT: startT,
             currentSelectMonth:startT.split("-")[1],
-            is_overdue:is_overdue,
-            is_warning:is_warning
+     
         })
     }
 
@@ -298,8 +293,8 @@ export default class TasksTime extends Component {
     } 
     render() {
        
-        const { start_date_str, start_time_str, due_date_str, due_time_str,isStartprint,new_card_name,dateTime,dateTimeArray,is_overdue,is_warning } = this.state
-        const { cellInfo = {}, isPermission, flag, completeAuth, editAuth,ishasChildCard,progress_percent,isHasSubFinish,isHasNoFinish } = this.props
+        const { start_date_str, start_time_str, due_date_str, due_time_str,isStartprint,new_card_name,dateTime,dateTimeArray } = this.state
+        const { cellInfo = {}, isPermission, flag, completeAuth, editAuth,ishasChildCard,progress_percent,isHasSubFinish,isHasNoFinish,time_warning } = this.props
         const card_name = (new_card_name && card_name != cellInfo.cardDefinition) ? new_card_name : cellInfo.cardDefinition
         var sTime = cellInfo.sTime ? timestampToDateTimeLine(cellInfo.sTime, 'YMDHM',true) : '开始时间'
         var eTime = cellInfo.eTime ? timestampToDateTimeLine(cellInfo.eTime, 'YMDHM',true) : '结束时间'
@@ -315,8 +310,9 @@ export default class TasksTime extends Component {
         const card_id = cellInfo.cardId
         const is_Realize = cellInfo.isRealize
         //当前时间
-        var now = Date.parse(new Date());
-        var unix = now / 1000
+        var now = Date.parse(new Date()) / 1000;
+        var is_overdue = cellInfo.eTime && now > cellInfo.eTime;
+        var is_warning = time_warning && (now > (cellInfo.eTime - 86400000 * time_warning) || now == (cellInfo.eTime - 86400000 * time_warning)) ? true : false;
         var istimeoverdue = ishasChildCard && is_overdue;
         var istime_warning =ishasChildCard && is_warning;
         var taskStatus = '';
@@ -356,7 +352,7 @@ export default class TasksTime extends Component {
                         ) : (
                             //日程
                             //当前时间小于结束时间, 日程为: 完成状态
-                            unix > eTime ? (
+                            now > eTime ? (
                                 <Text className={`${globalStyles.global_iconfont}`} style={{ color: '#1890FF' }}>&#xe63e;</Text>
                             ) : (
                                 <Text className={`${globalStyles.global_iconfont}`}>&#xe63e;</Text>
