@@ -11,6 +11,7 @@ import tasks from './tasks/index'
 import file from './file/index'
 import workflow from './workflow/index'
 import global from './global/index'
+import milestone from './milestone/index'
 
 const models = [
   board,
@@ -26,5 +27,6 @@ const models = [
   file,
   workflow,
   global,
+  milestone
 ]
 export default models

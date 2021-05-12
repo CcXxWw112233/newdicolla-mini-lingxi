@@ -44,11 +44,9 @@ export default class CardItem extends Component {
         })
       }
     } else if (itemValue && ["3"].indexOf(flag) !== -1) {
-        Taro.showToast({
-          title: '里程碑详情正在开发中···',
-          icon: 'none',
-          duration: 2000
-        }) 
+        Taro.navigateTo({
+          url: `../../pages/milestoneDetail/index?flag=${flag}&contentId=${content_id}&boardId=${board_id}&back_icon=arrow_icon`
+        });
     }else if (itemValue && ["1"].indexOf(flag) !== -1)  {
       Taro.showToast({
         title: '会议详情正在开发中···',

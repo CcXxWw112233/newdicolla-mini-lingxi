@@ -359,7 +359,10 @@ export default class taksDetails extends Component {
         const due_time = tasksDetailDatas["due_time"] || "";
         const start_time = tasksDetailDatas["start_time"];
         const is_realize = tasksDetailDatas["is_realize"] || "";
-        const ishasChildCard = JSON.stringify(tasksDetailDatas['child_card_status'])==="{}" || tasksDetailDatas['child_card_status']== '' ||  tasksDetailDatas['child_card_status'] == null? false:true
+        var ishasChildCard = false;
+        if(tasksDetailDatas['child_card_status']) {
+            ishasChildCard =  tasksDetailDatas['child_card_status'].has_child == 0 ? false : true;
+        }
         const timeInfo = {
             eTime: due_time,
             sTime: start_time,
@@ -390,6 +393,17 @@ export default class taksDetails extends Component {
         const { type_flag } = this.props;
         var { properties = [], fields = [], org_id, board_id } = tasksDetailDatas;
         board_id = Taro.getStorageSync("tasks_detail_boardId")  || tasksDetailDatas.board_id;
+        var subTask = [];
+        subTask = properties && properties.filter(item=>{
+           return item.code == 'SUBTASK'
+        })
+
+       var isHasSubFinish =  subTask.length > 0 && subTask[0].data.some(item=>{
+            return  item.is_realize == '1'
+        })
+        var isHasNoFinish = subTask.length > 0 && subTask[0].data.some(item=>{
+           return item.is_realize == '0'
+        })
         return (
             <View>
                 <CustomNavigation backIcon={backIcon} pop='previous' />
@@ -417,6 +431,8 @@ export default class taksDetails extends Component {
                                 ishasChildCard={ishasChildCard}
                                 time_warning = {time_warning}
                                 progress_percent = {progress_percent}
+                                isHasSubFinish={isHasSubFinish}
+                                isHasNoFinish = {isHasNoFinish}
                             />) : <View></View>
                         }
 

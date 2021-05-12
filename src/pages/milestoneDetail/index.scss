@@ -1,34 +1,20 @@
 @import "../../gloalSet/styles/constant";
-.container{
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-
-  .content{
-    margin-top:50px;
-    width: 80%;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    margin-left: 10%;
-    color: rgba(0, 0, 0, 0.45);
-
-  }
-  .topbg_View {
-    width: 100%;
-    height: pxTrans(100);
-    background-color:rgba(24, 144, 255, 1);
-  }
-  .bg_View {
+.topbg_View {
+    background:rgba(24, 144, 255, 1);
+    height:250px;
+    width:100%;
     position: fixed;
-    top: pxTrans(10);
-    height: 100%;
-    left: 0;
-    bottom: 0;
-    align-items: center;
+    top:0
+}
+.tasks_contant {
+    border-radius:pxTrans(20) pxTrans(20) 0 0;
     width: 100%;
+    position: absolute;
+    overflow: hidden;
+    height: 100vh;
+    bottom: pxTrans(0);
     background-color: white;
-    border-radius: pxTrans(20) pxTrans(20) 0 0;
-  }
-
+}
+.bottomPlace_View {
+    height: pxTrans(70);
 }

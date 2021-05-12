@@ -297,9 +297,9 @@ export default class TasksTime extends Component {
         }
     } 
     render() {
-
+       
         const { start_date_str, start_time_str, due_date_str, due_time_str,isStartprint,new_card_name,dateTime,dateTimeArray,is_overdue,is_warning } = this.state
-        const { cellInfo = {}, isPermission, flag, completeAuth, editAuth,ishasChildCard,progress_percent } = this.props
+        const { cellInfo = {}, isPermission, flag, completeAuth, editAuth,ishasChildCard,progress_percent,isHasSubFinish,isHasNoFinish } = this.props
         const card_name = (new_card_name && card_name != cellInfo.cardDefinition) ? new_card_name : cellInfo.cardDefinition
         var sTime = cellInfo.sTime ? timestampToDateTimeLine(cellInfo.sTime, 'YMDHM',true) : '开始时间'
         var eTime = cellInfo.eTime ? timestampToDateTimeLine(cellInfo.eTime, 'YMDHM',true) : '结束时间'
@@ -319,6 +319,29 @@ export default class TasksTime extends Component {
         var unix = now / 1000
         var istimeoverdue = ishasChildCard && is_overdue;
         var istime_warning =ishasChildCard && is_warning;
+        var taskStatus = '';
+        if (ishasChildCard) {
+            if((!isHasNoFinish && is_Realize === '0') || !isHasSubFinish) {
+                taskStatus = '未到期';
+            } else if(!isHasNoFinish) {
+                  taskStatus = '已完成';
+                   if(is_overdue && is_Realize === '1') {
+                    taskStatus = '逾期完成';
+                }  else if(is_Realize === '1' && !is_overdue){
+                    taskStatus = '按时完成';
+                } 
+            } else if (isHasSubFinish && isHasNoFinish) {
+                taskStatus = '进行中';
+            }
+        } else {
+            if(is_Realize === '0') {
+                taskStatus = '未到期';
+            } else if(is_overdue && is_Realize === '1') {
+                taskStatus = '逾期完成';
+            }  else if(is_Realize === '1' && !is_overdue){
+                taskStatus = '按时完成';
+            } 
+        }
         return (
             <View className={indexStyles.view_Style}>
                 <View className={indexStyles.input_View}>
@@ -341,11 +364,11 @@ export default class TasksTime extends Component {
                         )}
                     </View>
                     
-                    <View onClick={this.reminderToast} className={`${indexStyles.card_title_View} ${ishasChildCard ? indexStyles.card_top_View : ''}`}>
+                    <View onClick={this.reminderToast} className={`${indexStyles.card_title_View} ${indexStyles.card_top_View}`}>
                         {
                             isStartprint ? (
                                 <Textarea
-                                className={`${indexStyles.card_title} ${ishasChildCard ? indexStyles.card_title_hasChild: ''}`}
+                                className={`${indexStyles.card_title}  ${indexStyles.card_title_hasChild}`}
                                 placeholder='填写名称'
                                 value={card_name}
                                 confirmType='完成'
@@ -354,14 +377,17 @@ export default class TasksTime extends Component {
                                 disabled={!isStartprint}
                             ></Textarea>
                             ) :(
+                                // ${ishasChildCard ? indexStyles.card_title_hasChild: ''}
                                 <View
-                                className={`${indexStyles.card_title_place_view} ${ishasChildCard ? indexStyles.card_title_hasChild : ''}`}
+                                className={`${indexStyles.card_title_place_view}  ${indexStyles.card_title_hasChild}`}
                                 onClick={this.getfouces}
                                 >{card_name}</View>
                             )
                         }
                     </View>
-                    <View className={indexStyles.card_status}>进行中</View>
+                    {
+                        taskStatus && <View className={indexStyles.card_status}>{taskStatus}</View>
+                    }
                 </View>
                 {
                     ishasChildCard ? (
@@ -372,18 +398,18 @@ export default class TasksTime extends Component {
                 }
                 <View className={`${indexStyles.selectionTime} ${istimeoverdue ? indexStyles.selectionTime_overdue:''} ${istime_warning ? indexStyles.selectionTime_warning:''}`}>
                     <View className={indexStyles.start_content}>
-                    <Picker mode='multiSelector'  onColumnChange={this.onColumnPickerChange} disabled={!ishasChildCard} value={dateTime} onChange={this.changeStartDateTime} range={dateTimeArray}>
+                    <Picker mode='multiSelector'  onColumnChange={this.onColumnPickerChange} disabled={ishasChildCard} value={dateTime} onChange={this.changeStartDateTime} range={dateTimeArray}>
                         <View>{sTime}</View>
                     </Picker>
                     </View>
                     <Text className={`${globalStyles.global_iconfont} ${indexStyles.time_Icon_style} ${istimeoverdue ? indexStyles.selectionTime_overdue:''} ${istime_warning ? indexStyles.selectionTime_warning:''}`}>&#xe654;</Text>
                     <View className={indexStyles.due_content} onClick={this.reminderToast}>
                         <Picker mode='multiSelector' value={dateTime} onChange={this.
-                                changeEndDateTime} onColumnChange={this.onColumnPickerChange} disabled={!ishasChildCard} range={dateTimeArray}>
+                                changeEndDateTime} onColumnChange={this.onColumnPickerChange} disabled={ishasChildCard} range={dateTimeArray}>
                             <View>{eTime}</View>
                         </Picker>
-
                     </View>
+
                     {   
                         !ishasChildCard  &&  <View onClick={this.cleanDateTime} className={indexStyles.deleteTimeIcon}>
                                 <Text className={`${globalStyles.global_iconfont}`}>&#xe639;</Text>
