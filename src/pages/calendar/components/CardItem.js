@@ -16,7 +16,6 @@ import { PROJECT_TEAM_CARD_INTERVIEW, PROJECT_FLOW_FLOW_ACCESS,MEETING_APPID } f
 export default class CardItem extends Component {
   gotoListItemDetails = (itemValue) => {
     const { flag, content_id, board_id, parent_id } = itemValue;
-    
     if (itemValue && ["0"].indexOf(flag) !== -1) {
       let tasks_id = parent_id ? parent_id : content_id;
       // 判断有没有任务访问权限 
@@ -45,22 +44,25 @@ export default class CardItem extends Component {
         })
       }
     } else if (itemValue && ["3"].indexOf(flag) !== -1) {
-        Taro.showToast({
-          title: '里程碑详情正在开发中···',
-          icon: 'none',
-          duration: 2000
-        }) 
+        Taro.navigateTo({
+          url: `../../pages/milestoneDetail/index?flag=${flag}&contentId=${content_id}&boardId=${board_id}&back_icon=arrow_icon`
+        });
     }else if (itemValue && ["1"].indexOf(flag) !== -1)  {
-        Taro.navigateToMiniProgram({
-          appId: MEETING_APPID,
-          path: '/pages/meetingDetails/index',
-          extraData: {
-            id: content_id
-          },        
-          complete: (val) => {
-            console.log(val)
-          }
-        })
+      Taro.showToast({
+        title: '会议详情正在开发中···',
+        icon: 'none',
+        duration: 2000
+      }) 
+        // Taro.navigateToMiniProgram({
+        //   appId: MEETING_APPID,
+        //   path: '/pages/meetingDetails/index',
+        //   extraData: {
+        //     id: content_id
+        //   },        
+        //   complete: (val) => {
+        //     console.log(val)
+        //   }
+        // })
     }
   };
 
@@ -131,7 +133,6 @@ export default class CardItem extends Component {
     } = itemValue;
 
     var meetingUrl = flag == 1 && content_url || rela_url || start_url || join_url;
-
     const users = itemValue["data"] || [];
     var timeStamp = new Date(parseInt(selected_timestamp)).setHours(0, 0, 0, 0), duetimeStamp = new Date(parseInt(due_time)).setHours(0, 0, 0, 0);
     var is_warning = time_warning && (timeStamp > (duetimeStamp - 86400000 * time_warning) || timeStamp == (duetimeStamp - 86400000 * time_warning)) ? true : false;
@@ -238,7 +239,13 @@ export default class CardItem extends Component {
     const isCurrentYear = nowTime.substring(0,4) == eTime.substring(0,4) && sTime.substring(0,4) == nowTime.substring(0,4);
     sTime = isSameYear && isCurrentYear ? sTime.substring(5) : sTime;
     eTime = isSameYear && isCurrentYear ? eTime.substring(5) : eTime;
-
+    var timeColor = "#8c8c8c";
+    if(now > duetime && flag != "1" && is_realize != "1") {
+      timeColor = "#F5222D";
+    }
+    if(is_warning && flag == '0' && is_realize == '0' && !(due_time && now > duetime)) {
+      timeColor = "#FFA543";
+    }
     return (
       // () => flag != "meeting" && flag != "1"  && 
       <View
@@ -260,21 +267,12 @@ export default class CardItem extends Component {
               {moldIcon}
                {content_name || topic}
                <Text>
-              {
-                is_warning && flag == '0' && is_realize == '0' && !(due_time && now > duetime) ? (
-                  <Text className={`${indexStyles.urge} ${indexStyles.iswaring}`}><Text className={`${globalStyles.
-                    global_iconfont} ${indexStyles.urgeicon} `}>&#xe849;</Text>预警</Text>)
-                  : (null)
-              }
-
+             
               {
                 is_urge == '1' && flag == '2' ? (
                   <Text className={indexStyles.urge}><Text className={`${globalStyles.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text> 催办</Text>) : (null)
               }
-              {/* {
-                itemValue.due_time && now > duetime && (flag == '0' || flag == '2') && is_realize == '0' ? (<Text className={indexStyles.urge}><Text className={`${globalStyles.global_iconfont} ${indexStyles.urgeicon}`}>&#xe849;</Text>
-逾期</Text>) : (null)
-              } */}
+            
               </Text>
               </View>
 
@@ -287,9 +285,7 @@ export default class CardItem extends Component {
             <View
               className={`${indexStyles.card_content_middle_bott}`}
               style={{
-                color:
-                  now > duetime && flag != "1" && is_realize != "1"
-                    ? "#F5222D" : "#8c8c8c"
+                color:timeColor 
               }}
             >
               {!due_time
@@ -301,6 +297,17 @@ export default class CardItem extends Component {
                   ? eTime
                   : "截止时间未设置"
                 }`}
+                {
+                itemValue.due_time && now > duetime && (flag == '0' || flag == '2') && is_realize == '0' ? (
+                <Text className={indexStyles.urge}>逾期</Text>)
+                 : (null)
+                }
+                 {
+                is_warning && flag == '0' && is_realize == '0' && !(due_time && now > duetime) ? (
+                  <Text className={`${indexStyles.urge} ${indexStyles.iswaring}`}>预警</Text>
+                  )
+                  : (null)
+              }
             </View>
 
             {(flag == "meeting" || flag == '1') && isToday && (

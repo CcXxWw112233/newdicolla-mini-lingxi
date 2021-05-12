@@ -39,15 +39,13 @@
             font-size   : pxTrans(20);
             color       : rgba(0, 0, 0, 0.85);
             line-height : pxTrans(25);
-            width     : pxTrans(300);
+            width     : pxTrans(200);
         }
-        .card_title_hasChild {
-            width: pxTrans(200) !important;
-        }
+    
         .card_title_place_view {
             padding-top: pxTrans(5);
             margin-top: pxTrans(10);
-            width     : pxTrans(300);
+            width     : pxTrans(200);
             font-size: pxTrans(20);
             overflow:hidden;
             max-height: pxTrans(70);

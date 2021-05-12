@@ -41,7 +41,7 @@
 }
 .iconfont {
     font-size: pxTrans(25) ;
-    color: #3D7EFF !important;
+    color: #5FA6FF !important;
 }
 .content_title_text {
     font-size: pxTrans(16);
@@ -52,8 +52,9 @@
 .content_confirm {
     margin-top: pxTrans(15);
     line-height: pxTrans(32);
-    color: white;
-    background: linear-gradient(270deg, #4FADFF 0%, #4790FF 100%);
+    // color: white;
+    color: #212434;
+    // background: linear-gradient(270deg, #4FADFF 0%, #4790FF 100%);
     font-size: pxTrans(16);
     height: pxTrans(32);
     padding: 0 pxTrans(15);

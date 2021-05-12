@@ -1,4 +1,4 @@
-@import "../../../../gloalSet/styles/constant";
+@import "../../../gloalSet/styles/constant";
 
 .list_item {
     min-height    : pxTrans(56);
@@ -105,15 +105,17 @@
                 font-size   : pxTrans(25);
                 margin-left : pxTrans(20);
                 margin-right: pxTrans(10);
-
             }
          
             .song_task_name {
-                height: pxTrans(56);
+                padding-top: pxTrans(13);
+                line-height: pxTrans(30);
                 flex       : 1;
                 font-size  : pxTrans(16);
                 font-weight: 400;
                 color      : rgba(0, 0, 0, 0.65);
+                width      : pxTrans(300);
+
             }
 
             .list_item_rigth_iconnext {

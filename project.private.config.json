@@ -183,6 +183,12 @@
           "pathName": "pages/phoneNumberLogin/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "pages/milestoneDetail/index",
+          "pathName": "pages/milestoneDetail/index",
+          "query": "",
+          "scene": null
         }
       ]
     }

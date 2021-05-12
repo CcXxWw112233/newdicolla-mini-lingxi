@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text, Picker, Input } from '@tarojs/components'
+import { View, Text, Picker, Input,Progress } from '@tarojs/components'
 import indexStyles from './index.scss'
 import globalStyles from '../../../gloalSet/styles/globalStyles.scss'
 import { timestampToDateZH, timestampToHoursMinZH, timestampToTime, timestampToHM, timestampToDateTimeLine } from '../../../utils/basicFunction'
@@ -26,9 +26,14 @@ export default class TasksTime extends Component {
 
     componentDidMount() {
 
-        const { cellInfo = {}, } = this.props
+        const { cellInfo = {},time_warning } = this.props
         const { sTime, eTime, } = cellInfo       
         var obj = dateTimePicker('YMDHM');
+        var now = Date.parse(new Date()) / 1000;
+
+        var is_overdue = eTime && now > eTime;
+        var is_warning = time_warning && (now > (eTime - 86400000 * time_warning) || now == (eTime - 86400000 * time_warning)) ? true : false;
+
         var startT = formatTypePickerDateTime(obj.dateTimeArray, obj.dateTime,'YMDHM')
         this.setState({
             task_start_date: timestampToTime(sTime),
@@ -38,7 +43,9 @@ export default class TasksTime extends Component {
             dateTime: obj.dateTime,
             dateTimeArray: obj.dateTimeArray,
             startT: startT,
-            currentSelectMonth:startT.split("-")[1]
+            currentSelectMonth:startT.split("-")[1],
+            is_overdue:is_overdue,
+            is_warning:is_warning
         })
     }
 
@@ -290,9 +297,9 @@ export default class TasksTime extends Component {
         }
     } 
     render() {
-
-        const { start_date_str, start_time_str, due_date_str, due_time_str,isStartprint,new_card_name,dateTime,dateTimeArray } = this.state
-        const { cellInfo = {}, isPermission, flag, completeAuth, editAuth } = this.props
+       
+        const { start_date_str, start_time_str, due_date_str, due_time_str,isStartprint,new_card_name,dateTime,dateTimeArray,is_overdue,is_warning } = this.state
+        const { cellInfo = {}, isPermission, flag, completeAuth, editAuth,ishasChildCard,progress_percent,isHasSubFinish,isHasNoFinish } = this.props
         const card_name = (new_card_name && card_name != cellInfo.cardDefinition) ? new_card_name : cellInfo.cardDefinition
         var sTime = cellInfo.sTime ? timestampToDateTimeLine(cellInfo.sTime, 'YMDHM',true) : '开始时间'
         var eTime = cellInfo.eTime ? timestampToDateTimeLine(cellInfo.eTime, 'YMDHM',true) : '结束时间'
@@ -307,22 +314,45 @@ export default class TasksTime extends Component {
         eTime = eTime ? eTime : due_date_str;
         const card_id = cellInfo.cardId
         const is_Realize = cellInfo.isRealize
-
         //当前时间
         var now = Date.parse(new Date());
         var unix = now / 1000
-
+        var istimeoverdue = ishasChildCard && is_overdue;
+        var istime_warning =ishasChildCard && is_warning;
+        var taskStatus = '';
+        if (ishasChildCard) {
+            if((!isHasNoFinish && is_Realize === '0') || !isHasSubFinish) {
+                taskStatus = '未到期';
+            } else if(!isHasNoFinish) {
+                  taskStatus = '已完成';
+                   if(is_overdue && is_Realize === '1') {
+                    taskStatus = '逾期完成';
+                }  else if(is_Realize === '1' && !is_overdue){
+                    taskStatus = '按时完成';
+                } 
+            } else if (isHasSubFinish && isHasNoFinish) {
+                taskStatus = '进行中';
+            }
+        } else {
+            if(is_Realize === '0') {
+                taskStatus = '未到期';
+            } else if(is_overdue && is_Realize === '1') {
+                taskStatus = '逾期完成';
+            }  else if(is_Realize === '1' && !is_overdue){
+                taskStatus = '按时完成';
+            } 
+        }
         return (
             <View className={indexStyles.view_Style}>
                 <View className={indexStyles.input_View}>
                     <View className={`${indexStyles.list_item_iconnext}`} onClick={this.tasksRealizeStatus} >
                         {flag === '0' || flag === '2' ? (
                             //任务
-                            is_Realize === '1' && isPermission === true ? (
+                        ishasChildCard ? '' : (is_Realize === '1' && isPermission === true  ? (
                                 <Text className={`${globalStyles.global_iconfont} ${globalStyles.status_iconfont}`} style={{ color: '#1890FF' }}>&#xe844;</Text>
                             ) : (
                                 <Text className={`${globalStyles.global_iconfont} ${globalStyles.status_iconfont}`}>&#xe6df;</Text>
-                            )
+                            ))
                         ) : (
                             //日程
                             //当前时间小于结束时间, 日程为: 完成状态
@@ -333,11 +363,12 @@ export default class TasksTime extends Component {
                             )
                         )}
                     </View>
-                    <View onClick={this.reminderToast} className={indexStyles.card_title_View}>
+                    
+                    <View onClick={this.reminderToast} className={`${indexStyles.card_title_View} ${indexStyles.card_top_View}`}>
                         {
                             isStartprint ? (
                                 <Textarea
-                                className={indexStyles.card_title}
+                                className={`${indexStyles.card_title}  ${indexStyles.card_title_hasChild}`}
                                 placeholder='填写名称'
                                 value={card_name}
                                 confirmType='完成'
@@ -346,74 +377,52 @@ export default class TasksTime extends Component {
                                 disabled={!isStartprint}
                             ></Textarea>
                             ) :(
+                                // ${ishasChildCard ? indexStyles.card_title_hasChild: ''}
                                 <View
-                                className={indexStyles.card_title_place_view}
+                                className={`${indexStyles.card_title_place_view}  ${indexStyles.card_title_hasChild}`}
                                 onClick={this.getfouces}
                                 >{card_name}</View>
                             )
                         }
                     </View>
+                    {
+                        taskStatus && <View className={indexStyles.card_status}>{taskStatus}</View>
+                    }
                 </View>
-                <View className={indexStyles.line_View}></View>
-                <View className={indexStyles.selectionTime}>
+                {
+                    ishasChildCard ? (
+                       <View className={indexStyles.progress_View}>
+                            <Progress percent={progress_percent}  strokeWidth={8} borderRadius={4} showInfo={true}  active activeColor='#95DE64' />
+                       </View>
+                    ):(<View className={indexStyles.line_View}></View>)
+                }
+                <View className={`${indexStyles.selectionTime} ${istimeoverdue ? indexStyles.selectionTime_overdue:''} ${istime_warning ? indexStyles.selectionTime_warning:''}`}>
                     <View className={indexStyles.start_content}>
-                        {/*
-                        <View className={indexStyles.start_date_style} onClick={this.reminderToast}>
-                            <Picker mode='date' onChange={this.onDateChangeStart} disabled={!editAuth} className={indexStyles.startTime} >
-                                {sTime && sTime != '0' ? timestampToDateZH(sTime) : start_date_str}
-                            </Picker>
-                        </View>
-
-                        <View className={indexStyles.start_time_style}>
-                            <Picker mode='time' onChange={this.onTimeChangeStart} disabled={!editAuth} className={indexStyles.startTime}>
-                                {sTime ? timestampToHoursMinZH(sTime) : start_time_str}
-                            </Picker>
-                        </View>
-                    */}
-                    <Picker mode='multiSelector'  onColumnChange={this.onColumnPickerChange} value={dateTime} onChange={this.changeStartDateTime} range={dateTimeArray}>
+                    <Picker mode='multiSelector'  onColumnChange={this.onColumnPickerChange} disabled={ishasChildCard} value={dateTime} onChange={this.changeStartDateTime} range={dateTimeArray}>
                         <View>{sTime}</View>
                     </Picker>
-                        {/* {
-                         sTime && sTime != '0' ? (<View className={`${indexStyles.list_item_left_iconnext}`} onClick={this.cleanStartDateTime}>
-                                <Text className={`${globalStyles.global_iconfont}`}>&#xe77d;</Text>
-                            </View>) : <View></View>
-                        }  */}
-
                     </View>
-                    <Text className={`${globalStyles.global_iconfont} ${indexStyles.time_Icon_style}`}>&#xe654;</Text>
+                    <Text className={`${globalStyles.global_iconfont} ${indexStyles.time_Icon_style} ${istimeoverdue ? indexStyles.selectionTime_overdue:''} ${istime_warning ? indexStyles.selectionTime_warning:''}`}>&#xe654;</Text>
                     <View className={indexStyles.due_content} onClick={this.reminderToast}>
-                        {/** 
-                        <View className={indexStyles.due_date_style}>
-                            <Picker mode='date' onChange={this.onDateChangeDue} disabled={!editAuth} className={indexStyles.endTime}>
-                                {eTime && eTime != '0' ? timestampToDateZH(eTime) : due_date_str}
-                            </Picker>
-                        </View>
-
-                        <View className={indexStyles.due_time_style}>
-                            <Picker mode='time' onChange={this.onTimeChangeDue} disabled={!editAuth} className={indexStyles.endTime}>
-                                {eTime ? timestampToHoursMinZH(eTime) : due_time_str}
-                            </Picker>
-                        </View>
-                        */}
-
                         <Picker mode='multiSelector' value={dateTime} onChange={this.
-                                changeEndDateTime} onColumnChange={this.onColumnPickerChange} range={dateTimeArray}>
+                                changeEndDateTime} onColumnChange={this.onColumnPickerChange} disabled={ishasChildCard} range={dateTimeArray}>
                             <View>{eTime}</View>
                         </Picker>
-                            {/* {
-                                eTime && eTime != '0' ? (<View className={`${indexStyles.list_item_right_iconnext}`} onClick={this.cleanDueDateTime}>
-                                    <Text className={`${globalStyles.global_iconfont}`}>&#xe77d;</Text>
-                                </View>
-                                ) : <View></View>
-                            } */}
                     </View>
-                    {
-                        eTime && eTime != '0' ? (
-                            <View onClick={this.cleanDateTime} className={indexStyles.deleteTimeIcon}>
+
+                    {   
+                        !ishasChildCard  &&  <View onClick={this.cleanDateTime} className={indexStyles.deleteTimeIcon}>
                                 <Text className={`${globalStyles.global_iconfont}`}>&#xe639;</Text>
                             </View>
-                        ) : <View></View>
                     }
+
+                    {
+                        ishasChildCard && is_overdue && <View className={`${indexStyles.card_mark} ${indexStyles.card_mark_overdue}`}>逾期</View>
+                    }
+                    {
+                        istime_warning && <View className={`${indexStyles.card_mark} ${indexStyles.card_mark_warning}`}>预警</View>
+                    }
+                    
                 </View>
                 <View className={indexStyles.line_View}></View>
             </View >

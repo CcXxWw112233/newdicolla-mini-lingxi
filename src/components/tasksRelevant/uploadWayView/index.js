@@ -50,14 +50,16 @@ export default class SingleChoicePicker extends Component {
      * @param {*} item 
      */
   selectItem = (index) => {
-    console.log(index)
     if(index == 0) {
+        // 文件上传
         typeof this.props.uploadFile == "function" &&
         this.props.uploadFile();
     } else if(index == 1) {
+        // 微信上传
         typeof this.props.uploadWXFile == "function" &&
         this.props.uploadWXFile();
     } else if(index == 2) {
+        // 删除(子任务弹窗)
         typeof this.props.deleteAction == "function" &&
         this.props.deleteAction();
     }
@@ -72,25 +74,35 @@ export default class SingleChoicePicker extends Component {
         typeof this.props.onClickAction == "function" &&
         this.props.onClickAction();
     }
+    /**
+     * 编辑子任务
+     */
+    editSubTask() {
+        typeof this.props.onClickAction == "function" &&
+        this.props.editSubTask();
+    }
     render() {
         const { singleList = [], } = this.state
-        const {title} = this.props
+        const {title,mold} = this.props
         return (
             <View className={indexStyles.index} onTouchMove={(e) => {e.stopPropagation()}} onClick={this.cancelSelect}>
-
-                {/* <Picker rangeKey={rangeKey} mode='selector' disabled={!editAuth} range={singleList} onChange={this.onChange}>
-                    <View className={indexStyles.projectNameCellPicker}>
-                        {current_select_name != '未选择' || !title ? current_select_name : title}
-                    </View>
-                </Picker> */}
                    <View className={indexStyles.content_view} onClick={(e) => {e.stopPropagation()}}>
                     <View className={indexStyles.content_topline_view}></View>
                     <View className={indexStyles.content_title_view}>
                        <View className={indexStyles.content_title_left}>
-                          <View className={`${globalStyle.global_iconfont} ${indexStyles.iconfont}`}>&#xe6a8;</View>
+                        {
+                            mold =='subTask' ? (
+                                <View className={`${globalStyle.global_iconfont} ${indexStyles.iconfont}`}>&#xe867;</View>
+                            ):(
+                                <View className={`${globalStyle.global_iconfont} ${indexStyles.iconfont}`}>&#xe6a8;</View>
+                            )
+                        }
                           <View className={indexStyles.content_title_text}>{title}</View>
                        </View>
-                       {/* <View className={indexStyles.content_confirm} onClick={this.confirmSelect}>确定</View> */}
+                       {
+                           mold =='subTask' && <View className={indexStyles.content_confirm} onClick={this.editSubTask}>编辑</View>
+                       }
+                       
                     </View>
                     <ScrollView className={indexStyles.scrollview} scrollY scrollWithAnimation>
                        {

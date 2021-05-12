@@ -1,0 +1,20 @@
+@import "../../gloalSet/styles/constant";
+.topbg_View {
+    background:rgba(24, 144, 255, 1);
+    height:250px;
+    width:100%;
+    position: fixed;
+    top:0
+}
+.tasks_contant {
+    border-radius:pxTrans(20) pxTrans(20) 0 0;
+    width: 100%;
+    position: absolute;
+    overflow: hidden;
+    height: 100vh;
+    bottom: pxTrans(0);
+    background-color: white;
+}
+.bottomPlace_View {
+    height: pxTrans(70);
+}

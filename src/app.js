@@ -77,6 +77,7 @@ class App extends Component {
       "pages/jumpToMeeting/index",
       // "pages/OnlineTableWebView/index",
       "pages/qrcodeHistory/index",
+      // "pages/milestoneDetail/index"
     ],
     "subpackages": [
       {
@@ -134,7 +135,15 @@ class App extends Component {
           "index",
           "components/AddDesribeTaskText/index"
         ]
+      },
+      {
+
+        "root": "pages/milestoneDetail",
+        "pages": [
+          "index",
+        ]
       }
+
     ],
     permission: {
       "scope.userLocation": {
