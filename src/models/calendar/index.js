@@ -17,7 +17,8 @@ import {
   select_sche_card_list,
   no_sche_card_list,
   select_is_reach_bottom,
-  calendar_mark_list
+  calendar_mark_list,
+  noSchedulesCurrentParams
 } from "./selects";
 import { getCurrentOrgByStorage } from "../../utils/basicFunction";
 
@@ -40,7 +41,8 @@ export default {
     is_mask_show_Updatename: false,
     navTitle: '',
     isCartListScroll: false,
-    isHandleOpen: false
+    isHandleOpen: false,
+    noSchedulesCurrentParams:{}
   },
   effects: {
     // 获取当前组织项目列表
@@ -156,9 +158,8 @@ export default {
       const page_number = yield select(select_page_number);
       const current_no_sche_card_list = yield select(no_sche_card_list);
       const mark_list = yield select(calendar_mark_list);
-
-      // console.log(payload)
-      const res = yield call(getNoScheCardList, payload)
+      const currentParams = yield select(noSchedulesCurrentParams);
+      const res = yield call(getNoScheCardList, currentParams)
 
       // const res = yield call(getNoScheCardList, {
       // _organization_id: current_org,

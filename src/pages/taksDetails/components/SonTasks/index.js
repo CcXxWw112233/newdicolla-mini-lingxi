@@ -806,7 +806,7 @@ export default class index extends Component {
                         child_data && child_data.map((value, key) => {
                             const { card_name, deliverables = [], is_realize,card_id,due_time,start_time,time_warning } = value
                             var is_warning = time_warning && (now > (due_time - 86400000 * time_warning) || now == (due_time - 86400000 * time_warning)) ? true : false;
-                            var is_overdue = due_time && now > due_time && is_realize == '0'
+                            var is_overdue = due_time && now > due_time
                             return (
                                 <View key={key} className={`${indexStyles.content}`}>
                                     <View className={`${indexStyles.song_row_instyle} ${currentSubTaskId == card_id ? indexStyles.currentSubTask_content:''} `} >

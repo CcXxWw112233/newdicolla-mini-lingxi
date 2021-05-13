@@ -413,11 +413,13 @@ export default class TasksTime extends Component {
                         istime_warning && 
                         <View className={`${indexStyles.card_mark} ${indexStyles.card_mark_warning}`}>预警</View>
                     }
-                    {   
-                        !ishasChildCard  &&  <View onClick={this.cleanDateTime} className={indexStyles.deleteTimeIcon}>
-                                <Text className={`${globalStyles.global_iconfont}`}>&#xe639;</Text>
-                            </View>
-                    }
+                     
+                    <View onClick={this.cleanDateTime} className={indexStyles.deleteTimeIcon}>
+                        {
+                            !ishasChildCard  &&<Text className={`${globalStyles.global_iconfont}`}>&#xe639;</Text> 
+                        }
+                    </View>
+                    
 
                 </View>
                 <View className={indexStyles.line_View}></View>

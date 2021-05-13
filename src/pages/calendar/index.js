@@ -271,17 +271,24 @@ export default class Calendar extends Component {
   //获取尚未排期列表
   getNoScheCardList = () => {
     const { dispatch } = this.props;
+    var currentParams = {
+      org_id: '0',
+      board_ids: [],
+      search_content:'',
+      query_milestone: ['all'],
+      query_card: ['all'],
+      query_flow: ['all'],
+      query_meeting: ['all'],
+    }
+    dispatch({
+      type: "calendar/updateDatas",
+      payload: {
+          noSchedulesCurrentParams: currentParams
+      }
+    });
     dispatch({
       type: "calendar/getNoScheCardList",
-      payload: {
-        org_id: '0',
-        board_ids: [],
-        search_content:'',
-        query_milestone: ['all'],
-        query_card: ['all'],
-        query_flow: ['all'],
-        query_meeting: ['all'],
-      }
+      payload: currentParams
     });
   };
   // 获取排期列表

@@ -141,21 +141,28 @@ export default class Calendar extends Component {
             return item.length > 0;
         })
         var isall = newArr.length > 0 ? [] : ['all'];
+        var currentParams = {
+            org_id: '0',
+            search_content:searchKey ? searchKey : '',
+            board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] :
+                boardidListArr) : [],
+            query_milestone: moldArr[0] && moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) : isall,
+            query_card: moldArr[1] && moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : isall
+            ,
+            query_flow: moldArr[2] && moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : isall
+            ,
+            query_meeting: moldArr[3] && moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) : isall,
+        }
         dispatch({
-            type: "calendar/getNoScheCardList",
+            type: "calendar/updateDatas",
             payload: {
-                org_id: '0',
-                search_content:searchKey ? searchKey : '',
-                board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] :
-                    boardidListArr) : [],
-                query_milestone: moldArr[0] && moldArr[0].length > 0 ? (moldArr[0][0] == 'all' ? ['all'] : moldArr[0]) : isall,
-                query_card: moldArr[1] && moldArr[1].length > 0 ? (moldArr[1][0] == 'all' ? ['all'] : moldArr[1]) : isall
-                ,
-                query_flow: moldArr[2] && moldArr[2].length > 0 ? (moldArr[2][0] == 'all' ? ['all'] : moldArr[2]) : isall
-                ,
-                query_meeting: moldArr[3] && moldArr[3].length > 0 ? (moldArr[3][0] == 'all' ? ['all'] : moldArr[3]) : isall,
+                noSchedulesCurrentParams: currentParams
             }
         });
+        dispatch({
+            type: "calendar/getNoScheCardList",
+            payload: currentParams
+        })
     }
 
     onReachBottom() {
