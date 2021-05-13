@@ -59,8 +59,8 @@ export default class addSonTask extends Component {
         if(!(JSON.stringify(subTaskData) == "{}" || subTaskData == null)) {
             cardId = subTaskData.card_id;
             inputText = subTaskData.card_name;
-            start_date_str = subTaskData.start_time ? timestampToDateTimeLine(subTaskData.start_time, 'YMDHM',true) : '开始时间'
-            due_date_str = subTaskData.due_time ? timestampToDateTimeLine(subTaskData.due_time, 'YMDHM',true) : '结束时间',
+            start_date_str = subTaskData.start_time ? timestampToDateTimeLine(subTaskData.start_time, 'YMDHM') : '开始时间'
+            due_date_str = subTaskData.due_time ? timestampToDateTimeLine(subTaskData.due_time, 'YMDHM') : '结束时间',
             isUpdate = true
             dispatch({
                 type: 'tasks/updateDatas',
