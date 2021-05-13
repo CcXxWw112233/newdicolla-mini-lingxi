@@ -70,7 +70,7 @@ export default class Calendar extends Component {
 
     componentDidShow() {
         this.getOrgBoardList();
-        // this.getNoScheCardList();
+        this.getNoScheCardList();
     }
     componentDidHide() {
         const { dispatch } = this.props;
