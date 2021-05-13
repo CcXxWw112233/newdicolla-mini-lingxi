@@ -313,8 +313,8 @@ export default class TasksTime extends Component {
         var now = Date.parse(new Date()) / 1000;
         var is_overdue = cellInfo.eTime && now > cellInfo.eTime;
         var is_warning = time_warning && (now > (cellInfo.eTime - 86400000 * time_warning) || now == (cellInfo.eTime - 86400000 * time_warning)) ? true : false;
-        var istimeoverdue = ishasChildCard && is_overdue;
-        var istime_warning =ishasChildCard && is_warning;
+        var istimeoverdue =  is_overdue;
+        var istime_warning =  is_warning;
         var taskStatus = '';
         if (ishasChildCard) {
             if((!isHasNoFinish && is_Realize === '0') || !isHasSubFinish) {
@@ -405,22 +405,20 @@ export default class TasksTime extends Component {
                             <View>{eTime}</View>
                         </Picker>
                     </View>
-
-                    {   
-                        !ishasChildCard  &&  <View onClick={this.cleanDateTime} className={indexStyles.deleteTimeIcon}>
-                                <Text className={`${globalStyles.global_iconfont}`}>&#xe639;</Text>
-                            </View>
-                    }
-
                     {
-                        ishasChildCard && is_overdue && <View className={`${indexStyles.card_mark} ${indexStyles.card_mark_overdue}`}>逾期                            
+                        istimeoverdue && <View className={`${indexStyles.card_mark} ${indexStyles.card_mark_overdue}`}>逾期                            
                         </View>
                     }
                     {
                         istime_warning && 
                         <View className={`${indexStyles.card_mark} ${indexStyles.card_mark_warning}`}>预警</View>
                     }
-                    
+                    {   
+                        !ishasChildCard  &&  <View onClick={this.cleanDateTime} className={indexStyles.deleteTimeIcon}>
+                                <Text className={`${globalStyles.global_iconfont}`}>&#xe639;</Text>
+                            </View>
+                    }
+
                 </View>
                 <View className={indexStyles.line_View}></View>
             </View >

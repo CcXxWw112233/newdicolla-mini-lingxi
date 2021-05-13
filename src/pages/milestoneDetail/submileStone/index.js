@@ -20,7 +20,7 @@ export default class index extends Component {
 
                 <View className={indexStyles.title_row}>
                     <View className={`${indexStyles.list_item_left_iconnext}`}>
-                        <Text className={`${globalStyle.global_iconfont}`}>&#xe867;</Text>
+                        <Text className={`${globalStyle.global_iconfont}`}>&#xe850;</Text>
                     </View>
                     <View className={indexStyles.list_item_name}>关联里程碑</View>
 

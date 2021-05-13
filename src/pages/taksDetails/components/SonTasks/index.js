@@ -37,10 +37,8 @@ export default class index extends Component {
             isAddSonTaskShow: false,
             subTaskData:{}
         })
-        if(!isUpdate) {
-            typeof this.props.onClickAction == "function" &&
-            this.props.onClickAction();
-        }
+        typeof this.props.onClickAction == "function" &&
+        this.props.onClickAction();  
     }
     /**
      * 新增子任务弹窗
@@ -770,6 +768,7 @@ export default class index extends Component {
                 })
             }
         })
+        typeof this.props.onClickAction == 'function' && this.props.onClickAction()
     }
     
 
