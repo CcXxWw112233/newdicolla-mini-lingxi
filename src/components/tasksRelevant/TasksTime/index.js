@@ -312,9 +312,11 @@ export default class TasksTime extends Component {
         //当前时间
         var now = Date.parse(new Date()) / 1000;
         var is_overdue = cellInfo.eTime && now > cellInfo.eTime;
-        var is_warning = time_warning && (now > (cellInfo.eTime - 86400000 * time_warning) || now == (cellInfo.eTime - 86400000 * time_warning)) ? true : false;
+        // var is_warning = time_warning && (now < (cellInfo.eTime - 86400000 * time_warning) || now == (cellInfo.eTime - 86400000 * time_warning)) ? true : false;
+        var timeStamp = new Date(parseInt(now)).setHours(0, 0, 0, 0), duetimeStamp = new Date(parseInt(cellInfo.eTime)).setHours(0, 0, 0, 0);
+        var is_warning = time_warning && (timeStamp > (duetimeStamp - 86400000 * time_warning) || timeStamp == (duetimeStamp - 86400000 * time_warning)) ? true : false;
         var istimeoverdue =  is_overdue;
-        var istime_warning =  is_warning;
+        var istime_warning =  is_warning && is_Realize === '0';
         var taskStatus = '';
         if (ishasChildCard) {
             if((!isHasNoFinish && is_Realize === '0') || !isHasSubFinish) {

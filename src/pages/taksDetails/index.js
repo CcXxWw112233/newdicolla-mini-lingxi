@@ -380,7 +380,7 @@ export default class taksDetails extends Component {
         const milestone_data = tasksDetailDatas["milestone_data"] || "";
         const label_data = tasksDetailDatas["label_data"];
         const child_data = tasksDetailDatas["child_data"];
-        const time_warning = tasksDetailDatas["time_warning"];
+        const time_warning = tasksDetailDatas["time_warning"] || '';
         const is_Function = {
             isExecutors: executors,
             isMilestone: milestone_data.name,
