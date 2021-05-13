@@ -18,10 +18,11 @@ export default class CardItem extends Component {
     const { flag, content_id, board_id, parent_id } = itemValue;
     if (itemValue && ["0"].indexOf(flag) !== -1) {
       let tasks_id = parent_id ? parent_id : content_id;
+      let currentSubTaskId =  parent_id ? content_id : '';
       // 判断有没有任务访问权限 
       if (judgeJurisdictionProject(board_id, PROJECT_TEAM_CARD_INTERVIEW)) {
         Taro.navigateTo({
-          url: `../../pages/taksDetails/index?flag=${flag}&contentId=${tasks_id}&boardId=${board_id}&back_icon=arrow_icon`
+          url: `../../pages/taksDetails/index?flag=${flag}&contentId=${tasks_id}&boardId=${board_id}&back_icon=arrow_icon&currentSubTaskId=${currentSubTaskId}`
         });
       } else {
         Taro.showToast({

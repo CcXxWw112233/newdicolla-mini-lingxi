@@ -784,7 +784,7 @@ export default class index extends Component {
         })
     }
     render() {
-        const { child_data = [],  tasksDetailDatas = {}, editAuth ,boardId,selectExecutorsList=[]} = this.props
+        const { child_data = [],  tasksDetailDatas = {}, editAuth ,boardId,selectExecutorsList=[],currentSubTaskId} = this.props
         const { list_id, card_id } = tasksDetailDatas
         const { isAddSonTaskShow,isUploadWayViewShow,cartName,isSonTaskExecutorsShow,subTaskData } = this.state
         var now = Date.parse(new Date()) / 1000;
@@ -809,8 +809,8 @@ export default class index extends Component {
                             var is_warning = time_warning && (now > (due_time - 86400000 * time_warning) || now == (due_time - 86400000 * time_warning)) ? true : false;
                             var is_overdue = due_time && now > due_time && is_realize == '0'
                             return (
-                                <View key={key} className={indexStyles.content}>
-                                    <View className={indexStyles.song_row_instyle}>
+                                <View key={key} className={`${indexStyles.content}`}>
+                                    <View className={`${indexStyles.song_row_instyle} ${currentSubTaskId == card_id ? indexStyles.currentSubTask_content:''} `} >
                                         <View className={indexStyles.song_row_left_instyle}>
                                             {
                                                 is_realize == '0' ? (<View className={`${indexStyles.list_item_select_iconnext}`} onClick={() => this.tasksRealizeStatus(card_id, is_realize)}>

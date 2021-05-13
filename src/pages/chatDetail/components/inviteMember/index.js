@@ -113,6 +113,7 @@ allAcatarlist (key,isshowToast) {
 addacatarItem = ( item)=>{
   const {currentBoardDetail = {},dispatch} = this.props;
   var users = currentBoardDetail.users;
+  var {selectAcatarlist} = this.state;
   var isExist = users.some(value => {
     return  value.mobile == item.mobile;
   }) 

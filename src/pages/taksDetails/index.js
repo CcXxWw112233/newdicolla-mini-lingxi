@@ -66,7 +66,7 @@ export default class taksDetails extends Component {
     }
 
     componentDidMount() {
-        const { flag, boardId, contentId, back_icon } = this.$router.params;
+        const { flag, boardId, contentId, back_icon,currentSubTaskId } = this.$router.params;
 
         if (boardId || contentId) {
             Taro.setStorageSync("tasks_detail_boardId", boardId);
@@ -84,7 +84,7 @@ export default class taksDetails extends Component {
         // }
         // }
         // })
-
+        var scrollIntoId = currentSubTaskId ? 's' + currentSubTaskId :'';
         this.setState({
             content_Id: contentId,
             backIcon: back_icon,
@@ -92,10 +92,11 @@ export default class taksDetails extends Component {
             board_id: boardId,
             editFinishTimeAuth: judgeJurisdictionProject(boardId, PROJECT_TEAM_CARD_EDIT_FINISH_TIME),
             deleteAuth: judgeJurisdictionProject(boardId, PROJECT_TEAM_CARD_DELETE),
-
+            currentSubTaskId:currentSubTaskId,
             completeAuth: judgeJurisdictionProject(boardId, PROJECT_TEAM_CARD_COMPLETE),
             uploadAuth: judgeJurisdictionProject(boardId, PROJECT_FILES_FILE_UPLOAD),
-            fileInterViewAuth: judgeJurisdictionProject(boardId,PROJECT_FILES_FILE_INTERVIEW)
+            fileInterViewAuth: judgeJurisdictionProject(boardId,PROJECT_FILES_FILE_INTERVIEW),
+            // scrollIntoId:scrollIntoId
         });
         this.loadTasksDetail(contentId, boardId);
     }
@@ -389,7 +390,7 @@ export default class taksDetails extends Component {
         const SystemInfo = Taro.getSystemInfoSync();
         const statusBar_Height = SystemInfo.statusBarHeight;
         const navBar_Height = SystemInfo.platform == "ios" ? 44 : 48;
-        const { isIphoneX, editAuth, deleteAuth, completeAuth, uploadAuth, fileInterViewAuth, } = this.state;
+        const { isIphoneX, editAuth, deleteAuth, completeAuth, uploadAuth, fileInterViewAuth, currentSubTaskId,scrollIntoId} = this.state;
         const { type_flag } = this.props;
         var { properties = [], fields = [], org_id, board_id } = tasksDetailDatas;
         board_id = Taro.getStorageSync("tasks_detail_boardId")  || tasksDetailDatas.board_id;
@@ -404,6 +405,7 @@ export default class taksDetails extends Component {
         var isHasNoFinish = subTask.length > 0 && subTask[0].data.some(item=>{
            return item.is_realize == '0'
         })
+
         return (
             <View>
                 <CustomNavigation backIcon={backIcon} pop='previous' />
@@ -414,6 +416,7 @@ export default class taksDetails extends Component {
                     }} 
                     scrollY
                     scrollWithAnimation
+                    scrollIntoView={scrollIntoId}
                 >
                 <View>
                     <View className={indexStyles.tasks_time_style}>
@@ -501,6 +504,7 @@ export default class taksDetails extends Component {
                                             )}
                                         </View>
                                         {code == "SUBTASK" ? (
+                                            <View id={scrollIntoId}>
                                             <SonTasks
                                                 child_data={data}
                                                 boardId={board_id}
@@ -510,11 +514,14 @@ export default class taksDetails extends Component {
                                                 uploadAuth={uploadAuth}
                                                 deleteAuth={deleteAuth}
                                                 editAuth={editAuth}
+                                                currentSubTaskId={currentSubTaskId?currentSubTaskId:''}
+                                                
                                                 fileInterViewAuth={fileInterViewAuth}
                                                 onTasksDetailsRealizeStatus={(timeInfo, type) =>
                                                     this.tasksDetailsRealizeStatus(timeInfo, "SonTasks")
                                                 }
                                             />
+                                            </View>
                                         ) : (
                                             ""
                                         )}
@@ -753,7 +760,6 @@ export default class taksDetails extends Component {
                 ) : (
                     <View></View>
                 )}
-                <View className={indexStyles.place_View}></View>
                 {
                     // !editAuth && <View className={indexStyles.obscurationView} onClick={this.showNoAuthToast}></View>
                 }
@@ -763,7 +769,7 @@ export default class taksDetails extends Component {
                         <View className={`${indexStyles.deleteTask}`}>删除任务</View>
                     </View>):(null)
                 }
-                  
+                <View className={indexStyles.place_View}></View>
                 </ScrollView>
           
             </View>
