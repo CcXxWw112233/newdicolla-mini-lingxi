@@ -110,7 +110,7 @@ export default class TasksTime extends Component {
                 {
                     !ishasChildCard ? (
                        <View className={indexStyles.progress_View}>
-                            <Progress percent={progress_percent}  strokeWidth={8} borderRadius={4} showInfo={true}  active activeColor='#95DE64' />
+                            <Progress percent={progress_percent}  strokeWidth={8} activeMode="forwards" duration={10}  borderRadius={4} showInfo={true}  active activeColor='#95DE64' />
                        </View>
                     ):(<View className={indexStyles.line_View}></View>)
                 }

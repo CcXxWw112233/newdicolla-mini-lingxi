@@ -25,24 +25,22 @@
 }
 
 .placeholder_view {
-    height: 150px;
+    height: 10px;
 
 }
 
 .deleteView {
-    position        : fixed;
-    bottom          : 0;
-    left            : 0;
+    // position        : fixed;
+    // bottom          : 0;
+    // left            : 0;
     width           : 100%;
     height          : pxTrans(80);
     background-color: white;
-    z-index         : 100;
+    // z-index         : 100;
     color           : rgba(24, 144, 255, 1);
 }
 .deleteTask {
     z-index: 999;
-
-    margin-top: pxTrans(10);
     height: pxTrans(40);
     width: 80%;
     margin-left: 10%;
@@ -54,7 +52,7 @@
 
 }
 .place_View {
-    height: pxTrans(70);
+    height: pxTrans(50);
     background-color: white;
 
 }

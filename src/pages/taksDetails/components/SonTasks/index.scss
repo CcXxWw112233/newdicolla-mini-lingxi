@@ -77,11 +77,33 @@
             text-align: center;
         }
     }
+    @keyframes myAnimation {
+        0% {
+            background-color: lightgrey;
+            opacity:1;
+        }
+        22% {
+            background-color: white;
+        }
+        77% {
+            background-color: lightgrey;
+        }
+        100% {
+            background-color: white;
+        }
+    }
+      
 
     .content {
         display       : flex;
         flex-direction: column;
         width         : 100%;
+
+        .currentSubTask_content {
+            animation: myAnimation 1s infinite;
+            animation-iteration-count: 1;
+            background-color: yellow !important;
+          }
     }
 
     .song_task_centent {

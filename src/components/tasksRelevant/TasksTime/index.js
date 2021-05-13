@@ -388,7 +388,7 @@ export default class TasksTime extends Component {
                 {
                     ishasChildCard ? (
                        <View className={indexStyles.progress_View}>
-                            <Progress percent={progress_percent}  strokeWidth={8} borderRadius={4} showInfo={true}  active activeColor='#95DE64' />
+                            <Progress percent={progress_percent} activeMode="forwards" duration={10} strokeWidth={8} borderRadius={4} showInfo={true}  active activeColor='#95DE64' />
                        </View>
                     ):(<View className={indexStyles.line_View}></View>)
                 }
@@ -413,10 +413,12 @@ export default class TasksTime extends Component {
                     }
 
                     {
-                        ishasChildCard && is_overdue && <View className={`${indexStyles.card_mark} ${indexStyles.card_mark_overdue}`}>逾期</View>
+                        ishasChildCard && is_overdue && <View className={`${indexStyles.card_mark} ${indexStyles.card_mark_overdue}`}>逾期                            
+                        </View>
                     }
                     {
-                        istime_warning && <View className={`${indexStyles.card_mark} ${indexStyles.card_mark_warning}`}>预警</View>
+                        istime_warning && 
+                        <View className={`${indexStyles.card_mark} ${indexStyles.card_mark_warning}`}>预警</View>
                     }
                     
                 </View>
