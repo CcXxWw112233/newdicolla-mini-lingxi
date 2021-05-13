@@ -93,17 +93,24 @@ export default class Calendar extends Component {
             return item.length > 0;
         })
         var isall = newArr1.length > 0 ? [] : ['all'];
+        var currentParams = {
+            org_id: '0',
+            search_content:searchKey ? searchKey : '',
+            board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] : boardidListArr) : [],
+            query_milestone: newArr[0] && newArr[0].length > 0 ? (newArr[0][0] == 'all' ? ['all'] : newArr[0]) : isall,
+            query_card: newArr[1] && newArr[1].length > 0 ? (newArr[1][0] == 'all' ? ['all'] : newArr[1]) : isall,
+            query_flow: newArr[2] && newArr[2].length > 0 ? (newArr[2][0] == 'all' ? ['all'] : newArr[2]) : isall,
+            query_meeting: newArr[3] && newArr[3].length > 0 ? (newArr[3][0] == 'all' ? ['all'] : newArr[3]) : isall,
+        }
+        dispatch({
+            type: "calendar/updateDatas",
+            payload: {
+                noSchedulesCurrentParams: currentParams
+            }
+        });
         dispatch({
             type: "calendar/getNoScheCardList",
-            payload: {
-                org_id: '0',
-                search_content:searchKey ? searchKey : '',
-                board_ids: boardidListArr && boardidListArr.length > 0 ? (boardidListArr[0] == '0' ? [] : boardidListArr) : [],
-                query_milestone: newArr[0] && newArr[0].length > 0 ? (newArr[0][0] == 'all' ? ['all'] : newArr[0]) : isall,
-                query_card: newArr[1] && newArr[1].length > 0 ? (newArr[1][0] == 'all' ? ['all'] : newArr[1]) : isall,
-                query_flow: newArr[2] && newArr[2].length > 0 ? (newArr[2][0] == 'all' ? ['all'] : newArr[2]) : isall,
-                query_meeting: newArr[3] && newArr[3].length > 0 ? (newArr[3][0] == 'all' ? ['all'] : newArr[3]) : isall,
-            }
+            payload: currentParams
         });
         this.isShowCheckMenu(boardidListArr.toString(), newArr)
 

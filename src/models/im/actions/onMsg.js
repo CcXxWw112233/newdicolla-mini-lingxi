@@ -256,7 +256,7 @@ function onMsg(msg) {
       type: 'calendar/getOrgBoardList',
       payload: {}
     })
-
+    
     dispatch({
       type: 'calendar/getNoScheCardList',
       payload: {}
