@@ -313,8 +313,8 @@ export default class TasksTime extends Component {
         var now = Date.parse(new Date()) / 1000;
         var is_overdue = cellInfo.eTime && now > cellInfo.eTime;
         // var is_warning = time_warning && (now < (cellInfo.eTime - 86400000 * time_warning) || now == (cellInfo.eTime - 86400000 * time_warning)) ? true : false;
-        var timeStamp = new Date(parseInt(now)).setHours(0, 0, 0, 0), duetimeStamp = new Date(parseInt(cellInfo.eTime)).setHours(0, 0, 0, 0);
-        var is_warning = time_warning && (timeStamp > (duetimeStamp - 86400000 * time_warning) || timeStamp == (duetimeStamp - 86400000 * time_warning)) ? true : false;
+        var timeStamp = new Date().setHours(0, 0, 0, 0), duetimeStamp = new Date(parseInt(cellInfo.eTime * 1000)).setHours(0, 0, 0, 0);
+        var is_warning = time_warning && duetimeStamp > timeStamp && (timeStamp > (duetimeStamp - 86400000 * time_warning) || timeStamp == (duetimeStamp - 86400000 * time_warning)) ? true : false;
         var istimeoverdue =  is_overdue;
         var istime_warning =  is_warning && is_Realize === '0';
         var taskStatus = '';
@@ -340,6 +340,7 @@ export default class TasksTime extends Component {
                 taskStatus = '按时完成';
             } 
         }
+        console.log('ssssssssssssss',istime_warning,duetimeStamp,timeStamp,time_warning,86400000 * time_warning,duetimeStamp - 86400000 * time_warning)
         return (
             <View className={indexStyles.view_Style}>
                 <View className={indexStyles.input_View}>
