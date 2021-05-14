@@ -26,7 +26,6 @@ export default {
             sourcePage: payload.sourcePage,
           }
         })
-
       } else {
         const res_code = res.code
         if ('4013' == res_code) {
