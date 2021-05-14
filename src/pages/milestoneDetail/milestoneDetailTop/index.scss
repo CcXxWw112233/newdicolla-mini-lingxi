@@ -96,50 +96,6 @@
             text-align     : center;
             display        : flex;
             flex-direction : row;
-            
-            .start_date_style {
-                margin   : pxTrans(5);
-                font-size: pxTrans(13);
-            }
-
-            .start_time_style {
-                margin: pxTrans(5);
-                color : #608DE5;
-            }
-
-            .list_item_left_iconnext {
-                color       : rgb(0, 0, 0, 0.25);
-                font-size   : pxTrans(20);
-                margin-left : pxTrans(5);
-                margin-right: pxTrans(5);
-            }
-        }
-        .time_Icon_style {
-            line-height: pxTrans(64);
-            color: #9EA6C2;
-        }
-        .due_content {
-            justify-content: center;
-            align-items    : center;
-            text-align     : center;
-            display        : flex;
-            flex-direction : row;
-
-            .due_date_style {
-                margin: pxTrans(5);
-            }
-            .due_time_style {
-                margin: pxTrans(5);
-                color : #608DE5;
-            }
-
-
-            .list_item_right_iconnext {
-                color       : rgb(0, 0, 0, 0.25);
-                font-size   : pxTrans(20);
-                margin-left : pxTrans(5);
-                margin-right: pxTrans(5);
-            }
         }
     }
     .deleteTimeIcon {

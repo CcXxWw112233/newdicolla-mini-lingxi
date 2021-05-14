@@ -208,18 +208,26 @@ export default class Calendar extends Component {
             moldArr: [[], [], [], []],
             selectedMenuValueList: [[], [], [], []],
         })
+        var currentParams =  {
+            org_id: '0',
+            search_content:searchKey ? searchKey : '',
+            board_ids: [],
+            query_milestone: ['all'],
+            query_card: ['all'],
+            query_flow: ['all'],
+            query_meeting: ['all'],
+        }
         dispatch({
-            type: "calendar/getNoScheCardList",
+            type: "calendar/updateDatas",
             payload: {
-                org_id: '0',
-                search_content:searchKey ? searchKey : '',
-                board_ids: [],
-                query_milestone: ['all'],
-                query_card: ['all'],
-                query_flow: ['all'],
-                query_meeting: ['all'],
+                noSchedulesCurrentParams: currentParams
             }
         });
+        dispatch({
+            type: "calendar/getNoScheCardList",
+            payload: currentParams
+        });
+     
         typeof this.props.isShowCheckMenu == "function" &&
             this.props.isShowCheckMenu(false, boardidList, moldArr);
     }

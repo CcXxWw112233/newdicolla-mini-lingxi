@@ -76,7 +76,6 @@ export default class TasksTime extends Component {
                 <View className={indexStyles.input_View}>
                     <View className={`${indexStyles.list_item_iconnext}`} onClick={this.tasksRealizeStatus} >
                         {
-                            //任务
                         !ishasChildCard ? '' : (is_finished === '1'  ? (
                                 <Text className={`${globalStyles.global_iconfont} ${globalStyles.status_iconfont}`} style={{ color: '#1890FF' }}>&#xe844;</Text>
                             ) : (
@@ -120,14 +119,6 @@ export default class TasksTime extends Component {
                         <View>{endtime}</View>
                     {/* </Picker> */}
                     </View>
-                    {/* <Text className={`${globalStyles.global_iconfont} ${indexStyles.time_Icon_style} ${istimeoverdue ? indexStyles.selectionTime_overdue:''} ${istime_warning ? indexStyles.selectionTime_warning:''}`}>&#xe654;</Text>
-                    <View className={indexStyles.due_content} onClick={this.reminderToast}>
-                        <Picker mode='multiSelector' value={dateTime} onChange={this.
-                                changeEndDateTime} onColumnChange={this.onColumnPickerChange} disabled={!ishasChildCard} range={dateTimeArray}>
-                            <View>{eTime}</View>
-                        </Picker>
-
-                    </View> */}
                     {/* {   
                         !ishasChildCard  &&  <View onClick={this.cleanDateTime} className={indexStyles.deleteTimeIcon}>
                                 <Text className={`${globalStyles.global_iconfont}`}>&#xe639;</Text>
