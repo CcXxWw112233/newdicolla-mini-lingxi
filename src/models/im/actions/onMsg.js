@@ -262,10 +262,10 @@ function onMsg(msg) {
       payload: {}
     })
 
-    dispatch({
-      type: 'calendar/getNoScheCardList',
-      payload: {}
-    })
+    // dispatch({
+    //   type: 'calendar/getNoScheCardList',
+    //   payload: {}
+    // })
 
     dispatch({
       type: 'calendar/getScheCardList',

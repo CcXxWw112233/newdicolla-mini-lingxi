@@ -1,7 +1,7 @@
 //线上环境
-// export const BASE_URL = "https://lingxi.di-an.com";
+export const BASE_URL = "https://lingxi.di-an.com";
 //测试环境
-export const BASE_URL = "http://test.lingxi.new-di.com";
+// export const BASE_URL = "http://test.lingxi.new-di.com";
 // 稳定版开发服务器
 // export const BASE_URL = 'http://dev.lingxi.new-di.com'
 //本地环境
@@ -10,7 +10,7 @@ export const BASE_URL = "http://test.lingxi.new-di.com";
 // export const BASE_URL = 'http://ygk5cq.natappfree.cc'
 
 // 后端环境
-// export const BASE_URL = "http://192.168.1.36";
+// export const BASE_URL = "http://192.168.1.36"; 
 
 /***
  * 根据环境自动配置url
@@ -111,3 +111,9 @@ export const PROJECT_FILES_FOLDER = 'project:files:folder' //管理文件夹 per
 export const PROJECT_FILES_COMMENT_PUBLISH = 'project:files:comment:publish' //发表评论 permission_type=2
 export const PROJECT_FILES_COMMENT_VIEW = 'project:files:comment:view' //查看评论 permission_type=2
 export const PROJECT_TEAM_BOARD_MILESTONE = 'project:team:board:milestone' // 查看项
+
+/**
+ *  里程碑  任务  0 未完成  1 完成
+ */
+ export const COMPLETED = '1';
+ export const NOT_COMPLETED = '0' 
