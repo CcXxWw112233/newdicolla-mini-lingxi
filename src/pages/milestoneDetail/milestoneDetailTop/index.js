@@ -119,6 +119,7 @@ export default class TasksTime extends Component {
                         <View>{endtime}</View>
                     {/* </Picker> */}
                     </View>
+                 
                     {/* {   
                         !ishasChildCard  &&  <View onClick={this.cleanDateTime} className={indexStyles.deleteTimeIcon}>
                                 <Text className={`${globalStyles.global_iconfont}`}>&#xe639;</Text>

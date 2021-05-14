@@ -102,14 +102,14 @@ mileStoneRealizeStatus(info) {
     var isHasTaskFinish =  content_list.length > 0 &&  content_list.some(item=>{
            return item.is_completed == '1'
     })
-    var isAllChirdNoFinish =  content_list.length > 0 && chird_list.some(item=>{
+    var isAllChirdNoFinish =  chird_list.length > 0 && chird_list.some(item=>{
            return item.is_completed == '0'
     })
-    var isAllChirdFinish =  content_list.length > 0 && chird_list.some(item=>{
+    var isAllChirdFinish =  chird_list.length > 0 && chird_list.some(item=>{
            return item.is_completed == '1'
     })
-    var isHasNoFinish = isAllChirdNoFinish && isHasTaskNoFinish;
-    var isHasFinish = isHasTaskFinish && isAllChirdFinish;
+    var isHasNoFinish = isAllChirdNoFinish || isHasTaskNoFinish;
+    var isHasFinish = isHasTaskFinish || isAllChirdFinish;
     return (
         <View>
             <View className={indexStyles.topbg_View}></View>
