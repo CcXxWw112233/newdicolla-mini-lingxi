@@ -474,10 +474,7 @@ fileUploadMessageFile = () => {
         if(name.length > 0) {
             name=name.replace("</p>","");
             name=name.replace("<p>","");
-    
         }
-       
-
         const {isUploadWayViewShow} = this.state;
         const cartName = '任务说明'
         return (
@@ -491,15 +488,6 @@ fileUploadMessageFile = () => {
                     </View>
                     <View className={indexStyles.list_item_name}>任务说明</View>
                     <View className={indexStyles.right_style}>
-                        {/* <View className={indexStyles.right_centre_style}>
-                            <View>
-                                <View className={indexStyles.list_item_detail}>
-                                    {
-                                        <RichText className='text' nodes={name} />
-                                    }
-                                </View>
-                            </View>
-                        </View> */}
                     </View>
 
                     <View className={`${indexStyles.list_item_iconnext} ${indexStyles.addDesribeTaskText}`} onClick={this.addDesribeTaskText}>
@@ -521,8 +509,6 @@ fileUploadMessageFile = () => {
                             <View>
                                 <View key={key} className={indexStyles.song_tasks_file}>
                                     <View className={`${indexStyles.list_item_file_iconnext} ${indexStyles.list_item_file_mold_iconnext}`}>
-                                        {/* <Text className={`${globalStyle.global_iconfont}`}>&#xe669;</Text> */}
-                                        {/* <RichText className={`${globalStyle.global_iconfont}`} nodes={fileType} /> */}
                                         <View className={`${iconStyle.lxTaskicon}`} style={{'background': fileType}}></View>
 
                                     </View>
