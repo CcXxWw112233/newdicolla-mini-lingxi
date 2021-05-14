@@ -95,7 +95,7 @@ mileStoneRealizeStatus(info) {
     const {mileStone_detail = {}} = this.props
     const {board_id,board_name,content_list=[],id,parent_id,is_finished,progress_percent,chird_list=[],deadline} = mileStone_detail;
     const name = mileStone_detail['name'];
-    var ishasChild = content_list.length > 0 && chird_list.length > 0;
+    var ishasChild = content_list.length > 0 || chird_list.length > 0;
     var isHasTaskNoFinish =  content_list.length > 0 &&  content_list.some(item=>{
            return item.is_completed == '0'
         })
