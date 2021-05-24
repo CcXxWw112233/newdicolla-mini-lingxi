@@ -160,7 +160,7 @@ class App extends Component {
     tabBar: {
       // custom: true,
       backgroundColor: "#ffffff",
-      color: "#8c8c8c",
+      color: "#212434",
       selectedColor: "#1890FF",
       list: [
         {
@@ -183,7 +183,7 @@ class App extends Component {
         },
         {
           pagePath: "pages/jumpToMeeting/index",
-          text: "会协宝",
+          text: "预约",
           iconPath: "./asset/tabBar/meeting.png",
           selectedIconPath: "./asset/tabBar/meeting_selected.png",
         },
